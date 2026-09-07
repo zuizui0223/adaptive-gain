@@ -1,5 +1,13 @@
 """Public entrypoint for extremal finite adaptive-gain constructions and bounds."""
 
+from .binary_unit_cost_extremal_bounds import (
+    BinaryUnitCostWorldQueryRatioReceipt,
+    binary_tree_fixed_cost_bound,
+    sharp_binary_unit_cost_ratio,
+    sharp_binary_unit_cost_ratio_receipt,
+    sharp_binary_unit_cost_ratio_witness,
+    threshold_path_task,
+)
 from .extremal_routing import (
     ExtremalRoutingReceipt,
     RatioThreeHalvesMinimalityReceipt,
@@ -31,6 +39,12 @@ from .unit_cost_extremal_bounds import (
 )
 
 __all__ = [
+    "BinaryUnitCostWorldQueryRatioReceipt",
+    "binary_tree_fixed_cost_bound",
+    "sharp_binary_unit_cost_ratio",
+    "sharp_binary_unit_cost_ratio_receipt",
+    "sharp_binary_unit_cost_ratio_witness",
+    "threshold_path_task",
     "ExtremalRoutingReceipt",
     "RatioThreeHalvesMinimalityReceipt",
     "depth_two_fixed_cost_world_bound",
