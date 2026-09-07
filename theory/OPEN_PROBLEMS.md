@@ -8,7 +8,8 @@ exact fixed optimum C_F
 fixed-cost certificate ladder
 exact bypass decomposition
 full identity-indexed target-pair incidence sufficiency for C_A and C_F
-state-local target-relevant query-class compression preserving C_A
+state-local continuation-equivalence compression preserving C_A
+state-local cross-target refinement dominance preserving C_A
 two-sided fixed-cover kernelization
 exact proof DAG / isomorphism / transport / symmetry pruning
 unique minimal 4-world / 3-query strict-gain normal form
@@ -16,7 +17,7 @@ complete 4-world / 4-query extension classification
 unique deletion-minimal 5-world / 2+3-target / 3-query strict-gain normal form
 ```
 
-The key representation boundary is now explicit:
+The key representation boundary is explicit:
 
 \[
 \boxed{
@@ -26,38 +27,38 @@ The key representation boundary is now explicit:
 
 while an inclusion-minimal fixed-cover kernel is not sufficient to preserve adaptive routing geometry.
 
-The first adaptive-specific safe compression is also closed: at each Bellman state, queries with the same exact family of target-mixed children are continuation-equivalent, so one cheapest representative is sufficient.
+The adaptive-specific safe reductions now go beyond equality.  At Bellman state `A`, if
 
-The next questions therefore concern **stronger adaptive-safe quotients**, cheaper symmetry certification, larger finite normal forms, and extensions beyond deterministic exact resolution.
+\[
+S_A(q)\supseteq S_A(r),\qquad c(q)\le c(r),
+\]
+
+then `q` target-relevantly refines and safely dominates `r`.
+
+The next questions therefore concern **stronger adaptive-safe quotients beyond static refinement**, cheaper symmetry certification, larger finite normal forms, and extensions beyond deterministic exact resolution.
 
 ## 1. Characterize the coarsest adaptive-safe quotient of full pair incidence
 
-At a current world set `A`, define
+The current exact hierarchy is
 
-\[
-\mathcal M_A(q)
-\]
+```text
+same mixed-child family
+    -> interchangeable except for cost
 
-as the family of target-mixed outcome cells induced by query `q`.  `adaptive_safe_compression.py` now proves and implements
+cross-target separation superset at no greater cost
+    -> refinement dominance
+```
 
-\[
-\boxed{
-\mathcal M_A(q)=\mathcal M_A(r)
-\Longrightarrow
-\text{one cheapest representative is sufficient at }A.
-}
-\]
+Both preserve the direct Bellman optimum on the complete tested deterministic partition universes.
 
-All target-pure cells have continuation cost zero, and every unresolved common mixed child is an outcome cell of both queries, so the rest of the equivalence class becomes constant there.
-
-This exact equality quotient is useful but may not be maximal.
+The frontier now begins where neither query statically refines the other.
 
 Open questions:
 
-- Can different mixed-child families still be Bellman-equivalent because their child states have equal continuation values under every remaining query budget?
+- Can incomparable mixed-child families still be Bellman-equivalent because their child states have equal future value under every remaining vocabulary?
 - Is there a recursively defined bisimulation on `(world subset, remaining query vocabulary)` that gives the coarsest exact quotient for `C_A`?
-- Can that quotient be computed without already solving the complete Bellman recursion?
-- Can one prove safe **dominance** from refinement or inclusion relations between mixed-child families, rather than exact equality only?
+- Can such a quotient be computed without already solving the entire Bellman recursion?
+- Can a **dynamic dominance** theorem compare two incomparable root partitions by mapping every child of one to a no-harder child of the other?
 - Which within-target world distinctions can be merged before any query is chosen?
 - Is there a static quotient of full identity-indexed pair incidence that is strictly smaller yet still determines `C_A` for every positive cost vector?
 
@@ -73,7 +74,7 @@ The four-world and five-world deletion-minimal strict-gain cores both reduce to 
 
 while their adaptive normal forms differ.
 
-So the repository now has two distinct kernel ideas:
+So there are two distinct kernel theories:
 
 ```text
 fixed kernel:
@@ -85,7 +86,7 @@ adaptive kernel:
 
 Open questions:
 
-- What size bounds exist for the adaptive state-local quotient?
+- What size bounds exist for the adaptive refinement frontier?
 - Can pair-side Sperner bounds be combined with target-mixed child counts?
 - Is there a bound parameterized by `C_A`, strict gain `C_F-C_A`, or adaptive-tree depth rather than raw query count?
 - Can fixed and adaptive kernels share one compact residual representation without losing either proof obligation or routing geometry?
@@ -159,7 +160,7 @@ G(B)
 Open questions:
 
 - What are the information analogues of internal redundancy and external shortcut discount?
-- What replaces exact mixed-child equivalence when observations carry partial information?
+- What replaces deterministic refinement dominance when observations carry partial information?
 - Under what assumptions is the objective submodular or adaptively submodular?
 - Can positive adaptive-information windows have multiple disconnected budget intervals?
 - Is there an information-valued version of branch-orbit compression for equivalent continuation experiments?
@@ -186,24 +187,24 @@ vs
 improve the measurement model itself.
 ```
 
-A calibration action can change the future query system, so the state must carry both scientific uncertainty and calibration uncertainty.  The current static deterministic query-cover model is insufficient for that extension.
+A calibration action can change the future query system, so the state must carry both scientific uncertainty and calibration uncertainty. The current static deterministic query-cover model is insufficient for that extension.
 
 ## 9. Stochastic branch-invariance and scenario robustness
 
-BALANCE's current no-routing theorem is deterministic/minimax.  Under stochastic errors, equal deterministic support need not imply equal continuation distributions.
+BALANCE's current no-routing theorem is deterministic/minimax. Under stochastic errors, equal deterministic support need not imply equal continuation distributions.
 
-A probabilistic analogue likely requires equality of continuation-value kernels rather than raw state summaries.  Randomized policies under multiple calibration scenarios are a separate objective and should not be imported into deterministic guaranteed resolution by default.
+A probabilistic analogue likely requires equality of continuation-value kernels rather than raw state summaries. Randomized policies under multiple calibration scenarios are a separate objective and should not be imported into deterministic guaranteed resolution by default.
 
 ## 10. Empirical identification of routing value
 
-A natural-data routing claim needs more than a low-information first observation.  The finite theory now establishes that:
+A natural-data routing claim needs more than a low-information first observation. The finite theory now establishes that:
 
 - zero direct root information is neither necessary nor sufficient;
 - deletion-minimal strict gain can have a positive-information root;
 - fixed bypass may be internal or external;
 - lower-bound relaxations may miss integer fixed-cost gaps;
 - full target-pair incidence preserves deterministic `C_A`, but aggressive fixed-side kernelization may destroy adaptive geometry;
-- state-local mixed-continuation equivalence gives one exact adaptive-safe compression;
+- equality of target-mixed continuation and cross-target refinement dominance give exact adaptive-safe state-local reductions;
 - symmetric proof branches may be mathematically redundant even when measurements remain distinct named actions.
 
 An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
