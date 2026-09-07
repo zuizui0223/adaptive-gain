@@ -47,13 +47,12 @@ def direct_resolution_control() -> FiniteTask:
 
 
 def routing_bypass_control() -> FiniteTask:
-    """Zero-direct-info routing structure with NO strict adaptive gain.
+    """Branch-dependent routing where the selected tree union contains redundancy.
 
-    q_route splits the balanced target into two unresolved branches.  The two
-    branches use different continuations, q_left and q_right, but the fixed
-    bundle (q_left,q_right) resolves the target without buying q_route.  Thus
-    the selected adaptive tree has union cost 3 and worst-path cost 2, while
-    the best fixed cost is already 2.
+    The selected optimal tree can use all three query identities, but the fixed
+    subset (q_left,q_right) already resolves the target.  In the refined bypass
+    decomposition this is INTERNAL union redundancy rather than an external
+    shortcut: C_A=2, C_F=C_U=2, U=3.
     """
     worlds = (
         World("w0", 0),
@@ -67,6 +66,55 @@ def routing_bypass_control() -> FiniteTask:
             Query("q_left", 1, (0, 0, 0, 1)),
             Query("q_route", 1, (0, 1, 0, 1)),
             Query("q_right", 1, (0, 1, 1, 0)),
+        ),
+    )
+
+
+def external_shortcut_control() -> FiniteTask:
+    """No strict gain because a query OUTSIDE the selected tree union shortcuts it.
+
+    The selected optimal adaptive tree uses q0,q1,q2 with worst-path cost 2.
+    Flattening that union requires all three queries (C_U=3), but the global fixed
+    bundle (q2,q3) resolves at cost 2.  Thus U=3, C_U=3, C_F=C_A=2 and the entire
+    bypass discount is external.
+    """
+    worlds = (
+        World("w0", 0),
+        World("w1", 0),
+        World("w2", 1),
+        World("w3", 1),
+    )
+    return FiniteTask(
+        worlds,
+        (
+            Query("q0", 1, (0, 0, 0, 1)),
+            Query("q1", 1, (0, 1, 0, 0)),
+            Query("q2", 1, (0, 1, 1, 0)),
+            Query("q3_external", 1, (0, 1, 0, 1)),
+        ),
+    )
+
+
+def internal_redundancy_control() -> FiniteTask:
+    """No strict gain because the selected tree union itself has a cheaper fixed subset.
+
+    q_unused is constant.  The selected adaptive tree's union contains q1,q2,q3
+    with U=3, but q2+q3 already resolve, so C_U=C_F=2 and the entire bypass
+    discount is internal to the union.
+    """
+    worlds = (
+        World("w0", 0),
+        World("w1", 0),
+        World("w2", 1),
+        World("w3", 1),
+    )
+    return FiniteTask(
+        worlds,
+        (
+            Query("q_unused", 1, (0, 0, 0, 0)),
+            Query("q1", 1, (0, 0, 0, 1)),
+            Query("q2", 1, (0, 1, 0, 1)),
+            Query("q3", 1, (0, 1, 1, 0)),
         ),
     )
 
