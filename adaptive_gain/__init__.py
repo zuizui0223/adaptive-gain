@@ -33,6 +33,15 @@ from .information import (
     routing_information_receipt,
     target_entropy_bits,
 )
+from .pair_cover import (
+    EssentialQueryWitness,
+    PairCoverAudit,
+    PairSeparatorRow,
+    PrivatePairNoBypassCertificate,
+    pair_cover_audit,
+    private_pair_no_bypass_certificate,
+    restricted_fixed_minimum_resolution,
+)
 
 __all__ = [
     "AdaptiveGainReceipt",
@@ -64,4 +73,11 @@ __all__ = [
     "policy_information_bits",
     "routing_information_receipt",
     "target_entropy_bits",
+    "EssentialQueryWitness",
+    "PairCoverAudit",
+    "PairSeparatorRow",
+    "PrivatePairNoBypassCertificate",
+    "pair_cover_audit",
+    "private_pair_no_bypass_certificate",
+    "restricted_fixed_minimum_resolution",
 ]
