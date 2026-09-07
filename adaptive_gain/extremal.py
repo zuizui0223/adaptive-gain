@@ -20,6 +20,12 @@ from .bounded_arity_extremal_bounds import (
     sharp_bounded_arity_unit_cost_ratio_receipt,
     sharp_bounded_arity_unit_cost_witness,
 )
+from .frontier_edge_extremal_bounds import (
+    FrontierEdgeCappedRatioReceipt,
+    sharp_frontier_edge_capped_unit_cost_ratio,
+    sharp_frontier_edge_capped_unit_cost_ratio_receipt,
+    sharp_frontier_edge_capped_unit_cost_witness,
+)
 from .extremal_routing import (
     ExtremalRoutingReceipt,
     RatioThreeHalvesMinimalityReceipt,
@@ -67,6 +73,10 @@ __all__ = [
     "sharp_bounded_arity_unit_cost_ratio",
     "sharp_bounded_arity_unit_cost_ratio_receipt",
     "sharp_bounded_arity_unit_cost_witness",
+    "FrontierEdgeCappedRatioReceipt",
+    "sharp_frontier_edge_capped_unit_cost_ratio",
+    "sharp_frontier_edge_capped_unit_cost_ratio_receipt",
+    "sharp_frontier_edge_capped_unit_cost_witness",
     "ExtremalRoutingReceipt",
     "RatioThreeHalvesMinimalityReceipt",
     "depth_two_fixed_cost_world_bound",
