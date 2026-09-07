@@ -23,6 +23,8 @@ from .certificates import (
     branch_invariant_no_routing_certificate,
     routing_certificate,
 )
+from .decomposition import PolicyCostDecomposition, optimal_policy_cost_decomposition
+from .exhaustive import BinaryUniverseSummary, enumerate_binary_universe
 from .information import (
     RoutingInformationReceipt,
     best_fixed_information_bits,
@@ -52,6 +54,10 @@ __all__ = [
     "RoutingCertificate",
     "branch_invariant_no_routing_certificate",
     "routing_certificate",
+    "PolicyCostDecomposition",
+    "optimal_policy_cost_decomposition",
+    "BinaryUniverseSummary",
+    "enumerate_binary_universe",
     "RoutingInformationReceipt",
     "best_fixed_information_bits",
     "bundle_information_bits",
