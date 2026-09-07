@@ -23,6 +23,17 @@ from .certificates import (
     branch_invariant_no_routing_certificate,
     routing_certificate,
 )
+from .color_refinement import (
+    BipartiteColorRefinementReceipt,
+    RefinedCanonicalResidualCoverSignature,
+    RefinedIsomorphismQuotientAdaptiveGainAudit,
+    RefinedIsomorphismQuotientFixedBudgetDecision,
+    refine_residual_incidence_colors,
+    refined_canonical_residual_pair_cover_signature,
+    refined_isomorphic_fixed_budget_cover_decision,
+    refined_residual_pair_cover_isomorphism_witness,
+    selected_policy_refined_isomorphism_gain_audit,
+)
 from .cover_kernel import (
     CoverKernelLimitError,
     KernelizedAdaptiveGainAudit,
@@ -119,6 +130,13 @@ __all__ = [
     "bundle_resolves", "fixed_minimum_resolution", "resolution_budget_profile",
     "BranchInvariantCertificate", "RoutingBranch", "RoutingCertificate",
     "branch_invariant_no_routing_certificate", "routing_certificate",
+    "BipartiteColorRefinementReceipt", "RefinedCanonicalResidualCoverSignature",
+    "RefinedIsomorphismQuotientAdaptiveGainAudit",
+    "RefinedIsomorphismQuotientFixedBudgetDecision",
+    "refine_residual_incidence_colors", "refined_canonical_residual_pair_cover_signature",
+    "refined_isomorphic_fixed_budget_cover_decision",
+    "refined_residual_pair_cover_isomorphism_witness",
+    "selected_policy_refined_isomorphism_gain_audit",
     "CoverKernelLimitError", "KernelizedAdaptiveGainAudit", "KernelizedFixedBudgetDecision",
     "kernelized_fixed_budget_cover_decision", "selected_policy_kernelized_gain_audit",
     "PolicyCostDecomposition", "optimal_policy_cost_decomposition",
