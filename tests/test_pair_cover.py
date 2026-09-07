@@ -16,6 +16,8 @@ from adaptive_gain.witnesses import (
     external_shortcut_control,
     internal_redundancy_control,
     mrod_routing_task,
+    partial_external_bypass_gain_control,
+    partial_internal_bypass_gain_control,
     payoff_routing_task,
     routing_bypass_control,
 )
@@ -91,6 +93,28 @@ def test_internal_redundancy_control_has_no_external_shortcut_discount():
     assert d.internal_union_redundancy == 1
     assert d.external_shortcut_discount == 0
     assert d.realized_adaptive_gain == 0
+
+
+def test_internal_bypass_can_consume_only_part_of_overhead_and_leave_strict_gain():
+    d = optimal_policy_cost_decomposition(partial_internal_bypass_gain_control())
+    assert (d.adaptive_cost, d.fixed_cost, d.policy_union_restricted_fixed_cost, d.policy_union_cost) == (3, 4, 4, 5)
+    assert d.branch_exclusive_overhead == 2
+    assert d.internal_union_redundancy == 1
+    assert d.external_shortcut_discount == 0
+    assert d.realized_adaptive_gain == 1
+    assert d.fixed_bypass_discount == 1
+    assert d.three_way_identity_holds
+
+
+def test_external_bypass_can_consume_only_part_of_overhead_and_leave_strict_gain():
+    d = optimal_policy_cost_decomposition(partial_external_bypass_gain_control())
+    assert (d.adaptive_cost, d.fixed_cost, d.policy_union_restricted_fixed_cost, d.policy_union_cost) == (3, 4, 5, 5)
+    assert d.branch_exclusive_overhead == 2
+    assert d.internal_union_redundancy == 0
+    assert d.external_shortcut_discount == 1
+    assert d.realized_adaptive_gain == 1
+    assert d.fixed_bypass_discount == 1
+    assert d.three_way_identity_holds
 
 
 def test_restricted_fixed_optimum_can_be_strictly_more_expensive_than_global_fixed_optimum():
