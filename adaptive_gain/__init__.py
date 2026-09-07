@@ -49,6 +49,7 @@ from .integer_cover_proof import (
     IntegerCoverProofLimitError,
     fixed_budget_cover_decision,
     selected_policy_integer_cover_gain_certificate,
+    verify_fixed_budget_decision_certificate,
 )
 from .pair_cover import (
     EssentialQueryWitness,
@@ -113,6 +114,7 @@ __all__ = [
     "IntegerCoverProofLimitError",
     "fixed_budget_cover_decision",
     "selected_policy_integer_cover_gain_certificate",
+    "verify_fixed_budget_decision_certificate",
     "EssentialQueryWitness",
     "PairCoverAudit",
     "PairSeparatorRow",
