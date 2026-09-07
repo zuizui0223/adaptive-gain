@@ -56,7 +56,7 @@ Flattening the tree union is a valid fixed resolver and restricting the fixed vo
 \boxed{C_A\le C_F\le C_U\le U}.
 \]
 
-This yields the exact four-term identity
+This yields
 
 \[
 \boxed{
@@ -74,31 +74,27 @@ external shortcut discount = C_U - C_F
 internal union redundancy  = U - C_U
 ```
 
-and the older aggregate fixed bypass
+so equivalently
 
-```text
-fixed bypass discount = U - C_F
-                      = internal redundancy + external shortcut.
-```
+\[
+\boxed{
+\text{adaptive gain}
+=
+\text{branch-exclusive overhead}
+-
+\text{internal redundancy}
+-
+\text{external shortcut}
+}.
+\]
 
-So branch specialization creates **potential** overhead, but a fixed design can recover some of it in two distinct ways:
-
-1. **internal redundancy** — a cheaper fixed subset already exists inside the adaptive tree's query union;
-2. **external shortcut** — the union is internally irreducible, but another query outside that union creates a cheaper fixed route.
-
-Bypass is a discount, not a binary veto. Six-world controls show
-
-```text
-C_A=3, C_F=4, U=5
-```
-
-with either one unit of internal redundancy or one unit of external shortcut. In both cases one unit of overhead is consumed by bypass and one unit survives as genuine adaptive gain.
+Bypass is a discount, not a binary veto. Six-world controls show `C_A=3,C_F=4,U=5` with either one unit of internal redundancy or one unit of external shortcut; in both cases one unit of genuine gain survives.
 
 Implementation: `adaptive_gain/decomposition.py`.
 
 ## Fixed resolution as a target-pair cover
 
-Only pairs of represented worlds with different target values need to be separated:
+Only represented world pairs with different target values need separation:
 
 \[
 P_T=\{\{w_i,w_j\}:T(w_i)\ne T(w_j)\}.
@@ -106,11 +102,11 @@ P_T=\{\{w_i,w_j\}:T(w_i)\ne T(w_j)\}.
 
 Each query covers the cross-target pairs on which its outcomes differ. A fixed resolving bundle is therefore a weighted **target-pair cover**.
 
-This connects the fixed side to established Test Cover / Set Cover structure. The repository does **not** claim invention of those covering methods; it uses them to build checkable lower-bound certificates against the exact adaptive optimum.
+This connects the fixed side to established Test Cover / Set Cover structure. The repository does not claim invention of those covering methods; it uses them to build checkable lower-bound and infeasibility certificates against the exact adaptive optimum.
 
 ## Certificate ladder for strict adaptive gain
 
-The current repository contains four increasingly strong fixed-side proof layers.
+The current repository contains increasingly strong fixed-side proof layers.
 
 ### 1. Private-pair certificate
 
@@ -122,9 +118,7 @@ If every query in the selected adaptive union has such a globally private pair a
 \boxed{C_F=U>C_A}
 \]
 
-without globally optimizing the fixed class.
-
-The registered MROD-style and PAYOFF-style routing witnesses satisfy this strong certificate.
+without globally optimizing the fixed class. The registered MROD-style and PAYOFF-style routing witnesses satisfy this strong certificate.
 
 ### 2. Integral pair packing
 
@@ -134,17 +128,17 @@ Choose cross-target pairs `P*` such that each query separates at most `cost(q)` 
 |\{p\in P^*:q\text{ separates }p\}|\le c(q).
 \]
 
-Then every fixed resolver obeys
+Then
 
 \[
 \boxed{C_F\ge |P^*|}.
 \]
 
-Thus a packing of size at least `C_A+1` certifies strict gain. This can succeed when no single private pair proves every needed query mandatory.
+A packing of size at least `C_A+1` certifies strict gain.
 
 ### 3. Fractional pair-cover dual
 
-Allow rational pair weights `y_p>=0` with
+Allow rational pair weights `y_p>=0` satisfying
 
 \[
 \sum_{p:q\text{ separates }p}y_p\le c(q).
@@ -153,53 +147,61 @@ Allow rational pair weights `y_p>=0` with
 Then
 
 \[
-C_F\ge\sum_p y_p.
+C_F\ge\sum_p y_p,
 \]
 
-Since fixed acquisition costs are integer,
+and integer acquisition costs imply
 
 \[
 \boxed{C_F\ge\left\lceil\sum_p y_p\right\rceil}.
 \]
 
-A five-world control has
+A five-world control has `C_A=2,C_F=3`, integral packing maximum 2, but fractional optimum `5/2`, so the fractional layer alone proves `C_F>=3`.
 
-```text
-C_A=2, C_F=3
-integral packing maximum = 2
-fractional optimum       = 5/2
-```
+### 4. Exact integer budget-infeasibility proof
 
-so only the fractional layer proves `C_F>=3` without solving the integer fixed cover.
-
-### 4. Exact integer fixed cover
-
-The hierarchy is still incomplete before exact integer optimization. Another five-world control has
+The LP hierarchy is still incomplete. Another five-world control has
 
 ```text
 C_A = 2
 fractional fixed lower bound = 2
-C_F = 3
+C_F = 3.
 ```
 
-so the LP relaxation has an explicit integrality gap. Strict gain is real, but private-pair, integral-packing, and fractional-packing certificates are all insufficient.
+For strict gain we do not need the exact numerical optimum `C_F`; we only need to prove that no fixed resolver exists with cost at most `C_A`.
 
-Therefore the verified hierarchy is
+`fixed_budget_cover_decision()` chooses one still-uncovered cross-target pair and branches over **every** remaining affordable query that can separate it. If all branches are infeasible, the parent is infeasible. At budget `B=C_A`, this proves
+
+\[
+\boxed{C_F>C_A}
+\]
+
+directly.
+
+The resulting proof tree is independently rechecked by `verify_fixed_budget_decision_certificate()`, which reconstructs the pair system and verifies that every affordable separator branch is present and every budget/coverage update is valid. A tampered proof is rejected in regression tests.
+
+Thus the LP-integrality-gap control is now certified as strict gain without computing the global fixed optimum.
+
+### 5. Exact fixed optimum
+
+Only when the actual value of `C_F` is needed do we solve the stronger global optimization problem.
+
+The verified hierarchy is therefore
 
 ```text
 private pair
   -> integral pair packing
-  -> fractional pair packing
-  -> exact integer fixed cover
+  -> fractional pair-cover dual
+  -> exact integer budget-infeasibility proof at B=C_A
+  -> exact fixed optimum, when its value is required
 ```
-
-and each additional layer can matter.
 
 See:
 
 - `theory/FIXED_BYPASS_PAIR_COVER.md`
 - `theory/PAIR_PACKING_LOWER_BOUND.md`
 - `theory/FRACTIONAL_PAIR_COVER_BOUND.md`
+- `theory/INTEGER_FIXED_COVER_PROOF.md`
 
 ## Registered source-derived witnesses
 
@@ -287,7 +289,7 @@ For the balanced four-world universe:
 | `(2,2)` | 864 |
 | `(2,3)` | **192** |
 
-All 192 strict-gain tasks are also caught by the strong selected-policy private-pair certificate. That finite completeness is not general: larger controls require integral or fractional pair-packing certificates, and some still require the exact integer cover.
+All 192 strict-gain tasks are caught by the strong selected-policy private-pair certificate. That finite completeness is not general: larger controls require integral or fractional pair-packing, and the explicit LP-gap control requires the integer proof tree.
 
 See `theory/STRUCTURAL_DECOMPOSITION_AND_MINIMALITY.md`.
 
@@ -298,21 +300,22 @@ python examples/audit_witnesses.py
 python examples/audit_certificate_ladder.py
 ```
 
-The second script prints, for source-derived and adverse controls, which certificate layer succeeds together with `C_A`, `C_F`, `C_U`, `U`, internal redundancy, and external shortcut discounts. CI runs both scripts on Python 3.10, 3.11, and 3.12.
+The certificate-ladder script prints which proof layer succeeds together with `C_A`, `C_F`, `C_U`, `U`, internal redundancy, and external shortcut discounts. CI runs both scripts on Python 3.10, 3.11, and 3.12.
 
 ## Package
 
 ```text
 adaptive_gain/
-  core.py                 exact fixed/adaptive resolution solvers
-  certificates.py         routing and branch-invariance certificates
-  decomposition.py        C_A <= C_F <= C_U <= U decomposition
-  exhaustive.py           complete tiny binary-universe validation
-  information.py          target-information diagnostics
-  pair_cover.py           target-pair cover + private-pair certificates
-  pair_packing.py         exact integral pair-packing lower bounds
-  fractional_packing.py   exact rational small-task LP-dual bounds
-  witnesses.py            source-derived and adverse structural controls
+  core.py                  exact fixed/adaptive resolution solvers
+  certificates.py          routing and branch-invariance certificates
+  decomposition.py         C_A <= C_F <= C_U <= U decomposition
+  exhaustive.py            complete tiny binary-universe validation
+  information.py           target-information diagnostics
+  pair_cover.py            target-pair cover + private-pair certificates
+  pair_packing.py          exact integral pair-packing lower bounds
+  fractional_packing.py    exact rational small-task LP-dual bounds
+  integer_cover_proof.py   bounded-cost integer infeasibility proof trees
+  witnesses.py             source-derived and adverse structural controls
 
 theory/
   ADAPTIVE_GAIN_THEOREM.md
@@ -320,6 +323,7 @@ theory/
   FIXED_BYPASS_PAIR_COVER.md
   PAIR_PACKING_LOWER_BOUND.md
   FRACTIONAL_PAIR_COVER_BOUND.md
+  INTEGER_FIXED_COVER_PROOF.md
   PROVENANCE.md
   OPEN_PROBLEMS.md
 ```
@@ -334,12 +338,13 @@ This repository does **not** claim:
 - that zero direct target information is necessary or sufficient for gain;
 - that bypass must eliminate gain;
 - that a failed lower-bound certificate means no gain exists;
+- that exact integer branching is polynomial-time in the worst case;
 - that adaptive gain persists at all budgets;
 - that tiny-universe task counts are empirical prevalence estimates;
 - that a finite synthetic witness is empirical evidence;
 - that target resolution licenses a biological report.
 
-The narrower contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-resolution lower bounds exposed by the three repository-specific results.
+The narrower contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-resolution lower bounds and infeasibility proofs exposed by the three repository-specific results.
 
 ## Run
 
