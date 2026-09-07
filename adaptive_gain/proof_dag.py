@@ -5,7 +5,7 @@ The bounded fixed-cover continuation problem depends only on the residual state
     (uncovered cross-target pairs, available queries, remaining budget).
 
 Different branch histories that reach the same residual state therefore have the
-same continuation feasibility.  A verified recursive infeasibility proof can be
+same continuation feasibility. A verified recursive infeasibility proof can be
 quotiented by exact residual-state equality and exported as a DAG whose shared
 nodes are independently rechecked from the task.
 """
@@ -51,6 +51,21 @@ class CoverProofDagCertificate:
     scope: str = "exact_residual_state_quotient_of_verified_fixed_cover_infeasibility_tree"
 
 
+def _expanded_dag_occurrences(root_id: int, node_map: dict[int, CoverProofDagNode]) -> int:
+    """Count recursive tree occurrences represented by one DAG-root occurrence."""
+    cache: dict[int, int] = {}
+
+    def count(node_id: int) -> int:
+        if node_id in cache:
+            return cache[node_id]
+        node = node_map[node_id]
+        value = 1 + sum(count(branch.child_node_id) for branch in node.branches)
+        cache[node_id] = value
+        return value
+
+    return count(root_id)
+
+
 def compress_fixed_budget_infeasibility_proof(
     task: FiniteTask,
     certificate: FixedBudgetDecisionCertificate,
@@ -75,11 +90,8 @@ def compress_fixed_budget_infeasibility_proof(
 
     state_to_id: dict[tuple[int, int, int], int] = {}
     nodes: dict[int, CoverProofDagNode] = {}
-    expanded = 0
 
     def visit(node, uncovered: int, available: int, remaining: int) -> int:
-        nonlocal expanded
-        expanded += 1
         state = (uncovered, available, remaining)
         if state in state_to_id:
             return state_to_id[state]
@@ -88,7 +100,6 @@ def compress_fixed_budget_infeasibility_proof(
 
         if node.uncovered_world_pair not in pair_to_p:
             raise ArithmeticError("verified source proof contained an unknown pair")
-        p = pair_to_p[node.uncovered_world_pair]
         dag_branches = []
         for branch in node.branches:
             q = name_to_q[branch.query]
@@ -117,7 +128,14 @@ def compress_fixed_budget_infeasibility_proof(
     )
     ordered = tuple(nodes[i] for i in range(len(nodes)))
     dag_count = len(ordered)
-    if dag_count == 0 or expanded < dag_count:
+    if dag_count == 0:
+        raise ArithmeticError("empty proof DAG")
+
+    # Count the full recursive tree represented by the DAG *after* quotienting.
+    # Counting visits during construction would undercount shared subtrees because
+    # construction intentionally stops descending when a state is seen again.
+    expanded = _expanded_dag_occurrences(root_id, nodes)
+    if expanded < dag_count:
         raise ArithmeticError("invalid proof DAG compression counts")
     result = CoverProofDagCertificate(
         certificate.budget,
@@ -162,10 +180,10 @@ def verify_cover_proof_dag(task: FiniteTask, certificate: CoverProofDagCertifica
     def check(node_id: int, uncovered: int, available: int, remaining: int) -> bool:
         expected = (uncovered, available, remaining)
         if node_id in expected_state:
-            return expected_state[node_id] == expected
-        expected_state[node_id] = expected
-        if node_id in visiting or node_id not in node_map:
+            return expected_state[node_id] == expected and node_id in verified
+        if node_id not in node_map or node_id in visiting:
             return False
+        expected_state[node_id] = expected
         visiting.add(node_id)
         node = node_map[node_id]
         if node.remaining_budget != remaining or node.uncovered_world_pair not in pair_to_p:
@@ -218,22 +236,7 @@ def verify_cover_proof_dag(task: FiniteTask, certificate: CoverProofDagCertifica
     if not root_ok or verified != set(node_map):
         return False
 
-    # Re-expand the DAG mathematically, counting one occurrence per incoming path,
-    # to check the declared tree-size and compression fields.
-    expansion_cache: dict[int, int] = {}
-    def expanded_count(node_id: int) -> int:
-        # Do NOT memoize the final count across incoming paths when summing at a
-        # parent: the same sub-DAG contributes once for each reference.  The
-        # recursion value for a node itself is reusable because it already
-        # represents the full expansion below one occurrence of that node.
-        if node_id in expansion_cache:
-            return expansion_cache[node_id]
-        node = node_map[node_id]
-        value = 1 + sum(expanded_count(branch.child_node_id) for branch in node.branches)
-        expansion_cache[node_id] = value
-        return value
-
-    expanded = expanded_count(certificate.root_node_id)
+    expanded = _expanded_dag_occurrences(certificate.root_node_id, node_map)
     if expanded != certificate.expanded_tree_nodes:
         return False
     if certificate.shared_state_savings != expanded - certificate.dag_node_count:
