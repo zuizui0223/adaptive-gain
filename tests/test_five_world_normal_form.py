@@ -8,7 +8,6 @@ from adaptive_gain import (
 from adaptive_gain.five_world_normal_form import (
     FIVE_WORLD_IRREDUCIBLE_STRICT_GAIN_SIGNATURE,
     FIVE_WORLD_STRICT_SIGNATURES,
-    canonical_five_world_separator_signature,
     enumerate_two_plus_three_three_query_universe,
     five_world_irreducible_raw_symmetry_orbit_size,
     five_world_irreducible_standard_task,
@@ -17,7 +16,7 @@ from adaptive_gain.five_world_normal_form import (
 from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 
 
-def test_unique_irreducible_five_world_standard_form_is_strict_and_deletion_irreducible():
+def test_unique_irreducible_five_world_standard_form_is_strict_and_deletion_minimal():
     task = five_world_irreducible_standard_task()
     receipt = five_world_normal_form_receipt(task)
     assert receipt.canonical_separator_signature == FIVE_WORLD_IRREDUCIBLE_STRICT_GAIN_SIGNATURE
@@ -25,7 +24,10 @@ def test_unique_irreducible_five_world_standard_form_is_strict_and_deletion_irre
     assert (receipt.adaptive_cost, receipt.fixed_cost) == (2, 3)
     assert receipt.exact_strict_gain
     assert receipt.strict_balanced_four_world_deletion_count == 0
+    assert receipt.strict_any_four_world_deletion_count == 0
+    assert receipt.strict_two_query_deletion_count == 0
     assert receipt.irreducible_against_majority_world_deletion
+    assert receipt.world_and_query_deletion_minimal
     assert receipt.matches_unique_irreducible_normal_form
     assert receipt.exact_irreducible_strict_gain
     assert receipt.strict_classification_agrees_with_exact_solver
