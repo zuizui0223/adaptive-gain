@@ -37,7 +37,8 @@ def test_sharp_binary_formula_known_values():
         (7, 6): Fraction(2, 1),
         (8, 7): Fraction(7, 3),
         (10, 7): Fraction(7, 3),
-        (10, 9): Fraction(9, 4),
+        (10, 9): Fraction(7, 3),
+        (11, 10): Fraction(5, 2),
     }
     for key, value in expected.items():
         assert sharp_binary_unit_cost_ratio(*key) == value
