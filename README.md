@@ -218,11 +218,17 @@ C_F/C_A=\frac{2^d}{d+1}\longrightarrow\infty.
 }
 \]
 
-Thus the multiplicative adaptive advantage is unbounded even when **every observation is binary and every acquisition cost is one**. Small depths are checked by the exact solvers; the general formula follows from the target-0 path lower bound in `theory/UNBOUNDED_UNIT_COST_ADAPTIVE_GAIN.md`.
+Thus the multiplicative adaptive advantage is unbounded even when **every observation is binary and every acquisition cost is one**.
 
-## Sharp fixed-world / fixed-query ratio under unit costs
+---
 
-The unrestricted-arity unit-cost extremal problem is closed exactly. For `n>=2` represented worlds and `m>=1` declared unit-cost query resources,
+# Sharp fixed-world / fixed-query extremal ratios under unit costs
+
+The entire deterministic query-arity range is now closed.
+
+## Unrestricted arity
+
+For `n>=2` represented worlds and `m>=1` declared unit-cost queries,
 
 \[
 \boxed{
@@ -235,10 +241,9 @@ The unrestricted-arity unit-cost extremal problem is closed exactly. For `n>=2` 
 }
 \]
 
-The key tree bound is exact: if an optimal productive adaptive tree has worst-path depth `h`, then its number of internal-node occurrences is at most
+The exact unrestricted productive-tree internal-node bound is
 
 \[
-\boxed{
 M(n,h)
 =
 n+1-
@@ -246,23 +251,13 @@ n+1-
 2,
 \left\lceil\frac{n}{2^{h-1}}\right\rceil
 \right).
-}
 \]
 
-Its distinct query union is no larger, and flattening that union is a fixed resolver. Optimizing over `h=C_A` gives the world-count bound; `C_F<=m` gives the vocabulary bound. The depth-two extremal routing family attains the combined bound after harmless world/query padding.
+Depth two is globally extremal at fixed `n` when query arity is unrestricted.
 
-Consequences:
+## Binary arity
 
-- at fixed `n`, extra query vocabulary beyond `1+floor(n/2)` cannot improve the unrestricted-arity unit-cost extremal ratio;
-- at fixed `m>=3`, the sharp unrestricted-arity ratio reaches `m/2` once `n>=2(m-1)`;
-- the earlier six-world / four-query ratio-2 witness is an immediate corollary; and
-- depth two is globally extremal for fixed `n` when query arity is unrestricted.
-
-See `theory/SHARP_UNIT_COST_WORLD_QUERY_RATIO.md` and `adaptive_gain/unit_cost_extremal_bounds.py`.
-
-## Sharp binary-only fixed-world / fixed-query ratio
-
-The binary unit-cost problem is also closed exactly. Let
+Let
 
 \[
 K=\min(m,n-1),
@@ -284,28 +279,44 @@ Then
 }
 \]
 
-The upper bound follows because a binary adaptive tree of depth `h` has at most `2^h-1` internal occurrences, at most `n-1` by leaf counting, and cannot use more than `m` resources.
+Alternating-target threshold paths attain this bound. The first binary-only fixed-`(n,m)` scope above `3/2` is six worlds and five queries with `(C_A,C_F)=(3,5)`.
 
-The exact witnesses are alternating-target **threshold paths**: `N` ordered worlds with all `N-1` binary threshold queries. Every threshold is fixed-mandatory because it uniquely separates one adjacent opposite-target pair, while adaptive balanced binary search has
+## Any bounded arity `b>=2`
+
+Let `F_b(n,h)` be the maximum number of internal-node occurrences in a productive tree with at most `n` leaves, depth at most `h`, and at most `b` children per internal node. It obeys
 
 \[
-C_A=\lceil\log_2N\rceil,
-\qquad
-C_F=N-1.
+\boxed{
+F_b(n,h)
+=
+1+
+\max_{2\le r\le\min(b,n)}
+\max_{\substack{n_1+\cdots+n_r\le n\\n_i\ge1}}
+\sum_i F_b(n_i,h-1)
+}
 \]
 
-Choosing either `N=2^d` or `N=K+1`, whichever gives the larger candidate above, and then padding harmless worlds/queries attains the bound.
+with `F_b(1,h)=F_b(n,0)=0`.
 
-The first binary-only fixed-`(n,m)` scope with ratio above `3/2` is
+The exact fixed-`(n,m,b)` ratio is
 
-```text
-6 worlds
-5 binary unit-cost queries
-```
+\[
+\boxed{
+R_b(n,m)
+=
+\max_{1\le h\le n-1}
+\frac{\min\{m,F_b(n,h)\}}{h}.
+}
+\]
 
-with `(C_A,C_F)=(3,5)` and ratio `5/3`.
+This is sharp, not only an upper bound. Any extremal bounded-arity tree can be converted to a deterministic task in which every internal-node query has a private opposite-target pair. The private-pair graph is a forest and can be two-coloured, so all internal queries become simultaneously fixed-mandatory while the tree itself remains an adaptive resolving policy.
 
-See `theory/SHARP_BINARY_UNIT_COST_WORLD_QUERY_RATIO.md` and `adaptive_gain/binary_unit_cost_extremal_bounds.py`.
+The theorem exactly recovers both endpoints:
+
+- `b=2` gives the binary formula;
+- `b>=n` gives the unrestricted formula.
+
+See `theory/SHARP_BOUNDED_ARITY_UNIT_COST_RATIO.md` and `adaptive_gain/bounded_arity_extremal_bounds.py`.
 
 ---
 
@@ -328,7 +339,7 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. Finite-scope minimality claims are stated with their cost/outcome restrictions; unequal costs can change the smallest witness scope. The two sharp fixed-`(n,m)` theorems above assume unit query costs; one allows arbitrary deterministic query arity and the other restricts every query to binary outcomes.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The sharp fixed-`(n,m,b)` theorem assumes unit query costs. Unequal costs, stochastic observations, calibration-changing actions, and continuous compatible sets remain separate problems.
 
 ## Run
 
