@@ -1,13 +1,14 @@
 # Open problems
 
-The finite deterministic guaranteed-resolution layer now has four distinct proof objects:
+The finite deterministic guaranteed-resolution layer now has a certificate hierarchy rather than one monolithic fixed-class computation:
 
 ```text
-exact adaptive tree optimum C_A
+exact adaptive optimum C_A
 private-pair fixed lower bound
 integral pair-packing fixed lower bound
 fractional pair-cover dual lower bound
-exact integer fixed-cover optimum C_F
+exact integer fixed-budget infeasibility proof at B=C_A
+exact fixed optimum C_F, only when its value is needed
 ```
 
 It also separates branch-exclusive overhead into internal and external bypass channels:
@@ -18,26 +19,21 @@ U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
 
 The next problems begin where those certificates stop.
 
-## 1. Integer fixed-cover certificates beyond the LP integrality gap
+## 1. Compress the integer cover proof
 
-A registered five-world control has
+The previous LP-integrality-gap problem is now closed for strict-gain certification: `integer_cover_proof.py` can prove directly that no fixed resolver exists with cost at most `C_A`, and its proof tree is independently verified.
 
-```text
-C_A = 2
-fractional fixed lower bound = 2
-exact integer fixed optimum = 3.
-```
+The new question is **proof compression**, not existence of an exact certificate.
 
-So even the exact fractional pair-cover dual cannot certify its true strict gain. The next target is a **checkable integer lower-bound receipt** stronger than the LP relaxation but cheaper/more interpretable than blind enumeration of every fixed bundle.
+The branching proof can still be exponential. Useful next targets are:
 
-Candidate directions:
+- stronger cover cuts that collapse many proof-tree branches into one checkable inequality;
+- symmetry reduction of equivalent cross-target pairs and equivalent queries;
+- parameterized bounds in adaptive-tree union size, branch-exclusive overhead, or residual pair-cover width;
+- proof minimization: given several valid infeasibility trees, find the smallest receipt that still verifies;
+- a canonical proof format that can be checked without rerunning search.
 
-- cover inequalities over families of cross-target pairs;
-- branch-and-bound certificates that export the pruned lower bounds, not only the optimum;
-- parameterized algorithms indexed by adaptive-tree union size, branch-exclusive overhead, or number of uncovered target pairs;
-- symmetry reduction of the target-pair hypergraph before exact cover search.
-
-The scientific requirement is fail-closed: a search cap or incomplete cut set must remain `certificate_incomplete`, never `no_gain`.
+The fail-closed rule remains: hitting `max_states` means `certificate_incomplete`, never `strict_gain` or `no_gain`.
 
 ## 2. Characterize fixed bypass structurally
 
@@ -52,10 +48,10 @@ Both can be zero, can eliminate all adaptive gain, or can consume only part of t
 
 Open questions:
 
-- Can `C_U-C_F>0` be predicted from local separator structure around the adaptive tree rather than a global cover optimization?
+- Can `C_U-C_F>0` be predicted from local separator structure around the adaptive tree rather than a global cover decision?
 - What query-vocabulary operations create or destroy external shortcuts monotonically?
-- Is there a useful notion of a minimal bypass set analogous to a cut or alternate path?
-- How does the decomposition change if query costs are random or state-dependent?
+- Is there a useful minimal bypass set analogous to a cut or alternate path?
+- How does the decomposition change with random or state-dependent query costs?
 
 ## 3. Information-valued adaptive gain
 
@@ -69,14 +65,14 @@ G(B)
 \max_{F:\,c(F)\le B} I(T;Q_F).
 \]
 
-The repository can audit information of a selected deterministic policy but does not yet provide the general optimizer or theorem characterizing `G(B)>0`.
+The repository can audit information of a selected deterministic policy but does not yet provide a general optimizer or theorem characterizing `G(B)>0`.
 
 The cost results show why branch-dependent next actions are not enough: the fixed class can have internal or external bypasses. The information-valued analogue therefore needs an optimized fixed comparator too.
 
 Questions:
 
 - What is the information analogue of `internal union redundancy` and `external shortcut discount`?
-- Can positive routing entropy coexist with zero class-oracle information gap at every budget? (The source MROD XOR control already suggests yes.)
+- Can positive routing entropy coexist with zero class-oracle information gap at every budget? (The source MROD XOR control suggests yes.)
 - Can `G(B)>0` occur on several disconnected budget intervals?
 - Under what assumptions is the information objective submodular or adaptively submodular?
 
@@ -94,7 +90,7 @@ The next target is
 
 with a target map `T(theta)`. The challenge is to minimize worst-path acquisition cost without replacing the continuous compatible set by an unjustified finite panel.
 
-A continuous counterpart of the current pair-cover view would need a certificate that every pair of parameter points with different target values is separated by the selected constraints. This becomes an uncountable separation/cover problem rather than a finite set cover.
+A continuous counterpart of the current pair-cover view would need a certificate that every pair of parameter points with different target values is separated by selected constraints. This becomes an uncountable separation/cover problem.
 
 ## 5. Calibration actions versus target actions
 
@@ -145,7 +141,8 @@ The validation controls now show:
 - zero direct root information is not necessary;
 - zero direct information plus branch-dependent continuation is not sufficient;
 - a fixed bypass can be internal or external;
-- bypass can eliminate all gain or only part of it.
+- bypass can eliminate all gain or only part of it;
+- fractional lower bounds can miss a real integer fixed-cost gap.
 
 An empirical claim therefore needs evidence that:
 
@@ -158,9 +155,9 @@ The source repositories currently provide synthetic/conditional witnesses, not t
 
 ## 9. Structural prevalence beyond the tiny binary universe
 
-The complete 4-world / 3-binary-query balanced universe has 192 strict-gain labeled tasks out of 4096. In that tiny universe the private-pair certificate happens to catch all 192.
+The complete 4-world / 3-binary-query balanced universe has 192 strict-gain labeled tasks out of 4096. In that tiny universe the private-pair certificate catches all 192.
 
-That completeness disappears in larger controls, where integral packing, fractional packing, and exact integer covers each become necessary on different examples.
+That completeness disappears in larger controls, where integral packing, fractional packing, and exact integer budget proofs each become necessary on different examples.
 
 Next combinatorial questions:
 
