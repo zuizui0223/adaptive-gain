@@ -1,18 +1,63 @@
 # Open problems
 
-The repository now closes the exact finite **guaranteed-resolution cost** problem far enough to separate three quantities:
+The finite deterministic guaranteed-resolution layer now has four distinct proof objects:
 
 ```text
-branch-exclusive overhead
-=
-realized adaptive gain
-+
-fixed bypass discount.
+exact adaptive tree optimum C_A
+private-pair fixed lower bound
+integral pair-packing fixed lower bound
+fractional pair-cover dual lower bound
+exact integer fixed-cover optimum C_F
 ```
 
-The cross-repository comparison still leaves several nontrivial next questions.
+It also separates branch-exclusive overhead into internal and external bypass channels:
 
-## 1. Information-valued adaptive gain
+\[
+U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
+\]
+
+The next problems begin where those certificates stop.
+
+## 1. Integer fixed-cover certificates beyond the LP integrality gap
+
+A registered five-world control has
+
+```text
+C_A = 2
+fractional fixed lower bound = 2
+exact integer fixed optimum = 3.
+```
+
+So even the exact fractional pair-cover dual cannot certify its true strict gain. The next target is a **checkable integer lower-bound receipt** stronger than the LP relaxation but cheaper/more interpretable than blind enumeration of every fixed bundle.
+
+Candidate directions:
+
+- cover inequalities over families of cross-target pairs;
+- branch-and-bound certificates that export the pruned lower bounds, not only the optimum;
+- parameterized algorithms indexed by adaptive-tree union size, branch-exclusive overhead, or number of uncovered target pairs;
+- symmetry reduction of the target-pair hypergraph before exact cover search.
+
+The scientific requirement is fail-closed: a search cap or incomplete cut set must remain `certificate_incomplete`, never `no_gain`.
+
+## 2. Characterize fixed bypass structurally
+
+The refined decomposition distinguishes
+
+```text
+internal union redundancy = U - C_U
+external shortcut discount = C_U - C_F.
+```
+
+Both can be zero, can eliminate all adaptive gain, or can consume only part of the branch-exclusive overhead while strict gain survives.
+
+Open questions:
+
+- Can `C_U-C_F>0` be predicted from local separator structure around the adaptive tree rather than a global cover optimization?
+- What query-vocabulary operations create or destroy external shortcuts monotonically?
+- Is there a useful notion of a minimal bypass set analogous to a cut or alternate path?
+- How does the decomposition change if query costs are random or state-dependent?
+
+## 3. Information-valued adaptive gain
 
 For MROD-like tasks the utility need not be binary target resolution. Define
 
@@ -24,108 +69,102 @@ G(B)
 \max_{F:\,c(F)\le B} I(T;Q_F).
 \]
 
-The current repository can audit information of a selected deterministic policy, but it does not yet provide a general optimizer or a theorem characterizing when \(G(B)>0\).
+The repository can audit information of a selected deterministic policy but does not yet provide the general optimizer or theorem characterizing `G(B)>0`.
 
-The cost validation shows that **branch-dependent next actions are not sufficient**: a fixed design can sometimes bypass the routing query. The information-valued analogue therefore needs to compare against the fully optimized fixed class, not merely against the union of branch-specific actions.
+The cost results show why branch-dependent next actions are not enough: the fixed class can have internal or external bypasses. The information-valued analogue therefore needs an optimized fixed comparator too.
 
 Questions:
 
-- What is the information-theoretic analogue of `fixed bypass discount`?
-- Can a branch-dependent policy have positive routing entropy but zero class-oracle information gain at every budget?
-- Can \(G(B)>0\) occur on multiple disconnected budget intervals?
-- Under what assumptions is \(G(B)\) unimodal, submodular, or adaptively submodular?
+- What is the information analogue of `internal union redundancy` and `external shortcut discount`?
+- Can positive routing entropy coexist with zero class-oracle information gap at every budget? (The source MROD XOR control already suggests yes.)
+- Can `G(B)>0` occur on several disconnected budget intervals?
+- Under what assumptions is the information objective submodular or adaptively submodular?
 
-## 2. Continuous compatible sets
+## 4. Continuous compatible sets
 
-PAYOFF's scientific parameter uncertainty is continuous, whereas the exact adaptive theorem here is finite.
+PAYOFF's scientific uncertainty is continuous, whereas the current exact adaptive theorem is finite.
 
-The next target is a compatible set
-
-\[
-\Theta_t\subset\mathbb R^d
-\]
-
-updated by observations:
+The next target is
 
 \[
-\Theta_{t+1}
-=
-\Theta_t\cap C(q_t,y_t).
+\Theta_t\subset\mathbb R^d,
+\qquad
+\Theta_{t+1}=\Theta_t\cap C(q_t,y_t),
 \]
 
-The problem is to minimize worst-path acquisition cost for identifying a target map \(T(\theta)\) without replacing the continuous set by an unjustified finite panel.
+with a target map `T(theta)`. The challenge is to minimize worst-path acquisition cost without replacing the continuous compatible set by an unjustified finite panel.
 
-The finite union-flattening theorem suggests a possible route: characterize whether the union of all query constraints used by a continuous adaptive tree is itself a valid fixed certificate, and then define a continuous analogue of the bypass discount.
+A continuous counterpart of the current pair-cover view would need a certificate that every pair of parameter points with different target values is separated by the selected constraints. This becomes an uncountable separation/cover problem rather than a finite set cover.
 
-## 3. Calibration actions versus target actions
+## 5. Calibration actions versus target actions
 
-All three source lines now expose a common resource-allocation problem:
+All three source repositories expose the resource tradeoff
 
 ```text
 measure the scientific target
 vs
-spend budget improving the measurement model itself.
+spend budget improving the measurement model.
 ```
 
 Examples:
 
-- MROD: calibrate `P(Q|world)` versus acquire the target-facing observation;
-- PAYOFF: distinguish kernel/range calibration versus phase-discriminating payoff contrasts;
+- MROD: calibrate `P(Q|world)` versus acquire a target-facing observation;
+- PAYOFF: kernel/range calibration versus phase-discriminating payoff contrasts;
 - BALANCE: improve forcing-command precision `e` versus collect more switch-bracketing queries.
 
-A useful theory needs a state that carries both scientific uncertainty and calibration uncertainty. A calibration action can also create a fixed-design bypass, so its effect cannot be scored only by branch specialization.
+A useful state must carry both target uncertainty and calibration uncertainty. A calibration action can alter the future query hypergraph itself, so the static pair-cover representation is no longer enough.
 
-## 4. Stochastic branch-invariance
+## 6. Stochastic branch-invariance
 
-BALANCE's no-routing control is deterministic/minimax. Under stochastic errors or expected loss, two branches with equal interval span can have different future distributions.
+BALANCE's no-routing control is deterministic/minimax. With stochastic errors or expected loss, two branches with equal interval span may have different future distributions.
 
-Question:
-
-What is the correct probabilistic analogue of the sufficient-state condition
+The probabilistic analogue of
 
 \[
-\sigma(s_{q,y})=\sigma'
-\quad\forall y?
+\sigma(s_{q,y})=\sigma'\quad\forall y
 \]
 
-A likely formulation uses equality of continuation-value kernels rather than equality of raw state summaries.
+likely requires equality of continuation-value kernels, not equality of raw summaries.
 
-## 5. Randomized policies
+## 7. Randomized policies and scenario robustness
 
-The current exact solver optimizes deterministic trees.
+The current exact solver optimizes deterministic trees. Under multiple calibration scenarios, a randomized mixture of policies may reduce minimax regret even when it cannot lower guaranteed-resolution cost.
 
-For minimax regret under multiple scenarios, a randomized mixture of adaptive policies may reduce worst-case regret even when it cannot lower guaranteed-resolution cost.
+This is a separate objective and should not be imported into the deterministic theorem by default.
 
-This should be treated as a separate objective, not silently added to the deterministic theorem.
+## 8. Empirical identification of routing value
 
-## 6. Empirical identification of routing value
-
-A natural-data claim of routing value requires more than showing
+A natural-data routing claim requires much more than
 
 \[
 I(T;Q_1)\approx0.
 \]
 
-The new five-world control proves that zero direct root information is not even necessary for strict deterministic cost gain, while the bypass control proves that zero direct information plus branch-dependent continuation is not sufficient.
+The validation controls now show:
 
-An empirical claim therefore needs to establish all of the following in the deployment context:
+- zero direct root information is not necessary;
+- zero direct information plus branch-dependent continuation is not sufficient;
+- a fixed bypass can be internal or external;
+- bypass can eliminate all gain or only part of it.
 
-1. the first result changes the useful continuation action or future-value state;
-2. the branch-specific plan has a resource advantage;
-3. no equally cheap fixed bypass measurement set resolves the same target;
+An empirical claim therefore needs evidence that:
+
+1. the first result changes the useful continuation action/future-value state;
+2. the branch-specific plan has a real resource advantage;
+3. fixed bypass alternatives have been measured or bounded, not ignored;
 4. the measurement/calibration relationships transport to deployment.
 
-The source repositories currently provide synthetic/conditional witnesses, not that empirical demonstration.
+The source repositories currently provide synthetic/conditional witnesses, not that natural-data demonstration.
 
-## 7. Structural prevalence beyond the tiny binary universe
+## 9. Structural prevalence beyond the tiny binary universe
 
-The exhaustive validator classifies the complete 4-world / 3-binary-query labeled universe for fixed binary target assignments. The balanced 2+2 target has 192 strict-gain tasks out of 4096; the 3+1 target has none.
+The complete 4-world / 3-binary-query balanced universe has 192 strict-gain labeled tasks out of 4096. In that tiny universe the private-pair certificate happens to catch all 192.
 
-Those counts are not empirical prevalence estimates. The next mathematical questions are:
+That completeness disappears in larger controls, where integral packing, fractional packing, and exact integer covers each become necessary on different examples.
 
-- what are the symmetry classes of the 192 strict-gain tasks?
-- can they be characterized without enumeration?
-- how do counts change with multi-outcome queries, unequal costs, more target labels, or repeated queries?
-- what is the maximum possible ratio `C_fixed/C_adapt` as world and query vocabularies grow?
+Next combinatorial questions:
 
-The union-cost theorem suggests that large gains require many costly queries that live on mutually exclusive branches and cannot be replaced by a smaller fixed bypass bundle.
+- What are the symmetry classes of the 192 minimal strict-gain tasks?
+- What is the smallest universe exhibiting an integral-packing gap? a fractional integrality gap? partial internal/external bypass with residual gain?
+- How do results change with unequal costs, multi-outcome queries, multiple target labels, or reusable queries?
+- What is the maximum possible ratio `C_F/C_A` as world and query vocabularies grow?
