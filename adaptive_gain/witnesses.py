@@ -170,13 +170,7 @@ def partial_external_bypass_gain_control() -> FiniteTask:
 
 
 def positive_root_information_gain_control() -> FiniteTask:
-    """Strict gain where an optimal root has POSITIVE direct target information.
-
-    This five-world witness falsifies any general claim that zero direct target
-    information is necessary for adaptive gain.  The optimal root q_route has
-    small but positive target information under uniform world weights; its two
-    outcomes require different one-query continuations.  Costs are C_A=2,C_F=3.
-    """
+    """Strict gain where an optimal root has POSITIVE direct target information."""
     worlds = (
         World("w0", 0),
         World("w1", 0),
@@ -192,6 +186,46 @@ def positive_root_information_gain_control() -> FiniteTask:
             Query("q_route", 1, (0, 1, 1, 1, 0)),
         ),
     )
+
+
+def fractional_only_gain_control() -> FiniteTask:
+    """Strict gain certified by fractional but not integral pair packing.
+
+    C_A=2, C_F=3.  Maximum integral pair packing is 2, while the exact
+    fractional pair-cover dual optimum is 5/2 and therefore rounds to the integer
+    lower bound C_F>=3.
+    """
+    worlds = (
+        World("w0", 0), World("w1", 0),
+        World("w2", 1), World("w3", 1), World("w4", 1),
+    )
+    maps = (
+        (1, 0, 1, 0, 1),
+        (0, 1, 1, 0, 0),
+        (0, 1, 1, 1, 1),
+        (1, 1, 0, 1, 0),
+    )
+    return FiniteTask(worlds, tuple(Query(f"q{i}", 1, row) for i, row in enumerate(maps)))
+
+
+def fractional_integrality_gap_gain_control() -> FiniteTask:
+    """Strict gain whose fixed-cost proof survives only at the integer cover layer.
+
+    C_A=2 and C_F=3, but both the maximum integral pair packing and exact
+    fractional pair-cover dual optimum equal 2.  Thus the LP relaxation has an
+    integrality gap and cannot certify the true strict gain.
+    """
+    worlds = (
+        World("w0", 0), World("w1", 0),
+        World("w2", 1), World("w3", 1), World("w4", 1),
+    )
+    maps = (
+        (1, 0, 0, 0, 0),
+        (1, 0, 0, 1, 1),
+        (1, 0, 1, 0, 1),
+        (0, 1, 0, 0, 1),
+    )
+    return FiniteTask(worlds, tuple(Query(f"q{i}", 1, row) for i, row in enumerate(maps)))
 
 
 @dataclass(frozen=True)
