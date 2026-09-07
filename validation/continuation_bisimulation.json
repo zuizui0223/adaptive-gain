@@ -1,0 +1,116 @@
+{
+  "scope": "finite_synthetic_deterministic_worst_path_cost_not_empirical_data",
+  "baseline_commit": "44c39b7b48ddd1452303b28150950339d44be732",
+  "fixed_cost_collision": {
+    "same_recursive_root_class": true,
+    "adaptive_costs": [2, 2],
+    "original_cost_receipts": [
+      {
+        "adaptive_cost": 2,
+        "fixed_cost": 3,
+        "strict_adaptive_gain": true,
+        "adaptive_only_budget_lower": 2,
+        "adaptive_only_budget_upper": 2,
+        "status": "strict_adaptive_gain"
+      },
+      {
+        "adaptive_cost": 2,
+        "fixed_cost": 2,
+        "strict_adaptive_gain": false,
+        "adaptive_only_budget_lower": null,
+        "adaptive_only_budget_upper": null,
+        "status": "no_strict_adaptive_gain"
+      }
+    ],
+    "mixed_states": 16,
+    "mixed_classes": 3,
+    "structural_certificate_verified": true
+  },
+  "universes": [
+    {
+      "targets": [0, 0, 1, 1],
+      "query_count": 3,
+      "patterns_per_query": 16,
+      "task_count": 4096,
+      "mixed_states_before_quotient": 20992,
+      "mixed_continuation_classes": 12,
+      "distinct_root_classes": 12,
+      "structural_certificate_verified": true,
+      "adaptive_cost_mismatches": 0,
+      "strict_gain_tasks_using_original_fixed_oracle": 192,
+      "exact_cost_pair_counts": {
+        "(1, 1)": 1352,
+        "(2, 2)": 864,
+        "(2, 3)": 192,
+        "(None, None)": 1688
+      },
+      "root_classes_with_multiple_fixed_costs": 1
+    },
+    {
+      "targets": [0, 0, 1, 1, 1],
+      "query_count": 3,
+      "patterns_per_query": 32,
+      "task_count": 32768,
+      "mixed_states_before_quotient": 238880,
+      "mixed_continuation_classes": 43,
+      "distinct_root_classes": 43,
+      "structural_certificate_verified": true,
+      "adaptive_cost_mismatches": 0,
+      "strict_gain_tasks_using_original_fixed_oracle": 2016,
+      "exact_cost_pair_counts": {
+        "(1, 1)": 5768,
+        "(2, 2)": 6336,
+        "(2, 3)": 2016,
+        "(3, 3)": 720,
+        "(None, None)": 17928
+      },
+      "root_classes_with_multiple_fixed_costs": 2
+    },
+    {
+      "targets": [0, 0, 1, 1],
+      "query_count": 3,
+      "patterns_per_query": 15,
+      "task_count": 3375,
+      "mixed_states_before_quotient": 13275,
+      "mixed_continuation_classes": 16,
+      "distinct_root_classes": 16,
+      "structural_certificate_verified": true,
+      "adaptive_cost_mismatches": 0,
+      "strict_gain_tasks_using_original_fixed_oracle": 24,
+      "exact_cost_pair_counts": {
+        "(1, 1)": 2044,
+        "(2, 2)": 852,
+        "(2, 3)": 24,
+        "(None, None)": 455
+      },
+      "root_classes_with_multiple_fixed_costs": 1
+    },
+    {
+      "targets": [0, 0, 1, 2],
+      "query_count": 3,
+      "patterns_per_query": 15,
+      "task_count": 3375,
+      "mixed_states_before_quotient": 15075,
+      "mixed_continuation_classes": 17,
+      "distinct_root_classes": 17,
+      "structural_certificate_verified": true,
+      "adaptive_cost_mismatches": 0,
+      "strict_gain_tasks_using_original_fixed_oracle": 36,
+      "exact_cost_pair_counts": {
+        "(1, 1)": 1178,
+        "(2, 2)": 1584,
+        "(2, 3)": 36,
+        "(3, 3)": 12,
+        "(None, None)": 565
+      },
+      "root_classes_with_multiple_fixed_costs": 1
+    }
+  ],
+  "limitations": [
+    "State graph construction still visits all reachable mixed states.",
+    "Class IDs are local to one certificate; cross-task sharing is a batch operation.",
+    "Only declared positive query costs and deterministic worst-path resolution are preserved.",
+    "Fixed bundle cost, target labels and probabilistic information need their original data."
+  ],
+  "total_exhaustive_tasks": 43614
+}
