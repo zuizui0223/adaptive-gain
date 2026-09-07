@@ -1,167 +1,165 @@
 # Open problems
 
-The finite deterministic guaranteed-resolution layer now has a certificate hierarchy rather than one monolithic fixed-class computation:
+The finite deterministic guaranteed-resolution layer now has several closed components:
 
 ```text
 exact adaptive optimum C_A
-private-pair fixed lower bound
-integral pair-packing fixed lower bound
-fractional pair-cover dual lower bound
-exact integer fixed-budget infeasibility proof at B=C_A
-exact fixed optimum C_F, only when its value is needed
+fixed-cost certificate ladder
+  private pair
+  -> integral pair packing
+  -> fractional pair-cover dual
+  -> exact integer budget-infeasibility proof at B=C_A
+exact bypass decomposition C_A <= C_F <= C_U <= U
+two-sided residual kernelization
+exact shared-state proof DAG quotient
+unique minimal 4-world / 3-query strict-gain normal form
 ```
 
-It also separates branch-exclusive overhead into internal and external bypass channels:
+The next problems therefore concern stronger quotienting, larger structural bounds, and extensions beyond finite deterministic target resolution.
+
+## 1. Quotient residual states by isomorphism, not only exact identity
+
+`proof_dag.py` already merges branch histories reaching the exact same residual state `(U,A,B)`. `cover_kernel.py` removes inactive/dominated queries, dominated pair obligations, and forced choices before branching.
+
+Two residual pair-cover states may still be mathematically identical after relabeling pairs and queries even when their bit masks differ.
+
+The next proof-compression target is a canonical isomorphism signature preserving:
+
+- query costs;
+- pair-query incidence;
+- residual budget;
+- the target-pair-cover semantics.
+
+Questions:
+
+- Can graph/hypergraph canonicalization safely quotient these residual states?
+- How much smaller are proof DAGs after exact-isomorphism sharing?
+- Can the canonicalization certificate itself be independently verified without trusting a graph-isomorphism search trace?
+
+This is representation compression only; it must not merge merely similar states.
+
+## 2. Tight kernel-size bounds beyond the pair-side Sperner bound
+
+After pair-obligation dominance, distinct nonempty separator signatures form an inclusion antichain over `m` remaining queries, hence
 
 \[
-U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
+|U_K|\le {m\choose\lfloor m/2\rfloor}.
 \]
 
-The next problems begin where those certificates stop.
-
-## 1. Compress the integer cover proof
-
-The previous LP-integrality-gap problem is now closed for strict-gain certification: `integer_cover_proof.py` can prove directly that no fixed resolver exists with cost at most `C_A`, and its proof tree is independently verified.
-
-The new question is **proof compression**, not existence of an exact certificate.
-
-The branching proof can still be exponential. Useful next targets are:
-
-- stronger cover cuts that collapse many proof-tree branches into one checkable inequality;
-- symmetry reduction of equivalent cross-target pairs and equivalent queries;
-- parameterized bounds in adaptive-tree union size, branch-exclusive overhead, or residual pair-cover width;
-- proof minimization: given several valid infeasibility trees, find the smallest receipt that still verifies;
-- a canonical proof format that can be checked without rerunning search.
-
-The fail-closed rule remains: hitting `max_states` means `certificate_incomplete`, never `strict_gain` or `no_gain`.
-
-## 2. Characterize fixed bypass structurally
-
-The refined decomposition distinguishes
-
-```text
-internal union redundancy = U - C_U
-external shortcut discount = C_U - C_F.
-```
-
-Both can be zero, can eliminate all adaptive gain, or can consume only part of the branch-exclusive overhead while strict gain survives.
+The unique minimal strict-gain normal form saturates this at `m=3`.
 
 Open questions:
 
-- Can `C_U-C_F>0` be predicted from local separator structure around the adaptive tree rather than a global cover decision?
-- What query-vocabulary operations create or destroy external shortcuts monotonically?
-- Is there a useful minimal bypass set analogous to a cut or alternate path?
-- How does the decomposition change with random or state-dependent query costs?
+- What joint bounds follow when query dominance is imposed simultaneously?
+- For unit query costs, both row and column signatures are antichains; what incidence matrices can satisfy both conditions?
+- Can branch-exclusive overhead or residual budget sharpen the middle-binomial bound?
+- Is there a kernel-size bound parameterized by `C_A`, `C_F-C_A`, or selected adaptive-tree union size rather than raw query count?
 
-## 3. Information-valued adaptive gain
+A useful result would bound the size of the exact integer proof instance after safe preprocessing, not merely one side of the incidence matrix.
 
-For MROD-like tasks the utility need not be binary target resolution. Define
+## 3. Classify the next-smallest strict-gain universes
+
+The minimal balanced scope is now closed:
+
+```text
+4 worlds
+2+2 target multiplicity
+3 binary unit-cost queries
+```
+
+has exactly 192 labeled strict-gain tasks, all in one symmetry orbit with canonical separator signature `(3,5,9)`.
+
+The next classification questions are:
+
+- What new normal forms first appear with four queries?
+- What is the smallest universe exhibiting partial internal bypass with residual gain?
+- What is the smallest universe exhibiting partial external bypass with residual gain?
+- What is the smallest integral-packing gap and fractional integrality gap after quotienting symmetries?
+- What is the maximum possible ratio `C_F/C_A` at each `(world_count, query_count)`?
+
+Counts should be reported modulo declared symmetries as well as in raw labeled form.
+
+## 4. Characterize external fixed bypass locally
+
+The exact decomposition is
+
+\[
+U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U),
+\]
+
+where `C_U-C_F` is the external shortcut discount.
+
+Internal redundancy is visible inside the adaptive tree union. External shortcutting depends on the larger measurement vocabulary and remains more global.
+
+Open questions:
+
+- Can an outside query be certified irrelevant using only its incidence on private/minimal pair obligations?
+- Is there a cut-style certificate that every external shortcut must cross?
+- What query-vocabulary operations monotonically create or destroy external bypass?
+- Can external shortcut discount be bounded without solving the full fixed cover?
+
+## 5. Information-valued adaptive gain
+
+For MROD-like tasks the utility need not be binary target resolution:
 
 \[
 G(B)
 =
-\max_{\pi:\,c(\pi)\le B} I(T;H_\pi)
+\max_{\pi:c(\pi)\le B}I(T;H_\pi)
 -
-\max_{F:\,c(F)\le B} I(T;Q_F).
+\max_{F:c(F)\le B}I(T;Q_F).
 \]
 
-The repository can audit information of a selected deterministic policy but does not yet provide a general optimizer or theorem characterizing `G(B)>0`.
-
-The cost results show why branch-dependent next actions are not enough: the fixed class can have internal or external bypasses. The information-valued analogue therefore needs an optimized fixed comparator too.
+The cost theory shows why routing entropy alone is insufficient: the optimized fixed class can bypass an adaptive route.
 
 Questions:
 
-- What is the information analogue of `internal union redundancy` and `external shortcut discount`?
-- Can positive routing entropy coexist with zero class-oracle information gap at every budget? (The source MROD XOR control suggests yes.)
-- Can `G(B)>0` occur on several disconnected budget intervals?
+- What are the information analogues of internal redundancy and external shortcut discount?
+- Can the class-oracle information gap have multiple disconnected positive budget windows?
 - Under what assumptions is the information objective submodular or adaptively submodular?
+- What certificate replaces cross-target pair separation when partial information rather than exact resolution is the target?
 
-## 4. Continuous compatible sets
+## 6. Continuous compatible sets
 
-PAYOFF's scientific uncertainty is continuous, whereas the current exact adaptive theorem is finite.
-
-The next target is
+PAYOFF's scientific uncertainty is continuous. A desired extension has
 
 \[
-\Theta_t\subset\mathbb R^d,
-\qquad
-\Theta_{t+1}=\Theta_t\cap C(q_t,y_t),
+\Theta_{t+1}=\Theta_t\cap C(q_t,y_t)
 \]
 
-with a target map `T(theta)`. The challenge is to minimize worst-path acquisition cost without replacing the continuous compatible set by an unjustified finite panel.
+and target map `T(theta)` without discretizing `Theta` into an unjustified finite panel.
 
-A continuous counterpart of the current pair-cover view would need a certificate that every pair of parameter points with different target values is separated by selected constraints. This becomes an uncountable separation/cover problem.
+A continuous counterpart of pair cover must certify separation of every parameter pair with different target values. This becomes an uncountable separation problem.
 
-## 5. Calibration actions versus target actions
+Potential directions include convex/semi-algebraic certificates, interval branch-and-bound, and finite witness reductions whose completeness is proved rather than assumed.
 
-All three source repositories expose the resource tradeoff
+## 7. Calibration actions versus target actions
+
+MROD, PAYOFF, and BALANCE all expose the resource tradeoff
 
 ```text
 measure the scientific target
 vs
-spend budget improving the measurement model.
+improve the measurement model itself.
 ```
 
-Examples:
+A calibration action can change the future query hypergraph, so a static cover model is insufficient. The state must carry both scientific uncertainty and calibration uncertainty.
 
-- MROD: calibrate `P(Q|world)` versus acquire a target-facing observation;
-- PAYOFF: kernel/range calibration versus phase-discriminating payoff contrasts;
-- BALANCE: improve forcing-command precision `e` versus collect more switch-bracketing queries.
+## 8. Stochastic branch-invariance and scenario robustness
 
-A useful state must carry both target uncertainty and calibration uncertainty. A calibration action can alter the future query hypergraph itself, so the static pair-cover representation is no longer enough.
+BALANCE's current no-routing theorem is deterministic/minimax. Under stochastic errors, equal span need not imply equal continuation distributions.
 
-## 6. Stochastic branch-invariance
+The probabilistic analogue likely requires equality of continuation-value kernels rather than raw state summaries. Randomized policies under multiple calibration scenarios are another separate objective and should not be imported into deterministic guaranteed resolution by default.
 
-BALANCE's no-routing control is deterministic/minimax. With stochastic errors or expected loss, two branches with equal interval span may have different future distributions.
+## 9. Empirical identification of routing value
 
-The probabilistic analogue of
+A natural-data routing claim needs more than low direct information of the first observation. The finite controls establish that:
 
-\[
-\sigma(s_{q,y})=\sigma'\quad\forall y
-\]
+- zero direct root information is neither necessary nor sufficient;
+- fixed bypass may be internal or external;
+- bypass may remove all or only part of potential gain;
+- lower-bound relaxations may miss integer fixed-cost gaps.
 
-likely requires equality of continuation-value kernels, not equality of raw summaries.
-
-## 7. Randomized policies and scenario robustness
-
-The current exact solver optimizes deterministic trees. Under multiple calibration scenarios, a randomized mixture of policies may reduce minimax regret even when it cannot lower guaranteed-resolution cost.
-
-This is a separate objective and should not be imported into the deterministic theorem by default.
-
-## 8. Empirical identification of routing value
-
-A natural-data routing claim requires much more than
-
-\[
-I(T;Q_1)\approx0.
-\]
-
-The validation controls now show:
-
-- zero direct root information is not necessary;
-- zero direct information plus branch-dependent continuation is not sufficient;
-- a fixed bypass can be internal or external;
-- bypass can eliminate all gain or only part of it;
-- fractional lower bounds can miss a real integer fixed-cost gap.
-
-An empirical claim therefore needs evidence that:
-
-1. the first result changes the useful continuation action/future-value state;
-2. the branch-specific plan has a real resource advantage;
-3. fixed bypass alternatives have been measured or bounded, not ignored;
-4. the measurement/calibration relationships transport to deployment.
+An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
 
 The source repositories currently provide synthetic/conditional witnesses, not that natural-data demonstration.
-
-## 9. Structural prevalence beyond the tiny binary universe
-
-The complete 4-world / 3-binary-query balanced universe has 192 strict-gain labeled tasks out of 4096. In that tiny universe the private-pair certificate catches all 192.
-
-That completeness disappears in larger controls, where integral packing, fractional packing, and exact integer budget proofs each become necessary on different examples.
-
-Next combinatorial questions:
-
-- What are the symmetry classes of the 192 minimal strict-gain tasks?
-- What is the smallest universe exhibiting an integral-packing gap? a fractional integrality gap? partial internal/external bypass with residual gain?
-- How do results change with unequal costs, multi-outcome queries, multiple target labels, or reusable queries?
-- What is the maximum possible ratio `C_F/C_A` as world and query vocabularies grow?
