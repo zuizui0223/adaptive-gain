@@ -48,6 +48,104 @@ C_adapt <= B < C_fixed.
 
 When both costs are finite, this window is contiguous. It may be empty.
 
+## New structural decomposition from validation
+
+Let `pi*` be the selected optimal adaptive tree and let
+
+```text
+U = total cost of every distinct query appearing anywhere in pi*.
+```
+
+Flattening the full query union into one fixed bundle always resolves the target, so
+
+```text
+C_adapt <= C_fixed <= U.
+```
+
+This gives the exact decomposition
+
+```text
+U - C_adapt
+=
+(C_fixed - C_adapt)
++
+(U - C_fixed).
+```
+
+The three terms are named
+
+```text
+branch-exclusive overhead = U - C_adapt
+realized adaptive gain     = C_fixed - C_adapt
+fixed bypass discount      = U - C_fixed.
+```
+
+Hence
+
+```text
+branch-exclusive overhead
+=
+realized adaptive gain
++
+fixed bypass discount.
+```
+
+This sharpens the earlier intuition. Branch-dependent continuation can create query overhead for a fixed plan, but **another fixed bundle may bypass the routing query entirely**. Positive branch-exclusive overhead is therefore necessary but not sufficient for strict adaptive gain.
+
+Implementation: `adaptive_gain/decomposition.py`.
+
+### Registered positive witnesses
+
+For both MROD-style and PAYOFF-style routing:
+
+```text
+C_adapt = 2
+C_fixed = 3
+U       = 3
+
+overhead = 1
+gain     = 1
+bypass   = 0.
+```
+
+The branch-exclusive overhead is fully converted into realized adaptive gain.
+
+### Bypass counterexample
+
+A four-world control has
+
+```text
+targets = (0,0,1,1)
+
+q_left  = (0,0,0,1)
+q_route = (0,1,0,1)
+q_right = (0,1,1,0).
+```
+
+`q_route` has zero direct target information under uniform worlds and its two outcomes require different next queries. Yet the fixed bundle `(q_left,q_right)` already resolves the target without buying `q_route`.
+
+Therefore
+
+```text
+C_adapt = 2
+C_fixed = 2
+U       = 3
+
+overhead = 1
+gain     = 0
+bypass   = 1.
+```
+
+So
+
+```text
+zero direct target information
++
+branch-dependent continuation
+```
+
+does **not** imply strict adaptive gain.
+
 ## Routing certificate
 
 A strong sufficient certificate for adaptive-only resolution at budget `B` is:
@@ -60,7 +158,7 @@ A strong sufficient certificate for adaptive-only resolution at budget `B` is:
 
 The library returns the branch-specific continuation query, continuation cost, and whether the next action actually differs across branches.
 
-This is deliberately stronger than merely saying "the branches differ". Branch dependence alone does not guarantee adaptive gain.
+This is deliberately stronger than merely saying "the branches differ".
 
 ## Local no-routing certificate
 
@@ -76,7 +174,48 @@ The library can audit equality of declared signatures. It cannot prove that the 
 
 This is the structure used by the BALANCE negative control.
 
-## Registered witnesses
+## Minimality and exhaustive validation
+
+Strict worst-path adaptive cost gain in this deterministic finite problem requires at least
+
+```text
+4 represented worlds
+3 query identities.
+```
+
+With fewer than four worlds there cannot be two disjoint unresolved outcome branches, each containing different target values. With fewer than three queries there cannot be one routing query plus distinct branch-exclusive continuations.
+
+An independent brute-force oracle was added to the test suite. For three labeled unit-cost binary queries:
+
+| Fixed target assignment | Labeled query triples | Strict-gain tasks |
+|---|---:|---:|
+| 2 worlds, split 1+1 | 64 | 0 |
+| 3 worlds, split 2+1 | 512 | 0 |
+| 4 worlds, split 3+1 | 4096 | 0 |
+| 4 worlds, split 2+2 | 4096 | **192** |
+
+For the balanced four-world universe the exact cost classification is:
+
+| `(C_adapt,C_fixed)` | Count |
+|---|---:|
+| unresolved | 1688 |
+| `(1,1)` | 1352 |
+| `(2,2)` | 864 |
+| `(2,3)` | **192** |
+
+Every strict-gain case in this deliberately tiny balanced universe has `C_adapt=2,C_fixed=3`, and every optimal root has zero direct target information under uniform world weights.
+
+That last zero-information property is **not a general theorem**. A separate five-world control has `C_adapt=2,C_fixed=3` while its optimal routing root has positive direct target information. Thus
+
+```text
+I(T; root) = 0
+```
+
+is neither necessary nor sufficient for adaptive gain in general.
+
+See `theory/STRUCTURAL_DECOMPOSITION_AND_MINIMALITY.md`.
+
+## Registered source-repository witnesses
 
 | Witness | Root direct target info | `C_adapt` | `C_fixed` | Adaptive-only budget |
 |---|---:|---:|---:|---:|
@@ -101,7 +240,7 @@ zero direct target information
 zero decision relevance.
 ```
 
-The first observation can be useful because it tells the policy **which experiment should come next**.
+The first observation can be useful because it tells the policy **which experiment should come next** — but the bypass counterexample shows that routing structure alone does not guarantee a class-level gain.
 
 ### MROD-style witness
 
@@ -142,26 +281,30 @@ The no-routing certificate therefore fires.
 
 ```text
 adaptive_gain/
-  core.py          exact fixed/adaptive resolution solvers
-  certificates.py routing and no-routing certificates
-  information.py  direct/continuation information diagnostics
-  witnesses.py    MROD/PAYOFF/BALANCE finite witnesses
+  core.py           exact fixed/adaptive resolution solvers
+  certificates.py  routing and no-routing certificates
+  decomposition.py exact union/gain/bypass cost identity
+  exhaustive.py    finite binary-universe classification helper
+  information.py   direct/continuation information diagnostics
+  witnesses.py     source-derived witnesses plus adverse controls
 
 theory/
   ADAPTIVE_GAIN_THEOREM.md
+  STRUCTURAL_DECOMPOSITION_AND_MINIMALITY.md
   PROVENANCE.md
+  OPEN_PROBLEMS.md
 ```
 
 Quick example:
 
 ```python
-from adaptive_gain import adaptive_gain_receipt, routing_certificate
+from adaptive_gain import adaptive_gain_receipt, optimal_policy_cost_decomposition
 from adaptive_gain.witnesses import mrod_routing_task
 
 task = mrod_routing_task()
 
 print(adaptive_gain_receipt(task))
-print(routing_certificate(task, "context", budget=2))
+print(optimal_policy_cost_decomposition(task))
 ```
 
 ## Scope boundary
@@ -171,9 +314,10 @@ This repository does **not** claim:
 - a new general theory of adaptive experimental design;
 - that PAYOFF, MROD, and BALANCE are the same scientific model;
 - that branch dependence alone is sufficient for adaptive gain;
+- that zero direct target information is necessary or sufficient for gain;
 - that adaptive gain persists at all budgets;
+- that counts in a tiny labeled task universe are empirical prevalence estimates;
 - that a finite synthetic witness is empirical evidence;
-- that zero target information is intrinsically valuable;
 - that target resolution licenses a biological report;
 - that the registered positive examples are common in natural systems.
 
