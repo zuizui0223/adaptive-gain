@@ -12,31 +12,28 @@ fixed-cost certificate ladder
 exact bypass decomposition C_A <= C_F <= C_U <= U
 two-sided residual kernelization
 exact shared-state proof DAG quotient
+exact small-state weighted-incidence isomorphism quotient
 unique minimal 4-world / 3-query strict-gain normal form
+pair-side Sperner kernel bound
 ```
 
-The next problems therefore concern stronger quotienting, larger structural bounds, and extensions beyond finite deterministic target resolution.
+The next problems therefore concern cheaper symmetry handling, stronger structural bounds, larger normal-form classifications, and extensions beyond finite deterministic target resolution.
 
-## 1. Quotient residual states by isomorphism, not only exact identity
+## 1. Replace factorial residual canonicalization with certified symmetry refinement
 
-`proof_dag.py` already merges branch histories reaching the exact same residual state `(U,A,B)`. `cover_kernel.py` removes inactive/dominated queries, dominated pair obligations, and forced choices before branching.
+`isomorphism_quotient.py` now closes the correctness question for small residual states: pair-row order and query names can be forgotten exactly, while query costs and pair-query incidence are preserved. A six-world strict-gain witness compresses four label-specific residual states to two isomorphism classes, and all 4096 minimal tasks retain the exact gain classification.
 
-Two residual pair-cover states may still be mathematically identical after relabeling pairs and queries even when their bit masks differ.
+The remaining problem is computational rather than semantic. Exact canonicalization currently enumerates permutations within cost/invariant color classes and raises when `max_permutations` is exceeded.
 
-The next proof-compression target is a canonical isomorphism signature preserving:
+Open questions:
 
-- query costs;
-- pair-query incidence;
-- residual budget;
-- the target-pair-cover semantics.
+- Which color-refinement invariants can split query classes without excluding a true isomorphism?
+- Can automorphism generators replace explicit enumeration of every within-class permutation?
+- Can a compact canonicalization certificate be checked without rerunning the full symmetry search?
+- How does isomorphism quotienting interact with the already-exported exact-state proof DAG: can an isomorphism-quotient DAG be emitted directly with explicit edge transport maps?
+- Can proof size be bounded in the number of canonical isomorphism classes rather than raw residual states?
 
-Questions:
-
-- Can graph/hypergraph canonicalization safely quotient these residual states?
-- How much smaller are proof DAGs after exact-isomorphism sharing?
-- Can the canonicalization certificate itself be independently verified without trusting a graph-isomorphism search trace?
-
-This is representation compression only; it must not merge merely similar states.
+The fail-closed rule remains: exceeding a symmetry-search cap means `quotient_incomplete`, never `non_isomorphic`.
 
 ## 2. Tight kernel-size bounds beyond the pair-side Sperner bound
 
@@ -54,12 +51,13 @@ Open questions:
 - For unit query costs, both row and column signatures are antichains; what incidence matrices can satisfy both conditions?
 - Can branch-exclusive overhead or residual budget sharpen the middle-binomial bound?
 - Is there a kernel-size bound parameterized by `C_A`, `C_F-C_A`, or selected adaptive-tree union size rather than raw query count?
+- After quotienting isomorphic rows/columns, is there a smaller bound on the number of distinct residual kernels than on their raw size?
 
-A useful result would bound the size of the exact integer proof instance after safe preprocessing, not merely one side of the incidence matrix.
+A useful result would bound the size or number of exact proof instances after safe preprocessing, not merely one side of the incidence matrix.
 
 ## 3. Classify the next-smallest strict-gain universes
 
-The minimal balanced scope is now closed:
+The minimal balanced scope is closed:
 
 ```text
 4 worlds
@@ -158,7 +156,8 @@ A natural-data routing claim needs more than low direct information of the first
 - zero direct root information is neither necessary nor sufficient;
 - fixed bypass may be internal or external;
 - bypass may remove all or only part of potential gain;
-- lower-bound relaxations may miss integer fixed-cost gaps.
+- lower-bound relaxations may miss integer fixed-cost gaps;
+- label-different residual states can still be the same continuation problem after exact weighted-incidence quotienting.
 
 An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
 
