@@ -72,6 +72,8 @@ So an adaptive tree can lose potential gain in two different ways:
 
 This distinction matters experimentally. The first says the adaptive plan itself contains measurements that need not all be bought by a fixed design. The second says an entirely different measurement route bypasses the adaptive tree's branch-specific vocabulary.
 
+Crucially, bypass is a **discount**, not a binary veto. It may consume all branch-exclusive overhead and eliminate strict gain, or only part of the overhead and leave a positive residual gain.
+
 ## 3. Private-pair no-bypass theorem
 
 A query `q` has a globally private cross-target pair if there exists
@@ -202,7 +204,62 @@ Here the selected adaptive union is internally irreducible, but a fixed bundle u
 
 These two controls show that the old single quantity `fixed_bypass_discount` hides scientifically different failure modes.
 
-## 6. Minimal-universe validation
+## 6. Partial bypass can coexist with strict gain
+
+The refined identity predicts a third possibility: bypass can remove only part of the overhead.
+
+Two six-world unit-cost structural controls verify each channel separately.
+
+### Partial internal discount
+
+```text
+C_A = 3
+C_F = 4
+C_U = 4
+U   = 5
+```
+
+so
+
+```text
+overhead            = 2
+internal redundancy = 1
+external shortcut    = 0
+realized gain        = 1.
+```
+
+The selected adaptive union contains one unit of fixed redundancy, yet the fixed optimum still costs one unit more than the adaptive worst path.
+
+### Partial external discount
+
+```text
+C_A = 3
+C_F = 4
+C_U = 5
+U   = 5
+```
+
+so
+
+```text
+overhead            = 2
+internal redundancy = 0
+external shortcut    = 1
+realized gain        = 1.
+```
+
+The adaptive union is internally irreducible, but an outside query lets the global fixed class recover one unit. The remaining unit is still genuine adaptive gain.
+
+Therefore neither statement is valid in general:
+
+```text
+bypass exists -> no adaptive gain
+no bypass      -> necessary for adaptive gain.
+```
+
+The exact statement is only the additive decomposition.
+
+## 7. Minimal-universe validation
 
 For the exhaustively enumerated balanced universe
 
@@ -216,9 +273,9 @@ there are 4096 labeled tasks and exactly 192 strict-gain tasks.
 
 For this deliberately tiny universe, the selected-policy private-pair certificate identifies exactly those same 192 tasks and produces no false positives.
 
-That finite completeness is **not** a general theorem. In larger vocabularies/world sets, strict gain can occur while the private-pair certificate is incomplete.
+That finite completeness is **not** a general theorem. In larger vocabularies/world sets, strict gain can occur while the private-pair certificate is incomplete, and partial bypass can coexist with strict gain as above.
 
-## 7. What remains open
+## 8. What remains open
 
 The private-pair certificate is a cheap structural lower bound on fixed cost. The next stronger problem is to certify `C_F>=K` without exhaustively solving the weighted target-pair cover.
 
