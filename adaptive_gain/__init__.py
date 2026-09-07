@@ -51,6 +51,11 @@ from .fractional_packing import (
     exact_fractional_pair_packing,
     selected_policy_fractional_pair_packing_gain_certificate,
 )
+from .individualization_refinement import (
+    IndividualizationRefinementLimitError,
+    IndividualizationRefinementSignature,
+    individualization_refined_canonical_signature,
+)
 from .information import (
     RoutingInformationReceipt,
     best_fixed_information_bits,
@@ -144,6 +149,8 @@ __all__ = [
     "FractionalPackedPair", "FractionalPackingAdaptiveGainCertificate",
     "FractionalPackingSearchLimitError", "FractionalPairPackingCertificate",
     "exact_fractional_pair_packing", "selected_policy_fractional_pair_packing_gain_certificate",
+    "IndividualizationRefinementLimitError", "IndividualizationRefinementSignature",
+    "individualization_refined_canonical_signature",
     "RoutingInformationReceipt", "best_fixed_information_bits", "bundle_information_bits",
     "policy_information_bits", "routing_information_receipt", "target_entropy_bits",
     "CoverProofBranch", "CoverProofNode", "FixedBudgetDecisionCertificate",
