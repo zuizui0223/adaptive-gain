@@ -88,6 +88,32 @@ def test_refinement_can_close_exact_canonicalization_under_a_tighter_cap():
     assert refined.permutations_examined == 12
 
 
+def test_color_refinement_is_safe_but_not_a_complete_isomorphism_test():
+    # Both incidence graphs are 2-regular with four queries and four obligations.
+    # One is a connected 8-cycle; the other is two disconnected 4-cycles. Stable
+    # color refinement leaves all query vertices in one class in both instances,
+    # while exact canonical signatures still distinguish them.
+    cycle8 = ResidualPairCoverInstance(
+        (1, 1, 1, 1),
+        (0b0011, 0b0110, 0b1100, 0b1001),
+        2,
+    )
+    two_cycles4 = ResidualPairCoverInstance(
+        (1, 1, 1, 1),
+        (0b0011, 0b0011, 0b1100, 0b1100),
+        2,
+    )
+    _, _, left_refinement = refine_residual_incidence_colors(cycle8)
+    _, _, right_refinement = refine_residual_incidence_colors(two_cycles4)
+    assert left_refinement.refined_query_color_class_sizes == (4,)
+    assert right_refinement.refined_query_color_class_sizes == (4,)
+    assert left_refinement.refined_permutation_count == 24
+    assert right_refinement.refined_permutation_count == 24
+    left_exact = refined_canonical_residual_pair_cover_signature(cycle8)
+    right_exact = refined_canonical_residual_pair_cover_signature(two_cycles4)
+    assert left_exact.signature != right_exact.signature
+
+
 def test_refined_quotient_preserves_existing_isomorphism_compression_and_gain():
     task = _isomorphism_compression_control()
     exact = adaptive_gain_receipt(task)
