@@ -50,6 +50,7 @@ class FourQueryUniverseSummary:
     all_strict_tasks_have_minimal_strict_deletion: bool
     strict_gain_cost_pairs: tuple[tuple[int, int], ...]
     maximum_strict_cost_ratio: Fraction | None
+    classification_disagreement_count: int
     scope: str = "complete_labeled_four_world_balanced_four_binary_unit_cost_query_universe"
 
 
@@ -150,7 +151,7 @@ def enumerate_balanced_four_query_universe(
     extension_counts: dict[str, int] = {}
     deletion_counts: dict[int, int] = {}
     strict_pairs: set[tuple[int, int]] = set()
-    strict = unresolved = 0
+    strict = unresolved = disagreements = 0
     all_reducible = True
     max_ratio: Fraction | None = None
 
@@ -164,19 +165,20 @@ def enumerate_balanced_four_query_universe(
         cost_counts[pair] = cost_counts.get(pair, 0) + 1
         if exact.adaptive_cost is None:
             unresolved += 1
+
+        signature = canonical_four_query_separator_signature(task)
+        extension = FOUR_QUERY_STRICT_EXTENSION_SIGNATURES.get(signature)
+        predicted = extension is not None
+        disagreements += int(predicted != exact.strict_adaptive_gain)
         if not exact.strict_adaptive_gain:
             continue
 
         strict += 1
         assert exact.adaptive_cost is not None and exact.fixed_cost is not None
+        assert extension is not None
         strict_pairs.add((exact.adaptive_cost, exact.fixed_cost))
         ratio = Fraction(exact.fixed_cost, exact.adaptive_cost)
         max_ratio = ratio if max_ratio is None or ratio > max_ratio else max_ratio
-
-        signature = canonical_four_query_separator_signature(task)
-        extension = FOUR_QUERY_STRICT_EXTENSION_SIGNATURES.get(signature)
-        if extension is None:
-            raise ArithmeticError("strict four-query task escaped registered extension normal forms")
         extension_counts[extension] = extension_counts.get(extension, 0) + 1
         deletions = _strict_three_query_deletion_count(task)
         deletion_counts[deletions] = deletion_counts.get(deletions, 0) + 1
@@ -195,4 +197,5 @@ def enumerate_balanced_four_query_universe(
         all_reducible,
         tuple(sorted(strict_pairs)),
         max_ratio,
+        disagreements,
     )
