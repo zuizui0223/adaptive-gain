@@ -23,6 +23,7 @@ unbounded unit-cost adaptive advantage
 unbounded binary-observation unit-cost adaptive advantage
 sharp productive-tree internal-node bound M(n,h)
 sharp unit-cost fixed-(world count, query count) ratio for unrestricted query arity
+sharp unit-cost fixed-(world count, query count) ratio for binary query arity
 ```
 
 The central scalar-cost boundary is now especially compact:
@@ -88,13 +89,11 @@ Open questions:
 
 ## 3. Extremal adaptive advantage under additional structural constraints
 
-Without extra restrictions, both additive gain and `C_F/C_A` are unbounded even for binary deterministic observations with unit costs:
+Without extra restrictions, both additive gain and `C_F/C_A` are unbounded even for binary deterministic observations with unit costs.
 
-\[
-C_A=d+1,\qquad C_F=2^d.
-\]
+Two fixed-`(n,m)` unit-cost extremal problems are now closed.
 
-For **unit costs with unrestricted deterministic query arity**, the fixed-`(n,m)` problem is now closed exactly:
+### Unrestricted deterministic query arity
 
 \[
 \boxed{
@@ -121,14 +120,39 @@ n+1-
 }
 \]
 
-So the remaining extremal questions require additional restrictions beyond just `n,m` in the unrestricted-arity unit-cost model.
+### Binary query arity
+
+Let
+
+\[
+K=\min(m,n-1),
+\qquad d=\lfloor\log_2(K+1)\rfloor.
+\]
+
+Then
+
+\[
+\boxed{
+\max\frac{C_F}{C_A}
+=
+\max\!\left(
+1,
+\frac{2^d-1}{d},
+\frac{K}{d+1}
+\right).
+}
+\]
+
+Alternating-target threshold paths attain the binary bound.  The first binary-only fixed-`(n,m)` scope above `3/2` is six worlds and five queries, with `(C_A,C_F)=(3,5)`.
+
+The remaining extremal questions therefore require restrictions not captured by `(n,m)` and binary/unrestricted arity alone.
 
 Open questions:
 
-- What is the sharp fixed-`(n,m)` ratio when **all queries are binary**?
+- What is the sharp ratio for intermediate maximum query arity `3 <= b < infinity`?
 - What is the sharp ratio at fixed observation-tree depth together with bounded query arity?
 - What bounds follow from limiting productive-frontier rank, edge count, or transversal number?
-- What is the sharp ratio bound when every query has balanced binary outcomes?
+- What is the sharp ratio when every query has balanced binary outcomes?
 - What changes if each query may be used at most once globally, versus once per branch as in the current resource model?
 - Under unequal positive costs, what is the sharp fixed-`(n,m)` ratio and what are the smallest scopes exceeding a given threshold?
 
@@ -139,12 +163,12 @@ Closed nearby scopes:
 1. `4 worlds / 2+2 targets / 3 queries`: one strict orbit `(3,5,9)`.
 2. `4 worlds / 2+2 targets / 4 queries`: only one-query extensions of that core.
 3. `5 worlds / 2+3 targets / 3 queries`: one new deletion-minimal orbit `(7,28,42)`.
-4. Unit-cost ratio `>3/2`: impossible with at most five worlds; attained with six worlds/four queries.
+4. Unit-cost ratio `>3/2`: impossible with at most five worlds; attained with six worlds/four queries for unrestricted arity and six worlds/five queries for binary-only observations.
 
 Next questions:
 
 - What irreducible forms first appear with five worlds and four queries?
-- What is the next deletion-minimal core at six worlds after quotienting the explicit extremal family?
+- What is the next deletion-minimal core at six worlds after quotienting the explicit extremal families?
 - What is the smallest deletion-minimal core with nonzero internal or external bypass?
 - Which larger cores share one adaptive continuation type but have distinct productive frontiers?
 - Can normal forms be classified directly by `(continuation type, productive frontier)` rather than raw world/query tables?
