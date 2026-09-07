@@ -40,6 +40,17 @@ from .resource_orbit_quotient import (
     task_automorphism_group,
     verify_task_automorphism_group,
 )
+from .resource_overlap import (
+    ResourceCoLocationLimitError,
+    ResourceOverlapCollisionAudit,
+    ResourceOverlapTaskSignature,
+    ResourceRoleOverlapUniverseSummary,
+    enumerate_balanced_resource_role_overlap_universe,
+    orbit_capacity_collision,
+    resource_overlap_collision_audit,
+    resource_overlap_signatures,
+    resource_role_profile_collision,
+)
 
 __all__ = [
     "ContinuationAction",
@@ -74,4 +85,13 @@ __all__ = [
     "resource_orbit_cost_audit",
     "task_automorphism_group",
     "verify_task_automorphism_group",
+    "ResourceCoLocationLimitError",
+    "ResourceOverlapCollisionAudit",
+    "ResourceOverlapTaskSignature",
+    "ResourceRoleOverlapUniverseSummary",
+    "enumerate_balanced_resource_role_overlap_universe",
+    "orbit_capacity_collision",
+    "resource_overlap_collision_audit",
+    "resource_overlap_signatures",
+    "resource_role_profile_collision",
 ]
