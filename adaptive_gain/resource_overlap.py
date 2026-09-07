@@ -1,33 +1,33 @@
 """Resource-overlap diagnostics for joint adaptive/fixed representations.
 
-The cost-only continuation quotient forgets physical query identity.  Keeping only
-query-orbit capacities is still insufficient for the fixed comparator.  A stronger
+The cost-only continuation quotient forgets physical query identity. Keeping only
+query-orbit capacities is still insufficient for the fixed comparator. A stronger
 projection records, for every physical resource, the set of abstract continuation
-roles it can realize across reachable mixed states.  That projection is also not
+roles it can realize across reachable mixed states. That projection is also not
 sufficient in general: two four-world/four-query tasks can have the same multiset
 of per-resource role profiles while their fixed costs differ.
 
-This module makes those losses executable.  It also exposes a stronger
+This module makes those losses executable. It also exposes a stronger
 state-resource co-location signature that retains which local roles coexist in the
-same concrete reachable state.  Co-location distinguishes the registered collision
-but is NOT claimed to be generally sufficient.  The exact sufficient joint
+same concrete reachable state. Co-location distinguishes the registered collision
+but is NOT claimed to be generally sufficient. The exact sufficient joint
 representation remains ``resource_continuation.py``, which keeps resource-labelled
 transition structure.
 """
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
-from itertools import combinations, permutations, product
+from itertools import permutations, product
 from math import factorial
 from typing import Sequence
 
 from .continuation_bisimulation import (
-    ContinuationAction,
     ContinuationQuotientCertificate,
     build_continuation_quotient,
 )
 from .core import FiniteTask, Query, World, adaptive_gain_receipt
-from .resource_orbit_quotient import ResourceOrbitLimitError, task_automorphism_group
+from .resource_orbit_quotient import task_automorphism_group
 
 
 class ResourceCoLocationLimitError(RuntimeError):
@@ -68,46 +68,61 @@ class ResourceRoleOverlapUniverseSummary:
 def orbit_capacity_collision() -> tuple[FiniteTask, FiniteTask]:
     """Same continuation type + resource-orbit capacities; fixed costs 3 vs 2."""
     worlds = tuple(World(f"w{i}", 0 if i < 2 else 1) for i in range(5))
-    strict = FiniteTask(worlds, (
-        Query("q0", 1, (0, 0, 0, 0, 1)),
-        Query("q1", 1, (0, 1, 0, 0, 0)),
-        Query("q2", 1, (0, 1, 1, 1, 0)),
-    ))
-    bypass = FiniteTask(worlds, (
-        Query("q0", 1, (0, 1, 0, 0, 0)),
-        Query("q1", 1, (0, 1, 0, 0, 1)),
-        Query("q2", 1, (0, 1, 1, 1, 0)),
-    ))
+    strict = FiniteTask(
+        worlds,
+        (
+            Query("q0", 1, (0, 0, 0, 0, 1)),
+            Query("q1", 1, (0, 1, 0, 0, 0)),
+            Query("q2", 1, (0, 1, 1, 1, 0)),
+        ),
+    )
+    bypass = FiniteTask(
+        worlds,
+        (
+            Query("q0", 1, (0, 1, 0, 0, 0)),
+            Query("q1", 1, (0, 1, 0, 0, 1)),
+            Query("q2", 1, (0, 1, 1, 1, 0)),
+        ),
+    )
     return strict, bypass
 
 
 def resource_role_profile_collision() -> tuple[FiniteTask, FiniteTask]:
     """Same continuation + per-resource abstract role profiles; fixed 2 vs 3."""
     worlds = tuple(World(f"w{i}", i // 2) for i in range(4))
-    no_gain = FiniteTask(worlds, (
-        Query("left", 1, (0, 0, 0, 1)),
-        Query("right", 1, (0, 1, 0, 0)),
-        Query("bypass", 1, (0, 1, 0, 1)),
-        Query("route", 1, (0, 1, 1, 0)),
-    ))
-    strict = FiniteTask(worlds, (
-        Query("left", 1, (0, 0, 0, 1)),
-        Query("right", 1, (0, 1, 0, 0)),
-        Query("route_a", 1, (0, 1, 1, 0)),
-        Query("route_b", 1, (0, 1, 1, 0)),
-    ))
+    no_gain = FiniteTask(
+        worlds,
+        (
+            Query("left", 1, (0, 0, 0, 1)),
+            Query("right", 1, (0, 1, 0, 0)),
+            Query("bypass", 1, (0, 1, 0, 1)),
+            Query("route", 1, (0, 1, 1, 0)),
+        ),
+    )
+    strict = FiniteTask(
+        worlds,
+        (
+            Query("left", 1, (0, 0, 0, 1)),
+            Query("right", 1, (0, 1, 0, 0)),
+            Query("route_a", 1, (0, 1, 1, 0)),
+            Query("route_b", 1, (0, 1, 1, 0)),
+        ),
+    )
     return no_gain, strict
 
 
 def _class_types(certificate: ContinuationQuotientCertificate) -> tuple[tuple, ...]:
     result: list[tuple] = [("R",)]
     for cls in certificate.classes[1:]:
-        actions = tuple(sorted((
-            "A",
-            action.cost,
-            tuple(result[child] for child in action.child_classes),
-        ) for action in cls.actions, key=repr))
-        result.append(("M", actions))
+        action_rows = [
+            (
+                "A",
+                action.cost,
+                tuple(result[child] for child in action.child_classes),
+            )
+            for action in cls.actions
+        ]
+        result.append(("M", tuple(sorted(action_rows, key=repr))))
     return tuple(result)
 
 
@@ -121,11 +136,13 @@ def _cells(task: FiniteTask, world_mask: int, query_index: int) -> tuple[int, ..
 
 
 def _pure(task: FiniteTask, world_mask: int) -> bool:
-    return len({
-        task.worlds[i].target
-        for i in range(len(task.worlds))
-        if world_mask & (1 << i)
-    }) <= 1
+    return len(
+        {
+            task.worlds[i].target
+            for i in range(len(task.worlds))
+            if world_mask & (1 << i)
+        }
+    ) <= 1
 
 
 def _query_orbit_capacity_profile(task: FiniteTask) -> tuple[tuple[int, int], ...]:
@@ -171,10 +188,12 @@ def _resource_role_profiles(
                 children.add(class_types[child_id])
             action_type = ("A", query.cost, tuple(sorted(children, key=repr)))
             profiles[q].add((parent_type, action_type))
-    return tuple(sorted(
-        (tuple(sorted(profile, key=repr)) for profile in profiles),
-        key=repr,
-    ))
+    return tuple(
+        sorted(
+            (tuple(sorted(profile, key=repr)) for profile in profiles),
+            key=repr,
+        )
+    )
 
 
 def _cost_preserving_orders(task: FiniteTask, max_permutations: int):
@@ -231,16 +250,19 @@ def _state_resource_colocation_signature(
                     continue
                 child_id = lookup[(child, member.remaining_queries & ~bit)]
                 children.add(class_types[child_id])
-            cells_by_query.append(("P", query.cost, tuple(sorted(children, key=repr))))
+            cells_by_query.append(
+                ("P", query.cost, tuple(sorted(children, key=repr)))
+            )
         rows.append((class_types[member.class_id], tuple(cells_by_query)))
 
     best = None
     best_key = None
     for order in _cost_preserving_orders(task, max_permutations):
-        candidate = tuple(sorted((
-            parent,
-            tuple(cells[q] for q in order),
-        ) for parent, cells in rows, key=repr))
+        transformed_rows = [
+            (parent, tuple(cells[q] for q in order))
+            for parent, cells in rows
+        ]
+        candidate = tuple(sorted(transformed_rows, key=repr))
         key = repr(candidate)
         if best_key is None or key < best_key:
             best, best_key = candidate, key
@@ -257,15 +279,20 @@ def resource_overlap_signatures(
     class_types = _class_types(certificate)
     rows = []
     for t, task in enumerate(tasks):
-        rows.append(ResourceOverlapTaskSignature(
-            class_types[certificate.root_classes[t]],
-            _query_orbit_capacity_profile(task),
-            _resource_role_profiles(task, certificate, t, class_types),
-            _state_resource_colocation_signature(
-                task, certificate, t, class_types,
-                max_permutations=max_permutations,
-            ),
-        ))
+        rows.append(
+            ResourceOverlapTaskSignature(
+                class_types[certificate.root_classes[t]],
+                _query_orbit_capacity_profile(task),
+                _resource_role_profiles(task, certificate, t, class_types),
+                _state_resource_colocation_signature(
+                    task,
+                    certificate,
+                    t,
+                    class_types,
+                    max_permutations=max_permutations,
+                ),
+            )
+        )
     return tuple(rows)
 
 
@@ -318,8 +345,8 @@ def enumerate_balanced_resource_role_overlap_universe(
     """Exact compact scan for 4 balanced worlds and binary unit-cost queries.
 
     The global interning table gives one shared structural continuation vocabulary
-    across the complete labeled universe.  The signature keeps the root class and
-    the multiset of each resource's abstract local role set.  This is a scope-
+    across the complete labeled universe. The signature keeps the root class and
+    the multiset of each resource's abstract local role set. This is a scope-
     specific classifier used to locate the first resource-role ambiguity; it is
     not a general canonicalizer.
     """
@@ -393,11 +420,14 @@ def enumerate_balanced_resource_role_overlap_universe(
             return cid
 
         root = visit(0b1111, (1 << query_count) - 1)
-        profile_multiset = tuple(sorted(
-            (tuple(sorted(profile)) for profile in profiles),
-            key=repr,
-        ))
+        profile_multiset = tuple(
+            sorted(
+                (tuple(sorted(profile)) for profile in profiles),
+                key=repr,
+            )
+        )
         signature = (root, profile_multiset)
+
         fixed = None
         for bundle in range(1 << query_count):
             cost = bundle.bit_count()
