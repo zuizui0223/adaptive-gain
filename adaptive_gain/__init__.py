@@ -1,5 +1,10 @@
 """Adaptive gain theory extracted from PAYOFF/MROD/BALANCE decision structure."""
 
+from .automorphism import (
+    ResidualAutomorphismGroupReceipt,
+    residual_automorphism_group,
+    verify_residual_automorphism_group,
+)
 from .core import (
     AdaptiveGainReceipt,
     AdaptiveNode,
@@ -129,6 +134,8 @@ from .proof_dag import (
 )
 
 __all__ = [
+    "ResidualAutomorphismGroupReceipt", "residual_automorphism_group",
+    "verify_residual_automorphism_group",
     "AdaptiveGainReceipt", "AdaptiveNode", "AdaptiveResolutionReceipt",
     "BudgetResolutionRow", "FiniteTask", "FixedResolutionReceipt", "Query", "World",
     "adaptive_gain_receipt", "adaptive_minimum_resolution", "adaptive_only_at_budget",
