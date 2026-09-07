@@ -1,0 +1,26 @@
+{
+  "scope": "finite deterministic positive-cost selected-policy productive-frontier transversal structure",
+  "theorems": {
+    "fixed_optimum": "C_F = min_{T in Tr(H)} c(T)",
+    "restricted_optimum": "C_U = min_{T in Tr(H), T subseteq S} c(T)",
+    "internal_zero": "U-C_U=0 iff S is a minimal transversal iff every q in S has E cap S={q} for some frontier edge E",
+    "external_positive": "C_U-C_F>0 iff a minimal transversal outside S has cost below C_U"
+  },
+  "registered_controls": {
+    "MROD_style": {"C_A": 2, "C_F": 3, "C_U": 3, "U": 3, "gain": 1, "internal": 0, "external": 0},
+    "PAYOFF_style": {"C_A": 2, "C_F": 3, "C_U": 3, "U": 3, "gain": 1, "internal": 0, "external": 0},
+    "routing_internal_bypass": {"C_A": 2, "C_F": 2, "C_U": 2, "U": 3, "gain": 0, "internal": 1, "external": 0},
+    "external_shortcut": {"C_A": 2, "C_F": 2, "C_U": 3, "U": 3, "gain": 0, "internal": 0, "external": 1},
+    "partial_internal_gain": {"C_A": 3, "C_F": 4, "C_U": 4, "U": 5, "gain": 1, "internal": 1, "external": 0},
+    "partial_external_gain": {"C_A": 3, "C_F": 4, "C_U": 5, "U": 5, "gain": 1, "internal": 0, "external": 1}
+  },
+  "exhaustive_regression": {
+    "worlds": 4,
+    "target_multiplicity": "2+2",
+    "binary_unit_cost_queries": 3,
+    "labeled_tasks": 4096,
+    "strict_gain_tasks": 192,
+    "required_check": "minimal-transversal decomposition equals productive-frontier scalar decomposition on every task"
+  },
+  "claim_boundary": "Exact transversal enumeration is fail-closed and small-state; structural identities do not claim scalable hypergraph dualization or stochastic/noisy generalization."
+}
