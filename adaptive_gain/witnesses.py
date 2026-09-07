@@ -119,6 +119,56 @@ def internal_redundancy_control() -> FiniteTask:
     )
 
 
+def partial_internal_bypass_gain_control() -> FiniteTask:
+    """Strict gain survives one unit of INTERNAL union redundancy.
+
+    Six balanced target worlds and six unit-cost binary queries give
+
+        C_A=3, C_F=C_U=4, U=5.
+
+    Hence branch-exclusive overhead is 2, internal union redundancy is 1, and
+    realized adaptive gain remains 1.  q5 is constant and unused.
+    """
+    worlds = tuple(
+        World(f"w{i}", 0 if i < 3 else 1)
+        for i in range(6)
+    )
+    maps = (
+        (1, 0, 1, 1, 1, 0),
+        (0, 1, 1, 0, 1, 1),
+        (1, 1, 0, 1, 0, 0),
+        (0, 1, 1, 1, 1, 1),
+        (0, 0, 1, 0, 0, 0),
+        (1, 1, 1, 1, 1, 1),
+    )
+    return FiniteTask(worlds, tuple(Query(f"q{i}", 1, outcomes) for i, outcomes in enumerate(maps)))
+
+
+def partial_external_bypass_gain_control() -> FiniteTask:
+    """Strict gain survives one unit of EXTERNAL fixed shortcut discount.
+
+    Six balanced target worlds and six unit-cost binary queries give
+
+        C_A=3, C_F=4, C_U=5, U=5.
+
+    The selected adaptive union is internally irreducible, but an outside query
+    lets the global fixed class save one unit; one unit of adaptive gain remains.
+    """
+    worlds = tuple(
+        World(f"w{i}", 0 if i < 3 else 1)
+        for i in range(6)
+    )
+    maps = (
+        (1, 1, 1, 1, 1, 0),
+        (1, 0, 1, 1, 1, 0),
+        (1, 0, 0, 0, 1, 0),
+        (0, 0, 1, 0, 0, 0),
+        (1, 1, 0, 1, 1, 0),
+        (0, 0, 0, 0, 1, 0),
+    )
+    return FiniteTask(worlds, tuple(Query(f"q{i}", 1, outcomes) for i, outcomes in enumerate(maps)))
+
+
 def positive_root_information_gain_control() -> FiniteTask:
     """Strict gain where an optimal root has POSITIVE direct target information.
 
