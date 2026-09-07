@@ -178,7 +178,7 @@ def test_equal_cost_equivalent_queries_are_interchangeable_not_double_counted():
     assert refinement.refinement_dominated_query_occurrences_pruned > 0
 
 
-def test_no_progress_equivalence_class_is_skipped_without_changing_cost():
+def test_no_progress_equivalence_class_is_removed_before_explicit_skip_under_refinement():
     worlds = _balanced_worlds()
     task = FiniteTask(
         worlds,
@@ -194,5 +194,8 @@ def test_no_progress_equivalence_class_is_skipped_without_changing_cost():
     assert equivalent.no_progress_query_occurrences_skipped >= 2
     assert equivalent.cost_agrees_with_direct_solver
     assert refinement.minimum_worst_path_cost == 1
-    assert refinement.no_progress_query_occurrences_skipped >= 1
+    # The direct query strictly refines both constant queries, so refinement
+    # dominance removes them before the no-progress frontier counter is reached.
+    assert refinement.no_progress_query_occurrences_skipped == 0
+    assert refinement.refinement_dominated_query_occurrences_pruned >= 2
     assert refinement.cost_agrees_with_direct_solver
