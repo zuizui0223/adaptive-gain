@@ -6,19 +6,24 @@ The finite deterministic guaranteed-resolution layer now has the following close
 exact adaptive optimum C_A
 exact fixed optimum C_F
 exact gain/bypass decomposition
-full target-pair incidence sufficiency for (C_A,C_F)
 cost-only continuation quotient preserving C_A
-reachable state-resource (U,P) incidence preserving C_F
-cost-only continuation + (U,P) incidence preserving (C_A,C_F)
-resource-labelled transition quotient preserving richer named wiring
+productive-frontier hypergraph preserving C_F
+cost-only continuation + productive frontier preserving (C_A,C_F)
+productive-frontier / minimal pair-separator equivalence
+Sperner/LYM bounds for the fixed frontier
+productive-frontier form of gain / external bypass / internal redundancy
+resource-labelled transition structure for richer named wiring
 joint-safe global world-twin/query-refinement kernel
 fixed-side certificate ladder and proof compression
 minimal 4-world strict-gain normal form
 complete 4-world / 4-query extension classification
 unique deletion-minimal 5-world strict-gain normal form
+first unit-cost scope with C_F/C_A > 3/2
+unbounded unit-cost adaptive advantage
+unbounded binary-observation unit-cost adaptive advantage
 ```
 
-The central scalar-cost boundary is now
+The central scalar-cost boundary is now especially compact:
 
 \[
 \boxed{
@@ -30,125 +35,125 @@ and
 
 \[
 \boxed{
-\{(U_s,P_s)\}_{s\text{ mixed}}+\text{query costs}\Longrightarrow C_F.
+\mathcal H_{\min}=\min_{\subseteq}\{P_s:s\text{ reachable mixed}\}
++\text{query costs}
+\Longrightarrow C_F.
 }
 \]
 
-Therefore
+Thus
 
 \[
 \boxed{
-\text{adaptive continuation} + \text{state-resource incidence}
-\Longrightarrow (C_A,C_F).
+\text{adaptive continuation}+\mathcal H_{\min}
+\Longrightarrow(C_A,C_F).
 }
 \]
 
-The next questions are no longer whether physical resource identity matters, but how small these two sufficient objects can be made while preserving exact costs.
+The productive frontier is the minimum-edge antichain after inclusion reduction; consumed-query history and fixed-side child wiring are not needed for scalar `C_F`.
 
-## 1. Characterize the minimal state-resource failure-row kernel
-
-For a reachable mixed state, bundle failure is witnessed by
-
-\[
-U_s\subseteq B,\qquad P_s\cap B=\varnothing.
-\]
-
-The implemented componentwise dominance rule removes `(U_2,P_2)` when some `(U_1,P_1)` satisfies
-
-\[
-U_1\subseteq U_2,\qquad P_1\subseteq P_2.
-\]
-
-Open questions:
-
-- Is this dominance closure the unique inclusion-minimal failure-row representation?
-- What antichain bound exists for reduced `(U,P)` rows as a function of query count?
-- Can a Sperner-type theorem bound row count in the product poset of unavailable/productive sets?
-- Can reduced rows be generated directly without enumerating every reachable mixed state?
-- Is there a dual packing/lower-bound theory analogous to the cross-target pair-cover side?
-
-## 2. Relate state-resource incidence to target-pair cover
-
-Both exact representations determine `C_F`:
-
-```text
-cross-target pair cover
-reachable state-resource failure rows
-```
-
-but they encode different geometry.
-
-Open questions:
-
-- Can one transform either representation to the other without reconstructing the full world/outcome model?
-- Which representation has the smaller worst-case kernel?
-- Are there families exponentially smaller in one representation than the other?
-- Can fixed bypass certificates be expressed more compactly in `(U,P)` language?
-- Does one representation expose internal/external bypass more locally than the other?
-
-## 3. Find the coarsest joint scalar-cost quotient
+## 1. Find the coarsest joint scalar-cost quotient
 
 The product
 
 ```text
 cost-only continuation quotient
 +
-reduced state-resource incidence
+productive frontier
 ```
 
-is sufficient for `(C_A,C_F)` but not claimed minimal.
+is sufficient for `(C_A,C_F)` but is not claimed to be the coarsest joint representation.
 
 Open questions:
 
-- Can the two structures share one common state quotient instead of being stored separately?
-- Which continuation distinctions are already implied by `(U,P)` rows?
-- Which `(U,P)` distinctions are irrelevant once adaptive continuation type is known?
-- Is there a canonical joint bisimulation whose equivalence classes determine the entire adaptive/fixed budget profile?
-- Can the gap `C_F-C_A` be computed from a quotient strictly smaller than those needed to recover each optimum separately?
+- Can adaptive continuation classes and frontier edges share one canonical quotient instead of being stored separately?
+- Which continuation distinctions are already implied by the productive frontier?
+- Which frontier distinctions are irrelevant once continuation type is known?
+- Can the gap `C_F-C_A` be computed from an object strictly smaller than those needed to recover the two optima separately?
+- Is there a canonical joint bisimulation/hypergraph quotient preserving the entire budget profile rather than only the two minima?
 
-## 4. Strengthen the joint-safe preprocessing kernel
+## 2. Generate the productive frontier without full reachable-state enumeration
 
-The current joint-safe root preprocessing iterates:
-
-```text
-same-target world twins
-<->
-global query refinement dominance
-```
+The fixed statistic is now conceptually minimal under inclusion, but the current builder still discovers reachable mixed states before taking productive sets.
 
 Open questions:
 
-- Are there exact joint-safe query deletions not generated by pairwise global refinement?
-- Can a set of cheap resources safely dominate one expensive resource while preserving both objectives?
-- Are there stronger world quotients than same-target twins?
-- Can joint preprocessing be expressed directly on full target-pair incidence or `(U,P)` rows?
-- What kernel-size bound is possible in terms of `C_A`, `C_F`, or gain rather than raw world/query count?
+- Can the minimal productive frontier be generated directly from target-pair incidence or another static representation?
+- Can frontier edges be output-sensitive, with complexity parameterized by the number of minimal edges rather than the number of reachable states?
+- Can incremental query addition/deletion update the frontier without rebuilding the full state space?
+- Can frontier generation exploit query automorphisms and world symmetries with independently checkable certificates?
+- What parameterized complexity bounds are possible in query count, `C_F`, frontier rank, or transversal number?
 
-## 5. Resource-labelled transition structure beyond scalar costs
+## 3. Extremal adaptive advantage under additional structural constraints
 
-`resource_continuation.py` and global resource-transition isomorphism remain useful for named policy lifting, child wiring, and resource-renaming certificates even though `(U,P)` rows suffice for scalar `C_F`.
+Without extra restrictions, both additive gain and `C_F/C_A` are unbounded even for binary deterministic observations with unit costs:
+
+\[
+C_A=d+1,\qquad C_F=2^d.
+\]
+
+The interesting extremal questions therefore require additional constraints.
 
 Open questions:
 
-- What extra structure is minimally necessary to recover the set of all optimal fixed bundles, not just their cost?
-- What is minimally necessary to replay a named adaptive policy after quotienting?
-- Can explicit resource-transition isomorphism be certified without factorial query permutation enumeration?
-- Which richer objectives require child wiring that scalar `C_F` does not?
+- What is the largest ratio at fixed numbers of worlds and queries?
+- What is the largest ratio at fixed observation-tree depth or fixed maximum query arity?
+- What bounds follow from limiting productive-frontier rank or edge count?
+- What is the sharp ratio bound when every query has balanced binary outcomes?
+- What changes if each query may be used at most once globally, versus once per branch as in the current resource model?
+- Under unequal positive costs, what are the smallest world/query scopes exceeding a given ratio threshold?
 
-## 6. Next finite normal forms
+## 4. Next finite irreducible normal forms
 
 Closed nearby scopes:
 
 1. `4 worlds / 2+2 targets / 3 queries`: one strict orbit `(3,5,9)`.
 2. `4 worlds / 2+2 targets / 4 queries`: only one-query extensions of that core.
 3. `5 worlds / 2+3 targets / 3 queries`: one new deletion-minimal orbit `(7,28,42)`.
+4. Unit-cost ratio `>3/2`: impossible with at most five worlds; attained with six worlds/four queries.
 
 Next questions:
 
 - What irreducible forms first appear with five worlds and four queries?
-- At what smallest scope can `C_F/C_A` exceed `3/2`?
+- What is the next deletion-minimal core at six worlds after quotienting the explicit extremal family?
 - What is the smallest deletion-minimal core with nonzero internal or external bypass?
-- How do reduced `(U,P)` kernels classify the next normal forms?
+- Which larger cores share one adaptive continuation type but have distinct productive frontiers?
+- Can normal forms be classified directly by `(continuation type, productive frontier)` rather than raw world/query tables?
+
+## 5. Localize external and internal bypass on the productive frontier
+
+For selected adaptive query union `S`,
+
+\[
+c(S)-C_A
+=
+[\tau_c(\mathcal H)-C_A]
++
+[\tau_c(\mathcal H;S)-\tau_c(\mathcal H)]
++
+[c(S)-\tau_c(\mathcal H;S)].
+\]
+
+The scalar decomposition is closed, but structural certificates for its two discount terms can be sharper.
+
+Open questions:
+
+- Can external shortcut discount be bounded from frontier edges intersecting `Q\\S` without solving the full hitting set?
+- Is there a local cut certificate proving that no outside resource can improve `C_U`?
+- Can internal redundancy be characterized by minimal transversals entirely inside `S`?
+- Which vocabulary operations monotonically increase/decrease the two discount channels?
+- Can one certify the decomposition terms from a small subset of frontier edges?
+
+## 6. Resource-labelled structure beyond scalar costs
+
+The productive frontier is enough for scalar `C_F`, but richer outputs still need more structure.
+
+Open questions:
+
+- What is minimally necessary to recover **all** optimal fixed bundles, not just their minimum cost?
+- What is minimally necessary to replay a named adaptive policy after quotienting?
+- Can explicit resource-transition isomorphism be certified without factorial permutation enumeration?
+- Which scientific objectives depend on child wiring even though scalar fixed resolution does not?
 
 ## 7. Information-valued adaptive gain
 
@@ -161,10 +166,11 @@ G(B)=\max_{\pi:c(\pi)\le B}I(T;H_\pi)
 
 Open questions:
 
-- What replaces deterministic productivity rows when observations have likelihoods?
-- Is there a probabilistic analogue of the `(U,P)` fixed-failure certificate?
+- What replaces deterministic productive-frontier edges when observations have likelihoods?
+- Is there a probabilistic fixed-failure or fixed-sufficiency certificate analogous to hitting every productive set?
 - What are the information analogues of internal redundancy and external shortcut discount?
 - Under what assumptions is the objective submodular or adaptively submodular?
+- Can information-valued adaptive gain also be unbounded under bounded binary observations and normalized cost?
 
 ## 8. Continuous compatible sets
 
@@ -174,12 +180,12 @@ PAYOFF's scientific uncertainty is continuous. A desired extension has
 \Theta_{t+1}=\Theta_t\cap C(q_t,y_t)
 \]
 
-without unjustified finite discretization. Open directions include interval/semi-algebraic separation certificates and complete finite witness reductions.
+without unjustified finite discretization. Open directions include interval/semi-algebraic separation certificates, continuum hitting-set analogues, and complete finite witness reductions.
 
 ## 9. Calibration actions versus target actions
 
-A calibration action changes later observation laws, so a static productive/nonproductive row is no longer enough. The state must carry both scientific uncertainty and measurement-model uncertainty.
+A calibration action changes later observation laws, so a static productive frontier is no longer enough. The state must carry both scientific uncertainty and measurement-model uncertainty, and resources may change their own future transition law.
 
 ## 10. Empirical identification of routing value
 
-The source repositories currently provide synthetic/conditional structural witnesses. A natural-data routing claim still needs evidence that branch outcomes change the useful continuation, that fixed bypasses are bounded, and that the same measurement/calibration relationships transport to deployment.
+The source repositories currently provide synthetic/conditional structural witnesses. A natural-data routing claim still needs evidence that branch outcomes change useful continuation, that the physical measurement vocabulary really has the declared productive frontier, that plausible fixed bypasses are bounded, and that measurement/calibration relationships transport to deployment.
