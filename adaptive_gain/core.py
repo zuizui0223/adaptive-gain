@@ -5,16 +5,32 @@ from functools import lru_cache
 from itertools import combinations
 from typing import Hashable, Sequence
 
+
+def _validate_label(value, name: str) -> None:
+    try:
+        hash(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{name} values must be hashable") from exc
+    try:
+        reflexive = bool(value == value)
+    except Exception as exc:
+        raise ValueError(f"{name} values must support stable equality") from exc
+    if not reflexive:
+        raise ValueError(f"{name} values must be reflexive; missing/NaN-like labels are invalid")
+
+
 @dataclass(frozen=True)
 class World:
     name: str
     target: Hashable
+
 
 @dataclass(frozen=True)
 class Query:
     name: str
     cost: int
     outcomes: tuple[Hashable, ...]
+
 
 @dataclass(frozen=True)
 class FiniteTask:
@@ -27,6 +43,8 @@ class FiniteTask:
             raise ValueError("world names must be unique")
         if any(not isinstance(w.name, str) or not w.name.strip() for w in self.worlds):
             raise ValueError("world names must be non-empty strings")
+        for world in self.worlds:
+            _validate_label(world.target, "target")
         if len({q.name for q in self.queries}) != len(self.queries):
             raise ValueError("query names must be unique")
         for q in self.queries:
@@ -36,14 +54,18 @@ class FiniteTask:
                 raise ValueError("query costs must be positive integers")
             if len(q.outcomes) != len(self.worlds):
                 raise ValueError("each query needs one outcome per world")
+            for outcome in q.outcomes:
+                _validate_label(outcome, "query outcome")
         if len(self.queries) > 20:
             raise ValueError("exact finite solver permits at most 20 queries")
+
 
 @dataclass(frozen=True)
 class FixedResolutionReceipt:
     minimum_cost: int | None
     optimal_bundles: tuple[tuple[str, ...], ...]
     target_already_identified: bool
+
 
 @dataclass(frozen=True)
 class AdaptiveNode:
@@ -52,6 +74,7 @@ class AdaptiveNode:
     remaining_world_names: tuple[str, ...]
     resolved_target: Hashable | None
 
+
 @dataclass(frozen=True)
 class AdaptiveResolutionReceipt:
     minimum_worst_path_cost: int | None
@@ -59,6 +82,7 @@ class AdaptiveResolutionReceipt:
     optimal_first_queries: tuple[str, ...]
     target_already_identified: bool
     search_states: int
+
 
 @dataclass(frozen=True)
 class AdaptiveGainReceipt:
@@ -69,11 +93,14 @@ class AdaptiveGainReceipt:
     adaptive_only_budget_upper: int | None
     status: str
 
+
 def _indices(mask: int, n: int) -> tuple[int, ...]:
     return tuple(i for i in range(n) if mask & (1 << i))
 
+
 def _target_values(task: FiniteTask, mask: int) -> set[Hashable]:
     return {task.worlds[i].target for i in _indices(mask, len(task.worlds))}
+
 
 def _partition(task: FiniteTask, mask: int, query_index: int) -> dict[Hashable, int]:
     groups: dict[Hashable, int] = {}
@@ -82,6 +109,7 @@ def _partition(task: FiniteTask, mask: int, query_index: int) -> dict[Hashable, 
         outcome = q.outcomes[i]
         groups[outcome] = groups.get(outcome, 0) | (1 << i)
     return groups
+
 
 def bundle_resolves(task: FiniteTask, bundle: Sequence[str]) -> bool:
     names = tuple(bundle)
@@ -95,6 +123,7 @@ def bundle_resolves(task: FiniteTask, bundle: Sequence[str]) -> bool:
         if not any(task.queries[q].outcomes[i] != task.queries[q].outcomes[j] for q in chosen):
             return False
     return True
+
 
 def fixed_minimum_resolution(task: FiniteTask) -> FixedResolutionReceipt:
     root_targets = {w.target for w in task.worlds}
@@ -114,6 +143,7 @@ def fixed_minimum_resolution(task: FiniteTask) -> FixedResolutionReceipt:
             elif cost == best:
                 bundles.append(names)
     return FixedResolutionReceipt(best, tuple(bundles), False)
+
 
 def adaptive_minimum_resolution(task: FiniteTask) -> AdaptiveResolutionReceipt:
     n_worlds, n_queries = len(task.worlds), len(task.queries)
@@ -165,6 +195,7 @@ def adaptive_minimum_resolution(task: FiniteTask) -> AdaptiveResolutionReceipt:
         cost, node, roots, len({w.target for w in task.worlds}) == 1, states
     )
 
+
 def adaptive_gain_receipt(task: FiniteTask) -> AdaptiveGainReceipt:
     adaptive = adaptive_minimum_resolution(task)
     fixed = fixed_minimum_resolution(task)
@@ -186,6 +217,7 @@ def adaptive_gain_receipt(task: FiniteTask) -> AdaptiveGainReceipt:
         "strict_adaptive_gain" if strict else "no_strict_adaptive_gain",
     )
 
+
 def adaptive_only_at_budget(task: FiniteTask, budget: int) -> bool:
     if type(budget) is not int or budget < 0:
         raise ValueError("budget must be a nonnegative integer")
@@ -194,12 +226,14 @@ def adaptive_only_at_budget(task: FiniteTask, budget: int) -> bool:
         return False
     return receipt.adaptive_only_budget_lower <= budget <= receipt.adaptive_only_budget_upper
 
+
 @dataclass(frozen=True)
 class BudgetResolutionRow:
     budget: int
     adaptive_guaranteed: bool
     fixed_guaranteed: bool
     adaptive_only: bool
+
 
 def resolution_budget_profile(task: FiniteTask, max_budget: int) -> tuple[BudgetResolutionRow, ...]:
     if type(max_budget) is not int or max_budget < 0:
