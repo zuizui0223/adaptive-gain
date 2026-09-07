@@ -1,0 +1,41 @@
+{
+  "scope": "finite_deterministic_unit_cost_exact_target_resolution",
+  "multivalued_router_family": {
+    "parameter": "k >= 2 mixed branches",
+    "world_count": "2k",
+    "query_count": "k+1",
+    "adaptive_cost": "2",
+    "fixed_cost": "k+1",
+    "additive_gain": "k-1",
+    "ratio": "(k+1)/2",
+    "productive_frontier": "k+1 singleton edges, one for every declared resource",
+    "bypass_decomposition": {
+      "policy_union_cost": "k+1",
+      "restricted_fixed_cost": "k+1",
+      "internal_union_redundancy": 0,
+      "external_shortcut_discount": 0
+    },
+    "exact_solver_regression": "k=2..8",
+    "first_unit_cost_ratio_above_3_over_2": {
+      "worlds": 6,
+      "queries": 4,
+      "adaptive_cost": 2,
+      "fixed_cost": 4,
+      "ratio": 2,
+      "minimality_scope": "componentwise minimal in world count and query count among unit-cost finite deterministic tasks"
+    }
+  },
+  "binary_observation_family": {
+    "parameter": "routing depth d >= 1, k=2^d branches",
+    "world_count": "2^(d+1)",
+    "query_count": "d+2^d",
+    "all_query_outcomes_binary": true,
+    "adaptive_cost": "d+1",
+    "fixed_cost": "2^d",
+    "ratio": "2^d/(d+1)",
+    "ratio_limit": "unbounded",
+    "exact_solver_regression_depths": [1, 2, 3],
+    "larger_depth_validation": "closed-form target-0 path lower bound; not claimed as exhaustive solver validation"
+  },
+  "claim_boundary": "unit-cost extremal statements; unequal positive costs can change finite minimal scopes"
+}
