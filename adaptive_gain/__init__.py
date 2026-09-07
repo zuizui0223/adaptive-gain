@@ -77,6 +77,13 @@ from .pair_packing import (
     pair_packing_lower_bound,
     selected_policy_pair_packing_gain_certificate,
 )
+from .proof_dag import (
+    CoverProofDagBranch,
+    CoverProofDagCertificate,
+    CoverProofDagNode,
+    compress_fixed_budget_infeasibility_proof,
+    verify_cover_proof_dag,
+)
 
 __all__ = [
     "AdaptiveGainReceipt", "AdaptiveNode", "AdaptiveResolutionReceipt",
@@ -105,4 +112,6 @@ __all__ = [
     "PackedPair", "PairPackingAdaptiveGainCertificate", "PairPackingCertificate",
     "PairPackingSearchLimitError", "pair_packing_lower_bound",
     "selected_policy_pair_packing_gain_certificate",
+    "CoverProofDagBranch", "CoverProofDagCertificate", "CoverProofDagNode",
+    "compress_fixed_budget_infeasibility_proof", "verify_cover_proof_dag",
 ]
