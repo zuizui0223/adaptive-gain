@@ -10,8 +10,14 @@ cost-only continuation quotient preserving C_A
 productive-frontier hypergraph preserving C_F
 cost-only continuation + productive frontier preserving (C_A,C_F)
 productive-frontier / minimal pair-separator equivalence
+static minimal frontier generation from cross-target pair incidence
 Sperner/LYM bounds for the fixed frontier
 productive-frontier form of gain / external bypass / internal redundancy
+minimal-transversal characterization of internal and external bypass
+set-valued local replacement certificate for zero external shortcut
+sharp bypass-channel query minima: internal >=3, external >=4
+deterministic exact guarantee budget profile from (C_A,C_F)
+all optimal fixed bundles from the productive frontier
 resource-labelled transition structure for richer named wiring
 joint-safe global world-twin/query-refinement kernel
 fixed-side certificate ladder and proof compression
@@ -55,7 +61,14 @@ Thus
 }
 \]
 
-The productive frontier is the minimum-edge antichain after inclusion reduction; consumed-query history and fixed-side child wiring are not needed for scalar `C_F`.
+For deterministic exact guarantee, the entire binary budget profile is already determined by the two minima:
+
+\[
+A(B)=\mathbf 1[B\ge C_A],\qquad
+F(B)=\mathbf 1[B\ge C_F].
+\]
+
+The productive frontier also determines the complete set of minimum-cost fixed bundles, not only scalar `C_F`.
 
 ## 1. Find the coarsest joint scalar-cost quotient
 
@@ -75,19 +88,19 @@ Open questions:
 - Which continuation distinctions are already implied by the productive frontier?
 - Which frontier distinctions are irrelevant once continuation type is known?
 - Can the gap `C_F-C_A` be computed from an object strictly smaller than those needed to recover the two optima separately?
-- Is there a canonical joint bisimulation/hypergraph quotient preserving the entire budget profile rather than only the two minima?
+- Is there a canonical joint quotient preserving richer budget-indexed utilities (information, expected loss), not merely deterministic exact feasibility?
 
-## 2. Generate the productive frontier without full reachable-state enumeration
+## 2. Generate and update the productive frontier efficiently
 
-The fixed statistic is now conceptually minimal under inclusion, but the current builder still discovers reachable mixed states before taking productive sets.
+The minimal productive frontier can now be generated **statically** from identity-indexed cross-target pair incidence, so reachable-state enumeration is not required for fixed scalar resolution.
 
-Open questions:
+The remaining questions are computational/structural rather than representational:
 
-- Can the minimal productive frontier be generated directly from target-pair incidence or another static representation?
-- Can frontier edges be output-sensitive, with complexity parameterized by the number of minimal edges rather than the number of reachable states?
-- Can incremental query addition/deletion update the frontier without rebuilding the full state space?
+- Can minimal frontier edges be generated output-sensitively, parameterized by the number of minimal edges rather than all cross-target pairs?
+- Can incremental query addition/deletion update the frontier without rebuilding pair incidence from scratch?
 - Can frontier generation exploit query automorphisms and world symmetries with independently checkable certificates?
 - What parameterized complexity bounds are possible in query count, `C_F`, frontier rank, or transversal number?
+- Can minimal transversals be generated output-sensitively without the small-state subset enumeration used by the current structural verifier?
 
 ## 3. Extremal adaptive advantage under additional structural constraints
 
@@ -125,8 +138,6 @@ R_b(n,m)
 
 is the exact maximum `C_F/C_A` among tasks with `n` represented worlds, `m` declared queries, and query arity at most `b`.
 
-Sharpness follows from the private-pair forest construction on an extremal tree.
-
 ### Productive-frontier edge cap
 
 If additionally
@@ -146,11 +157,7 @@ R_{b,E}(n,m)
 }
 \]
 
-The upper bound uses `C_F=tau(H)<=|H|<=E`; the same private-pair forest witness has exactly one singleton frontier edge per retained internal query and attains the bound.
-
-The remaining extremal questions therefore require constraints beyond `(n,m,b,E)` under unit costs.
-
-Open questions:
+Remaining extremal questions require constraints beyond `(n,m,b,E)` under unit costs:
 
 - What bounds follow from limiting productive-frontier **rank**, transversal geometry, or intersection pattern rather than edge count alone?
 - What is the sharp ratio when every binary query has balanced outcomes on the represented worlds?
@@ -166,16 +173,18 @@ Closed nearby scopes:
 2. `4 worlds / 2+2 targets / 4 queries`: only one-query extensions of that core.
 3. `5 worlds / 2+3 targets / 3 queries`: one new deletion-minimal orbit `(7,28,42)`.
 4. Unit-cost ratio `>3/2`: impossible with at most five worlds; attained with six worlds/four queries for unrestricted arity and six worlds/five queries for binary-only observations.
+5. Positive internal bypass requires at least three declared queries; positive external bypass requires at least four, and both bounds are attained.
 
 Next questions:
 
 - What irreducible forms first appear with five worlds and four queries?
 - What is the next deletion-minimal core at six worlds after quotienting the explicit extremal families?
-- What is the smallest deletion-minimal core with nonzero internal or external bypass?
+- What are the minimum **world counts** for deletion-minimal internal and external bypass cores?
+- What is the smallest strict-gain core with positive internal bypass? With positive external bypass?
 - Which larger cores share one adaptive continuation type but have distinct productive frontiers?
 - Can normal forms be classified directly by `(continuation type, productive frontier)` rather than raw world/query tables?
 
-## 5. Localize external and internal bypass on the productive frontier
+## 5. Short certificates for bypass channels
 
 For selected adaptive query union `S`,
 
@@ -189,26 +198,45 @@ c(S)-C_A
 [c(S)-\tau_c(\mathcal H;S)].
 \]
 
-The scalar decomposition is closed, but structural certificates for its two discount terms can be sharper.
+The scalar and minimal-transversal structure is now closed:
+
+\[
+U-C_U=0
+\iff
+S\in\operatorname{Tr}(\mathcal H)
+\iff
+\forall q\in S\;\exists E:\ E\cap S=\{q\},
+\]
+
+and
+
+\[
+C_U-C_F>0
+\iff
+\exists T\in\operatorname{Tr}(\mathcal H):
+T\not\subseteq S,\ c(T)<C_U.
+\]
+
+There is also a local sufficient no-external certificate: every outside resource may be replaced by a no-more-expensive inside **set** covering all frontier edges that used the outside resource.
 
 Open questions:
 
-- Can external shortcut discount be bounded from frontier edges intersecting `Q\\S` without solving the full hitting set?
-- Is there a local cut certificate proving that no outside resource can improve `C_U`?
-- Can internal redundancy be characterized by minimal transversals entirely inside `S`?
-- Which vocabulary operations monotonically increase/decrease the two discount channels?
-- Can one certify the decomposition terms from a small subset of frontier edges?
+- Can zero external shortcut be certified **necessarily and sufficiently** from a small edge subset without enumerating all minimal transversals?
+- Can positive external discount be lower-bounded from local outside-resource coverage geometry?
+- Which query-vocabulary operations monotonically increase/decrease internal and external discount?
+- Can internal redundancy magnitude, not only its zero/nonzero status, be certified from private-edge defects?
+- What parameterized complexity is possible for minimal-transversal bypass certificates in `C_U`, frontier rank, or edge count?
 
-## 6. Resource-labelled structure beyond scalar costs
+## 6. Resource-labelled structure beyond fixed bundle optimization
 
-The productive frontier is enough for scalar `C_F`, but richer outputs still need more structure.
+The productive frontier already recovers scalar `C_F` **and all minimum-cost fixed bundles**. Richer transition structure is still needed for other outputs.
 
 Open questions:
 
-- What is minimally necessary to recover **all** optimal fixed bundles, not just their minimum cost?
 - What is minimally necessary to replay a named adaptive policy after quotienting?
 - Can explicit resource-transition isomorphism be certified without factorial permutation enumeration?
-- Which scientific objectives depend on child wiring even though scalar fixed resolution does not?
+- Which scientific objectives depend on child wiring even though fixed resolution and its optimal bundles do not?
+- What compact object preserves branch-specific provenance or measurement semantics in addition to decision cost?
 
 ## 7. Information-valued adaptive gain
 
