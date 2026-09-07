@@ -41,6 +41,9 @@ def test_complete_four_world_partition_triples_preserve_exact_adaptive_cost():
     assert len(partitions) == 15
     worlds = _balanced_worlds()
     checked = 0
+    equivalent_states = refinement_states = 0
+    equivalent_evaluated = refinement_evaluated = 0
+    equivalent_pruned = refinement_pruned = 0
     for maps in product(partitions, repeat=3):
         task = FiniteTask(
             worlds,
@@ -55,14 +58,25 @@ def test_complete_four_world_partition_triples_preserve_exact_adaptive_cost():
         assert refinement.minimum_worst_path_cost == direct
         assert refinement.exact_direct_cost == direct
         assert refinement.cost_agrees_with_direct_solver
+        equivalent_states += equivalent.search_states
+        refinement_states += refinement.search_states
+        equivalent_evaluated += equivalent.representative_queries_evaluated
+        refinement_evaluated += refinement.nondominated_queries_evaluated
+        equivalent_pruned += equivalent.dominated_query_occurrences_pruned
+        refinement_pruned += refinement.refinement_dominated_query_occurrences_pruned
         checked += 1
     assert checked == 15 ** 3 == 3_375
+    # Registered finite-universe computational benchmark, not a prevalence claim.
+    assert (equivalent_states, refinement_states) == (12_361, 6_697)
+    assert (equivalent_evaluated, refinement_evaluated) == (17_726, 7_514)
+    assert (equivalent_pruned, refinement_pruned) == (4_246, 6_942)
 
 
 def test_complete_two_query_partition_cost_grid_preserves_exact_adaptive_cost():
     partitions = _set_partitions(4)
     worlds = _balanced_worlds()
     checked = 0
+    equivalent_states = refinement_states = 0
     for maps in product(partitions, repeat=2):
         for costs in product((1, 2), repeat=2):
             task = FiniteTask(
@@ -79,8 +93,11 @@ def test_complete_two_query_partition_cost_grid_preserves_exact_adaptive_cost():
             assert equivalent.cost_agrees_with_direct_solver
             assert refinement.minimum_worst_path_cost == direct
             assert refinement.cost_agrees_with_direct_solver
+            equivalent_states += equivalent.search_states
+            refinement_states += refinement.search_states
             checked += 1
     assert checked == (15 ** 2) * 4 == 900
+    assert (equivalent_states, refinement_states) == (2_380, 1_960)
 
 
 def test_same_mixed_continuation_with_different_pure_partition_prunes_expensive_query():
