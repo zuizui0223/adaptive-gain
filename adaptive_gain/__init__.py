@@ -58,6 +58,19 @@ from .integer_cover_proof import (
     selected_policy_integer_cover_gain_certificate,
     verify_fixed_budget_decision_certificate,
 )
+from .isomorphism_quotient import (
+    CanonicalResidualCoverSignature,
+    IsomorphismQuotientAdaptiveGainAudit,
+    IsomorphismQuotientFixedBudgetDecision,
+    ResidualIsomorphismLimitError,
+    ResidualIsomorphismWitness,
+    ResidualPairCoverInstance,
+    canonical_residual_pair_cover_signature,
+    isomorphic_fixed_budget_cover_decision,
+    residual_pair_cover_isomorphism_witness,
+    selected_policy_isomorphism_quotient_gain_audit,
+    verify_residual_pair_cover_isomorphism,
+)
 from .kernel_bounds import (
     AntichainKernelBoundReceipt,
     is_inclusion_antichain,
@@ -119,6 +132,13 @@ __all__ = [
     "IntegerCoverAdaptiveGainCertificate", "IntegerCoverProofLimitError",
     "fixed_budget_cover_decision", "selected_policy_integer_cover_gain_certificate",
     "verify_fixed_budget_decision_certificate",
+    "CanonicalResidualCoverSignature", "IsomorphismQuotientAdaptiveGainAudit",
+    "IsomorphismQuotientFixedBudgetDecision", "ResidualIsomorphismLimitError",
+    "ResidualIsomorphismWitness", "ResidualPairCoverInstance",
+    "canonical_residual_pair_cover_signature", "isomorphic_fixed_budget_cover_decision",
+    "residual_pair_cover_isomorphism_witness",
+    "selected_policy_isomorphism_quotient_gain_audit",
+    "verify_residual_pair_cover_isomorphism",
     "AntichainKernelBoundReceipt", "is_inclusion_antichain",
     "minimal_separator_antichain", "task_pair_antichain_bound",
     "MINIMAL_STRICT_GAIN_SIGNATURE", "MinimalNormalFormReceipt",
