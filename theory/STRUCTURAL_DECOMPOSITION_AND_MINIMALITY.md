@@ -1,80 +1,83 @@
-# Structural decomposition, bypass controls, and minimality
+# Structural decomposition, bypass channels, and minimality
 
-Status: exact finite deterministic target-resolution theory. The registered source-repository witnesses remain synthetic/conditional abstractions.
+Status: exact finite deterministic target-resolution theory. Registered source-repository witnesses remain synthetic/conditional abstractions.
 
 ## 1. Union-flattening theorem
 
 Let `pi` be any deterministic adaptive tree that resolves the target on every represented world. Let
 
 ```text
-U(pi) = set of distinct query identities appearing anywhere in the tree,
-u(pi) = sum of their positive acquisition costs,
+Q(pi) = set of distinct query identities appearing anywhere in the tree
+U(pi) = sum of their positive acquisition costs
 d(pi) = worst root-to-leaf path cost.
 ```
 
-Then `U(pi)` is itself a resolving fixed bundle.
+Then `Q(pi)` is itself a resolving fixed bundle.
 
-Proof: take any two represented worlds with different targets. If every query in `U(pi)` gave the same outcome in the two worlds, the worlds would follow exactly the same branch at every node of `pi` and reach the same terminal leaf. That leaf would then contain two target values, contradicting target resolution. Therefore some query in the union separates every opposite-target pair.
+Proof: take any two represented worlds with different target values. If every query appearing in the tree gave the same outcome in the two worlds, they would follow the same branch at every node and reach the same terminal leaf, contradicting target resolution. Therefore some query in the union separates every cross-target pair.
 
-For an optimal adaptive tree `pi*`, write
+For a selected optimal adaptive tree `pi*`, write
 
 ```text
 C_A = d(pi*)
-C_F = minimum fixed resolving-bundle cost
-U   = u(pi*).
+U   = U(pi*)
+C_F = global minimum fixed resolving-bundle cost
+C_U = minimum fixed resolving cost restricted to Q(pi*)
 ```
 
-The class-containment and union-flattening inequalities are
+Then
 
-```text
-C_A <= C_F <= U.
-```
+\[
+\boxed{C_A\le C_F\le C_U\le U}.
+\]
 
-## 2. Exact cost decomposition
+The first inequality is class containment; the second follows because restricting the fixed vocabulary cannot improve the optimum; the third follows because the whole union is feasible.
+
+## 2. Refined exact decomposition
 
 Define
 
 ```text
 branch-exclusive overhead = U - C_A
 realized adaptive gain     = C_F - C_A
-fixed bypass discount      = U - C_F.
+external shortcut discount = C_U - C_F
+internal union redundancy  = U - C_U.
 ```
 
-All three are nonnegative and satisfy the exact identity
-
-```text
-U - C_A = (C_F - C_A) + (U - C_F).
-```
-
-or
+All four quantities are nonnegative and
 
 \[
 \boxed{
-\text{branch-exclusive overhead}
-=
-\text{realized adaptive gain}
-+
-\text{fixed bypass discount}
-}
+U-C_A
+=(C_F-C_A)+(C_U-C_F)+(U-C_U)
+}.
+\]
+
+The older aggregate fixed bypass is
+
+\[
+U-C_F=(C_U-C_F)+(U-C_U).
 \]
 
 Interpretation:
 
-- `U-C_A` is the extra acquisition burden of flattening all mutually exclusive adaptive branches into one union bundle;
-- `C_F-C_A` is the part of that burden that actually survives after optimizing the fixed class;
-- `U-C_F` is the amount the fixed class recovers by using some cheaper resolving bundle, possibly one that omits the adaptive tree's routing query entirely.
+- `U-C_A`: extra burden of flattening mutually exclusive branches into one query union;
+- `U-C_U`: part removable by deleting redundant queries from that union while remaining fixed;
+- `C_U-C_F`: further discount available only by changing to a fixed bundle that can use queries outside the selected adaptive union;
+- `C_F-C_A`: overhead that survives both discounts and is therefore genuine adaptive gain.
 
-Therefore positive branch-exclusive overhead is **necessary but not sufficient** for strict adaptive gain.
+So bypass is not a yes/no property. It is an additive discount and can consume none, some, or all of the branch-exclusive overhead.
 
 Implementation: `adaptive_gain/decomposition.py`.
 
-## 3. Registered positive witnesses saturate the bound
+## 3. Source-derived positive witnesses
 
 For both the MROD-style and PAYOFF-style routing witnesses,
 
 ```text
 C_A = 2
 C_F = 3
+C_U = 3
 U   = 3.
 ```
 
@@ -82,48 +85,60 @@ Hence
 
 ```text
 overhead = 1
-gain     = 1
-bypass   = 0.
+internal = 0
+external = 0
+gain     = 1.
 ```
 
-Every unit of branch-exclusive overhead becomes realized adaptive gain.
+Every unit of branch-exclusive overhead survives as adaptive gain.
 
-## 4. Bypass counterexample
+## 4. Two complete-bypass controls
 
-A four-world binary-target control uses three unit-cost queries:
+### Internal redundancy control
 
-```text
-targets = (0,0,1,1)
-
-q_left  = (0,0,0,1)
-q_route = (0,1,0,1)
-q_right = (0,1,1,0).
-```
-
-`q_route` has zero direct target information under uniform worlds and splits the task into two unresolved branches:
-
-```text
-q_route=0 -> q_right resolves
-q_route=1 -> q_left resolves.
-```
-
-Thus an adaptive tree has worst-path cost 2 and genuinely branch-dependent next actions. Its query union is all three queries, so `U=3`.
-
-However the fixed bundle `(q_left,q_right)` already resolves the target at cost 2 without buying `q_route`.
-
-Therefore
+A four-world routing task has a genuinely branch-dependent adaptive tree but
 
 ```text
 C_A = 2
 C_F = 2
-U   = 3
-
-overhead = 1
-gain     = 0
-bypass   = 1.
+C_U = 2
+U   = 3.
 ```
 
-This falsifies the naive sufficient condition
+Thus
+
+```text
+overhead = 1
+internal = 1
+external = 0
+gain     = 0.
+```
+
+The selected adaptive union itself contains a cheaper fixed resolving subset.
+
+### External shortcut control
+
+A separate four-query task has
+
+```text
+C_A = 2
+C_F = 2
+C_U = 3
+U   = 3.
+```
+
+Thus
+
+```text
+overhead = 1
+internal = 0
+external = 1
+gain     = 0.
+```
+
+The selected adaptive union is internally irreducible, but a query outside that union creates a cheaper global fixed route.
+
+These controls falsify the naive sufficient condition
 
 ```text
 zero direct target information
@@ -132,72 +147,86 @@ branch-dependent continuation
 => strict adaptive gain.
 ```
 
-The missing condition is that the optimized fixed class must NOT have a cheaper bypass bundle.
+## 5. Partial bypass does not kill gain
 
-## 5. Minimality theorem
+Larger controls show that bypass can consume only part of the overhead.
+
+### Partial internal bypass
+
+```text
+C_A = 3
+C_F = 4
+C_U = 4
+U   = 5
+```
+
+so
+
+```text
+overhead = 2
+internal = 1
+external = 0
+gain     = 1.
+```
+
+### Partial external bypass
+
+```text
+C_A = 3
+C_F = 4
+C_U = 5
+U   = 5
+```
+
+so
+
+```text
+overhead = 2
+internal = 0
+external = 1
+gain     = 1.
+```
+
+Therefore neither of these is valid in general:
+
+```text
+bypass exists -> no gain
+no bypass is necessary -> gain.
+```
+
+Only the additive decomposition is exact.
+
+## 6. Minimality theorem
 
 Strict worst-path adaptive cost gain requires at least:
 
 ```text
-4 represented worlds,
+4 represented worlds
 3 query identities.
 ```
 
 ### Fewer than four worlds
 
-Suppose every internal node has at most one child whose compatible set contains more than one target value. Then all nonterminal queries lie on one unresolved spine. The union of all queries used by the tree is exactly the set of queries on that spine, so
-
-```text
-U = d(pi).
-```
-
-The decomposition gives zero possible strict gain.
-
-Therefore positive branch-exclusive overhead requires some node with at least two unresolved children. Each unresolved child contains at least two worlds with different targets, and the child supports are disjoint. At least four represented worlds are required.
+Strict gain requires positive branch-exclusive overhead. That requires some adaptive node with at least two unresolved child supports. Every unresolved child contains at least two represented worlds with different targets, and child supports are disjoint. Hence at least four worlds are required.
 
 ### Fewer than three queries
 
-With at most two query identities, a resolving tree cannot have one routing query plus two distinct branch-exclusive continuations. Any resolving union has the same cost as some worst path, hence `U=C_A` for an optimal tree and strict gain is impossible.
+With at most two query identities there cannot be one routing query plus distinct branch-exclusive continuations. Any resolving adaptive tree can be flattened without increasing beyond the worst-path cost, so strict gain is impossible.
 
-These are structural lower bounds for this deterministic guaranteed-resolution problem, not claims about stochastic expected-cost design.
+These are structural lower bounds for deterministic guaranteed resolution, not statements about stochastic expected-cost experiments.
 
-## 6. Exhaustive small-universe classification
+## 7. Complete tiny-universe classification
 
 `adaptive_gain.exhaustive.enumerate_binary_universe` enumerates every labeled binary outcome map for a fixed target assignment and three labeled unit-cost queries. Isomorphic relabelings are intentionally counted separately.
 
-### Two worlds, target split 1+1
+| Universe | Labeled query triples | Strict gain |
+|---|---:|---:|
+| 2 worlds, target 1+1 | 64 | 0 |
+| 3 worlds, target 2+1 | 512 | 0 |
+| 4 worlds, target 3+1 | 4096 | 0 |
+| 4 worlds, target 2+2 | 4096 | **192** |
 
-There are
-
-```text
-4^3 = 64
-```
-
-labeled query triples. Strict gain count: `0`.
-
-### Three worlds, target split 2+1
-
-There are
-
-```text
-8^3 = 512
-```
-
-labeled query triples. Strict gain count: `0`.
-
-### Four worlds, target split 3+1
-
-There are
-
-```text
-16^3 = 4096
-```
-
-labeled query triples. Strict gain count: `0`.
-
-### Four worlds, balanced target split 2+2
-
-There are `4096` labeled query triples. Exact classification:
+For the balanced four-world universe:
 
 | `(C_A,C_F)` | Count |
 |---|---:|
@@ -206,73 +235,92 @@ There are `4096` labeled query triples. Exact classification:
 | `(2,2)` | 864 |
 | `(2,3)` | **192** |
 
-Thus exactly
-
-\[
-\boxed{192/4096}
-\]
-
-of this deliberately tiny labeled universe has strict gain, and every strict case has
+Thus every strict task in that deliberately tiny universe has
 
 ```text
-C_A=2, C_F=3.
-```
-
-For this specific balanced four-world universe, every optimal first query in all 192 strict-gain tasks has zero direct target information under uniform world weights.
-
-That zero-information pattern is a **finite-universe classification result**, not a general theorem.
-
-## 7. Zero direct root information is not necessary
-
-A five-world binary-target witness uses
-
-```text
-targets = (0,0,1,1,1)
-
-q_left  = (0,0,0,0,1)
-q_right = (0,1,0,0,0)
-q_route = (0,1,1,1,0).
-```
-
-The optimal root `q_route` has positive direct target information under uniform world weights, yet
-
-```text
-C_A=2,
+C_A=2
 C_F=3.
 ```
 
-So
+The selected-policy private-pair certificate happens to identify exactly the same 192 strict tasks there with zero false positives. This finite completeness is not general.
+
+## 8. Zero direct root information is not a general condition
+
+In the balanced four-world / three-query universe, every optimal first query in the 192 strict-gain tasks has zero direct target information under uniform world weights.
+
+But a five-world control has
 
 ```text
-I(T;q_root)=0
+C_A=2
+C_F=3
 ```
 
-is neither a necessary condition for adaptive gain nor part of the general cost theorem. It is a useful diagnostic feature of the registered MROD/PAYOFF routing examples and of the minimal balanced four-world classification only.
+while an optimal root has positive direct target information. Conversely, a four-world bypass control has zero root information and branch-dependent continuation but no strict gain.
 
-## 8. Revised structural picture
+Therefore
 
-The earlier heuristic can now be sharpened.
+\[
+I(T;Q_{root})=0
+\]
 
-Strict adaptive gain requires:
+is neither necessary nor sufficient for adaptive gain.
 
-1. **branch-exclusive future work** — otherwise `U=C_A`;
-2. **resource scarcity** — otherwise the fixed class can simply buy enough measurements;
-3. **no equally cheap fixed bypass** — otherwise `C_F=C_A` despite branch-dependent routing.
+## 9. Fixed-side certificate hierarchy
 
-The exact decomposition shows where the heuristic fails:
+The decomposition identifies `C_F-C_A` as the quantity that must be proved positive. The repository now supplies increasingly strong lower-bound routes for `C_F`:
 
 ```text
-branch specialization creates overhead,
-fixed bypass consumes some or all of that overhead,
-only the remainder appears as realized adaptive gain.
+private cross-target pair
+-> integral pair packing
+-> exact fractional pair-cover dual
+-> exact integer fixed cover.
 ```
 
-This is a statement about acquisition cost for finite deterministic guaranteed target resolution. Information-valued, stochastic, continuous-state, and calibration-learning problems remain separate extensions.
+Each layer can matter on explicit controls:
+
+- source-derived MROD/PAYOFF: private pairs already prove `C_F=U`;
+- a five-world task: private pairs fail but integral packing proves strict gain;
+- another five-world task: integral packing reaches only 2 but fractional optimum `5/2` proves integer `C_F>=3`;
+- an LP-integrality-gap task: fractional optimum remains 2 while exact integer `C_F=3`.
+
+See:
+
+```text
+theory/FIXED_BYPASS_PAIR_COVER.md
+theory/PAIR_PACKING_LOWER_BOUND.md
+theory/FRACTIONAL_PAIR_COVER_BOUND.md
+```
+
+## 10. Revised structural picture
+
+The original heuristic can now be sharpened:
+
+```text
+branch specialization creates potential overhead;
+internal fixed simplification removes part of it;
+external fixed shortcuts can remove more;
+only the residual becomes realized adaptive gain.
+```
+
+Equivalently,
+
+\[
+\boxed{
+\text{gain}
+=
+\text{overhead}
+-
+\text{internal redundancy}
+-
+\text{external shortcut}
+}.
+\]
+
+This is an exact cost identity for the selected optimal deterministic tree and finite guaranteed target resolution. Information-valued, stochastic, continuous-state, calibration-learning, and randomized-policy problems remain separate extensions.
 
 ## Reproduce
 
 ```bash
-python -m pytest -q tests/test_structural_validation.py
+python -m pytest -q tests/test_structural_validation.py tests/test_pair_cover.py tests/test_pair_packing.py tests/test_fractional_packing.py
+python examples/audit_certificate_ladder.py
 ```
-
-The test suite includes an independent brute-force oracle for the small universes, rather than relying only on the production dynamic program.
