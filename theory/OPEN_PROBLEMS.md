@@ -25,6 +25,7 @@ sharp productive-tree internal-node bound M(n,h)
 sharp unit-cost fixed-(world count, query count) ratio for unrestricted query arity
 sharp unit-cost fixed-(world count, query count) ratio for binary query arity
 sharp unit-cost fixed-(world count, query count, max query arity b) ratio
+sharp unit-cost ratio with an upper bound on productive-frontier edge count
 ```
 
 The central scalar-cost boundary is now especially compact:
@@ -126,16 +127,32 @@ is the exact maximum `C_F/C_A` among tasks with `n` represented worlds, `m` decl
 
 Sharpness follows from the private-pair forest construction on an extremal tree.
 
-The two previously closed endpoints are recovered exactly:
+### Productive-frontier edge cap
 
-- `b=2`: the binary threshold-path formula;
-- `b>=n`: the unrestricted-arity depth-two formula.
+If additionally
 
-The remaining extremal questions therefore require constraints beyond `(n,m,b)` under unit costs.
+\[
+|\mathcal H_{\min}|\le E,
+\]
+
+then the exact maximum becomes
+
+\[
+\boxed{
+R_{b,E}(n,m)
+=
+\max_{1\le h\le n-1}
+\frac{\min\{m,E,F_b(n,h)\}}{h}.
+}
+\]
+
+The upper bound uses `C_F=tau(H)<=|H|<=E`; the same private-pair forest witness has exactly one singleton frontier edge per retained internal query and attains the bound.
+
+The remaining extremal questions therefore require constraints beyond `(n,m,b,E)` under unit costs.
 
 Open questions:
 
-- What bounds follow from limiting productive-frontier rank, edge count, or transversal number?
+- What bounds follow from limiting productive-frontier **rank**, transversal geometry, or intersection pattern rather than edge count alone?
 - What is the sharp ratio when every binary query has balanced outcomes on the represented worlds?
 - What changes if one physical query may be used at most once **globally** rather than once on each possible branch in the policy tree?
 - Under unequal positive costs, what is the sharp fixed-`(n,m,b)` ratio and what are the smallest scopes exceeding a given threshold?
