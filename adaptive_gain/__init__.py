@@ -10,6 +10,10 @@ from .adaptive_safe_compression import (
     target_relevant_query_classes,
     target_relevant_refinement_dominance,
 )
+from .adaptive_two_sided_kernel import (
+    AdaptiveTwoSidedKernelReceipt,
+    adaptive_two_sided_kernel_minimum_resolution,
+)
 from .adaptive_world_twins import (
     DynamicWorldTwinCompressionReceipt,
     StaticWorldTwinQuotientReceipt,
@@ -217,6 +221,7 @@ __all__ = [
     "adaptive_refinement_compressed_minimum_resolution",
     "adaptive_safe_compressed_minimum_resolution", "target_relevant_query_classes",
     "target_relevant_refinement_dominance",
+    "AdaptiveTwoSidedKernelReceipt", "adaptive_two_sided_kernel_minimum_resolution",
     "DynamicWorldTwinCompressionReceipt", "StaticWorldTwinQuotientReceipt",
     "TargetRelevantWorldTwinClass", "adaptive_world_twin_compressed_minimum_resolution",
     "static_target_relevant_world_twin_quotient", "target_relevant_world_twin_classes",
