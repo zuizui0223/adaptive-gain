@@ -237,6 +237,55 @@ Registered controls give:
 
 The current automorphism audit itself still enumerates the stable-color-preserving permutation family up to a hard cap. Orbit pruning therefore removes downstream canonical-leaf redundancy, but does not yet avoid the full exact group-certification cost.
 
+### 7. Explicit isomorphism transports in proof DAG edges
+
+`isomorphism_proof_dag.py` exports the isomorphism reuse itself as a proof object. Every shared child edge stores an explicit query bijection from the reconstructed source child instance to its representative DAG node.
+
+The verifier does **not** trust canonical-signature equality. It reconstructs each child from the parent query and directly verifies the supplied cost/incidence-preserving transport before reusing the representative subproof. A tampered transport is rejected by regression tests.
+
+### 8. Parent-automorphism branch pruning
+
+`adaptive_gain/symmetry_pruned_proof_dag.py` now compresses the sibling branch set itself. If an exact parent residual automorphism maps query `q` to query `r`, then
+
+\[
+\boxed{I\setminus q\cong I\setminus r}.
+\]
+
+Thus, among the affordable separators of one proof obligation, one recursive child proof per exact query-automorphism orbit is sufficient. Every skipped branch carries an explicit child-to-orbit-representative transport.
+
+For a proof node `v`, write
+
+\[
+b(v)=\text{raw affordable branch count},\qquad
+o(v)=\text{orbit-representative count}.
+\]
+
+Then the exact local branch saving is
+
+\[
+\boxed{s(v)=b(v)-o(v)}
+\]
+
+and the local compression factor obeys
+
+\[
+\boxed{1\le \frac{b(v)}{o(v)}\le |\operatorname{Aut}(I_v)|}.
+\]
+
+`proof_size_bounds.py` recomputes these metrics from the stored proof object rather than trusting execution counters.
+
+The reusable four-query C4 control gives
+
+```text
+raw affordable branches = 2
+orbit representatives    = 1
+local saving             = 1
+local factor             = 2
+parent automorphism size = 8
+```
+
+while still providing an explicit transport for the skipped branch. All 4096 minimal tasks retain the exact strict/no-gain classification.
+
 The exact compression/canonicalization chain is now
 
 \[
@@ -254,6 +303,10 @@ The exact compression/canonicalization chain is now
 \text{individualization-refinement}
 \to
 \text{certified automorphism-orbit pruning}
+\to
+\text{transported proof DAG}
+\to
+\text{automorphism-orbit-pruned proof branches}
 }.
 \]
 
@@ -264,6 +317,7 @@ See:
 - `theory/RESIDUAL_ISOMORPHISM_QUOTIENT.md`
 - `theory/BIPARTITE_COLOR_REFINEMENT.md`
 - `theory/SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md`
+- `theory/SYMMETRY_PRUNED_PROOF_DAG.md`
 
 ## Unique minimal strict-gain normal form
 
@@ -372,6 +426,9 @@ The test suite includes:
 - individualization-refinement class-equivalence regression;
 - exact automorphism group and generator verification;
 - stabilizer-orbit-pruned versus unpruned IR regression;
+- explicit isomorphism-transport proof DAG verification;
+- parent-automorphism branch pruning with skipped-branch transport verification;
+- branch-orbit proof-size accounting and metadata-tamper detection;
 - the unique minimal normal-form iff classifier.
 
 CI runs the suite on Python 3.10, 3.11, and 3.12, plus the executable witness and certificate-ladder audits.
@@ -395,6 +452,10 @@ adaptive_gain/
   individualization_refinement.py
   automorphism.py
   orbit_pruning.py
+  isomorphism_proof_dag.py
+  symmetry_pruned_proof_dag.py
+  proof_size_bounds.py
+  symmetry_witnesses.py
   minimal_normal_form.py
   exhaustive.py
   information.py
@@ -412,6 +473,7 @@ theory/
   RESIDUAL_ISOMORPHISM_QUOTIENT.md
   BIPARTITE_COLOR_REFINEMENT.md
   SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md
+  SYMMETRY_PRUNED_PROOF_DAG.md
   MINIMAL_STRICT_GAIN_NORMAL_FORM.md
   PROVENANCE.md
   OPEN_PROBLEMS.md
