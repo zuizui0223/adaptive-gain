@@ -24,6 +24,7 @@ unbounded binary-observation unit-cost adaptive advantage
 sharp productive-tree internal-node bound M(n,h)
 sharp unit-cost fixed-(world count, query count) ratio for unrestricted query arity
 sharp unit-cost fixed-(world count, query count) ratio for binary query arity
+sharp unit-cost fixed-(world count, query count, max query arity b) ratio
 ```
 
 The central scalar-cost boundary is now especially compact:
@@ -91,70 +92,54 @@ Open questions:
 
 Without extra restrictions, both additive gain and `C_F/C_A` are unbounded even for binary deterministic observations with unit costs.
 
-Two fixed-`(n,m)` unit-cost extremal problems are now closed.
+The fixed-world / fixed-query unit-cost extremal problem is now closed for **every finite maximum query arity**.
 
-### Unrestricted deterministic query arity
+### Bounded query arity `b>=2`
 
-\[
-\boxed{
-\max\frac{C_F}{C_A}
-=
-\max\!\left(
-1,
-\frac{\min\{m,1+\lfloor n/2\rfloor\}}{2}
-\right).
-}
-\]
-
-The exact productive-tree internal-node bound used in that proof is
+Let `F_b(n,h)` be the exact maximum number of internal-node occurrences in a productive tree with at most `n` leaves, depth at most `h`, and at most `b` children at each internal node. Then
 
 \[
 \boxed{
-M(n,h)
+F_b(n,h)
 =
-n+1-
-\max\!\left(
-2,
-\left\lceil\frac{n}{2^{h-1}}\right\rceil
-\right).
+1+
+\max_{2\le r\le\min(b,n)}
+\max_{\substack{n_1+\cdots+n_r\le n\\n_i\ge1}}
+\sum_i F_b(n_i,h-1)
 }
 \]
 
-### Binary query arity
+with `F_b(1,h)=F_b(n,0)=0`.
 
-Let
-
-\[
-K=\min(m,n-1),
-\qquad d=\lfloor\log_2(K+1)\rfloor.
-\]
-
-Then
+For unit costs,
 
 \[
 \boxed{
-\max\frac{C_F}{C_A}
+R_b(n,m)
 =
-\max\!\left(
-1,
-\frac{2^d-1}{d},
-\frac{K}{d+1}
-\right).
+\max_{1\le h\le n-1}
+\frac{\min\{m,F_b(n,h)\}}{h}
 }
 \]
 
-Alternating-target threshold paths attain the binary bound.  The first binary-only fixed-`(n,m)` scope above `3/2` is six worlds and five queries, with `(C_A,C_F)=(3,5)`.
+is the exact maximum `C_F/C_A` among tasks with `n` represented worlds, `m` declared queries, and query arity at most `b`.
 
-The remaining extremal questions therefore require restrictions not captured by `(n,m)` and binary/unrestricted arity alone.
+Sharpness follows from the private-pair forest construction on an extremal tree.
+
+The two previously closed endpoints are recovered exactly:
+
+- `b=2`: the binary threshold-path formula;
+- `b>=n`: the unrestricted-arity depth-two formula.
+
+The remaining extremal questions therefore require constraints beyond `(n,m,b)` under unit costs.
 
 Open questions:
 
-- What is the sharp ratio for intermediate maximum query arity `3 <= b < infinity`?
-- What is the sharp ratio at fixed observation-tree depth together with bounded query arity?
 - What bounds follow from limiting productive-frontier rank, edge count, or transversal number?
-- What is the sharp ratio when every query has balanced binary outcomes?
-- What changes if each query may be used at most once globally, versus once per branch as in the current resource model?
-- Under unequal positive costs, what is the sharp fixed-`(n,m)` ratio and what are the smallest scopes exceeding a given threshold?
+- What is the sharp ratio when every binary query has balanced outcomes on the represented worlds?
+- What changes if one physical query may be used at most once **globally** rather than once on each possible branch in the policy tree?
+- Under unequal positive costs, what is the sharp fixed-`(n,m,b)` ratio and what are the smallest scopes exceeding a given threshold?
+- Can the bounded-arity recurrence be simplified to useful closed forms for fixed small `b=3,4`?
 
 ## 4. Next finite irreducible normal forms
 
