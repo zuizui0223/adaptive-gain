@@ -318,6 +318,36 @@ The theorem exactly recovers both endpoints:
 
 See `theory/SHARP_BOUNDED_ARITY_UNIT_COST_RATIO.md` and `adaptive_gain/bounded_arity_extremal_bounds.py`.
 
+## Productive-frontier edge cap
+
+If the minimal productive frontier is constrained by
+
+\[
+|\mathcal H_{\min}|\le E,
+\]
+
+then under unit costs
+
+\[
+C_F=\tau(\mathcal H_{\min})\le E.
+\]
+
+Combining this with the bounded-arity tree bound gives the exact extremum
+
+\[
+\boxed{
+R_{b,E}(n,m)
+=
+\max_{1\le h\le n-1}
+\frac{\min\{m,E,F_b(n,h)\}}{h}.
+}
+\]
+
+Sharpness again uses the private-pair forest construction, truncated to
+`I=min(m,E,F_b(n,h))` internal queries. Its productive frontier is exactly the `I` singleton edges, so the cap is met with equality whenever active.
+
+See `theory/SHARP_FRONTIER_EDGE_CAPPED_RATIO.md` and `adaptive_gain/frontier_edge_extremal_bounds.py`.
+
 ---
 
 # Source-derived witnesses
@@ -339,7 +369,7 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The sharp fixed-`(n,m,b)` theorem assumes unit query costs. Unequal costs, stochastic observations, calibration-changing actions, and continuous compatible sets remain separate problems.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The sharp fixed-`(n,m,b)` and frontier-edge-cap theorems assume unit query costs. Unequal costs, stochastic observations, calibration-changing actions, and continuous compatible sets remain separate problems.
 
 ## Run
 
