@@ -1,5 +1,10 @@
 """Public entrypoint for productive-frontier fixed and bypass structure."""
 
+from .frontier_budget_profile import (
+    FrontierBudgetProfileAudit,
+    frontier_budget_profile_audit,
+    frontier_resolution_budget_profile,
+)
 from .frontier_bypass_certificates import (
     FrontierNoExternalShortcutCertificate,
     FrontierReplacementLimitError,
@@ -41,6 +46,9 @@ from .productive_frontier import (
 )
 
 __all__ = [
+    "FrontierBudgetProfileAudit",
+    "frontier_budget_profile_audit",
+    "frontier_resolution_budget_profile",
     "FrontierNoExternalShortcutCertificate",
     "FrontierReplacementLimitError",
     "OutsideResourceReplacement",
