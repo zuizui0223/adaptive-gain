@@ -171,8 +171,6 @@ query acquisition costs
 pair-query incidence
 ```
 
-For small states, exact cost-preserving query permutations are enumerated to obtain a canonical signature. A hard permutation cap fails closed.
-
 A six-world / six-query strict-gain control has
 
 ```text
@@ -184,17 +182,78 @@ C_F = 3
 
 so this quotient gives compression beyond exact-state DAG sharing. The first merge exports an explicit query-bijection witness that is independently checked by `verify_residual_pair_cover_isomorphism()`.
 
-Thus the current exact compression chain is
+### 4. Bipartite color refinement before exact canonicalization
+
+`color_refinement.py` propagates isomorphism-invariant colors between obligation rows and query columns before exact query-permutation enumeration.
+
+A registered eight-query residual benchmark has
+
+```text
+initial query permutation family = 720
+stable refined family            = 12
+```
+
+so the exact canonicalization search is reduced by a factor of 60. All 4096 minimal tasks preserve the exact canonical isomorphism classes.
+
+Color refinement is deliberately not treated as an isomorphism test. A connected bipartite 8-cycle and two disjoint 4-cycles remain color-indistinguishable but have different exact canonical forms.
+
+### 5. Exact individualization-refinement
+
+`individualization_refinement.py` handles higher-order color collisions by choosing a non-singleton query color class, individualizing one query, refining again, and recursively exploring every required branch.
+
+For each of the two regular color-collision controls,
+
+```text
+stable exact permutations = 24
+IR canonical leaves       = 8.
+```
+
+The IR encoding need not be byte-identical to the older brute-force canonical encoding; exactness is checked by equality of induced isomorphism classes. Over all 4096 minimal tasks, the old exact canonicalizer and IR canonicalizer give a one-to-one correspondence between equivalence classes.
+
+### 6. Exact automorphism audit and stabilizer-orbit pruning
+
+`automorphism.py` enumerates the complete small-task query automorphism group after stable refinement, verifies a generator set, and reports query orbits. If the stable color classes leave
+
+\[
+N_{\rm color}=\prod_i |C_i|!
+\]
+
+labelings and the exact residual automorphism group is `G`, then
+
+\[
+\boxed{N_{\rm distinct}=N_{\rm color}/|G|}.
+\]
+
+`orbit_pruning.py` uses the subgroup fixing the already individualized queries pointwise. Only one representative per stabilizer orbit must be individualized.
+
+Registered controls give:
+
+| Residual structure | Stable permutations | IR leaves | `|Aut|` | Orbit-pruned leaves |
+|---|---:|---:|---:|---:|
+| Minimal strict-gain normal form | 6 | 6 | 6 | **1** |
+| Connected bipartite 8-cycle | 24 | 8 | 8 | **1** |
+| Two disjoint 4-cycles | 24 | 8 | 8 | **1** |
+| 720->12 refinement benchmark | 12 | 12 | 12 | **1** |
+
+The current automorphism audit itself still enumerates the stable-color-preserving permutation family up to a hard cap. Orbit pruning therefore removes downstream canonical-leaf redundancy, but does not yet avoid the full exact group-certification cost.
+
+The exact compression/canonicalization chain is now
 
 \[
 \boxed{
 \text{raw proof tree}
 \to
-\text{kernelized residuals}
+\text{two-sided kernel}
 \to
 \text{exact-state DAG}
 \to
-\text{weighted-incidence isomorphism classes}
+\text{weighted-incidence quotient}
+\to
+\text{color refinement}
+\to
+\text{individualization-refinement}
+\to
+\text{certified automorphism-orbit pruning}
 }.
 \]
 
@@ -203,6 +262,8 @@ See:
 - `theory/FIXED_COVER_KERNELIZATION.md`
 - `theory/PROOF_DAG_COMPRESSION.md`
 - `theory/RESIDUAL_ISOMORPHISM_QUOTIENT.md`
+- `theory/BIPARTITE_COLOR_REFINEMENT.md`
+- `theory/SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md`
 
 ## Unique minimal strict-gain normal form
 
@@ -264,6 +325,14 @@ The raw multiplicity is explained by the declared symmetry orbit:
 4\times 3!\times2^3=192.
 \]
 
+At the residual fixed-cover level the standard form has full query automorphism group
+
+\[
+\boxed{\mathrm{Aut}\cong S_3,\qquad |\mathrm{Aut}|=6,}
+\]
+
+so its six query relabelings are genuine self-symmetry, not unresolved color-refinement ambiguity.
+
 See `theory/MINIMAL_STRICT_GAIN_NORMAL_FORM.md`.
 
 ## Source-derived witnesses
@@ -299,6 +368,10 @@ The test suite includes:
 - two-sided kernel equivalence;
 - exact-state DAG verification;
 - residual isomorphism witnesses and quotient regression;
+- color-refinement exact-class regression and adverse regular controls;
+- individualization-refinement class-equivalence regression;
+- exact automorphism group and generator verification;
+- stabilizer-orbit-pruned versus unpruned IR regression;
 - the unique minimal normal-form iff classifier.
 
 CI runs the suite on Python 3.10, 3.11, and 3.12, plus the executable witness and certificate-ladder audits.
@@ -318,6 +391,10 @@ adaptive_gain/
   kernel_bounds.py
   proof_dag.py
   isomorphism_quotient.py
+  color_refinement.py
+  individualization_refinement.py
+  automorphism.py
+  orbit_pruning.py
   minimal_normal_form.py
   exhaustive.py
   information.py
@@ -333,6 +410,8 @@ theory/
   FIXED_COVER_KERNELIZATION.md
   PROOF_DAG_COMPRESSION.md
   RESIDUAL_ISOMORPHISM_QUOTIENT.md
+  BIPARTITE_COLOR_REFINEMENT.md
+  SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md
   MINIMAL_STRICT_GAIN_NORMAL_FORM.md
   PROVENANCE.md
   OPEN_PROBLEMS.md
@@ -342,7 +421,7 @@ theory/
 
 This repository does **not** claim:
 
-- a new general theory of adaptive experimental design, Set Cover, Test Cover, graph isomorphism, or Sperner theory;
+- a new general theory of adaptive experimental design, Set Cover, Test Cover, graph isomorphism, color refinement, or group algorithms;
 - that PAYOFF, MROD, and BALANCE are the same scientific model;
 - that branch dependence alone is sufficient for adaptive gain;
 - that zero direct target information is necessary or sufficient for gain;
@@ -352,7 +431,7 @@ This repository does **not** claim:
 - that finite synthetic controls are empirical evidence;
 - that target resolution licenses a biological report.
 
-The contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-side certificates, together with exact proof compression and finite structural classification exposed by the three source repositories.
+The contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-side certificates, together with exact proof compression, certified symmetry handling, and finite structural classification exposed by the three source repositories.
 
 ## Run
 
