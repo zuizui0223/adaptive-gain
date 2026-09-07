@@ -21,6 +21,8 @@ unique deletion-minimal 5-world strict-gain normal form
 first unit-cost scope with C_F/C_A > 3/2
 unbounded unit-cost adaptive advantage
 unbounded binary-observation unit-cost adaptive advantage
+sharp productive-tree internal-node bound M(n,h)
+sharp unit-cost fixed-(world count, query count) ratio for unrestricted query arity
 ```
 
 The central scalar-cost boundary is now especially compact:
@@ -92,16 +94,43 @@ Without extra restrictions, both additive gain and `C_F/C_A` are unbounded even 
 C_A=d+1,\qquad C_F=2^d.
 \]
 
-The interesting extremal questions therefore require additional constraints.
+For **unit costs with unrestricted deterministic query arity**, the fixed-`(n,m)` problem is now closed exactly:
+
+\[
+\boxed{
+\max\frac{C_F}{C_A}
+=
+\max\!\left(
+1,
+\frac{\min\{m,1+\lfloor n/2\rfloor\}}{2}
+\right).
+}
+\]
+
+The exact productive-tree internal-node bound used in that proof is
+
+\[
+\boxed{
+M(n,h)
+=
+n+1-
+\max\!\left(
+2,
+\left\lceil\frac{n}{2^{h-1}}\right\rceil
+\right).
+}
+\]
+
+So the remaining extremal questions require additional restrictions beyond just `n,m` in the unrestricted-arity unit-cost model.
 
 Open questions:
 
-- What is the largest ratio at fixed numbers of worlds and queries?
-- What is the largest ratio at fixed observation-tree depth or fixed maximum query arity?
-- What bounds follow from limiting productive-frontier rank or edge count?
+- What is the sharp fixed-`(n,m)` ratio when **all queries are binary**?
+- What is the sharp ratio at fixed observation-tree depth together with bounded query arity?
+- What bounds follow from limiting productive-frontier rank, edge count, or transversal number?
 - What is the sharp ratio bound when every query has balanced binary outcomes?
 - What changes if each query may be used at most once globally, versus once per branch as in the current resource model?
-- Under unequal positive costs, what are the smallest world/query scopes exceeding a given ratio threshold?
+- Under unequal positive costs, what is the sharp fixed-`(n,m)` ratio and what are the smallest scopes exceeding a given threshold?
 
 ## 4. Next finite irreducible normal forms
 
