@@ -181,6 +181,16 @@ from .symmetry_pruned_proof_dag import (
     verify_symmetry_pruned_proof_dag,
 )
 from .symmetry_witnesses import cycle_branch_symmetry_control
+from .target_pair_incidence import (
+    PairIncidenceAdaptiveReceipt,
+    PairIncidenceFixedReceipt,
+    PairIncidenceSufficiencyAudit,
+    TargetPairIncidenceTask,
+    pair_incidence_adaptive_minimum_resolution,
+    pair_incidence_fixed_minimum_resolution,
+    pair_incidence_sufficiency_audit,
+    target_pair_incidence_task,
+)
 
 __all__ = [
     "ResidualAutomorphismGroupReceipt", "residual_automorphism_group",
@@ -255,4 +265,9 @@ __all__ = [
     "SymmetryPrunedProofDagLimitError", "SymmetryPrunedProofDagNode",
     "build_symmetry_pruned_proof_dag", "selected_policy_symmetry_pruned_gain_audit",
     "verify_symmetry_pruned_proof_dag", "cycle_branch_symmetry_control",
+    "PairIncidenceAdaptiveReceipt", "PairIncidenceFixedReceipt",
+    "PairIncidenceSufficiencyAudit", "TargetPairIncidenceTask",
+    "pair_incidence_adaptive_minimum_resolution",
+    "pair_incidence_fixed_minimum_resolution", "pair_incidence_sufficiency_audit",
+    "target_pair_incidence_task",
 ]
