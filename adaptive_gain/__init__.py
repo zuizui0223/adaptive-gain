@@ -79,6 +79,14 @@ from .integer_cover_proof import (
     selected_policy_integer_cover_gain_certificate,
     verify_fixed_budget_decision_certificate,
 )
+from .isomorphism_proof_dag import (
+    IsomorphismProofDagLimitError,
+    IsomorphismProofDagNode,
+    IsomorphismTransportEdge,
+    IsomorphismTransportProofDagCertificate,
+    build_isomorphism_transport_proof_dag,
+    verify_isomorphism_transport_proof_dag,
+)
 from .isomorphism_quotient import (
     CanonicalResidualCoverSignature,
     IsomorphismQuotientAdaptiveGainAudit,
@@ -168,6 +176,9 @@ __all__ = [
     "IntegerCoverAdaptiveGainCertificate", "IntegerCoverProofLimitError",
     "fixed_budget_cover_decision", "selected_policy_integer_cover_gain_certificate",
     "verify_fixed_budget_decision_certificate",
+    "IsomorphismProofDagLimitError", "IsomorphismProofDagNode",
+    "IsomorphismTransportEdge", "IsomorphismTransportProofDagCertificate",
+    "build_isomorphism_transport_proof_dag", "verify_isomorphism_transport_proof_dag",
     "CanonicalResidualCoverSignature", "IsomorphismQuotientAdaptiveGainAudit",
     "IsomorphismQuotientFixedBudgetDecision", "ResidualIsomorphismLimitError",
     "ResidualIsomorphismWitness", "ResidualPairCoverInstance",
