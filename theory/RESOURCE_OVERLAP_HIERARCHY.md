@@ -1,49 +1,37 @@
 # Resource-overlap hierarchy for joint adaptive/fixed resolution
 
-This note separates four different kinds of information that can be retained when
-compressing a finite deterministic measurement problem.
+This note separates which resource information is sufficient for deterministic
+worst-path adaptive cost `C_A` and fixed-bundle cost `C_F`.
 
-The scientific model is still the same finite guaranteed-resolution contract:
+The finite contract remains:
 
-- hidden worlds are finite;
-- every world has a declared target label;
-- every query has positive acquisition cost;
-- query outcomes are deterministic in represented worlds;
-- `C_A` is the minimum adaptive worst-path acquisition cost;
-- `C_F` is the minimum cost of one fixed resolving query bundle.
+- finitely many represented hidden worlds;
+- a declared target label in every world;
+- positive query acquisition costs;
+- deterministic query outcomes;
+- exact guaranteed target resolution.
 
-No claim here concerns noisy measurements, natural-data prevalence, or report
-licensing.
+No statement here is a natural-data prevalence claim or report-license claim.
 
 ## 1. Orbit capacity is not enough
 
-Start from the cost-only continuation quotient, which preserves `C_A` but forgets
-physical query identity. A tempting repair is to add the sizes/costs of the exact
-full-task query orbits.
+The cost-only continuation quotient preserves `C_A` but forgets physical query
+identity. Adding only exact query-orbit sizes/costs still does not recover `C_F`.
 
-The registered five-world pair in `orbit_capacity_collision()` defeats that idea.
-Both tasks have
-
-```text
-targets = (0,0,1,1,1)
-three binary unit-cost queries
-same cost-only continuation root type
-same exact query-orbit capacity profile
-```
-
-but their exact costs are
+The registered five-world pair `orbit_capacity_collision()` has the same
+cost-only continuation root type and the same query-orbit capacity profile, but
 
 \[
 (C_A,C_F)=(2,3)
 \]
 
-and
+versus
 
 \[
 (C_A,C_F)=(2,2).
 \]
 
-Thus
+Therefore
 
 \[
 \boxed{
@@ -52,208 +40,145 @@ Thus
 }
 \]
 
-The missing information is not how many resources exist in an orbit, but how the
-same physical resource participates in local continuation roles across different
-reachable states.
-
 ## 2. First-order per-resource role profiles are still not enough
 
-For each physical query `q`, define its abstract role profile as the set of pairs
+For each physical query `q`, record the set of abstract local roles
 
 \[
-(\text{parent continuation type},\;\text{local action type})
+(\text{parent continuation type},\text{ local action type})
 \]
 
-that `q` realizes anywhere in the reachable mixed-state graph.
+that it realizes anywhere in the reachable mixed-state graph.
 
-This remembers cross-state reuse of a resource more strongly than orbit capacity:
-a query that serves several different continuation roles has all of them in one
-profile.
+This is stronger than orbit capacity, but the four-world/four-query pair
+`resource_role_profile_collision()` has the same continuation root type and the
+same multiset of complete per-resource role profiles while its exact fixed costs
+are `2` and `3`.
 
-However the four-world/four-query pair in
-`resource_role_profile_collision()` has
-
-```text
-same cost-only continuation root type
-same multiset of complete per-resource role profiles
-```
-
-while
-
-\[
-(C_A,C_F)=(2,2)
-\]
-
-for the bypass task and
-
-\[
-(C_A,C_F)=(2,3)
-\]
-
-for the strict task.
-
-The representatives are
-
-```text
-T = (0,0,1,1)
-
-no-gain:
-  left   = (0,0,0,1)
-  right  = (0,1,0,0)
-  bypass = (0,1,0,1)
-  route  = (0,1,1,0)
-
-strict:
-  left    = (0,0,0,1)
-  right   = (0,1,0,0)
-  route_a = (0,1,1,0)
-  route_b = (0,1,1,0)
-```
-
-So even
+Hence
 
 \[
 \boxed{
-\text{continuation type + multiset of per-resource role sets}
+\text{continuation type + per-resource role-profile multiset}
 \not\Rightarrow C_F.
 }
 \]
 
-What the projection loses is **co-location**: it knows what roles each resource can
-play somewhere, but not which role occurrences coexist in the same concrete
-reachable state.
+The exact balanced four-world binary scan locates the first registered ambiguity:
 
-## 3. Exact finite location of the first role-profile ambiguity
+- with three queries, all `16^3=4,096` labeled tasks have zero ambiguous role-profile signatures;
+- with four queries, one ambiguous signature contains `2,304` tasks:
+  `1,536` with `(C_A,C_F)=(2,2)` and `768` with `(2,3)`.
 
-For balanced four-world binary unit-cost tasks, the compact exhaustive classifier
-`enumerate_balanced_resource_role_overlap_universe()` gives:
+## 3. Reachable state-resource incidence is sufficient for `C_F`
 
-### Three queries
+The previous version of this note treated co-location only as an empirical repair.
+The stronger result is now proved.
 
-\[
-16^3=4096
-\]
+For every reachable mixed state `s`, define
 
-labeled tasks collapse to 25 resource-role signatures, with
+- `U_s`: queries already used on the history to `s`;
+- `P_s`: still-available queries productive (nonconstant) on `s`.
 
-\[
-\boxed{0\text{ ambiguous signatures}.}
-\]
-
-### Four queries
-
-\[
-16^4=65536
-\]
-
-labeled tasks collapse to 60 resource-role signatures. Exactly one signature is
-ambiguous in fixed cost. It contains
-
-\[
-1536\text{ tasks with }(C_A,C_F)=(2,2)
-\]
-
-and
-
-\[
-768\text{ tasks with }(C_A,C_F)=(2,3),
-\]
-
-for a total of
-
-\[
-\boxed{2304\text{ tasks}.}
-\]
-
-Thus, at fixed four-world balanced target structure, four binary resources are the
-first registered query count where first-order resource-role profiles stop being
-sufficient.
-
-This is an exact finite classification, not a prevalence statement about real
-experiments.
-
-## 4. State-resource co-location is strictly stronger
-
-The diagnostic `state_resource_colocation_signature` retains one row for every
-reachable mixed state. A row records:
-
-- the abstract continuation type of that state;
-- which physical resources are still unavailable/available;
-- whether each available resource is constant or productive there; and
-- the resource's local action type.
-
-Query columns are canonicalized only under cost-preserving permutation.
-
-The registered four-query role-profile collision has different co-location
-signatures, so the stronger representation repairs that particular information
-loss.
-
-But no general sufficiency theorem is claimed for co-location alone. It still
-forgets which concrete child occurrence follows each action. Two tasks could in
-principle share the same row/column incidence while wiring those rows differently.
-
-Therefore
+For a fixed bundle `B`,
 
 \[
 \boxed{
-\text{state-resource co-location distinguishes the witness}
-\neq
-\text{general joint sufficiency theorem}.
+B\text{ fails}
+\iff
+\exists s:\ U_s\subseteq B,\quad P_s\cap B=\varnothing.
 }
 \]
 
-## 5. Resource-labelled transition structure is sufficient
+If `B` fails, follow a surviving cross-target pair while repeatedly applying any
+productive query from `B`; the process terminates at a mixed state where all
+remaining `B` queries are constant. Conversely, such a state is an explicit
+witness that applying the rest of `B` cannot resolve the target.
 
-The existing `resource_continuation.py` keeps the missing transition information:
+Therefore query costs plus the set of reachable `(U_s,P_s)` rows determine the
+exact fixed optimum:
 
-```text
-physical query token
-    -> declared cost
-    -> mixed child continuation classes
-```
+\[
+\boxed{
+\{(U_s,P_s)\}_{s\text{ mixed}} + \text{query costs}
+\Longrightarrow C_F.
+}
+\]
 
-while retaining the resource token globally across branches.
+Concrete child wiring and world-pair identities are unnecessary for this scalar
+fixed optimum.
 
-That representation has already been validated to preserve both exact costs.
-Therefore the current hierarchy is
+Implementation: `adaptive_gain/state_resource_incidence.py`.
+
+See `theory/STATE_RESOURCE_INCIDENCE_SUFFICIENCY.md`.
+
+## 4. A smaller fixed-side row kernel
+
+A row `(U_1,P_1)` dominates `(U_2,P_2)` when
+
+\[
+U_1\subseteq U_2,\qquad P_1\subseteq P_2.
+\]
+
+Every bundle failing row 2 also fails row 1, so row 2 is redundant. The
+`reduced_rows` certificate removes these componentwise-dominated failure rows
+without changing `C_F`.
+
+This is a different compression from cross-target pair-cover dominance: it works
+on reachable history/resource incidence rather than world-pair obligations.
+
+## 5. Joint sufficiency without child wiring
+
+The cost-only continuation quotient already determines `C_A`. Combining it with
+the state-resource incidence theorem gives
+
+\[
+\boxed{
+\text{cost-only continuation structure}
++
+\{(U_s,P_s)\}_{s\text{ mixed}}
+\Longrightarrow
+(C_A,C_F).
+}
+\]
+
+This is strictly weaker than retaining the full resource-labelled transition
+system when only the two scalar optimum costs are required.
+
+The richer `resource_continuation.py` remains useful when one needs named resource
+transitions, policy lifting, explicit child structure, or resource-transition
+isomorphism certificates. Its sufficiency is unchanged; it is simply no longer
+minimal for the scalar pair `(C_A,C_F)`.
+
+## 6. Revised hierarchy
+
+The current information hierarchy is therefore
 
 \[
 \boxed{
 \begin{array}{c}
-\text{orbit capacity}\\
+\text{orbit capacity}\quad\text{(insufficient for }C_F\text{)}\\
 \downarrow\\
-\text{per-resource role profile}\\
+\text{per-resource role profile}\quad\text{(insufficient for }C_F\text{)}\\
 \downarrow\\
-\text{state-resource co-location}\\
+\text{reachable state-resource }(U,P)\text{ incidence}\quad\Rightarrow C_F\\
 \downarrow\\
-\text{resource-labelled transition structure}
+\text{resource-labelled transition structure}\quad\Rightarrow(C_A,C_F)\text{ plus wiring}
 \end{array}
 }
 \]
 
-with explicit negative controls at the first two arrows and exact joint
-sufficiency at the last layer.
+For the joint scalar costs, attach the cost-only continuation quotient to the
+`(U,P)` incidence layer.
 
-## 6. Interpretation
+## 7. Validation and scope
 
-The fixed comparator is sensitive to a genuinely global question:
+Implementation checks include the two registered fixed-cost collisions,
+all `15^3=3,375` arbitrary three-query set-partition tasks on four balanced worlds,
+and all `15^2 x 2^2=900` two-query arbitrary-partition tasks with costs in `{1,2}`.
+Those tests validate code; the sufficiency claim follows from the bundle-failure
+equivalence above.
 
-> Can one physical measurement resource satisfy requirements that appear in
-> different possible histories?
-
-Neither local continuation value, resource count, nor the set of roles a resource
-can play somewhere answers that question completely. What matters is the
-**incidence of the same physical resource with concrete branch-state obligations**.
-
-This makes the next research problem sharper:
-
-\[
-\boxed{
-\text{How much of resource-labelled transition incidence can be quotiented while
-preserving all fixed cross-branch reuse?}
-}
-\]
-
-A promising next object is a state-resource-action hypergraph with explicit child
-transport, followed by exact automorphism/capacity quotienting. The current note
-does not claim that a first-order or pairwise overlap summary is sufficient.
+The theorem does not automatically extend to stochastic repeated sampling,
+expected loss, calibration-changing actions, continuous compatible sets, or
+scientific report licensing.
