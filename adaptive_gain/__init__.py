@@ -106,6 +106,10 @@ from .minimal_normal_form import (
     minimal_strict_gain_standard_task,
     standard_raw_symmetry_orbit_size,
 )
+from .orbit_pruning import (
+    OrbitPrunedIndividualizationSignature,
+    orbit_pruned_individualization_canonical_signature,
+)
 from .pair_cover import (
     EssentialQueryWitness,
     PairCoverAudit,
@@ -176,6 +180,8 @@ __all__ = [
     "MINIMAL_STRICT_GAIN_SIGNATURE", "MinimalNormalFormReceipt",
     "canonical_minimal_separator_signature", "minimal_normal_form_receipt",
     "minimal_strict_gain_standard_task", "standard_raw_symmetry_orbit_size",
+    "OrbitPrunedIndividualizationSignature",
+    "orbit_pruned_individualization_canonical_signature",
     "EssentialQueryWitness", "PairCoverAudit", "PairSeparatorRow",
     "PrivatePairAdaptiveGainCertificate", "PrivatePairNoBypassCertificate",
     "pair_cover_audit", "private_pair_no_bypass_certificate",
