@@ -14,9 +14,8 @@ from adaptive_gain.witnesses import routing_bypass_control
 
 def _kernel_compression_control():
     # Registered synthetic strict-gain benchmark discovered by seeded search.
-    # Exact costs are C_A=3,C_F=4.  The unkernelized bounded-cover proof visits
-    # 13 states at B=3; forced selection + dominance closes the kernelized
-    # decision at the root without a genuine branch state.
+    # Exact costs are C_A=3,C_F=4. The unkernelized bounded-cover proof visits
+    # 13 states at B=3; the two-sided kernel closes the same decision at root.
     worlds = tuple(World(f"w{i}", 0 if i < 4 else 1) for i in range(8))
     maps = (
         (1, 1, 0, 1, 0, 1, 0, 1),
@@ -47,6 +46,7 @@ def test_kernelization_preserves_strict_gain_decision_on_compression_control():
     assert baseline.states_visited == 13
     assert kernel.kernel_calls == 1
     assert kernel.canonical_branch_states == 0
+    assert kernel.dominated_pair_removals == 12
     assert kernel.forced_query_selections == 3
     assert kernel.dominated_query_removals == 3
     assert kernel.inactive_or_unaffordable_query_removals == 2
@@ -67,7 +67,7 @@ def test_dominance_replaces_a_more_expensive_identical_separator():
     assert result.forced_query_selections == 1
 
 
-def test_dominance_removes_equal_cost_strict_cover_subset():
+def test_query_dominance_removes_equal_cost_strict_cover_subset():
     task = FiniteTask(
         (World("a", 0), World("b", 0), World("c", 1)),
         (
@@ -76,11 +76,28 @@ def test_dominance_removes_equal_cost_strict_cover_subset():
             Query("other", 1, (1, 0, 1)),
         ),
     )
-    # subset covers only (a,c); superset covers both cross-target pairs.
     result = kernelized_fixed_budget_cover_decision(task, budget=1)
     assert result.fixed_resolver_exists_within_budget
     assert result.feasible_bundle == ("superset",)
     assert result.dominated_query_removals >= 1
+
+
+def test_pair_obligation_dominance_removes_easier_cross_target_pair():
+    task = FiniteTask(
+        (World("a", 0), World("b", 0), World("c", 1)),
+        (
+            Query("hard_separator", 1, (0, 0, 1)),  # separates both pairs
+            Query("easy_extra", 1, (0, 1, 0)),     # separates only (b,c)
+        ),
+    )
+    # Sep(a,c)={hard_separator} is a subset of
+    # Sep(b,c)={hard_separator,easy_extra}; covering (a,c) therefore guarantees
+    # (b,c), so the latter obligation is redundant.
+    result = kernelized_fixed_budget_cover_decision(task, budget=1)
+    assert result.fixed_resolver_exists_within_budget
+    assert result.feasible_bundle == ("hard_separator",)
+    assert result.dominated_pair_removals == 1
+    assert result.forced_query_selections == 1
 
 
 def test_kernelized_solver_constructively_refuses_false_gain_on_bypass_control():
