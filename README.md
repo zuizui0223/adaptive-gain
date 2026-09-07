@@ -222,7 +222,7 @@ Thus the multiplicative adaptive advantage is unbounded even when **every observ
 
 ## Sharp fixed-world / fixed-query ratio under unit costs
 
-The unrestricted-arity unit-cost extremal problem is now closed exactly. For `n>=2` represented worlds and `m>=1` declared unit-cost query resources,
+The unrestricted-arity unit-cost extremal problem is closed exactly. For `n>=2` represented worlds and `m>=1` declared unit-cost query resources,
 
 \[
 \boxed{
@@ -253,12 +253,59 @@ Its distinct query union is no larger, and flattening that union is a fixed reso
 
 Consequences:
 
-- at fixed `n`, extra query vocabulary beyond `1+floor(n/2)` cannot improve the unit-cost extremal ratio;
-- at fixed `m>=3`, the sharp ratio reaches `m/2` once `n>=2(m-1)`;
+- at fixed `n`, extra query vocabulary beyond `1+floor(n/2)` cannot improve the unrestricted-arity unit-cost extremal ratio;
+- at fixed `m>=3`, the sharp unrestricted-arity ratio reaches `m/2` once `n>=2(m-1)`;
 - the earlier six-world / four-query ratio-2 witness is an immediate corollary; and
 - depth two is globally extremal for fixed `n` when query arity is unrestricted.
 
 See `theory/SHARP_UNIT_COST_WORLD_QUERY_RATIO.md` and `adaptive_gain/unit_cost_extremal_bounds.py`.
+
+## Sharp binary-only fixed-world / fixed-query ratio
+
+The binary unit-cost problem is also closed exactly. Let
+
+\[
+K=\min(m,n-1),
+\qquad
+ d=\lfloor\log_2(K+1)\rfloor.
+\]
+
+Then
+
+\[
+\boxed{
+\max\frac{C_F}{C_A}
+=
+\max\!\left(
+1,
+\frac{2^d-1}{d},
+\frac{K}{d+1}
+\right).
+}
+\]
+
+The upper bound follows because a binary adaptive tree of depth `h` has at most `2^h-1` internal occurrences, at most `n-1` by leaf counting, and cannot use more than `m` resources.
+
+The exact witnesses are alternating-target **threshold paths**: `N` ordered worlds with all `N-1` binary threshold queries. Every threshold is fixed-mandatory because it uniquely separates one adjacent opposite-target pair, while adaptive balanced binary search has
+
+\[
+C_A=\lceil\log_2N\rceil,
+\qquad
+C_F=N-1.
+\]
+
+Choosing either `N=2^d` or `N=K+1`, whichever gives the larger candidate above, and then padding harmless worlds/queries attains the bound.
+
+The first binary-only fixed-`(n,m)` scope with ratio above `3/2` is
+
+```text
+6 worlds
+5 binary unit-cost queries
+```
+
+with `(C_A,C_F)=(3,5)` and ratio `5/3`.
+
+See `theory/SHARP_BINARY_UNIT_COST_WORLD_QUERY_RATIO.md` and `adaptive_gain/binary_unit_cost_extremal_bounds.py`.
 
 ---
 
@@ -281,7 +328,7 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. Finite-scope minimality claims are stated with their cost/outcome restrictions; unequal costs can change the smallest witness scope. The sharp fixed-`(n,m)` ratio theorem above assumes unit costs and unrestricted deterministic query arity; fixed-`(n,m)` sharpness under binary-only observations remains separate.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. Finite-scope minimality claims are stated with their cost/outcome restrictions; unequal costs can change the smallest witness scope. The two sharp fixed-`(n,m)` theorems above assume unit query costs; one allows arbitrary deterministic query arity and the other restricts every query to binary outcomes.
 
 ## Run
 
