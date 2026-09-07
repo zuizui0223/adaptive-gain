@@ -52,6 +52,26 @@ from .resource_overlap_exhaustive import (
     ResourceCoLocationRepairSummary,
     enumerate_balanced_four_query_colocation_repair,
 )
+from .resource_transition_isomorphism import (
+    CanonicalResourceTransitionSignature,
+    ResourceTransitionIsomorphismAudit,
+    ResourceTransitionIsomorphismLimitError,
+    ResourceTransitionIsomorphismWitness,
+    canonical_resource_transition_signature,
+    resource_transition_isomorphism_audit,
+    resource_transition_isomorphism_witness,
+    verify_resource_transition_isomorphism,
+)
+from .state_resource_incidence import (
+    StateResourceIncidenceCertificate,
+    StateResourceIncidenceRow,
+    StateResourceJointCostReceipt,
+    build_state_resource_incidence,
+    bundle_resolves_from_state_resource_incidence,
+    state_resource_fixed_minimum_resolution,
+    state_resource_joint_cost_audit,
+    verify_state_resource_incidence,
+)
 
 __all__ = [
     "ContinuationAction",
@@ -97,4 +117,20 @@ __all__ = [
     "resource_role_profile_collision",
     "ResourceCoLocationRepairSummary",
     "enumerate_balanced_four_query_colocation_repair",
+    "CanonicalResourceTransitionSignature",
+    "ResourceTransitionIsomorphismAudit",
+    "ResourceTransitionIsomorphismLimitError",
+    "ResourceTransitionIsomorphismWitness",
+    "canonical_resource_transition_signature",
+    "resource_transition_isomorphism_audit",
+    "resource_transition_isomorphism_witness",
+    "verify_resource_transition_isomorphism",
+    "StateResourceIncidenceCertificate",
+    "StateResourceIncidenceRow",
+    "StateResourceJointCostReceipt",
+    "build_state_resource_incidence",
+    "bundle_resolves_from_state_resource_incidence",
+    "state_resource_fixed_minimum_resolution",
+    "state_resource_joint_cost_audit",
+    "verify_state_resource_incidence",
 ]
