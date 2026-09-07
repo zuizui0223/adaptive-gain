@@ -17,6 +17,9 @@ bipartite color refinement
 exact individualization-refinement canonicalization
 exact small-task query automorphism audit
 stabilizer-orbit pruning of individualization branches
+explicit isomorphism-transport proof DAG edges
+parent-automorphism orbit pruning of proof branches
+branch-orbit proof-size accounting
 unique minimal 4-world / 3-query strict-gain normal form
 pair-side Sperner kernel bound
 ```
@@ -25,30 +28,35 @@ The next problems concern cheaper symmetry certification, stronger structural bo
 
 ## 1. Certify automorphism generators without enumerating the full stable-color permutation family
 
-The previous factorial-canonicalization problem is partially closed.
+The earlier factorial-canonicalization and proof-reuse questions are now substantially closed for small residual states.
 
-`color_refinement.py` can reduce exact query permutations before canonicalization; one registered benchmark goes from `720` candidates to `12`. `individualization_refinement.py` breaks higher-order color collisions. `automorphism.py` then distinguishes unresolved search ambiguity from genuine query symmetry, and `orbit_pruning.py` uses the exact automorphism stabilizer to keep one individualization representative per orbit.
+`color_refinement.py` can reduce exact query permutations before canonicalization; one registered benchmark goes from `720` candidates to `12`. `individualization_refinement.py` breaks higher-order color collisions. `automorphism.py` distinguishes unresolved search ambiguity from genuine query symmetry, and `orbit_pruning.py` keeps one individualization representative per exact stabilizer orbit.
 
-Registered structural controls now include:
+`isomorphism_proof_dag.py` now stores explicit query transports on shared subproof edges. `symmetry_pruned_proof_dag.py` goes further: when several affordable proof branches lie in one exact parent query-automorphism orbit, it recursively proves one representative child and stores explicit child-isomorphism transports for the skipped branches.
 
-```text
-minimal strict-gain normal form: 6 IR leaves -> 1 orbit-pruned leaf
-bipartite 8-cycle:              8 IR leaves -> 1 orbit-pruned leaf
-two disjoint 4-cycles:          8 IR leaves -> 1 orbit-pruned leaf
-720->12 refinement benchmark:  12 IR leaves -> 1 orbit-pruned leaf
-```
+For a proof node `v`, with `b(v)` raw affordable branches and `o(v)` orbit representatives,
 
-However the current automorphism audit obtains a complete group by enumerating every stable-color-preserving permutation up to a hard cap. Thus it explains and removes downstream leaf redundancy only after paying an exact group-certification cost.
+\[
+s(v)=b(v)-o(v)
+\]
 
-The new computational question is:
+is now an exact, executable branch-saving quantity. The current local bound is
 
-- Can a small generator set and its completeness be certified without enumerating the whole candidate permutation family?
-- Can a stabilizer chain be built incrementally during individualization?
+\[
+1\le b(v)/o(v)\le |\operatorname{Aut}(I_v)|.
+\]
+
+However the current automorphism audit still obtains a complete group by enumerating every stable-color-preserving query permutation up to a hard cap. Thus downstream orbit pruning is exact only after paying that group-certification cost.
+
+The new computational questions are:
+
+- Can a small generator set and its **completeness** be certified without enumerating the whole candidate permutation family?
+- Can a stabilizer chain be built incrementally during individualization and reused by the proof DAG?
 - Can graph-canonicalization traces provide a compact proof that skipped branches are in the same automorphism orbit?
-- Can an isomorphism-quotient proof DAG store explicit edge transport maps so one representative subproof is independently reusable across label-different states?
-- Can proof size be bounded in certified orbit counts rather than raw residual-state counts?
+- Can the branch-orbit bound be sharpened using stabilizer sizes of the chosen obligation or already selected proof path?
+- Can a global proof-size bound be expressed in certified orbit counts without first materializing every residual automorphism group?
 
-The fail-closed rule remains: exceeding a symmetry/group-certification cap means `quotient_incomplete`, never `non_isomorphic`.
+The fail-closed rule remains: exceeding a symmetry/group-certification cap means `quotient_incomplete`, never `non_isomorphic` or `strict_gain`.
 
 ## 2. Tight kernel-size bounds beyond the pair-side Sperner bound
 
@@ -89,6 +97,7 @@ The next classification questions are:
 - What is the smallest universe exhibiting partial external bypass with residual gain?
 - What is the smallest integral-packing gap and fractional integrality gap after quotienting symmetries?
 - What is the maximum possible ratio `C_F/C_A` at each `(world_count, query_count)`?
+- Which next-smallest normal forms maximize proof-branch orbit compression independently of `C_F/C_A`?
 
 Counts should be reported modulo certified automorphisms as well as in raw labeled form.
 
@@ -127,6 +136,7 @@ Questions:
 - Can the class-oracle information gap have multiple disconnected positive budget windows?
 - Under what assumptions is the information objective submodular or adaptively submodular?
 - What certificate replaces cross-target pair separation when partial information rather than exact resolution is the target?
+- Is there an information-valued analogue of branch-orbit proof compression for equivalent continuation experiments?
 
 ## 6. Continuous compatible sets
 
@@ -169,7 +179,8 @@ A natural-data routing claim needs more than low direct information of the first
 - bypass may remove all or only part of potential gain;
 - lower-bound relaxations may miss integer fixed-cost gaps;
 - label-different residual states can be the same continuation problem after exact weighted-incidence quotienting;
-- residual symmetry can be local-color ambiguity, higher-order ambiguity, or a genuine automorphism, and those cases should not be conflated.
+- residual symmetry can be local-color ambiguity, higher-order ambiguity, or a genuine automorphism, and those cases should not be conflated;
+- symmetric proof branches may be mathematically redundant even though the underlying measurements remain distinct named actions.
 
 An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
 
