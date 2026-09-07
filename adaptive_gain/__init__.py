@@ -1,10 +1,14 @@
 """Adaptive gain theory extracted from PAYOFF/MROD/BALANCE decision structure."""
 
 from .adaptive_safe_compression import (
+    AdaptiveRefinementCompressionReceipt,
     AdaptiveSafeCompressionReceipt,
     TargetRelevantQueryClass,
+    TargetRelevantRefinementDominance,
+    adaptive_refinement_compressed_minimum_resolution,
     adaptive_safe_compressed_minimum_resolution,
     target_relevant_query_classes,
+    target_relevant_refinement_dominance,
 )
 from .automorphism import (
     ResidualAutomorphismGroupReceipt,
@@ -199,8 +203,11 @@ from .target_pair_incidence import (
 )
 
 __all__ = [
-    "AdaptiveSafeCompressionReceipt", "TargetRelevantQueryClass",
+    "AdaptiveRefinementCompressionReceipt", "AdaptiveSafeCompressionReceipt",
+    "TargetRelevantQueryClass", "TargetRelevantRefinementDominance",
+    "adaptive_refinement_compressed_minimum_resolution",
     "adaptive_safe_compressed_minimum_resolution", "target_relevant_query_classes",
+    "target_relevant_refinement_dominance",
     "ResidualAutomorphismGroupReceipt", "residual_automorphism_group",
     "verify_residual_automorphism_group",
     "AdaptiveGainReceipt", "AdaptiveNode", "AdaptiveResolutionReceipt",
