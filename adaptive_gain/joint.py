@@ -17,6 +17,15 @@ from .frontier_decomposition import (
     productive_frontier_policy_decomposition,
 )
 from .joint_resource_kernel import JointResourceKernelReceipt, joint_resource_kernel
+from .minimal_productive_frontier import (
+    MinimalProductiveFrontierCertificate,
+    StaticFrontierFixedCostReceipt,
+    build_minimal_productive_frontier_from_pair_incidence,
+    bundle_resolves_from_minimal_productive_frontier,
+    minimal_frontier_fixed_minimum_resolution,
+    static_minimal_frontier_fixed_cost_audit,
+    verify_minimal_productive_frontier_from_pair_incidence,
+)
 from .productive_frontier import (
     ProductiveFrontierCertificate,
     ProductiveFrontierJointCostReceipt,
@@ -101,9 +110,15 @@ __all__ = [
     "LiftedContinuationPolicy", "build_continuation_quotient",
     "continuation_quotient_costs", "lift_continuation_policy",
     "verify_continuation_quotient", "ProductiveFrontierPolicyDecomposition",
-    "productive_frontier_policy_decomposition", "ProductiveFrontierCertificate",
-    "ProductiveFrontierJointCostReceipt", "build_productive_frontier",
-    "bundle_resolves_from_productive_frontier",
+    "productive_frontier_policy_decomposition",
+    "MinimalProductiveFrontierCertificate", "StaticFrontierFixedCostReceipt",
+    "build_minimal_productive_frontier_from_pair_incidence",
+    "bundle_resolves_from_minimal_productive_frontier",
+    "minimal_frontier_fixed_minimum_resolution",
+    "static_minimal_frontier_fixed_cost_audit",
+    "verify_minimal_productive_frontier_from_pair_incidence",
+    "ProductiveFrontierCertificate", "ProductiveFrontierJointCostReceipt",
+    "build_productive_frontier", "bundle_resolves_from_productive_frontier",
     "productive_frontier_fixed_minimum_resolution",
     "productive_frontier_joint_cost_audit", "productive_frontier_sperner_bound",
     "verify_productive_frontier", "JointResourceKernelReceipt",
