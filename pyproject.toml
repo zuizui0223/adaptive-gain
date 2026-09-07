@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaptive-gain"
+version = "0.1.0"
+description = "Exact finite certificates for adaptive versus fixed target-resolution designs"
+requires-python = ">=3.10"
+authors = [{name = "ZHANG Ruiqi"}]
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+include = ["adaptive_gain*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
