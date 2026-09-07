@@ -2,8 +2,10 @@ from itertools import product
 
 from adaptive_gain import FiniteTask, Query, World, adaptive_minimum_resolution
 from adaptive_gain.adaptive_safe_compression import (
+    adaptive_refinement_compressed_minimum_resolution,
     adaptive_safe_compressed_minimum_resolution,
     target_relevant_query_classes,
+    target_relevant_refinement_dominance,
 )
 from adaptive_gain.target_pair_incidence import target_pair_incidence_task
 
@@ -45,10 +47,14 @@ def test_complete_four_world_partition_triples_preserve_exact_adaptive_cost():
             tuple(Query(f"q{i}", 1, outcomes) for i, outcomes in enumerate(maps)),
         )
         direct = adaptive_minimum_resolution(task).minimum_worst_path_cost
-        compressed = adaptive_safe_compressed_minimum_resolution(task)
-        assert compressed.minimum_worst_path_cost == direct
-        assert compressed.exact_direct_cost == direct
-        assert compressed.cost_agrees_with_direct_solver
+        equivalent = adaptive_safe_compressed_minimum_resolution(task)
+        refinement = adaptive_refinement_compressed_minimum_resolution(task)
+        assert equivalent.minimum_worst_path_cost == direct
+        assert equivalent.exact_direct_cost == direct
+        assert equivalent.cost_agrees_with_direct_solver
+        assert refinement.minimum_worst_path_cost == direct
+        assert refinement.exact_direct_cost == direct
+        assert refinement.cost_agrees_with_direct_solver
         checked += 1
     assert checked == 15 ** 3 == 3_375
 
@@ -67,9 +73,12 @@ def test_complete_two_query_partition_cost_grid_preserves_exact_adaptive_cost():
                 ),
             )
             direct = adaptive_minimum_resolution(task).minimum_worst_path_cost
-            compressed = adaptive_safe_compressed_minimum_resolution(task)
-            assert compressed.minimum_worst_path_cost == direct
-            assert compressed.cost_agrees_with_direct_solver
+            equivalent = adaptive_safe_compressed_minimum_resolution(task)
+            refinement = adaptive_refinement_compressed_minimum_resolution(task)
+            assert equivalent.minimum_worst_path_cost == direct
+            assert equivalent.cost_agrees_with_direct_solver
+            assert refinement.minimum_worst_path_cost == direct
+            assert refinement.cost_agrees_with_direct_solver
             checked += 1
     assert checked == (15 ** 2) * 4 == 900
 
@@ -108,6 +117,32 @@ def test_same_mixed_continuation_with_different_pure_partition_prunes_expensive_
     assert compressed.representative_queries_evaluated < compressed.raw_query_candidates_seen
 
 
+def test_strict_target_relevant_refinement_safely_dominates_coarser_expensive_query():
+    worlds = _balanced_worlds()
+    task = FiniteTask(
+        worlds,
+        (
+            # fine separates every cross-target pair that coarse separates, plus one more.
+            Query("fine", 1, (0, 1, 0, 2)),
+            Query("coarse", 2, (0, 0, 0, 1)),
+            Query("finish", 1, (0, 0, 1, 0)),
+        ),
+    )
+    incidence = target_pair_incidence_task(task)
+    frontier = target_relevant_refinement_dominance(
+        incidence,
+        world_mask=(1 << len(worlds)) - 1,
+    )
+    fine = next(row for row in frontier if row.dominating_query_name == "fine")
+    assert "coarse" in fine.dominated_query_names
+
+    direct = adaptive_minimum_resolution(task)
+    compressed = adaptive_refinement_compressed_minimum_resolution(task)
+    assert direct.minimum_worst_path_cost == compressed.minimum_worst_path_cost == 2
+    assert compressed.refinement_dominated_query_occurrences_pruned > 0
+    assert compressed.nondominated_queries_evaluated < compressed.raw_query_candidates_seen
+
+
 def test_equal_cost_equivalent_queries_are_interchangeable_not_double_counted():
     worlds = _balanced_worlds()
     task = FiniteTask(
@@ -118,9 +153,12 @@ def test_equal_cost_equivalent_queries_are_interchangeable_not_double_counted():
             Query("finish", 1, (0, 1, 1, 0)),
         ),
     )
-    compressed = adaptive_safe_compressed_minimum_resolution(task)
-    assert compressed.cost_agrees_with_direct_solver
-    assert compressed.dominated_query_occurrences_pruned > 0
+    equivalent = adaptive_safe_compressed_minimum_resolution(task)
+    refinement = adaptive_refinement_compressed_minimum_resolution(task)
+    assert equivalent.cost_agrees_with_direct_solver
+    assert equivalent.dominated_query_occurrences_pruned > 0
+    assert refinement.cost_agrees_with_direct_solver
+    assert refinement.refinement_dominated_query_occurrences_pruned > 0
 
 
 def test_no_progress_equivalence_class_is_skipped_without_changing_cost():
@@ -133,7 +171,11 @@ def test_no_progress_equivalence_class_is_skipped_without_changing_cost():
             Query("direct", 1, (0, 0, 1, 1)),
         ),
     )
-    compressed = adaptive_safe_compressed_minimum_resolution(task)
-    assert compressed.minimum_worst_path_cost == 1
-    assert compressed.no_progress_query_occurrences_skipped >= 2
-    assert compressed.cost_agrees_with_direct_solver
+    equivalent = adaptive_safe_compressed_minimum_resolution(task)
+    refinement = adaptive_refinement_compressed_minimum_resolution(task)
+    assert equivalent.minimum_worst_path_cost == 1
+    assert equivalent.no_progress_query_occurrences_skipped >= 2
+    assert equivalent.cost_agrees_with_direct_solver
+    assert refinement.minimum_worst_path_cost == 1
+    assert refinement.no_progress_query_occurrences_skipped >= 1
+    assert refinement.cost_agrees_with_direct_solver
