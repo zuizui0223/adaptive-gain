@@ -37,10 +37,12 @@ from .pair_cover import (
     EssentialQueryWitness,
     PairCoverAudit,
     PairSeparatorRow,
+    PrivatePairAdaptiveGainCertificate,
     PrivatePairNoBypassCertificate,
     pair_cover_audit,
     private_pair_no_bypass_certificate,
     restricted_fixed_minimum_resolution,
+    selected_policy_private_pair_gain_certificate,
 )
 
 __all__ = [
@@ -76,8 +78,10 @@ __all__ = [
     "EssentialQueryWitness",
     "PairCoverAudit",
     "PairSeparatorRow",
+    "PrivatePairAdaptiveGainCertificate",
     "PrivatePairNoBypassCertificate",
     "pair_cover_audit",
     "private_pair_no_bypass_certificate",
     "restricted_fixed_minimum_resolution",
+    "selected_policy_private_pair_gain_certificate",
 ]
