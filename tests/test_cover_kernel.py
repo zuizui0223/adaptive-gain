@@ -64,8 +64,6 @@ def test_dominance_replaces_a_more_expensive_identical_separator():
     result = kernelized_fixed_budget_cover_decision(task, budget=1)
     assert result.fixed_resolver_exists_within_budget
     assert result.feasible_bundle == ("cheap",)
-    # expensive is removed as unaffordable before dominance; exact feasibility
-    # is still preserved and the unique cheap separator is forced.
     assert result.forced_query_selections == 1
 
 
@@ -73,14 +71,15 @@ def test_dominance_removes_equal_cost_strict_cover_subset():
     task = FiniteTask(
         (World("a", 0), World("b", 0), World("c", 1)),
         (
-            Query("subset", 1, (0, 0, 1)),
-            Query("superset", 1, (0, 1, 1)),
-            Query("other", 1, (0, 1, 0)),
+            Query("subset", 1, (0, 1, 1)),
+            Query("superset", 1, (0, 0, 1)),
+            Query("other", 1, (1, 0, 1)),
         ),
     )
-    # superset covers every cross-target pair covered by subset and more.
+    # subset covers only (a,c); superset covers both cross-target pairs.
     result = kernelized_fixed_budget_cover_decision(task, budget=1)
     assert result.fixed_resolver_exists_within_budget
+    assert result.feasible_bundle == ("superset",)
     assert result.dominated_query_removals >= 1
 
 
