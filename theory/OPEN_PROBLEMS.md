@@ -12,28 +12,43 @@ fixed-cost certificate ladder
 exact bypass decomposition C_A <= C_F <= C_U <= U
 two-sided residual kernelization
 exact shared-state proof DAG quotient
-exact small-state weighted-incidence isomorphism quotient
+exact weighted-incidence residual isomorphism quotient
+bipartite color refinement
+exact individualization-refinement canonicalization
+exact small-task query automorphism audit
+stabilizer-orbit pruning of individualization branches
 unique minimal 4-world / 3-query strict-gain normal form
 pair-side Sperner kernel bound
 ```
 
-The next problems therefore concern cheaper symmetry handling, stronger structural bounds, larger normal-form classifications, and extensions beyond finite deterministic target resolution.
+The next problems concern cheaper symmetry certification, stronger structural bounds, larger normal-form classifications, and extensions beyond finite deterministic target resolution.
 
-## 1. Replace factorial residual canonicalization with certified symmetry refinement
+## 1. Certify automorphism generators without enumerating the full stable-color permutation family
 
-`isomorphism_quotient.py` now closes the correctness question for small residual states: pair-row order and query names can be forgotten exactly, while query costs and pair-query incidence are preserved. A six-world strict-gain witness compresses four label-specific residual states to two isomorphism classes, and all 4096 minimal tasks retain the exact gain classification.
+The previous factorial-canonicalization problem is partially closed.
 
-The remaining problem is computational rather than semantic. Exact canonicalization currently enumerates permutations within cost/invariant color classes and raises when `max_permutations` is exceeded.
+`color_refinement.py` can reduce exact query permutations before canonicalization; one registered benchmark goes from `720` candidates to `12`. `individualization_refinement.py` breaks higher-order color collisions. `automorphism.py` then distinguishes unresolved search ambiguity from genuine query symmetry, and `orbit_pruning.py` uses the exact automorphism stabilizer to keep one individualization representative per orbit.
 
-Open questions:
+Registered structural controls now include:
 
-- Which color-refinement invariants can split query classes without excluding a true isomorphism?
-- Can automorphism generators replace explicit enumeration of every within-class permutation?
-- Can a compact canonicalization certificate be checked without rerunning the full symmetry search?
-- How does isomorphism quotienting interact with the already-exported exact-state proof DAG: can an isomorphism-quotient DAG be emitted directly with explicit edge transport maps?
-- Can proof size be bounded in the number of canonical isomorphism classes rather than raw residual states?
+```text
+minimal strict-gain normal form: 6 IR leaves -> 1 orbit-pruned leaf
+bipartite 8-cycle:              8 IR leaves -> 1 orbit-pruned leaf
+two disjoint 4-cycles:          8 IR leaves -> 1 orbit-pruned leaf
+720->12 refinement benchmark:  12 IR leaves -> 1 orbit-pruned leaf
+```
 
-The fail-closed rule remains: exceeding a symmetry-search cap means `quotient_incomplete`, never `non_isomorphic`.
+However the current automorphism audit obtains a complete group by enumerating every stable-color-preserving permutation up to a hard cap. Thus it explains and removes downstream leaf redundancy only after paying an exact group-certification cost.
+
+The new computational question is:
+
+- Can a small generator set and its completeness be certified without enumerating the whole candidate permutation family?
+- Can a stabilizer chain be built incrementally during individualization?
+- Can graph-canonicalization traces provide a compact proof that skipped branches are in the same automorphism orbit?
+- Can an isomorphism-quotient proof DAG store explicit edge transport maps so one representative subproof is independently reusable across label-different states?
+- Can proof size be bounded in certified orbit counts rather than raw residual-state counts?
+
+The fail-closed rule remains: exceeding a symmetry/group-certification cap means `quotient_incomplete`, never `non_isomorphic`.
 
 ## 2. Tight kernel-size bounds beyond the pair-side Sperner bound
 
@@ -51,7 +66,7 @@ Open questions:
 - For unit query costs, both row and column signatures are antichains; what incidence matrices can satisfy both conditions?
 - Can branch-exclusive overhead or residual budget sharpen the middle-binomial bound?
 - Is there a kernel-size bound parameterized by `C_A`, `C_F-C_A`, or selected adaptive-tree union size rather than raw query count?
-- After quotienting isomorphic rows/columns, is there a smaller bound on the number of distinct residual kernels than on their raw size?
+- After exact automorphism quotienting, can the number of distinct residual kernels be bounded by orbit counts rather than raw row/column counts?
 
 A useful result would bound the size or number of exact proof instances after safe preprocessing, not merely one side of the incidence matrix.
 
@@ -65,7 +80,7 @@ The minimal balanced scope is closed:
 3 binary unit-cost queries
 ```
 
-has exactly 192 labeled strict-gain tasks, all in one symmetry orbit with canonical separator signature `(3,5,9)`.
+has exactly 192 labeled strict-gain tasks, all in one symmetry orbit with canonical separator signature `(3,5,9)`. The residual query automorphism group of the standard normal form is the full `S3`, so all six query relabelings are genuine self-symmetry rather than unresolved color-refinement ambiguity.
 
 The next classification questions are:
 
@@ -75,7 +90,7 @@ The next classification questions are:
 - What is the smallest integral-packing gap and fractional integrality gap after quotienting symmetries?
 - What is the maximum possible ratio `C_F/C_A` at each `(world_count, query_count)`?
 
-Counts should be reported modulo declared symmetries as well as in raw labeled form.
+Counts should be reported modulo certified automorphisms as well as in raw labeled form.
 
 ## 4. Characterize external fixed bypass locally
 
@@ -101,11 +116,7 @@ Open questions:
 For MROD-like tasks the utility need not be binary target resolution:
 
 \[
-G(B)
-=
-\max_{\pi:c(\pi)\le B}I(T;H_\pi)
--
-\max_{F:c(F)\le B}I(T;Q_F).
+G(B)=\max_{\pi:c(\pi)\le B}I(T;H_\pi)-\max_{F:c(F)\le B}I(T;Q_F).
 \]
 
 The cost theory shows why routing entropy alone is insufficient: the optimized fixed class can bypass an adaptive route.
@@ -157,7 +168,8 @@ A natural-data routing claim needs more than low direct information of the first
 - fixed bypass may be internal or external;
 - bypass may remove all or only part of potential gain;
 - lower-bound relaxations may miss integer fixed-cost gaps;
-- label-different residual states can still be the same continuation problem after exact weighted-incidence quotienting.
+- label-different residual states can be the same continuation problem after exact weighted-incidence quotienting;
+- residual symmetry can be local-color ambiguity, higher-order ambiguity, or a genuine automorphism, and those cases should not be conflated.
 
 An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
 
