@@ -2,7 +2,7 @@ from itertools import product
 
 from adaptive_gain.continuation_witnesses import continuation_fixed_cost_collision
 from adaptive_gain.core import FiniteTask, Query, World, adaptive_gain_receipt
-from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
+from adaptive_gain.five_world_normal_form import five_world_irreducible_standard_task
 from adaptive_gain.resource_orbit_quotient import (
     canonical_fixed_replay_state,
     resource_orbit_cost_audit,
@@ -11,11 +11,12 @@ from adaptive_gain.resource_orbit_quotient import (
 )
 
 
-def test_minimal_strict_core_keeps_capacity_under_resource_orbit_quotient():
-    task = minimal_strict_gain_standard_task()
+def test_five_world_strict_core_keeps_capacity_under_genuine_task_automorphism():
+    task = five_world_irreducible_standard_task()
     group = task_automorphism_group(task)
     assert verify_task_automorphism_group(task, group)
-    assert group.automorphism_count > 1
+    assert group.automorphism_count == 2
+    assert any(auto.query_mapping == (0, 2, 1) for auto in group.automorphisms)
 
     all_worlds = (1 << len(task.worlds)) - 1
     all_queries = (1 << len(task.queries)) - 1
@@ -28,7 +29,7 @@ def test_minimal_strict_core_keeps_capacity_under_resource_orbit_quotient():
     audit = resource_orbit_cost_audit(task)
     assert audit.exact_costs_agree
     assert (audit.adaptive_cost, audit.fixed_cost) == (2, 3)
-    assert audit.automorphism_count == group.automorphism_count
+    assert audit.automorphism_count == 2
     assert audit.adaptive_orbit_states <= audit.adaptive_state_occurrences
     assert audit.fixed_orbit_states <= audit.fixed_state_occurrences
 
