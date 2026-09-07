@@ -1,20 +1,19 @@
-"""An explicit unit-cost family with unbounded fixed/adaptive ratio.
+"""Explicit unit-cost families with unbounded fixed/adaptive ratio.
 
-For ``k >= 2`` create ``k`` target-mixed branches, each containing one target-0
-world ``a_i`` and one target-1 world ``b_i``.  A single k-ary router reports the
-branch index.  Terminal query ``q_i`` resolves only branch i.
+Two constructions are registered.
 
-The terminal outcome codes are chained so that ``a_{i+1}`` and ``b_i`` agree under
-every terminal query.  Hence the router is globally mandatory for fixed
-resolution, while pair ``(a_i,b_i)`` makes terminal ``q_i`` mandatory.  Therefore
+1. ``extremal_routing_task(k)`` uses one k-ary router plus k branch-terminal
+   queries and has
 
-    C_A = 2,
-    C_F = k + 1,
-    gain = k - 1,
-    C_F / C_A = (k + 1) / 2.
+       C_A = 2, C_F = k + 1.
 
-The ratio is unbounded as k grows.  The k=2 member is isomorphic to the registered
-minimal four-world strict-gain mechanism up to query/world relabeling.
+2. ``binary_extremal_routing_task(d)`` uses only binary observations.  It has
+   ``k=2**d`` target-mixed branches, d binary routing bits, and one terminal query
+   per branch.  It has
+
+       C_A = d + 1, C_F = 2**d.
+
+Thus even with binary outcomes and unit acquisition costs the ratio is unbounded.
 """
 from __future__ import annotations
 
@@ -44,6 +43,25 @@ class ExtremalRoutingFamilyReceipt:
 
 
 @dataclass(frozen=True)
+class BinaryExtremalRoutingFamilyReceipt:
+    routing_depth: int
+    branch_count: int
+    world_count: int
+    query_count: int
+    expected_adaptive_cost: int
+    expected_fixed_cost: int
+    expected_ratio: Fraction
+    lower_bound_values: tuple[int, ...]
+    lower_bound_minimum: int
+    direct_adaptive_cost: int | None
+    direct_fixed_cost: int | None
+    direct_check_performed: bool
+    direct_check_agrees: bool
+    theorem_holds: bool
+    scope: str = "binary_unit_cost_branch_index_bits_plus_branch_terminal_queries"
+
+
+@dataclass(frozen=True)
 class UnitCostRatioThresholdReceipt:
     tested_world_upper_bound: int
     threshold: Fraction
@@ -66,20 +84,19 @@ def extremal_routing_task(branch_count: int) -> FiniteTask:
         worlds.append(World(f"a{i}", 0))
         worlds.append(World(f"b{i}", 1))
 
-    # Router outcome is the branch index and is target-blind within a branch.
     router_outcomes = []
     for i in range(branch_count):
         router_outcomes.extend((i, i))
     queries = [Query("router", 1, tuple(router_outcomes))]
 
-    # Code of a_j has ones in coordinates < j.  Code of b_j has ones in
-    # coordinates <= j.  Thus q_i differs only within branch i, while
-    # code(a_{i+1}) == code(b_i), making the router mandatory between branches.
+    # Code(a_j) has ones in coordinates < j; code(b_j) has ones in
+    # coordinates <= j.  Thus code(a_{i+1}) == code(b_i), making the router
+    # mandatory between adjacent branches, while q_i alone resolves branch i.
     for i in range(branch_count):
         outcomes = []
         for j in range(branch_count):
-            outcomes.append(int(i < j))   # a_j
-            outcomes.append(int(i <= j))  # b_j
+            outcomes.append(int(i < j))
+            outcomes.append(int(i <= j))
         queries.append(Query(f"terminal_{i}", 1, tuple(outcomes)))
 
     return FiniteTask(tuple(worlds), tuple(queries))
@@ -119,15 +136,93 @@ def extremal_routing_family_audit(branch_count: int) -> ExtremalRoutingFamilyRec
     )
 
 
-def unit_cost_ratio_upper_bound_by_world_count(world_count: int) -> Fraction:
-    """Upper-bound C_F/C_A using only represented-world count for unit costs.
+def binary_extremal_routing_task(routing_depth: int) -> FiniteTask:
+    """Return a unit-cost unbounded-ratio family using only binary query outcomes."""
+    if type(routing_depth) is not int or routing_depth < 1:
+        raise ValueError("routing_depth must be a positive integer")
+    branch_count = 1 << routing_depth
+    worlds = []
+    for i in range(branch_count):
+        worlds.append(World(f"a{i}", 0))
+        worlds.append(World(f"b{i}", 1))
 
-    For C_A=1 the ratio is 1.  For C_A=2, the root can have at most
-    floor(n/2) mixed child branches, so the flattened selected tree uses at most
-    1+floor(n/2) query occurrences/resources.  For C_A>=3, any productive
-    resolution tree on n represented worlds has at most n-1 internal nodes, so
-    C_F/C_A <= (n-1)/3.  The maximum of those cases gives this bound.
-    """
+    queries = []
+    # Routing bits identify branch index but carry no target information within
+    # any branch pair.
+    for bit in range(routing_depth):
+        outcomes = []
+        for i in range(branch_count):
+            value = (i >> bit) & 1
+            outcomes.extend((value, value))
+        queries.append(Query(f"route_bit_{bit}", 1, tuple(outcomes)))
+
+    # terminal_i is 1 only on target-1 world b_i.  Pair (a_i,b_i) is therefore
+    # separated by terminal_i and by no other declared query, making all
+    # terminals fixed-mandatory.
+    for terminal in range(branch_count):
+        outcomes = []
+        for i in range(branch_count):
+            outcomes.extend((0, int(i == terminal)))
+        queries.append(Query(f"terminal_{terminal}", 1, tuple(outcomes)))
+    return FiniteTask(tuple(worlds), tuple(queries))
+
+
+def _binary_target0_path_lower_bounds(routing_depth: int) -> tuple[int, ...]:
+    # After r independent routing bits, 2**(d-r) branch indices remain compatible
+    # with a target-0 world.  Since every terminal returns zero on every target-0
+    # world, each compatible target-1 world b_j must be eliminated by its own
+    # terminal query.  Hence every target-0 path costs at least r+2**(d-r).
+    return tuple(r + (1 << (routing_depth - r)) for r in range(routing_depth + 1))
+
+
+def binary_extremal_routing_family_audit(
+    routing_depth: int,
+    *,
+    direct_check: bool = True,
+) -> BinaryExtremalRoutingFamilyReceipt:
+    if type(routing_depth) is not int or routing_depth < 1:
+        raise ValueError("routing_depth must be a positive integer")
+    branch_count = 1 << routing_depth
+    expected_ca = routing_depth + 1
+    expected_cf = branch_count
+    bounds = _binary_target0_path_lower_bounds(routing_depth)
+    lower = min(bounds)
+    if lower != expected_ca:
+        raise ArithmeticError("binary family target-0 path lower bound was not d+1")
+
+    direct_ca = direct_cf = None
+    direct_agrees = True
+    if direct_check:
+        task = binary_extremal_routing_task(routing_depth)
+        direct_ca = adaptive_minimum_resolution(task).minimum_worst_path_cost
+        direct_cf = fixed_minimum_resolution(task).minimum_cost
+        direct_agrees = direct_ca == expected_ca and direct_cf == expected_cf
+        if not direct_agrees:
+            raise ArithmeticError("binary extremal family direct solver disagreed with theorem")
+
+    receipt = BinaryExtremalRoutingFamilyReceipt(
+        routing_depth,
+        branch_count,
+        2 * branch_count,
+        routing_depth + branch_count,
+        expected_ca,
+        expected_cf,
+        Fraction(expected_cf, expected_ca),
+        bounds,
+        lower,
+        direct_ca,
+        direct_cf,
+        direct_check,
+        direct_agrees,
+        lower == expected_ca and (not direct_check or direct_agrees),
+    )
+    if not receipt.theorem_holds:
+        raise ArithmeticError("binary extremal routing family audit failed")
+    return receipt
+
+
+def unit_cost_ratio_upper_bound_by_world_count(world_count: int) -> Fraction:
+    """Upper-bound C_F/C_A using only represented-world count for unit costs."""
     if type(world_count) is not int or world_count < 2:
         raise ValueError("world_count must be an integer at least 2")
     ca1 = Fraction(1, 1)
@@ -137,13 +232,7 @@ def unit_cost_ratio_upper_bound_by_world_count(world_count: int) -> Fraction:
 
 
 def first_unit_cost_ratio_above_three_halves_receipt() -> UnitCostRatioThresholdReceipt:
-    """Certify that six worlds/four queries attain the first >3/2 unit-cost scope.
-
-    With at most five worlds the bound above is at most 3/2.  Any ratio above
-    3/2 has C_A>=2 and integer C_F, hence C_F>=4 and therefore needs at least four
-    declared unit-cost queries.  The k=3 extremal family uses exactly six worlds
-    and four queries and has ratio 2.
-    """
+    """Certify that six worlds/four queries attain the first >3/2 unit-cost scope."""
     threshold = Fraction(3, 2)
     max_five = max(unit_cost_ratio_upper_bound_by_world_count(n) for n in range(2, 6))
     witness = extremal_routing_family_audit(3)
