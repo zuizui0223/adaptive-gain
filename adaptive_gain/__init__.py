@@ -44,6 +44,14 @@ from .pair_cover import (
     restricted_fixed_minimum_resolution,
     selected_policy_private_pair_gain_certificate,
 )
+from .pair_packing import (
+    PackedPair,
+    PairPackingAdaptiveGainCertificate,
+    PairPackingCertificate,
+    PairPackingSearchLimitError,
+    pair_packing_lower_bound,
+    selected_policy_pair_packing_gain_certificate,
+)
 
 __all__ = [
     "AdaptiveGainReceipt",
@@ -84,4 +92,10 @@ __all__ = [
     "private_pair_no_bypass_certificate",
     "restricted_fixed_minimum_resolution",
     "selected_policy_private_pair_gain_certificate",
+    "PackedPair",
+    "PairPackingAdaptiveGainCertificate",
+    "PairPackingCertificate",
+    "PairPackingSearchLimitError",
+    "pair_packing_lower_bound",
+    "selected_policy_pair_packing_gain_certificate",
 ]
