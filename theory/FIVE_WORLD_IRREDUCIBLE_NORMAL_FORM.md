@@ -8,7 +8,7 @@ This note closes the complete finite scope
 3 labeled binary unit-cost queries
 ```
 
-There are `32^3 = 32,768` labeled query triples.  This is a finite structural
+There are `32^3 = 32,768` labeled query triples. This is a finite structural
 classification, not an empirical prevalence estimate.
 
 ## Complete exact enumeration
@@ -34,7 +34,7 @@ Thus every strict case in this scope has
 ## Canonical separator signatures
 
 Put the two worlds of the size-2 target class in canonical positions `0,1` and
-the three worlds of the size-3 class in positions `2,3,4`.  The six cross-target
+the three worlds of the size-3 class in positions `2,3,4`. The six cross-target
 pairs are ordered as
 
 \[
@@ -42,18 +42,18 @@ pairs are ordered as
 \]
 
 Each binary query is represented by the 6-bit mask of cross-target pairs it
-separates.  Independent outcome flips do not change this mask.  We then quotient
+separates. Independent outcome flips do not change this mask. We then quotient
 within-target world permutations and query order.
 
 Because the cross-target graph is the connected complete bipartite graph
 `K_{2,3}`, the cross-target equality/inequality pattern determines a binary query
-labeling up to one global outcome flip.  Therefore this separator representation
+labeling up to one global outcome flip. Therefore this separator representation
 is complete for the declared binary-query symmetry, not merely a heuristic
 feature.
 
 Exactly five canonical signatures occur among strict tasks:
 
-| canonical signature | labeled tasks | strict 4-world majority deletions |
+| canonical signature | labeled tasks | strict balanced 4-world deletions |
 |---|---:|---:|
 | `(7,9,49)` | 288 | 2 |
 | `(7,14,54)` | 288 | 2 |
@@ -61,7 +61,7 @@ Exactly five canonical signatures occur among strict tasks:
 | `(14,21,45)` | 576 | 1 |
 | **`(7,28,42)`** | **288** | **0** |
 
-No non-strict task has any of these five signatures.  Therefore, in this declared
+No non-strict task has any of these five signatures. Therefore, in this declared
 scope,
 
 \[
@@ -73,13 +73,15 @@ C_A<C_F
 }
 \]
 
-## Irreducibility against world deletion
+## Deletion irreducibility
 
-A five-world strict task is called **majority-world deletion irreducible** here if
-deleting any one world from the size-3 target class removes strict adaptive gain.
-Each such deletion leaves a balanced 2+2 four-world task.
+A five-world strict task is **world-deletion irreducible** here if deleting any
+one represented world removes strict adaptive gain. It is **query-deletion
+minimal** if deleting any one query also removes strict gain.
 
-Across all 2,016 strict tasks, the exact deletion-count distribution is
+For the size-3 target class, deleting one world leaves a balanced 2+2 four-world
+task. Across all 2,016 strict tasks, the exact count of strict balanced deletions
+is
 
 | number of strict balanced deletions | labeled tasks |
 |---:|---:|
@@ -87,28 +89,33 @@ Across all 2,016 strict tasks, the exact deletion-count distribution is
 | 1 | 1,152 |
 | 2 | 576 |
 
-The 288 deletion-irreducible tasks all have the single canonical signature
+The 288 zero-deletion tasks all have the single canonical signature
 
 \[
 \boxed{\sigma_5=(7,28,42)}.
 \]
 
-Conversely every task with this signature is strict and deletion irreducible.
-Thus
+For this signature, deleting either world from the size-2 target class also
+removes strict gain: the resulting 1+3 four-world tasks have no strict gain. Thus
+all five single-world deletions are non-strict.
+
+Deleting any one query leaves only two query identities, while strict gain in the
+finite deterministic model requires at least three. Hence the same standard form
+is query-deletion minimal as well.
+
+Consequently, within this declared scope,
 
 \[
 \boxed{
-\text{irreducible five-world strict gain}
+\text{world/query deletion-minimal strict gain}
 \iff
-\sigma= (7,28,42)
+\sigma=(7,28,42).
 }
 \]
 
-within this finite scope.
-
 The declared symmetry orbit of the standard representative contains exactly 288
-labeled tasks, matching the complete irreducible count.  Hence the irreducible
-set is one symmetry orbit.
+labeled tasks, matching the complete irreducible count. Hence the irreducible set
+is one symmetry orbit.
 
 ## Standard representative
 
@@ -153,20 +160,22 @@ The six cross-target pair separator rows are
 \]
 
 In particular singleton rows `1`, `2`, and `4` make each of the three queries
-uniquely necessary for at least one cross-target pair.  Therefore every fixed
+uniquely necessary for at least one cross-target pair. Therefore every fixed
 resolver buys all three queries:
 
 \[
 C_F=3.
 \]
 
-Deleting any one of the three target-1 worlds gives exact costs
+For the three deletions from the size-3 target class the exact costs are all
 
 \[
-(C_A,C_F)=(2,2),
+(C_A,C_F)=(2,2).
 \]
 
-so no balanced four-world deletion retains strict gain.
+For the two deletions from the size-2 class the exact costs are `(2,2)` and
+`(1,1)` for this representative. Thus every one-world deletion removes strict
+gain.
 
 ## The new structure is adaptive-side, not a stronger fixed obstruction
 
@@ -190,8 +199,8 @@ After exact pair-obligation dominance, however, both reduce to
 \]
 
 So the new irreducible five-world mechanism does **not** arise because the fixed
-pair-cover obstruction became stronger.  The inclusion-minimal fixed-side kernel
-is identical.  What changes is the hidden-world partition geometry available to
+pair-cover obstruction became stronger. The inclusion-minimal fixed-side kernel
+is identical. What changes is the hidden-world partition geometry available to
 the adaptive policy.
 
 This is an important separation:
@@ -204,6 +213,9 @@ This is an important separation:
 }
 \]
 
+The four-world and five-world cores therefore share the same minimal fixed
+certificate while belonging to different adaptive normal forms.
+
 ## Positive direct root information
 
 Under uniform weights on the five represented worlds, the selected routing root
@@ -214,8 +226,8 @@ I(T;q_1)\approx 0.0199730940\ \text{bits}.
 \]
 
 The full adaptive policy resolves the target, while its first result changes the
-useful continuation.  Therefore the first genuinely new deletion-irreducible
-normal form also provides a stronger control against treating zero direct root
+useful continuation. Therefore the first genuinely new deletion-minimal normal
+form also provides a stronger control against treating zero direct root
 information as essential to adaptive gain.
 
 In particular,
@@ -224,8 +236,8 @@ In particular,
 \boxed{I(T;Q_{\rm root})=0}
 \]
 
-is neither necessary for strict gain nor necessary for irreducible strict gain in
-these finite deterministic scopes.
+is neither necessary for strict gain nor necessary for deletion-minimal strict
+gain in these finite deterministic scopes.
 
 ## Validation
 
@@ -234,7 +246,8 @@ these finite deterministic scopes.
 - the five strict canonical signatures;
 - the unique irreducible signature `(7,28,42)`;
 - one standard representative;
-- majority-world deletion irreducibility;
+- balanced and all-world deletion audits;
+- query-deletion minimality;
 - the standard raw symmetry-orbit count; and
 - the complete 32,768-task enumerator.
 
@@ -246,14 +259,17 @@ irreducible strict tasks             = 288
 irreducible canonical signatures     = 1
 strict classification disagreements = 0
 irreducible disagreements            = 0
+standard all-world strict deletions  = 0
+standard query strict deletions      = 0
 ```
 
 against the exact adaptive/fixed solver.
 
 ## Scope boundary
 
-This is an exact theorem for a declared finite binary deterministic universe.  It
+This is an exact theorem for a declared finite binary deterministic universe. It
 does not show that five biological states are intrinsically special, that the
 same normal form survives noisy or continuous measurement models, or that the
-288/32,768 labeled-task ratio is a natural prevalence.  It identifies the first
-new irreducible finite decision structure found after the four-world minimal core.
+288/32,768 labeled-task ratio is a natural prevalence. It identifies the first
+new deletion-minimal finite decision structure found after the four-world minimal
+core.
