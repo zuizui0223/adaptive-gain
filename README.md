@@ -85,11 +85,11 @@ so
 }.
 \]
 
-Bypass is therefore a discount, not a binary veto.
+Bypass is a discount, not a binary veto.
 
 ## Representation boundary: full pair incidence versus fixed kernel
 
-Only world pairs with different target values matter to final target resolution.  For every query `q` and every cross-target pair `(u,v)`, record whether `q` separates that pair.
+For every query `q` and every pair of worlds with different targets, record whether `q` separates that pair.
 
 The **full identity-indexed target-pair incidence**, together with target labels and query costs, is sufficient to recover both exact costs:
 
@@ -101,11 +101,11 @@ The **full identity-indexed target-pair incidence**, together with target labels
 }
 \]
 
-The reason is that, for one query, the cross-target pairs that are *not* separated reconstruct every target-mixed outcome cell as a connected component.  Target-pure cells are already resolved, so their internal same-target partition is continuation-irrelevant.
+For one query, the cross-target pairs that are *not* separated reconstruct every target-mixed outcome cell as a connected component. Target-pure cells are already resolved, so their internal same-target partition is continuation-irrelevant.
 
 This is implemented in `target_pair_incidence.py` and validated against the direct solver on all `15^3=3,375` triples of arbitrary set partitions of four worlds.
 
-The important boundary is what happens **after further compression**.  Pair-obligation dominance may reduce a fixed cover to an inclusion-minimal kernel.  That kernel remains sufficient for `C_F`, but need not preserve the adaptive routing geometry.
+The important boundary is what happens after further compression. Pair-obligation dominance may reduce a fixed cover to an inclusion-minimal kernel. That kernel remains sufficient for `C_F`, but need not preserve adaptive routing geometry.
 
 The four-world and five-world deletion-minimal strict-gain cores both reduce to the same minimal fixed kernel
 
@@ -113,7 +113,7 @@ The four-world and five-world deletion-minimal strict-gain cores both reduce to 
 \boxed{(1,2,4)}
 \]
 
-while having different adaptive normal forms.  Therefore
+while having different adaptive normal forms. Therefore
 
 \[
 \boxed{
@@ -123,7 +123,7 @@ while having different adaptive normal forms.  Therefore
 }
 \]
 
-So the current representation ladder is
+So the representation ladder is
 
 \[
 \boxed{
@@ -132,17 +132,19 @@ So the current representation ladder is
 \text{full identity-indexed target-pair incidence}
 \to
 \begin{cases}
-\text{aggressive fixed-cover kernel},\\
-\text{adaptive-safe state-local compression}.
+\text{adaptive-safe state-local compression},\\
+\text{aggressive fixed-cover kernel}.
 \end{cases}
 }
 \]
 
 See `theory/TARGET_PAIR_INCIDENCE_SUFFICIENCY.md`.
 
-## Adaptive-safe state-local query compression
+## Adaptive-safe state-local compression
 
-`adaptive_safe_compression.py` introduces the first adaptive-specific safe kernel rule.
+`adaptive_safe_compression.py` now provides two exact adaptive-specific reductions.
+
+### Continuation equality
 
 At a current world set `A`, let
 
@@ -150,45 +152,54 @@ At a current world set `A`, let
 \mathcal M_A(q)
 \]
 
-be the family of target-mixed outcome cells induced by query `q`.  Pure-target cells are omitted because they terminate immediately.
+be the family of target-mixed outcome cells induced by query `q`. Pure-target cells are omitted because they terminate immediately.
 
-If two remaining queries satisfy
-
-\[
-\boxed{\mathcal M_A(q)=\mathcal M_A(r)},
-\]
-
-then every unresolved child is an outcome cell of both queries.  Hence both queries are constant on every future mixed child reached after either one is used.  If
+If
 
 \[
-c(q)\le c(r),
+\mathcal M_A(q)=\mathcal M_A(r)
 \]
 
-then `r` can be removed from the Bellman candidate set at `A`; one cheapest representative of the continuation-equivalence class is sufficient.
+and `q` costs no more than `r`, one cheapest representative is sufficient.
 
-Equal-cost members are interchangeable for worst-path target resolution.  A no-progress class with
+### Target-relevant refinement dominance
+
+The stronger rule works directly on the active cross-target separation sets. Let
 
 \[
-\mathcal M_A(q)=\{A\}
+S_A(q)
 \]
 
-is skipped entirely.
+be the cross-target pairs inside `A` separated by `q`.
+
+If
+
+\[
+\boxed{S_A(q)\supseteq S_A(r),\qquad c(q)\le c(r),}
+\]
+
+then `q` is target-relevantly at least as fine as `r`. Every unresolved `q`-child lies inside one `r` outcome cell, so `r` is constant after `q` on every mixed child. Thus `q` safely dominates `r` at that Bellman state.
+
+This strictly generalizes continuation equality: equal active separation masks are the tie case, while strict supersets let a genuinely finer cheap query replace a coarser expensive query.
+
+A no-progress query with no active target-relevant separation is skipped.
 
 Validation includes:
 
 - all `15^3=3,375` three-query multi-valued partition tasks on four balanced worlds;
 - all `15^2 x 2^2 = 900` two-query partition tasks with costs in `{1,2}`;
 - different pure-branch partitions with the same mixed continuation;
+- an explicit strict-refinement dominance control;
 - equal-cost interchangeable queries; and
 - no-progress query classes.
 
-Every tested case must match the original direct Bellman solver exactly in `C_A`.
+Both adaptive compressed solvers must match the original direct Bellman solver exactly in `C_A` on every exhaustive case.
 
 See `theory/ADAPTIVE_SAFE_QUERY_COMPRESSION.md`.
 
 ## Fixed-side certificate ladder
 
-A fixed resolver is a weighted cover of all cross-target world pairs.  Strict gain can often be certified without first computing the exact numerical `C_F`:
+A fixed resolver is a weighted cover of all cross-target world pairs. Strict gain can often be certified without first computing the exact numerical `C_F`:
 
 ```text
 private-pair necessity
@@ -244,8 +255,6 @@ and
 \boxed{1\le b(v)/o(v)\le |\operatorname{Aut}(I_v)|}.
 \]
 
-See the proof/symmetry notes under `theory/`.
-
 ## Finite normal-form ladder
 
 ### Unique minimal 4-world / 3-query core
@@ -275,7 +284,7 @@ All 192 strict tasks are one symmetry orbit with canonical separator signature
 
 ### Adding a fourth query creates no new irreducible mechanism
 
-For four worlds with four binary unit-cost queries, all `16^4=65,536` labeled tasks were enumerated.  The 3,840 strict cases all have `(C_A,C_F)=(2,3)` and every one contains the unique three-query core after deleting at least one query.
+For four worlds with four binary unit-cost queries, all `16^4=65,536` labeled tasks were enumerated. The 3,840 strict cases all have `(C_A,C_F)=(2,3)` and every one contains the unique three-query core after deleting at least one query.
 
 The only strict canonical signatures are
 
@@ -307,7 +316,7 @@ all `32^3=32,768` labeled tasks were classified exactly:
 | `(3,3)` | 720 |
 | **`(2,3)`** | **2,016** |
 
-Exactly 288 tasks lose strict gain after every one-world deletion.  They form one symmetry orbit with unique signature
+Exactly 288 tasks lose strict gain after every one-world deletion. They form one symmetry orbit with unique signature
 
 \[
 \boxed{(7,28,42)}.
@@ -319,7 +328,7 @@ A standard representative has
 T=(0,0,1,1,1)
 \]
 
-and three binary queries
+and queries
 
 \[
 (0,1,1,1,1),\quad
@@ -356,7 +365,7 @@ C_A = 2
 C_F = C_U = U = 3
 ```
 
-Under uniform represented worlds, the first routing observation has zero direct target information, while the full adaptive policy resolves the target.  The best fixed information at budget 2 is 0.5 bit in both abstractions.
+Under uniform represented worlds, the first routing observation has zero direct target information, while the full adaptive policy resolves the target. The best fixed information at budget 2 is 0.5 bit in both abstractions.
 
 BALANCE supplies a negative control: under the current midpoint-reset span objective, branch labels change interval location but not the declared sufficient future-value state, so extra direction adaptivity has no gain at that step.
 
@@ -393,7 +402,7 @@ This repository does **not** claim:
 - that finite synthetic controls are empirical evidence; or
 - that target resolution licenses a biological report.
 
-The current deterministic finite theory identifies which information can be safely discarded for fixed resolution, which must be retained for adaptive routing, and a first exact state-local compression that preserves the adaptive Bellman optimum.
+The current deterministic finite theory identifies which information can be safely discarded for fixed resolution, which must be retained for adaptive routing, and two exact state-local adaptive reductions—continuation equality and target-relevant refinement dominance—that preserve the Bellman optimum.
 
 ## Run
 
