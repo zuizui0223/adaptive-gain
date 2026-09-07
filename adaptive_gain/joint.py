@@ -29,6 +29,17 @@ from .resource_continuation import (
     resource_continuation_fixed_cost,
     verify_resource_continuation_quotient,
 )
+from .resource_orbit_quotient import (
+    ResourceOrbitCostReceipt,
+    ResourceOrbitLimitError,
+    TaskAutomorphism,
+    TaskAutomorphismReceipt,
+    canonical_fixed_replay_state,
+    canonical_resource_state,
+    resource_orbit_cost_audit,
+    task_automorphism_group,
+    verify_task_automorphism_group,
+)
 
 __all__ = [
     "ContinuationAction",
@@ -54,4 +65,13 @@ __all__ = [
     "resource_continuation_cost_audit",
     "resource_continuation_fixed_cost",
     "verify_resource_continuation_quotient",
+    "ResourceOrbitCostReceipt",
+    "ResourceOrbitLimitError",
+    "TaskAutomorphism",
+    "TaskAutomorphismReceipt",
+    "canonical_fixed_replay_state",
+    "canonical_resource_state",
+    "resource_orbit_cost_audit",
+    "task_automorphism_group",
+    "verify_task_automorphism_group",
 ]
