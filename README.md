@@ -1,20 +1,18 @@
 # adaptive-gain
 
-A finite theory repository for **when outcome-contingent measurement choice is strictly better than a fixed measurement bundle**.
+A finite structural theory of **when outcome-contingent measurement choice is strictly better than a fixed measurement bundle**.
 
-It was extracted from a cross-repository comparison of:
+The repository was extracted from a cross-repository comparison of:
 
-- [`zuizui0223/mrod`](https://github.com/zuizui0223/mrod) — an initial observation can route the next assay;
-- [`zuizui0223/payoff`](https://github.com/zuizui0223/payoff) — an initial payoff contrast can route the next architecture distance;
-- [`zuizui0223/balance`](https://github.com/zuizui0223/balance) — under the current threshold-span objective, branch labels change interval location but not the sufficient future-value state, giving a no-routing control.
+- `zuizui0223/mrod` — an early observation can route the next assay;
+- `zuizui0223/payoff` — an early payoff contrast can route the next architecture distance;
+- `zuizui0223/balance` — under the current threshold-span objective, branch labels move interval location but not the sufficient future-value state, giving a no-routing control.
 
-The source repositories retain ownership of their scientific models. `adaptive-gain` abstracts only the finite decision structure and has no runtime dependency on those repositories.
+The scientific models remain owned by those source repositories. `adaptive-gain` abstracts only the finite decision structure.
 
 ## Core theorem
 
-Let `W` be a finite hidden-world set, `T:W->labels` the declared target, and every query have a positive integer acquisition cost plus one deterministic outcome in every represented world.
-
-Define
+Let `W` be a finite represented hidden-world set, `T:W->labels` the target, and every query have a positive integer acquisition cost plus one deterministic outcome in every represented world.
 
 ```text
 C_A = minimum worst-path cost of guaranteed target resolution by an adaptive tree
@@ -33,7 +31,7 @@ Strict adaptive gain exists exactly when
 \boxed{C_A<C_F}.
 \]
 
-For integer acquisition budget `B`, the adaptive-only guaranteed-resolution window is
+For integer budget `B`, the exact adaptive-only resolution window is
 
 \[
 \boxed{C_A\le B<C_F}.
@@ -54,15 +52,15 @@ Then
 C_A\le C_F\le C_U\le U
 \]
 
-and exactly
+and
 
 \[
 \boxed{
-U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U)
-}.
+U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
+}
 \]
 
-Interpret the terms as
+Interpret these as
 
 ```text
 branch-exclusive overhead = U-C_A
@@ -81,17 +79,23 @@ so
 -
 \text{internal redundancy}
 -
-\text{external shortcut}
-}.
+\text{external shortcut}.
+}
 \]
 
-Bypass is a discount, not a binary veto.
+Bypass is therefore a discount, not a binary veto.
 
-## Representation boundary: full pair incidence versus fixed kernel
+---
 
-For every query `q` and every pair of worlds with different targets, record whether `q` separates that pair.
+# Representation hierarchy
 
-The **full identity-indexed target-pair incidence**, together with target labels and query costs, is sufficient to recover both exact costs:
+The main theoretical development is now a hierarchy of **what information may be forgotten for which objective**.
+
+## 1. Full target-pair incidence preserves both costs
+
+For every query and every pair of worlds with different targets, record whether the query separates that pair.
+
+The full **identity-indexed** target-pair incidence, together with target labels and query costs, determines both exact costs:
 
 \[
 \boxed{
@@ -101,19 +105,25 @@ The **full identity-indexed target-pair incidence**, together with target labels
 }
 \]
 
-For one query, the cross-target pairs that are *not* separated reconstruct every target-mixed outcome cell as a connected component. Target-pure cells are already resolved, so their internal same-target partition is continuation-irrelevant.
+For one query, cross-target nonseparation edges reconstruct every target-mixed outcome cell as a connected component. Target-pure cells are already resolved, so their internal same-target partition is irrelevant to guaranteed target resolution.
 
-This is implemented in `target_pair_incidence.py` and validated against the direct solver on all `15^3=3,375` triples of arbitrary set partitions of four worlds.
+Implementation: `adaptive_gain/target_pair_incidence.py`.
 
-The important boundary is what happens after further compression. Pair-obligation dominance may reduce a fixed cover to an inclusion-minimal kernel. That kernel remains sufficient for `C_F`, but need not preserve adaptive routing geometry.
+See `theory/TARGET_PAIR_INCIDENCE_SUFFICIENCY.md`.
 
-The four-world and five-world deletion-minimal strict-gain cores both reduce to the same minimal fixed kernel
+## 2. Aggressive fixed compression does not preserve adaptive geometry
+
+Fixed resolution is a weighted cover of cross-target pairs. Pair-obligation dominance can reduce this to a much smaller fixed-side kernel.
+
+But the unique four-world and deletion-minimal five-world strict-gain cores both reduce to the same inclusion-minimal fixed signature
 
 \[
 \boxed{(1,2,4)}
 \]
 
-while having different adaptive normal forms. Therefore
+while having different adaptive normal forms.
+
+Thus
 
 \[
 \boxed{
@@ -123,104 +133,152 @@ while having different adaptive normal forms. Therefore
 }
 \]
 
-So the representation ladder is
+The fixed-side kernel is sufficient for `C_F`, not for adaptive continuation structure.
 
-\[
-\boxed{
-\text{full world/outcome model}
-\to
-\text{full identity-indexed target-pair incidence}
-\to
-\begin{cases}
-\text{adaptive-safe state-local compression},\\
-\text{aggressive fixed-cover kernel}.
-\end{cases}
-}
-\]
+## 3. Adaptive-only state-local kernels preserve `C_A`
 
-See `theory/TARGET_PAIR_INCIDENCE_SUFFICIENCY.md`.
+The adaptive side has exact state-local reductions that are intentionally stronger than the joint-safe global reductions below.
 
-## Adaptive-safe state-local compression
+### Query continuation equality
 
-`adaptive_safe_compression.py` now provides two exact adaptive-specific reductions.
+If two queries induce the same family of target-mixed children at one Bellman state, one cheapest representative suffices.
 
-### Continuation equality
+### Query refinement dominance
 
-At a current world set `A`, let
-
-\[
-\mathcal M_A(q)
-\]
-
-be the family of target-mixed outcome cells induced by query `q`. Pure-target cells are omitted because they terminate immediately.
-
-If
-
-\[
-\mathcal M_A(q)=\mathcal M_A(r)
-\]
-
-and `q` costs no more than `r`, one cheapest representative is sufficient.
-
-### Target-relevant refinement dominance
-
-The stronger rule works directly on the active cross-target separation sets. Let
-
-\[
-S_A(q)
-\]
-
-be the cross-target pairs inside `A` separated by `q`.
-
-If
+For a current world set `A`, let `S_A(q)` be the active cross-target pairs separated by query `q`. If
 
 \[
 \boxed{S_A(q)\supseteq S_A(r),\qquad c(q)\le c(r),}
 \]
 
-then `q` is target-relevantly at least as fine as `r`. Every unresolved `q`-child lies inside one `r` outcome cell, so `r` is constant after `q` on every mixed child. Thus `q` safely dominates `r` at that Bellman state.
+then `q` safely dominates `r` at that state.
 
-This strictly generalizes continuation equality: equal active separation masks are the tie case, while strict supersets let a genuinely finer cheap query replace a coarser expensive query.
+### Same-target world twins
 
-A no-progress query with no active target-relevant separation is skipped.
+Same-target worlds with identical future separation/nonseparation relations to every opposite-target world under all remaining queries can be represented by one world in unresolved continuation states.
 
-Validation includes:
+Combining query refinement and world twins gives the adaptive two-sided kernel.
 
-- all `15^3=3,375` three-query multi-valued partition tasks on four balanced worlds;
-- all `15^2 x 2^2 = 900` two-query partition tasks with costs in `{1,2}`;
-- different pure-branch partitions with the same mixed continuation;
-- an explicit strict-refinement dominance control;
-- equal-cost interchangeable queries; and
-- no-progress query classes.
+Implementations:
 
-Both adaptive compressed solvers must match the original direct Bellman solver exactly in `C_A` on every exhaustive case.
+- `adaptive_gain/adaptive_safe_compression.py`
+- `adaptive_gain/adaptive_world_twins.py`
+- `adaptive_gain/adaptive_two_sided_kernel.py`
 
-See `theory/ADAPTIVE_SAFE_QUERY_COMPRESSION.md`.
+These reductions preserve `C_A`; they are not automatically licensed as fixed-bundle reductions.
 
-## Fixed-side certificate ladder
+## 4. Cost-only continuation bisimulation compresses adaptive value further
 
-A fixed resolver is a weighted cover of all cross-target world pairs. Strict gain can often be certified without first computing the exact numerical `C_F`:
+`adaptive_gain/continuation_bisimulation.py` recursively represents one mixed state by the **costs** of its productive actions and the set of recursively equivalent mixed child classes.
+
+Outcome labels, pure branches, repeated child types, query names, and repeated action types may disappear.
+
+If two states have the same continuation type,
+
+\[
+\boxed{
+\operatorname{Type}(s)=\operatorname{Type}(t)
+\Longrightarrow
+V_A(s)=V_A(t).
+}
+\]
+
+Across the checked finite universes, `43,614` tasks had zero adaptive-cost mismatches under this quotient.
+
+But this quotient is **not** sufficient for `C_F`.
+
+A registered pair of four-world tasks has the same cost-only recursive root class and `C_A=2` in both cases, but
+
+\[
+C_F=3\quad\text{versus}\quad C_F=2.
+\]
+
+The lost information is whether terminal actions in separate branches are the **same physical query resource** and can therefore be reused by one fixed bundle.
+
+See `theory/CONTINUATION_BISIMULATION.md`.
+
+## 5. Resource-labelled continuation preserves both `C_A` and `C_F`
+
+`adaptive_gain/resource_continuation.py` restores the missing branch-crossing resource identity.
+
+Each productive action keeps a persistent task-local query token:
+
+\[
+q\mapsto\left(c(q),\{\text{mixed child classes}\}\right).
+\]
+
+Distinct query tokens are not collapsed merely because they have the same local cost and continuation type.
+
+The same quotient then supports two recursions:
+
+```text
+adaptive:
+  choose a query separately at each state
+
+fixed:
+  replay the same selected query-token set through every branch
+```
+
+Therefore
+
+\[
+\boxed{
+\text{resource-labelled continuation quotient}
+\Longrightarrow
+(C_A,C_F).
+}
+\]
+
+Erasing the resource tokens reduces it to the cost-only quotient and recreates the registered fixed-cost collision. Thus query resource identity is demonstrably necessary for this joint comparator in some finite tasks.
+
+See `theory/RESOURCE_LABELLED_CONTINUATION_QUOTIENT.md`.
+
+## 6. Joint-safe global kernel before the resource quotient
+
+Keeping every resource token is sufficient but not minimal. `adaptive_gain/joint_resource_kernel.py` applies only reductions that are globally safe for **both** objectives:
+
+1. same-target world twins over the complete remaining query vocabulary;
+2. global query refinement dominance:
+
+\[
+\boxed{S(q)\supseteq S(r),\qquad c(q)\le c(r).}
+\]
+
+The two reductions are iterated because removing a dominated query can create new world twins and vice versa.
+
+This gives the current joint pipeline:
+
+\[
+\boxed{
+\text{full task}
+\to
+\text{joint resource kernel}
+\to
+\text{resource-labelled continuation quotient}
+\to
+(C_A,C_F).
+}
+\]
+
+The adaptive side may then use stronger state-local kernels when only `C_A` is needed.
+
+See `theory/JOINT_RESOURCE_KERNEL.md`.
+
+---
+
+# Fixed-side certificates and proof compression
+
+Strict gain can often be certified without first computing the exact numerical `C_F`:
 
 ```text
 private-pair necessity
-  -> integral pair packing
-  -> fractional pair-cover dual
-  -> exact integer budget-infeasibility proof at B=C_A
-  -> exact fixed optimum, only when its value is needed
+-> integral pair packing
+-> fractional pair-cover dual
+-> exact integer budget-infeasibility proof at B=C_A
+-> exact fixed optimum only when its numerical value is needed
 ```
 
-The layers are genuinely distinct, including a registered LP-integrality-gap control where the fractional bound stops at `C_A` but an exact integer infeasibility proof still establishes `C_F>C_A`.
-
-See:
-
-- `theory/FIXED_BYPASS_PAIR_COVER.md`
-- `theory/PAIR_PACKING_LOWER_BOUND.md`
-- `theory/FRACTIONAL_PAIR_COVER_BOUND.md`
-- `theory/INTEGER_FIXED_COVER_PROOF.md`
-
-## Exact proof compression
-
-The fixed-side integer proof has several semantics-preserving compression layers:
+The fixed integer proof itself has an exact compression stack:
 
 ```text
 raw proof tree
@@ -234,69 +292,44 @@ raw proof tree
 -> parent-automorphism branch-orbit pruning
 ```
 
-Highlights:
+A proof verifier independently checks stored branches, budgets, transports, and symmetry receipts instead of trusting the generator's memoization or canonical hashes.
 
-- a seeded proof expands to 19 tree nodes but only 14 exact-state DAG nodes;
-- a six-world control compresses four label-specific residual states to two weighted-incidence isomorphism classes;
-- color refinement reduces one exact permutation family from `720` to `12` candidates;
-- exact automorphism stabilizers reduce several canonical searches to one orbit representative;
-- every shared proof edge carries an explicit query transport that is independently verified;
-- sibling proof branches in one exact parent query-automorphism orbit require only one recursive child proof.
+See the `theory/` notes on pair cover, packing, integer proof, kernelization, DAG compression, isomorphism, and symmetry pruning.
 
-For a proof node `v`, with `b(v)` raw affordable branches and `o(v)` orbit representatives,
+---
 
-\[
-\boxed{s(v)=b(v)-o(v)}
-\]
+# Finite normal-form ladder
 
-and
-
-\[
-\boxed{1\le b(v)/o(v)\le |\operatorname{Aut}(I_v)|}.
-\]
-
-## Finite normal-form ladder
-
-### Unique minimal 4-world / 3-query core
+## Unique minimal 4-world / 3-query core
 
 For
 
 ```text
 4 worlds
 T=(0,0,1,1)
-3 labeled binary unit-cost queries
+3 binary unit-cost queries
 ```
 
-all `16^3=4,096` tasks were classified exactly:
+all `16^3=4,096` tasks are classified exactly:
 
-| `(C_A,C_F)` | labeled tasks |
+| `(C_A,C_F)` | tasks |
 |---|---:|
 | unresolved | 1,688 |
 | `(1,1)` | 1,352 |
 | `(2,2)` | 864 |
 | **`(2,3)`** | **192** |
 
-All 192 strict tasks are one symmetry orbit with canonical separator signature
+All 192 strict tasks are one symmetry orbit with canonical signature
 
 \[
 \boxed{(3,5,9)}.
 \]
 
-### Adding a fourth query creates no new irreducible mechanism
+## Four queries add no new irreducible mechanism
 
-For four worlds with four binary unit-cost queries, all `16^4=65,536` labeled tasks were enumerated. The 3,840 strict cases all have `(C_A,C_F)=(2,3)` and every one contains the unique three-query core after deleting at least one query.
+For four balanced worlds and four binary unit-cost queries, all `16^4=65,536` tasks were enumerated. The 3,840 strict cases all have `(C_A,C_F)=(2,3)` and every one contains the unique three-query core after deleting at least one query.
 
-The only strict canonical signatures are
-
-```text
-(0,3,5,9)   null-query extension
-(3,3,5,9)   duplicate-terminal extension
-(3,5,9,9)   duplicate-routing extension
-```
-
-so merely enlarging the query vocabulary from three to four creates no new irreducible gain mechanism in this scope.
-
-### Five worlds create the first new deletion-minimal core
+## Five worlds create the first new deletion-minimal core
 
 For
 
@@ -306,57 +339,29 @@ For
 3 binary unit-cost queries
 ```
 
-all `32^3=32,768` labeled tasks were classified exactly:
-
-| `(C_A,C_F)` | labeled tasks |
-|---|---:|
-| unresolved | 17,928 |
-| `(1,1)` | 5,768 |
-| `(2,2)` | 6,336 |
-| `(3,3)` | 720 |
-| **`(2,3)`** | **2,016** |
-
-Exactly 288 tasks lose strict gain after every one-world deletion. They form one symmetry orbit with unique signature
+all `32^3=32,768` tasks are classified exactly. There are 2,016 strict tasks; exactly 288 lose strict gain after every one-world deletion and form one orbit with signature
 
 \[
 \boxed{(7,28,42)}.
 \]
 
-A standard representative has
-
-\[
-T=(0,0,1,1,1)
-\]
-
-and queries
-
-\[
-(0,1,1,1,1),\quad
-(0,1,0,0,1),\quad
-(0,1,0,1,0).
-\]
-
-It has
+The standard core has
 
 \[
 \boxed{C_A=2<C_F=3}
 \]
 
-and an optimal root with positive direct target information under uniform world weights,
+and an optimal root with positive direct target information under uniform represented-world weights,
 
 \[
 I(T;Q_{root})\approx0.0199730940\text{ bits}.
 \]
 
-Thus zero direct root information is not necessary even for deletion-minimal strict gain.
+So zero direct root information is not necessary even for deletion-minimal strict gain.
 
-See:
+---
 
-- `theory/MINIMAL_STRICT_GAIN_NORMAL_FORM.md`
-- `theory/FOUR_QUERY_EXTENSION_CLASSIFICATION.md`
-- `theory/FIVE_WORLD_IRREDUCIBLE_NORMAL_FORM.md`
-
-## Source-derived witnesses
+# Source-derived witnesses
 
 For the registered MROD-style and PAYOFF-style routing abstractions:
 
@@ -365,44 +370,38 @@ C_A = 2
 C_F = C_U = U = 3
 ```
 
-Under uniform represented worlds, the first routing observation has zero direct target information, while the full adaptive policy resolves the target. The best fixed information at budget 2 is 0.5 bit in both abstractions.
+Under uniform represented worlds, the first routing observation has zero direct target information while the full adaptive policy resolves the target. The best fixed information at budget 2 is 0.5 bit in both abstractions.
 
 BALANCE supplies a negative control: under the current midpoint-reset span objective, branch labels change interval location but not the declared sufficient future-value state, so extra direction adaptivity has no gain at that step.
 
 These are synthetic/conditional structural witnesses, not field empirical validation.
 
-## Validation
+---
 
-The suite includes:
+# Validation and scope
 
-- direct-versus-incidence Bellman equivalence;
-- complete 4,096-task minimal binary universe;
-- complete 65,536-task four-query extension universe;
-- complete 32,768-task five-world universe;
-- complete 3,375-task multi-valued partition universe for pair-incidence sufficiency;
-- complete 3,375-task multi-valued adaptive-compression universe;
-- complete 900-task unequal-cost adaptive-compression grid;
-- certificate and LP-gap controls;
-- tampered proof and transport rejection;
-- kernel, DAG, isomorphism, color-refinement and automorphism regressions; and
-- exact normal-form iff classifiers.
+The suite includes complete finite universes, seeded adverse controls, tampered-certificate rejection, independent verifiers, and Python 3.10/3.11/3.12 CI.
 
-CI runs on Python 3.10, 3.11, and 3.12 plus executable witness and certificate-ladder audits.
+The repository does **not** claim:
 
-## Scope boundary
-
-This repository does **not** claim:
-
-- a new general theory of adaptive experimental design, Set Cover, Test Cover, graph isomorphism, color refinement, or group algorithms;
+- a new general theory of adaptive experimental design, Set Cover, bisimulation, or graph isomorphism;
 - that PAYOFF, MROD, and BALANCE are the same scientific model;
-- that branch dependence alone is sufficient for adaptive gain;
-- that zero direct target information is necessary or sufficient for gain;
-- polynomial-time exact integer cover or graph canonicalization;
-- that finite labeled-task counts are natural prevalence estimates;
-- that finite synthetic controls are empirical evidence; or
+- that branch dependence or zero direct information is sufficient/necessary for gain;
+- polynomial-time exact optimization or canonicalization;
+- that finite labeled-task frequencies are empirical prevalence estimates;
+- that synthetic structural validation is field evidence; or
 - that target resolution licenses a biological report.
 
-The current deterministic finite theory identifies which information can be safely discarded for fixed resolution, which must be retained for adaptive routing, and two exact state-local adaptive reductions—continuation equality and target-relevant refinement dominance—that preserve the Bellman optimum.
+The current deterministic theory instead separates the information needed for:
+
+```text
+adaptive value
+fixed bundle reuse
+their joint comparison
+scientific report licensing
+```
+
+and keeps those claims distinct.
 
 ## Run
 
