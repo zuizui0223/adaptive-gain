@@ -1,0 +1,41 @@
+{
+  "scope": "finite deterministic positive-cost selected-optimal-policy bypass channels",
+  "theorems": {
+    "two_resource_union": "If the selected optimal policy union S has |S|<=2, then C_A=c(S)=U and hence C_A=C_F=C_U=U.",
+    "internal_minimum_queries": 3,
+    "external_minimum_queries": 4
+  },
+  "sharp_witnesses": {
+    "internal": {
+      "declared_queries": 3,
+      "C_A": 2,
+      "C_F": 2,
+      "C_U": 2,
+      "U": 3,
+      "internal_union_redundancy": 1,
+      "external_shortcut_discount": 0
+    },
+    "external": {
+      "declared_queries": 4,
+      "C_A": 2,
+      "C_F": 2,
+      "C_U": 3,
+      "U": 3,
+      "internal_union_redundancy": 0,
+      "external_shortcut_discount": 1
+    }
+  },
+  "finite_regressions": {
+    "two_query_arbitrary_partition_cost_1_2": {
+      "tasks": 900,
+      "required_result": "Every resolved task has internal=external=0."
+    },
+    "three_query_balanced_binary": {
+      "tasks": 4096,
+      "resolved_tasks": 2408,
+      "external_positive_tasks": 0,
+      "replacement_certificate_successes": 2408
+    }
+  },
+  "claim_boundary": "The lower bounds are theorem-level consequences of positive costs and selected-policy union size; finite counts validate implementation only."
+}
