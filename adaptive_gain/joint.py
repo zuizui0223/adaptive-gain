@@ -12,10 +12,7 @@ from .continuation_bisimulation import (
     lift_continuation_policy,
     verify_continuation_quotient,
 )
-from .joint_resource_kernel import (
-    JointResourceKernelReceipt,
-    joint_resource_kernel,
-)
+from .joint_resource_kernel import JointResourceKernelReceipt, joint_resource_kernel
 from .resource_continuation import (
     ResourceContinuationAction,
     ResourceContinuationCertificate,
@@ -50,6 +47,10 @@ from .resource_overlap import (
     resource_overlap_collision_audit,
     resource_overlap_signatures,
     resource_role_profile_collision,
+)
+from .resource_overlap_exhaustive import (
+    ResourceCoLocationRepairSummary,
+    enumerate_balanced_four_query_colocation_repair,
 )
 
 __all__ = [
@@ -94,4 +95,6 @@ __all__ = [
     "resource_overlap_collision_audit",
     "resource_overlap_signatures",
     "resource_role_profile_collision",
+    "ResourceCoLocationRepairSummary",
+    "enumerate_balanced_four_query_colocation_repair",
 ]
