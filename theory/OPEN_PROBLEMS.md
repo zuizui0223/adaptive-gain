@@ -23,16 +23,15 @@ branch-orbit proof-size accounting
 unique minimal 4-world / 3-query strict-gain normal form
 complete 4-world / 4-query one-query-extension classification
 unique deletion-minimal 5-world / 2+3-target / 3-query strict-gain normal form
+full identity-indexed target-pair incidence sufficiency for deterministic C_A and C_F
 pair-side Sperner kernel bound
 ```
 
-The next problems concern cheaper symmetry certification, adaptive-side structural
-invariants beyond fixed pair cover, stronger bounds, larger normal-form
-classifications, and extensions beyond finite deterministic target resolution.
+The next problems concern cheaper symmetry certification, **adaptive-safe compression of the full target-pair incidence**, stronger bounds, larger normal-form classifications, and extensions beyond finite deterministic target resolution.
 
 ## 1. Certify automorphism generators without enumerating the full stable-color permutation family
 
-The earlier factorial-canonicalization and proof-reuse questions are now substantially closed for small residual states.
+The earlier factorial-canonicalization and proof-reuse questions are substantially closed for small residual states.
 
 `color_refinement.py` can reduce exact query permutations before canonicalization; one registered benchmark goes from `720` candidates to `12`. `individualization_refinement.py` breaks higher-order color collisions. `automorphism.py` distinguishes unresolved search ambiguity from genuine query symmetry, and `orbit_pruning.py` keeps one individualization representative per exact stabilizer orbit.
 
@@ -88,51 +87,54 @@ Open questions:
 
 A useful result would bound the size or number of exact proof instances after safe preprocessing, not merely one side of the incidence matrix.
 
-## 3. Find a complete adaptive-side invariant beyond target-pair cover
+## 3. Find the coarsest adaptive-safe compression of full target-pair incidence
 
-The five-world classification exposes a new structural limit of the fixed-side representation.
+The five-world classification initially looked like a failure of pair incidence on the adaptive side, but the precise result is sharper.
 
-The four-world minimal strict-gain core has raw cross-target separator rows
-
-\[
-(1,2,4,7),
-\]
-
-while the deletion-minimal five-world core has
+For every query and every pair of worlds with different targets, retain the **identity-indexed** separation bit
 
 \[
-(1,2,3,4,5,6).
+S_q(u,v)=\mathbf 1[q(u)\ne q(v)].
 \]
 
-After pair-obligation dominance both reduce to exactly
+Together with world identities, target labels, query identities, and query costs, this full incidence determines both exact fixed resolution and exact adaptive worst-path target-resolution cost. `target_pair_incidence.py` reconstructs each target-mixed query outcome cell as a connected component of the graph of cross-target **nonseparation** edges and then runs the Bellman recursion. The theorem is documented in `FULL_PAIR_INCIDENCE_SUFFICIENCY.md`.
+
+Regression tests include all `15^3=3,375` triples of arbitrary deterministic set partitions on four worlds, not only binary outcomes.
+
+What fails is the more aggressive fixed-side compression. The four-world core has raw pair rows `(1,2,4,7)` and the five-world deletion-minimal core has `(1,2,3,4,5,6)`, but pair-obligation dominance reduces both to `(1,2,4)`. A same-five-world no-gain control also has that minimal kernel while changing the exact costs from `(2,3)` to `(3,3)`.
+
+Thus
 
 \[
-(1,2,4).
+\boxed{
+\text{full identity-indexed pair incidence is adaptive-safe,}
+}
 \]
 
-Thus the fixed comparator sees the same minimal obstruction, yet the adaptive
-world-partition geometry is different.  The five-world core is not reducible by
-world deletion and has an optimal root with positive direct target information,
-whereas the four-world standard core has a zero-information routing root.
+but
 
-Therefore target-pair cover is sufficient for fixed resolution but not a complete
-invariant for adaptive decision structure.
+\[
+\boxed{
+\text{the inclusion-minimal fixed-cover kernel is not.}
+}
+\]
 
-Open questions:
+The new open problem is therefore not to replace pair incidence wholesale, but to characterize **which reductions of the full incidence preserve `C_A`**.
 
-- What is the smallest exact object that determines adaptive-policy equivalence?
-- Is the target-colored lattice of query-induced world partitions sufficient?
-- Can an adaptive normal form be expressed as a quotient of target-colored decision trees rather than pair covers?
-- Which within-target distinctions can be discarded without changing `C_A`?
-- Can two tasks have the same full cross-target pair-incidence matrix, not merely the same minimal kernel, but different adaptive costs?
-- Can a joint invariant expose exactly which information is lost when passing from world partitions to cross-target pair cover?
+Questions:
 
-This is now a central theoretical question because the fixed and adaptive sides no
-longer admit one shared minimal representation.
+- Which pair-obligation deletions are safe for adaptive Bellman values, and which are safe only for fixed cover?
+- Is the state-local collection of target-mixed outcome components a minimal sufficient representation for `C_A`?
+- Can worlds of one target be quotient-ed by a target-resolution bisimulation without changing any future Bellman value?
+- Can a polynomial-time refinement compute the coarsest such quotient?
+- Can an adaptive-safe kernel be strictly smaller than full identity-indexed incidence while still preserving all reachable residual states?
+- Which parts of the sufficiency theorem survive stochastic observation kernels or information-valued objectives?
+
+This distinction between **full incidence** and **fixed-minimal kernel** should remain explicit in all subsequent claims.
 
 ## 4. Classify the next finite normal forms
 
-Two nearby scopes are now closed.
+Two nearby scopes are closed.
 
 ### Four worlds, four queries
 
@@ -144,9 +146,7 @@ For
 4 binary unit-cost queries
 ```
 
-all `16^4 = 65,536` labeled tasks were enumerated.  There are 3,840 strict tasks,
-all with `(C_A,C_F)=(2,3)`, and every one contains the unique three-query strict
-core after deleting at least one query.  The only strict canonical signatures are
+all `16^4 = 65,536` labeled tasks were enumerated. There are 3,840 strict tasks, all with `(C_A,C_F)=(2,3)`, and every one contains the unique three-query strict core after deleting at least one query. The only strict canonical signatures are
 
 ```text
 (0,3,5,9)   null-query extension
@@ -166,15 +166,13 @@ For
 3 binary unit-cost queries
 ```
 
-all `32^3 = 32,768` labeled tasks were enumerated.  There are 2,016 strict tasks
-in five canonical signature classes.  Exactly 288 are deletion-minimal and all
-belong to one new orbit with signature
+all `32^3 = 32,768` labeled tasks were enumerated. There are 2,016 strict tasks in five canonical signature classes. Exactly 288 are world/query deletion-minimal and all belong to one new orbit with signature
 
 \[
 \boxed{(7,28,42)}.
 \]
 
-This is the first new irreducible normal form after the four-world core.
+This is the first new irreducible normal form after the four-world core, and an optimal root has positive direct target information under uniform represented-world weights.
 
 Next questions:
 
@@ -214,7 +212,7 @@ For MROD-like tasks the utility need not be binary target resolution:
 G(B)=\max_{\pi:c(\pi)\le B}I(T;H_\pi)-\max_{F:c(F)\le B}I(T;Q_F).
 \]
 
-The cost theory shows why routing entropy alone is insufficient: the optimized fixed class can bypass an adaptive route.  The new five-world deletion-minimal core additionally shows that a genuinely irreducible routing root may carry positive direct target information.
+The cost theory shows why routing entropy alone is insufficient: the optimized fixed class can bypass an adaptive route. The five-world deletion-minimal core additionally shows that a genuinely irreducible routing root may carry positive direct target information.
 
 Questions:
 
@@ -223,7 +221,7 @@ Questions:
 - Under what assumptions is the information objective submodular or adaptively submodular?
 - What certificate replaces cross-target pair separation when partial information rather than exact resolution is the target?
 - Is there an information-valued analogue of branch-orbit proof compression for equivalent continuation experiments?
-- What replaces the adaptive-side partition invariant when observations are noisy likelihoods rather than deterministic partitions?
+- What representation replaces deterministic pair incidence when observations are noisy likelihoods?
 
 ## 7. Continuous compatible sets
 
@@ -249,7 +247,7 @@ vs
 improve the measurement model itself.
 ```
 
-A calibration action can change the future query hypergraph, so a static cover model is insufficient. The state must carry both scientific uncertainty and calibration uncertainty.
+A calibration action can change the future query structure, so a static cover model is insufficient. The state must carry both scientific uncertainty and calibration uncertainty.
 
 ## 9. Stochastic branch-invariance and scenario robustness
 
@@ -269,7 +267,8 @@ A natural-data routing claim needs more than low direct information of the first
 - label-different residual states can be the same continuation problem after exact weighted-incidence quotienting;
 - residual symmetry can be local-color ambiguity, higher-order ambiguity, or a genuine automorphism, and those cases should not be conflated;
 - symmetric proof branches may be mathematically redundant even though the underlying measurements remain distinct named actions;
-- identical minimal fixed pair-cover kernels do not imply identical adaptive routing geometries.
+- identical inclusion-minimal fixed kernels do not imply identical adaptive routing geometries;
+- full deterministic identity-indexed pair incidence is sufficient for guaranteed target-resolution cost, but that does not establish the same sufficiency for noisy or information-valued objectives.
 
 An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
 
