@@ -9,6 +9,7 @@ from adaptive_gain.extremal_routing_family import (
     first_unit_cost_ratio_above_three_halves_receipt,
     unit_cost_ratio_upper_bound_by_world_count,
 )
+from adaptive_gain.frontier_decomposition import productive_frontier_policy_decomposition
 
 
 def _delete_world(task: FiniteTask, index: int) -> FiniteTask:
@@ -36,6 +37,20 @@ def test_extremal_family_exact_cost_formula_and_frontier_singletons():
         assert receipt.ratio == Fraction(k + 1, 2)
         assert receipt.every_query_frontier_mandatory
         assert receipt.minimal_frontier_edges == tuple(1 << q for q in range(k + 1))
+
+
+def test_extremal_family_has_no_internal_or_external_fixed_bypass():
+    for k in range(2, 7):
+        receipt = productive_frontier_policy_decomposition(extremal_routing_task(k))
+        assert receipt.agrees_with_direct_decomposition
+        assert receipt.adaptive_cost == 2
+        assert receipt.fixed_cost == k + 1
+        assert receipt.policy_union_cost == k + 1
+        assert receipt.policy_union_restricted_fixed_cost == k + 1
+        assert receipt.branch_exclusive_overhead == k - 1
+        assert receipt.realized_adaptive_gain == k - 1
+        assert receipt.internal_union_redundancy == 0
+        assert receipt.external_shortcut_discount == 0
 
 
 def test_ratio_is_unbounded_along_multivalued_router_family():
