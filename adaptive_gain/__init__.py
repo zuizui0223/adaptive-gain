@@ -10,6 +10,15 @@ from .adaptive_safe_compression import (
     target_relevant_query_classes,
     target_relevant_refinement_dominance,
 )
+from .adaptive_world_twins import (
+    DynamicWorldTwinCompressionReceipt,
+    StaticWorldTwinQuotientReceipt,
+    TargetRelevantWorldTwinClass,
+    adaptive_world_twin_compressed_minimum_resolution,
+    static_target_relevant_world_twin_quotient,
+    target_relevant_world_twin_classes,
+    target_relevant_world_twin_representative_mask,
+)
 from .automorphism import (
     ResidualAutomorphismGroupReceipt,
     residual_automorphism_group,
@@ -208,6 +217,10 @@ __all__ = [
     "adaptive_refinement_compressed_minimum_resolution",
     "adaptive_safe_compressed_minimum_resolution", "target_relevant_query_classes",
     "target_relevant_refinement_dominance",
+    "DynamicWorldTwinCompressionReceipt", "StaticWorldTwinQuotientReceipt",
+    "TargetRelevantWorldTwinClass", "adaptive_world_twin_compressed_minimum_resolution",
+    "static_target_relevant_world_twin_quotient", "target_relevant_world_twin_classes",
+    "target_relevant_world_twin_representative_mask",
     "ResidualAutomorphismGroupReceipt", "residual_automorphism_group",
     "verify_residual_automorphism_group",
     "AdaptiveGainReceipt", "AdaptiveNode", "AdaptiveResolutionReceipt",
