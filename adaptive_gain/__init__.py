@@ -41,6 +41,15 @@ from .information import (
     routing_information_receipt,
     target_entropy_bits,
 )
+from .integer_cover_proof import (
+    CoverProofBranch,
+    CoverProofNode,
+    FixedBudgetDecisionCertificate,
+    IntegerCoverAdaptiveGainCertificate,
+    IntegerCoverProofLimitError,
+    fixed_budget_cover_decision,
+    selected_policy_integer_cover_gain_certificate,
+)
 from .pair_cover import (
     EssentialQueryWitness,
     PairCoverAudit,
@@ -97,6 +106,13 @@ __all__ = [
     "policy_information_bits",
     "routing_information_receipt",
     "target_entropy_bits",
+    "CoverProofBranch",
+    "CoverProofNode",
+    "FixedBudgetDecisionCertificate",
+    "IntegerCoverAdaptiveGainCertificate",
+    "IntegerCoverProofLimitError",
+    "fixed_budget_cover_decision",
+    "selected_policy_integer_cover_gain_certificate",
     "EssentialQueryWitness",
     "PairCoverAudit",
     "PairSeparatorRow",
