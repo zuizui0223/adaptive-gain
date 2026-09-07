@@ -1,5 +1,13 @@
 """Public entrypoint for productive-frontier fixed and bypass structure."""
 
+from .frontier_bypass_certificates import (
+    FrontierNoExternalShortcutCertificate,
+    FrontierReplacementLimitError,
+    OutsideResourceReplacement,
+    frontier_replacement_certificate,
+    selected_policy_no_external_shortcut_certificate,
+    verify_frontier_replacement_certificate,
+)
 from .frontier_decomposition import (
     ProductiveFrontierPolicyDecomposition,
     productive_frontier_policy_decomposition,
@@ -33,6 +41,12 @@ from .productive_frontier import (
 )
 
 __all__ = [
+    "FrontierNoExternalShortcutCertificate",
+    "FrontierReplacementLimitError",
+    "OutsideResourceReplacement",
+    "frontier_replacement_certificate",
+    "selected_policy_no_external_shortcut_certificate",
+    "verify_frontier_replacement_certificate",
     "ProductiveFrontierPolicyDecomposition",
     "productive_frontier_policy_decomposition",
     "FrontierTransversalLimitError",
