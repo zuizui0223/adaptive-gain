@@ -14,7 +14,7 @@ The source repositories retain ownership of their scientific models. `adaptive-g
 
 Let `W` be a finite represented hidden-world set, `T: W -> labels` the declared target, and each query have a positive integer acquisition cost plus one deterministic outcome in every represented world.
 
-A fixed design chooses one bundle before seeing outcomes. An adaptive design chooses the next query from outcomes already observed.
+A **fixed design** chooses one bundle before seeing outcomes. An **adaptive design** chooses the next query from outcomes already observed.
 
 Define
 
@@ -35,7 +35,7 @@ Strict adaptive gain exists exactly when
 \boxed{C_A<C_F}.
 \]
 
-For integer acquisition budget `B`, the exact adaptive-only resolution window is
+For integer acquisition budget `B`, the adaptive-only guaranteed-resolution window is
 
 \[
 \boxed{C_A\le B<C_F}.
@@ -43,11 +43,11 @@ For integer acquisition budget `B`, the exact adaptive-only resolution window is
 
 ## Where potential gain goes
 
-Let `pi*` be the selected optimal adaptive tree. Define
+For a selected optimal adaptive tree `pi*`, let
 
 ```text
-U   = total cost of every distinct query appearing anywhere in pi*
-C_U = cheapest fixed resolving subset restricted to that tree union
+U   = cost of every distinct query used anywhere in pi*
+C_U = cheapest fixed resolver restricted to that tree union
 ```
 
 Then
@@ -56,7 +56,7 @@ Then
 \boxed{C_A\le C_F\le C_U\le U}
 \]
 
-and
+and exactly
 
 \[
 \boxed{
@@ -88,13 +88,13 @@ so
 }.
 \]
 
-Bypass is therefore a discount, not a binary veto. Registered six-world controls show that one unit of internal or external bypass can coexist with one remaining unit of strict gain.
+Bypass is a discount, not a binary veto: registered six-world controls retain one unit of strict gain despite one unit of internal or external bypass.
 
 Implementation: `adaptive_gain/decomposition.py`.
 
-## Fixed resolution is a target-pair cover
+## Fixed resolution as target-pair cover
 
-Only world pairs with different target values need to be separated:
+Only world pairs with different target values require separation:
 
 \[
 P_T=\{\{w_i,w_j\}:T(w_i)\ne T(w_j)\}.
@@ -102,11 +102,11 @@ P_T=\{\{w_i,w_j\}:T(w_i)\ne T(w_j)\}.
 
 Each query covers the cross-target pairs on which its outcomes differ. A fixed resolving bundle is therefore a weighted target-pair cover.
 
-This connects the fixed side to established Test Cover / Set Cover structure. The repository does **not** claim invention of those general covering methods; it uses them to build checkable fixed-side comparators for the adaptive problem.
+This connects the fixed side to established Set/Test Cover structure; the repository does **not** claim invention of those general covering methods.
 
-## Certificate ladder
+### Certificate ladder
 
-Strict gain can often be certified without first computing the exact numerical `C_F`.
+Strict gain can often be certified without first computing the exact numerical `C_F`:
 
 ```text
 private-pair necessity
@@ -121,9 +121,9 @@ The layers are genuinely distinct:
 - source-derived MROD/PAYOFF controls are already certified by private pairs;
 - a larger control needs integral packing;
 - another has integral packing 2 but fractional optimum `5/2`, so only the fractional layer proves `C_F>=3`;
-- an LP-integrality-gap control has `C_A=2`, fractional lower bound 2, and `C_F=3`, so only the exact integer budget proof closes the strict-gain claim.
+- an LP-integrality-gap control has `C_A=2`, fractional lower bound 2, and `C_F=3`, so only the exact integer budget proof closes strict gain.
 
-The integer proof emits a checkable infeasibility tree. `verify_fixed_budget_decision_certificate()` reconstructs the target-pair system and independently verifies every branch, budget update, and separator obligation.
+The integer proof is independently rechecked by `verify_fixed_budget_decision_certificate()`.
 
 See:
 
@@ -132,13 +132,13 @@ See:
 - `theory/FRACTIONAL_PAIR_COVER_BOUND.md`
 - `theory/INTEGER_FIXED_COVER_PROOF.md`
 
-## Proof compression stack
+## Exact proof compression stack
 
-The exact integer comparison now has several semantics-preserving compression layers.
+The fixed-side proof now has semantics-preserving compression at several levels.
 
-### 1. Two-sided residual kernel
+### Two-sided residual kernel
 
-Before branching, `cover_kernel.py` repeatedly applies exact reductions:
+`cover_kernel.py` repeatedly applies exact reductions:
 
 ```text
 inactive/unaffordable query deletion
@@ -147,168 +147,74 @@ unique-separator forcing
 query dominance
 ```
 
-A seeded eight-world strict-gain control has `C_A=3,C_F=4`; the unkernelized integer proof visits 13 states, while the kernel closes the fixed-budget impossibility in one kernel call with zero genuine branch states.
-
-After pair dominance, nonempty separator signatures form an inclusion antichain over the remaining queries. Therefore, for `m` remaining queries,
+After pair dominance, distinct nonempty separator signatures form an inclusion antichain over `m` queries, so Sperner's theorem gives
 
 \[
-\boxed{|P_K|\le {m\choose\lfloor m/2\rfloor}}
+\boxed{|P_K|\le {m\choose\lfloor m/2\rfloor}}.
 \]
 
-by Sperner's theorem. The unique minimal strict-gain normal form below saturates this bound at `m=3`.
+### Exact-state and isomorphism DAGs
 
-### 2. Exact-state proof DAG
+`proof_dag.py` shares literal repeated residual states. `isomorphism_quotient.py` further forgets pair order and query names while preserving remaining budget, query costs, and pair-query incidence.
 
-Different branch histories can reach the literal same residual `(uncovered pairs, available queries, budget)` state. `proof_dag.py` stores that subproof once and references it by node ID. A registered control compresses 19 expanded tree nodes to 14 DAG nodes.
-
-### 3. Weighted-incidence isomorphism quotient
-
-Label-different residual states can still be the same continuation problem. `isomorphism_quotient.py` forgets pair order and query names while preserving:
+A six-world / six-query strict-gain control compresses
 
 ```text
-remaining budget
-query acquisition costs
-pair-query incidence
+4 label-specific residual states -> 2 weighted-incidence isomorphism classes.
 ```
 
-A six-world / six-query strict-gain control has
+`isomorphism_proof_dag.py` exports every shared edge with an explicit child-to-representative query bijection. Its verifier reconstructs each child and checks the transport directly rather than trusting a canonical-signature match.
 
-```text
-C_A = 2
-C_F = 3
-4 label-specific residual states
-2 weighted-incidence isomorphism classes
-```
+### Certified symmetry handling
 
-so this quotient gives compression beyond exact-state DAG sharing. The first merge exports an explicit query-bijection witness that is independently checked by `verify_residual_pair_cover_isomorphism()`.
-
-### 4. Bipartite color refinement before exact canonicalization
-
-`color_refinement.py` propagates isomorphism-invariant colors between obligation rows and query columns before exact query-permutation enumeration.
-
-A registered eight-query residual benchmark has
-
-```text
-initial query permutation family = 720
-stable refined family            = 12
-```
-
-so the exact canonicalization search is reduced by a factor of 60. All 4096 minimal tasks preserve the exact canonical isomorphism classes.
-
-Color refinement is deliberately not treated as an isomorphism test. A connected bipartite 8-cycle and two disjoint 4-cycles remain color-indistinguishable but have different exact canonical forms.
-
-### 5. Exact individualization-refinement
-
-`individualization_refinement.py` handles higher-order color collisions by choosing a non-singleton query color class, individualizing one query, refining again, and recursively exploring every required branch.
-
-For each of the two regular color-collision controls,
-
-```text
-stable exact permutations = 24
-IR canonical leaves       = 8.
-```
-
-The IR encoding need not be byte-identical to the older brute-force canonical encoding; exactness is checked by equality of induced isomorphism classes. Over all 4096 minimal tasks, the old exact canonicalizer and IR canonicalizer give a one-to-one correspondence between equivalence classes.
-
-### 6. Exact automorphism audit and stabilizer-orbit pruning
-
-`automorphism.py` enumerates the complete small-task query automorphism group after stable refinement, verifies a generator set, and reports query orbits. If the stable color classes leave
+The current exact stack is
 
 \[
-N_{\rm color}=\prod_i |C_i|!
+\boxed{
+\text{color refinement}
+\to
+\text{individualization-refinement}
+\to
+\text{exact automorphism audit}
+\to
+\text{stabilizer-orbit pruning}
+}.
 \]
 
-labelings and the exact residual automorphism group is `G`, then
+A registered eight-query residual benchmark shrinks exact permutation enumeration from `720` candidates to `12` after color refinement. Regular adverse controls show why refinement alone is not an isomorphism test.
+
+For a proof node `v`, `symmetry_pruned_proof_dag.py` keeps one recursive child per exact parent query-automorphism orbit. If
 
 \[
-\boxed{N_{\rm distinct}=N_{\rm color}/|G|}.
+g(q)=r,\qquad g\in\operatorname{Aut}(I_v),
 \]
 
-`orbit_pruning.py` uses the subgroup fixing the already individualized queries pointwise. Only one representative per stabilizer orbit must be individualized.
-
-Registered controls give:
-
-| Residual structure | Stable permutations | IR leaves | `|Aut|` | Orbit-pruned leaves |
-|---|---:|---:|---:|---:|
-| Minimal strict-gain normal form | 6 | 6 | 6 | **1** |
-| Connected bipartite 8-cycle | 24 | 8 | 8 | **1** |
-| Two disjoint 4-cycles | 24 | 8 | 8 | **1** |
-| 720->12 refinement benchmark | 12 | 12 | 12 | **1** |
-
-The current automorphism audit itself still enumerates the stable-color-preserving permutation family up to a hard cap. Orbit pruning therefore removes downstream canonical-leaf redundancy, but does not yet avoid the full exact group-certification cost.
-
-### 7. Explicit isomorphism transports in proof DAG edges
-
-`isomorphism_proof_dag.py` exports the isomorphism reuse itself as a proof object. Every shared child edge stores an explicit query bijection from the reconstructed source child instance to its representative DAG node.
-
-The verifier does **not** trust canonical-signature equality. It reconstructs each child from the parent query and directly verifies the supplied cost/incidence-preserving transport before reusing the representative subproof. A tampered transport is rejected by regression tests.
-
-### 8. Parent-automorphism branch pruning
-
-`adaptive_gain/symmetry_pruned_proof_dag.py` now compresses the sibling branch set itself. If an exact parent residual automorphism maps query `q` to query `r`, then
+then
 
 \[
-\boxed{I\setminus q\cong I\setminus r}.
+\boxed{I_v\setminus q\cong I_v\setminus r}.
 \]
 
-Thus, among the affordable separators of one proof obligation, one recursive child proof per exact query-automorphism orbit is sufficient. Every skipped branch carries an explicit child-to-orbit-representative transport.
-
-For a proof node `v`, write
+Writing
 
 \[
-b(v)=\text{raw affordable branch count},\qquad
-o(v)=\text{orbit-representative count}.
+b(v)=\text{raw affordable branches},\qquad
+o(v)=\text{orbit representatives},
 \]
 
-Then the exact local branch saving is
+we get exact local saving
 
 \[
 \boxed{s(v)=b(v)-o(v)}
 \]
 
-and the local compression factor obeys
+and
 
 \[
-\boxed{1\le \frac{b(v)}{o(v)}\le |\operatorname{Aut}(I_v)|}.
+\boxed{1\le b(v)/o(v)\le |\operatorname{Aut}(I_v)|}.
 \]
 
-`proof_size_bounds.py` recomputes these metrics from the stored proof object rather than trusting execution counters.
-
-The reusable four-query C4 control gives
-
-```text
-raw affordable branches = 2
-orbit representatives    = 1
-local saving             = 1
-local factor             = 2
-parent automorphism size = 8
-```
-
-while still providing an explicit transport for the skipped branch. All 4096 minimal tasks retain the exact strict/no-gain classification.
-
-The exact compression/canonicalization chain is now
-
-\[
-\boxed{
-\text{raw proof tree}
-\to
-\text{two-sided kernel}
-\to
-\text{exact-state DAG}
-\to
-\text{weighted-incidence quotient}
-\to
-\text{color refinement}
-\to
-\text{individualization-refinement}
-\to
-\text{certified automorphism-orbit pruning}
-\to
-\text{transported proof DAG}
-\to
-\text{automorphism-orbit-pruned proof branches}
-}.
-\]
+The C4 branch-symmetry control gives `2 -> 1` recursive branches with an explicit transport for the skipped branch.
 
 See:
 
@@ -319,7 +225,9 @@ See:
 - `theory/SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md`
 - `theory/SYMMETRY_PRUNED_PROOF_DAG.md`
 
-## Unique minimal strict-gain normal form
+## Finite normal-form ladder
+
+### 1. Unique minimal 4-world / 3-query core
 
 Strict worst-path adaptive cost gain requires at least
 
@@ -328,66 +236,150 @@ Strict worst-path adaptive cost gain requires at least
 3 query identities
 ```
 
-For the complete balanced minimal universe
+For
 
 ```text
 4 worlds
-T = (0,0,1,1)
+T=(0,0,1,1)
 3 labeled binary unit-cost queries
 ```
 
-there are `16^3=4096` declared query triples. Exact classification is:
+all `16^3 = 4,096` tasks are classified exactly:
 
-| `(C_A,C_F)` | Count |
+| `(C_A,C_F)` | labeled tasks |
 |---|---:|
-| unresolved | 1688 |
-| `(1,1)` | 1352 |
+| unresolved | 1,688 |
+| `(1,1)` | 1,352 |
 | `(2,2)` | 864 |
-| `(2,3)` | **192** |
+| **`(2,3)`** | **192** |
 
-The 192 strict-gain tasks are not 192 structural types. Quotienting target-preserving world permutations, query permutations, and independent binary outcome flips collapses all 192 into **one symmetry orbit**.
-
-A canonical standard form is
-
-\[
-q_0=(0,0,1,0),\qquad
-q_1=(0,1,1,0),\qquad
-q_2=(0,1,1,1),
-\]
-
-with canonical cross-target separator signature
+All 192 strict tasks collapse to one symmetry orbit with canonical separator signature
 
 \[
 \boxed{(3,5,9)}.
 \]
 
-Over all 4096 tasks in this declared scope,
+Thus, in this declared scope,
+
+\[
+\boxed{C_A<C_F\iff \sigma=(3,5,9)}.
+\]
+
+The standard residual fixed-cover automorphism group is the full `S3`.
+
+See `theory/MINIMAL_STRICT_GAIN_NORMAL_FORM.md`.
+
+### 2. Adding a fourth query creates no new irreducible mechanism
+
+For
+
+```text
+4 worlds
+2+2 target multiplicity
+4 binary unit-cost queries
+```
+
+all `16^4 = 65,536` labeled tasks were enumerated. There are 3,840 strict tasks, all with
+
+\[
+(C_A,C_F)=(2,3).
+\]
+
+Every strict task contains the unique three-query core after deleting at least one query. The only strict canonical signatures are
+
+```text
+(0,3,5,9)   null-query extension
+(3,3,5,9)   duplicate-terminal extension
+(3,5,9,9)   duplicate-routing extension
+```
+
+so increasing the query vocabulary from three to four does not create a new irreducible gain mechanism in this scope.
+
+See `theory/FOUR_QUERY_EXTENSION_CLASSIFICATION.md`.
+
+### 3. Five worlds create the first new deletion-minimal core
+
+For
+
+```text
+5 worlds
+2+3 target multiplicity
+3 binary unit-cost queries
+```
+
+all `32^3 = 32,768` labeled tasks are classified exactly:
+
+| `(C_A,C_F)` | labeled tasks |
+|---|---:|
+| unresolved | 17,928 |
+| `(1,1)` | 5,768 |
+| `(2,2)` | 6,336 |
+| `(3,3)` | 720 |
+| **`(2,3)`** | **2,016** |
+
+The strict set has exactly five canonical separator signatures:
+
+```text
+(7,9,49)    288 tasks
+(7,14,54)   288 tasks
+(7,27,42)   576 tasks
+(14,21,45)  576 tasks
+(7,28,42)   288 tasks
+```
+
+Exactly 288 tasks lose strict gain after **every** one-world deletion. They all form one symmetry orbit with unique irreducible signature
+
+\[
+\boxed{(7,28,42)}.
+\]
+
+A standard representative is
+
+\[
+T=(0,0,1,1,1),
+\]
+
+\[
+q_0=(0,1,1,1,1),\quad
+q_1=(0,1,0,0,1),\quad
+q_2=(0,1,0,1,0).
+\]
+
+An optimal adaptive policy uses two queries on every path, while singleton fixed-cover obligations force all three queries:
+
+\[
+\boxed{C_A=2<C_F=3}.
+\]
+
+Deleting any world removes strict gain; deleting any query leaves only two query identities and also removes strict gain. This is the first world/query deletion-minimal core after the four-world normal form.
+
+Under uniform world weights an optimal root has **positive** direct target information,
+
+\[
+I(T;Q_{\rm root})\approx0.0199730940\text{ bits},
+\]
+
+so zero root information is not necessary even for deletion-minimal gain.
+
+Most importantly, the four-world and five-world cores have different raw pair systems but the **same inclusion-minimal fixed kernel**:
+
+\[
+\boxed{(1,2,4)}.
+\]
+
+Therefore
 
 \[
 \boxed{
-C_A<C_F
-\iff
-\text{canonical signature}=(3,5,9)
+\text{same minimal fixed obstruction}
+\not\Rightarrow
+\text{same adaptive routing geometry}.
 }
 \]
 
-with zero false positives and zero false negatives against the exact solver.
+This makes a complete adaptive-side invariant beyond target-pair cover a new central problem.
 
-The raw multiplicity is explained by the declared symmetry orbit:
-
-\[
-4\times 3!\times2^3=192.
-\]
-
-At the residual fixed-cover level the standard form has full query automorphism group
-
-\[
-\boxed{\mathrm{Aut}\cong S_3,\qquad |\mathrm{Aut}|=6,}
-\]
-
-so its six query relabelings are genuine self-symmetry, not unresolved color-refinement ambiguity.
-
-See `theory/MINIMAL_STRICT_GAIN_NORMAL_FORM.md`.
+See `theory/FIVE_WORLD_IRREDUCIBLE_NORMAL_FORM.md`.
 
 ## Source-derived witnesses
 
@@ -398,7 +390,7 @@ C_A = 2
 C_F = C_U = U = 3
 ```
 
-Under uniform represented worlds, the first routing observation has zero direct target information, while the selected adaptive policy identifies the target completely. The best fixed information at budget 2 is 0.5 bit in both abstractions.
+Under uniform represented worlds, the first routing observation has zero direct target information while the selected adaptive policy identifies the target completely. The best fixed information at budget 2 is 0.5 bit in both abstractions.
 
 This demonstrates
 
@@ -406,32 +398,31 @@ This demonstrates
 zero direct target information != zero decision relevance
 ```
 
-but zero direct information is neither necessary nor sufficient for adaptive gain in general.
+but zero direct information is neither necessary nor sufficient for adaptive gain.
 
 BALANCE supplies the negative control: under the current midpoint-reset span objective, supported branch labels change interval location but not the declared sufficient future-value state, so extra direction adaptivity has no gain at that step.
 
 ## Validation
 
-The test suite includes:
+The suite now includes:
 
 - independent exact-oracle checks;
-- the complete 4096-task minimal universe;
-- bypass controls;
-- integral/fractional/integer certificate gaps;
-- tampered proof rejection;
+- the complete 4,096-task minimal universe;
+- the complete 65,536-task four-query extension universe;
+- the complete 32,768-task five-world universe;
+- exact strict-signature and irreducibility iff classifiers;
+- bypass controls and certificate gaps;
+- tampered proof and transport rejection;
 - two-sided kernel equivalence;
-- exact-state DAG verification;
-- residual isomorphism witnesses and quotient regression;
-- color-refinement exact-class regression and adverse regular controls;
+- exact-state and isomorphism DAG verification;
+- color-refinement adverse controls;
 - individualization-refinement class-equivalence regression;
 - exact automorphism group and generator verification;
-- stabilizer-orbit-pruned versus unpruned IR regression;
-- explicit isomorphism-transport proof DAG verification;
-- parent-automorphism branch pruning with skipped-branch transport verification;
-- branch-orbit proof-size accounting and metadata-tamper detection;
-- the unique minimal normal-form iff classifier.
+- stabilizer-orbit pruning;
+- parent-automorphism branch pruning and proof-size accounting;
+- fixed-kernel equality between the four- and five-world irreducible cores.
 
-CI runs the suite on Python 3.10, 3.11, and 3.12, plus the executable witness and certificate-ladder audits.
+CI runs on Python 3.10, 3.11, and 3.12 plus executable witness and certificate-ladder audits.
 
 ## Package
 
@@ -457,6 +448,8 @@ adaptive_gain/
   proof_size_bounds.py
   symmetry_witnesses.py
   minimal_normal_form.py
+  four_query_normal_form.py
+  five_world_normal_form.py
   exhaustive.py
   information.py
   witnesses.py
@@ -475,6 +468,8 @@ theory/
   SYMMETRY_REFINEMENT_AND_AUTOMORPHISMS.md
   SYMMETRY_PRUNED_PROOF_DAG.md
   MINIMAL_STRICT_GAIN_NORMAL_FORM.md
+  FOUR_QUERY_EXTENSION_CLASSIFICATION.md
+  FIVE_WORLD_IRREDUCIBLE_NORMAL_FORM.md
   PROVENANCE.md
   OPEN_PROBLEMS.md
 ```
@@ -487,9 +482,9 @@ This repository does **not** claim:
 - that PAYOFF, MROD, and BALANCE are the same scientific model;
 - that branch dependence alone is sufficient for adaptive gain;
 - that zero direct target information is necessary or sufficient for gain;
-- that bypass must eliminate gain;
 - that failed lower-bound or quotient certificates imply no gain;
 - polynomial-time exact integer cover or general graph canonicalization;
+- that finite labeled-task counts are empirical prevalence estimates;
 - that finite synthetic controls are empirical evidence;
 - that target resolution licenses a biological report.
 
