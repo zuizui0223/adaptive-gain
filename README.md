@@ -1,6 +1,6 @@
 # adaptive-gain
 
-A small theory repository for **when outcome-contingent measurement choice is strictly better than a fixed measurement bundle**.
+A finite theory repository for **when outcome-contingent measurement choice is strictly better than a fixed measurement bundle**.
 
 It was extracted from a cross-repository comparison of:
 
@@ -14,7 +14,7 @@ The source repositories retain ownership of their scientific models. `adaptive-g
 
 Let `W` be a finite represented hidden-world set, `T: W -> labels` the declared target, and each query have a positive integer acquisition cost plus one deterministic outcome in every represented world.
 
-A **fixed design** chooses one bundle before seeing outcomes. An **adaptive design** chooses the next query from outcomes already observed.
+A fixed design chooses one bundle before seeing outcomes. An adaptive design chooses the next query from outcomes already observed.
 
 Define
 
@@ -41,31 +41,31 @@ For integer acquisition budget `B`, the exact adaptive-only resolution window is
 \boxed{C_A\le B<C_F}.
 \]
 
-## Refined cost decomposition: where potential gain goes
+## Where potential gain goes
 
-Let `pi*` be the selected optimal adaptive tree and define
+Let `pi*` be the selected optimal adaptive tree. Define
 
 ```text
-U   = cost of every distinct query appearing anywhere in pi*
-C_U = cheapest fixed resolving subset restricted to that selected tree union
+U   = total cost of every distinct query appearing anywhere in pi*
+C_U = cheapest fixed resolving subset restricted to that tree union
 ```
 
-Flattening the tree union is a valid fixed resolver and restricting the fixed vocabulary cannot improve its global optimum. Therefore
+Then
 
 \[
-\boxed{C_A\le C_F\le C_U\le U}.
+\boxed{C_A\le C_F\le C_U\le U}
 \]
 
-This yields
+and
 
 \[
 \boxed{
 U-C_A
 =(C_F-C_A)+(C_U-C_F)+(U-C_U)
-}
+}.
 \]
 
-with
+Interpret the terms as
 
 ```text
 branch-exclusive overhead = U - C_A
@@ -74,7 +74,7 @@ external shortcut discount = C_U - C_F
 internal union redundancy  = U - C_U
 ```
 
-so equivalently
+so
 
 \[
 \boxed{
@@ -88,113 +88,42 @@ so equivalently
 }.
 \]
 
-Bypass is a discount, not a binary veto. Six-world controls show `C_A=3,C_F=4,U=5` with either one unit of internal redundancy or one unit of external shortcut; in both cases one unit of genuine gain survives.
+Bypass is therefore a discount, not a binary veto. Registered six-world controls show that one unit of internal or external bypass can coexist with one remaining unit of strict gain.
 
 Implementation: `adaptive_gain/decomposition.py`.
 
-## Fixed resolution as a target-pair cover
+## Fixed resolution is a target-pair cover
 
-Only represented world pairs with different target values need separation:
+Only world pairs with different target values need to be separated:
 
 \[
 P_T=\{\{w_i,w_j\}:T(w_i)\ne T(w_j)\}.
 \]
 
-Each query covers the cross-target pairs on which its outcomes differ. A fixed resolving bundle is therefore a weighted **target-pair cover**.
+Each query covers the cross-target pairs on which its outcomes differ. A fixed resolving bundle is therefore a weighted target-pair cover.
 
-This connects the fixed side to established Test Cover / Set Cover structure. The repository does not claim invention of those covering methods; it uses them to build checkable lower-bound and infeasibility certificates against the exact adaptive optimum.
+This connects the fixed side to established Test Cover / Set Cover structure. The repository does **not** claim invention of those general covering methods; it uses them to build checkable fixed-side comparators for the adaptive problem.
 
-## Certificate ladder for strict adaptive gain
+## Certificate ladder
 
-The current repository contains increasingly strong fixed-side proof layers.
-
-### 1. Private-pair certificate
-
-If a query is the **only** declared separator of some cross-target pair, every fixed resolver must buy it.
-
-If every query in the selected adaptive union has such a globally private pair and `U>C_A`, then
-
-\[
-\boxed{C_F=U>C_A}
-\]
-
-without globally optimizing the fixed class. The registered MROD-style and PAYOFF-style routing witnesses satisfy this strong certificate.
-
-### 2. Integral pair packing
-
-Choose cross-target pairs `P*` such that each query separates at most `cost(q)` chosen pairs:
-
-\[
-|\{p\in P^*:q\text{ separates }p\}|\le c(q).
-\]
-
-Then
-
-\[
-\boxed{C_F\ge |P^*|}.
-\]
-
-A packing of size at least `C_A+1` certifies strict gain.
-
-### 3. Fractional pair-cover dual
-
-Allow rational pair weights `y_p>=0` satisfying
-
-\[
-\sum_{p:q\text{ separates }p}y_p\le c(q).
-\]
-
-Then
-
-\[
-C_F\ge\sum_p y_p,
-\]
-
-and integer acquisition costs imply
-
-\[
-\boxed{C_F\ge\left\lceil\sum_p y_p\right\rceil}.
-\]
-
-A five-world control has `C_A=2,C_F=3`, integral packing maximum 2, but fractional optimum `5/2`, so the fractional layer alone proves `C_F>=3`.
-
-### 4. Exact integer budget-infeasibility proof
-
-The LP hierarchy is still incomplete. Another five-world control has
+Strict gain can often be certified without first computing the exact numerical `C_F`.
 
 ```text
-C_A = 2
-fractional fixed lower bound = 2
-C_F = 3.
-```
-
-For strict gain we do not need the exact numerical optimum `C_F`; we only need to prove that no fixed resolver exists with cost at most `C_A`.
-
-`fixed_budget_cover_decision()` chooses one still-uncovered cross-target pair and branches over **every** remaining affordable query that can separate it. If all branches are infeasible, the parent is infeasible. At budget `B=C_A`, this proves
-
-\[
-\boxed{C_F>C_A}
-\]
-
-directly.
-
-The resulting proof tree is independently rechecked by `verify_fixed_budget_decision_certificate()`, which reconstructs the pair system and verifies that every affordable separator branch is present and every budget/coverage update is valid. A tampered proof is rejected in regression tests.
-
-Thus the LP-integrality-gap control is now certified as strict gain without computing the global fixed optimum.
-
-### 5. Exact fixed optimum
-
-Only when the actual value of `C_F` is needed do we solve the stronger global optimization problem.
-
-The verified hierarchy is therefore
-
-```text
-private pair
+private-pair necessity
   -> integral pair packing
   -> fractional pair-cover dual
   -> exact integer budget-infeasibility proof at B=C_A
-  -> exact fixed optimum, when its value is required
+  -> exact fixed optimum, only when its value is needed
 ```
+
+The layers are genuinely distinct:
+
+- source-derived MROD/PAYOFF controls are already certified by private pairs;
+- a larger control needs integral packing;
+- another has integral packing 2 but fractional optimum `5/2`, so only the fractional layer proves `C_F>=3`;
+- an LP-integrality-gap control has `C_A=2`, fractional lower bound 2, and `C_F=3`, so only the exact integer budget proof closes the strict-gain claim.
+
+The integer proof emits a checkable infeasibility tree. `verify_fixed_budget_decision_certificate()` reconstructs the target-pair system and independently verifies every branch, budget update, and separator obligation.
 
 See:
 
@@ -203,84 +132,96 @@ See:
 - `theory/FRACTIONAL_PAIR_COVER_BOUND.md`
 - `theory/INTEGER_FIXED_COVER_PROOF.md`
 
-## Registered source-derived witnesses
+## Proof compression stack
 
-For both MROD-style and PAYOFF-style routing:
+The exact integer comparison now has several semantics-preserving compression layers.
+
+### 1. Two-sided residual kernel
+
+Before branching, `cover_kernel.py` repeatedly applies exact reductions:
+
+```text
+inactive/unaffordable query deletion
+pair-obligation dominance
+unique-separator forcing
+query dominance
+```
+
+A seeded eight-world strict-gain control has `C_A=3,C_F=4`; the unkernelized integer proof visits 13 states, while the kernel closes the fixed-budget impossibility in one kernel call with zero genuine branch states.
+
+After pair dominance, nonempty separator signatures form an inclusion antichain over the remaining queries. Therefore, for `m` remaining queries,
+
+\[
+\boxed{|P_K|\le {m\choose\lfloor m/2\rfloor}}
+\]
+
+by Sperner's theorem. The unique minimal strict-gain normal form below saturates this bound at `m=3`.
+
+### 2. Exact-state proof DAG
+
+Different branch histories can reach the literal same residual `(uncovered pairs, available queries, budget)` state. `proof_dag.py` stores that subproof once and references it by node ID. A registered control compresses 19 expanded tree nodes to 14 DAG nodes.
+
+### 3. Weighted-incidence isomorphism quotient
+
+Label-different residual states can still be the same continuation problem. `isomorphism_quotient.py` forgets pair order and query names while preserving:
+
+```text
+remaining budget
+query acquisition costs
+pair-query incidence
+```
+
+For small states, exact cost-preserving query permutations are enumerated to obtain a canonical signature. A hard permutation cap fails closed.
+
+A six-world / six-query strict-gain control has
 
 ```text
 C_A = 2
-C_F = C_U = U = 3
-
-overhead = 1
-gain     = 1
-internal = 0
-external = 0
+C_F = 3
+4 label-specific residual states
+2 weighted-incidence isomorphism classes
 ```
 
-Under uniform represented worlds, the first routing observation has zero direct target information, while the selected adaptive policy identifies the target completely. The best fixed information at budget 2 is 0.5 bit in both registered abstractions.
+so this quotient gives compression beyond exact-state DAG sharing. The first merge exports an explicit query-bijection witness that is independently checked by `verify_residual_pair_cover_isomorphism()`.
 
-This demonstrates
+Thus the current exact compression chain is
 
-```text
-zero direct target information
-!=
-zero decision relevance
-```
+\[
+\boxed{
+\text{raw proof tree}
+\to
+\text{kernelized residuals}
+\to
+\text{exact-state DAG}
+\to
+\text{weighted-incidence isomorphism classes}
+}.
+\]
 
-but zero direct information is neither necessary nor sufficient for adaptive gain in general.
+See:
 
-### MROD-style routing
+- `theory/FIXED_COVER_KERNELIZATION.md`
+- `theory/PROOF_DAG_COMPRESSION.md`
+- `theory/RESIDUAL_ISOMORPHISM_QUOTIENT.md`
 
-The deterministic hidden world expands `(context, target)` with nuisance bits:
-
-```text
-context 0 -> assay0 reveals target, assay1 reveals nuisance
-context 1 -> assay1 reveals target, assay0 reveals nuisance
-```
-
-The routing observation chooses which assay should come next.
-
-### PAYOFF-style routing
-
-Four categorical worlds preserve the finite separation pattern of the source PAYOFF quadratic/triangular example:
-
-```text
-first intrinsic contrast
-  low branch  -> interaction distance 0.2
-  high branch -> interaction distance 0.1
-```
-
-This abstraction does not replace PAYOFF's continuous payoff model or bounded-error phase certificate.
-
-### BALANCE-style no-routing control
-
-For the source BALANCE midpoint reset rule,
-
-```text
-a(w,e)=min(w,w/2+e)
-```
-
-both supported state outcomes leave the same future span. Branch labels change interval location but not the declared sufficient future-value signature. A local branch-invariance certificate therefore reports no extra routing value at that step.
-
-## Minimality and exhaustive validation
+## Unique minimal strict-gain normal form
 
 Strict worst-path adaptive cost gain requires at least
 
 ```text
 4 represented worlds
-3 query identities.
+3 query identities
 ```
 
-For three labeled unit-cost binary queries the complete small-universe classification is:
+For the complete balanced minimal universe
 
-| Target assignment | Labeled tasks | Strict-gain tasks |
-|---|---:|---:|
-| 2 worlds, 1+1 | 64 | 0 |
-| 3 worlds, 2+1 | 512 | 0 |
-| 4 worlds, 3+1 | 4096 | 0 |
-| 4 worlds, 2+2 | 4096 | **192** |
+```text
+4 worlds
+T = (0,0,1,1)
+3 labeled binary unit-cost queries
+```
 
-For the balanced four-world universe:
+there are `16^3=4096` declared query triples. Exact classification is:
 
 | `(C_A,C_F)` | Count |
 |---|---:|
@@ -289,33 +230,98 @@ For the balanced four-world universe:
 | `(2,2)` | 864 |
 | `(2,3)` | **192** |
 
-All 192 strict-gain tasks are caught by the strong selected-policy private-pair certificate. That finite completeness is not general: larger controls require integral or fractional pair-packing, and the explicit LP-gap control requires the integer proof tree.
+The 192 strict-gain tasks are not 192 structural types. Quotienting target-preserving world permutations, query permutations, and independent binary outcome flips collapses all 192 into **one symmetry orbit**.
 
-See `theory/STRUCTURAL_DECOMPOSITION_AND_MINIMALITY.md`.
+A canonical standard form is
 
-## Executable certificate audit
+\[
+q_0=(0,0,1,0),\qquad
+q_1=(0,1,1,0),\qquad
+q_2=(0,1,1,1),
+\]
 
-```bash
-python examples/audit_witnesses.py
-python examples/audit_certificate_ladder.py
+with canonical cross-target separator signature
+
+\[
+\boxed{(3,5,9)}.
+\]
+
+Over all 4096 tasks in this declared scope,
+
+\[
+\boxed{
+C_A<C_F
+\iff
+\text{canonical signature}=(3,5,9)
+}
+\]
+
+with zero false positives and zero false negatives against the exact solver.
+
+The raw multiplicity is explained by the declared symmetry orbit:
+
+\[
+4\times 3!\times2^3=192.
+\]
+
+See `theory/MINIMAL_STRICT_GAIN_NORMAL_FORM.md`.
+
+## Source-derived witnesses
+
+For both registered MROD-style and PAYOFF-style routing abstractions:
+
+```text
+C_A = 2
+C_F = C_U = U = 3
 ```
 
-The certificate-ladder script prints which proof layer succeeds together with `C_A`, `C_F`, `C_U`, `U`, internal redundancy, and external shortcut discounts. CI runs both scripts on Python 3.10, 3.11, and 3.12.
+Under uniform represented worlds, the first routing observation has zero direct target information, while the selected adaptive policy identifies the target completely. The best fixed information at budget 2 is 0.5 bit in both abstractions.
+
+This demonstrates
+
+```text
+zero direct target information != zero decision relevance
+```
+
+but zero direct information is neither necessary nor sufficient for adaptive gain in general.
+
+BALANCE supplies the negative control: under the current midpoint-reset span objective, supported branch labels change interval location but not the declared sufficient future-value state, so extra direction adaptivity has no gain at that step.
+
+## Validation
+
+The test suite includes:
+
+- independent exact-oracle checks;
+- the complete 4096-task minimal universe;
+- bypass controls;
+- integral/fractional/integer certificate gaps;
+- tampered proof rejection;
+- two-sided kernel equivalence;
+- exact-state DAG verification;
+- residual isomorphism witnesses and quotient regression;
+- the unique minimal normal-form iff classifier.
+
+CI runs the suite on Python 3.10, 3.11, and 3.12, plus the executable witness and certificate-ladder audits.
 
 ## Package
 
 ```text
 adaptive_gain/
-  core.py                  exact fixed/adaptive resolution solvers
-  certificates.py          routing and branch-invariance certificates
-  decomposition.py         C_A <= C_F <= C_U <= U decomposition
-  exhaustive.py            complete tiny binary-universe validation
-  information.py           target-information diagnostics
-  pair_cover.py            target-pair cover + private-pair certificates
-  pair_packing.py          exact integral pair-packing lower bounds
-  fractional_packing.py    exact rational small-task LP-dual bounds
-  integer_cover_proof.py   bounded-cost integer infeasibility proof trees
-  witnesses.py             source-derived and adverse structural controls
+  core.py
+  certificates.py
+  decomposition.py
+  pair_cover.py
+  pair_packing.py
+  fractional_packing.py
+  integer_cover_proof.py
+  cover_kernel.py
+  kernel_bounds.py
+  proof_dag.py
+  isomorphism_quotient.py
+  minimal_normal_form.py
+  exhaustive.py
+  information.py
+  witnesses.py
 
 theory/
   ADAPTIVE_GAIN_THEOREM.md
@@ -324,6 +330,10 @@ theory/
   PAIR_PACKING_LOWER_BOUND.md
   FRACTIONAL_PAIR_COVER_BOUND.md
   INTEGER_FIXED_COVER_PROOF.md
+  FIXED_COVER_KERNELIZATION.md
+  PROOF_DAG_COMPRESSION.md
+  RESIDUAL_ISOMORPHISM_QUOTIENT.md
+  MINIMAL_STRICT_GAIN_NORMAL_FORM.md
   PROVENANCE.md
   OPEN_PROBLEMS.md
 ```
@@ -332,23 +342,23 @@ theory/
 
 This repository does **not** claim:
 
-- a new general theory of adaptive experimental design or Set/Test Cover;
+- a new general theory of adaptive experimental design, Set Cover, Test Cover, graph isomorphism, or Sperner theory;
 - that PAYOFF, MROD, and BALANCE are the same scientific model;
 - that branch dependence alone is sufficient for adaptive gain;
 - that zero direct target information is necessary or sufficient for gain;
 - that bypass must eliminate gain;
-- that a failed lower-bound certificate means no gain exists;
-- that exact integer branching is polynomial-time in the worst case;
-- that adaptive gain persists at all budgets;
-- that tiny-universe task counts are empirical prevalence estimates;
-- that a finite synthetic witness is empirical evidence;
+- that failed lower-bound or quotient certificates imply no gain;
+- polynomial-time exact integer cover or general graph canonicalization;
+- that finite synthetic controls are empirical evidence;
 - that target resolution licenses a biological report.
 
-The narrower contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-resolution lower bounds and infeasibility proofs exposed by the three repository-specific results.
+The contribution is a tested bridge between exact adaptive-tree costs and increasingly strong, checkable fixed-side certificates, together with exact proof compression and finite structural classification exposed by the three source repositories.
 
 ## Run
 
 ```bash
 python -m pip install -e .
 python -m pytest -q
+python examples/audit_witnesses.py
+python examples/audit_certificate_ladder.py
 ```
