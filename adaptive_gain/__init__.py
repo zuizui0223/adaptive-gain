@@ -48,6 +48,14 @@ from .cover_kernel import (
 )
 from .decomposition import PolicyCostDecomposition, optimal_policy_cost_decomposition
 from .exhaustive import BinaryUniverseSummary, enumerate_binary_universe
+from .four_query_normal_form import (
+    FOUR_QUERY_STRICT_EXTENSION_SIGNATURES,
+    FourQueryNormalFormReceipt,
+    FourQueryUniverseSummary,
+    canonical_four_query_separator_signature,
+    enumerate_balanced_four_query_universe,
+    four_query_normal_form_receipt,
+)
 from .fractional_packing import (
     FractionalPackedPair,
     FractionalPackingAdaptiveGainCertificate,
@@ -183,6 +191,9 @@ __all__ = [
     "kernelized_fixed_budget_cover_decision", "selected_policy_kernelized_gain_audit",
     "PolicyCostDecomposition", "optimal_policy_cost_decomposition",
     "BinaryUniverseSummary", "enumerate_binary_universe",
+    "FOUR_QUERY_STRICT_EXTENSION_SIGNATURES", "FourQueryNormalFormReceipt",
+    "FourQueryUniverseSummary", "canonical_four_query_separator_signature",
+    "enumerate_balanced_four_query_universe", "four_query_normal_form_receipt",
     "FractionalPackedPair", "FractionalPackingAdaptiveGainCertificate",
     "FractionalPackingSearchLimitError", "FractionalPairPackingCertificate",
     "exact_fractional_pair_packing", "selected_policy_fractional_pair_packing_gain_certificate",
