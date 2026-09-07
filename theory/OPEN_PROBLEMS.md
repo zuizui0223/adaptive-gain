@@ -1,138 +1,150 @@
 # Open problems
 
-The finite deterministic guaranteed-resolution layer now has several closed components:
+The finite deterministic guaranteed-resolution layer now has the following closed components:
 
 ```text
 exact adaptive optimum C_A
 exact fixed optimum C_F
-fixed-cost certificate ladder
-exact bypass decomposition
-full identity-indexed target-pair incidence sufficiency for C_A and C_F
-state-local continuation-equivalence compression preserving C_A
-state-local cross-target refinement dominance preserving C_A
-two-sided fixed-cover kernelization
-exact proof DAG / isomorphism / transport / symmetry pruning
-unique minimal 4-world / 3-query strict-gain normal form
+exact gain/bypass decomposition
+fixed-side certificate ladder
+full identity-indexed target-pair incidence sufficiency for (C_A,C_F)
+adaptive-only state-local query equality/refinement reductions
+adaptive-only same-target world twins and two-sided kernel
+cost-only recursive continuation quotient preserving C_A
+resource-labelled recursive continuation quotient preserving (C_A,C_F)
+joint-safe global world-twin/query-refinement kernel preserving (C_A,C_F)
+fixed proof DAG / isomorphism / transport / symmetry compression
+minimal 4-world normal form
 complete 4-world / 4-query extension classification
-unique deletion-minimal 5-world / 2+3-target / 3-query strict-gain normal form
+unique deletion-minimal 5-world normal form
 ```
 
-The key representation boundary is explicit:
+The central representation boundary is now explicit:
 
 \[
 \boxed{
-\text{full target-pair incidence is sufficient for deterministic }(C_A,C_F),
+\text{cost-only continuation structure}
+\Longrightarrow C_A,
 }
 \]
 
-while an inclusion-minimal fixed-cover kernel is not sufficient to preserve adaptive routing geometry.
-
-The adaptive-specific safe reductions now go beyond equality.  At Bellman state `A`, if
+but physical query identity may be required for the fixed comparator, whereas
 
 \[
-S_A(q)\supseteq S_A(r),\qquad c(q)\le c(r),
+\boxed{
+\text{resource-labelled continuation structure}
+\Longrightarrow (C_A,C_F).
+}
 \]
 
-then `q` target-relevantly refines and safely dominates `r`.
+The next questions concern how much **resource identity itself** can be safely quotiented, rather than whether it matters at all.
 
-The next questions therefore concern **stronger adaptive-safe quotients beyond static refinement**, cheaper symmetry certification, larger finite normal forms, and extensions beyond deterministic exact resolution.
+## 1. Find the coarsest joint resource-preserving quotient
 
-## 1. Characterize the coarsest adaptive-safe quotient of full pair incidence
+The current joint quotient keeps every declared physical query token. This is sufficient but not claimed minimal.
 
-The current exact hierarchy is
-
-```text
-same mixed-child family
-    -> interchangeable except for cost
-
-cross-target separation superset at no greater cost
-    -> refinement dominance
-```
-
-Both preserve the direct Bellman optimum on the complete tested deterministic partition universes.
-
-The frontier now begins where neither query statically refines the other.
+The registered collision proves that erasing all query identity is too aggressive: two tasks share the same cost-only continuation root class and `C_A=2`, yet have `C_F=3` and `C_F=2`.
 
 Open questions:
 
-- Can incomparable mixed-child families still be Bellman-equivalent because their child states have equal future value under every remaining vocabulary?
-- Is there a recursively defined bisimulation on `(world subset, remaining query vocabulary)` that gives the coarsest exact quotient for `C_A`?
-- Can such a quotient be computed without already solving the entire Bellman recursion?
-- Can a **dynamic dominance** theorem compare two incomparable root partitions by mapping every child of one to a no-harder child of the other?
-- Which within-target world distinctions can be merged before any query is chosen?
-- Is there a static quotient of full identity-indexed pair incidence that is strictly smaller yet still determines `C_A` for every positive cost vector?
+- Under what exact condition may two physical query tokens be globally identified without changing any fixed bundle reuse relation?
+- Can a certified global query automorphism provide a safe token quotient?
+- Is equality of complete cross-target separation columns plus equal cost sufficient to merge resources for both objectives? (It should be; characterize the stronger cases.)
+- Can global refinement dominance and exact query symmetry be unified as a partial order / orbit quotient on resources?
+- What is the coarsest quotient preserving not only `C_A` and `C_F`, but the entire budget profile of adaptive and fixed resolution?
+- Can a compact independently verifiable certificate show that a proposed resource merge preserves all branch-crossing reuse?
 
-The fail-closed rule remains: inability to certify a quotient means `compression_incomplete`, never assumed equivalence.
+The fail-closed rule remains: inability to certify a resource quotient means `compression_incomplete`, not assumed equivalence.
 
-## 2. Develop joint fixed/adaptive kernel bounds
+## 2. Strengthen the joint global kernel
 
-The four-world and five-world deletion-minimal strict-gain cores both reduce to the same minimal fixed separator antichain
-
-\[
-(1,2,4),
-\]
-
-while their adaptive normal forms differ.
-
-So there are two distinct kernel theories:
+The current joint-safe kernel iterates:
 
 ```text
-fixed kernel:
-  preserve weighted target-pair cover
+same-target world twins
+<->
+global cross-target query refinement dominance
+```
 
-adaptive kernel:
-  preserve target-mixed continuation structure and Bellman value
+and preserves both exact costs.
+
+Open questions:
+
+- Are there joint-safe query deletions not generated by pairwise global refinement?
+- Can a query be removed because every use can be simulated by a **set** of no-more-expensive resources while preserving fixed reuse?
+- Are there world quotients stronger than pairwise same-target twins that preserve both the adaptive transition system and fixed obligations?
+- What size bound exists for the fixed point of the joint kernel?
+- Can the joint kernel be characterized directly on the identity-indexed pair-incidence matrix without reconstructing original outcome labels?
+
+A useful theorem would give a finite kernel-size bound in terms of `C_A`, `C_F`, gain `C_F-C_A`, or resource-orbit count rather than raw numbers of worlds and queries.
+
+## 3. Relate adaptive-only and joint quotients
+
+There are now deliberately different compression strengths:
+
+```text
+adaptive-only:
+  state-local query refinement
+  dynamic world twins
+  cost-only continuation bisimulation
+
+joint adaptive/fixed:
+  global world twins
+  global query refinement
+  resource-labelled continuation quotient
 ```
 
 Open questions:
 
-- What size bounds exist for the adaptive refinement frontier?
-- Can pair-side Sperner bounds be combined with target-mixed child counts?
-- Is there a bound parameterized by `C_A`, strict gain `C_F-C_A`, or adaptive-tree depth rather than raw query count?
-- Can fixed and adaptive kernels share one compact residual representation without losing either proof obligation or routing geometry?
+- Can one start from the coarser adaptive quotient and add the **minimum resource-overlap annotation** needed to recover `C_F`?
+- Is there a hypergraph of query-token reuse across continuation classes that is sufficient for the fixed comparator?
+- Can fixed reuse information be localized to only those branch pairs that compete inside an optimal or near-optimal adaptive policy?
+- Can the exact bypass decomposition be computed from that annotation without returning to full pair incidence?
 
-## 3. Certify automorphism generators without enumerating the full stable-color permutation family
+This is the most direct route toward a small representation specialized to the *gap* `C_F-C_A`, rather than to either optimum separately.
 
-The proof-compression side is exact for small states:
+## 4. Certify resource and proof symmetries without exhaustive permutation enumeration
+
+The proof-compression side already has:
 
 ```text
 color refinement
 -> individualization-refinement
 -> exact automorphism audit
 -> stabilizer-orbit pruning
--> explicit transported proof DAG
--> parent-automorphism branch-orbit pruning
+-> transported proof DAG
+-> parent-automorphism branch pruning
 ```
 
-But `automorphism.py` still certifies the complete group by enumerating every stable-color-preserving query permutation up to a hard cap.
+but complete small-task automorphism certification still enumerates a stable-color-preserving permutation family up to a hard cap.
 
 Open questions:
 
-- Can a small generator set and its completeness be certified without enumerating the whole candidate family?
-- Can a stabilizer chain be built incrementally during individualization and reused by proof search?
-- Can canonicalization traces provide a compact independently checkable symmetry certificate?
-- Can global proof size be bounded directly in certified orbit counts?
+- Can a compact generator set and its completeness be certified without full enumeration?
+- Can stabilizer chains be reused simultaneously for proof states and physical query resources?
+- Can canonicalization traces produce independently checkable resource-renaming certificates?
+- Can global proof size be bounded in certified orbit counts?
 
-## 4. Classify the next finite normal forms
+## 5. Classify the next finite normal forms
 
 Three nearby scopes are closed:
 
-1. `4 worlds / 2+2 targets / 3 queries`: one strict symmetry orbit `(3,5,9)`.
-2. `4 worlds / 2+2 targets / 4 queries`: no new irreducible mechanism; only one-query extensions of the minimal core.
-3. `5 worlds / 2+3 targets / 3 queries`: five strict signature classes and one new world/query deletion-minimal orbit `(7,28,42)`.
+1. `4 worlds / 2+2 targets / 3 queries`: one strict orbit `(3,5,9)`.
+2. `4 worlds / 2+2 targets / 4 queries`: only one-query extensions of the minimal core.
+3. `5 worlds / 2+3 targets / 3 queries`: one new world/query deletion-minimal orbit `(7,28,42)`.
 
 Next questions:
 
-- What new irreducible forms appear first with five worlds and four queries?
+- What irreducible forms first appear with five worlds and four queries?
 - What is the next deletion-minimal core at six worlds?
 - At what smallest scope can `C_F/C_A` exceed `3/2`?
 - What is the smallest deletion-minimal core with nonzero internal or external bypass?
-- Do larger deletion-minimal cores reuse the same fixed antichain while introducing new adaptive routing geometries?
-- How many normal forms remain after exact world/query/outcome symmetry quotienting?
+- Which larger cores share the same adaptive continuation type but differ only in resource reuse geometry?
+- How many normal forms remain after exact world/query/outcome/resource symmetry quotienting?
 
-## 5. Characterize external fixed bypass locally
+## 6. Characterize external fixed bypass locally
 
-The exact decomposition is
+The exact decomposition remains
 
 \[
 U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
@@ -142,44 +154,43 @@ U-C_A=(C_F-C_A)+(C_U-C_F)+(U-C_U).
 
 Open questions:
 
-- Can an outside query be certified irrelevant from a restricted incidence signature?
+- Can an outside resource be certified irrelevant from a restricted incidence signature?
 - Is there a cut-style certificate that every external shortcut must cross?
-- Can external shortcut discount be bounded without solving the full fixed cover?
+- Can external shortcut discount be bounded from the resource-labelled continuation graph without solving full fixed cover?
 - Which query-vocabulary operations monotonically create or destroy external bypass?
 
-## 6. Information-valued adaptive gain
+## 7. Information-valued adaptive gain
 
-For MROD-like tasks the utility need not be binary exact target resolution:
+For MROD-like tasks, utility need not be binary exact resolution:
 
 \[
-G(B)
-=\max_{\pi:c(\pi)\le B}I(T;H_\pi)
+G(B)=\max_{\pi:c(\pi)\le B}I(T;H_\pi)
 -\max_{F:c(F)\le B}I(T;Q_F).
 \]
 
 Open questions:
 
 - What are the information analogues of internal redundancy and external shortcut discount?
-- What replaces deterministic refinement dominance when observations carry partial information?
+- What replaces deterministic resource-labelled continuation when observations have likelihoods rather than partitions?
 - Under what assumptions is the objective submodular or adaptively submodular?
 - Can positive adaptive-information windows have multiple disconnected budget intervals?
-- Is there an information-valued version of branch-orbit compression for equivalent continuation experiments?
+- What is the probabilistic counterpart of branch-crossing resource reuse?
 
-## 7. Continuous compatible sets
+## 8. Continuous compatible sets
 
-PAYOFF's scientific uncertainty is continuous.  A desired extension has
+PAYOFF's scientific uncertainty is continuous. A desired extension has
 
 \[
 \Theta_{t+1}=\Theta_t\cap C(q_t,y_t)
 \]
 
-with target map `T(theta)` without unjustified finite discretization.
+without unjustified finite discretization.
 
-Open questions include convex/semi-algebraic separation certificates, interval branch-and-bound, and finite witness reductions whose completeness is proved rather than assumed.
+Open directions include convex/semi-algebraic separation certificates, interval branch-and-bound, and finite witness reductions whose completeness is proved rather than assumed.
 
-## 8. Calibration actions versus target actions
+## 9. Calibration actions versus target actions
 
-MROD, PAYOFF, and BALANCE all expose the resource tradeoff
+MROD, PAYOFF, and BALANCE all expose the tradeoff
 
 ```text
 measure the scientific target
@@ -187,26 +198,21 @@ vs
 improve the measurement model itself.
 ```
 
-A calibration action can change the future query system, so the state must carry both scientific uncertainty and calibration uncertainty. The current static deterministic query-cover model is insufficient for that extension.
-
-## 9. Stochastic branch-invariance and scenario robustness
-
-BALANCE's current no-routing theorem is deterministic/minimax. Under stochastic errors, equal deterministic support need not imply equal continuation distributions.
-
-A probabilistic analogue likely requires equality of continuation-value kernels rather than raw state summaries. Randomized policies under multiple calibration scenarios are a separate objective and should not be imported into deterministic guaranteed resolution by default.
+A calibration action can alter later observation laws, so a static resource token no longer has one fixed transition structure. The state must carry calibration uncertainty as well as scientific uncertainty.
 
 ## 10. Empirical identification of routing value
 
-A natural-data routing claim needs more than a low-information first observation. The finite theory now establishes that:
+The finite theory now establishes that:
 
 - zero direct root information is neither necessary nor sufficient;
-- deletion-minimal strict gain can have a positive-information root;
+- deletion-minimal gain may have positive root information;
 - fixed bypass may be internal or external;
-- lower-bound relaxations may miss integer fixed-cost gaps;
-- full target-pair incidence preserves deterministic `C_A`, but aggressive fixed-side kernelization may destroy adaptive geometry;
-- equality of target-mixed continuation and cross-target refinement dominance give exact adaptive-safe state-local reductions;
-- symmetric proof branches may be mathematically redundant even when measurements remain distinct named actions.
+- full target-pair incidence preserves deterministic `(C_A,C_F)`;
+- aggressive fixed-only compression may destroy adaptive geometry;
+- cost-only continuation compression preserves `C_A` but may destroy `C_F`;
+- preserving physical query identity repairs that fixed-comparator failure; and
+- global world twins and global refinement dominance give the first joint-safe resource kernel.
 
-An empirical claim therefore needs evidence that the first result changes the useful continuation, the branch-specific plan has a real resource advantage, plausible fixed bypasses are bounded, and the measurement/calibration relationships transport to deployment.
+A natural-data routing claim therefore needs evidence not only that branch outcomes change the useful continuation, but also that the **same physical measurements and calibration relationships can actually be reused across the branches being compared**.
 
-The source repositories currently provide synthetic/conditional witnesses, not that natural-data demonstration.
+The source repositories currently provide synthetic/conditional structural witnesses, not that natural-data demonstration.
