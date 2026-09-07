@@ -45,21 +45,9 @@ So realized adaptive gain is branch-exclusive overhead minus external shortcut d
 
 # Representation hierarchy
 
-The main result is now a hierarchy of **what information may be forgotten for which objective**.
+The main result is a hierarchy of **what information may be forgotten for which objective**.
 
-## 1. Full target-pair incidence preserves both costs
-
-For each query and each cross-target world pair, record whether the query separates that pair. The full identity-indexed incidence plus target labels and query costs determines both exact optima:
-
-\[
-\boxed{
-\text{full target-pair incidence}\Longrightarrow(C_A,C_F).
-}
-\]
-
-See `theory/TARGET_PAIR_INCIDENCE_SUFFICIENCY.md`.
-
-## 2. Adaptive-only continuation structure preserves `C_A`
+## 1. Adaptive continuation structure determines `C_A`
 
 `continuation_bisimulation.py` recursively keeps only action costs and mixed-child continuation classes. Query identity, outcome labels, pure branches, and repeated action types may disappear.
 
@@ -70,64 +58,67 @@ See `theory/TARGET_PAIR_INCIDENCE_SUFFICIENCY.md`.
 }
 \]
 
-This quotient is not sufficient for `C_F`; registered tasks share the same adaptive continuation type and `C_A=2` while having fixed costs `3` and `2`.
+This quotient is deliberately adaptive-only: registered tasks share one continuation type and `C_A=2` while having fixed costs `3` and `2`.
 
-## 3. Reachable state-resource incidence is sufficient for `C_F`
+## 2. Productive frontier determines `C_F`
 
-For every reachable mixed state `s`, define
+For every reachable target-mixed state `s`, let
 
-```text
-U_s = queries already consumed on the history to s
-P_s = still-available queries productive on s
-```
+\[
+P_s=\{q:q\text{ is productive/nonconstant on }s\}.
+\]
 
-Then a fixed bundle `B` fails exactly when
+A query already consumed on the path to `s` is constant on the chosen outcome cell and remains constant on every descendant. Therefore a fixed bundle `B` resolves exactly when
 
 \[
 \boxed{
-\exists s:\ U_s\subseteq B,\qquad P_s\cap B=\varnothing.
+B\cap P_s\ne\varnothing
+\quad\text{for every reachable mixed }s.
 }
 \]
 
-Therefore query costs plus the unique reachable `(U_s,P_s)` rows determine the exact fixed optimum:
+So `C_F` is exactly the minimum-weight hitting set of the reachable productive-set hypergraph. Only inclusion-minimal productive sets matter:
 
 \[
 \boxed{
-\{(U_s,P_s)\}+\text{costs}\Longrightarrow C_F.
+\mathcal H_{\min}=\min_{\subseteq}\{P_s:s\text{ mixed}\}
+\Longrightarrow C_F.
 }
 \]
 
-A row `(U_1,P_1)` makes `(U_2,P_2)` redundant when
+This **productive frontier** is equivalent, for fixed resolution, to the inclusion-minimal cross-target pair-separator hypergraph, and its size obeys the usual Sperner bound
 
 \[
-U_1\subseteq U_2,\qquad P_1\subseteq P_2.
+|\mathcal H_{\min}|\le {m\choose\lfloor m/2\rfloor}
 \]
 
-Implementation: `adaptive_gain/state_resource_incidence.py`.
+for `m` declared query resources.
 
-See `theory/STATE_RESOURCE_INCIDENCE_SUFFICIENCY.md`.
+Implementation: `adaptive_gain/productive_frontier.py`.
 
-## 4. Joint scalar-cost sufficiency without child wiring
+See `theory/PRODUCTIVE_FRONTIER_HITTING_SET.md` and `theory/PRODUCTIVE_FRONTIER_PAIR_EQUIVALENCE.md`.
 
-Combining the previous two results gives
+## 3. Joint scalar-cost sufficiency
+
+Combining the two sufficient statistics gives
 
 \[
 \boxed{
-\text{cost-only continuation structure}
+\text{cost-only adaptive continuation}
 +
-\text{state-resource }(U,P)\text{ incidence}
+\text{productive frontier}
 \Longrightarrow
 (C_A,C_F).
 }
 \]
 
-This is weaker than retaining the entire resource-labelled child-transition system when only the two scalar optima are needed.
+No fixed-side child wiring, world-pair identities, or consumed-query history is required once these two objects are known.
 
-`resource_continuation.py` and `resource_transition_isomorphism.py` remain useful for named resource transitions, policy lifting, child wiring, and explicit global resource-renaming certificates.
+`state_resource_incidence.py` is a richer intermediate representation. `resource_continuation.py` and `resource_transition_isomorphism.py` remain useful when named resources, child wiring, policy lifting, or explicit resource-renaming certificates are required.
 
-## 5. Weaker resource summaries really fail
+## 4. Weaker resource summaries really fail
 
-Two negative layers are registered:
+Registered negative layers include
 
 ```text
 continuation type + resource-orbit capacities    -> not enough for C_F
@@ -136,9 +127,38 @@ continuation type + per-resource role profiles  -> not enough for C_F
 
 In the balanced four-world binary scope, the first per-resource-role ambiguity appears with four queries: one signature contains `2,304` tasks, split into `1,536` with `(C_A,C_F)=(2,2)` and `768` with `(2,3)`.
 
-State-resource co-location repairs that entire finite ambiguity, and the theorem above explains why the simpler `(U,P)` projection already suffices for `C_F` generally under the deterministic contract.
+The productive-frontier theorem explains exactly what fixed-side information those weaker projections lost.
 
-See `theory/RESOURCE_OVERLAP_HIERARCHY.md`.
+---
+
+# Productive-frontier form of the gain decomposition
+
+Let `S` be the distinct query resources used anywhere in one selected optimal adaptive tree and let `c(S)` be their total cost. If `tau_c(H)` is minimum weighted hitting-set cost of the productive frontier and `tau_c(H;S)` is the same optimum restricted to resources in `S`, then
+
+\[
+\boxed{
+c(S)-C_A
+=
+[\tau_c(\mathcal H)-C_A]
++
+[\tau_c(\mathcal H;S)-\tau_c(\mathcal H)]
++
+[c(S)-\tau_c(\mathcal H;S)].
+}
+\]
+
+These are respectively
+
+```text
+branch-exclusive overhead
+= realized adaptive gain
++ external shortcut discount
++ internal union redundancy.
+```
+
+`frontier_decomposition.py` reproduces the original decomposition exactly from the frontier. Regression includes internal/external bypass controls and all `4,096` minimal labeled tasks.
+
+See `theory/PRODUCTIVE_FRONTIER_DECOMPOSITION.md`.
 
 ---
 
@@ -154,19 +174,19 @@ Adaptive-only exact reductions include:
 Fixed-side exact machinery includes:
 
 ```text
+productive-frontier hitting set
 private-pair necessity
 -> integral pair packing
 -> fractional pair-cover dual
 -> integer budget-infeasibility proof
--> two-sided residual kernel
--> proof DAG / isomorphism / symmetry compression
+-> residual kernel / proof DAG / isomorphism / symmetry compression
 ```
 
 A separate joint-safe global kernel iterates same-target world twins and global query refinement dominance before either objective is solved.
 
 ---
 
-# Finite normal-form ladder
+# Finite normal forms and an extremal family
 
 ### 4 worlds / 3 binary queries
 
@@ -190,6 +210,32 @@ All `32^3=32,768` tasks were classified. There are 2,016 strict tasks; exactly 2
 
 Its standard representative has `C_A=2<C_F=3` and an optimal root with positive direct target information under uniform represented-world weights.
 
+## Unbounded unit-cost adaptive advantage
+
+The minimal four-world mechanism extends to an explicit `k`-branch family. There are `2k` worlds, one unit-cost `k`-ary router, and `k` unit-cost branch-terminal queries. The router identifies the branch; one terminal then resolves the target.
+
+The terminal outcome codes are chained so that every terminal and the router is individually mandatory for fixed resolution. Therefore
+
+\[
+\boxed{C_A=2,\qquad C_F=k+1}
+\]
+
+and
+
+\[
+\boxed{
+C_F-C_A=k-1,
+\qquad
+\frac{C_F}{C_A}=\frac{k+1}{2}.
+}
+\]
+
+Thus both additive adaptive gain and the fixed/adaptive ratio are unbounded even with **unit acquisition cost**. The growing router is multi-valued.
+
+The `k=3` member has six worlds, four queries, and ratio `2`. It is componentwise minimal in world count and query count for a **unit-cost** finite deterministic task with ratio strictly above `3/2`; every task with at most five represented worlds has ratio at most `3/2`.
+
+See `theory/UNBOUNDED_UNIT_COST_ADAPTIVE_GAIN.md`.
+
 ---
 
 # Source-derived witnesses
@@ -209,9 +255,9 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 # Scope
 
-The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
+The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The six-world minimality and unbounded-family statements above are explicitly **unit-cost** statements; unequal costs can change minimal finite scopes.
 
 ## Run
 
