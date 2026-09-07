@@ -1,0 +1,45 @@
+{
+  "scope": "finite_synthetic_deterministic_guaranteed_resolution_not_empirical_data",
+  "orbit_capacity_collision": {
+    "targets": [0, 0, 1, 1, 1],
+    "query_count": 3,
+    "same_cost_only_continuation_type": true,
+    "same_resource_orbit_capacity_profile": true,
+    "exact_cost_pairs": [[2, 3], [2, 2]],
+    "conclusion": "continuation type plus resource-orbit capacity does not determine fixed cost"
+  },
+  "resource_role_profile_collision": {
+    "targets": [0, 0, 1, 1],
+    "query_count": 4,
+    "same_cost_only_continuation_type": true,
+    "same_multiset_of_per_resource_role_profiles": true,
+    "same_state_resource_colocation_signature": false,
+    "exact_cost_pairs": [[2, 2], [2, 3]],
+    "conclusion": "first-order per-resource role profiles do not determine fixed cost"
+  },
+  "balanced_four_world_binary_universes": {
+    "three_queries": {
+      "task_count": 4096,
+      "resource_role_signature_count": 25,
+      "ambiguous_signature_count": 0,
+      "ambiguous_task_count": 0
+    },
+    "four_queries": {
+      "task_count": 65536,
+      "resource_role_signature_count": 60,
+      "ambiguous_signature_count": 1,
+      "ambiguous_task_count": 2304,
+      "ambiguous_cost_pair_counts": {
+        "(2,2)": 1536,
+        "(2,3)": 768
+      }
+    }
+  },
+  "representation_hierarchy": [
+    "resource-orbit capacity",
+    "per-resource abstract continuation-role profile",
+    "state-resource co-location",
+    "resource-labelled transition structure"
+  ],
+  "claim_boundary": "state-resource co-location distinguishes the registered four-query collision but is not claimed generally sufficient; resource-labelled continuation remains the verified joint-sufficient layer"
+}
