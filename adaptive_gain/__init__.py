@@ -58,6 +58,14 @@ from .integer_cover_proof import (
     selected_policy_integer_cover_gain_certificate,
     verify_fixed_budget_decision_certificate,
 )
+from .minimal_normal_form import (
+    MINIMAL_STRICT_GAIN_SIGNATURE,
+    MinimalNormalFormReceipt,
+    canonical_minimal_separator_signature,
+    minimal_normal_form_receipt,
+    minimal_strict_gain_standard_task,
+    standard_raw_symmetry_orbit_size,
+)
 from .pair_cover import (
     EssentialQueryWitness,
     PairCoverAudit,
@@ -105,6 +113,9 @@ __all__ = [
     "IntegerCoverAdaptiveGainCertificate", "IntegerCoverProofLimitError",
     "fixed_budget_cover_decision", "selected_policy_integer_cover_gain_certificate",
     "verify_fixed_budget_decision_certificate",
+    "MINIMAL_STRICT_GAIN_SIGNATURE", "MinimalNormalFormReceipt",
+    "canonical_minimal_separator_signature", "minimal_normal_form_receipt",
+    "minimal_strict_gain_standard_task", "standard_raw_symmetry_orbit_size",
     "EssentialQueryWitness", "PairCoverAudit", "PairSeparatorRow",
     "PrivatePairAdaptiveGainCertificate", "PrivatePairNoBypassCertificate",
     "pair_cover_audit", "private_pair_no_bypass_certificate",
