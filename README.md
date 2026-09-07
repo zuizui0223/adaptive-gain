@@ -220,6 +220,46 @@ C_F/C_A=\frac{2^d}{d+1}\longrightarrow\infty.
 
 Thus the multiplicative adaptive advantage is unbounded even when **every observation is binary and every acquisition cost is one**. Small depths are checked by the exact solvers; the general formula follows from the target-0 path lower bound in `theory/UNBOUNDED_UNIT_COST_ADAPTIVE_GAIN.md`.
 
+## Sharp fixed-world / fixed-query ratio under unit costs
+
+The unrestricted-arity unit-cost extremal problem is now closed exactly. For `n>=2` represented worlds and `m>=1` declared unit-cost query resources,
+
+\[
+\boxed{
+\max\frac{C_F}{C_A}
+=
+\max\!\left(
+1,
+\frac{\min\{m,\,1+\lfloor n/2\rfloor\}}{2}
+\right).
+}
+\]
+
+The key tree bound is exact: if an optimal productive adaptive tree has worst-path depth `h`, then its number of internal-node occurrences is at most
+
+\[
+\boxed{
+M(n,h)
+=
+n+1-
+\max\!\left(
+2,
+\left\lceil\frac{n}{2^{h-1}}\right\rceil
+\right).
+}
+\]
+
+Its distinct query union is no larger, and flattening that union is a fixed resolver. Optimizing over `h=C_A` gives the world-count bound; `C_F<=m` gives the vocabulary bound. The depth-two extremal routing family attains the combined bound after harmless world/query padding.
+
+Consequences:
+
+- at fixed `n`, extra query vocabulary beyond `1+floor(n/2)` cannot improve the unit-cost extremal ratio;
+- at fixed `m>=3`, the sharp ratio reaches `m/2` once `n>=2(m-1)`;
+- the earlier six-world / four-query ratio-2 witness is an immediate corollary; and
+- depth two is globally extremal for fixed `n` when query arity is unrestricted.
+
+See `theory/SHARP_UNIT_COST_WORLD_QUERY_RATIO.md` and `adaptive_gain/unit_cost_extremal_bounds.py`.
+
 ---
 
 # Source-derived witnesses
@@ -241,7 +281,7 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. Finite-scope minimality claims are stated with their cost/outcome restrictions; unequal costs can change the smallest witness scope.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. Finite-scope minimality claims are stated with their cost/outcome restrictions; unequal costs can change the smallest witness scope. The sharp fixed-`(n,m)` ratio theorem above assumes unit costs and unrestricted deterministic query arity; fixed-`(n,m)` sharpness under binary-only observations remains separate.
 
 ## Run
 
