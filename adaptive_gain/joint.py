@@ -12,7 +12,21 @@ from .continuation_bisimulation import (
     lift_continuation_policy,
     verify_continuation_quotient,
 )
+from .frontier_decomposition import (
+    ProductiveFrontierPolicyDecomposition,
+    productive_frontier_policy_decomposition,
+)
 from .joint_resource_kernel import JointResourceKernelReceipt, joint_resource_kernel
+from .productive_frontier import (
+    ProductiveFrontierCertificate,
+    ProductiveFrontierJointCostReceipt,
+    build_productive_frontier,
+    bundle_resolves_from_productive_frontier,
+    productive_frontier_fixed_minimum_resolution,
+    productive_frontier_joint_cost_audit,
+    productive_frontier_sperner_bound,
+    verify_productive_frontier,
+)
 from .resource_continuation import (
     ResourceContinuationAction,
     ResourceContinuationCertificate,
@@ -86,7 +100,13 @@ __all__ = [
     "ContinuationQuotientCertificate", "ContinuationQuotientLimitError",
     "LiftedContinuationPolicy", "build_continuation_quotient",
     "continuation_quotient_costs", "lift_continuation_policy",
-    "verify_continuation_quotient", "JointResourceKernelReceipt",
+    "verify_continuation_quotient", "ProductiveFrontierPolicyDecomposition",
+    "productive_frontier_policy_decomposition", "ProductiveFrontierCertificate",
+    "ProductiveFrontierJointCostReceipt", "build_productive_frontier",
+    "bundle_resolves_from_productive_frontier",
+    "productive_frontier_fixed_minimum_resolution",
+    "productive_frontier_joint_cost_audit", "productive_frontier_sperner_bound",
+    "verify_productive_frontier", "JointResourceKernelReceipt",
     "joint_resource_kernel", "ResourceContinuationAction",
     "ResourceContinuationCertificate", "ResourceContinuationClass",
     "ResourceContinuationCostReceipt", "ResourceContinuationLimitError",
