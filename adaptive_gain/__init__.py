@@ -25,6 +25,14 @@ from .certificates import (
 )
 from .decomposition import PolicyCostDecomposition, optimal_policy_cost_decomposition
 from .exhaustive import BinaryUniverseSummary, enumerate_binary_universe
+from .fractional_packing import (
+    FractionalPackedPair,
+    FractionalPackingAdaptiveGainCertificate,
+    FractionalPackingSearchLimitError,
+    FractionalPairPackingCertificate,
+    exact_fractional_pair_packing,
+    selected_policy_fractional_pair_packing_gain_certificate,
+)
 from .information import (
     RoutingInformationReceipt,
     best_fixed_information_bits,
@@ -77,6 +85,12 @@ __all__ = [
     "optimal_policy_cost_decomposition",
     "BinaryUniverseSummary",
     "enumerate_binary_universe",
+    "FractionalPackedPair",
+    "FractionalPackingAdaptiveGainCertificate",
+    "FractionalPackingSearchLimitError",
+    "FractionalPairPackingCertificate",
+    "exact_fractional_pair_packing",
+    "selected_policy_fractional_pair_packing_gain_certificate",
     "RoutingInformationReceipt",
     "best_fixed_information_bits",
     "bundle_information_bits",
