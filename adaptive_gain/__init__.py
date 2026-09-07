@@ -144,6 +144,17 @@ from .proof_dag import (
     compress_fixed_budget_infeasibility_proof,
     verify_cover_proof_dag,
 )
+from .symmetry_pruned_proof_dag import (
+    SymmetricBranchMember,
+    SymmetricBranchOrbit,
+    SymmetryPrunedAdaptiveGainAudit,
+    SymmetryPrunedProofDagCertificate,
+    SymmetryPrunedProofDagLimitError,
+    SymmetryPrunedProofDagNode,
+    build_symmetry_pruned_proof_dag,
+    selected_policy_symmetry_pruned_gain_audit,
+    verify_symmetry_pruned_proof_dag,
+)
 
 __all__ = [
     "ResidualAutomorphismGroupReceipt", "residual_automorphism_group",
@@ -202,4 +213,9 @@ __all__ = [
     "selected_policy_pair_packing_gain_certificate",
     "CoverProofDagBranch", "CoverProofDagCertificate", "CoverProofDagNode",
     "compress_fixed_budget_infeasibility_proof", "verify_cover_proof_dag",
+    "SymmetricBranchMember", "SymmetricBranchOrbit",
+    "SymmetryPrunedAdaptiveGainAudit", "SymmetryPrunedProofDagCertificate",
+    "SymmetryPrunedProofDagLimitError", "SymmetryPrunedProofDagNode",
+    "build_symmetry_pruned_proof_dag", "selected_policy_symmetry_pruned_gain_audit",
+    "verify_symmetry_pruned_proof_dag",
 ]
