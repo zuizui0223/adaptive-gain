@@ -8,22 +8,32 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
-from math import fsum, log2
+from math import fsum, isfinite, log2
 from typing import Hashable, Sequence
 
 from .core import AdaptiveNode, FiniteTask
+
 
 def _weights(task: FiniteTask, weights: Sequence[float] | None) -> tuple[float, ...]:
     if weights is None:
         return (1.0 / len(task.worlds),) * len(task.worlds)
     values = tuple(float(x) for x in weights)
-    if len(values) != len(task.worlds) or any(x <= 0 for x in values):
-        raise ValueError("weights must be strictly positive and cover every world")
-    total = fsum(values)
-    return tuple(x / total for x in values)
+    if len(values) != len(task.worlds) or any(not isfinite(x) or x <= 0 for x in values):
+        raise ValueError("weights must be finite, strictly positive, and cover every world")
+    # Scale before summing so large but finite user weights cannot overflow and
+    # silently create NaN normalized masses.
+    scale = max(values)
+    scaled = tuple(x / scale for x in values)
+    total = fsum(scaled)
+    normalized = tuple(x / total for x in scaled)
+    if any(not isfinite(x) or x <= 0 for x in normalized):
+        raise ValueError("weight normalization failed without preserving every world")
+    return normalized
+
 
 def _entropy(masses) -> float:
     return -fsum(p * log2(p) for p in masses if p > 0)
+
 
 def _mi(task: FiniteTask, signatures: Sequence[Hashable], weights=None) -> float:
     w = _weights(task, weights)
@@ -37,7 +47,10 @@ def _mi(task: FiniteTask, signatures: Sequence[Hashable], weights=None) -> float
     value = 0.0
     for (target, signature), mass in joint.items():
         value += mass * log2(mass / (target_mass[target] * obs_mass[signature]))
+    if value < -1e-10:
+        raise ArithmeticError("mutual information became materially negative")
     return max(0.0, value)
+
 
 def target_entropy_bits(task: FiniteTask, weights=None) -> float:
     w = _weights(task, weights)
@@ -45,6 +58,7 @@ def target_entropy_bits(task: FiniteTask, weights=None) -> float:
     for world, mass in zip(task.worlds, w):
         masses[world.target] += mass
     return _entropy(masses.values())
+
 
 def bundle_information_bits(
     task: FiniteTask, bundle: Sequence[str], weights: Sequence[float] | None = None
@@ -59,6 +73,7 @@ def bundle_information_bits(
     )
     return _mi(task, signatures, weights)
 
+
 def best_fixed_information_bits(task: FiniteTask, budget: int, weights=None) -> float:
     if type(budget) is not int or budget < 0:
         raise ValueError("budget must be a nonnegative integer")
@@ -70,6 +85,7 @@ def best_fixed_information_bits(task: FiniteTask, budget: int, weights=None) -> 
         if cost <= budget:
             best = max(best, bundle_information_bits(task, names, weights))
     return best
+
 
 def _transcript_for_world(task: FiniteTask, node: AdaptiveNode, world_index: int):
     lookup = {q.name: q for q in task.queries}
@@ -85,6 +101,7 @@ def _transcript_for_world(task: FiniteTask, node: AdaptiveNode, world_index: int
         current = branches[outcome]
     return tuple(transcript)
 
+
 def policy_information_bits(
     task: FiniteTask, policy: AdaptiveNode, weights: Sequence[float] | None = None
 ) -> float:
@@ -92,6 +109,7 @@ def policy_information_bits(
         _transcript_for_world(task, policy, i) for i in range(len(task.worlds))
     )
     return _mi(task, signatures, weights)
+
 
 @dataclass(frozen=True)
 class RoutingInformationReceipt:
@@ -104,6 +122,7 @@ class RoutingInformationReceipt:
     branch_dependent_next_action: bool
     zero_direct_information_routing_witness: bool
 
+
 def routing_information_receipt(
     task: FiniteTask, policy: AdaptiveNode, weights: Sequence[float] | None = None
 ) -> RoutingInformationReceipt:
@@ -115,7 +134,10 @@ def routing_information_receipt(
     root = policy.query
     direct = bundle_information_bits(task, (root,), w)
     total = policy_information_bits(task, policy, w)
-    continuation = max(0.0, total - direct)
+    continuation = total - direct
+    if continuation < -1e-10:
+        raise ArithmeticError("full policy lost information already present at its root")
+    continuation = max(0.0, continuation)
     query = next(q for q in task.queries if q.name == root)
     children = dict(policy.branches)
     action_mass = defaultdict(float)
