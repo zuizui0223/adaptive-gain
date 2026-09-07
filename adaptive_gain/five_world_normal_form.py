@@ -1,11 +1,13 @@
 """Exact classification for the 5-world / 2+3-target / 3-query scope.
 
 This is the smallest declared scope in the repository where strict adaptive gain
-can be irreducible with respect to deleting one world from the larger target
-class.  Exhaustive enumeration of all 32^3 labeled binary query maps shows five
-strict symmetry classes.  Four contain at least one strict balanced four-world
-deletion; one class, with canonical separator signature ``(7, 28, 42)``, does
-not.  The irreducible class has 288 labeled tasks and one symmetry orbit.
+can be irreducible under world deletion. Exhaustive enumeration of all 32^3
+labeled binary query maps shows five strict symmetry classes. Four contain at
+least one strict balanced four-world deletion; one class, with canonical
+separator signature ``(7, 28, 42)``, loses strict gain after deleting *any* world.
+Because strict gain needs at least three query identities, deleting any query also
+removes strict gain. The irreducible class has 288 labeled tasks and one symmetry
+orbit.
 """
 from __future__ import annotations
 
@@ -32,7 +34,10 @@ class FiveWorldNormalFormReceipt:
     strict_class: str | None
     matches_declared_strict_normal_form: bool
     strict_balanced_four_world_deletion_count: int
+    strict_any_four_world_deletion_count: int
+    strict_two_query_deletion_count: int
     irreducible_against_majority_world_deletion: bool
+    world_and_query_deletion_minimal: bool
     matches_unique_irreducible_normal_form: bool
     adaptive_cost: int | None
     fixed_cost: int | None
@@ -114,19 +119,44 @@ def canonical_five_world_separator_signature(task: FiniteTask) -> tuple[int, int
     return min(representatives)
 
 
+def _subtask_without_world(task: FiniteTask, omitted: int) -> FiniteTask:
+    keep = tuple(i for i in range(5) if i != omitted)
+    return FiniteTask(
+        tuple(task.worlds[i] for i in keep),
+        tuple(
+            Query(query.name, query.cost, tuple(query.outcomes[i] for i in keep))
+            for query in task.queries
+        ),
+    )
+
+
 def _strict_balanced_four_world_deletion_count(task: FiniteTask) -> int:
-    """Count majority-class world deletions that retain strict adaptive gain."""
+    """Count size-3 target-class world deletions retaining strict gain."""
     _validate_five_world_scope(task)
     _, large = _target_blocks(task)
+    return sum(
+        int(adaptive_gain_receipt(_subtask_without_world(task, omitted)).strict_adaptive_gain)
+        for omitted in large
+    )
+
+
+def _strict_any_four_world_deletion_count(task: FiniteTask) -> int:
+    """Count all single-world deletions retaining strict adaptive gain."""
+    _validate_five_world_scope(task)
+    return sum(
+        int(adaptive_gain_receipt(_subtask_without_world(task, omitted)).strict_adaptive_gain)
+        for omitted in range(5)
+    )
+
+
+def _strict_two_query_deletion_count(task: FiniteTask) -> int:
+    """Count single-query deletions retaining strict gain (zero in this scope)."""
+    _validate_five_world_scope(task)
     count = 0
-    for omitted in large:
-        keep = tuple(i for i in range(5) if i != omitted)
+    for omitted in range(3):
         subtask = FiniteTask(
-            tuple(task.worlds[i] for i in keep),
-            tuple(
-                Query(query.name, query.cost, tuple(query.outcomes[i] for i in keep))
-                for query in task.queries
-            ),
+            task.worlds,
+            tuple(query for q, query in enumerate(task.queries) if q != omitted),
         )
         count += int(adaptive_gain_receipt(subtask).strict_adaptive_gain)
     return count
@@ -152,16 +182,23 @@ def five_world_normal_form_receipt(task: FiniteTask) -> FiveWorldNormalFormRecei
     signature = canonical_five_world_separator_signature(task)
     strict_class = FIVE_WORLD_STRICT_SIGNATURES.get(signature)
     predicted_strict = strict_class is not None
-    deletion_count = _strict_balanced_four_world_deletion_count(task)
+    balanced_deletions = _strict_balanced_four_world_deletion_count(task)
+    all_world_deletions = _strict_any_four_world_deletion_count(task)
+    query_deletions = _strict_two_query_deletion_count(task)
     exact = adaptive_gain_receipt(task)
-    exact_irreducible = exact.strict_adaptive_gain and deletion_count == 0
+    exact_irreducible = (
+        exact.strict_adaptive_gain and all_world_deletions == 0 and query_deletions == 0
+    )
     predicted_irreducible = signature == FIVE_WORLD_IRREDUCIBLE_STRICT_GAIN_SIGNATURE
     return FiveWorldNormalFormReceipt(
         signature,
         strict_class,
         predicted_strict,
-        deletion_count,
-        deletion_count == 0,
+        balanced_deletions,
+        all_world_deletions,
+        query_deletions,
+        balanced_deletions == 0,
+        all_world_deletions == 0 and query_deletions == 0,
         predicted_irreducible,
         exact.adaptive_cost,
         exact.fixed_cost,
@@ -233,7 +270,6 @@ def enumerate_two_plus_three_three_query_universe(
         strict_disagreements += int(predicted_strict != exact.strict_adaptive_gain)
 
         if not exact.strict_adaptive_gain:
-            # A non-strict task cannot be an irreducible strict task.
             irreducible_disagreements += int(
                 signature == FIVE_WORLD_IRREDUCIBLE_STRICT_GAIN_SIGNATURE
             )
@@ -248,9 +284,11 @@ def enumerate_two_plus_three_three_query_universe(
         strict_signature_counts[signature] = strict_signature_counts.get(signature, 0) + 1
         strict_class_counts[strict_class] = strict_class_counts.get(strict_class, 0) + 1
 
-        deletions = _strict_balanced_four_world_deletion_count(task)
-        deletion_counts[deletions] = deletion_counts.get(deletions, 0) + 1
-        exact_irreducible = deletions == 0
+        balanced_deletions = _strict_balanced_four_world_deletion_count(task)
+        deletion_counts[balanced_deletions] = deletion_counts.get(balanced_deletions, 0) + 1
+        all_world_deletions = _strict_any_four_world_deletion_count(task)
+        query_deletions = _strict_two_query_deletion_count(task)
+        exact_irreducible = all_world_deletions == 0 and query_deletions == 0
         predicted_irreducible = signature == FIVE_WORLD_IRREDUCIBLE_STRICT_GAIN_SIGNATURE
         irreducible_disagreements += int(predicted_irreducible != exact_irreducible)
         if exact_irreducible:
