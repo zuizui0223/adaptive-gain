@@ -1,0 +1,31 @@
+{
+  "scope": "exact_balanced_binary_sharp_fixed_cost_given_CA_at_most_3",
+  "query_constraint": "binary, unit cost, globally exact 50/50 balanced",
+  "world_scope": "even n>=6",
+  "sharp_fixed_cost_cap": {
+    "n=6": 3,
+    "n=8": 5,
+    "n=10": 6,
+    "even n>=12": 7
+  },
+  "compact_formula": "D3(n)=min(7,n-3) for even n>=6 except D3(10)=6",
+  "generic_upper_bounds": {
+    "binary_depth_three_flattening": 7,
+    "exact_balanced_global_fixed_cost": "n-3"
+  },
+  "unique_defect": {
+    "world_count": 10,
+    "generic_intersection_bound": 7,
+    "sharp_value": 6,
+    "reason": "C_A=3,C_F=7 is excluded by the exhaustive 2944-by-2944 half-state exact-balance/private-edge compatibility audit"
+  },
+  "attaining_cost_pairs": {
+    "n=6": {"C_A": 2, "C_F": 3},
+    "n=8": {"C_A": 3, "C_F": 5},
+    "n=10": {"C_A": 3, "C_F": 6},
+    "n=12": {"C_A": 3, "C_F": 7},
+    "even n>12": "pad the n=12 witness by complementary all-zero/all-one world pairs"
+  },
+  "next_open_depth": 4,
+  "status": "closed"
+}
