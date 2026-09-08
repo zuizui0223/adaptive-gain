@@ -1,10 +1,18 @@
 # Evolutionary timescale branch
 
-This branch asks how the repository's exact finite sensing structure can generate
-rapid short-term evolution that is either retained, reversed, or averaged away
-over longer time.
+This branch connects the repository's exact finite adaptive-gain mathematics to
+evolutionary timescales under recurrent community states.
 
-The current hierarchy is
+Its current boundary is deliberate:
+
+- **inside this branch:** community states generate sensing tasks and selection
+  rewards; a finite stationary community process determines how those rewards
+  accumulate through time;
+- **not yet inside this branch:** evolved phenotype frequencies changing the
+  community transition process itself.  That endogenous eco-evolutionary
+  feedback belongs in the next layer.
+
+The hierarchy is
 
 ```text
 community / natural-history state
@@ -17,7 +25,7 @@ finite sensing task
         +--> productive frontier  -> C_F
         |
         v
-structural opportunity / state-specific selection reward
+structural opportunity / state-specific reward
         |
         v
 community-state transition process
@@ -29,18 +37,14 @@ reward-weighted temporal modes
 short-term burst / reversible fluctuation / long-term trend / stasis
 ```
 
-The finite-state community Markov layer is now the general temporal model.  The
-previous two-state `m,phi` formulas are retained as an analytically transparent
-special case.
-
 ---
 
-## Read in this order
+# Read in this order
 
 1. `INFORMATION_MEDIATED_ECO_EVOLUTIONARY_LOOP.md`
    - individual cue sequence -> behavior -> realized interaction -> community;
-   - keeps explicit the natural-history links that the combinatorial theorem
-     does not infer automatically.
+   - marks the natural-history links that the combinatorial theorem does not
+     infer automatically.
 
 2. `SHARP_STRUCTURAL_EVOLUTIONARY_OPPORTUNITY.md`
    - defines the fitness-free normalized adaptive-only opportunity
@@ -59,7 +63,7 @@ special case.
      positive frontier-rank cap is extremally vacuous.
 
 3. `STRUCTURAL_SELECTION_TRANSITIONS.md`
-   - lifts community-state change into
+   - lifts a community-state change into
 
      \[
      \Delta s
@@ -72,55 +76,81 @@ special case.
 
 4. `STRUCTURAL_SELECTION_COLLISION.md`
    - reuses the existing `resource_role_profile_collision()`;
-   - same adaptive continuation and same multiset of complete per-resource role
-     profiles can still give `C_F=2` versus `3`;
+   - same adaptive continuation and same complete per-resource role-profile
+     multiset can still give `C_F=2` versus `3`;
    - therefore weaker marginal cue summaries need not determine selection on
      contingent sensing.
 
 5. `BUDGET_GATED_EVOLUTIONARY_SELECTION.md` and
    `BUDGET_GATED_STRUCTURAL_COLLISION.md`
-   - use the exact adaptive-only budget window
+   - use the exact adaptive-only ecological feasibility window
 
      \[
      C_A\le B<C_F
      \]
 
-     directly, avoiding any required linear conversion from sensing cost to
+     directly, without requiring a linear conversion of sensing cost into
      fitness.
 
 6. `EVOLUTIONARY_RETENTION_SCALING.md`
-   - symmetric zero-mean two-state result;
-   - for fixed `|phi|<1`, selection activity is `O(H)` while RMS retained
-     directional change is `O(sqrt(H))`;
-   - hence the retained fraction is `O(H^-1/2)`.
+   - transparent two-state zero-mean case;
+   - fixed `|phi|<1` gives `O(H)` selection activity but only `O(sqrt(H))` RMS
+     directional residue.
 
 7. `DIRECTIONAL_BIAS_AND_LONG_TERM_ACCUMULATION.md`
    - adds stationary directional bias `m`;
    - any fixed `m!=0` restores `O(H)` directional accumulation;
-   - gives the two-state crossover scale for when a weak long-run trend rises
-     above correlated fluctuations.
+   - derives the two-state trend-emergence crossover horizon.
 
 8. `COMMUNITY_SPECTRAL_EVOLUTIONARY_TIMESCALE.md`
    - general finite-community result;
-   - uses the Poisson equation to obtain the effective long-run variance
-     coefficient `sigma_eff^2`;
-   - shows that community persistence affects evolution only through dynamical
-     modes onto which structural selection actually projects;
-   - therefore raw community mixing time and evolutionary selection timescale
-     need not be the same.
+   - obtains the long-run reward variance rate from the Poisson equation;
+   - replaces the one-number `phi` picture by reward-weighted community
+     relaxation modes.
 
-9. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
-   - treats fluctuating selection, rapid evolution, stasis, eco-evolutionary
-     feedbacks, Markov/covariance scaling, and rate-time issues as prior art;
-   - isolates the proposed repository-specific structural bridge.
+9. `STRUCTURAL_REWARD_MODE_ALIGNMENT.md`
+   - builds slow-mode and fast-mode reward vectors entirely from existing exact
+     repository tasks with gaps `0,1,2`;
+   - holds the community transition matrix and reward variance fixed while
+     changing only which community contrast carries structural adaptive gain;
+   - obtains `sigma_eff^2=17/3` versus `11/9`, a ratio `51/11`.
+
+10. `STRUCTURAL_GAP_CENTERING_AND_STASIS.md`
+    - for
+
+      \[
+      s_i=\lambda[C_F(i)-C_A(i)]-\kappa,
+      \]
+
+      shows that a state-independent maintenance cost changes stationary mean
+      selection but leaves centered covariance and `sigma_eff^2` unchanged;
+    - critical cost
+
+      \[
+      \kappa^*=\lambda E_\pi[C_F-C_A]
+      \]
+
+      yields zero long-run directional mean while state-dependent selection
+      fluctuations remain active;
+    - near the threshold,
+
+      \[
+      H_\times\propto|\kappa-\kappa^*|^{-2}.
+      \]
+
+11. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
+    - treats fluctuating selection, rapid evolution, stasis, eco-evolutionary
+      feedbacks, Markov-reward theory, covariance/spectral scaling, and rate-time
+      issues as prior art;
+    - isolates the repository-specific structural bridge.
 
 ---
 
-# Four mathematically distinct controls on evolutionary timescale
+# The current general theory
 
-## 1. Instantaneous structural opportunity
+## Axis 1: instantaneous structural opportunity
 
-For a nontrivial unit-cost sensing task,
+For a nontrivial unit-cost task,
 
 \[
 \boxed{
@@ -128,11 +158,8 @@ For a nontrivial unit-cost sensing task,
 }
 \]
 
-This is the adaptive-only budget-window width per unit adaptive effort.  It is
-an **instantaneous amplitude generator** supplied by community and natural-history
-structure before any particular fitness map is chosen.
-
-The repository's exact extremal theorem gives
+This is the adaptive-only budget-window width per unit adaptive effort.  The
+existing extremal theorem gives
 
 \[
 \boxed{
@@ -140,53 +167,44 @@ The repository's exact extremal theorem gives
 }
 \]
 
-So the finite combinatorics already bound how large state-specific adaptive
-opportunity can become.
+So community and natural-history structure set a sharp upper bound on the
+instantaneous opportunity for contingent sensing.
 
-## 2. State-specific selection reward
+## Axis 2: state-specific structural reward
 
-Two explicit lifts are retained.
-
-### Continuous cost-value lift
+One continuous lift is
 
 \[
 \boxed{
-s(X)=\lambda[C_F(X)-C_A(X)]-\kappa.}
+s_i=\lambda[C_F(i)-C_A(i)]-\kappa.}
 \]
 
-The existing decomposition gives
+The repository's existing decomposition gives
 
 \[
 C_F-C_A
 =(U-C_A)-(C_U-C_F)-(U-C_U),
 \]
 
-so selection can be separated into branch-exclusive opportunity minus external
-shortcut discount minus internal union redundancy.
+so the state-specific advantage can be separated into branch-exclusive
+opportunity minus external shortcut discount minus internal union redundancy.
 
-### Hard ecological budget lift
-
-Adaptive-only deterministic success occurs exactly when
+A nonlinear alternative uses the exact feasibility condition
 
 \[
-\boxed{C_A(X)\le B<C_F(X).}
+\boxed{C_A(i)\le B<C_F(i).}
 \]
 
-Possible natural-history meanings of `B` include decision deadlines, energetic
-ceilings, exposure time, handling-time limits, or phenological opportunity
-windows.
-
-## 3. Community temporal dynamics
+## Axis 3: finite community dynamics
 
 Let community state follow a stationary finite Markov chain with transition
-matrix `P`, stationary distribution `pi`, and state-specific selection rewards
-`s_i`.
+matrix `P`, stationary distribution `pi`, and reward vector `s`.
 
-The long-run mean direction is
+Long-run mean selection is
 
 \[
 \boxed{
-\bar s=\sum_i\pi_i s_i.
+\bar s=E_\pi[s].
 }
 \]
 
@@ -195,23 +213,28 @@ Centered reward covariance is
 \[
 \boxed{
 \gamma(k)
-=\sum_i\pi_i(s_i-\bar s)
-[P^k(s-\bar s)]_i.
+=\sum_i\pi_i(s_i-\bar s)[P^k(s-\bar s)]_i.
 }
 \]
 
-Thus the ecological transition process controls the temporal ordering of
-state-specific selection rewards.
+The exact finite-horizon cumulative variance is
 
-## 4. Reward-weighted temporal modes
+\[
+\boxed{
+\operatorname{Var}(S_H)
+=H\gamma(0)+2\sum_{k=1}^{H-1}(H-k)\gamma(k).
+}
+\]
 
-Solve the Poisson equation
+## Axis 4: reward-weighted community timescale
+
+Solve
 
 \[
 (I-P+\Pi)h=s-\bar s\mathbf1.
 \]
 
-The effective long-run variance rate is
+Then
 
 \[
 \boxed{
@@ -220,8 +243,7 @@ The effective long-run variance rate is
 }
 \]
 
-For zero mean selection, expected absolute activity is `H E_pi|s|` while RMS
-retained directional change is asymptotically `sqrt(H) sigma_eff`, so
+For zero mean selection,
 
 \[
 \boxed{
@@ -231,8 +253,7 @@ retained directional change is asymptotically `sqrt(H) sigma_eff`, so
 }
 \]
 
-For nonzero mean selection, the directional mean rises above correlated
-fluctuations near
+For nonzero mean selection,
 
 \[
 \boxed{
@@ -249,10 +270,10 @@ For a reversible chain,
 }
 \]
 
-where `lambda_r` are community relaxation eigenvalues and `w_r` are the centered
-selection-reward projections onto those modes.
+where `lambda_r` are ecological relaxation eigenvalues and `w_r` are structural
+selection-reward projections.
 
-This yields the key distinction
+Thus
 
 \[
 \boxed{
@@ -262,20 +283,18 @@ This yields the key distinction
 }
 \]
 
-A slow ecological mode matters only when the structural reward changes along
+A slow ecological mode matters only if structural adaptive gain varies along
 that mode.
 
 ---
 
-# Two-state model as a special case
+# Two-state model is the one-mode special case
 
 For
 
 \[
 P=\begin{pmatrix}1-a&a\\b&1-b\end{pmatrix},
 \]
-
-we have
 
 \[
 \boxed{
@@ -301,8 +320,8 @@ H_\times
 \frac{1-m^2}{m^2}\frac{1+\phi}{1-\phi}.
 \]
 
-So the earlier `m,phi` theory is the one-mode finite-community case, not a
-separate model family.
+The earlier persistence/alternation theory is therefore retained as the
+analytically transparent one-mode limit of the finite-community theory.
 
 ---
 
@@ -310,23 +329,24 @@ separate model family.
 
 - `payoff_routing_task()` has `(C_A,C_F)=(2,3)` and attains the exact
   `Omega*=1/2` bound for `(n,m,b)=(4,3,2)`;
-- the registered higher-order resource collision changes `C_F` from 2 to 3
-  while keeping `C_A=2`, adaptive continuation root type, and the multiset of
-  per-resource role profiles fixed;
-- under either the continuous cost-value lift or the hard-budget lift, that
-  structural difference can reverse selection;
+- higher-order resource co-location can change `C_F` and reverse selection while
+  `C_A`, adaptive continuation, and weaker per-resource role summaries stay the
+  same;
 - productive-frontier edge count limits maximum normalized opportunity, while a
   positive frontier-rank cap alone does not;
-- finite-state Markov covariance formulas match exhaustive community-state path
-  enumeration;
-- the Poisson long-run variance matches an independent reversible-chain spectral
-  decomposition on 500 random models to maximum absolute error
-  `1.07e-14`;
-- one registered three-state chain has the same transition matrix and equal
-  stationary reward variance for two reward vectors, yet slow-mode alignment
-  gives `sigma_eff^2=17/3` while fast-mode alignment gives `11/9`;
-- therefore the same ecological dynamics can generate very different
-  evolutionary timescales solely through reward geometry.
+- finite-state Markov reward moments match exhaustive state-path enumeration;
+- Poisson asymptotic variance matches independent reversible spectral
+  decomposition on 500 random models with maximum absolute error `1.07e-14`;
+- the same three-state community chain and equal stationary reward variance can
+  yield `sigma_eff^2=17/3` or `11/9` depending only on reward-mode alignment;
+- those two reward alignments can be generated from existing repository tasks,
+  not arbitrary reward vectors;
+- a common maintenance cost leaves `sigma_eff^2` invariant while shifting mean
+  selection through zero;
+- at `kappa*=lambda E_pi[C_F-C_A]`, long-run directional trend vanishes while
+  state-dependent selection fluctuations remain active;
+- the trend-emergence horizon diverges quadratically as `kappa` approaches that
+  threshold.
 
 ---
 
@@ -340,8 +360,9 @@ separate model family.
 - `adaptive_gain/directional_retention.py`
 - `adaptive_gain/community_markov_selection.py`
 - `adaptive_gain/community_spectral_timescale.py`
+- `adaptive_gain/structural_markov_centering.py`
 
-Key tests:
+Key tests include
 
 - `tests/test_structural_eco_evolution.py`
 - `tests/test_structural_selection_collisions.py`
@@ -353,6 +374,7 @@ Key tests:
 - `tests/test_directional_retention.py`
 - `tests/test_community_markov_selection.py`
 - `tests/test_community_spectral_timescale.py`
+- `tests/test_structural_markov_centering.py`
 
 Validation receipts include
 
@@ -364,16 +386,16 @@ Validation receipts include
 - `validation/budget_gated_selection_v1.json`
 - `validation/budget_gated_structural_collision_v1.json`
 - `validation/community_spectral_timescale_v1.json`
+- `validation/structural_markov_centering_v1.json`
 
 ---
 
-# Scope boundary
+# Scope boundary and next layer
 
-The branch remains theoretical.
+This branch remains theoretical and treats community-state dynamics as exogenous.
 
 It does not claim new Markov-reward theory, fluctuating-selection theory,
-eco-evolutionary feedback theory, or macroevolutionary rate theory.  It also does
-not yet claim that a natural system realizes the full chain.
+eco-evolutionary feedback theory, or macroevolutionary rate theory.
 
 A strong biological application still needs evidence for
 
@@ -386,6 +408,17 @@ community state
 -> temporally varying selection.
 ```
 
-Natural history is therefore not decoration at the end of the model.  It is what
-identifies both the structural sensing map and the ecological transition process
-that feed the mathematics.
+The next mathematical layer should make the community transition process depend
+on the evolving sensory phenotype itself.  That is where the current
+
+```text
+community -> selection -> evolution
+```
+
+construction becomes a genuine closed
+
+```text
+community -> selection -> evolution -> community
+```
+
+eco-evolutionary feedback.
