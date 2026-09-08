@@ -33,6 +33,17 @@ def _two_state_model(a, b, delta=1.0):
     return stationary, transition, rewards
 
 
+def _persistent_three_state_model():
+    # P = 0.6 I + 0.4 * 1 pi, so pi is stationary by construction.
+    stationary = (0.2, 0.5, 0.3)
+    transition = (
+        (0.68, 0.20, 0.12),
+        (0.08, 0.80, 0.12),
+        (0.08, 0.20, 0.72),
+    )
+    return stationary, transition
+
+
 def test_two_state_markov_reward_layer_recovers_m_phi_formulas():
     for a, b in ((0.3, 0.2), (0.1, 0.4), (0.7, 0.5)):
         stationary, transition, rewards = _two_state_model(a, b, delta=0.8)
@@ -54,12 +65,7 @@ def test_two_state_markov_reward_layer_recovers_m_phi_formulas():
 
 
 def test_finite_state_covariance_matches_bruteforce_path_moments():
-    stationary = (1 / 3, 1 / 3, 1 / 3)
-    transition = (
-        (0.7, 0.2, 0.1),
-        (0.2, 0.6, 0.2),
-        (0.1, 0.2, 0.7),
-    )
+    stationary, transition = _persistent_three_state_model()
     rewards = (-1.0, 0.25, 1.5)
     horizon = 4
 
@@ -100,13 +106,7 @@ def test_structural_collision_maps_directly_to_opposite_markov_rewards():
 
 
 def test_multistate_mean_and_activity_separate_direction_from_amount():
-    stationary = (0.2, 0.5, 0.3)
-    transition = (
-        (0.7, 0.2, 0.1),
-        (0.08, 0.8, 0.12),
-        (0.1, 0.2, 0.7),
-    )
-    # pi P = pi for this transition.
+    stationary, transition = _persistent_three_state_model()
     rewards = (-2.0, 0.4, 1.0)
     mean = stationary_mean_selection(stationary, transition, rewards)
     activity = expected_selection_activity(1, stationary, transition, rewards)
