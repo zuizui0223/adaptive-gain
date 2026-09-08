@@ -14,6 +14,17 @@ This note is intentionally based on the evolutionary-timescale branch rather tha
 merged into it.  The parent branch treats community transitions as exogenous;
 this dependent layer makes them phenotype-dependent.
 
+The local phase structure implied by this model is developed separately in
+`STRUCTURAL_LOOP_GAIN_PHASE_DIAGRAM.md`, where the exact structural gap contrast
+is shown to enter the closed loop through the dimensionless gain
+
+\[
+L=-\eta\Delta s\,p^*(1-p^*)
+=-\eta\lambda\Delta g\,p^*(1-p^*)
+\]
+
+under the continuous structural lift.
+
 ---
 
 ## 1. Two recurrent community states
@@ -120,48 +131,50 @@ These are different mechanisms.
 
 ---
 
-## 4. Community state feeds selection back to evolution
+## 4. Community state selects among sensing architectures
 
-Mean selection at occupancy `q_t` is
+At occupancy `q_t`, the mean log-fitness advantage of the contingent architecture
+is
 
 \[
 \boxed{
-\bar s_t
-=s_-+\Delta s\,q_t.
-}
+s(q_t)=s_-+(s_+-s_-)q_t.}
 \]
 
-Exact haploid viability selection gives
+The exact haploid update is
 
 \[
 \boxed{
 \operatorname{logit}(p_{t+1})
-=\operatorname{logit}(p_t)+\bar s_t.
+=
+\operatorname{logit}(p_t)+s(q_t).
 }
 \]
 
-The loop is now closed:
+So the current community state alters evolution, while the current evolved
+frequency alters the community state it will experience later.
+
+This is the minimal closed loop
 
 ```text
-p_t
- -> realized interactions / community target
- -> q_{t+1}
- -> state-dependent structural selection
- -> p_{t+1}
- -> ...
+community occupancy q_t
+    -> structural selection s(q_t)
+    -> phenotype frequency p_{t+1}
+    -> target community occupancy q_target(p_{t+1})
+    -> future community occupancy
 ```
 
 ---
 
 ## 5. Interior equilibrium
 
-An interior evolutionary equilibrium requires zero mean selection:
+Assume
 
 \[
-0=s_-+\Delta s\,q^*.
+\Delta s=s_+-s_-\ne0.
 \]
 
-Therefore
+Selection vanishes when
 
 \[
 \boxed{
@@ -169,61 +182,66 @@ q^*=-\frac{s_-}{\Delta s}.
 }
 \]
 
-The ecological equilibrium condition is
+An interior equilibrium requires
+
+\[
+0<q^*<1.
+\]
+
+The ecological fixed-point condition is
 
 \[
 q^*=q_0+\eta(p^*-1/2).
 \]
 
-Hence, for `eta!=0`,
+If
+
+\[
+\eta\ne0,
+\]
+
+then
 
 \[
 \boxed{
-p^*
-=\frac12+\frac{q^*-q_0}{\eta}.}
+p^*=\frac12+\frac{q^*-q_0}{\eta}.}
 \]
 
-An interior closed-loop equilibrium exists when both `p*` and `q*` lie strictly
-inside `[0,1]`.
-
-For the repository-native gap-0/gap-1 pair with
+An interior eco-evolutionary equilibrium exists only when
 
 \[
-\lambda=1,
-\qquad
-\kappa=1/2,
+0<p^*<1.
 \]
 
-we have
+For symmetric state rewards
 
 \[
-s_-=-1/2,
-\qquad
-s_+=1/2,
+s_-=-s_+
 \]
 
-so
+and
 
 \[
-q^*=1/2.
+q_0=1/2,
 \]
 
-With `q_0=1/2`, any nonzero feedback slope gives
+we obtain the centered equilibrium
 
 \[
-p^*=1/2.
+\boxed{p^*=q^*=1/2.}
 \]
 
 ---
 
-## 6. Exact Jacobian
+## 6. Exact local Jacobian
 
-Use coordinates
+Use
 
 \[
-z=\operatorname{logit}(p),
-\qquad q.
+z=\operatorname{logit}(p)
 \]
+
+so the evolutionary update is additive.
 
 At an interior equilibrium,
 
@@ -231,7 +249,7 @@ At an interior equilibrium,
 \frac{dp}{dz}=p^*(1-p^*).
 \]
 
-The exact Jacobian is
+The Jacobian in coordinates `(z,q)` is
 
 \[
 \boxed{
@@ -243,37 +261,31 @@ J=
 }
 \]
 
-Its trace and determinant are
+Its trace is
 
 \[
-\boxed{T=1+\phi,}
+T=1+\phi,
 \]
 
+and its determinant is
+
 \[
-\boxed{
-D=\phi
+D
+=\phi
 -\Delta s(1-\phi)\eta p^*(1-p^*).
-}
 \]
-
-The eigenvalues are
-
-\[
-\boxed{
-r_\pm
-=\frac{1+\phi
-\pm\sqrt{(1-\phi)^2
-+4\Delta s(1-\phi)\eta p^*(1-p^*)}}{2}.
-}
-\]
-
-This separates ecological memory from feedback sign and strength.
 
 ---
 
-## 7. Exact local stability criterion
+## 7. Exact local stability condition
 
-For a two-dimensional discrete map, the Jury conditions are
+For the characteristic polynomial
+
+\[
+\lambda^2-T\lambda+D,
+\]
+
+the discrete-time Jury conditions are
 
 \[
 1-T+D>0,
@@ -287,15 +299,36 @@ For a two-dimensional discrete map, the Jury conditions are
 1-D>0.
 \]
 
-For
+Assume
 
 \[
 \Delta s>0,
 \qquad
-0\le\phi<1,
+0\le\phi<1.
 \]
 
-and an interior equilibrium, these reduce to
+Substitution gives
+
+\[
+1-T+D
+=-(1-\phi)\Delta s\eta p^*(1-p^*).
+\]
+
+Hence positive feedback
+
+\[
+\eta>0
+\]
+
+immediately violates the restoring condition.
+
+For negative feedback, the remaining upper stability bound is
+
+\[
+1-D>0
+\]
+
+which gives
 
 \[
 \boxed{
@@ -304,126 +337,175 @@ and an interior equilibrium, these reduce to
 }
 \]
 
-Therefore:
+Thus
 
-### Positive feedback
+```text
+eta > 0
+    positive feedback
+    -> interior equilibrium locally unstable
 
-\[
-\eta>0
-\]
+-1/[Delta_s p*(1-p*)] < eta < 0
+    moderate negative feedback
+    -> interior equilibrium locally stable
 
-makes the interior equilibrium unstable.
+eta <= -1/[Delta_s p*(1-p*)]
+    excessively strong negative feedback
+    -> discrete-time overshoot instability
+```
 
-A phenotype that creates more of the community state that favors itself produces
-self-reinforcement rather than stabilizing balance.
-
-### Moderate negative feedback
-
-\[
--\frac{1}{\Delta s p^*(1-p^*)}
-<\eta<0
-\]
-
-stabilizes the interior equilibrium.
-
-The phenotype erodes the ecological condition that favors it, producing a
-restoring loop.
-
-### Excessively strong negative feedback
-
-\[
-\eta
-<-rac{1}{\Delta s p^*(1-p^*)}
-\]
-
-is locally unstable in discrete time because the restoring response overshoots.
-
-Thus negative feedback is not automatically stable at arbitrary gain.
-
----
-
-## 8. Community memory changes transient time, not the stability interval
-
-A notable cancellation occurs in the Jury inequalities.
-
-For the interior structural contrast considered above, the stability interval for
-`eta` is independent of `phi` as long as
+The interval does **not** depend on `phi` as long as
 
 \[
 0\le\phi<1.
 \]
 
-But the eigenvalues still depend on `phi`.
-
-Therefore community memory affects
-
-- damping time;
-- whether convergence is monotone or oscillatory;
-- transient burst duration;
-
-without moving the interior equilibrium or the basic sign boundary between
-negative and positive feedback.
-
-For the repo-native gap-0/gap-1 example with
-
-\[
-p^*=q^*=1/2,
-\quad
-\eta=-1,
-\]
-
-raising `phi` from `0.2` to `0.8` leaves the equilibrium and stability class
-unchanged but increases the dominant eigenvalue modulus, producing much slower
-damped convergence.
+Community memory changes transient damping and oscillatory behavior, but not this
+local negative-feedback stability interval.
 
 ---
 
-## 9. Existing structural tasks generate the feedback contrast
+## 8. Repository-native minimal witness
 
-No arbitrary reward pair is required.
+Use the existing tasks
 
-### Low-opportunity state
+- `routing_bypass_control()` with
 
-`routing_bypass_control()` gives
+  \[
+  C_A=C_F=2;
+  \]
 
-\[
-(C_A,C_F)=(2,2),
-\]
+- `payoff_routing_task()` with
 
-hence structural gap zero.
+  \[
+  C_A=2,
+  \qquad
+  C_F=3.
+  \]
 
-### High-opportunity state
-
-`payoff_routing_task()` gives
-
-\[
-(C_A,C_F)=(2,3),
-\]
-
-hence structural gap one.
-
-At
+Under
 
 \[
 \lambda=1,
 \qquad
-\kappa=1/2,
+\kappa=0.5,
 \]
 
-these become exactly
+we get
 
 \[
-(s_-,s_+)=(-1/2,+1/2).
+s_-=-0.5,
+\qquad
+s_+=+0.5.
 \]
 
-So the closed-loop equilibrium and stability results are built on existing
-repository witnesses.
+Therefore
 
-A larger contrast can be obtained from
+\[
+q^*=0.5.
+\]
 
-`extremal_routing_task(3)` with `(C_A,C_F)=(2,4)`, which makes the upper state
-structural gap two.  The executable tests use this to demonstrate that sufficiently
-strong negative feedback can cross the discrete-time overshoot boundary.
+With
+
+\[
+q_0=0.5,
+\]
+
+the interior equilibrium is
+
+\[
+p^*=q^*=0.5.
+\]
+
+For
+
+\[
+\eta=-1,
+\]
+
+we have
+
+\[
+-4<\eta<0,
+\]
+
+so the equilibrium is locally stable.
+
+The executable simulation converges back to the centered state from displaced
+initial conditions.
+
+For
+
+\[
+\eta=+0.5,
+\]
+
+the same structural reward contrast creates positive feedback and the interior
+state is unstable.
+
+Thus the sign of the ecological feedback, not the existence of structural
+adaptive gain itself, decides whether the closed loop restores or amplifies a
+perturbation.
+
+---
+
+## 9. Stronger structural contrast narrows the stabilizing feedback range
+
+The stability interval is
+
+\[
+-\frac{1}{\Delta s\,p^*(1-p^*)}
+<\eta<0.
+\]
+
+For fixed equilibrium frequency, larger
+
+\[
+\Delta s
+\]
+
+makes the lower bound less negative.
+
+So increasing the structural selection contrast makes the closed system more
+sensitive to feedback overshoot.
+
+Under the continuous structural lift,
+
+\[
+\Delta s
+=\lambda
+\left(
+[(C_F-C_A)_+]
+-[(C_F-C_A)_-]
+\right).
+\]
+
+The repository's extremal adaptive-gain families can therefore be interpreted as
+families that amplify eco-evolutionary feedback sensitivity.
+
+For example, comparing a gap-zero control with the `k`-branch family gives
+
+\[
+\Delta s=\lambda(k-1).
+\]
+
+At
+
+\[
+p^*=1/2,
+\]
+
+stability requires
+
+\[
+\boxed{
+-\frac{4}{\lambda(k-1)}<\eta<0.
+}
+\]
+
+As `k` grows, the stable negative-feedback interval shrinks toward zero.
+
+The complete transient and overshoot phase diagram is developed in
+`STRUCTURAL_LOOP_GAIN_PHASE_DIAGRAM.md`.
 
 ---
 
