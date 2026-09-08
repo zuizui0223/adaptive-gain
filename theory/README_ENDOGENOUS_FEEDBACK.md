@@ -34,26 +34,8 @@ Read in this order:
      L=-\eta\Delta s\,p^*(1-p^*);
      \]
 
-   - proves the exact local phase boundaries
-
-     \[
-     0<L<1
-     \]
-
-     for stability and
-
-     \[
-     L>(1-\phi)/4
-     \]
-
-     for damped oscillation within the stable region;
-   - identifies `L=1` as an oscillatory unit-circle boundary with
-
-     \[
-     \cos\theta_c=(1+\phi)/2;
-     \]
-
-   - maps the repository's exact structural gap contrast directly into the loop gain;
+   - proves exact local phase boundaries: stability for `0<L<1`, damped oscillation for `L>(1-phi)/4` inside that interval, and an oscillatory unit-circle boundary at `L=1`;
+   - maps the repository's exact structural gap contrast directly into loop gain;
    - turns the `k`-branch and binary extremal routing families into explicit nonoscillatory / damped / unstable phase sequences.
 
 3. `STRUCTURAL_PHASE_EXCLUSION_BOUNDS.md`
@@ -73,6 +55,29 @@ Read in this order:
    - provides rigorous one-sided certificates that damped oscillation or strong-feedback instability are structurally impossible under declared world/query/arity/frontier constraints;
    - keeps frontier-rank caps out of the certificate because the parent repository already proves positive rank caps are extremally vacuous.
 
+4. `CRITICAL_SLOWING_OF_ECO_EVOLUTIONARY_FEEDBACK.md`
+   - derives the exact damping time in the stable damped phase,
+
+     \[
+     \tau_{\rm damp}
+     =-\frac{2}{\log[1-(1-\phi)(1-L)]};
+     \]
+
+   - gives the critical-slowing law
+
+     \[
+     \tau_{\rm damp}
+     \sim\frac{2}{(1-\phi)(1-L)};
+     \]
+
+   - shows the unit-circle critical period scales as
+
+     \[
+     T_c\sim\frac{2\pi}{\sqrt{1-\phi}};
+     \]
+
+   - separates a slowly damped stable transient from both genuine long-run directional accumulation and recurrent zero-mean selection fluctuations.
+
 Executable layers:
 
 - `adaptive_gain/endogenous_community_feedback.py`
@@ -84,6 +89,7 @@ Executable layers:
 - `validation/endogenous_community_feedback_v1.json`
 - `validation/feedback_loop_gain_phase_v1.json`
 - `validation/feedback_structural_bounds_v1.json`
+- `validation/feedback_critical_slowing_v1.json`
 
 The central structural identity is
 
@@ -130,8 +136,17 @@ stable nonoscillatory
 -> oscillatory unit-circle instability
 ```
 
-without changing the sign of the ecological feedback.
+without changing the sign of ecological feedback.
 
-Conversely, the inherited finite-structure bounds can rule those phases out before a particular task is constructed. In the executable API, `possible=False` is the strong conclusion: the declared structural scope cannot reach that phase under the stated feedback parameters. `possible=True` means only that the upper bound does not exclude it.
+It also predicts that dynamics can remain visible for a very long time while the equilibrium is still stable. Near the feedback boundary or long-memory limit,
 
-Generic feedback stability, Jury analysis, damped oscillations, unit-circle crossing algebra, and finite-state bifurcation tools are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure, plus the resulting structural phase-exclusion certificates.
+```text
+long transient duration
+~ 1 / [(1-community memory)*(distance from loop-gain boundary)].
+```
+
+This is a third evolutionary-timescale mechanism alongside the parent branch's long-run directional trend and zero-mean recurrent fluctuation.
+
+Conversely, inherited finite-structure bounds can rule phases out before a particular task is constructed. In the executable API, `possible=False` is the strong conclusion: the declared structural scope cannot reach that phase under the stated feedback parameters. `possible=True` means only that the upper bound does not exclude it.
+
+Generic feedback stability, Jury analysis, damped oscillations, unit-circle crossing algebra, critical slowing, and finite-state bifurcation tools are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure, plus the resulting phase boundaries, phase-exclusion certificates, and structurally parameterized transient timescale.
