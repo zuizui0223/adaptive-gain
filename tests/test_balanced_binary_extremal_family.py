@@ -14,7 +14,7 @@ def test_balanced_binary_family_direct_small_depths():
         k = 1 << depth
         assert receipt.theorem_holds
         assert receipt.branch_count == k
-        assert receipt.world_count == 2 * k + 1
+        assert receipt.world_count == 2 * k + 2
         assert receipt.query_count == depth + k
         assert receipt.adaptive_upper_bound == depth + 1
         assert receipt.fixed_lower_bound == k
@@ -28,14 +28,14 @@ def test_balanced_binary_family_direct_small_depths():
         assert receipt.direct_fixed_cost >= k
 
 
-def test_every_explicit_query_is_binary_and_globally_balanced():
+def test_every_explicit_query_is_binary_and_exactly_balanced():
     for depth in (1, 2, 3):
         task = balanced_binary_extremal_task(depth)
         for query in task.queries:
             assert set(query.outcomes) <= {0, 1}
             zeros = sum(outcome == 0 for outcome in query.outcomes)
             ones = sum(outcome == 1 for outcome in query.outcomes)
-            assert abs(zeros - ones) <= 1
+            assert zeros == ones
 
 
 def test_balanced_binary_ratio_lower_bound_is_unbounded_analytically():
@@ -55,7 +55,7 @@ def test_balanced_binary_ratio_lower_bound_is_unbounded_analytically():
 def test_large_family_counts_do_not_require_exact_solver_materialization():
     k, worlds, queries = balanced_binary_family_counts(8)
     assert k == 256
-    assert worlds == 513
+    assert worlds == 514
     assert queries == 264
     assert balanced_binary_ratio_lower_bound(8) == Fraction(256, 9)
 
