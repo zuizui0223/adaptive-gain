@@ -144,9 +144,9 @@ def exact_balanced_depth_four_ceiling_witness(world_count: int) -> FiniteTask:
         worlds = list(task.worlds)
         zero_index = len(worlds)
         one_index = zero_index + 1
-        # all-zero routes to target 11; all-one routes to target 0 in the
-        # registered complete depth-four policy.
-        worlds.extend((World(f"pad_zero_{zero_index}", 11), World(f"pad_one_{one_index}", 0)))
+        # all-zero routes to the w19 terminal (target 15); all-one routes to
+        # the (w0,w11) terminal (target 0).
+        worlds.extend((World(f"pad_zero_{zero_index}", 15), World(f"pad_one_{one_index}", 0)))
         queries = tuple(
             Query(query.name, query.cost, query.outcomes + (0, 1))
             for query in task.queries
