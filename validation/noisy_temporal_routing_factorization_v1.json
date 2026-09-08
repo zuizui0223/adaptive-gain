@@ -1,0 +1,32 @@
+{
+  "model": "symmetric_binary_noisy_temporal_routing_v1",
+  "source_core": "four_world_three_query_unique_strict_gain_normal_form",
+  "assumptions": {
+    "target": "binary and fixed within the two-step sensing episode",
+    "context": "binary with P(C1=C0)=rho",
+    "initial_prior": "T and C0 independent fair bits",
+    "routing_observation": "binary symmetric channel with P(R=C0)=a, a in [1/2,1]",
+    "specialist_observations": "independent binary symmetric channels around the deterministic specialist outputs with reliability b in [1/2,1]",
+    "budget": "two queries",
+    "decoder": "Bayes-optimal target classification"
+  },
+  "closed_form": {
+    "every_fixed_pair_accuracy": "1/2 + (2*b-1)/4",
+    "persistence_accuracy": "fixed + (2*rho-1)*(2*a-1)*(2*b-1)/4",
+    "alternation_accuracy": "fixed - (2*rho-1)*(2*a-1)*(2*b-1)/4",
+    "optimal_adaptive_accuracy": "fixed + abs(2*rho-1)*(2*a-1)*(2*b-1)/4",
+    "adaptive_gain": "abs(2*rho-1)*(2*a-1)*(2*b-1)/4",
+    "zero_gain_boundary": "rho=1/2 or a=1/2 or b=1/2"
+  },
+  "independent_enumeration_check": {
+    "rho_grid_points": 21,
+    "routing_reliability_grid_points": 6,
+    "specialist_reliability_grid_points": 6,
+    "parameter_triples": 756,
+    "formula_comparisons": 3780,
+    "maximum_absolute_error": 2.220446049250313e-16
+  },
+  "evolutionary_corollary": "with fitness value v per accuracy unit and routing-control cost k, DeltaW = v*gain-k; cue reliabilities are complementary conditional on nonzero temporal predictability",
+  "test_status": "Repository test file added. Local git clone for branch-wide pytest was blocked by DNS in the execution environment; GitHub Actions is the intended full-suite check.",
+  "claim_boundary": "Exact only for the stated symmetric binary-noise model; no general factorization claim for asymmetric, correlated, multistep, or nonbinary cue processes."
+}
