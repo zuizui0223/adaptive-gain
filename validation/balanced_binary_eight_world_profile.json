@@ -1,0 +1,47 @@
+{
+  "scope": "exact_balanced_binary_eight_world_sharp_fixed_m_profile",
+  "world_count": 8,
+  "balanced_cut_classes_modulo_outcome_complement": 35,
+  "irredundant_cut_cap": {
+    "six_cut_families_checked": 1623160,
+    "formula": "C(35,6)",
+    "irredundant_six_cut_families_found": 0,
+    "registered_irredundant_five_cut_witness": true,
+    "maximum_irredundant_family_size": 5,
+    "consequence": "Every minimum fixed resolver has size C_F <= 5."
+  },
+  "sharp_ratio_by_declared_query_count": {
+    "m=1": "1",
+    "m=2": "1",
+    "m=3": "3/2",
+    "m=4": "3/2",
+    "m>=5": "5/3"
+  },
+  "three_query_witness": {
+    "targets": [0, 0, 1, 1, 1, 0, 0, 0],
+    "query_outcomes": [
+      [0, 0, 0, 0, 1, 1, 1, 1],
+      [1, 1, 1, 0, 1, 0, 0, 0],
+      [1, 1, 0, 1, 0, 1, 0, 0]
+    ],
+    "adaptive_cost": 2,
+    "fixed_cost": 3,
+    "ratio": "3/2",
+    "all_queries_exactly_50_50": true
+  },
+  "five_query_witness": {
+    "source": "validation/balanced_binary_small_scope.json",
+    "adaptive_cost": 3,
+    "fixed_cost": 5,
+    "ratio": "5/3",
+    "all_queries_exactly_50_50": true
+  },
+  "padding_argument": "Duplicate physical query labels with identical exactly-balanced outcomes preserve C_A and C_F and attain the same ratio at larger declared m.",
+  "upper_bound_argument": {
+    "m<=2": "If C_A=1 then C_F<=1; otherwise C_F/C_A<=m/2<=1.",
+    "m=3,4": "If C_A=2, binary depth-two flattening gives C_F<=3; if C_A>=3 then C_F<=4, so the maximum is 3/2.",
+    "m>=5": "The irredundant-cut classification gives C_F<=5. For C_A<=2 flattening gives at most 3/2; for C_A>=3 the ratio is at most 5/3."
+  },
+  "implementation": "adaptive_gain/balanced_binary_eight_world_profile.py",
+  "tests": "tests/test_balanced_binary_eight_world_profile.py"
+}
