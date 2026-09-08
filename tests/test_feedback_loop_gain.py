@@ -60,23 +60,27 @@ def test_repo_native_gap_contrast_and_centered_loop_gain():
     ) == pytest.approx(0.125)
 
 
-def test_exact_loop_gain_stability_interval():
+def test_exact_loop_gain_stability_interval_with_globally_feasible_feedback():
+    # Keep q_target(p)=0.5+eta*(p-0.5) inside [0,1] for every p by using
+    # |eta|<=1.  Vary the symmetric reward contrast instead to span the exact
+    # loop-gain stability boundary L=-eta*Delta_s/4 at p*=1/2.
     cases = (
-        (-0.5, 0.2, True),
-        (-3.0, 0.2, True),
-        (-4.0, 0.2, False),
-        (0.5, 0.2, False),
+        (-0.5, 0.5, -0.5, 0.2, True, 0.125),
+        (-1.5, 1.5, -1.0, 0.2, True, 0.75),
+        (-2.0, 2.0, -1.0, 0.2, False, 1.0),
+        (-0.5, 0.5, 0.5, 0.2, False, -0.125),
     )
-    for eta, phi, expected_stable in cases:
+    for low, high, eta, phi, expected_stable, expected_L in cases:
         eq = interior_feedback_equilibrium(
-            low_reward=-0.5,
-            high_reward=0.5,
+            low_reward=low,
+            high_reward=high,
             q_base=0.5,
             feedback_strength=eta,
             community_memory=phi,
         )
         assert eq.status == "interior_equilibrium"
         L = loop_gain_from_equilibrium(eq)
+        assert L == pytest.approx(expected_L)
         assert eq.locally_stable == expected_stable
         assert expected_stable == (0.0 < L < 1.0)
 
