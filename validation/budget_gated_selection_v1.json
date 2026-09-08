@@ -1,0 +1,33 @@
+{
+  "claim": "exact adaptive-only budget window lifted to threshold evolutionary selection",
+  "deterministic_identity": "S_A(B)-S_F(B)=1 iff C_A<=B<C_F",
+  "registered_witnesses": {
+    "strict_state": {
+      "task": "payoff_routing_task()",
+      "C_A": 2,
+      "C_F": 3,
+      "budget": 2,
+      "adaptive_resolves": true,
+      "fixed_resolves": false
+    },
+    "bypass_state": {
+      "task": "routing_bypass_control()",
+      "C_A": 2,
+      "C_F": 2,
+      "budget": 2,
+      "adaptive_resolves": true,
+      "fixed_resolves": true
+    }
+  },
+  "fitness_parameters": {
+    "baseline_fitness": 1.0,
+    "resolution_benefit": 1.0,
+    "contingent_maintenance_log_cost": "0.5*log(2)"
+  },
+  "selection_sequence_under_alternation": [
+    "+0.5*log(2)",
+    "-0.5*log(2)"
+  ],
+  "population_genetic_consequence": "under exact haploid log-odds addition, every two-state cycle returns any interior initial allele frequency exactly to its starting value while the odd generation moves",
+  "scope": "Fitness threshold model is explicit and conditional. It avoids a linear cost-to-fitness conversion but still assumes deterministic exact resolution, positive baseline fitness, and a fixed resolution benefit."
+}
