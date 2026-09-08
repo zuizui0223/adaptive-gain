@@ -1,0 +1,30 @@
+{
+  "scope": "exact_balanced_binary_twelve_world_sharp_fixed_m_profile",
+  "world_count": 12,
+  "query_constraint": "every declared query is binary and exactly 6/6 balanced",
+  "sharp_profile": {
+    "m=1": "1",
+    "m=2": "1",
+    "m=3": "3/2",
+    "m=4": "3/2",
+    "m=5": "5/3",
+    "m=6": "2",
+    "m>=7": "7/3"
+  },
+  "registered_witness_cost_pairs": {
+    "m=3": {"C_A": 2, "C_F": 3},
+    "m=5": {"C_A": 3, "C_F": 5},
+    "m=6": {"C_A": 3, "C_F": 6},
+    "m=7": {"C_A": 3, "C_F": 7}
+  },
+  "universal_fixed_cost_cap": 9,
+  "depth_three_full_flattening_threshold": {
+    "cost_pair": {"C_A": 3, "C_F": 7},
+    "minimum_even_world_count": 12,
+    "n=10": "impossible by the 2944-by-2944 half-state exact-balance/private-edge obstruction",
+    "n=12": "attained by an explicit exact-6/6 seven-query witness",
+    "all_even_n>=12": "attained by adding complementary all-zero/all-one world pairs"
+  },
+  "proof_consequence": "for m>=7, C_A<=3 gives C_F<=7; C_A>=4 gives C_F/C_A<=9/4<7/3; the (3,7) witness attains 7/3",
+  "status": "closed"
+}
