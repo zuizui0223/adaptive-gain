@@ -1,0 +1,15 @@
+{
+  "claim": "for fixed nonzero directional bias m and finite-correlation geometric sign process, cumulative directional mean overtakes fluctuation scale at H_x approximately ((1-m^2)/m^2)*((1+phi)/(1-phi))",
+  "signal_to_noise": "D_H=|m|H/sqrt((1-m^2)F_H(phi))",
+  "asymptotic": "D_H ~ |m|/sqrt(1-m^2) * sqrt(H(1-phi)/(1+phi))",
+  "crossover": "H_x ~= ((1-m^2)/m^2)*((1+phi)/(1-phi))",
+  "examples_mean_sign_0_1": {
+    "phi_-0_5": 33.0,
+    "phi_0": 99.0,
+    "phi_0_5": 297.0
+  },
+  "interpretation": "small directional bias is hidden for O(1/m^2) generations; positive temporal coherence inflates the short-run fluctuation scale and delays emergence of a weak persistent trend",
+  "implementation": "adaptive_gain/directional_retention.py",
+  "tests": "tests/test_directional_retention.py",
+  "novelty_boundary": "The signal-to-noise algebra is standard asymptotic probability. The repository-specific contribution is linking m and phi to community-state occupancy and persistence downstream of exact C_A/C_F structural selection states."
+}
