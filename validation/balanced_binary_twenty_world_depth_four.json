@@ -20,6 +20,7 @@
     "all_even_world_counts_at_least_20": true
   },
   "sharp_conclusion": "D4(n)=15 for every even n>=20",
-  "n18_status": "open: 13<=D4(18)<=14",
+  "n18_status": "closed: D4(18)=13",
+  "n18_receipt": "validation/balanced_binary_eighteen_world_depth_four_sharp.json",
   "theorem_holds": true
 }
