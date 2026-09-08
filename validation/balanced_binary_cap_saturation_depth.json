@@ -1,0 +1,15 @@
+{
+  "scope": "exact_balanced_binary_cap_saturation_adaptive_depth",
+  "domain": "even n >= 8; declared family exactly n-3 fixed-mandatory queries",
+  "private_pair_forest_normal_form": ["star(n/2-1)", "edge(2)", "star(n/2-1)"],
+  "sharp_adaptive_depth": "n/2 - 1",
+  "sharp_fixed_cost": "n - 3",
+  "examples": [
+    {"n": 8, "adaptive_cost": 3, "fixed_cost": 5},
+    {"n": 10, "adaptive_cost": 4, "fixed_cost": 7},
+    {"n": 12, "adaptive_cost": 5, "fixed_cost": 9},
+    {"n": 14, "adaptive_cost": 6, "fixed_cost": 11}
+  ],
+  "caveat": "Additional declared exact-balanced queries may be used adaptively; the bundle-local theorem alone does not close D4(n).",
+  "theorem_holds": true
+}
