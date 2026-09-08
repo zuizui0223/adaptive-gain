@@ -20,6 +20,7 @@ from adaptive_gain.feedback_loop_gain import (
     structural_loop_gain,
     summarize_loop_gain,
     transient_regime,
+    unit_circle_instability_period,
 )
 from adaptive_gain.witnesses import payoff_routing_task, routing_bypass_control
 
@@ -55,8 +56,6 @@ def test_repo_native_gap_contrast_and_centered_loop_gain():
 
 
 def test_exact_loop_gain_stability_interval():
-    # For every interior equilibrium with positive reward contrast, the Jury
-    # inequalities reduce to 0<L<1.
     cases = (
         (-0.5, 0.2, True),
         (-3.0, 0.2, True),
@@ -103,6 +102,28 @@ def test_complex_pair_has_finite_damping_time_and_period():
     assert period is not None and isfinite(period) and period > 2.0
 
 
+def test_strong_feedback_boundary_is_oscillatory_unit_circle_crossing():
+    # At L=1, determinant=1 and trace=1+phi, so the conjugate pair lies on
+    # the unit circle with cos(theta_c)=(1+phi)/2.
+    assert unit_circle_instability_period(0.0) == pytest.approx(6.0)
+    assert unit_circle_instability_period(0.8) > unit_circle_instability_period(0.2)
+    assert unit_circle_instability_period(0.95) > 20.0
+
+    for phi in (0.0, 0.2, 0.8):
+        eq = interior_feedback_equilibrium(
+            low_reward=-2.0,
+            high_reward=2.0,
+            q_base=0.5,
+            feedback_strength=-1.0,
+            community_memory=phi,
+        )
+        assert loop_gain_from_equilibrium(eq) == pytest.approx(1.0)
+        assert eq.eigenvalues is not None
+        assert abs(eq.eigenvalues[0]) == pytest.approx(1.0)
+        assert abs(eq.eigenvalues[1]) == pytest.approx(1.0)
+        assert eq.eigenvalues[0].imag != pytest.approx(0.0)
+
+
 def test_positive_feedback_and_strong_negative_feedback_are_distinct_instabilities():
     positive = _repo_native_equilibrium(phi=0.5, eta=0.5)
     assert transient_regime(positive) == "unstable_nonrestoring_feedback"
@@ -121,7 +142,6 @@ def test_positive_feedback_and_strong_negative_feedback_are_distinct_instabiliti
 
 
 def test_k_branch_family_crosses_nonoscillatory_damped_and_overshoot_regimes():
-    # eta=-1/2, lambda=1 gives L_k=(k-1)/8 at p*=1/2.
     phi = 0.5
     assert oscillation_threshold(phi) == pytest.approx(0.125)
 
@@ -143,7 +163,6 @@ def test_k_branch_family_crosses_nonoscillatory_damped_and_overshoot_regimes():
         )
         assert L == pytest.approx((k - 1) / 8.0)
 
-        # Midpoint control cost centers state rewards and q*=p*=1/2.
         eq = structural_feedback_equilibrium(
             low,
             high,
@@ -161,7 +180,6 @@ def test_k_branch_family_crosses_nonoscillatory_damped_and_overshoot_regimes():
 
 
 def test_binary_extremal_family_has_faster_structural_phase_crossing():
-    # Delta_g(d)=2^d-(d+1), eta=-1/2, lambda=1.
     phi = 0.5
     L2 = binary_family_centered_loop_gain(
         2, lambda_cost=1.0, feedback_strength=-0.5
@@ -194,6 +212,8 @@ def test_loop_gain_summary_is_self_consistent():
 def test_invalid_inputs_raise():
     with pytest.raises(ValueError):
         oscillation_threshold(1.0)
+    with pytest.raises(ValueError):
+        unit_circle_instability_period(1.0)
     with pytest.raises(ValueError):
         centered_loop_gain_from_gap_contrast(
             1,
