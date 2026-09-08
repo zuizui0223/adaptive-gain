@@ -47,17 +47,43 @@ Read in this order:
      \]
 
      for damped oscillation within the stable region;
+   - identifies `L=1` as an oscillatory unit-circle boundary with
+
+     \[
+     \cos\theta_c=(1+\phi)/2;
+     \]
+
    - maps the repository's exact structural gap contrast directly into the loop gain;
-   - turns the `k`-branch and binary extremal routing families into explicit monotone / damped / overshoot phase sequences.
+   - turns the `k`-branch and binary extremal routing families into explicit nonoscillatory / damped / unstable phase sequences.
+
+3. `STRUCTURAL_PHASE_EXCLUSION_BOUNDS.md`
+   - reuses the parent bounded-arity theorem
+
+     \[
+     C_F\le\min\{m,F_b(n,h)\}
+     \]
+
+     to bound the maximum possible loop gain in a finite sensing scope;
+   - adds the productive-frontier edge cap
+
+     \[
+     C_F\le\min\{m,E,F_b(n,h)\};
+     \]
+
+   - provides rigorous one-sided certificates that damped oscillation or strong-feedback instability are structurally impossible under declared world/query/arity/frontier constraints;
+   - keeps frontier-rank caps out of the certificate because the parent repository already proves positive rank caps are extremally vacuous.
 
 Executable layers:
 
 - `adaptive_gain/endogenous_community_feedback.py`
 - `adaptive_gain/feedback_loop_gain.py`
+- `adaptive_gain/feedback_structural_bounds.py`
 - `tests/test_endogenous_community_feedback.py`
 - `tests/test_feedback_loop_gain.py`
+- `tests/test_feedback_structural_bounds.py`
 - `validation/endogenous_community_feedback_v1.json`
 - `validation/feedback_loop_gain_phase_v1.json`
+- `validation/feedback_structural_bounds_v1.json`
 
 The central structural identity is
 
@@ -101,9 +127,11 @@ The branch therefore predicts that increasing structural adaptive advantage can 
 ```text
 stable nonoscillatory
 -> stable damped oscillation
--> overshoot instability
+-> oscillatory unit-circle instability
 ```
 
 without changing the sign of the ecological feedback.
 
-Generic feedback stability, Jury analysis, and damped oscillations are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure.
+Conversely, the inherited finite-structure bounds can rule those phases out before a particular task is constructed. In the executable API, `possible=False` is the strong conclusion: the declared structural scope cannot reach that phase under the stated feedback parameters. `possible=True` means only that the upper bound does not exclude it.
+
+Generic feedback stability, Jury analysis, damped oscillations, unit-circle crossing algebra, and finite-state bifurcation tools are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure, plus the resulting structural phase-exclusion certificates.
