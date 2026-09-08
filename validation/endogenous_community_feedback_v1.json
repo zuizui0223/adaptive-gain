@@ -1,0 +1,31 @@
+{
+  "claim": "minimal closed community-selection-evolution feedback with exact local stability audit",
+  "branch": "theory/endogenous-community-feedback",
+  "repository_native_core": {
+    "low_state_task": "routing_bypass_control: (C_A,C_F)=(2,2)",
+    "high_state_task": "payoff_routing_task: (C_A,C_F)=(2,3)",
+    "lambda_cost": 1.0,
+    "control_cost": 0.5,
+    "rewards": [-0.5, 0.5],
+    "q_base": 0.5,
+    "interior_equilibrium": [0.5, 0.5],
+    "negative_feedback_example": {
+      "eta": -1.0,
+      "phi": 0.8,
+      "locally_stable": true
+    },
+    "positive_feedback_example": {
+      "eta": 0.5,
+      "phi": 0.8,
+      "locally_stable": false
+    }
+  },
+  "independent_jacobian_audit": {
+    "seed": 20260908,
+    "random_feasible_interior_models": 601,
+    "comparison": "analytic Jacobian vs central finite-difference Jacobian in (logit p, q) coordinates",
+    "maximum_absolute_error": 5.558300486541157e-10,
+    "jury_vs_eigenvalue_stability_mismatches": 0
+  },
+  "scope": "two recurrent community states; deterministic mean-field occupancy; q_target linear in phenotype frequency; 0<=community_memory<1; exact haploid log-odds selection update"
+}
