@@ -1,0 +1,236 @@
+"""Dimensionless loop gain for the endogenous community-feedback layer.
+
+For an interior equilibrium of ``endogenous_community_feedback.py`` with
+reward contrast ``Delta_s = s_high-s_low``, feedback slope ``eta``, and
+phenotype response ``r=p_star(1-p_star)``, define
+
+    L = -eta * Delta_s * r.
+
+When Delta_s>0 and 0<=phi<1, the exact Jury conditions reduce to
+
+    0 < L < 1.
+
+The Jacobian discriminant is
+
+    (1-phi) * [(1-phi) - 4L],
+
+so a stable equilibrium is
+
+    0 < L <= (1-phi)/4       stable nonoscillatory,
+    (1-phi)/4 < L < 1       stable damped oscillatory,
+    L >= 1                   unstable negative-feedback overshoot,
+    L <= 0                   non-restoring / positive-feedback instability.
+
+For the continuous structural lift, Delta_s=lambda_cost*Delta_g where
+Delta_g is the contrast in exact adaptive/fixed gaps C_F-C_A between community
+states.  Thus the repository's finite structural mathematics enters the closed
+loop as a literal dynamical gain.
+"""
+
+from __future__ import annotations
+
+from cmath import phase
+from dataclasses import dataclass
+from math import inf, isfinite, log, pi
+
+from .core import FiniteTask, adaptive_gain_receipt
+from .endogenous_community_feedback import FeedbackEquilibrium
+
+_TOL = 1e-12
+
+
+def task_structural_gap(task: FiniteTask) -> int:
+    receipt = adaptive_gain_receipt(task)
+    if receipt.adaptive_cost is None or receipt.fixed_cost is None:
+        raise ValueError("task must be resolvable")
+    return receipt.fixed_cost - receipt.adaptive_cost
+
+
+def structural_gap_contrast(low_task: FiniteTask, high_task: FiniteTask) -> int:
+    """Return Delta_g=(C_F-C_A)_high-(C_F-C_A)_low."""
+
+    return task_structural_gap(high_task) - task_structural_gap(low_task)
+
+
+def loop_gain_from_equilibrium(equilibrium: FeedbackEquilibrium) -> float:
+    """Return L=-eta*Delta_s*p*(1-p) for an interior equilibrium."""
+
+    if equilibrium.status != "interior_equilibrium":
+        raise ValueError("loop gain requires an interior equilibrium")
+    p = equilibrium.phenotype_frequency
+    if p is None:
+        raise ValueError("interior equilibrium lost phenotype frequency")
+    return (
+        -equilibrium.feedback_strength
+        * equilibrium.reward_contrast
+        * p
+        * (1.0 - p)
+    )
+
+
+def structural_loop_gain(
+    low_task: FiniteTask,
+    high_task: FiniteTask,
+    *,
+    lambda_cost: float,
+    feedback_strength: float,
+    equilibrium_frequency: float,
+) -> float:
+    """Loop gain directly from exact structural gap contrast.
+
+    The state-independent maintenance cost cancels from the reward contrast.
+    """
+
+    lam = float(lambda_cost)
+    eta = float(feedback_strength)
+    p = float(equilibrium_frequency)
+    if not isfinite(lam) or lam < 0.0:
+        raise ValueError("lambda_cost must be finite and non-negative")
+    if not isfinite(eta):
+        raise ValueError("feedback_strength must be finite")
+    if not 0.0 < p < 1.0:
+        raise ValueError("equilibrium_frequency must lie strictly inside (0,1)")
+    delta_g = structural_gap_contrast(low_task, high_task)
+    return -eta * lam * delta_g * p * (1.0 - p)
+
+
+def centered_loop_gain_from_gap_contrast(
+    gap_contrast: float,
+    *,
+    lambda_cost: float,
+    feedback_strength: float,
+) -> float:
+    """Loop gain at the centered equilibrium p*=1/2."""
+
+    delta_g = float(gap_contrast)
+    lam = float(lambda_cost)
+    eta = float(feedback_strength)
+    if not isfinite(delta_g):
+        raise ValueError("gap_contrast must be finite")
+    if not isfinite(lam) or lam < 0.0:
+        raise ValueError("lambda_cost must be finite and non-negative")
+    if not isfinite(eta):
+        raise ValueError("feedback_strength must be finite")
+    return -eta * lam * delta_g / 4.0
+
+
+def oscillation_threshold(community_memory: float) -> float:
+    """Loop-gain threshold (1-phi)/4 for complex local eigenvalues."""
+
+    phi = float(community_memory)
+    if not isfinite(phi) or not 0.0 <= phi < 1.0:
+        raise ValueError("community_memory must lie in [0,1)")
+    return (1.0 - phi) / 4.0
+
+
+def transient_regime(equilibrium: FeedbackEquilibrium) -> str:
+    """Classify the local feedback regime using exact loop-gain boundaries."""
+
+    if equilibrium.status != "interior_equilibrium":
+        return "no_interior_equilibrium"
+    if equilibrium.reward_contrast <= _TOL:
+        return "unsupported_nonpositive_reward_contrast"
+    L = loop_gain_from_equilibrium(equilibrium)
+    if L <= _TOL:
+        return "unstable_nonrestoring_feedback"
+    if L >= 1.0 - _TOL:
+        return "unstable_negative_feedback_overshoot"
+    threshold = oscillation_threshold(equilibrium.community_memory)
+    if L > threshold + _TOL:
+        return "stable_damped_oscillation"
+    return "stable_nonoscillatory"
+
+
+def local_spectral_radius(equilibrium: FeedbackEquilibrium) -> float:
+    """Maximum local eigenvalue modulus for an interior equilibrium."""
+
+    if equilibrium.status != "interior_equilibrium" or equilibrium.eigenvalues is None:
+        raise ValueError("spectral radius requires an interior equilibrium")
+    return max(abs(value) for value in equilibrium.eigenvalues)
+
+
+def local_damping_time(equilibrium: FeedbackEquilibrium) -> float:
+    """Local e-folding generations -1/log(rho) for a stable equilibrium."""
+
+    rho = local_spectral_radius(equilibrium)
+    if rho >= 1.0 - _TOL:
+        return inf
+    if rho <= _TOL:
+        return 0.0
+    return -1.0 / log(rho)
+
+
+def local_oscillation_period(equilibrium: FeedbackEquilibrium) -> float | None:
+    """Local oscillation period in generations for a complex stable pair."""
+
+    if transient_regime(equilibrium) != "stable_damped_oscillation":
+        return None
+    assert equilibrium.eigenvalues is not None
+    angle = abs(phase(equilibrium.eigenvalues[0]))
+    if angle <= _TOL:
+        return None
+    return 2.0 * pi / angle
+
+
+def k_branch_centered_loop_gain(
+    branch_count: int,
+    *,
+    lambda_cost: float,
+    feedback_strength: float,
+) -> float:
+    """Centered L for a gap-0 control vs k-branch family (gap k-1)."""
+
+    k = int(branch_count)
+    if k < 2:
+        raise ValueError("branch_count must be at least 2")
+    return centered_loop_gain_from_gap_contrast(
+        k - 1,
+        lambda_cost=lambda_cost,
+        feedback_strength=feedback_strength,
+    )
+
+
+def binary_family_centered_loop_gain(
+    routing_depth: int,
+    *,
+    lambda_cost: float,
+    feedback_strength: float,
+) -> float:
+    """Centered L for a gap-0 control vs binary extremal routing family.
+
+    Existing family theorem: C_A=d+1, C_F=2^d, so Delta_g=2^d-(d+1).
+    """
+
+    d = int(routing_depth)
+    if d < 1:
+        raise ValueError("routing_depth must be positive")
+    delta_g = (1 << d) - (d + 1)
+    return centered_loop_gain_from_gap_contrast(
+        delta_g,
+        lambda_cost=lambda_cost,
+        feedback_strength=feedback_strength,
+    )
+
+
+@dataclass(frozen=True)
+class LoopGainSummary:
+    loop_gain: float
+    oscillation_threshold: float
+    regime: str
+    spectral_radius: float
+    damping_time: float
+    oscillation_period: float | None
+
+
+def summarize_loop_gain(equilibrium: FeedbackEquilibrium) -> LoopGainSummary:
+    if equilibrium.status != "interior_equilibrium":
+        raise ValueError("summary requires an interior equilibrium")
+    L = loop_gain_from_equilibrium(equilibrium)
+    return LoopGainSummary(
+        loop_gain=L,
+        oscillation_threshold=oscillation_threshold(equilibrium.community_memory),
+        regime=transient_regime(equilibrium),
+        spectral_radius=local_spectral_radius(equilibrium),
+        damping_time=local_damping_time(equilibrium),
+        oscillation_period=local_oscillation_period(equilibrium),
+    )
