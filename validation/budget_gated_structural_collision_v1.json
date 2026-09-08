@@ -1,0 +1,28 @@
+{
+  "claim": "registered higher-order resource collision reverses selection under a hard shared budget without a linear cost-to-fitness map",
+  "source": "resource_role_profile_collision()",
+  "shared_weaker_summaries": [
+    "same adaptive continuation root type",
+    "same multiset of complete per-resource abstract role profiles",
+    "same adaptive cost C_A=2"
+  ],
+  "states": {
+    "X0": {"C_A": 2, "C_F": 2},
+    "X1": {"C_A": 2, "C_F": 3}
+  },
+  "budget": 2,
+  "fitness_model": {
+    "W_A": "exp(-kappa) * [w0 + v * 1{C_A<=B}]",
+    "W_F": "w0 + v * 1{C_F<=B}",
+    "w0": 1.0,
+    "v": 1.0,
+    "kappa": "0.5*log(2)"
+  },
+  "outcomes": {
+    "X0": "both architectures resolve; s=-0.5*log(2)",
+    "X1": "adaptive-only resolution; s=+0.5*log(2)",
+    "alternating_cycle": "allele frequency moves every odd generation and returns exactly after every two-state cycle under haploid log-odds selection"
+  },
+  "structural_channel": "Delta C_A=0, Delta C_F=1; the change is fixed/productive-frontier-side",
+  "scope": "conditional theoretical witness; natural realization requires empirical mapping from community state to finite cue obligations and a justified hard ecological budget"
+}
