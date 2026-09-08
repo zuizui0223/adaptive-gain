@@ -1,5 +1,3 @@
-from math import sqrt
-
 import pytest
 
 from adaptive_gain.directional_retention import (
@@ -27,12 +25,12 @@ def test_nonzero_mean_creates_linear_expected_accumulation():
 
 
 def test_long_horizon_retention_converges_to_absolute_directional_bias():
-    horizon = 200_000
+    horizon = 1_000_000
     for mean_sign in (-0.7, -0.2, 0.0, 0.3, 0.8):
         for phi in (-0.6, 0.0, 0.7):
             observed = rms_retention_fraction(horizon, mean_sign, phi)
             expected = asymptotic_rms_retention_fraction(mean_sign)
-            tolerance = 4e-3 if abs(mean_sign) < 0.05 else 8e-4
+            tolerance = 3e-3 if abs(mean_sign) < 0.05 else 8e-4
             assert observed == pytest.approx(expected, abs=tolerance, rel=tolerance)
 
 
