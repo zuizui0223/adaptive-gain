@@ -1,41 +1,62 @@
-# Next extension: noisy temporal routing
+# Noisy temporal routing: first symmetric case closed
 
-The exact temporal theorem currently assumes a perfectly observed routing context and deterministic specialist queries conditional on context.
+The symmetric binary-noise extension that was staged here is now closed exactly.
 
-The next model should introduce
-
-\[
-P(R=C_0)=a>1/2
-\]
-
-for routing reliability and
+Let
 
 \[
-P(S_C=T\mid \text{specialist matches current context})=b>1/2
+P(C_1=C_0)=\rho,
+\qquad
+P(R=C_0)=a,
+\qquad
+P(Y_q=q(T,C_1))=b,
 \]
 
-for specialist reliability, while retaining an uninformative or branch-specific nuisance law for a mismatched specialist.
+with `a,b in [1/2,1]`, where the route signal and specialist observations pass through independent binary symmetric channels.
 
-The first target is a closed-form analogue of
+Then every two-query fixed pair has
 
 \[
-G_{time}=|2\rho-1|/4
+\boxed{
+A_F^{(2)}
+=
+\frac12+\frac{2b-1}{4},
+}
 \]
 
-that separates three effects:
+and the optimal contingent policy has exact gain
+
+\[
+\boxed{
+G_{noisy}
+=
+\frac{|2\rho-1|(2a-1)(2b-1)}{4}.
+}
+\]
+
+Thus the previously conjectured product structure is exact in this symmetric construction.
+
+See:
 
 ```text
-temporal predictability
-x routing-cue reliability
-x specialist-cue reliability
+theory/NOISY_TEMPORAL_ROUTING_FACTORIZATION.md
+adaptive_gain/noisy_temporal_routing.py
+tests/test_noisy_temporal_routing.py
 ```
 
-and then adds an explicit control cost.
+## What is now genuinely next
 
-A useful conjectural factorization to test is that, under a symmetric binary-noise construction preserving the minimal normal-form semantics, routing gain scales monotonically with
+The next unresolved layer is no longer `does noise destroy the temporal theorem?` It is the boundary of the factorization under more realistic observation laws.
 
-\[
-|2\rho-1|(2a-1)(2b-1).
-\]
+Priority questions:
 
-This is a conjecture, not yet a repository theorem. The exact mismatched-specialist likelihood must be chosen so that the deterministic limit recovers the existing four-world strict-gain core rather than a different two-query problem.
+1. asymmetric false-positive / false-negative rates;
+2. unequal reliabilities for the two specialist channels;
+3. correlated routing and specialist errors;
+4. nonuniform target and context priors;
+5. more than one context transition before action;
+6. moving fitness-relevant target `T_t` rather than fixed `T`;
+7. explicit sensing-time costs and mortality / missed-opportunity risk;
+8. heritable investment trade-offs in `a`, `b`, memory, and switching machinery.
+
+The most biologically useful next theorem would identify which of these perturbations preserve a multiplicative or monotone complementarity among temporal predictability, early-cue quality, and downstream-cue quality.
