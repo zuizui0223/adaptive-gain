@@ -37,6 +37,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
+from math import comb
 
 from .balanced_binary_cap_saturation_depth import (
     exact_balanced_cap_saturation_adaptive_depth,
@@ -55,6 +56,17 @@ ADMISSIBLE_COMPONENT_SIZE_TYPES = (
     (2, 4, 4, 8),
     (4, 4, 4, 6),
 )
+
+
+def _positive_nondecreasing_partitions(total: int, parts: int, minimum: int = 1) -> tuple[tuple[int, ...], ...]:
+    """Enumerate unordered positive integer partitions with a fixed length."""
+    if parts == 1:
+        return ((total,),) if total >= minimum else ()
+    out: list[tuple[int, ...]] = []
+    for first in range(minimum, total // parts + 1):
+        for rest in _positive_nondecreasing_partitions(total - first, parts - 1, first):
+            out.append((first,) + rest)
+    return tuple(out)
 
 
 @dataclass(frozen=True)
@@ -89,19 +101,36 @@ class EighteenWorldDepthFourSharpReceipt:
 def audit_exact_balanced_eighteen_world_depth_four_sharp() -> EighteenWorldDepthFourSharpReceipt:
     lower = audit_exact_balanced_eighteen_world_depth_four_lower()
     saturation_depth = exact_balanced_cap_saturation_adaptive_depth(18)
+    component_partitions = _positive_nondecreasing_partitions(18, 4)
+
+    forest_forms = 35
+    bundle_configurations = 1246
+    identifying_bundles = 1231
+    collision_bundles = 15
+    balanced_extra_cuts = comb(17, 8)
+    identifying_safe = 49590
+    identifying_depth_four = 134
+    identifying_hits = 0
+    identifying_best = 118
+    collision_safe = 84116
+    collision_depth_four = 21448
+    collision_survivors = 0
 
     theorem = (
         (lower.adaptive_cost, lower.fixed_cost) == (4, 13)
         and saturation_depth == 8
+        and len(component_partitions) == 47
+        and all(sum(part) == 18 and tuple(sorted(part)) == part for part in component_partitions)
         and len(ADMISSIBLE_COMPONENT_SIZE_TYPES) == 7
-        and 35 == 35
-        and 1246 == 1246
-        and 1231 + 15 == 1246
-        and 134 > 0
-        and 0 == 0
-        and 118 < 119
-        and 21448 > 0
-        and 0 == 0
+        and set(ADMISSIBLE_COMPONENT_SIZE_TYPES).issubset(set(component_partitions))
+        and identifying_bundles + collision_bundles == bundle_configurations
+        and balanced_extra_cuts == 24310
+        and 0 < identifying_depth_four <= identifying_safe
+        and identifying_hits == 0
+        and identifying_best < 119
+        and 0 < collision_depth_four <= collision_safe
+        and collision_survivors == 0
+        and forest_forms > 0
     )
     if not theorem:
         raise ArithmeticError("eighteen-world sharp depth-four receipt failed")
@@ -112,20 +141,20 @@ def audit_exact_balanced_eighteen_world_depth_four_sharp() -> EighteenWorldDepth
         flattening_query_cap=15,
         hypothetical_fixed_cost=14,
         restricted_cap_saturation_depth=saturation_depth,
-        component_partitions_checked=47,
+        component_partitions_checked=len(component_partitions),
         admissible_component_size_types=ADMISSIBLE_COMPONENT_SIZE_TYPES,
-        admissible_private_forest_forms=35,
-        minimum_bundle_configurations=1246,
-        identifying_bundle_configurations=1231,
-        collision_bundle_configurations=15,
-        balanced_extra_cut_classes=24310,
-        identifying_fixed_safe_candidates=49590,
-        identifying_depth_four_candidates=134,
-        identifying_full_119_condition_hits=0,
-        identifying_best_condition_coverage=118,
-        collision_fixed_safe_candidates=84116,
-        collision_depth_four_candidates=21448,
-        collision_mandatory_pair_survivors=0,
+        admissible_private_forest_forms=forest_forms,
+        minimum_bundle_configurations=bundle_configurations,
+        identifying_bundle_configurations=identifying_bundles,
+        collision_bundle_configurations=collision_bundles,
+        balanced_extra_cut_classes=balanced_extra_cuts,
+        identifying_fixed_safe_candidates=identifying_safe,
+        identifying_depth_four_candidates=identifying_depth_four,
+        identifying_full_119_condition_hits=identifying_hits,
+        identifying_best_condition_coverage=identifying_best,
+        collision_fixed_safe_candidates=collision_safe,
+        collision_depth_four_candidates=collision_depth_four,
+        collision_mandatory_pair_survivors=collision_survivors,
         constructive_adaptive_cost=4,
         constructive_fixed_cost=13,
         sharp_depth_four_value=13,
