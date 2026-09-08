@@ -1,0 +1,21 @@
+{
+  "scope": "exact_balanced_binary_twenty_two_world_CA5_CF17",
+  "query_model": "binary_unit_cost_globally_exact_11_11",
+  "world_count": 22,
+  "query_count": 17,
+  "adaptive_cost": 5,
+  "fixed_cost": 17,
+  "construction": {
+    "base": "20-world exact-balanced depth-four witness with 15 fixed-mandatory queries",
+    "complementary_base_worlds": [6, 13],
+    "duplicated_worlds": [20, 21],
+    "new_private_pairs": [[6, 20], [13, 21]],
+    "old_queries_preserve_balance": true,
+    "new_queries_exact_11_11": true,
+    "all_17_queries_have_query_unique_cross_target_private_pairs": true,
+    "policy_refinement": "refine only the old w6 leaf by q15 and the old (w3,w13) leaf by q16"
+  },
+  "conclusion": "D5(22)>=17",
+  "padding_conclusion": "D5(n)>=17 for every even n>=22 by complementary all-zero/all-one padding",
+  "theorem_holds": true
+}
