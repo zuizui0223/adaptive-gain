@@ -19,7 +19,12 @@ Read in this order:
    - same adaptive continuation and same per-resource role-profile multiset can still give `C_F=2` versus `3`;
    - under midpoint control cost this reverses selection on contingent sensing.
 
-4. `STRUCTURAL_SELECTION_TRANSITIONS.md`
+4. `BUDGET_GATED_STRUCTURAL_COLLISION.md`
+   - combines that same higher-order collision with the exact adaptive-only budget window;
+   - at `B=2`, the `(2,2)` state lets both architectures resolve while the `(2,3)` state lets only the contingent architecture resolve;
+   - selection reverses under the shared threshold-fitness model without assigning a linear fitness value to each unit of sensing cost.
+
+5. `STRUCTURAL_SELECTION_TRANSITIONS.md`
    - decomposes a community-state change as
 
      \[
@@ -29,7 +34,7 @@ Read in this order:
    - separates fixed/productive-frontier rewiring from adaptive-continuation rewiring;
    - the registered collision isolates a pure frontier-side selection change with `Delta C_A=0`.
 
-5. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
+6. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
    - fluctuating selection, eco-evolutionary feedback, rapid evolution, stasis, individual-information-to-community effects, and rate-time issues are treated as prior art;
    - isolates the proposed repository-specific structural bridge.
 
@@ -44,10 +49,12 @@ Executable layers:
 - `tests/test_structural_selection_transition.py`
 - `tests/test_structural_collision_timescale.py`
 - `tests/test_budget_gated_selection.py`
+- `tests/test_budget_gated_structural_collision.py`
 - `tests/test_evolutionary_timescale_filter.py`
 - `validation/evolutionary_timescale_filter_v1.json`
 - `validation/structural_selection_transition_v1.json`
 - `validation/budget_gated_selection_v1.json`
+- `validation/budget_gated_structural_collision_v1.json`
 
 Core timescale distinction:
 
@@ -92,8 +99,11 @@ between community states:
        - Delta kappa control channel
 ```
 
-The strongest current exact witnesses are complementary:
+The strongest current exact result is now robust to the fitness lift used:
 
-1. higher-order resource co-location changes `C_F` while leaving adaptive continuation and marginal per-resource role profiles unchanged, reversing structural selection;
-2. a strict task and a bypass task move a fixed hard budget into and out of the adaptive-only interval, generating `+s,-s` without a linear cost-to-fitness assumption;
-3. under alternating community states, both mechanisms can produce nonzero short-term allele-frequency movement but zero retained change after each two-generation cycle.
+- the registered higher-order resource collision changes `C_F` from 2 to 3 while keeping `C_A=2`, adaptive continuation root type, and the multiset of per-resource role profiles fixed;
+- under the continuous cost-value model, that structural change can reverse selection;
+- under the hard-budget model at `B=2`, the same structural change moves the population into an adaptive-only resolution window and also reverses selection;
+- under alternating community states, either lift yields nonzero short-term allele-frequency movement but zero retained change after each two-generation cycle at the corresponding midpoint maintenance cost.
+
+So the burst-versus-stasis conclusion is not tied to one arbitrary linear conversion of sensing cost into fitness.
