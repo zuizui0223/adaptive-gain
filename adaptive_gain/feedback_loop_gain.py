@@ -21,6 +21,11 @@ so a stable equilibrium is
     L >= 1                   unstable negative-feedback overshoot,
     L <= 0                   non-restoring / positive-feedback instability.
 
+At L=1 and phi<1 the conjugate pair lies on the unit circle.  Its critical
+angle satisfies cos(theta_c)=(1+phi)/2, giving a critical local oscillation
+period 2*pi/theta_c.  Thus the strong-negative-feedback boundary is an
+oscillatory unit-circle crossing rather than a flip through eigenvalue -1.
+
 For the continuous structural lift, Delta_s=lambda_cost*Delta_g where
 Delta_g is the contrast in exact adaptive/fixed gaps C_F-C_A between community
 states.  Thus the repository's finite structural mathematics enters the closed
@@ -31,7 +36,7 @@ from __future__ import annotations
 
 from cmath import phase
 from dataclasses import dataclass
-from math import inf, isfinite, log, pi
+from math import acos, inf, isfinite, log, pi
 
 from .core import FiniteTask, adaptive_gain_receipt
 from .endogenous_community_feedback import FeedbackEquilibrium
@@ -121,6 +126,24 @@ def oscillation_threshold(community_memory: float) -> float:
     if not isfinite(phi) or not 0.0 <= phi < 1.0:
         raise ValueError("community_memory must lie in [0,1)")
     return (1.0 - phi) / 4.0
+
+
+def unit_circle_instability_period(community_memory: float) -> float:
+    """Critical local oscillation period at the strong-feedback boundary L=1.
+
+    At L=1, determinant is one and trace is 1+phi.  For 0<=phi<1 the
+    eigenvalues are exp(+-i theta_c), with
+
+        cos(theta_c) = (1+phi)/2.
+
+    The returned period is 2*pi/theta_c generations.
+    """
+
+    phi = float(community_memory)
+    if not isfinite(phi) or not 0.0 <= phi < 1.0:
+        raise ValueError("community_memory must lie in [0,1)")
+    theta = acos((1.0 + phi) / 2.0)
+    return 2.0 * pi / theta
 
 
 def transient_regime(equilibrium: FeedbackEquilibrium) -> str:
