@@ -27,6 +27,7 @@ unique deletion-minimal 5-world strict-gain normal form
 first unit-cost scope with C_F/C_A > 3/2
 unbounded unit-cost adaptive advantage
 unbounded binary-observation unit-cost adaptive advantage
+unbounded balanced-binary unit-cost adaptive advantage
 sharp productive-tree internal-node bound M(n,h)
 sharp unit-cost fixed-(world count, query count) ratio for unrestricted query arity
 sharp unit-cost fixed-(world count, query count) ratio for binary query arity
@@ -172,15 +173,39 @@ R_{b,\,\operatorname{rank}\le r}(n,m)=R_b(n,m)
 
 The sharp bounded-arity witness already has only singleton frontier edges. Thus `rank=1` can realize the full worst-case ratio; small edge size by itself does not make fixed resolution easy.
 
+### Balanced binary outcomes
+
+Global marginal balance also does **not** bound the ratio as problem size grows. There is an explicit family in which every binary query satisfies
+
+\[
+|\#0-\#1|\le1,
+\]
+
+while
+
+\[
+C_F\ge2^d,
+\qquad
+C_A\le d+1,
+\]
+
+so
+
+\[
+\boxed{C_F/C_A\ge2^d/(d+1)\to\infty.}
+\]
+
+What remains open is the **sharp fixed-`(n,m)` extremal formula inside the balanced-binary subclass**. Balancedness does not give a uniform constant bound, but it may change the finite-size optimum relative to unrestricted binary queries.
+
 ### Global-label-once policy syntax
 
 The ordinary model already uses each query at most once on every **realized path**. A stronger syntax that allows each query label at only one node in the entire counterfactual tree is a different model.
 
 Pointwise class containment fails under that syntax: a registered two-query task has ordinary `C_A=C_F=2` but no globally label-unique resolving tree. Nevertheless, if one restricts attention to tasks that are global-label-once resolvable, their sharp unit-cost extremal maximum remains `R_b(n,m)`, because the bounded-arity sharp construction already uses a distinct query at every internal node.
 
-Remaining extremal questions therefore need constraints stronger or different than positive rank caps or global-label uniqueness:
+Remaining extremal questions therefore need constraints stronger or different than positive rank caps, marginal balance, or global-label uniqueness:
 
-- What is the sharp ratio when every binary query has balanced outcomes on the represented worlds?
+- What is the sharp fixed-`(n,m)` ratio in the balanced-binary subclass?
 - What changes under a genuine operational inventory constraint shared across multiple simultaneously realized subjects or repeated experimental rounds?
 - Under unequal positive costs, what is the sharp fixed-`(n,m,b)` ratio and what are the smallest scopes exceeding a given threshold?
 - Can the bounded-arity recurrence be simplified to useful closed forms for fixed small `b=3,4`?
