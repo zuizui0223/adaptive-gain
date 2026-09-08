@@ -1,0 +1,31 @@
+{
+  "claim": "predictive cue usefulness Jensen-gap theorem",
+  "branch": "theory/ecological-state-observability",
+  "binary_exact_original_normal_form": {
+    "parameter_grid": {
+      "pi0": "0.0,0.1,...,1.0",
+      "K00": "0.0,0.1,...,1.0",
+      "K10": "0.0,0.1,...,1.0"
+    },
+    "parameter_triples": 1331,
+    "latent_histories_per_policy": 8,
+    "fixed_policies_enumerated": 3,
+    "adaptive_policies_enumerated": 4,
+    "comparisons": [
+      "enumerated best fixed accuracy vs closed form",
+      "enumerated best adaptive accuracy vs closed form",
+      "enumerated gain vs binary Jensen-gap formula",
+      "closed-form gain identity"
+    ],
+    "maximum_absolute_error": 1.6653345369377348e-16
+  },
+  "finite_state_branch_diagnostic_extension": {
+    "seed": 20260908,
+    "state_sizes": [2, 3, 4],
+    "models_per_size": 500,
+    "models_checked": 1500,
+    "check": "row-wise closed-form adaptive usefulness probability vs exhaustive enumeration of all deterministic context-to-specialist policies",
+    "maximum_absolute_error": 0.0
+  },
+  "scope": "The arbitrary binary result uses the repository's exact q_route/q_left/q_right semantics. The n-by-m result assumes a branch-diagnostic specialist abstraction with matched specialist perfect and mismatched specialist target-uninformative."
+}
