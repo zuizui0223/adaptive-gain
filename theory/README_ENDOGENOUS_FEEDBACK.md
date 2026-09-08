@@ -78,18 +78,28 @@ Read in this order:
 
    - separates a slowly damped stable transient from both genuine long-run directional accumulation and recurrent zero-mean selection fluctuations.
 
+5. `STRUCTURAL_TRANSIENT_TIME_CEILINGS.md`
+   - combines the inherited finite structural gap bound with unit-cost gap integrality;
+   - identifies the largest structurally allowed stable integer gap and the smallest integer gap entering the damped phase;
+   - converts those integer envelopes into rigorous one-sided ceilings on stable damping time and damped-cycle period;
+   - for `(n,m,b,h)=(12,12,2,3)` with the registered feedback parameters, bounds every stable damped transient by approximately `6.9521` e-folding generations and every damped local period by approximately `19.5281` generations;
+   - shows how frontier-edge caps can collapse the time ceiling by eliminating the damped phase entirely.
+
 Executable layers:
 
 - `adaptive_gain/endogenous_community_feedback.py`
 - `adaptive_gain/feedback_loop_gain.py`
 - `adaptive_gain/feedback_structural_bounds.py`
+- `adaptive_gain/feedback_transient_bounds.py`
 - `tests/test_endogenous_community_feedback.py`
 - `tests/test_feedback_loop_gain.py`
 - `tests/test_feedback_structural_bounds.py`
+- `tests/test_feedback_transient_bounds.py`
 - `validation/endogenous_community_feedback_v1.json`
 - `validation/feedback_loop_gain_phase_v1.json`
 - `validation/feedback_structural_bounds_v1.json`
 - `validation/feedback_critical_slowing_v1.json`
+- `validation/feedback_transient_time_ceiling_v1.json`
 
 The central structural identity is
 
@@ -147,6 +157,22 @@ long transient duration
 
 This is a third evolutionary-timescale mechanism alongside the parent branch's long-run directional trend and zero-mean recurrent fluctuation.
 
+Finite sensing structure can now constrain this third mechanism quantitatively.  Because unit-cost structural gaps are integer and bounded by the existing finite-task theorems, a declared `(n,m,b,h)` scope may either
+
+- exclude stable damped transients completely, or
+- admit them but impose finite upper bounds on their damping time and period.
+
+Thus the current hierarchy is
+
+```text
+finite sensing constraints
+-> structural gap / gap ceiling
+-> feedback loop gain / loop-gain ceiling
+-> local phase
+-> critical slowing
+-> structurally permitted transient-time ceiling.
+```
+
 Conversely, inherited finite-structure bounds can rule phases out before a particular task is constructed. In the executable API, `possible=False` is the strong conclusion: the declared structural scope cannot reach that phase under the stated feedback parameters. `possible=True` means only that the upper bound does not exclude it.
 
-Generic feedback stability, Jury analysis, damped oscillations, unit-circle crossing algebra, critical slowing, and finite-state bifurcation tools are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure, plus the resulting phase boundaries, phase-exclusion certificates, and structurally parameterized transient timescale.
+Generic feedback stability, Jury analysis, damped oscillations, unit-circle crossing algebra, critical slowing, integer-envelope optimization, and finite-state bifurcation tools are prior art. The repository-specific contribution is the source and exact scaling of `Delta g` from continuation/productive-frontier sensing structure, plus the resulting phase boundaries, phase-exclusion certificates, and structural transient-time ceilings.
