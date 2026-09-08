@@ -220,12 +220,12 @@ C_F/C_A=\frac{2^d}{d+1}\longrightarrow\infty.
 
 Thus the multiplicative adaptive advantage is unbounded even when **every observation is binary and every acquisition cost is one**.
 
-## Balanced binary observations are still not enough
+## Exact 50/50 balanced binary observations are still not enough
 
-Even imposing near-perfect marginal balance on every binary query does not bound the ratio. There is an explicit family with `k=2^d` mixed branches plus one dummy world in which every query satisfies
+Even perfect global marginal balance on every binary query does not bound the ratio. There is an explicit family with `k=2^d` mixed branches plus two target-0 dummy worlds in which every declared query has exactly equal binary outcome counts:
 
 \[
-\boxed{|\#0-\#1|\le1}.
+\boxed{\#0=\#1=k+1.}
 \]
 
 Every branch-terminal query remains the unique separator of its own target-mixed pair, so
@@ -251,7 +251,7 @@ Therefore
 }
 \]
 
-This is an unboundedness result, not the sharp fixed-`(n,m)` extremum under balancedness. See `theory/BALANCED_BINARY_UNBOUNDED_ADAPTIVE_GAIN.md`.
+This is an unboundedness result, not the sharp fixed-`(n,m)` extremum under exact balance. See `theory/BALANCED_BINARY_UNBOUNDED_ADAPTIVE_GAIN.md`.
 
 ---
 
