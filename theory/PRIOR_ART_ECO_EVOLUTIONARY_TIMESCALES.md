@@ -11,6 +11,7 @@ The branch does **not** claim as new:
 - fluctuating selection;
 - temporal reversals in directional selection;
 - the possibility that rapid short-term changes coexist with long-term stasis;
+- individual behavior or information use affecting ecological interactions and community dynamics;
 - the standard haploid log-odds selection recurrence;
 - partial-sum autocovariance identities;
 - the general warning that evolutionary rate divided by elapsed time is difficult to interpret.
@@ -69,7 +70,35 @@ is not a repository novelty.
 
 ---
 
-## 3. Rate-time scaling should not be the main observable
+## 3. Individual behavior and information can scale up to communities
+
+The step from individual phenotype or behavior to altered ecological interactions is also established.
+
+Werner & Peacor (2003) reviewed trait-mediated indirect interactions in ecological communities. Their core point is that a species' phenotypic or behavioral response to another species can alter its per-capita effects on other species, changing population density or fitness and thereby restructuring community interactions.
+
+**Reference**
+
+Werner, E. E., & Peacor, S. D. (2003). A review of trait-mediated indirect interactions in ecological communities. *Ecology*, 84(5), 1083–1100. https://doi.org/10.1890/0012-9658(2003)084[1083:AROTII]2.0.CO;2
+
+Gil et al. (2018) explicitly synthesized how social information use can link individual behavior to population and community dynamics, including changes in density dependence, competition, species interactions, and extinction risk.
+
+**Reference**
+
+Gil, M. A., Hein, A. M., Spiegel, O., Baskett, M. L., & Sih, A. (2018). Social Information Links Individual Behavior to Population and Community Dynamics. *Trends in Ecology & Evolution*, 33(7), 535–548. https://doi.org/10.1016/j.tree.2018.04.010
+
+Therefore the generic statement
+
+```text
+individual information/behavior -> interaction changes -> community consequences
+```
+
+is prior art.
+
+The present branch must make a narrower claim: the repository's exact continuation/frontier mathematics can distinguish **which higher-order cue structures change the structural advantage of contingent sensing**, and therefore can supply a specific state-dependent selection mechanism inside that already-established individual-to-community framework.
+
+---
+
+## 4. Rate-time scaling should not be the main observable
 
 De Lisle & Svensson (2026) revisited evolutionary rate–time relationships and showed that much negative rate–time scaling follows from the mathematical dependence created by dividing evolutionary change by elapsed time. Their reanalysis found that over 99% of variation in rate–time relationships across six datasets was explained by time variation alone. They recommend focusing more directly on how evolutionary change accumulates with time.
 
@@ -98,7 +127,7 @@ This aligns the model with accumulated change rather than a denominator-confound
 
 ---
 
-## 4. What the repository adds to this literature
+## 5. What the repository adds to this literature
 
 The new bridge starts one mechanistic layer earlier than standard fluctuating-selection models.
 
@@ -152,11 +181,26 @@ branch-exclusive opportunity
 - internal union redundancy.
 ```
 
+Across community states the same mathematics gives
+
+\[
+\boxed{
+\Delta s
+=\lambda\Delta C_F
+-\lambda\Delta C_A
+-\Delta\kappa,
+}
+\]
+
+which separates productive-frontier rewiring from adaptive-continuation rewiring and a separately modeled control-cost channel.
+
+The registered `resource_role_profile_collision()` sharpens this point: two tasks can have the same adaptive continuation root type and the same multiset of per-resource role profiles while `C_F` differs. Under the minimal fitness map this can reverse selection with `Delta C_A=0`, isolating a purely fixed/frontier-side structural effect.
+
 This mapping from finite sensing structure to a state-dependent evolutionary selection coefficient is the proposed modeling contribution.
 
 ---
 
-## 5. Cross-scale result that is specific to the combined construction
+## 6. Cross-scale result that is specific to the combined construction
 
 The temporal-routing branch and evolutionary-timescale branch use temporal predictability differently.
 
@@ -184,7 +228,7 @@ Neither the existence of fluctuating selection nor the population-genetic cancel
 
 ---
 
-## 6. What still must be shown before a strong biological claim
+## 7. What still must be shown before a strong biological claim
 
 The branch remains theoretical until at least one natural system supplies evidence for the full chain
 
