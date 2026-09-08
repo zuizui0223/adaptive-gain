@@ -1,0 +1,7 @@
+{
+  "status": "open",
+  "objective": "derive exact noisy temporal routing gain while preserving deterministic four-world normal-form limit",
+  "parameters": ["rho temporal context predictability", "a routing-cue reliability", "b specialist-cue reliability", "k routing-control cost"],
+  "candidate_scaling_to_test": "abs(2*rho-1)*(2*a-1)*(2*b-1)",
+  "claim_status": "conjecture only"
+}
