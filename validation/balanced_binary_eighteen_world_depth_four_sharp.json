@@ -23,37 +23,29 @@
     "admissible_component_size_types": [
       [1, 1, 8, 8],
       [1, 2, 7, 8],
-      [1, 3, 7, 7],
       [2, 2, 6, 8],
       [2, 3, 5, 8],
       [2, 4, 4, 8],
       [4, 4, 4, 6]
     ],
-    "admissible_private_forest_forms": 35,
-    "balanced_B14_configurations": 1246,
-    "identifying_B14_configurations": 1231,
-    "single_collision_B14_configurations": 15
+    "balanced_B14_configurations": 1222,
+    "identifying_B14_configurations": 1207,
+    "single_collision_B14_configurations": 15,
+    "supersedes_intermediate_overcount": 1246
   },
   "extra_query_universe": {
     "exact_balanced_cut_classes_mod_complement": 24310
   },
   "identifying_branch": {
-    "fixed_14_safe_B_plus_r_candidates": 49590,
+    "fixed_14_safe_B_plus_r_candidates": 65864,
     "private_edge_depth_four_candidates": 134,
-    "required_conditions": 119,
-    "condition_breakdown": {
-      "two_query_omission_conditions": 105,
-      "private_edge_conditions": 14
-    },
-    "full_condition_hits": 0,
-    "best_condition_coverage": 118
+    "singleton_omission_witness_depth_four_survivors": 0
   },
   "collision_branch": {
     "forced_same_target_pair_per_bundle": 1,
-    "fixed_14_safe_B_plus_r_candidates": 84116,
+    "fixed_14_safe_B_plus_r_candidates": 84326,
     "private_edge_depth_four_candidates": 21448,
-    "mandatory_pair_count_range": [22, 41],
-    "mandatory_pair_depth_four_survivors": 0
+    "singleton_omission_witness_depth_four_survivors": 0
   },
   "sharp_D4_18": 13,
   "conclusion": "D4(18)=13",
