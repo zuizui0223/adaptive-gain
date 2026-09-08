@@ -1,0 +1,16 @@
+{
+  "scope": "exact_balanced_binary_eighteen_world_CA4_CF13",
+  "world_count": 18,
+  "query_count": 13,
+  "adaptive_cost": 4,
+  "fixed_cost": 13,
+  "component_sizes": [3, 3, 4, 4, 4],
+  "all_queries_exactly_balanced": true,
+  "all_private_pairs_query_unique": true,
+  "all_private_pairs_cross_target": true,
+  "policy_depth": 4,
+  "depth_three_flattening_upper_bound": 7,
+  "conclusion": "D4(18)>=13",
+  "sharp_status": "open_between_13_and_14",
+  "theorem_holds": true
+}
