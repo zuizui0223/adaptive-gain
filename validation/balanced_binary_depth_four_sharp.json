@@ -1,6 +1,6 @@
 {
   "scope": "exact_balanced_binary_depth_four_sharp",
-  "status": "closed_n12_n14_n16",
+  "status": "closed_n12_n14_n16_n18_and_ceiling_from_n20",
   "query_model": "binary_unit_cost_globally_exact_50_50",
   "results": {
     "12": {
@@ -27,7 +27,25 @@
       "constructive_cost_pair": [4, 12],
       "private_forest_component_sizes": [2, 3, 4, 7],
       "sharp_D4": 12
+    },
+    "18": {
+      "constructive_cost_pair": [4, 13],
+      "hypothetical_fixed_cost_14_classification": {
+        "minimum_bundle_configurations": 1246,
+        "identifying_bundle_configurations": 1231,
+        "collision_bundle_configurations": 15,
+        "identifying_depth_four_candidates": 134,
+        "identifying_full_119_condition_hits": 0,
+        "collision_depth_four_candidates": 21448,
+        "collision_mandatory_pair_survivors": 0
+      },
+      "sharp_D4": 13
+    },
+    "20_plus_even": {
+      "constructive_cost_pair": [4, 15],
+      "padding_by_complementary_world_pairs": true,
+      "sharp_D4": 15
     }
   },
-  "conclusion": "D4(12)=8, D4(14)=10, D4(16)=12"
+  "conclusion": "D4(12)=8, D4(14)=10, D4(16)=12, D4(18)=13, and D4(n)=15 for every even n>=20"
 }
