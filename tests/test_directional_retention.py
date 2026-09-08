@@ -11,6 +11,8 @@ from adaptive_gain.directional_retention import (
     rms_cumulative_selection,
     rms_retention_fraction,
     summarize_directional_retention,
+    two_state_markov_feasible,
+    two_state_markov_transition_probabilities,
 )
 from adaptive_gain.evolutionary_timescale_filter import ar1_rms_retention_ratio
 
@@ -30,12 +32,31 @@ def test_nonzero_mean_creates_linear_expected_accumulation():
 
 def test_long_horizon_retention_converges_to_absolute_directional_bias():
     horizon = 1_000_000
+    # This shared phi grid is Markov-feasible even for |m|=0.8.
     for mean_sign in (-0.7, -0.2, 0.0, 0.3, 0.8):
-        for phi in (-0.6, 0.0, 0.7):
+        for phi in (-0.1, 0.0, 0.7):
+            assert two_state_markov_feasible(mean_sign, phi)
             observed = rms_retention_fraction(horizon, mean_sign, phi)
             expected = asymptotic_rms_retention_fraction(mean_sign)
             tolerance = 3e-3 if abs(mean_sign) < 0.05 else 8e-4
             assert observed == pytest.approx(expected, abs=tolerance, rel=tolerance)
+
+
+def test_two_state_markov_feasibility_boundary():
+    # For m=0.8, phi_min=-(1-0.8)/(1+0.8)=-1/9.
+    assert two_state_markov_feasible(0.8, -0.1)
+    assert not two_state_markov_feasible(0.8, -0.2)
+    with pytest.raises(ValueError):
+        two_state_markov_transition_probabilities(0.8, -0.2)
+
+
+def test_two_state_markov_transition_probabilities_recover_stationary_bias():
+    plus_from_minus, minus_from_plus = two_state_markov_transition_probabilities(0.2, 0.5)
+    assert plus_from_minus == pytest.approx(0.3)
+    assert minus_from_plus == pytest.approx(0.2)
+    stationary_plus = plus_from_minus / (plus_from_minus + minus_from_plus)
+    assert 2.0 * stationary_plus - 1.0 == pytest.approx(0.2)
+    assert 1.0 - plus_from_minus - minus_from_plus == pytest.approx(0.5)
 
 
 def test_any_fixed_nonzero_bias_dominates_sqrt_h_fluctuations_eventually():
@@ -59,6 +80,7 @@ def test_rms_identity_mean_squared_plus_variance():
     delta = 0.8
     mean_sign = 0.3
     phi = -0.4
+    assert two_state_markov_feasible(mean_sign, phi)
     mean = expected_cumulative_selection(horizon, delta, mean_sign)
     variance = cumulative_selection_variance(horizon, delta, mean_sign, phi)
     rms = rms_cumulative_selection(horizon, delta, mean_sign, phi)
@@ -67,15 +89,12 @@ def test_rms_identity_mean_squared_plus_variance():
 
 def test_crossover_horizon_matches_signal_to_noise_transition_asymptotically():
     for mean_sign, phi in ((0.1, 0.0), (0.2, 0.5), (0.15, -0.4)):
+        assert two_state_markov_feasible(mean_sign, phi)
         hx = asymptotic_directional_crossover_horizon(mean_sign, phi)
         assert hx > 0.0
-        # The asymptotic H_x is defined where cumulative directional mean and
-        # fluctuation SD become comparable.  Around H_x the exact SNR should be
-        # order one rather than orders of magnitude away.
         H = max(1, round(hx))
         snr = directional_signal_to_noise(H, mean_sign, phi)
         assert 0.5 <= snr <= 2.0
-        # Well beyond the crossover the directional component must dominate.
         assert directional_signal_to_noise(max(H * 100, 100), mean_sign, phi) > snr
 
 
