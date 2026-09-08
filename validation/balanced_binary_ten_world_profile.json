@@ -1,0 +1,31 @@
+{
+  "scope": "exact_balanced_binary_ten_world_sharp_fixed_m_profile",
+  "world_count": 10,
+  "query_constraint": "every declared query is binary and exactly 5/5 balanced",
+  "sharp_profile": {
+    "m=1": "1",
+    "m=2": "1",
+    "m=3": "3/2",
+    "m=4": "3/2",
+    "m=5": "5/3",
+    "m>=6": "2"
+  },
+  "registered_witness_cost_pairs": {
+    "m=3": {"C_A": 2, "C_F": 3},
+    "m=5": {"C_A": 3, "C_F": 5},
+    "m=6": {"C_A": 3, "C_F": 6}
+  },
+  "universal_fixed_cost_cap": 7,
+  "depth_three_fixed_seven_obstruction": {
+    "assumption": "C_A=3 and C_F=7",
+    "forced_tree": "complete binary depth-3 tree with seven distinct query labels",
+    "left_local_private_dimensions": ["q1", "q3", "q4"],
+    "right_local_private_dimensions": ["q2", "q5", "q6"],
+    "left_half_count_vectors": 2944,
+    "right_half_count_vectors": 2944,
+    "coordinatewise_complementary_pairs": 0,
+    "conclusion": "C_A=3 implies C_F<=6"
+  },
+  "proof_consequence": "for m>=6, C_A<=2 gives <=3/2; C_A=3 gives <=2; C_A>=4 gives <=7/4; the (3,6) witness attains 2",
+  "status": "closed"
+}
