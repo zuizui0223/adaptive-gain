@@ -18,24 +18,34 @@ Read in this order:
 
    - inherits the repository's exact fixed-`(n,m,b)` maximum as `Omega*=R_b(n,m)-1`;
    - productive-frontier edge count can cap the maximum opportunity, whereas any positive frontier-rank cap is extremally vacuous;
-   - separates the **within-state amplitude generator** from the later temporal retention filter.
+   - identifies the **within-state amplitude generator**.
 
-3. `BUDGET_GATED_EVOLUTIONARY_SELECTION.md`
+3. `EVOLUTIONARY_RETENTION_SCALING.md`
+   - promotes the existing partial-sum implementation into the explicit long-timescale theorem;
+   - for symmetric zero-mean selection with lag-one correlation `phi`, short-term activity grows as `H` while RMS retained directional change grows as `sqrt(H)` for fixed `|phi|<1`;
+   - hence the retained fraction obeys
+
+     \[
+     \mathcal R_H^{RMS}\sim\sqrt{\frac{1+\phi}{1-\phi}}H^{-1/2};
+     \]
+
+   - identifies the **across-generation temporal retention filter**.
+
+4. `BUDGET_GATED_EVOLUTIONARY_SELECTION.md`
    - uses the exact repository window `C_A <= B < C_F` directly as an adaptive-only ecological success window;
-   - provides a nonlinear threshold-fitness alternative to the linear cost-to-fitness map;
-   - at a shared hard budget, existing strict and bypass tasks generate equal-and-opposite selection at midpoint maintenance cost.
+   - provides a nonlinear threshold-fitness alternative to the linear cost-to-fitness map.
 
-4. `STRUCTURAL_SELECTION_COLLISION.md`
+5. `STRUCTURAL_SELECTION_COLLISION.md`
    - reuses the existing `resource_role_profile_collision()`;
    - same adaptive continuation and same per-resource role-profile multiset can still give `C_F=2` versus `3`;
    - under midpoint control cost this reverses selection on contingent sensing.
 
-5. `BUDGET_GATED_STRUCTURAL_COLLISION.md`
+6. `BUDGET_GATED_STRUCTURAL_COLLISION.md`
    - combines that same higher-order collision with the exact adaptive-only budget window;
    - at `B=2`, the `(2,2)` state lets both architectures resolve while the `(2,3)` state lets only the contingent architecture resolve;
    - selection reverses under the shared threshold-fitness model without assigning a linear fitness value to each unit of sensing cost.
 
-6. `STRUCTURAL_SELECTION_TRANSITIONS.md`
+7. `STRUCTURAL_SELECTION_TRANSITIONS.md`
    - decomposes a community-state change as
 
      \[
@@ -45,8 +55,8 @@ Read in this order:
    - separates fixed/productive-frontier rewiring from adaptive-continuation rewiring;
    - the registered collision isolates a pure frontier-side selection change with `Delta C_A=0`.
 
-7. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
-   - fluctuating selection, eco-evolutionary feedback, rapid evolution, stasis, individual-information-to-community effects, and rate-time issues are treated as prior art;
+8. `PRIOR_ART_ECO_EVOLUTIONARY_TIMESCALES.md`
+   - fluctuating selection, eco-evolutionary feedback, rapid evolution, stasis, individual-information-to-community effects, partial-sum covariance scaling, and rate-time issues are treated as prior art;
    - isolates the proposed repository-specific structural bridge.
 
 Executable layers:
@@ -64,15 +74,19 @@ Executable layers:
 - `tests/test_budget_gated_selection.py`
 - `tests/test_budget_gated_structural_collision.py`
 - `tests/test_evolutionary_timescale_filter.py`
+- `tests/test_evolutionary_retention_scaling.py`
 - `validation/evolutionary_timescale_filter_v1.json`
+- `validation/evolutionary_retention_scaling_v1.json`
 - `validation/structural_selection_transition_v1.json`
 - `validation/structural_opportunity_bounds_v1.json`
 - `validation/budget_gated_selection_v1.json`
 - `validation/budget_gated_structural_collision_v1.json`
 
-The branch now separates two orthogonal timescale quantities.
+## The two-axis timescale theory
 
-### Within-state structural opportunity
+The branch now separates two orthogonal quantities.
+
+### Axis 1: within-state structural opportunity
 
 \[
 \boxed{
@@ -90,27 +104,53 @@ is the adaptive-only budget-window width per unit adaptive effort. Its exact wor
 
 This is the **short-term amplitude generator**: it quantifies how much structural room a community state can create for contingent sensing before any particular fitness map is chosen.
 
-### Across-generation temporal retention
+### Axis 2: across-generation temporal retention
+
+For a realized selection path,
 
 \[
-\text{short-term selection activity}=\sum_t|s_t|,
+A_H=\sum_t|s_t|,
 \qquad
-\text{long-term retained change}=\left|\sum_t s_t\right|,
+R_H=\left|\sum_t s_t\right|,
+\qquad
+\mathcal R_H=R_H/A_H.
 \]
 
-with retention ratio
+For the stationary symmetric sign process `s_t=delta X_t` with `Corr(X_t,X_{t+k})=phi^k`,
+
+\[
+A_H=\delta H
+\]
+
+but, for fixed `|phi|<1`,
+
+\[
+R_H^{RMS}=\delta\sqrt{F_H(\phi)}=O(\sqrt H),
+\]
+
+so
 
 \[
 \boxed{
-\mathcal R_H=\frac{|\sum_t s_t|}{\sum_t|s_t|}
+\mathcal R_H^{RMS}\sim\sqrt{\frac{1+\phi}{1-\phi}}H^{-1/2}.
 }
 \]
 
-when the denominator is positive.
+This is the **long-term retention filter**: selection can remain strong every generation while the fraction retained as directional long-term change vanishes.
 
-This is the **long-term retention filter**: large state-specific structural opportunity can still generate little retained directional evolution when the resulting selection changes sign through time.
+The singular endpoints clarify the role of time:
 
-Two explicit fitness lifts are retained rather than pretending that one is universal.
+```text
+phi = 1   -> perfect persistence, retention fraction = 1
+phi = 0   -> independent direction, retention fraction = H^(-1/2)
+phi = -1  -> perfect alternation, exact cancellation on even horizons
+```
+
+Thus time does not necessarily weaken instantaneous selection. It can instead average away directionally incoherent evolutionary activity.
+
+## Two explicit fitness lifts
+
+The theory keeps two alternatives rather than pretending that one map is universal.
 
 ### Continuous cost-value lift
 
@@ -130,11 +170,11 @@ For a sensing deadline/resource ceiling `B`, exact deterministic resolution succ
 
 This model does not require a linear fitness value per unit sensing cost: contingent sensing gets a resolution benefit only when it crosses the ecological feasibility threshold.
 
-The branch therefore distinguishes three structural questions:
+## Structural questions now separated
 
 ```text
 within one community state:
-    how much adaptive-only opportunity is even structurally possible?
+    how much adaptive-only opportunity is structurally possible?
     -> Omega=(C_F-C_A)/C_A
     -> sharp bounded-arity / frontier-edge / frontier-rank theorems
 
@@ -148,27 +188,32 @@ between community states:
     -> Delta C_F frontier channel
        - Delta C_A continuation channel
        - Delta kappa control channel
+
+across generations:
+    why does rapid evolution accumulate or disappear?
+    -> signed temporal coherence / retention scaling
 ```
 
-The strongest current exact results are now:
+## Strongest current exact results
 
 - the registered `payoff_routing_task()` has `(C_A,C_F)=(2,3)` and exactly attains the sharp normalized opportunity `Omega*=1/2` for its `(n,m,b)=(4,3,2)` scope;
 - the registered higher-order resource collision changes `C_F` from 2 to 3 while keeping `C_A=2`, adaptive continuation root type, and the multiset of per-resource role profiles fixed;
 - under the continuous cost-value model, that structural change can reverse selection;
 - under the hard-budget model at `B=2`, the same structural change moves the population into an adaptive-only resolution window and also reverses selection;
 - under alternating community states, either lift yields nonzero short-term allele-frequency movement but zero retained change after each two-generation cycle at the corresponding midpoint maintenance cost;
-- productive-frontier edge count limits the maximum normalized opportunity, while a positive cap on frontier rank alone does not.
+- productive-frontier edge count limits the maximum normalized opportunity, while a positive cap on frontier rank alone does not;
+- for every fixed `|phi|<1`, stationary zero-mean selection can remain active at `O(H)` while RMS retained directional change is only `O(sqrt(H))`, so the retained fraction vanishes as `H^-1/2`.
 
-So the branch's organizing picture is
+The organizing picture is now
 
 ```text
-community/natural-history structure
+community / natural-history structure
         |
         v
 instantaneous structural opportunity Omega
         |
         v
-state-dependent selection amplitude/sign
+state-dependent selection amplitude and sign
         |
         v
 temporal retention filter
