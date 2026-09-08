@@ -26,6 +26,12 @@ from .frontier_edge_extremal_bounds import (
     sharp_frontier_edge_capped_unit_cost_ratio_receipt,
     sharp_frontier_edge_capped_unit_cost_witness,
 )
+from .frontier_rank_extremal_bounds import (
+    FrontierRankCappedRatioReceipt,
+    productive_frontier_rank,
+    sharp_frontier_rank_capped_unit_cost_ratio,
+    sharp_frontier_rank_capped_unit_cost_ratio_receipt,
+)
 from .extremal_routing import (
     ExtremalRoutingReceipt,
     RatioThreeHalvesMinimalityReceipt,
@@ -77,6 +83,10 @@ __all__ = [
     "sharp_frontier_edge_capped_unit_cost_ratio",
     "sharp_frontier_edge_capped_unit_cost_ratio_receipt",
     "sharp_frontier_edge_capped_unit_cost_witness",
+    "FrontierRankCappedRatioReceipt",
+    "productive_frontier_rank",
+    "sharp_frontier_rank_capped_unit_cost_ratio",
+    "sharp_frontier_rank_capped_unit_cost_ratio_receipt",
     "ExtremalRoutingReceipt",
     "RatioThreeHalvesMinimalityReceipt",
     "depth_two_fixed_cost_world_bound",
