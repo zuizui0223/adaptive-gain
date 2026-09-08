@@ -26,7 +26,7 @@ the long-timescale filter downstream of structurally generated selection.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import sqrt
+from math import inf, sqrt
 
 from .evolutionary_timescale_filter import ar1_partial_sum_factor
 
@@ -114,6 +114,53 @@ def asymptotic_rms_retention_fraction(mean_sign: float) -> float:
     return abs(m)
 
 
+def directional_signal_to_noise(
+    horizon: int,
+    mean_sign: float,
+    phi: float,
+) -> float:
+    """Absolute cumulative mean divided by its standard deviation.
+
+    The selection magnitude cancels.  A value below one means the expected
+    directional trend is still smaller than the correlated fluctuation scale;
+    a value above one means the directional component dominates in RMS scale.
+    """
+
+    H, m, p = _validate(horizon, mean_sign, phi)
+    numerator = abs(m) * H
+    variance_factor = (1.0 - m * m) * ar1_partial_sum_factor(H, p)
+    if variance_factor <= 0.0:
+        return inf if numerator > 0.0 else 0.0
+    return numerator / sqrt(variance_factor)
+
+
+def asymptotic_directional_crossover_horizon(
+    mean_sign: float,
+    phi: float,
+) -> float:
+    """Asymptotic generations needed for directional mean ~= fluctuation SD.
+
+    For 0<|m|<1 and -1<phi<1,
+
+        H_x ~= ((1-m^2)/m^2) * ((1+phi)/(1-phi)).
+
+    The value diverges at m=0.  Fully directional m=+-1 has zero stochastic
+    sign variance and therefore crossover horizon zero.
+    """
+
+    m = float(mean_sign)
+    p = float(phi)
+    if m < -1.0 or m > 1.0:
+        raise ValueError("mean_sign must lie in [-1, 1]")
+    if not (-1.0 < p < 1.0):
+        raise ValueError("crossover approximation requires -1 < phi < 1")
+    if m == 0.0:
+        return inf
+    if abs(m) == 1.0:
+        return 0.0
+    return ((1.0 - m * m) / (m * m)) * ((1.0 + p) / (1.0 - p))
+
+
 @dataclass(frozen=True)
 class DirectionalRetentionSummary:
     horizon: int
@@ -124,6 +171,7 @@ class DirectionalRetentionSummary:
     cumulative_variance: float
     rms_cumulative_selection: float
     rms_retention_fraction: float
+    directional_signal_to_noise: float
 
 
 def summarize_directional_retention(
@@ -146,4 +194,5 @@ def summarize_directional_retention(
         cumulative_variance=variance,
         rms_cumulative_selection=rms,
         rms_retention_fraction=rms / (delta * H) if delta > 0 else 0.0,
+        directional_signal_to_noise=directional_signal_to_noise(H, m, p),
     )
