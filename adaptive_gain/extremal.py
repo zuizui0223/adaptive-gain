@@ -1,5 +1,12 @@
 """Public entrypoint for extremal finite adaptive-gain constructions and bounds."""
 
+from .balanced_binary_extremal_family import (
+    BalancedBinaryFamilyReceipt,
+    balanced_binary_extremal_task,
+    balanced_binary_family_audit,
+    balanced_binary_family_counts,
+    balanced_binary_ratio_lower_bound,
+)
 from .binary_unit_cost_extremal_bounds import (
     BinaryUnitCostWorldQueryRatioReceipt,
     binary_tree_fixed_cost_bound,
@@ -63,6 +70,11 @@ from .unit_cost_extremal_bounds import (
 )
 
 __all__ = [
+    "BalancedBinaryFamilyReceipt",
+    "balanced_binary_extremal_task",
+    "balanced_binary_family_audit",
+    "balanced_binary_family_counts",
+    "balanced_binary_ratio_lower_bound",
     "BinaryUnitCostWorldQueryRatioReceipt",
     "binary_tree_fixed_cost_bound",
     "sharp_binary_unit_cost_ratio",
