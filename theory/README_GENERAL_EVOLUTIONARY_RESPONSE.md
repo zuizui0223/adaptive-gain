@@ -10,15 +10,31 @@ finite sensing structure
     -> ecological effect slope e
     -> generalized loop gain G=-beta*Delta_s*e
     -> local eco-evolutionary phase
+    -> lower / upper feedback timescale
 ```
 
-Read `GENERAL_EVOLUTIONARY_RESPONSE.md` for the derivation.
+Read in this order:
 
-Executable layer:
+1. `GENERAL_EVOLUTIONARY_RESPONSE.md`
+   - derives the generalized local Jacobian;
+   - gives the exact stability and oscillation thresholds;
+   - recovers the parent haploid-logit model as an exact special case;
+   - shows intrinsic evolutionary damping can stabilize a finite amount of reinforcing ecological feedback.
+
+2. `GENERAL_RESPONSE_BOUNDARY_TIMESCALES.md`
+   - separates the two stability boundaries;
+   - lower boundary `G_-=alpha-1`: real eigenvalue approaches `+1`, producing slow nonoscillatory return;
+   - upper boundary `G_+=(1-alpha*phi)/(1-phi)`: conjugate pair approaches the unit circle, producing slow damped oscillation;
+   - derives the distinct critical-slowing laws near both boundaries.
+
+Executable layers:
 
 - `adaptive_gain/general_evolutionary_response.py`
+- `adaptive_gain/general_response_boundary_timescales.py`
 - `tests/test_general_evolutionary_response.py`
+- `tests/test_general_response_boundary_timescales.py`
 - `validation/general_evolutionary_response_v1.json`
+- `validation/general_response_boundary_timescales_v1.json`
 
 The generic local map is
 
@@ -67,9 +83,9 @@ local stability is exactly
 
 \[
 \boxed{
-\alpha-1
+G_-:=\alpha-1
 <G<
-\frac{1-\alpha\phi}{1-\phi}.
+G_+:=\frac{1-\alpha\phi}{1-\phi}.
 }
 \]
 
@@ -78,9 +94,20 @@ The damped-oscillation threshold is
 \[
 \boxed{
 G>
+G_{osc}:=
 \frac{(\alpha-\phi)^2}{4(1-\phi)}.
 }
 \]
+
+Thus the stable interval splits into
+
+```text
+G_- < G <= G_osc
+    stable nonoscillatory return
+
+G_osc < G < G_+
+    stable damped oscillation
+```
 
 The parent haploid-logit model is the exact special case
 
@@ -97,12 +124,12 @@ which gives
 \[
 G=L,
 \qquad
-0<L<1,
+G_-=0,
 \qquad
-L>(1-\phi)/4
+G_+=1,
+\qquad
+G_{osc}=(1-\phi)/4.
 \]
-
-for damped oscillation.
 
 The important qualitative change is that when
 
@@ -130,28 +157,72 @@ G=-\beta\lambda\Delta g\,e.
 
 so the original continuation/productive-frontier mathematics still supplies the upstream selection contrast. The generalized response layer changes only the conversion from structural selection to local evolutionary dynamics.
 
-At the upper stability boundary
+## Two distinct critical-slowing limits
+
+### Lower weak-restoring boundary
+
+At
 
 \[
-G_+=\frac{1-\alpha\phi}{1-\phi},
+G\downarrow G_-=\alpha-1,
 \]
 
-the conjugate pair reaches the unit circle with
+a real eigenvalue approaches `+1`. The damping time obeys
+
+\[
+\boxed{
+\tau_{lower}
+\sim
+\frac{2-\alpha-\phi}
+{(1-\phi)(G-G_-)}.
+}
+\]
+
+For the parent case `alpha=1`, this reduces to
+
+\[
+\boxed{
+\tau_{lower}\sim1/G.
+}
+\]
+
+### Upper strong-feedback boundary
+
+At
+
+\[
+G\uparrow G_+
+=\frac{1-\alpha\phi}{1-\phi},
+\]
+
+the conjugate pair approaches the unit circle with
 
 \[
 \cos\theta_c=(\alpha+\phi)/2.
 \]
 
-Near that boundary,
+The damping time obeys
 
 \[
 \boxed{
-\tau_{damp}
+\tau_{upper}
 \sim
 \frac{2}{(1-\phi)(G_+-G)}.
 }
 \]
 
-Thus the parent critical-slowing result also survives after removing the specific haploid update.
+So long-lived evolutionary transients can arise for opposite reasons:
 
-Prior-art boundary: local linearization, 2x2 Jury stability, and generic response coefficients are standard. The repository-specific contribution is the structural sensing gap entering the generalized eco-evolutionary gain, and the exact identification of which parent conclusions survive or change when the evolutionary update is generalized.
+```text
+too little effective restoring gain
+    -> slow nonoscillatory relaxation near G_-
+
+large gain near the upper feedback boundary
+    -> slow damped oscillation near G_+
+```
+
+The same observed statement, "evolution remains displaced for many generations," does not distinguish these mechanisms without transient geometry.
+
+Independent validation includes 200,000 random phase checks with zero stability/oscillation mismatches, 100,000 upper-boundary critical-slowing checks, and 100,000 lower-boundary checks; the near-boundary asymptotic ratios agree at the ~5e-4 level in the declared small-parameter regimes.
+
+Prior-art boundary: local linearization, 2x2 Jury stability, generic response coefficients, and critical slowing are standard. The repository-specific contribution is the structural sensing gap entering the generalized eco-evolutionary gain, and the exact identification of which parent conclusions survive or change when the evolutionary update is generalized.
