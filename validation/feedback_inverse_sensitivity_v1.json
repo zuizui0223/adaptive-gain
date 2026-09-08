@@ -1,0 +1,37 @@
+{
+  "claim": "phenotype-AR2 loop-gain inversion has an exact finite coefficient-error bound and becomes ill-conditioned as community memory approaches one",
+  "branch": "theory/feedback-inverse-diagnostics",
+  "exact_identity": {
+    "phi_error": "phi_hat-phi = epsilon_1",
+    "loop_gain_error": "L_hat-L = -[(1-L)epsilon_1+epsilon_2]/[1-phi-epsilon_1]"
+  },
+  "deterministic_bound": {
+    "assumptions": "|epsilon_1|<=E1<1-phi and |epsilon_2|<=E2",
+    "phi_error_bound": "|phi_hat-phi|<=E1",
+    "loop_gain_error_bound": "|L_hat-L| <= [|1-L|E1+E2]/[1-phi-E1]"
+  },
+  "local_jacobian": {
+    "d_phi_d_a1": 1.0,
+    "d_phi_d_a2": 0.0,
+    "d_L_d_a1": "-(1-L)/(1-phi)",
+    "d_L_d_a2": "-1/(1-phi)",
+    "conditioning_result": "loop-gain inverse sensitivity diverges like 1/(1-phi) as phi approaches one"
+  },
+  "independent_random_bound_audit": {
+    "seed": 20260909,
+    "samples": 200000,
+    "domain": "0<=phi<0.98, -0.5<=L<=1.5; E1 sampled below 0.4*(1-phi); independent E2 envelope",
+    "bound_violations": 0,
+    "maximum_actual_error_to_bound_ratio": 0.9993340639582554
+  },
+  "structural_gap_propagation": {
+    "known_scale": "A=(-eta)*lambda*p_star*(1-p_star)",
+    "gap_error_bound": "E_Delta_g=E_L/A",
+    "interpretation": "integer structural-gap diagnostics require uncertainty narrow enough to distinguish neighboring integer gaps"
+  },
+  "singular_boundary": {
+    "condition_for_finite_bound": "E1 < 1-phi",
+    "failure_interpretation": "lag-one coefficient uncertainty crosses the phi=1 singular boundary, so a finite model-specific L bound is not available from this envelope"
+  },
+  "scope": "deterministic coefficient-error sensitivity only; no statistical consistency claim for noisy, finite, irregularly sampled ecological time series"
+}
