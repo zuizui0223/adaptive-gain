@@ -32,6 +32,8 @@ sharp unit-cost fixed-(world count, query count) ratio for unrestricted query ar
 sharp unit-cost fixed-(world count, query count) ratio for binary query arity
 sharp unit-cost fixed-(world count, query count, max query arity b) ratio
 sharp unit-cost ratio with an upper bound on productive-frontier edge count
+productive-frontier rank upper cap is extremally vacuous for every positive cap
+global-label-once syntax: pointwise containment failure + unchanged feasible-class extremal maximum
 ```
 
 The central scalar-cost boundary is now especially compact:
@@ -157,13 +159,32 @@ R_{b,E}(n,m)
 }
 \]
 
-Remaining extremal questions require constraints beyond `(n,m,b,E)` under unit costs:
+### Productive-frontier rank cap
 
-- What bounds follow from limiting productive-frontier **rank**, transversal geometry, or intersection pattern rather than edge count alone?
+If `rank(H_min)` means maximum cardinality of a minimal frontier edge, then any positive upper cap is extremally vacuous:
+
+\[
+\boxed{
+R_{b,\,\operatorname{rank}\le r}(n,m)=R_b(n,m)
+\qquad(r\ge1).
+}
+\]
+
+The sharp bounded-arity witness already has only singleton frontier edges. Thus `rank=1` can realize the full worst-case ratio; small edge size by itself does not make fixed resolution easy.
+
+### Global-label-once policy syntax
+
+The ordinary model already uses each query at most once on every **realized path**. A stronger syntax that allows each query label at only one node in the entire counterfactual tree is a different model.
+
+Pointwise class containment fails under that syntax: a registered two-query task has ordinary `C_A=C_F=2` but no globally label-unique resolving tree. Nevertheless, if one restricts attention to tasks that are global-label-once resolvable, their sharp unit-cost extremal maximum remains `R_b(n,m)`, because the bounded-arity sharp construction already uses a distinct query at every internal node.
+
+Remaining extremal questions therefore need constraints stronger or different than positive rank caps or global-label uniqueness:
+
 - What is the sharp ratio when every binary query has balanced outcomes on the represented worlds?
-- What changes if one physical query may be used at most once **globally** rather than once on each possible branch in the policy tree?
+- What changes under a genuine operational inventory constraint shared across multiple simultaneously realized subjects or repeated experimental rounds?
 - Under unequal positive costs, what is the sharp fixed-`(n,m,b)` ratio and what are the smallest scopes exceeding a given threshold?
 - Can the bounded-arity recurrence be simplified to useful closed forms for fixed small `b=3,4`?
+- What sharp bounds follow from a **lower** bound on frontier edge size, resource-frequency limits, or specified edge-intersection geometry?
 
 ## 4. Next finite irreducible normal forms
 
