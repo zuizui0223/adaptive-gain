@@ -1,8 +1,12 @@
+from math import inf
+
 import pytest
 
 from adaptive_gain.directional_retention import (
+    asymptotic_directional_crossover_horizon,
     asymptotic_rms_retention_fraction,
     cumulative_selection_variance,
+    directional_signal_to_noise,
     expected_cumulative_selection,
     rms_cumulative_selection,
     rms_retention_fraction,
@@ -61,11 +65,50 @@ def test_rms_identity_mean_squared_plus_variance():
     assert rms * rms == pytest.approx(mean * mean + variance)
 
 
+def test_crossover_horizon_matches_signal_to_noise_transition_asymptotically():
+    for mean_sign, phi in ((0.1, 0.0), (0.2, 0.5), (0.15, -0.4)):
+        hx = asymptotic_directional_crossover_horizon(mean_sign, phi)
+        assert hx > 0.0
+        # The asymptotic H_x is defined where cumulative directional mean and
+        # fluctuation SD become comparable.  Around H_x the exact SNR should be
+        # order one rather than orders of magnitude away.
+        H = max(1, round(hx))
+        snr = directional_signal_to_noise(H, mean_sign, phi)
+        assert 0.5 <= snr <= 2.0
+        # Well beyond the crossover the directional component must dominate.
+        assert directional_signal_to_noise(max(H * 100, 100), mean_sign, phi) > snr
+
+
+def test_crossover_horizon_increases_with_positive_temporal_coherence():
+    mean_sign = 0.1
+    negative = asymptotic_directional_crossover_horizon(mean_sign, -0.5)
+    independent = asymptotic_directional_crossover_horizon(mean_sign, 0.0)
+    positive = asymptotic_directional_crossover_horizon(mean_sign, 0.5)
+    assert negative < independent < positive
+
+
+def test_small_directional_bias_delays_emergence_quadratically():
+    phi = 0.2
+    h_large_bias = asymptotic_directional_crossover_horizon(0.2, phi)
+    h_small_bias = asymptotic_directional_crossover_horizon(0.1, phi)
+    assert h_small_bias > 3.5 * h_large_bias
+
+
+def test_zero_bias_never_has_directional_crossover_and_full_bias_is_immediate():
+    assert asymptotic_directional_crossover_horizon(0.0, 0.0) == inf
+    assert asymptotic_directional_crossover_horizon(1.0, 0.0) == 0.0
+    assert directional_signal_to_noise(100, 0.0, 0.5) == pytest.approx(0.0)
+    assert directional_signal_to_noise(100, 1.0, 0.5) == inf
+
+
 def test_summary_consistent():
     summary = summarize_directional_retention(20, 0.5, 0.2, 0.4)
     assert summary.expected_cumulative_selection == pytest.approx(2.0)
     assert summary.rms_cumulative_selection / (0.5 * 20) == pytest.approx(
         summary.rms_retention_fraction
+    )
+    assert summary.directional_signal_to_noise == pytest.approx(
+        directional_signal_to_noise(20, 0.2, 0.4)
     )
 
 
@@ -76,3 +119,5 @@ def test_invalid_inputs_raise():
         rms_retention_fraction(10, 1.2, 0.0)
     with pytest.raises(ValueError):
         rms_retention_fraction(10, 0.0, 1.2)
+    with pytest.raises(ValueError):
+        asymptotic_directional_crossover_horizon(0.2, 1.0)
