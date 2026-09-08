@@ -1,0 +1,19 @@
+{
+  "scope": "exact_balanced_binary_depth_five_sharp_n16",
+  "world_count": 16,
+  "query_model": "binary_unit_cost_globally_exact_8_8",
+  "adaptive_depth_cap": 5,
+  "fixed_cost_cap": 13,
+  "safe_external_cut_count": 3,
+  "query_counts_by_safe_subset": [13, 14, 14, 15, 14, 15, 15, 16],
+  "twelve_query_subfamily_counts": [13, 91, 91, 455, 91, 455, 455, 1820],
+  "unique_witness_pair_counts": [13, 13, 28, 28, 28, 28, 43, 43],
+  "mandatory_pair_adaptive_depths": [7, 7, 7, 7, 7, 7, 7, 7],
+  "constructive_lower_witness": {
+    "adaptive_cost": 4,
+    "fixed_cost": 12
+  },
+  "sharp_D5_16": 12,
+  "conclusion": "D5(16)=12",
+  "theorem_holds": true
+}
