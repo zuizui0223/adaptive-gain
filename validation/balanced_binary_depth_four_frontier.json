@@ -1,0 +1,40 @@
+{
+  "scope": "exact_balanced_binary_depth_four_constructive_frontier",
+  "depth_three_flattening_cap": 7,
+  "sharp_status": "constructive_lower_bounds_only",
+  "witnesses": [
+    {
+      "world_count": 12,
+      "query_count": 8,
+      "adaptive_cost": 4,
+      "fixed_cost": 8,
+      "ratio": "2",
+      "exact_balance": "6/6 per query",
+      "private_pair_count": 8,
+      "all_queries_fixed_mandatory": true
+    },
+    {
+      "world_count": 14,
+      "query_count": 10,
+      "adaptive_cost": 4,
+      "fixed_cost": 10,
+      "ratio": "5/2",
+      "exact_balance": "7/7 per query",
+      "private_pair_count": 10,
+      "all_queries_fixed_mandatory": true
+    }
+  ],
+  "certified_lower_bounds": {
+    "D4(12)": 8,
+    "D4(14)": 10
+  },
+  "generic_upper_bounds": {
+    "D4(12)": 9,
+    "D4(14)": 11
+  },
+  "remaining_sharp_gaps": {
+    "D4(12)": [8, 9],
+    "D4(14)": [10, 11]
+  },
+  "theorem_holds": true
+}
