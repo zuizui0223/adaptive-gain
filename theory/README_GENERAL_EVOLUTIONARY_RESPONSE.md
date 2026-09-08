@@ -11,6 +11,7 @@ finite sensing structure
     -> generalized loop gain G=-beta*Delta_s*e
     -> local eco-evolutionary phase
     -> lower / upper feedback timescale
+    -> structurally permitted transient-time envelope
 ```
 
 Read in this order:
@@ -40,17 +41,27 @@ Read in this order:
    - certifies upper instability impossible when `G_max<G_+`;
    - shows the same finite sensing scope can exclude a phase under one evolutionary response and fail to exclude it under another.
 
+4. `GENERAL_RESPONSE_TRANSIENT_CEILINGS.md`
+   - uses unit-cost structural-gap integrality;
+   - identifies the first integer gap entering the generalized damped region and the largest integer gap remaining below `G_+`;
+   - converts those envelopes into class-wide upper bounds on stable damping time and oscillation period;
+   - recovers the parent transient ceiling exactly at `alpha=1`;
+   - shows the same sensing scope can have different time ceilings after changing only evolutionary persistence.
+
 Executable layers:
 
 - `adaptive_gain/general_evolutionary_response.py`
 - `adaptive_gain/general_response_boundary_timescales.py`
 - `adaptive_gain/general_response_structural_bounds.py`
+- `adaptive_gain/general_response_transient_bounds.py`
 - `tests/test_general_evolutionary_response.py`
 - `tests/test_general_response_boundary_timescales.py`
 - `tests/test_general_response_structural_bounds.py`
+- `tests/test_general_response_transient_bounds.py`
 - `validation/general_evolutionary_response_v1.json`
 - `validation/general_response_boundary_timescales_v1.json`
 - `validation/general_response_structural_bounds_v1.json`
+- `validation/general_response_transient_ceiling_v1.json`
 
 The generic local map is
 
@@ -179,7 +190,7 @@ The original continuation/productive-frontier mathematics therefore remains upst
 }
 \]
 
-For `alpha=1`, this reduces to
+For `alpha=1`,
 
 \[
 \boxed{\tau_{lower}\sim1/G.}
@@ -195,7 +206,7 @@ For `alpha=1`, this reduces to
 }
 \]
 
-So long-lived evolutionary transients can arise for opposite reasons:
+Long-lived evolutionary transients can therefore arise for opposite reasons:
 
 ```text
 too little effective restoring gain
@@ -205,36 +216,39 @@ large gain near the upper feedback boundary
     -> slow damped oscillation near G_+
 ```
 
-## Structural scope no longer determines phase by itself
+## Structural scope no longer determines phase or timescale by itself
 
-For the minimal four-world scope `(n,m,b,h)=(4,3,2,2)`, the inherited gap ceiling is one. With generalized gain per gap `0.125` and `phi=0.5`, the gain ceiling is therefore `0.125`.
+For the minimal four-world scope `(n,m,b,h)=(4,3,2,2)`, the inherited gap ceiling is one. With generalized gain per gap `0.125` and `phi=0.5`, the gain ceiling is `0.125`.
 
-For `alpha=1`,
+For `alpha=1`, `G_osc=0.125`, so the whole scope is certified nonoscillatory.
 
-\[
-G_{osc}=0.125,
-\]
-
-so the whole scope is certified nonoscillatory.
-
-For `alpha=0.7`,
+For `alpha=0.7`, `G_osc=0.02`, so the same scope admits a damped integer gap. Because gap one is the only positive structural step, the resulting class-wide bounds are approximately
 
 \[
-G_{osc}=0.02,
+\tau_{damp}\le2.25856
 \]
 
-so the **same structural scope** no longer excludes damped oscillation.
+and
+
+\[
+T\le17.22412
+\]
+
+generations.
+
+For the larger `(12,12,2,3)` scope with gap ceiling four and gain/gap `0.125` at `phi=0.5`:
+
+- parent `alpha=1`: first damped gap 2, max stable gap 4, `tau<=6.95212`, `T<=19.52813`;
+- generalized `alpha=0.8`: first damped gap 1, max stable gap 4, `tau<=4.64271`, `T<=21.04927`.
 
 Therefore
 
 \[
 \boxed{
-\text{finite sensing structure constrains available gain, while response geometry sets the phase boundaries.}
+\text{finite sensing structure constrains the gain ladder, while response geometry sets both phase and transient-time boundaries.}
 }
 \]
 
-Neither layer alone determines the dynamics.
+Independent validation includes 200,000 random phase checks with zero stability/oscillation mismatches, 100,000 upper-boundary critical-slowing checks, 100,000 lower-boundary checks, 200,000 integer-envelope checks with zero gap-envelope mismatches, parent special-case recovery tests, and direct structural-bound examples.
 
-Independent validation includes 200,000 random phase checks with zero stability/oscillation mismatches, 100,000 upper-boundary critical-slowing checks, 100,000 lower-boundary checks, parent special-case recovery tests, and direct structural-bound examples.
-
-Prior-art boundary: local linearization, 2x2 Jury stability, generic response coefficients, critical slowing, and composition of upper bounds are standard. The repository-specific contribution is the exact finite sensing gap entering generalized eco-evolutionary gain and the resulting structural phase-exclusion logic.
+Prior-art boundary: local linearization, 2x2 Jury stability, generic response coefficients, critical slowing, integer-envelope optimization, and composition of upper bounds are standard. The repository-specific contribution is the exact finite sensing gap entering generalized eco-evolutionary gain and the resulting structural phase/time-exclusion logic.
