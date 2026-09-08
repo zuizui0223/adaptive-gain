@@ -6,8 +6,8 @@ This note closes the local deterministic phase diagram for the minimal endogenou
 community-feedback model in `ENDOGENOUS_COMMUNITY_FEEDBACK.md`.
 
 The discrete-time Jacobian, Jury stability conditions, damped-oscillation
-boundary, and feedback-gain algebra are standard dynamical-systems results.  The
-repository does **not** claim those mathematical tools as new.
+boundary, unit-circle crossing, and feedback-gain algebra are standard
+dynamical-systems results. The repository does **not** claim those tools as new.
 
 The repository-specific result is the upstream identification
 
@@ -19,9 +19,9 @@ The repository-specific result is the upstream identification
 }
 \]
 
-Because the gap contrast is already constrained by the repository's sharp
-finite-task theorems, those combinatorial results now imply exact dynamical phase
-crossings in the feedback model.
+Because the gap contrast is constrained by the repository's finite sensing
+theorems, those combinatorial results now imply dynamical phase crossings and
+phase exclusions in the feedback model.
 
 ---
 
@@ -41,11 +41,11 @@ q_t\in[0,1]
 
 be the occupancy of a high-opportunity community state.
 
-Community occupancy relaxes toward a phenotype-dependent target
+Community occupancy relaxes toward
 
 \[
 q_{\rm target}(p)
-=q_0+\eta\left(p-\frac12\right),
+=q_0+\eta\left(p-\frac12\right)
 \]
 
 with memory
@@ -56,8 +56,7 @@ with memory
 
 \[
 q_{t+1}
-=
-\phi q_t
+=\phi q_t
 +(1-\phi)q_{\rm target}(p_t).
 \]
 
@@ -69,7 +68,7 @@ s_-<s_+,
 \Delta s=s_+-s_->0.
 \]
 
-The exact haploid log-odds update is
+Evolution follows the exact haploid log-odds update
 
 \[
 \operatorname{logit}(p_{t+1})
@@ -101,7 +100,7 @@ z=\operatorname{logit}(p),
 \qquad q.
 \]
 
-Because
+Since
 
 \[
 \frac{dp}{dz}=p(1-p),
@@ -150,7 +149,7 @@ L=-\eta\Delta s\,r.
 }
 \]
 
-For the biologically restoring case
+For restoring negative feedback
 
 \[
 \eta<0,
@@ -171,8 +170,7 @@ The determinant becomes
 }
 \]
 
-The entire local feedback problem is therefore compressed to two dimensionless
-numbers:
+The local feedback problem is therefore compressed to
 
 ```text
 L    closed-loop structural feedback gain
@@ -183,7 +181,7 @@ phi  community memory
 
 - ecological feedback sensitivity `eta`;
 - state-specific selection contrast `Delta s`;
-- local evolutionary responsiveness `p*(1-p*)`.
+- evolutionary responsiveness `p*(1-p*)`.
 
 ---
 
@@ -237,7 +235,7 @@ For
 0\le\phi<1,
 \]
 
-the middle inequality is automatic whenever `L>0`.  Hence
+the middle inequality is automatic whenever `L>0`. Hence
 
 \[
 \boxed{
@@ -256,47 +254,23 @@ Equivalently,
 }
 \]
 
-This has three immediate biological regimes.
-
-### Positive or non-restoring feedback
-
-\[
-L\le0
-\]
-
-fails to restore an interior polymorphism.
-
-### Moderate negative feedback
-
-\[
-0<L<1
-\]
-
-stabilizes the interior state.
-
-### Excessive negative feedback
-
-\[
-L\ge1
-\]
-
-overshoots in discrete time and destabilizes the interior state again.
-
-Thus stronger negative ecological feedback is not monotonically stabilizing.
+Thus positive feedback is non-restoring, moderate negative feedback stabilizes
+the interior state, and sufficiently strong negative feedback destabilizes it
+again in discrete time.
 
 ---
 
-## 5. Monotone versus damped-oscillatory return
+## 5. Nonoscillatory versus damped return
 
 The characteristic discriminant is
 
 \[
 \Delta_J
 =(1+\phi)^2
--4[\phi+(1-\phi)L].
+-4[\phi+(1-\phi)L]
 \]
 
-It factorizes exactly as
+and factorizes exactly as
 
 \[
 \boxed{
@@ -305,13 +279,13 @@ It factorizes exactly as
 }
 \]
 
-For a stable equilibrium,
+Within the stable interval
 
 \[
 0<L<1,
 \]
 
-the eigenvalues are a complex conjugate pair exactly when
+the eigenvalues are complex exactly when
 
 \[
 \boxed{
@@ -319,7 +293,7 @@ L>\frac{1-\phi}{4}.
 }
 \]
 
-Therefore the complete local phase diagram is
+Hence
 
 ```text
 L <= 0
@@ -332,7 +306,7 @@ L <= 0
     stable damped eco-evolutionary oscillation
 
 L >= 1
-    unstable negative-feedback overshoot
+    strong-negative-feedback oscillatory instability
 ```
 
 Community memory changes the transient boundary but not the basic stability
@@ -350,12 +324,88 @@ the oscillation threshold
 \frac{1-\phi}{4}
 \]
 
-approaches zero.  Hence even weak restoring feedback can produce long damped
-cycles when community states have long memory.
+approaches zero. Even weak restoring feedback can therefore generate long
+damped cycles when community states have strong memory.
 
 ---
 
-## 6. Structural gap enters the loop literally
+## 6. The `L=1` boundary is an oscillatory unit-circle crossing
+
+At
+
+\[
+L=1,
+\]
+
+we have
+
+\[
+\det J=1
+\]
+
+and
+
+\[
+\operatorname{tr}J=1+\phi.
+\]
+
+For every
+
+\[
+0\le\phi<1,
+\]
+
+the two eigenvalues form a nonreal conjugate pair on the unit circle:
+
+\[
+\lambda_{\pm}=e^{\pm i\theta_c}.
+\]
+
+Their angle satisfies
+
+\[
+\boxed{
+\cos\theta_c
+=\frac{1+\phi}{2}.
+}
+\]
+
+Thus the critical local oscillation period is
+
+\[
+\boxed{
+T_c
+=\frac{2\pi}{\theta_c}
+=\frac{2\pi}{\arccos[(1+\phi)/2]}.
+}
+\]
+
+For example,
+
+```text
+phi = 0      -> T_c = 6 generations
+phi = 0.2    -> T_c ~= 6.78
+phi = 0.5    -> T_c ~= 8.69
+phi = 0.8    -> T_c ~= 13.93
+phi = 0.95   -> T_c ~= 28.04
+```
+
+and
+
+\[
+T_c\to\infty
+\quad\text{as}\quad
+\phi\uparrow1.
+\]
+
+So the strong-feedback boundary is not a flip through eigenvalue `-1`; it is an
+oscillatory unit-circle crossing. The repository does not claim the generic
+bifurcation algebra as novel, but the boundary becomes biologically relevant
+once `L` is tied to structural adaptive gain.
+
+---
+
+## 7. Structural gap enters the loop literally
 
 Under the continuous structural lift,
 
@@ -363,7 +413,7 @@ Under the continuous structural lift,
 s_i
 =\lambda g_i-\kappa,
 \qquad
-\g_i=C_F(i)-C_A(i).
+g_i=C_F(i)-C_A(i).
 \]
 
 The common maintenance cost cancels from the state contrast:
@@ -388,8 +438,6 @@ L
 }
 \]
 
-This is the key connection to the original repository mathematics.
-
 The same exact quantity that measures how much more fixed sensing must pay in one
 community state now acts as a dynamical feedback amplifier when evolution feeds
 back onto community occupancy.
@@ -411,7 +459,7 @@ L
 
 ---
 
-## 7. Repo-native minimal witness
+## 8. Repo-native minimal witness
 
 Use existing tasks
 
@@ -454,35 +502,23 @@ If
 \phi=0.2,
 \]
 
-the oscillation threshold is
+the oscillation threshold is `0.2`, so return is stable and nonoscillatory.
 
-\[
-\frac{1-\phi}{4}=0.2,
-\]
-
-so the return is stable and nonoscillatory.
-
-If instead
+If
 
 \[
 \phi=0.8,
 \]
 
-the threshold is
+the threshold is `0.05`, so the same structural feedback gain produces a stable
+damped oscillation.
 
-\[
-0.05,
-\]
-
-so exactly the same structural feedback gain produces a stable damped
-oscillation.
-
-Thus community memory can change the visible eco-evolutionary transient without
-changing either the structural gap contrast or local stability itself.
+Community memory can therefore alter the visible eco-evolutionary transient
+without changing either structural gap contrast or local stability.
 
 ---
 
-## 8. k-branch extremal family becomes a dynamical phase sequence
+## 9. `k`-branch extremal family becomes a dynamical phase sequence
 
 The repository's unit-cost `k`-branch family has
 
@@ -492,13 +528,13 @@ C_A=2,
 C_F=k+1,
 \]
 
-hence structural gap
+so
 
 \[
 g_k=k-1.
 \]
 
-Against a gap-zero control, at the centered equilibrium
+Against a gap-zero control at the centered equilibrium,
 
 \[
 \boxed{
@@ -523,11 +559,7 @@ Then
 L_k=\frac{k-1}{8}
 \]
 
-and the oscillation threshold is
-
-\[
-\frac18.
-\]
+and the oscillation threshold is `1/8`.
 
 Therefore
 
@@ -540,21 +572,22 @@ k = 3,...,8
     1/8 < L < 1
     stable damped oscillation
 
-k >= 9
-    L >= 1
-    overshoot instability
+k = 9
+    L=1
+    oscillatory unit-circle boundary
+
+k > 9
+    L>1
+    oscillatory instability
 ```
 
-This is an exact dynamical interpretation of the repository's linear extremal
-gap family.
-
-Increasing branch structure does not simply produce a stronger adaptive
-advantage.  Once the evolving architecture feeds back on the community, the
-same increase can drive the closed loop through qualitative dynamical phases.
+Increasing branch structure does not simply produce a stronger static adaptive
+advantage. Once the evolving architecture feeds back on community state, the
+same increase drives the closed loop through qualitative dynamical phases.
 
 ---
 
-## 9. Binary extremal family crosses phases faster
+## 10. Binary extremal family crosses phases faster
 
 For the repository's binary routing family,
 
@@ -581,17 +614,7 @@ L_d
 }
 \]
 
-Again take
-
-\[
-\eta=-\frac12,
-\qquad
-\lambda=1,
-\qquad
-\phi=\frac12.
-\]
-
-Then
+With the same parameters,
 
 \[
 L_2=\frac18,
@@ -610,65 +633,43 @@ Thus
 ```text
 depth 2 -> stable nonoscillatory boundary
 depth 3 -> stable damped oscillation
-depth 4 -> overshoot instability
+depth 4 -> oscillatory instability
 ```
 
-The exponential structural gap family therefore reaches the instability phase
-much faster than the linear `k`-branch family.
+The exponential structural-gap family reaches the instability phase much faster
+than the linear `k`-branch family.
 
 ---
 
-## 10. General family thresholds
+## 11. General family thresholds
 
-At a centered equilibrium with
-
-\[
-a=-\eta\lambda>0,
-\]
-
-the `k`-branch family has
+At a centered equilibrium define
 
 \[
-L_k=\frac{a(k-1)}4.
+a=-\eta\lambda>0.
 \]
 
-### Oscillation onset
+For the `k`-branch family,
+
+\[
+L_k=\frac{a(k-1)}{4}.
+\]
 
 Damped oscillation begins when
-
-\[
-\frac{a(k-1)}4
->
-\frac{1-\phi}{4},
-\]
-
-i.e.
 
 \[
 \boxed{
 k-1>\frac{1-\phi}{a}.}
 \]
 
-### Stability loss
-
-Overshoot begins when
-
-\[
-\frac{a(k-1)}4\ge1,
-\]
-
-i.e.
+The unit-circle instability boundary is reached when
 
 \[
 \boxed{
-k-1\ge\frac4a.}
+k-1\ge\frac{4}{a}.}
 \]
 
-So the width of the stable-oscillatory family region is controlled by both
-community memory and the product of ecological feedback strength and structural
-fitness scaling.
-
-For the binary family the same phase criteria apply after replacing `k-1` by
+For the binary family the same criteria apply after replacing `k-1` by
 
 \[
 2^d-(d+1).
@@ -676,12 +677,13 @@ For the binary family the same phase criteria apply after replacing `k-1` by
 
 ---
 
-## 11. Damping time and oscillation period
+## 12. Damping time and oscillation period
 
 Inside the damped-oscillatory phase the conjugate eigenvalue modulus is
 
 \[
-\rho=\sqrt{\det J}
+\rho
+=\sqrt{\det J}
 =\sqrt{\phi+(1-\phi)L}.
 \]
 
@@ -714,15 +716,16 @@ we have
 
 so damping becomes arbitrarily slow.
 
-The complex eigenvalue phase determines the local oscillation period.  Thus two
-stable systems can have identical equilibrium positions while differing greatly
-in how many generations of oscillation remain visible after a perturbation.
+The complex eigenvalue phase determines the local oscillation period. Two stable
+systems can therefore have identical equilibrium positions while differing
+greatly in how many generations of oscillation remain visible after a
+perturbation.
 
 ---
 
-## 12. Biological interpretation
+## 13. Biological interpretation
 
-The loop-gain form separates four ingredients.
+The loop gain separates four ingredients.
 
 ### Structural contrast
 
@@ -738,8 +741,7 @@ comes from exact continuation/productive-frontier structure.
 \lambda
 \]
 
-maps saved sensing burden into state-specific log-fitness contrast in the
-continuous lift.
+maps saved sensing burden into state-specific log-fitness contrast.
 
 ### Ecological feedback sensitivity
 
@@ -756,24 +758,45 @@ or restores the high-opportunity community state under negative feedback.
 p^*(1-p^*)
 \]
 
-is largest at an intermediate phenotype frequency and vanishes near fixation.
+is largest at intermediate phenotype frequency and vanishes near fixation.
 
 Their product is the dynamical gain.
 
-This means a system can have a large static adaptive advantage but weak feedback
-if ecological state is insensitive to phenotype frequency.  Conversely, a
+A system can therefore have a large static adaptive advantage but weak feedback
+if ecological state is insensitive to phenotype frequency. Conversely, a
 moderate structural contrast can generate pronounced cycles when ecological
 feedback and community memory are strong.
 
 ---
 
-## 13. What this does and does not establish
+## 14. Relation to structural phase-exclusion bounds
 
-The exact result in this branch is local and deterministic.
+`STRUCTURAL_PHASE_EXCLUSION_BOUNDS.md` adds the complementary one-sided result.
+The parent bounded-arity theorem gives an upper bound on the largest possible
+`C_F-C_A` gap in a finite sensing scope, and therefore an upper bound on `L`.
+
+This can certify that a damped or unstable phase is impossible for **every** task
+in that scope under the declared feedback parameters.
+
+So the two notes play different roles:
+
+```text
+STRUCTURAL_LOOP_GAIN_PHASE_DIAGRAM
+    given L, which dynamical phase follows?
+
+STRUCTURAL_PHASE_EXCLUSION_BOUNDS
+    can the finite sensing structure generate enough L to reach that phase at all?
+```
+
+---
+
+## 15. Scope boundary
+
+The exact result here is local and deterministic.
 
 It establishes that, in the stated two-community-state feedback model,
-repository-derived structural gap contrasts map directly to the local feedback
-gain and therefore to exact monotone / damped / overshoot phase boundaries.
+repository-derived structural gap contrasts map directly to loop gain and hence
+to exact nonoscillatory / damped / unit-circle phase boundaries.
 
 It does **not** yet establish
 
@@ -785,6 +808,6 @@ It does **not** yet establish
 - global bifurcation structure outside the local interior analysis;
 - empirical realization in a natural system.
 
-The next natural-history application should estimate or constrain all four
-pieces of `L`: structural gap contrast, fitness scaling, ecological feedback
-slope, and equilibrium phenotype responsiveness.
+A natural-history application must estimate or constrain the four components of
+`L`: structural gap contrast, fitness scaling, ecological feedback slope, and
+equilibrium phenotype responsiveness.
