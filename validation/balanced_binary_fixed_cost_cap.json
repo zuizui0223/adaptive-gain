@@ -1,0 +1,28 @@
+{
+  "scope": "sharp_exact_balanced_binary_fixed_cost_cap",
+  "claim": "For exact-50/50 binary queries, max C_F is 1 at n=2, 2 at n=4, and n-3 for every even n>=6.",
+  "upper_bound_certificate": {
+    "step_1": "Every query in a minimum fixed resolver has a private cross-target pair.",
+    "step_2": "Choosing one private pair per query gives a graph in which each query crosses exactly its own edge; every selected edge is therefore a bridge and the graph is a forest.",
+    "step_3": "A one-component forest would be a tree; a leaf edge forces component sizes 1 and n-1 and cannot be crossed by an exact n/2-n/2 cut.",
+    "step_4": "For n>=6 a two-component forest is also impossible at n-2 edges: if both components are nontrivial, an edge in the smaller component cannot be crossed by an exact half cut while the larger component stays whole; if the smaller component is isolated, a leaf edge of the n-1 tree leaves a connected n-2 block larger than n/2.",
+    "consequence": "C_F <= n-3 for every even n>=6."
+  },
+  "sharp_construction": {
+    "private_pair_forest_component_sizes": "(n/2-1, 2, n/2-1)",
+    "component_shapes": "star, edge, star",
+    "edge_count": "n-3",
+    "query_balance": "Every query has exactly n/2 zeros and n/2 ones.",
+    "targets": "Identity targets; construction query signatures are pairwise distinct.",
+    "fixed_cost": "n-3"
+  },
+  "small_exceptions": {
+    "n=2": 1,
+    "n=4": 2
+  },
+  "combined_adaptive_upper_bound": "C_F <= min(m, n-3, F_2(n,C_A)) for even n>=6.",
+  "next_scope": "n=10 exact-balanced sharp ratio profile; fixed side is now capped at C_F<=7.",
+  "implementation": "adaptive_gain/balanced_binary_fixed_cost_cap.py",
+  "tests": "tests/test_balanced_binary_fixed_cost_cap.py",
+  "theory": "theory/EXACT_BALANCED_BINARY_FIXED_COST_CAP.md"
+}
