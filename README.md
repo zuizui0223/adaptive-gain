@@ -220,6 +220,39 @@ C_F/C_A=\frac{2^d}{d+1}\longrightarrow\infty.
 
 Thus the multiplicative adaptive advantage is unbounded even when **every observation is binary and every acquisition cost is one**.
 
+## Balanced binary observations are still not enough
+
+Even imposing near-perfect marginal balance on every binary query does not bound the ratio. There is an explicit family with `k=2^d` mixed branches plus one dummy world in which every query satisfies
+
+\[
+\boxed{|\#0-\#1|\le1}.
+\]
+
+Every branch-terminal query remains the unique separator of its own target-mixed pair, so
+
+\[
+C_F\ge2^d,
+\]
+
+while the `d` routing bits plus one branch terminal give
+
+\[
+C_A\le d+1.
+\]
+
+Therefore
+
+\[
+\boxed{
+\frac{C_F}{C_A}
+\ge
+\frac{2^d}{d+1}
+\longrightarrow\infty.
+}
+\]
+
+This is an unboundedness result, not the sharp fixed-`(n,m)` extremum under balancedness. See `theory/BALANCED_BINARY_UNBOUNDED_ADAPTIVE_GAIN.md`.
+
 ---
 
 # Sharp fixed-world / fixed-query extremal ratios under unit costs
@@ -343,10 +376,39 @@ R_{b,E}(n,m)
 }
 \]
 
-Sharpness again uses the private-pair forest construction, truncated to
-`I=min(m,E,F_b(n,h))` internal queries. Its productive frontier is exactly the `I` singleton edges, so the cap is met with equality whenever active.
+Sharpness again uses the private-pair forest construction, truncated to `I=min(m,E,F_b(n,h))` internal queries. Its productive frontier is exactly the `I` singleton edges, so the cap is met with equality whenever active.
 
-See `theory/SHARP_FRONTIER_EDGE_CAPPED_RATIO.md` and `adaptive_gain/frontier_edge_extremal_bounds.py`.
+## Productive-frontier rank cap does not help
+
+Let frontier rank mean the maximum cardinality of an inclusion-minimal productive edge. For every positive cap `r>=1`,
+
+\[
+\boxed{
+R_{b,\,\operatorname{rank}\le r}(n,m)=R_b(n,m).
+}
+\]
+
+The reason is structural: the sharp bounded-arity witnesses already have productive frontier rank exactly one. Singleton edges are not weak obligations; they make individual resources mandatory in every fixed resolver. Thus **edge count can bound the worst ratio, while maximum edge size cannot**.
+
+See `theory/FRONTIER_RANK_CAP_IS_EXTREMALLY_VACUOUS.md`.
+
+---
+
+# A resource-semantics caveat: global-label-once trees
+
+The ordinary adaptive model already uses every query at most once on a realized path. Allowing the same query label in two mutually exclusive counterfactual branches does not mean measuring it twice on one run.
+
+If one instead imposes the stronger syntax that each query name may label only one node in the entire policy tree, the standard fixed/adaptive class containment can fail. A registered two-query task has
+
+\[
+C_A=C_F=2
+\]
+
+under the ordinary semantics but **no** globally label-unique resolving tree.
+
+Nevertheless, over tasks that are resolvable by this global-label-once syntax, the sharp unit-cost extremal maximum is still `R_b(n,m)`: the bounded-arity sharp witnesses already assign one distinct physical query to every internal node.
+
+See `theory/GLOBAL_ONCE_POLICY_SEMANTICS.md`. This syntax restriction should not be confused with genuine operational inventory constraints across repeated experiments or simultaneously realized subjects.
 
 ---
 
@@ -369,7 +431,7 @@ These are synthetic/conditional structural witnesses, not field empirical valida
 
 The repository does **not** claim a new general theory of adaptive experimental design, Set Cover, hitting set, bisimulation, or graph isomorphism; polynomial-time exact optimization; natural prevalence from finite labeled-task counts; field empirical validation; or that target resolution licenses a biological report.
 
-Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The sharp fixed-`(n,m,b)` and frontier-edge-cap theorems assume unit query costs. Unequal costs, stochastic observations, calibration-changing actions, and continuous compatible sets remain separate problems.
+Current results concern finite deterministic guaranteed target resolution with positive acquisition costs. The sharp fixed-`(n,m,b)` and frontier-edge/rank statements assume unit query costs. Unequal costs, stochastic observations, calibration-changing actions, genuine multi-run inventory constraints, and continuous compatible sets remain separate problems.
 
 ## Run
 
