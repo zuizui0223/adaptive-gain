@@ -1,0 +1,54 @@
+{
+  "scope": "exactly_balanced_binary_small_world_complete_classification",
+  "claim": "Exact 50-50 binary balance changes the finite-size extremum: no task with fewer than 8 worlds exceeds C_F/C_A=3/2, while an 8-world 5-query task attains 5/3.",
+  "symmetry_reduction": {
+    "query_outcomes": "Complementary 0/1 maps are identified because outcome relabeling preserves deterministic resolution costs.",
+    "targets": "Target assignments are represented by integer multiplicity profiles because the complete balanced-query universe is invariant under world relabeling.",
+    "duplicates": "Duplicate query partitions add no deterministic information and may only pad declared query count."
+  },
+  "complete_scans": {
+    "4_worlds": {
+      "balanced_partition_classes": 3,
+      "target_multiplicity_profiles": 4,
+      "representative_query_families": 28,
+      "maximum_ratio": "1"
+    },
+    "6_worlds": {
+      "balanced_partition_classes": 10,
+      "target_multiplicity_profiles": 10,
+      "representative_query_families": 10230,
+      "resolved_representatives": 9184,
+      "maximum_ratio": "3/2",
+      "maximizing_cost_pair_includes": [2, 3]
+    }
+  },
+  "first_above_three_halves_witness": {
+    "worlds": 8,
+    "queries": 5,
+    "targets": [0, 0, 0, 0, 1, 1, 1, 1],
+    "query_outcomes": [
+      [0, 1, 1, 0, 0, 0, 1, 1],
+      [0, 1, 0, 0, 0, 1, 1, 1],
+      [0, 1, 0, 1, 0, 1, 1, 0],
+      [0, 1, 1, 0, 0, 1, 0, 1],
+      [0, 0, 1, 1, 1, 0, 0, 1]
+    ],
+    "adaptive_cost": 3,
+    "fixed_cost": 5,
+    "ratio": "5/3",
+    "private_cross_target_pairs_by_query": {
+      "q0": [1, 5],
+      "q1": [2, 7],
+      "q2": [3, 4],
+      "q3": [1, 6],
+      "q4": [0, 4]
+    },
+    "all_queries_exactly_50_50": true
+  },
+  "minimality": {
+    "world_count": "Exact 50-50 requires even n. n=2 is trivial; complete n=4 and n=6 scans are <=3/2; the n=8 witness is >3/2.",
+    "query_count": "For any binary task with m<=4: C_A=1 implies C_F<=1; C_A=2 implies C_F<=3 by the depth-two internal-node bound; C_A>=3 implies C_F/C_A<=4/3. Hence >3/2 requires m>=5."
+  },
+  "implementation": "adaptive_gain/balanced_binary_small_scope.py",
+  "tests": "tests/test_balanced_binary_small_scope.py"
+}
