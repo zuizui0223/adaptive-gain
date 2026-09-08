@@ -1,0 +1,73 @@
+{
+  "claim": "local feedback transients identify community memory and closed-loop gain, with structural gap recovery requiring independent biological factors",
+  "branch": "theory/feedback-inverse-diagnostics",
+  "forward_invariants": {
+    "trace": "T=1+phi",
+    "determinant": "D=phi+(1-phi)L",
+    "eigenvalue_inverse": "phi=lambda1+lambda2-1; L=(lambda1*lambda2-phi)/(1-phi)",
+    "damped_inverse": "rho=exp(-1/tau); theta=2*pi/P; phi=2*rho*cos(theta)-1; L=(rho^2-phi)/(1-phi)",
+    "phenotype_ar2": "x[t+2]=(1+phi)x[t+1]-[phi+(1-phi)L]x[t]"
+  },
+  "independent_damping_period_roundtrip": {
+    "seed": 20260909,
+    "samples": 200000,
+    "domain": "random stable damped points with 0<=phi<0.99 and (1-phi)/4<L<1",
+    "maximum_loop_gain_absolute_error": 2.5479618415147343e-14,
+    "maximum_community_memory_absolute_error": 3.3306690738754696e-16
+  },
+  "independent_eigenvalue_roundtrip": {
+    "seed": 20260909,
+    "samples": 200000,
+    "domain": "0<=phi<0.99, -0.5<=L<=1.5",
+    "maximum_loop_gain_absolute_error": 2.8255175976710234e-14,
+    "maximum_community_memory_absolute_error": 3.2959746043559335e-16
+  },
+  "independent_ar2_roundtrip": {
+    "seed": 20260909,
+    "samples": 200000,
+    "domain": "0<=phi<0.99, -0.5<=L<=1.5",
+    "maximum_loop_gain_absolute_error": 1.9206858326015208e-14,
+    "maximum_community_memory_absolute_error": 1.1102230246251565e-16
+  },
+  "repo_native_roundtrip": {
+    "community_memory": 0.8,
+    "loop_gain": 0.125,
+    "spectral_radius": 0.9082951062292476,
+    "damping_time_generations": 10.396529204322148,
+    "oscillation_period_generations": 46.45541098794288,
+    "lambda_cost": 1.0,
+    "feedback_strength": -0.5,
+    "equilibrium_frequency": 0.5,
+    "inferred_structural_gap": 1.0,
+    "unit_cost_integer_compatible": true,
+    "minimal_scope": {"n": 4, "m": 3, "b": 2, "h": 2, "gap_upper_bound": 1},
+    "minimal_scope_compatible": true
+  },
+  "structural_falsification_examples": {
+    "gap_4_vs_minimal_scope": {
+      "inferred_gap": 4.0,
+      "scope": {"n": 4, "m": 3, "b": 2, "h": 2},
+      "gap_upper_bound": 1,
+      "compatible": false
+    },
+    "gap_4_vs_larger_scope": {
+      "inferred_gap": 4.0,
+      "scope": {"n": 12, "m": 12, "b": 2, "h": 3},
+      "gap_upper_bound": 4,
+      "compatible": true
+    },
+    "gap_2_with_frontier_edge_cap": {
+      "inferred_gap": 2.0,
+      "scope": {"n": 12, "m": 12, "b": 2, "h": 3, "E": 3},
+      "gap_upper_bound": 0,
+      "compatible": false
+    }
+  },
+  "identifiability_boundary": {
+    "identified_from_local_transient": ["phi", "L"],
+    "not_separately_identified_from_local_transient": ["eta", "lambda", "Delta_g", "p_star factors"],
+    "factorization": "Delta_g=L/[(-eta)*lambda*p_star*(1-p_star)] requires independently measured eta, lambda, p_star",
+    "unit_cost_prediction": "after factorization, Delta_g should be a non-negative integer within estimation tolerance"
+  },
+  "scope": "local deterministic inverse for the two-community-state endogenous feedback model; no statistical consistency claim under process or observation noise"
+}
