@@ -199,6 +199,25 @@ The unit-cost finite theory then makes two falsifiable predictions:
 1. `Delta_g` should lie near a non-negative integer, within a tolerance justified by estimation uncertainty;
 2. it must not exceed the inherited bounded-arity / productive-frontier gap ceiling for the declared sensing scope.
 
+Minimum empirical packages:
+
+```text
+A: phenotype time series
+   -> phi, L
+
+B: A + community-response slope eta + p*
+   -> Delta_s
+
+C: B + direct state-specific fitness
+   -> independent test of Delta_s and closed-loop factorization
+
+D: C + natural-history finite sensing graph
+   -> Delta_g, lambda calibration or hard-budget test
+   -> exact structural compatibility / falsification
+```
+
+Package B already tests more than dynamics alone; Package D is the first level that directly tests the repository's sensing combinatorics rather than only the generic feedback model.
+
 The sensitivity layer adds an equally important warning:
 
 \[
