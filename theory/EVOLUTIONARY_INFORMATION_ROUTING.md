@@ -2,390 +2,342 @@
 
 ## Status
 
-This note develops an evolutionary-ecology interpretation of the deterministic `adaptive-gain` theory.
+This note interprets the deterministic `adaptive-gain` theory as a theory of outcome-contingent information acquisition by organisms and records the evolutionary-ecology programme around it.
 
-It is a **research programme**, not a claim that the evolutionary model has already been proved. The current repository proves finite deterministic fixed-versus-adaptive target-resolution results. The evolutionary layer below specifies what would have to be added.
+A first dynamic theorem is now closed in `TEMPORAL_ROUTING_THRESHOLD.md`. The important correction relative to the initial sketch is that **temporal predictability, not persistence alone, controls routing value** in the minimal model.
 
 ---
 
-## 1. The key shift
+## 1. From investigator measurement to organism sensing
 
-The current theory can be read in two ways.
+The same formal object has two interpretations.
 
 ```text
-investigator interpretation:
-    which measurement should the scientist acquire next?
+investigator:
+    which measurement should be acquired next?
 
-organism interpretation:
-    which cue / sensory channel should the organism sample next?
+organism:
+    which cue, location, sensory modality, or inspection behaviour should be sampled next?
 ```
 
-The second interpretation moves the theory into evolutionary and behavioural ecology.
+The evolutionary object is therefore not adaptation in the population-genetic sense by definition. It is a heritable or condition-dependent information-acquisition policy on which natural selection may act.
 
-The biological object is not "adaptation" in the population-genetic sense yet. It is an **outcome-contingent information-acquisition policy** that natural selection may favour or disfavor.
+The central question becomes
 
----
-
-## 2. Four distinct timescales
-
-A useful evolutionary treatment must separate at least four clocks.
-
-### Information-acquisition time
-
-\[
-\tau_{\mathrm{info}}
-\]
-
-The time over which an organism samples cues in sequence.
-
-Examples include approach, inspection, tasting, courtship assessment, host search, predator assessment, or navigation.
-
-### Ecological-state persistence time
-
-\[
-\tau_{\mathrm{env}}
-\]
-
-The time over which the fitness-relevant ecological state remains similar enough that an earlier cue still describes the state relevant to later sensing or action.
-
-### Phenotypic-response time
-
-\[
-\tau_{\mathrm{phen}}
-\]
-
-The time required to change behaviour, physiology, development, or another plastic phenotype after information is acquired.
-
-### Evolutionary time
-
-\[
-\tau_{\mathrm{evo}}
-\]
-
-The time over which selection changes the sensory repertoire, cue weighting, memory, sampling behaviour, or information-routing policy.
-
-The present deterministic repository is closest to the regime
-
-\[
-\boxed{\tau_{\mathrm{info}}\ll\tau_{\mathrm{env}}}
-\]
-
-where the hidden state is effectively frozen while the observation policy runs.
+> **When should an organism condition future information acquisition on information already obtained?**
 
 ---
 
-## 3. Time is already implicit in adaptivity
+## 2. Four clocks
 
-Even in the static theory, adaptivity creates an arrow of logical time:
+A useful evolutionary treatment must distinguish at least four timescales.
+
+\[
+\tau_{info}
+\]
+
+is the time over which cues are sampled in sequence.
+
+\[
+\tau_{env}
+\]
+
+is the characteristic time over which the ecological context governing cue usefulness changes.
+
+\[
+\tau_{phen}
+\]
+
+is the response time for behaviour, physiology, development, or another phenotype.
+
+\[
+\tau_{evo}
+\]
+
+is the evolutionary time over which cue weighting, memory, sensory repertoires, and routing policies change.
+
+The original deterministic repository is closest to a frozen-state limit in which the information-acquisition episode is short relative to relevant state change.
+
+---
+
+## 3. Adaptivity already creates an arrow of time
+
+Even before the ecological state moves, the adaptive policy has logical time:
 
 \[
 h_t
-\longrightarrow q_t
-\longrightarrow y_t
-\longrightarrow h_{t+1}
-\longrightarrow q_{t+1}.
+\to q_t
+\to y_t
+\to h_{t+1}
+\to q_{t+1}.
 \]
 
-The current continuation structure is therefore a structure of **future information opportunities conditional on past information**.
+The continuation structure therefore describes **future information opportunities conditional on past information**.
 
-The natural dynamic extension is to let the ecological state itself move:
+A dynamic ecological extension lets context move:
 
 \[
 X_{t+1}\sim K(\cdot\mid X_t),
-\]
-
-and observations satisfy
-
-\[
+\qquad
 Y_t\sim P_{q_t}(\cdot\mid X_t).
 \]
 
-The organism chooses
+The organism chooses a later cue from its history or stops sensing and acts.
 
-\[
-q_{t+1}=\pi(h_{t+1})
-\]
-
-or stops sampling and acts.
-
-This creates a competition between two effects:
+This creates a competition among
 
 ```text
 routing benefit:
-    an early cue makes later sensing more targeted
+    early information makes later sensing more targeted
 
-obsolescence cost:
-    while the organism samples, the ecological state may change
+obsolescence:
+    early information can become stale
+
+predictable transformation:
+    early information may remain useful after a systematic reversal or other transition
 ```
+
+The third term is essential. Rapid change need not destroy routing if the change itself is predictable.
 
 ---
 
-## 4. Temporal persistence as a control parameter
+## 4. First exact temporal theorem
 
-Let ecological persistence be summarized, in the simplest Markov model, by a parameter such as
-
-\[
-\rho=P(X_{t+1}=X_t)
-\]
-
-or more generally by predictive dependence between `X_t` and `X_{t+\Delta}`.
-
-This suggests three regimes.
-
-### Slow environmental change
+The unique four-world strict-gain normal form can be written as
 
 \[
-\tau_{\mathrm{env}}\gg\tau_{\mathrm{info}}.
+(T,C)\in\{0,1\}^2,
 \]
 
-Earlier cues remain valid long enough to route later sensing.
+where `T` is a target and `C` determines which specialist query is diagnostic.
 
-Prediction: deeper outcome-contingent sensing policies can be favoured.
-
-### Comparable timescales
+Let
 
 \[
-\tau_{\mathrm{env}}\approx\tau_{\mathrm{info}}.
+P(C_1=C_0)=\rho.
 \]
 
-Information can become stale during the sensing sequence.
-
-Prediction: optimal policies should trade routing depth against delay and may show an optimal stopping depth.
-
-### Fast environmental change
+At budget two, every fixed pair has Bayes target accuracy
 
 \[
-\tau_{\mathrm{env}}\ll\tau_{\mathrm{info}}.
+\boxed{A_F^{(2)}=3/4.}
 \]
 
-Branch information rapidly loses relevance.
+The optimal contingent policy has
 
-Prediction: selection may favour shallow, parallel, constitutive, or robust sensing rather than deep sequential routing.
+\[
+\boxed{
+A_A^{(2)}
+=
+3/4+|2\rho-1|/4.
+}
+\]
 
-These are hypotheses to prove in a dynamic extension, not consequences already established by the deterministic theorem.
+Therefore
+
+\[
+\boxed{
+G_{time}=|2\rho-1|/4.
+}
+\]
+
+Consequences:
+
+- `rho > 1/2`: follow the same branch because context tends to persist;
+- `rho < 1/2`: route to the opposite branch because context tends to alternate;
+- `rho = 1/2`: routing value vanishes exactly.
+
+The relevant ecological quantity is thus **predictability of future cue usefulness from current context**.
+
+See `theory/TEMPORAL_ROUTING_THRESHOLD.md` and `adaptive_gain/temporal_routing.py`.
 
 ---
 
 ## 5. Routing cues versus target-predictive cues
 
-Much evolutionary theory of phenotypic plasticity values a cue by how reliably it predicts the environment of selection.
+The deterministic core and its temporal extension motivate a useful distinction.
 
-The deterministic `adaptive-gain` witnesses expose a different possibility.
+### Target-predictive cue
 
-An early observation may have little or even zero direct information about the final target while still being essential because it determines which later observation is useful.
+A cue directly changes belief about the final fitness-relevant target.
 
-This motivates a distinction between:
+### Routing cue
 
-### target-predictive cue
+A cue changes which later cue, sensory modality, location, or inspection behaviour should be sampled.
 
-A cue directly changes the organism's belief about the fitness-relevant target.
-
-### routing cue
-
-A cue primarily changes **which subsequent cue, sensory modality, location, or behaviour should be sampled**.
-
-Symbolically, a routing cue may satisfy
+A routing cue can satisfy
 
 \[
-I(T;Y_q)\approx0
+I(T;Y_q)=0
 \]
 
-while
+while still changing the optimal continuation policy.
 
-\[
-\pi^*(h,Y_q)\ne\pi^*(h).
-\]
-
-Its value lies in changing the continuation policy rather than directly predicting `T`.
-
-This should not be advertised as a newly discovered biological phenomenon without a dedicated literature audit: context-dependent cue hierarchies and sequential multimodal sensing are already documented. The potential contribution is an exact **fixed-versus-contingent structural theory** of such routing value.
+This does **not** mean cue hierarchies or context-dependent sensing are newly discovered. Those are established biological phenomena. The proposed contribution is narrower: an exact fixed-versus-contingent theory showing when the routing role itself generates value.
 
 ---
 
 ## 6. Evolutionary objective
 
-To move from behavioural routing to evolutionary adaptation, assign fitness consequences to information acquisition and action.
-
-Let an organism eventually choose action or phenotype `a`, with fitness contribution
+Let an organism eventually choose an action `a` with fitness contribution
 
 \[
-w(a,X_t),
+w(a,X_\tau),
 \]
 
-and let cue acquisition have costs in time, energy, exposure, or opportunity:
+and let sensing carry energetic, temporal, predation, attention, or opportunity costs.
 
-\[
-c(q)>0.
-\]
-
-A simple within-episode objective is
+A within-episode objective is
 
 \[
 J(\pi)
 =
-\mathbb E\left[
- w(a_\pi,X_{\tau})
+E\left[
+ w(a_\pi,X_\tau)
  -\sum_{t<\tau}c(q_t)
  -d(\tau)
-\right],
+\right].
 \]
 
-where `tau` is the stopping time and `d(tau)` is an optional delay cost.
-
-For repeated episodes or population growth, a more explicitly evolutionary objective may use long-run growth or expected lifetime reproductive success.
-
-Define the evolutionary value of contingent sensing as
+Define the value of contingent sensing as
 
 \[
-\Delta_{\mathrm{route}}
+\Delta_{route}
 =
-\max_{\pi\in\Pi_{\mathrm{adaptive}}}J(\pi)
+\max_{\pi\in\Pi_A}J(\pi)
 -
-\max_{F\in\Pi_{\mathrm{fixed}}}J(F).
+\max_{F\in\Pi_F}J(F).
 \]
 
-The current deterministic `C_F-C_A` becomes a zero-error, static-state, resolution-cost boundary case rather than a separate unrelated theory.
+In the first temporal model, if one unit of classification accuracy is worth `s` fitness units and maintaining contingent control costs `k`,
+
+\[
+\boxed{
+\Delta W
+=
+\frac{s}{4}|2\rho-1|-k.
+}
+\]
+
+Thus routing is selected when
+
+\[
+\boxed{|2\rho-1|>4k/s.}
+\]
+
+This turns temporal predictability into an explicit evolutionary threshold.
 
 ---
 
-## 7. Evolutionary predictions suggested by the framework
+## 7. Predictions
 
-The dynamic theory should test the following predictions.
+### P1. Marginally weak cues can be strongly selected
 
-### P1. Environmental persistence should favour deeper cue routing
+A cue can have little or no direct association with the final target while being maintained because it predicts which later cue will be useful.
 
-When state persistence is high relative to cue-acquisition time, early branch information remains useful long enough to justify specialized later sensing.
+### P2. The sign of temporal autocorrelation can reverse cue order
 
-### P2. Volatile environments should favour shallower or parallel sensing
+Positive autocorrelation favours same-branch continuation; negative autocorrelation can favour deliberate branch reversal.
 
-When states change rapidly, sequential specialization can lose value because early routing information becomes stale.
+### P3. Unpredictability, not change alone, erodes routing value
 
-### P3. Large cue-cost asymmetry should favour cheap routers followed by expensive specialists
+A rapidly oscillating but predictable environment can support contingent sensing. A slowly changing but locally unpredictable environment need not.
 
-If one cue cheaply identifies which expensive sensory channel is worth using, contingent acquisition can strongly outperform constitutive acquisition of all channels.
+### P4. Memory and routing should coevolve
 
-### P4. A cue can be evolutionarily important despite weak marginal correlation with the final fitness target
+Memory is useful insofar as stored branch information predicts future cue usefulness. Its optimal duration should therefore depend on the temporal correlation structure relevant to the next sensing step.
 
-Selection can maintain a cue because it changes the value of future cues.
+### P5. Selection can act on information order
 
-This predicts a failure mode for empirical analyses that rank cue importance only by marginal cue-target association.
+Approach, inspection, movement, handling, and attention can change which cues become available first. Natural selection can therefore act on the order of information acquisition, not only sensory sensitivity or cue weighting.
 
-### P5. Memory should evolve jointly with routing depth and environmental autocorrelation
+### P6. Signalers may affect receiver routing
 
-Memory preserves branch information, but retaining old information can become harmful when environmental states turn over quickly.
-
-### P6. Organisms may evolve behaviour that changes the order in which cues become available
-
-If cue order affects information value, natural selection can act not only on sensory sensitivity but also on approach, inspection, search, movement, or handling behaviours that reorder information acquisition.
-
-### P7. Signalers and receivers can coevolve around routing cues
-
-A signal or cue that controls a receiver's next information-acquisition step can alter later inspection effort even without directly identifying quality. This suggests a possible connection to deception, sensory exploitation, mate assessment, host finding, and plant-pollinator interactions.
+Signals may alter which later features a receiver inspects even when they do not directly reveal final quality. This creates possible links to mate assessment, sensory exploitation, host finding, deception, and mutualistic signalling.
 
 ---
 
-## 8. Natural history is part of the theory, not merely an illustration
+## 8. Natural history specifies the feasible cue graph
 
-Natural history determines the feasible observation policy.
+Natural history is not a decorative example after the mathematics. It constrains the policy space.
 
-For an organism, cues are not arbitrary labels in a mathematical table. Natural history determines:
+It determines
 
 ```text
-which cue is available at long range
-which appears only after approach or contact
-which cue acquisition consumes time or energy
-which cue exposes the organism to predation or competition
+which cues exist at long range
+which require approach or contact
 which cues can be sampled simultaneously
+which cues take time or energy
+which cues increase predation or competition risk
 which cues disappear after an action
-which cues themselves alter the interaction partner or environment
-how long the ecological state persists
+which interactions change after inspection
+how quickly the relevant context changes
 ```
 
-Mathematically, natural history specifies a state- and time-dependent action set
+Mathematically, this defines a history- and state-dependent feasible set of observations.
 
-\[
-Q(h_t,X_t,t)
-\]
-
-and sometimes action-dependent ecological transitions.
-
-Thus natural history supplies the **feasible cue graph** on which the adaptive-information theory runs.
-
-This gives the theory a concrete empirical interface: document the actual cue sequence first, then ask whether the observed sequence has routing structure.
+Empirically, the workflow should therefore begin with a natural-history map of the actual cue sequence and only then ask whether it contains routing structure.
 
 ---
 
-## 9. Natural-history systems where the idea is plausible
+## 9. Plausible natural-history systems
 
-These are example classes, not empirical claims about any particular species.
+These are candidate system classes, not claims that they instantiate the exact theorem.
 
 ### Host finding and oviposition
 
-Long-distance habitat or plant cues can be encountered before short-distance chemical, nutritional, predator, or contact cues. Sequential cue hierarchies are already documented in host-selection behaviour.
+Long-distance habitat or plant cues precede short-distance chemical, nutritional, predator, and contact cues. `Pieris rapae` host choice provides an empirical example of sequential long- and short-distance cue hierarchy.
 
 ### Foraging
 
-Animals may first identify a promising patch class, then deploy more costly local assessment, handling, or prey-discrimination behaviours.
+A coarse patch cue can determine whether an animal invests in more costly local assessment or prey discrimination.
 
 ### Mate assessment
 
-Long-range signals can determine whether an individual approaches and which close-range visual, acoustic, chemical, or behavioural information is then acquired.
+Long-range signals can determine approach and thereby which close-range visual, acoustic, chemical, or behavioural information becomes available.
 
 ### Predator assessment
 
-A coarse alarm or habitat-risk cue can route attention toward predator-specific confirmation channels before escape or refuge choice.
+A coarse risk cue can route attention toward predator-specific confirmation before escape or refuge choice.
 
 ### Navigation
 
-Global and local cues can have context- and experience-dependent hierarchical roles.
+Global and local orientation cues can be used in context- and experience-dependent orders.
 
 ### Plant-pollinator interactions
 
-Pollinators encounter floral information through a temporally and spatially structured sequence from detection and approach to landing, handling, reward assessment, and memory. Selection on floral traits can therefore act partly through effects on the pollinator's future information-acquisition trajectory, not only through instantaneous attraction.
+Pollinators encounter floral information through detection, approach, landing, handling, reward assessment, and memory. Floral traits may therefore affect later information acquisition as well as immediate attraction.
 
 ---
 
-## 10. Relation to established evolutionary ecology
+## 10. Literature boundary
 
-This project must explicitly connect to, rather than rediscover, existing information-use theory.
+The project must connect explicitly to established information-use and sensory-ecology theory.
 
-Representative starting points include:
+Representative anchors:
 
 - Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. (2005). *Information and its use by animals in evolutionary ecology*. Trends in Ecology & Evolution. DOI: 10.1016/j.tree.2005.01.010.
-- Chevin, L.-M. & Lande, R. (2015). *Evolution of environmental cues for phenotypic plasticity*. Evolution. DOI: 10.1111/evo.12755.
 - Eliassen, S., Jørgensen, C., Mangel, M. & Giske, J. (2009). *Quantifying the adaptive value of learning in foraging behavior*. The American Naturalist. DOI: 10.1086/605370.
 - Schneeberger, K. & Taborsky, M. (2020). *The role of sensory ecology and cognition in social decisions: Costs of acquiring information matter*. Functional Ecology. DOI: 10.1111/1365-2435.13488.
-- Nieh, J. C. et al. (2023). *Information Ecology: an integrative framework for studying animal behavior*. Trends in Ecology & Evolution. DOI: 10.1016/j.tree.2023.05.017.
-- Lund, M. et al. (2019). *Cue hierarchy for host plant selection in Pieris rapae*. Entomologia Experimentalis et Applicata. DOI: 10.1111/eea.12772.
+- Bergman, T. J. & Beehner, J. C. (2023). *Information Ecology: an integrative framework for studying animal behavior*. Trends in Ecology & Evolution. DOI: 10.1016/j.tree.2023.05.017.
+- Lund, M., Brainard, D. C. & Szendrei, Z. (2019). *Cue hierarchy for host plant selection in Pieris rapae*. Entomologia Experimentalis et Applicata. DOI: 10.1111/eea.12772.
 
-The literature already establishes that information has fitness value, costs, temporal structure, cue hierarchies, and context dependence.
+These literatures already establish information value, information costs, cue hierarchy, attention, learning, and temporal environmental effects.
 
-The proposed contribution is therefore narrower:
-
-\[
-\boxed{
-\text{When does conditional cue routing itself create value beyond a fixed cue repertoire?}
-}
-\]
-
-and
+The proposed theoretical niche is
 
 \[
 \boxed{
-\text{How does that value depend on the relative timescales of sensing and environmental change?}
+\text{fixed cue bundles versus outcome-contingent cue routing, with exact structural and temporal gain.}
 }
 \]
 
 ---
 
-## 11. Stronger theoretical-ecology framing
+## 11. Journal-level framing
 
-A possible conceptual centre is no longer merely
+For a theoretical-ecology paper, the conceptual centre should be
 
-> When is adaptive measurement cheaper than fixed measurement?
+> **When should organisms use present information to choose what information to acquire next?**
 
-but
-
-> **When should an organism condition future information acquisition on information already obtained, and how does environmental time structure determine the evolutionary value of that routing?**
-
-This framing connects the exact deterministic theory to behavioural ecology, sensory ecology, phenotypic plasticity, learning, and natural history without pretending those literatures are absent.
+The deterministic `C_A<C_F` theorem supplies the structural boundary. The temporal theorem supplies the first evolutionary consequence. A next-stage model should add noisy cues, arbitrary transition kernels, and explicit fitness actions without losing the distinction between direct target information and continuation-routing information.
