@@ -1,0 +1,48 @@
+{
+  "claim": "general local evolutionary response recovers the parent haploid feedback model and gives exact gain-phase thresholds",
+  "branch": "theory/general-evolutionary-response",
+  "local_model": {
+    "jacobian": "[[alpha, beta*Delta_s],[(1-phi)*e,phi]]",
+    "generalized_gain": "G=-beta*Delta_s*e",
+    "trace": "alpha+phi",
+    "determinant": "alpha*phi+(1-phi)*G",
+    "domain": "0<=alpha<=1, 0<=phi<1, beta>=0, Delta_s>=0"
+  },
+  "exact_thresholds": {
+    "lower_stability_gain": "G_minus=alpha-1",
+    "upper_stability_gain": "G_plus=(1-alpha*phi)/(1-phi)",
+    "stability": "G_minus<G<G_plus",
+    "oscillation": "G>(alpha-phi)^2/[4(1-phi)]",
+    "upper_boundary_period": "2*pi/acos[(alpha+phi)/2]",
+    "upper_critical_slowing": "tau ~ 2/[(1-phi)(G_plus-G)]"
+  },
+  "parent_recovery": {
+    "coordinate": "x=logit(p)",
+    "alpha": 1.0,
+    "beta": 1.0,
+    "ecological_slope": "e=eta*p_star*(1-p_star)",
+    "generalized_gain": "G=L",
+    "recovered_lower_threshold": 0.0,
+    "recovered_upper_threshold": 1.0,
+    "recovered_oscillation_threshold": "(1-phi)/4"
+  },
+  "independent_random_phase_audit": {
+    "seed": 20260909,
+    "samples": 200000,
+    "alpha_range": "Uniform(0,1)",
+    "phi_range": "Uniform(0,0.999999)",
+    "G_range": "Uniform(-0.5,2)",
+    "stability_mismatches_vs_direct_eigenvalue_modulus": 0,
+    "oscillation_boundary_mismatches_vs_discriminant": 0,
+    "maximum_discriminant_identity_absolute_error": 1.3322676295501878e-15
+  },
+  "upper_critical_slowing_audit": {
+    "seed": 20260909,
+    "samples": 100000,
+    "distance_to_upper_boundary": "sampled up to 1e-3 while remaining in stable damped region",
+    "maximum_absolute_deviation_of_exact_over_asymptotic_ratio_from_one": 0.000490739436651566
+  },
+  "qualitative_new_consequence_relative_to_parent": "When alpha<1, the lower stability threshold alpha-1 is negative, so weak reinforcing ecological feedback can remain stable because intrinsic evolutionary damping absorbs it.",
+  "prior_art_boundary": "Generic local linearization, Jury criteria, oscillation thresholds, and critical slowing are standard. Repository-specific input is the exact finite sensing gap entering Delta_s=lambda*Delta_g and hence generalized gain G.",
+  "scope": "local deterministic scalar evolutionary coordinate coupled to one scalar community state"
+}
