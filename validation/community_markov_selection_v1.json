@@ -1,0 +1,26 @@
+{
+  "claim": "finite-state stationary community Markov reward identities recover the two-state m/phi theory and exact finite-horizon cumulative selection moments",
+  "implementation": "adaptive_gain/community_markov_selection.py",
+  "tests": "tests/test_community_markov_selection.py",
+  "two_state_recovery": {
+    "community_transition": "P=[ [1-a,a], [b,1-b] ]",
+    "stationary": "[b/(a+b), a/(a+b)]",
+    "mean_sign": "m=(a-b)/(a+b)",
+    "coherence": "phi=1-a-b",
+    "covariance": "gamma(k)=delta^2(1-m^2)phi^k"
+  },
+  "independent_path_enumeration": {
+    "mixture_stationary_models_checked": 300,
+    "general_positive_markov_models_checked": 200,
+    "state_counts": [2, 3, 4],
+    "maximum_horizon": 5,
+    "maximum_absolute_error_mixture_models": 1.7386092565629951e-13,
+    "maximum_absolute_error_general_models": 2.475797344914099e-14,
+    "comparisons": [
+      "stationary cumulative mean vs full path enumeration",
+      "stationary covariance-sum variance vs full path enumeration",
+      "enumerated total path probability vs one"
+    ]
+  },
+  "scope": "Finite-state stationary Markov community switching with user-supplied stationary distribution and state-specific selection rewards. Long-run asymptotic directional fraction additionally requires an ergodic/mixing interpretation; finite-horizon moment identities do not."
+}
