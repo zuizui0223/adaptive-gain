@@ -1,0 +1,25 @@
+{
+  "scope": "exact_balanced_binary_depth_four_ceiling_from_n20",
+  "world_count": 20,
+  "query_count": 15,
+  "adaptive_cost": 4,
+  "fixed_cost": 15,
+  "all_queries_exactly_balanced": true,
+  "balance_per_query": [10, 10],
+  "private_pair_count": 15,
+  "all_private_pairs_query_unique": true,
+  "all_private_pairs_cross_target": true,
+  "private_forest_component_sizes": [1, 2, 3, 6, 8],
+  "complete_depth_four_internal_nodes": 15,
+  "complete_depth_four_distinct_query_labels": 15,
+  "padding": {
+    "method": "append complementary all-zero/all-one world pairs",
+    "preserves_exact_balance": true,
+    "preserves_original_private_pairs": true,
+    "preserves_depth_four_policy": true,
+    "all_even_world_counts_at_least_20": true
+  },
+  "sharp_conclusion": "D4(n)=15 for every even n>=20",
+  "n18_status": "open: 13<=D4(18)<=14",
+  "theorem_holds": true
+}
