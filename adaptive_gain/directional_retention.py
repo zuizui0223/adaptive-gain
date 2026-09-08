@@ -19,6 +19,17 @@ where F_H is the partial-sum factor implemented in
 
 for fixed |phi|<1.
 
+When this second-order model is interpreted as an actual stationary two-state
+Markov sign process, not every pair (m,phi) is feasible.  For |m|<1 the implied
+transition probabilities are
+
+    P(+ | -) = (1+m)(1-phi)/2
+    P(- | +) = (1-m)(1-phi)/2,
+
+so feasibility requires both probabilities to lie in [0,1], equivalently
+
+    phi >= -(1-|m|)/(1+|m|).
+
 The covariance algebra is standard; the repository-specific role is to expose
 the long-timescale filter downstream of structurally generated selection.
 """
@@ -42,6 +53,52 @@ def _validate(horizon: int, mean_sign: float, phi: float) -> tuple[int, float, f
     if p < -1.0 or p > 1.0:
         raise ValueError("phi must lie in [-1, 1]")
     return H, m, p
+
+
+def two_state_markov_transition_probabilities(
+    mean_sign: float,
+    phi: float,
+) -> tuple[float, float]:
+    """Return P(+|-), P(-|+) for the stationary two-state Markov interpretation.
+
+    Raises when ``(mean_sign, phi)`` cannot be realized by a stationary two-state
+    Markov chain with sign values -1 and +1.  Degenerate |m|=1 is treated as a
+    one-support-state process and returns the on-support transition rate zero;
+    the off-support row is not identifiable from stationary observations.
+    """
+
+    m = float(mean_sign)
+    p = float(phi)
+    if m < -1.0 or m > 1.0:
+        raise ValueError("mean_sign must lie in [-1, 1]")
+    if p < -1.0 or p > 1.0:
+        raise ValueError("phi must lie in [-1, 1]")
+    if m == 1.0:
+        return 0.0, 0.0
+    if m == -1.0:
+        return 0.0, 0.0
+    plus_from_minus = 0.5 * (1.0 + m) * (1.0 - p)
+    minus_from_plus = 0.5 * (1.0 - m) * (1.0 - p)
+    if plus_from_minus > 1.0 + 1e-12 or minus_from_plus > 1.0 + 1e-12:
+        minimum_phi = -(1.0 - abs(m)) / (1.0 + abs(m))
+        raise ValueError(
+            "mean_sign and phi are not jointly feasible for a stationary two-state "
+            f"Markov sign process; require phi >= {minimum_phi:.12g}"
+        )
+    return (
+        min(1.0, max(0.0, plus_from_minus)),
+        min(1.0, max(0.0, minus_from_plus)),
+    )
+
+
+def two_state_markov_feasible(mean_sign: float, phi: float) -> bool:
+    """Whether ``(m,phi)`` has a stationary two-state Markov realization."""
+
+    try:
+        two_state_markov_transition_probabilities(mean_sign, phi)
+    except ValueError:
+        return False
+    return True
 
 
 def expected_cumulative_selection(
