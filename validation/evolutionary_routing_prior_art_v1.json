@@ -1,0 +1,19 @@
+{
+  "status": "positioned_not_novelty_claimed",
+  "established_neighbors": [
+    "animal information use and statistical decision theory",
+    "adaptive value of learning under temporal and spatial heterogeneity",
+    "costs of sensory and cognitive information acquisition",
+    "information ecology",
+    "sequential and hierarchical cue use"
+  ],
+  "narrow_novelty_target": "exact fixed-versus-contingent future cue acquisition and its temporal-predictability gain",
+  "verified_references": [
+    "10.1016/j.tree.2005.01.010",
+    "10.1086/605370",
+    "10.1111/1365-2435.13488",
+    "10.1016/j.tree.2023.05.017",
+    "10.1111/eea.12772"
+  ],
+  "claim_boundary": "No claim that information use, cue hierarchy, learning, information costs, or temporal autocorrelation are themselves novel."
+}
