@@ -1,24 +1,24 @@
-"""Balanced-binary unit-cost family with unbounded adaptive advantage.
+"""Exactly balanced binary unit-cost family with unbounded adaptive advantage.
 
-For routing depth d>=1 let k=2**d.  Start from k mixed target pairs
-(a_i,b_i), add one target-0 dummy world, and use:
+For routing depth d>=1 let k=2**d. Start from k mixed target pairs
+(a_i,b_i), add two target-0 dummy worlds, and use:
 
-* d binary routing-bit queries, balanced up to one because the dummy contributes
-  one additional zero; and
-* k binary terminal queries.  Terminal t_j separates a_j from b_j and is made
-  globally balanced by assigning outcome one to both worlds in exactly k/2
-  other branches.
+* d binary routing-bit queries; the two dummies contribute opposite routing
+  values, so every routing query has exactly k+1 zeros and k+1 ones; and
+* k binary terminal queries. Terminal t_j separates a_j from b_j, assigns one
+  to both worlds in exactly k/2 other branches, and assigns zero to both dummies.
+  Thus every terminal also has exactly k+1 zeros and k+1 ones.
 
-Every query therefore has outcome counts (k+1,k) in some order on 2k+1 worlds.
+Every declared query is therefore **exactly 50/50 balanced** on 2k+2 worlds.
 Pair (a_j,b_j) is separated by t_j and by no other query, so every fixed resolver
-must contain all k terminal resources: C_F>=k.  Reading all d routing bits and
+must contain all k terminal resources: C_F>=k. Reading all d routing bits and
 then the identified branch terminal resolves adaptively in at most d+1 queries:
-C_A<=d+1.  Hence
+C_A<=d+1. Hence
 
     C_F/C_A >= 2**d/(d+1) -> infinity.
 
 The theorem is an existence/lower-bound result, not a sharp fixed-(n,m) theorem
-under balancedness.  Small depths are audited with the repository's exact
+under balancedness. Small depths are audited with the repository's exact
 solvers; the general construction exceeds the exact solver's 20-query cap.
 """
 from __future__ import annotations
@@ -45,14 +45,14 @@ class BalancedBinaryFamilyReceipt:
     direct_check_performed: bool
     direct_bounds_hold: bool
     theorem_holds: bool
-    scope: str = "balanced_binary_unit_cost_unbounded_adaptive_advantage"
+    scope: str = "exactly_balanced_binary_unit_cost_unbounded_adaptive_advantage"
 
 
 def balanced_binary_family_counts(routing_depth: int) -> tuple[int, int, int]:
     if type(routing_depth) is not int or routing_depth < 1:
         raise ValueError("routing_depth must be a positive integer")
     k = 1 << routing_depth
-    return k, 2 * k + 1, routing_depth + k
+    return k, 2 * k + 2, routing_depth + k
 
 
 def balanced_binary_ratio_lower_bound(routing_depth: int) -> Fraction:
@@ -61,7 +61,7 @@ def balanced_binary_ratio_lower_bound(routing_depth: int) -> Fraction:
 
 
 def balanced_binary_extremal_task(routing_depth: int) -> FiniteTask:
-    """Construct the balanced family when it fits the exact FiniteTask query cap."""
+    """Construct the exactly balanced family when it fits the exact query cap."""
     k, _, query_count = balanced_binary_family_counts(routing_depth)
     if query_count > 20:
         raise ValueError("explicit FiniteTask exceeds the exact solver's 20-query cap")
@@ -70,22 +70,26 @@ def balanced_binary_extremal_task(routing_depth: int) -> FiniteTask:
     for i in range(k):
         worlds.append(World(f"a{i}", 0))
         worlds.append(World(f"b{i}", 1))
-    worlds.append(World("dummy", 0))
+    # Both dummies have target 0.  Their routing vectors place one in branch 0
+    # and one in branch k-1.  The branch terminal still separates target 1.
+    worlds.append(World("dummy_zero", 0))
+    worlds.append(World("dummy_one", 0))
 
     queries = []
-    # On the original 2k worlds every routing bit is exactly balanced.  The
-    # target-0 dummy gets outcome zero, so counts become k+1 versus k.
+    # On the original 2k worlds every routing bit is k/k.  The two dummies add
+    # one zero and one one, yielding exact (k+1)/(k+1) balance.
     for bit in range(routing_depth):
         outcomes = []
         for i in range(k):
             value = (i >> bit) & 1
             outcomes.extend((value, value))
-        outcomes.append(0)
+        outcomes.extend((0, 1))
         queries.append(Query(f"route_bit_{bit}", 1, tuple(outcomes)))
 
-    # For terminal j choose the next k/2 cyclic branch indices.  This never
-    # includes j.  Those complete pairs contribute k ones; b_j contributes one
-    # more; dummy and a_j contribute zero.  Hence terminal counts are k+1/k.
+    # For terminal j choose the next k/2 cyclic branch indices, never j.
+    # Those complete pairs contribute k ones; b_j contributes one more.
+    # The original 2k worlds therefore have k+1 ones and k-1 zeros; the two
+    # zero-valued dummies make both counts exactly k+1.
     half = k // 2
     for j in range(k):
         filled = {(j + offset) % k for offset in range(1, half + 1)}
@@ -97,7 +101,7 @@ def balanced_binary_extremal_task(routing_depth: int) -> FiniteTask:
                 outcomes.extend((1, 1))
             else:
                 outcomes.extend((0, 0))
-        outcomes.append(0)
+        outcomes.extend((0, 0))
         queries.append(Query(f"terminal_{j}", 1, tuple(outcomes)))
 
     return FiniteTask(tuple(worlds), tuple(queries))
@@ -106,7 +110,7 @@ def balanced_binary_extremal_task(routing_depth: int) -> FiniteTask:
 def _balanced(query: Query) -> bool:
     zeros = sum(outcome == 0 for outcome in query.outcomes)
     ones = sum(outcome == 1 for outcome in query.outcomes)
-    return zeros + ones == len(query.outcomes) and abs(zeros - ones) <= 1
+    return zeros + ones == len(query.outcomes) and zeros == ones
 
 
 def _terminals_uniquely_mandatory(task: FiniteTask, routing_depth: int) -> bool:
@@ -151,7 +155,7 @@ def balanced_binary_family_audit(
         )
 
     theorem = (
-        world_count == 2 * k + 1
+        world_count == 2 * k + 2
         and query_count == routing_depth + k
         and balanced_binary_ratio_lower_bound(routing_depth) == Fraction(k, routing_depth + 1)
         and (not direct_check or (all_balanced and mandatory and direct_bounds))
