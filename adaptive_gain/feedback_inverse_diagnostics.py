@@ -1,60 +1,25 @@
 """Inverse diagnostics for the endogenous eco-evolutionary feedback model.
 
-The forward local model has Jacobian
-
-    J = [[1, Delta_s],
-         [(1-phi)*eta*p_star*(1-p_star), phi]],
-
-with trace and determinant
+The local forward map has invariants
 
     T = 1 + phi,
     D = phi + (1-phi)L,
 
-where ``L=-eta*Delta_s*p_star*(1-p_star)`` is the structural loop gain.
+where ``L=-eta*Delta_s*p_star*(1-p_star)``.  The same invariants can be recovered
+from a local eigenvalue pair, a stable damped transient, or the phenotype-logit
+AR(2) recurrence
 
-Therefore the local eigenvalues identify ``phi`` and ``L`` directly:
+    x[t+2] = T*x[t+1] - D*x[t].
 
-    phi = (lambda_1 + lambda_2) - 1,
-    L   = (lambda_1*lambda_2 - phi)/(1-phi).
+If nonstructural factors are independently known, the recovered loop gain can be
+factorized into the structural gap
 
-The same coefficients appear in the local scalar recurrence of phenotype logit
-deviations ``x_t``:
+    Delta_g = L / [(-eta)*lambda*p_star*(1-p_star)],
 
-    x_{t+2} = T*x_{t+1} - D*x_t.
+which can then be checked against unit-cost integrality and the repository's
+finite structural bounds.
 
-Thus, if a local phenotype-only time series supports the deterministic AR(2)
-representation
-
-    x_{t+2} = a1*x_{t+1} + a2*x_t,
-
-then
-
-    phi = a1 - 1,
-    D   = -a2,
-    L   = (D-phi)/(1-phi).
-
-In the stable damped phase, writing the conjugate pair as
-
-    rho * exp(+-i theta),
-
-and observing damping time ``tau`` and period ``P`` gives
-
-    rho   = exp(-1/tau),
-    theta = 2*pi/P,
-    phi   = 2*rho*cos(theta) - 1,
-    L     = (rho^2 - phi)/(1-phi).
-
-If ecological feedback strength, fitness scaling, and equilibrium phenotype
-frequency are independently known, the structural gap contrast can then be
-recovered from
-
-    Delta_g = L / [(-eta)*lambda*p_star*(1-p_star)].
-
-For unit-cost sensing tasks the exact structural gap is integer.  Comparing the
-inferred gap with the nearest integer and with the repository's bounded-arity
-upper bound yields a falsification-oriented diagnostic for the structural model.
-
-The inverse algebra and AR(2) reduction are elementary.  The repository-specific
+The inverse algebra and AR(2) reduction are standard.  The repository-specific
 use is to connect observable transient geometry back to exact finite sensing
 structure.
 """
@@ -148,18 +113,11 @@ def infer_feedback_from_eigenvalues(
     eigenvalue_1: complex,
     eigenvalue_2: complex,
 ) -> FeedbackInverseEstimate:
-    """Recover ``phi`` and ``L`` from a local eigenvalue pair.
-
-    The sum and product must be real up to numerical tolerance because the model
-    Jacobian has real coefficients.
-    """
+    """Recover ``phi`` and ``L`` from a local eigenvalue pair."""
 
     l1 = complex(eigenvalue_1)
     l2 = complex(eigenvalue_2)
-    if not all(
-        isfinite(value)
-        for value in (l1.real, l1.imag, l2.real, l2.imag)
-    ):
+    if not all(isfinite(v) for v in (l1.real, l1.imag, l2.real, l2.imag)):
         raise ValueError("eigenvalues must be finite")
     trace_c = l1 + l2
     determinant_c = l1 * l2
@@ -199,17 +157,7 @@ def infer_feedback_from_ar2_coefficients(
     lag1_coefficient: float,
     lag2_coefficient: float,
 ) -> FeedbackInverseEstimate:
-    """Recover feedback parameters from a local phenotype-logit AR(2) recurrence.
-
-    The convention is
-
-        x_{t+2} = a1*x_{t+1} + a2*x_t.
-
-    Comparing with the feedback characteristic recurrence gives
-
-        trace = a1,
-        determinant = -a2.
-    """
+    """Recover feedback parameters from ``x[t+2]=a1*x[t+1]+a2*x[t]``."""
 
     a1 = float(lag1_coefficient)
     a2 = float(lag2_coefficient)
@@ -226,14 +174,19 @@ def infer_feedback_from_damping_and_period(
     damping_time: float,
     oscillation_period: float,
 ) -> FeedbackInverseEstimate:
-    """Recover damped-phase ``phi`` and ``L`` from observed ``tau`` and period."""
+    """Recover damped-phase ``phi`` and ``L`` from local ``tau`` and period.
+
+    A discrete-time nonreal eigenvalue has principal angle ``0<theta<pi``, so
+    its unaliased local period must satisfy ``P>2`` generations.  Shorter values
+    are rejected rather than folded through the cosine into a spurious inverse.
+    """
 
     tau = float(damping_time)
     period = float(oscillation_period)
     if not isfinite(tau) or tau <= 0.0:
         raise ValueError("damping_time must be finite and positive")
-    if not isfinite(period) or period <= 0.0:
-        raise ValueError("oscillation_period must be finite and positive")
+    if not isfinite(period) or period <= 2.0:
+        raise ValueError("oscillation_period must be finite and greater than 2 generations")
 
     rho = exp(-1.0 / tau)
     theta = 2.0 * pi / period
@@ -315,7 +268,7 @@ def structural_scope_compatibility(
     frontier_edge_cap: int | None = None,
     tolerance: float = 1e-9,
 ) -> StructuralScopeCompatibility:
-    """Compare an inferred structural gap with an inherited finite-task ceiling."""
+    """Compare an inferred gap with the inherited finite-task gap ceiling."""
 
     gap = float(inferred_gap)
     tol = float(tolerance)
@@ -358,7 +311,7 @@ def full_damped_inverse_diagnostic(
     frontier_edge_cap: int | None = None,
     integer_tolerance: float = 1e-6,
 ) -> tuple[FeedbackInverseEstimate, StructuralGapInference, StructuralScopeCompatibility]:
-    """Run the full transient -> loop gain -> structural-gap -> scope audit."""
+    """Run transient -> loop gain -> structural gap -> finite-scope audit."""
 
     feedback = infer_feedback_from_damping_and_period(
         damping_time,
