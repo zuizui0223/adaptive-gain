@@ -1,0 +1,33 @@
+{
+  "scope": "exact_balanced_binary_depth_four_sharp",
+  "status": "closed_n12_n14_n16",
+  "query_model": "binary_unit_cost_globally_exact_50_50",
+  "results": {
+    "12": {
+      "fixed_cost_cap": 9,
+      "safe_external_cuts": 3,
+      "reachable_partition_counts_by_safe_subset": [6727, 9018, 13152, 17471, 13152, 17471, 25750, 33918],
+      "cap_retaining_partition_counts_by_safe_subset": [0, 0, 0, 0, 0, 0, 0, 0],
+      "constructive_cost_pair": [4, 8],
+      "sharp_D4": 8
+    },
+    "14": {
+      "fixed_cost_cap": 11,
+      "safe_external_cuts": 3,
+      "reachable_partition_counts_by_safe_subset": [25750, 33918, 45730, 59687, 45730, 59687, 81188, 105064],
+      "cap_retaining_partition_counts_by_safe_subset": [0, 0, 0, 0, 0, 0, 0, 0],
+      "constructive_cost_pair": [4, 10],
+      "sharp_D4": 10
+    },
+    "16": {
+      "fixed_cost_cap": 13,
+      "safe_external_cuts": 3,
+      "reachable_partition_counts_by_safe_subset": [81188, 105064, 133669, 171496, 133669, 171496, 219882, 279840],
+      "cap_retaining_partition_counts_by_safe_subset": [0, 0, 0, 0, 0, 0, 0, 0],
+      "constructive_cost_pair": [4, 12],
+      "private_forest_component_sizes": [2, 3, 4, 7],
+      "sharp_D4": 12
+    }
+  },
+  "conclusion": "D4(12)=8, D4(14)=10, D4(16)=12"
+}
