@@ -17,24 +17,40 @@ Read in this order:
 
 1. `GENERAL_EVOLUTIONARY_RESPONSE.md`
    - derives the generalized local Jacobian;
-   - gives the exact stability and oscillation thresholds;
+   - gives exact stability and oscillation thresholds;
    - recovers the parent haploid-logit model as an exact special case;
    - shows intrinsic evolutionary damping can stabilize a finite amount of reinforcing ecological feedback.
 
 2. `GENERAL_RESPONSE_BOUNDARY_TIMESCALES.md`
    - separates the two stability boundaries;
-   - lower boundary `G_-=alpha-1`: real eigenvalue approaches `+1`, producing slow nonoscillatory return;
-   - upper boundary `G_+=(1-alpha*phi)/(1-phi)`: conjugate pair approaches the unit circle, producing slow damped oscillation;
-   - derives the distinct critical-slowing laws near both boundaries.
+   - lower `G_-=alpha-1`: real eigenvalue approaches `+1`, producing slow nonoscillatory return;
+   - upper `G_+=(1-alpha*phi)/(1-phi)`: conjugate pair approaches the unit circle, producing slow damped oscillation;
+   - derives distinct critical-slowing laws near both boundaries.
+
+3. `GENERAL_RESPONSE_STRUCTURAL_PHASE_BOUNDS.md`
+   - reuses the existing bounded-arity / productive-frontier gap ceiling;
+   - maps it into a generalized gain ceiling
+
+     \[
+     G_{max}=(-\beta e)\lambda\,\Delta g_{max}
+     \]
+
+     for restoring `e<0`;
+   - certifies damped oscillation impossible when `G_max<=G_osc`;
+   - certifies upper instability impossible when `G_max<G_+`;
+   - shows the same finite sensing scope can exclude a phase under one evolutionary response and fail to exclude it under another.
 
 Executable layers:
 
 - `adaptive_gain/general_evolutionary_response.py`
 - `adaptive_gain/general_response_boundary_timescales.py`
+- `adaptive_gain/general_response_structural_bounds.py`
 - `tests/test_general_evolutionary_response.py`
 - `tests/test_general_response_boundary_timescales.py`
+- `tests/test_general_response_structural_bounds.py`
 - `validation/general_evolutionary_response_v1.json`
 - `validation/general_response_boundary_timescales_v1.json`
+- `validation/general_response_structural_bounds_v1.json`
 
 The generic local map is
 
@@ -99,7 +115,7 @@ G_{osc}:=
 }
 \]
 
-Thus the stable interval splits into
+Thus
 
 ```text
 G_- < G <= G_osc
@@ -113,9 +129,9 @@ The parent haploid-logit model is the exact special case
 
 \[
 \alpha=1,
-\qquad
+\quad
 \beta=1,
-\qquad
+\quad
 e=\eta p^*(1-p^*),
 \]
 
@@ -123,15 +139,12 @@ which gives
 
 \[
 G=L,
-\qquad
-G_-=0,
-\qquad
-G_+=1,
-\qquad
-G_{osc}=(1-\phi)/4.
+\quad G_-=0,
+\quad G_+=1,
+\quad G_{osc}=(1-\phi)/4.
 \]
 
-The important qualitative change is that when
+When
 
 \[
 \alpha<1,
@@ -140,34 +153,22 @@ The important qualitative change is that when
 weak reinforcing feedback can remain stable:
 
 \[
-\boxed{
-\alpha-1<G<0.
-}
+\boxed{\alpha-1<G<0.}
 \]
 
-Intrinsic evolutionary damping can therefore buffer positive ecological feedback. The parent conclusion that any positive feedback destabilizes the interior state is specific to `alpha=1`.
+So the parent conclusion that any positive ecological feedback destabilizes the interior state is specific to `alpha=1`.
 
 Under the continuous structural lift,
 
 \[
-\boxed{
-G=-\beta\lambda\Delta g\,e.
-}
+\boxed{G=-\beta\lambda\Delta g\,e.}
 \]
 
-so the original continuation/productive-frontier mathematics still supplies the upstream selection contrast. The generalized response layer changes only the conversion from structural selection to local evolutionary dynamics.
+The original continuation/productive-frontier mathematics therefore remains upstream; the generalized response changes how structural selection is converted into dynamics.
 
 ## Two distinct critical-slowing limits
 
 ### Lower weak-restoring boundary
-
-At
-
-\[
-G\downarrow G_-=\alpha-1,
-\]
-
-a real eigenvalue approaches `+1`. The damping time obeys
 
 \[
 \boxed{
@@ -178,30 +179,13 @@ a real eigenvalue approaches `+1`. The damping time obeys
 }
 \]
 
-For the parent case `alpha=1`, this reduces to
+For `alpha=1`, this reduces to
 
 \[
-\boxed{
-\tau_{lower}\sim1/G.
-}
+\boxed{\tau_{lower}\sim1/G.}
 \]
 
 ### Upper strong-feedback boundary
-
-At
-
-\[
-G\uparrow G_+
-=\frac{1-\alpha\phi}{1-\phi},
-\]
-
-the conjugate pair approaches the unit circle with
-
-\[
-\cos\theta_c=(\alpha+\phi)/2.
-\]
-
-The damping time obeys
 
 \[
 \boxed{
@@ -221,8 +205,36 @@ large gain near the upper feedback boundary
     -> slow damped oscillation near G_+
 ```
 
-The same observed statement, "evolution remains displaced for many generations," does not distinguish these mechanisms without transient geometry.
+## Structural scope no longer determines phase by itself
 
-Independent validation includes 200,000 random phase checks with zero stability/oscillation mismatches, 100,000 upper-boundary critical-slowing checks, and 100,000 lower-boundary checks; the near-boundary asymptotic ratios agree at the ~5e-4 level in the declared small-parameter regimes.
+For the minimal four-world scope `(n,m,b,h)=(4,3,2,2)`, the inherited gap ceiling is one. With generalized gain per gap `0.125` and `phi=0.5`, the gain ceiling is therefore `0.125`.
 
-Prior-art boundary: local linearization, 2x2 Jury stability, generic response coefficients, and critical slowing are standard. The repository-specific contribution is the structural sensing gap entering the generalized eco-evolutionary gain, and the exact identification of which parent conclusions survive or change when the evolutionary update is generalized.
+For `alpha=1`,
+
+\[
+G_{osc}=0.125,
+\]
+
+so the whole scope is certified nonoscillatory.
+
+For `alpha=0.7`,
+
+\[
+G_{osc}=0.02,
+\]
+
+so the **same structural scope** no longer excludes damped oscillation.
+
+Therefore
+
+\[
+\boxed{
+\text{finite sensing structure constrains available gain, while response geometry sets the phase boundaries.}
+}
+\]
+
+Neither layer alone determines the dynamics.
+
+Independent validation includes 200,000 random phase checks with zero stability/oscillation mismatches, 100,000 upper-boundary critical-slowing checks, 100,000 lower-boundary checks, parent special-case recovery tests, and direct structural-bound examples.
+
+Prior-art boundary: local linearization, 2x2 Jury stability, generic response coefficients, critical slowing, and composition of upper bounds are standard. The repository-specific contribution is the exact finite sensing gap entering generalized eco-evolutionary gain and the resulting structural phase-exclusion logic.
