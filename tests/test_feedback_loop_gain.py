@@ -10,6 +10,10 @@ from adaptive_gain.extremal_routing_family import extremal_routing_task
 from adaptive_gain.feedback_loop_gain import (
     binary_family_centered_loop_gain,
     centered_loop_gain_from_gap_contrast,
+    critical_slowing_approximation,
+    critical_slowing_scaled_ratio,
+    damped_phase_spectral_radius,
+    damping_time_from_loop_gain,
     k_branch_centered_loop_gain,
     local_damping_time,
     local_oscillation_period,
@@ -21,6 +25,7 @@ from adaptive_gain.feedback_loop_gain import (
     summarize_loop_gain,
     transient_regime,
     unit_circle_instability_period,
+    unit_circle_period_long_memory_asymptotic,
 )
 from adaptive_gain.witnesses import payoff_routing_task, routing_bypass_control
 
@@ -102,9 +107,57 @@ def test_complex_pair_has_finite_damping_time_and_period():
     assert period is not None and isfinite(period) and period > 2.0
 
 
+def test_damped_loop_gain_closed_form_matches_equilibrium_eigenvalues():
+    # Delta_s=4 and p*=1/2 make L=-eta.  eta=-0.99 therefore gives L=0.99
+    # while keeping q_target globally feasible.
+    eq = interior_feedback_equilibrium(
+        low_reward=-2.0,
+        high_reward=2.0,
+        q_base=0.5,
+        feedback_strength=-0.99,
+        community_memory=0.8,
+    )
+    assert eq.status == "interior_equilibrium"
+    assert transient_regime(eq) == "stable_damped_oscillation"
+    L = loop_gain_from_equilibrium(eq)
+    assert L == pytest.approx(0.99)
+    assert damped_phase_spectral_radius(L, 0.8) == pytest.approx(
+        local_spectral_radius(eq)
+    )
+    assert damping_time_from_loop_gain(L, 0.8) == pytest.approx(
+        local_damping_time(eq)
+    )
+
+
+def test_critical_slowing_scaling_as_loop_gain_approaches_unit_circle():
+    for phi in (0.2, 0.8, 0.95):
+        previous = 0.0
+        for L in (0.9, 0.99, 0.999):
+            if L <= oscillation_threshold(phi):
+                continue
+            tau = damping_time_from_loop_gain(L, phi)
+            approximation = critical_slowing_approximation(L, phi)
+            assert tau > previous
+            previous = tau
+            assert tau / approximation == pytest.approx(1.0, rel=6e-2)
+            if L >= 0.99:
+                assert critical_slowing_scaled_ratio(L, phi) == pytest.approx(
+                    1.0, rel=1e-2
+                )
+
+
+def test_critical_slowing_scaling_as_community_memory_approaches_one():
+    L = 0.5
+    previous = 0.0
+    for phi in (0.8, 0.9, 0.99, 0.999):
+        tau = damping_time_from_loop_gain(L, phi)
+        assert tau > previous
+        previous = tau
+    assert critical_slowing_scaled_ratio(L, 0.99) == pytest.approx(1.0, rel=5e-3)
+    assert critical_slowing_scaled_ratio(L, 0.999) == pytest.approx(1.0, rel=1e-3)
+
+
 def test_strong_feedback_boundary_is_oscillatory_unit_circle_crossing():
-    # At L=1, determinant=1 and trace=1+phi, so the conjugate pair lies on
-    # the unit circle with cos(theta_c)=(1+phi)/2.
     assert unit_circle_instability_period(0.0) == pytest.approx(6.0)
     assert unit_circle_instability_period(0.8) > unit_circle_instability_period(0.2)
     assert unit_circle_instability_period(0.95) > 20.0
@@ -122,6 +175,13 @@ def test_strong_feedback_boundary_is_oscillatory_unit_circle_crossing():
         assert abs(eq.eigenvalues[0]) == pytest.approx(1.0)
         assert abs(eq.eigenvalues[1]) == pytest.approx(1.0)
         assert eq.eigenvalues[0].imag != pytest.approx(0.0)
+
+
+def test_unit_circle_period_has_long_memory_inverse_square_root_scaling():
+    for phi in (0.9, 0.99, 0.999):
+        exact = unit_circle_instability_period(phi)
+        asymptotic = unit_circle_period_long_memory_asymptotic(phi)
+        assert exact / asymptotic == pytest.approx(1.0, rel=5e-3)
 
 
 def test_positive_feedback_and_strong_negative_feedback_are_distinct_instabilities():
@@ -214,6 +274,10 @@ def test_invalid_inputs_raise():
         oscillation_threshold(1.0)
     with pytest.raises(ValueError):
         unit_circle_instability_period(1.0)
+    with pytest.raises(ValueError):
+        damped_phase_spectral_radius(0.01, 0.5)
+    with pytest.raises(ValueError):
+        damping_time_from_loop_gain(1.0, 0.5)
     with pytest.raises(ValueError):
         centered_loop_gain_from_gap_contrast(
             1,
