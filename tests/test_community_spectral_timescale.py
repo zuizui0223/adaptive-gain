@@ -59,6 +59,35 @@ def test_three_state_reset_chain_has_one_common_relaxation_factor():
         assert asymptotic_variance_rate(stationary, transition, rewards) == pytest.approx(expected)
 
 
+def test_same_community_chain_can_expose_different_evolutionary_timescales_by_reward_alignment():
+    # Symmetric three-state chain with eigenvalues 1, 0.7, 0.1.
+    # The two reward vectors have equal stationary variance but align with
+    # different community relaxation modes.
+    stationary = (1 / 3, 1 / 3, 1 / 3)
+    transition = (
+        (0.7, 0.0, 0.3),
+        (0.0, 0.7, 0.3),
+        (0.3, 0.3, 0.4),
+    )
+    slow_reward = (sqrt(3 / 2), -sqrt(3 / 2), 0.0)
+    fast_reward = (1 / sqrt(2), 1 / sqrt(2), -sqrt(2))
+
+    slow_var = asymptotic_variance_rate(stationary, transition, slow_reward)
+    fast_var = asymptotic_variance_rate(stationary, transition, fast_reward)
+
+    # Both rewards have mean zero and stationary variance one.
+    assert sum(stationary[i] * slow_reward[i] for i in range(3)) == pytest.approx(0.0)
+    assert sum(stationary[i] * fast_reward[i] for i in range(3)) == pytest.approx(0.0)
+    assert sum(stationary[i] * slow_reward[i] ** 2 for i in range(3)) == pytest.approx(1.0)
+    assert sum(stationary[i] * fast_reward[i] ** 2 for i in range(3)) == pytest.approx(1.0)
+
+    # Mode factors are (1+0.7)/(1-0.7)=17/3 and
+    # (1+0.1)/(1-0.1)=11/9 respectively.
+    assert slow_var == pytest.approx(17 / 3)
+    assert fast_var == pytest.approx(11 / 9)
+    assert slow_var > 4.0 * fast_var
+
+
 def test_zero_mean_prefactor_matches_large_h_finite_retention():
     stationary = (0.5, 0.5)
     transition = ((0.8, 0.2), (0.2, 0.8))
