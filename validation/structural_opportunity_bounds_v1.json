@@ -1,0 +1,38 @@
+{
+  "claim": "sharp normalized adaptive-only opportunity is inherited exactly from the repository's sharp C_F/C_A theorems",
+  "definition": "Omega=(C_F-C_A)/C_A=C_F/C_A-1",
+  "scope": "finite deterministic guaranteed target resolution with unit query costs",
+  "checks": {
+    "payoff_routing_task": {
+      "n": 4,
+      "m": 3,
+      "b": 2,
+      "C_A": 2,
+      "C_F": 3,
+      "observed_Omega": "1/2",
+      "sharp_Omega": "1/2",
+      "attains_bound": true
+    },
+    "binary_n12_m12": {
+      "n": 12,
+      "m": 12,
+      "b": 2,
+      "sharp_ratio": "11/4",
+      "sharp_Omega": "7/4"
+    },
+    "frontier_edge_caps_binary_n12_m12": {
+      "E_1_Omega": "0",
+      "E_2_Omega": "0",
+      "E_3_Omega": "1/2",
+      "E_6_Omega": "1",
+      "E_12_Omega": "7/4"
+    },
+    "frontier_rank_cap_binary_n12_m12": {
+      "rank_1_Omega": "7/4",
+      "rank_2_Omega": "7/4",
+      "rank_5_Omega": "7/4",
+      "interpretation": "positive rank caps are extremally vacuous because rank-one singleton obligations attain the unrestricted maximum"
+    }
+  },
+  "novelty_boundary": "No new combinatorial extremal theorem is claimed. The result is an exact evolutionary-timescale interpretation of already-proved sharp adaptive/fixed ratio, edge-cap, and rank-cap theorems."
+}
