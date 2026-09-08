@@ -1,0 +1,13 @@
+{
+  "claim": "for fixed-magnitude stationary selection with mean sign m and geometric autocovariance (1-m^2)phi^k, nonzero m restores O(H) long-term accumulation",
+  "moments": {
+    "mean": "E[S_H]=delta*m*H",
+    "variance": "Var(S_H)=delta^2*(1-m^2)*F_H(phi)",
+    "rms_fraction": "sqrt(m^2+(1-m^2)F_H(phi)/H^2)"
+  },
+  "asymptotic": "for fixed |phi|<1, RMS retained fraction -> |m|",
+  "zero_mean_boundary": "m=0 recovers the H^-1/2 retention law",
+  "implementation": "adaptive_gain/directional_retention.py",
+  "tests": "tests/test_directional_retention.py",
+  "novelty_boundary": "The stationary-process moment algebra is standard. The repository-specific use is to separate state-specific structural opportunity from temporal coherence and long-run directional occupancy bias."
+}
