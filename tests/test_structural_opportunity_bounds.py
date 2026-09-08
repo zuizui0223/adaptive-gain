@@ -38,9 +38,9 @@ def test_source_derived_four_world_binary_task_hits_sharp_scope_bound():
 
 def test_edge_count_cap_can_reduce_maximum_normalized_opportunity():
     unrestricted = sharp_normalized_opportunity(12, 12, 2)
-    capped = sharp_edge_capped_normalized_opportunity(12, 12, 2, 3)
+    capped = sharp_edge_capped_normalized_opportunity(12, 12, 2, 1)
     assert capped <= unrestricted
-    assert capped == 0  # C_F/C_A cannot exceed 1 when E<=3 in this scope's optimum.
+    assert capped == 0  # One minimal frontier obligation cannot create strict fixed/adaptive gain.
 
 
 def test_rank_cap_is_extremally_vacuous_for_normalized_opportunity():
