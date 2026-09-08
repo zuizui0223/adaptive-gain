@@ -10,7 +10,8 @@
   "all_private_pairs_cross_target": true,
   "policy_depth": 4,
   "depth_three_flattening_upper_bound": 7,
-  "conclusion": "D4(18)>=13",
-  "sharp_status": "open_between_13_and_14",
+  "conclusion": "D4(18)=13",
+  "sharp_status": "closed",
+  "sharp_upper_receipt": "validation/balanced_binary_eighteen_world_depth_four_sharp.json",
   "theorem_holds": true
 }
