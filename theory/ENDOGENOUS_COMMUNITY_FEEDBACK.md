@@ -154,15 +154,21 @@ The exact haploid update is
 So the current community state alters evolution, while the current evolved
 frequency alters the community state it will experience later.
 
-This is the minimal closed loop
+The update is simultaneous in the current state `(p_t,q_t)`:
 
 ```text
-community occupancy q_t
-    -> structural selection s(q_t)
-    -> phenotype frequency p_{t+1}
-    -> target community occupancy q_target(p_{t+1})
-    -> future community occupancy
+current state (p_t, q_t)
+    |                  |
+    |                  +--> q_target(p_t) --> q_{t+1}
+    |
+    +--> s(q_t) --> p_{t+1}
+
+next state (p_{t+1}, q_{t+1})
 ```
+
+Thus the ecological update uses `p_t`, not `p_{t+1}`.  The closed loop appears
+across successive generations because the updated phenotype frequency enters the
+next ecological update.
 
 ---
 
@@ -348,19 +354,22 @@ eta > 0
     moderate negative feedback
     -> interior equilibrium locally stable
 
-eta <= -1/[Delta_s p*(1-p*)]
-    excessively strong negative feedback
-    -> discrete-time overshoot instability
+eta = -1/[Delta_s p*(1-p*)]
+    -> L=1 oscillatory unit-circle boundary
+
+eta < -1/[Delta_s p*(1-p*)]
+    stronger negative feedback
+    -> oscillatory instability
 ```
 
-The interval does **not** depend on `phi` as long as
+The stability interval does **not** depend on `phi` as long as
 
 \[
 0\le\phi<1.
 \]
 
-Community memory changes transient damping and oscillatory behavior, but not this
-local negative-feedback stability interval.
+Community memory changes transient damping, oscillation period, and the route to
+the boundary, but not the local negative-feedback stability interval itself.
 
 ---
 
@@ -466,7 +475,7 @@ For fixed equilibrium frequency, larger
 makes the lower bound less negative.
 
 So increasing the structural selection contrast makes the closed system more
-sensitive to feedback overshoot.
+sensitive to feedback instability.
 
 Under the continuous structural lift,
 
@@ -504,7 +513,7 @@ stability requires
 
 As `k` grows, the stable negative-feedback interval shrinks toward zero.
 
-The complete transient and overshoot phase diagram is developed in
+The complete transient and oscillatory-instability phase diagram is developed in
 `STRUCTURAL_LOOP_GAIN_PHASE_DIAGRAM.md`.
 
 ---
@@ -567,7 +576,8 @@ The following are not claimed as new:
 - negative eco-evolutionary feedback stabilizing coexistence or polymorphism;
 - positive feedback generating runaway or threshold behavior;
 - Jacobian/Jury stability analysis of two-dimensional maps;
-- ecological memory producing damped transients.
+- ecological memory producing damped transients;
+- unit-circle instability algebra for discrete two-dimensional maps.
 
 The repository-specific contribution is the upstream source of the selection
 contrast:
