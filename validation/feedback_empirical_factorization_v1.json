@@ -1,0 +1,30 @@
+{
+  "claim": "ordered empirical factorization of closed-loop gain before structural-gap inference",
+  "branch": "theory/feedback-inverse-diagnostics",
+  "identities": {
+    "loop_gain": "L=(-eta)*Delta_s*p_star*(1-p_star)",
+    "selection_contrast_inverse": "Delta_s=L/[(-eta)*p_star*(1-p_star)]",
+    "feedback_inverse": "eta=-L/[Delta_s*p_star*(1-p_star)]",
+    "continuous_structural_lift": "Delta_s=lambda*Delta_g",
+    "lambda_calibration": "lambda=Delta_s/Delta_g"
+  },
+  "independent_round_trip_audit": {
+    "seed": 20260909,
+    "random_models": 200000,
+    "eta_sampling": "negative log-uniform magnitude",
+    "selection_contrast_sampling": "positive log-uniform",
+    "p_star_sampling": "Uniform(0.05,0.95)",
+    "maximum_selection_contrast_round_trip_absolute_error": 1.7763568394002505e-15,
+    "maximum_feedback_strength_round_trip_absolute_error": 8.881784197001252e-16,
+    "maximum_lambda_reconstruction_absolute_error": 1.7763568394002505e-15
+  },
+  "empirical_order": [
+    "transient -> phi,L",
+    "community response + p_star -> Delta_s",
+    "direct fitness -> test Delta_s",
+    "natural history -> finite tasks -> Delta_g",
+    "Delta_s and Delta_g -> calibrate/test lambda"
+  ],
+  "interpretation_boundary": "The transient alone identifies L, not eta, Delta_s, lambda, or Delta_g separately. The continuous structural lift should be tested only after independent ecological/fitness and natural-history inputs exist.",
+  "scope": "local deterministic restoring feedback; algebraic validation only, not a statistical estimator for noisy field data"
+}
