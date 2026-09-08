@@ -107,20 +107,35 @@ original private pairs remain present. Repeating the operation yields
 \boxed{D_4(n)=15\quad\text{for every even }n\ge20.}
 \]
 
-## Current finite-size frontier below the ceiling
+## Eighteen worlds: the last finite gap is closed
 
-The certified values/bounds are now
+The 18-world lower witness gives `(C_A,C_F)=(4,13)`.  A separate exhaustive
+classification now rules out `C_F=14` at adaptive depth four, so
+
+\[
+\boxed{D_4(18)=13}.
+\]
+
+The key reduction is internal to the adaptive tree, not an assumption about an
+arbitrary global minimum bundle.  If a hypothetical depth-four task had
+`C_F=14`, let `U` be the distinct query labels used by a resolving depth-four
+tree.  Then `14<=|U|<=15`.  If `|U|=15` and the restricted fixed minimum inside
+`U` were 15, those fifteen exact-balanced queries would form an `n-3`
+cap-saturating family and the cap-saturation theorem would force adaptive depth
+8 inside `U`, contradicting the displayed depth-four tree.  Hence `U` itself
+contains a minimum 14-query resolver `B`, with at most one extra tree query
+`r`.  Exhausting all such `B+r` cases gives no survivor; see
+`EXACT_BALANCED_BINARY_EIGHTEEN_WORLD_DEPTH_FOUR_SHARP.md`.
+
+## Certified depth-four frontier near the ceiling
 
 ```text
 n=12: D4=8
 n=14: D4=10
 n=16: D4=12
-n=18: 13 <= D4 <= 14   (still open by one)
+n=18: D4=13
 n>=20 even: D4=15
 ```
 
-The n=18 upper endpoint must **not** be ruled out merely by assuming that a
-15-query adaptive flattening contains a globally minimum 14-query fixed
-resolver. That containment need not hold. Any sharp n=18 proof must allow the
-adaptive tree to use several query identities outside the chosen minimum
-bundle simultaneously.
+Thus the finite transition into the universal 15-query flattening ceiling is
+closed through eighteen worlds.
