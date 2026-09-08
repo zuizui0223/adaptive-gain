@@ -1,25 +1,25 @@
 {
-  "scope": "balanced_binary_unit_cost_unbounded_adaptive_advantage",
-  "claim": "global binary outcome balance |#0-#1|<=1 does not uniformly bound C_F/C_A",
+  "scope": "exactly_balanced_binary_unit_cost_unbounded_adaptive_advantage",
+  "claim": "exact 50-50 binary outcome balance for every query does not uniformly bound C_F/C_A",
   "direct_checked_depths": {
-    "1": {"branches": 2, "worlds": 5, "queries": 3, "ratio_lower_bound": "1"},
-    "2": {"branches": 4, "worlds": 9, "queries": 6, "ratio_lower_bound": "4/3"},
-    "3": {"branches": 8, "worlds": 17, "queries": 11, "ratio_lower_bound": "2"}
+    "1": {"branches": 2, "worlds": 6, "queries": 3, "ratio_lower_bound": "1"},
+    "2": {"branches": 4, "worlds": 10, "queries": 6, "ratio_lower_bound": "4/3"},
+    "3": {"branches": 8, "worlds": 18, "queries": 11, "ratio_lower_bound": "2"}
   },
   "analytic_only_examples": {
-    "4": {"branches": 16, "worlds": 33, "queries": 20, "ratio_lower_bound": "16/5"},
-    "6": {"branches": 64, "worlds": 129, "queries": 70, "ratio_lower_bound": "64/7"},
-    "8": {"branches": 256, "worlds": 513, "queries": 264, "ratio_lower_bound": "256/9"}
+    "4": {"branches": 16, "worlds": 34, "queries": 20, "ratio_lower_bound": "16/5"},
+    "6": {"branches": 64, "worlds": 130, "queries": 70, "ratio_lower_bound": "64/7"},
+    "8": {"branches": 256, "worlds": 514, "queries": 264, "ratio_lower_bound": "256/9"}
   },
   "general_formula": {
     "branch_count": "2^d",
-    "world_count": "2^(d+1)+1",
+    "world_count": "2^(d+1)+2",
     "query_count": "d+2^d",
     "adaptive_upper_bound": "d+1",
     "fixed_lower_bound": "2^d",
     "ratio_lower_bound": "2^d/(d+1) -> infinity"
   },
-  "balancedness": "every declared query has binary outcome counts differing by at most one",
+  "balancedness": "every declared binary query has exactly equal zero and one outcome counts",
   "fixed_obstruction": "terminal_j is the unique separator of cross-target pair (a_j,b_j)",
-  "claim_boundary": "unboundedness only; no sharp fixed-(n,m) balanced-query extremal formula is claimed"
+  "claim_boundary": "unboundedness only; no sharp fixed-(n,m) exactly-balanced-query extremal formula is claimed"
 }
