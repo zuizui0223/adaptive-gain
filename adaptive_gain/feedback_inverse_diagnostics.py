@@ -17,6 +17,22 @@ Therefore the local eigenvalues identify ``phi`` and ``L`` directly:
     phi = (lambda_1 + lambda_2) - 1,
     L   = (lambda_1*lambda_2 - phi)/(1-phi).
 
+The same coefficients appear in the local scalar recurrence of phenotype logit
+deviations ``x_t``:
+
+    x_{t+2} = T*x_{t+1} - D*x_t.
+
+Thus, if a local phenotype-only time series supports the deterministic AR(2)
+representation
+
+    x_{t+2} = a1*x_{t+1} + a2*x_t,
+
+then
+
+    phi = a1 - 1,
+    D   = -a2,
+    L   = (D-phi)/(1-phi).
+
 In the stable damped phase, writing the conjugate pair as
 
     rho * exp(+-i theta),
@@ -38,14 +54,16 @@ For unit-cost sensing tasks the exact structural gap is integer.  Comparing the
 inferred gap with the nearest integer and with the repository's bounded-arity
 upper bound yields a falsification-oriented diagnostic for the structural model.
 
-The inverse algebra is elementary.  The repository-specific use is to connect
-observable transient geometry back to the exact finite sensing structure.
+The inverse algebra and AR(2) reduction are elementary.  The repository-specific
+use is to connect observable transient geometry back to exact finite sensing
+structure.
 """
 
 from __future__ import annotations
 
+from cmath import phase
 from dataclasses import dataclass
-from math import cos, exp, inf, isfinite, pi
+from math import cos, exp, isfinite, log, pi
 
 from .feedback_structural_bounds import bounded_arity_gap_upper_bound
 
@@ -99,6 +117,33 @@ def _validate_inferred_phi_L(phi: float, loop_gain: float) -> tuple[float, float
     return p, L
 
 
+def _estimate_from_trace_determinant(
+    trace: float,
+    determinant: float,
+    *,
+    reconstruction: str,
+) -> FeedbackInverseEstimate:
+    T = float(trace)
+    D = float(determinant)
+    if not isfinite(T) or not isfinite(D):
+        raise ValueError("trace and determinant must be finite")
+    denominator = 2.0 - T
+    if abs(denominator) <= _TOL:
+        raise ValueError("trace implies community memory too close to one for inversion")
+    phi = T - 1.0
+    phi, L = _validate_inferred_phi_L(phi, (D - phi) / denominator)
+    return FeedbackInverseEstimate(
+        community_memory=phi,
+        loop_gain=L,
+        trace=T,
+        determinant=D,
+        spectral_radius=None,
+        oscillation_period=None,
+        damping_time=None,
+        reconstruction=reconstruction,
+    )
+
+
 def infer_feedback_from_eigenvalues(
     eigenvalue_1: complex,
     eigenvalue_2: complex,
@@ -111,15 +156,20 @@ def infer_feedback_from_eigenvalues(
 
     l1 = complex(eigenvalue_1)
     l2 = complex(eigenvalue_2)
+    if not all(
+        isfinite(value)
+        for value in (l1.real, l1.imag, l2.real, l2.imag)
+    ):
+        raise ValueError("eigenvalues must be finite")
     trace_c = l1 + l2
     determinant_c = l1 * l2
     if abs(trace_c.imag) > _TOL or abs(determinant_c.imag) > _TOL:
         raise ValueError("eigenvalue pair does not define a real second-order map")
-    trace = float(trace_c.real)
-    determinant = float(determinant_c.real)
-    phi, L = _validate_inferred_phi_L(
-        trace - 1.0,
-        (determinant - (trace - 1.0)) / (2.0 - trace),
+
+    estimate = _estimate_from_trace_determinant(
+        float(trace_c.real),
+        float(determinant_c.real),
+        reconstruction="eigenvalue_pair",
     )
 
     rho = None
@@ -127,23 +177,48 @@ def infer_feedback_from_eigenvalues(
     damping = None
     if abs(l1.imag) > _TOL or abs(l2.imag) > _TOL:
         rho = abs(l1)
-        angle = abs(__import__("cmath").phase(l1))
+        angle = abs(phase(l1))
         if angle > _TOL:
             period = 2.0 * pi / angle
         if 0.0 < rho < 1.0:
-            from math import log
-
             damping = -1.0 / log(rho)
 
     return FeedbackInverseEstimate(
-        community_memory=phi,
-        loop_gain=L,
-        trace=trace,
-        determinant=determinant,
+        community_memory=estimate.community_memory,
+        loop_gain=estimate.loop_gain,
+        trace=estimate.trace,
+        determinant=estimate.determinant,
         spectral_radius=rho,
         oscillation_period=period,
         damping_time=damping,
         reconstruction="eigenvalue_pair",
+    )
+
+
+def infer_feedback_from_ar2_coefficients(
+    lag1_coefficient: float,
+    lag2_coefficient: float,
+) -> FeedbackInverseEstimate:
+    """Recover feedback parameters from a local phenotype-logit AR(2) recurrence.
+
+    The convention is
+
+        x_{t+2} = a1*x_{t+1} + a2*x_t.
+
+    Comparing with the feedback characteristic recurrence gives
+
+        trace = a1,
+        determinant = -a2.
+    """
+
+    a1 = float(lag1_coefficient)
+    a2 = float(lag2_coefficient)
+    if not isfinite(a1) or not isfinite(a2):
+        raise ValueError("AR(2) coefficients must be finite")
+    return _estimate_from_trace_determinant(
+        a1,
+        -a2,
+        reconstruction="phenotype_logit_ar2",
     )
 
 
@@ -164,10 +239,13 @@ def infer_feedback_from_damping_and_period(
     theta = 2.0 * pi / period
     phi = 2.0 * rho * cos(theta) - 1.0
     determinant = rho * rho
-    phi, L = _validate_inferred_phi_L(
-        phi,
-        (determinant - phi) / (1.0 - phi),
+    estimate = _estimate_from_trace_determinant(
+        1.0 + phi,
+        determinant,
+        reconstruction="damping_time_and_period",
     )
+    phi = estimate.community_memory
+    L = estimate.loop_gain
 
     threshold = (1.0 - phi) / 4.0
     if not threshold < L < 1.0:
@@ -178,7 +256,7 @@ def infer_feedback_from_damping_and_period(
     return FeedbackInverseEstimate(
         community_memory=phi,
         loop_gain=L,
-        trace=1.0 + phi,
+        trace=estimate.trace,
         determinant=determinant,
         spectral_radius=rho,
         oscillation_period=period,
