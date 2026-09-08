@@ -1,0 +1,12 @@
+{
+  "branch": "theory/ecological-state-observability",
+  "base": "main",
+  "status_at_recording": "ahead, not behind",
+  "new_dynamic_core": [
+    "adaptive_gain/temporal_routing.py",
+    "tests/test_temporal_routing.py",
+    "theory/TEMPORAL_ROUTING_THRESHOLD.md"
+  ],
+  "focused_tests": "18/18 passed",
+  "next_extension": "noisy routing and specialist cues with arbitrary reliability"
+}
