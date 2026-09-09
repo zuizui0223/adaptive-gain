@@ -37,7 +37,15 @@ finite sensing structure Delta_g
 
 Read in this order:
 
-1. `SCALAR_TRANSIENT_OBSERVABILITY.md`
+1. `ECO_EVOLUTIONARY_TIMESCALE_THEORY_MAP.md`
+   - fixes the logical hierarchy of static sensing structure, exogenous temporal
+     filtering, endogenous feedback, the parent inverse, the generalized
+     evolutionary response, and the generalized identifiability boundary;
+   - separates exact general claims from special-case claims and open empirical
+     layers;
+   - gives the forward and inverse research spines in one place.
+
+2. `SCALAR_TRANSIENT_OBSERVABILITY.md`
    - states when one observed scalar trajectory can recover the second-order
      invariants at all;
    - derives the four-point rank condition
@@ -51,7 +59,7 @@ Read in this order:
    - distinguishes exact non-observability from near-degenerate numerical
      conditioning.
 
-2. `GENERAL_RESPONSE_IDENTIFIABILITY.md`
+3. `GENERAL_RESPONSE_IDENTIFIABILITY.md`
    - assumes `(T,D)` have passed the first gate;
    - derives the exact `(alpha,phi,G)` equivalence ridge;
    - recovers the earlier `alpha=1` inverse as a special case;
