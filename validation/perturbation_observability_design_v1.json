@@ -1,5 +1,5 @@
 {
-  "claim": "two-dimensional perturbation-observation visibility factorization and symmetric optimal-mixture special case",
+  "claim": "two-dimensional perturbation-observation visibility factorization, symmetric optimal-mixture special case, and separable finite candidate design",
   "branch": "theory/perturbation-observability-design",
   "factorization_audit": {
     "seed": 20260909,
@@ -13,5 +13,12 @@
     "check": "direct normalized one-side determinant versus |r1-r2|*|sin(2 theta)|/2",
     "maximum_absolute_error": 3.3306690738754696e-16
   },
-  "scope": "Exact deterministic 2x2 local linearization. The factorization is standard linear-systems algebra; the repository-specific use is natural-history perturbation and observation design before eco-evolutionary timescale inversion."
+  "finite_candidate_separability_audit": {
+    "seed": 20260909,
+    "random_candidate_sets": 50000,
+    "check": "product of independent one-side maxima versus brute-force Cartesian-product pair search",
+    "mismatches": 0,
+    "maximum_absolute_error": 0.0
+  },
+  "scope": "Exact deterministic 2x2 local linearization. The factorization and candidate-set separation are standard consequences of linear-systems geometry and product optimization; the repository-specific use is natural-history perturbation and observation design before eco-evolutionary timescale inversion."
 }
