@@ -25,6 +25,14 @@ Combining the two gives the joint ceiling
     sigma_eff^2
       <= (lambda_cost*g_max)^2/4 * (1+r_max)/(1-r_max).
 
+If stationary mean selection has nonzero magnitude |mu|, the asymptotic
+mean-versus-fluctuation crossover proxy
+
+    H_x^asy = sigma_eff^2 / mu^2
+
+therefore obeys the same structural-temporal ceiling divided by mu^2.  This is a
+bound on the asymptotic proxy, not an exact finite-time hitting-time theorem.
+
 The ingredients are standard variance and reversible Markov-reward identities.
 The repository-specific use is to insert an exact finite-sensing gap ceiling for
 g_max, thereby constraining short-term structural amplitude and long-term
@@ -89,6 +97,32 @@ def joint_asymptotic_variance_upper_bound(
     return instantaneous * temporal
 
 
+def directional_crossover_proxy_upper_bound(
+    structural_gap_upper_bound: float,
+    *,
+    lambda_cost: float,
+    maximal_nontrivial_eigenvalue: float,
+    stationary_mean_selection_magnitude: float,
+) -> float:
+    """Ceiling on the asymptotic crossover proxy sigma_eff^2 / mu^2.
+
+    Requires a strictly nonzero declared stationary mean-selection magnitude.
+    This is not an exact first-passage or finite-horizon emergence-time result.
+    """
+
+    mu = float(stationary_mean_selection_magnitude)
+    if not isfinite(mu) or mu <= 0.0:
+        raise ValueError(
+            "stationary_mean_selection_magnitude must be finite and strictly positive"
+        )
+    variance_ceiling = joint_asymptotic_variance_upper_bound(
+        structural_gap_upper_bound,
+        lambda_cost=lambda_cost,
+        maximal_nontrivial_eigenvalue=maximal_nontrivial_eigenvalue,
+    )
+    return variance_ceiling / (mu * mu)
+
+
 @dataclass(frozen=True)
 class BoundedAritySpectralCeiling:
     world_count: int
@@ -145,3 +179,33 @@ def bounded_arity_spectral_ceiling(
         temporal_amplification_upper_bound=temporal,
         asymptotic_variance_upper_bound=total,
     )
+
+
+def bounded_arity_directional_crossover_proxy_upper_bound(
+    world_count: int,
+    query_count: int,
+    adaptive_cost: int,
+    max_arity: int,
+    *,
+    lambda_cost: float,
+    maximal_nontrivial_eigenvalue: float,
+    stationary_mean_selection_magnitude: float,
+    frontier_edge_cap: int | None = None,
+) -> float:
+    """Finite-sensing ceiling on the asymptotic directional crossover proxy."""
+
+    receipt = bounded_arity_spectral_ceiling(
+        world_count,
+        query_count,
+        adaptive_cost,
+        max_arity,
+        lambda_cost=lambda_cost,
+        maximal_nontrivial_eigenvalue=maximal_nontrivial_eigenvalue,
+        frontier_edge_cap=frontier_edge_cap,
+    )
+    mu = float(stationary_mean_selection_magnitude)
+    if not isfinite(mu) or mu <= 0.0:
+        raise ValueError(
+            "stationary_mean_selection_magnitude must be finite and strictly positive"
+        )
+    return receipt.asymptotic_variance_upper_bound / (mu * mu)
