@@ -1,15 +1,18 @@
 {
-  "claim": "A common finite-sensing gap ceiling and reversible community persistence jointly bound the asymptotic variance rate of centered structural selection.",
-  "formula": "sigma_eff^2 <= (lambda_cost*g_max)^2/4 * (1+r_max)/(1-r_max)",
+  "claim": "A common finite-sensing gap ceiling and reversible community persistence jointly bound the asymptotic variance rate of centered structural selection and, for nonzero mean selection, the asymptotic mean-versus-fluctuation crossover proxy.",
+  "variance_formula": "sigma_eff^2 <= (lambda_cost*g_max)^2/4 * (1+r_max)/(1-r_max)",
+  "crossover_proxy_formula": "H_x^asy <= [(lambda_cost*g_max)^2/(4*mu^2)] * (1+r_max)/(1-r_max)",
   "assumptions": [
     "0 <= g_i <= g_max for all recurrent community states",
     "s_i = lambda_cost*g_i - kappa",
     "finite ergodic reversible community Markov chain",
-    "-1 < r_max < 1 is the largest nontrivial algebraic eigenvalue"
+    "-1 < r_max < 1 is the largest nontrivial algebraic eigenvalue",
+    "the crossover-proxy corollary additionally requires |mu| > 0"
   ],
   "components": {
     "instantaneous_variance_ceiling": "Var_pi(s) <= (lambda_cost*g_max)^2/4",
-    "temporal_amplification_ceiling": "sigma_eff^2 <= Var_pi(s)*(1+r_max)/(1-r_max)"
+    "temporal_amplification_ceiling": "sigma_eff^2 <= Var_pi(s)*(1+r_max)/(1-r_max)",
+    "directional_crossover_proxy": "H_x^asy = sigma_eff^2/mu^2"
   },
   "sharp_fixture": {
     "community_states": 2,
@@ -34,7 +37,9 @@
     "r_max": 0.5,
     "instantaneous_variance_upper_bound": 1.0,
     "temporal_amplification_upper_bound": 3.0,
-    "asymptotic_variance_upper_bound": 3.0
+    "asymptotic_variance_upper_bound": 3.0,
+    "declared_stationary_mean_selection_magnitude": 0.25,
+    "directional_crossover_proxy_upper_bound": 48.0
   },
   "independent_random_audit": {
     "seed": 20260909,
@@ -44,6 +49,7 @@
     "maximum_observed_to_bound_ratio": 0.9208319445605374,
     "method": "Random symmetric positive edge weights generated reversible ergodic chains; random bounded structural gaps, lambda_cost, and additive constants were lifted to rewards; Poisson-equation asymptotic variance was compared with the declared joint ceiling."
   },
-  "interpretation": "The original finite information ceiling and community temporal persistence constrain one downstream quantity rather than serving as unrelated annotations.",
-  "novelty_boundary": "No novelty claim for Popoviciu variance bounds or reversible Markov spectral formulas; the repository-specific contribution is their composition with exact adaptive-gain structural ceilings."
+  "interpretation": "Finite information scope and community temporal persistence constrain both long-run fluctuation strength and, conditional on a nonzero directional bias, the asymptotic delay before directional accumulation dominates those fluctuations.",
+  "scope_boundary": "The crossover result is a ceiling on the asymptotic proxy sigma_eff^2/mu^2, not an exact finite-time first-passage or statistical detection theorem.",
+  "novelty_boundary": "No novelty claim for Popoviciu variance bounds, reversible Markov spectral formulas, or the standard mean-versus-fluctuation crossover proxy; the repository-specific contribution is their composition with exact adaptive-gain structural ceilings."
 }
