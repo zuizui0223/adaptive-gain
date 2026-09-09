@@ -4,6 +4,10 @@ This dependent branch asks which parts of the generalized eco-evolutionary
 feedback model can actually be recovered from an observed local evolutionary
 trajectory.
 
+For the full hierarchy from static sensing structure through exogenous timescale
+filtering, endogenous feedback, generalized evolutionary response, and inverse
+identifiability, read `ECO_EVOLUTIONARY_TIMESCALE_THEORY_MAP.md` first.
+
 The inverse now has two distinct gates before structural interpretation:
 
 ```text
