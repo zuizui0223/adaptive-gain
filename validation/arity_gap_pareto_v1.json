@@ -1,0 +1,37 @@
+{
+  "claim": "For required structural gap q under maximum query arity b>=2, higher arity can reduce minimum adaptive/query/frontier burden but cannot reduce the minimum represented-world count; the exact joint requirement is therefore generally a Pareto frontier.",
+  "formulas": {
+    "full_b_ary_internal_capacity": "T_b(h)=(b^h-1)/(b-1)",
+    "minimum_depth": "h_b*(q)=min{h>=1:T_b(h)-h>=q}",
+    "minimum_query_count": "m_min(q,b)=q+h_b*(q)",
+    "minimum_frontier_edges": "E_min(q,b)=q+h_b*(q)",
+    "minimum_world_count": "n_min(q)=q+h_2*(q)+1",
+    "pareto_point_at_depth_h": "(n_b(q,h), h+q, h+q), n_b(q,h)=min{n:F_b(n,h)>=h+q}"
+  },
+  "exact_examples": {
+    "q2_b3": {
+      "pareto_frontier": [[6, 4, 4, 2]],
+      "interpretation": "world and query/frontier minima are simultaneously attainable"
+    },
+    "q3_b4": {
+      "pareto_frontier": [[8, 5, 5, 2], [7, 6, 6, 3]],
+      "interpretation": "query/frontier optimum and world optimum are incompatible; neither point dominates the other"
+    },
+    "q8_b3": {
+      "pareto_frontier": [[14, 11, 11, 3], [13, 12, 12, 4]],
+      "interpretation": "higher arity again produces a genuine world-query tradeoff"
+    }
+  },
+  "registered_audits": {
+    "world_minimum_arity_invariance": "q=1..40 checked against exact unrestricted world-gap ceiling n-1-ceil(log2 n)",
+    "log_b_depth_bracket": "b=2..7 and q=1..500 checked for h_b*(q) in {ceil(log_b((b-1)q+1)), that value + 1}",
+    "constructive_exact_solver": "all Pareto points in q=3,b=4 and q=2,b=3 examples are converted to private-pair tasks and checked for exact C_A, C_F, and productive-frontier edge count",
+    "pareto_recurrence": "points use the inherited exact F_b(n,h) recurrence; only strict decreases in minimum world count are retained as query count rises with depth"
+  },
+  "asymptotics": {
+    "adaptive_depth": "h_b*(q)=log_b q+O(1)",
+    "query_frontier": "m_min=E_min=q+log_b q+O(1)",
+    "worlds": "n_min=q+log_2 q+O(1)"
+  },
+  "novelty_boundary": "No novelty claim for elementary b-ary tree counting. The repository-specific contribution is the composition with adaptive/fixed structural gap and productive-frontier obligations, yielding a dynamical-reachability Pareto constraint."
+}
