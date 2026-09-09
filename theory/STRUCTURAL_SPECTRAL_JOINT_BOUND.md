@@ -134,9 +134,64 @@ but they constrain a single downstream quantity, the asymptotic variance rate of
 
 ---
 
-## 4. Sharpness
+## 4. Corollary: maximum asymptotic delay before directional trend dominates
 
-The joint bound is attained by a symmetric two-state community chain.
+Suppose stationary mean selection has nonzero magnitude
+
+\[
+|\mu|>0.
+\]
+
+The existing long-horizon approximation compares directional accumulation
+
+\[
+H|\mu|
+\]
+
+with fluctuation scale
+
+\[
+\sqrt{H\sigma_{\rm eff}^2}.
+\]
+
+Their asymptotic crossover proxy is
+
+\[
+H_\times^{\rm asy}
+=
+\frac{\sigma_{\rm eff}^2}{\mu^2}.
+\]
+
+Substituting the joint structural-temporal ceiling gives
+
+\[
+\boxed{
+H_\times^{\rm asy}
+\le
+\frac{(\lambda g_{\max})^2}{4\mu^2}
+\frac{1+r_{\max}}{1-r_{\max}}.
+}
+\]
+
+Interpretation:
+
+> finite information scope and community persistence bound how long short-term structural fluctuations can asymptotically mask a persistent directional bias of declared magnitude.
+
+This is a bound on the **asymptotic crossover proxy**, not an exact finite-time first-passage or trend-detection theorem.
+
+The dependence is transparent:
+
+- larger structural gap ceiling delays emergence quadratically;
+- stronger community persistence delays emergence through `(1+r_max)/(1-r_max)`;
+- stronger directional bias shortens the delay as `1/mu^2`.
+
+If `mu=0`, this crossover proxy is infinite and the system remains in the cancellation-stasis side of the exogenous theory rather than entering a persistent directional trend.
+
+---
+
+## 5. Sharpness
+
+The joint variance bound is attained by a symmetric two-state community chain.
 
 Let
 
@@ -175,15 +230,15 @@ and all centered reward variance lies on the unique nontrivial mode. Hence
 \frac{1+r}{1-r}.
 \]
 
-Therefore the ceiling is sharp given only the declared reward range and maximal nontrivial eigenvalue.
+Therefore the variance ceiling is sharp given only the declared reward range and maximal nontrivial eigenvalue. For any separately declared nonzero `|mu|`, the corresponding asymptotic crossover-proxy bound is then sharp with respect to the same variance information.
 
 ---
 
-## 5. Why this matters for the paper
+## 6. Why this matters for the paper
 
 The broad fluctuating-selection result that temporal coherence affects long-run accumulation is prior art.
 
-The role of this theorem is different. It puts the original `adaptive-gain` extremal mathematics directly inside a temporal statement:
+The role of this theorem is different. It puts the original `adaptive-gain` extremal mathematics directly inside temporal statements:
 
 \[
 \boxed{
@@ -195,11 +250,25 @@ The role of this theorem is different. It puts the original `adaptive-gain` extr
 }
 \]
 
-Thus Pillar A (common structural origin) and Pillar B (finite structural reachability) are not merely adjacent ideas. They meet in a single sharp inequality.
+and, with nonzero directional bias,
+
+\[
+\boxed{
+\text{finite sensing ceiling}
+\times
+\text{community persistence}
+\times
+\text{directional bias}^{-2}
+\Rightarrow
+\text{maximum asymptotic trend-emergence delay}.
+}
+\]
+
+Thus Pillar A (common structural origin) and Pillar B (finite structural reachability) are not merely adjacent ideas. They meet in explicit inequalities that constrain long-timescale behavior.
 
 ---
 
-## 6. Scope
+## 7. Scope
 
 The theorem assumes:
 
@@ -208,4 +277,6 @@ The theorem assumes:
 - a finite ergodic reversible community Markov chain;
 - a known upper bound `r_max<1` on nonstationary eigenvalues.
 
-It does not claim the bound remains sharp for nonreversible chains, nonlinear structural lifts, heterogeneous scope constraints with no common gap ceiling, or nonstationary community processes.
+The trend-emergence corollary additionally assumes a declared nonzero stationary mean-selection magnitude and uses the asymptotic crossover proxy `sigma_eff^2/mu^2`.
+
+It does not claim the bound remains sharp for nonreversible chains, nonlinear structural lifts, heterogeneous scope constraints with no common gap ceiling, nonstationary community processes, or finite-time trend-detection procedures.
