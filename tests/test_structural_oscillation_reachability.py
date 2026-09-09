@@ -21,6 +21,22 @@ def test_canonical_integer_gap_window():
     ) == 7
 
 
+def test_strict_integer_boundaries_remain_excluded_at_equality():
+    # alpha=1, phi=0.2 gives G_osc=0.2 and G_+=1.  With a=0.1,
+    # gap 2 lies exactly on the oscillation boundary and gap 10 lies exactly on
+    # the upper stability boundary, so the strict integer window is 3..9.
+    assert minimum_integer_gap_for_oscillation(
+        evolutionary_persistence=1.0,
+        community_memory=0.2,
+        gain_per_structural_gap=0.1,
+    ) == 3
+    assert maximum_integer_gap_for_stable_response(
+        evolutionary_persistence=1.0,
+        community_memory=0.2,
+        gain_per_structural_gap=0.1,
+    ) == 9
+
+
 def test_general_response_geometry_can_lower_required_structural_gap():
     # alpha=0.8, phi=0.5 gives G_osc=0.045, so one structural-gap unit
     # already crosses the complex-eigenvalue threshold when a=1/8.
