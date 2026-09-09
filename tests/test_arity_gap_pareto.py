@@ -57,6 +57,21 @@ def test_q3_b4_has_two_exact_pareto_points():
         assert audit.observed_frontier_edge_count == point.productive_frontier_edge_count
 
 
+def test_increasing_arity_can_split_one_corner_into_a_tradeoff():
+    # At q=3, ternary sensing still has one componentwise minimum. Allowing
+    # quaternary outcomes lowers the query/frontier minimum to five but that
+    # improvement cannot coexist with the seven-world minimum, creating a
+    # two-point Pareto frontier rather than a single better corner.
+    ternary = arity_gap_pareto_frontier(3, 3)
+    quaternary = arity_gap_pareto_frontier(3, 4)
+    assert [
+        (p.world_count, p.query_count, p.adaptive_depth) for p in ternary
+    ] == [(7, 6, 3)]
+    assert [
+        (p.world_count, p.query_count, p.adaptive_depth) for p in quaternary
+    ] == [(8, 5, 2), (7, 6, 3)]
+
+
 def test_some_higher_arity_gaps_have_no_tradeoff_and_hit_both_minima():
     # q=2,b=3 reaches the arity-independent world minimum and the ternary
     # query/frontier minimum at the same point.
