@@ -39,7 +39,7 @@ extremal bounds and their constructive witness.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import floor, isclose, isfinite
+from math import floor, inf, isfinite, nextafter
 
 from .bounded_arity_extremal_bounds import (
     maximum_bounded_arity_tree_internal_nodes,
@@ -48,32 +48,6 @@ from .bounded_arity_extremal_bounds import (
 from .core import adaptive_minimum_resolution, fixed_minimum_resolution
 from .general_evolutionary_response import general_response_thresholds
 
-_TOL = 1e-12
-
-
-def _strictly_above_integer_threshold(value: float) -> int:
-    """Smallest integer strictly greater than a finite nonnegative value."""
-
-    x = float(value)
-    if not isfinite(x) or x < 0.0:
-        raise ValueError("threshold ratio must be finite and non-negative")
-    nearest = round(x)
-    if isclose(x, nearest, rel_tol=_TOL, abs_tol=_TOL):
-        return int(nearest) + 1
-    return floor(x) + 1
-
-
-def _strictly_below_integer_threshold(value: float) -> int:
-    """Largest nonnegative integer strictly below a finite positive value."""
-
-    x = float(value)
-    if not isfinite(x) or x <= 0.0:
-        raise ValueError("threshold ratio must be finite and positive")
-    nearest = round(x)
-    if isclose(x, nearest, rel_tol=_TOL, abs_tol=_TOL):
-        return max(0, int(nearest) - 1)
-    return max(0, floor(x))
-
 
 def minimum_integer_gap_for_oscillation(
     *,
@@ -81,7 +55,11 @@ def minimum_integer_gap_for_oscillation(
     community_memory: float,
     gain_per_structural_gap: float,
 ) -> int:
-    """Smallest integer Delta_g with a*Delta_g > G_osc."""
+    """Smallest integer Delta_g with a*Delta_g > G_osc.
+
+    ``nextafter`` nudges the strict threshold upward so an exact integer ratio
+    ``G_osc/a`` is not accidentally admitted at equality.
+    """
 
     a = float(gain_per_structural_gap)
     if not isfinite(a) or a <= 0.0:
@@ -90,7 +68,7 @@ def minimum_integer_gap_for_oscillation(
         evolutionary_persistence,
         community_memory,
     ).oscillation_gain
-    return _strictly_above_integer_threshold(threshold / a)
+    return floor(nextafter(threshold / a, inf)) + 1
 
 
 def maximum_integer_gap_for_stable_response(
@@ -99,7 +77,11 @@ def maximum_integer_gap_for_stable_response(
     community_memory: float,
     gain_per_structural_gap: float,
 ) -> int:
-    """Largest nonnegative integer Delta_g with a*Delta_g < G_+."""
+    """Largest nonnegative integer Delta_g with a*Delta_g < G_+.
+
+    ``nextafter`` nudges the strict upper boundary downward so an exact integer
+    ratio ``G_+/a`` remains excluded from the stable region.
+    """
 
     a = float(gain_per_structural_gap)
     if not isfinite(a) or a <= 0.0:
@@ -108,7 +90,7 @@ def maximum_integer_gap_for_stable_response(
         evolutionary_persistence,
         community_memory,
     ).upper_stability_gain
-    return _strictly_below_integer_threshold(upper / a)
+    return max(0, floor(nextafter(upper / a, -inf)))
 
 
 def bounded_arity_gap_ceiling_over_adaptive_depth(
