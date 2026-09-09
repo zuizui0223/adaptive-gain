@@ -27,9 +27,11 @@ The canonical executable corollary uses
 Then G_osc=1/8, so gap >=2 is necessary for oscillation.  Existing binary
 bounded-arity extremal theory proves that every binary task with <=5 worlds has
 gap <=1 and every binary task with <=4 queries has gap <=1, while the sharp
-(6 worlds, 5 queries, b=2) witness has C_A=3, C_F=5, gap=2.  Hence (6,5,2) is
-the first binary world/query scope that can reach the stable oscillatory region
-under this declared response geometry.
+(6 worlds, 5 queries, b=2) witness has C_A=3, C_F=5, gap=2.  The unit-cost
+productive-frontier bound C_F<=|H_min| also implies that at least five minimal
+frontier obligations are required, and the same witness attains five singleton
+obligations.  Hence the first canonical binary oscillatory scope is sharp in
+world count, query count, and productive-frontier edge count.
 
 No novelty is claimed for the complex-eigenvalue threshold or integer rounding.
 The repository-specific statement is the exact composition with finite sensing
@@ -47,6 +49,7 @@ from .bounded_arity_extremal_bounds import (
 )
 from .core import adaptive_minimum_resolution, fixed_minimum_resolution
 from .general_evolutionary_response import general_response_thresholds
+from .productive_frontier import build_productive_frontier
 
 
 def minimum_integer_gap_for_oscillation(
@@ -97,6 +100,8 @@ def bounded_arity_gap_ceiling_over_adaptive_depth(
     world_count: int,
     query_count: int,
     max_arity: int,
+    *,
+    frontier_edge_cap: int | None = None,
 ) -> int:
     """One-sided max Delta_g ceiling over all possible positive adaptive costs."""
 
@@ -106,11 +111,21 @@ def bounded_arity_gap_ceiling_over_adaptive_depth(
         raise ValueError("query_count must be a positive integer")
     if type(max_arity) is not int or max_arity < 2:
         raise ValueError("max_arity must be an integer at least 2")
+    if frontier_edge_cap is not None and (
+        type(frontier_edge_cap) is not int or frontier_edge_cap < 1
+    ):
+        raise ValueError("frontier_edge_cap must be a positive integer when supplied")
 
     best = 0
     # If h>m, then C_F<=m<h=C_A, so no positive structural gap is possible.
-    # Hence only h<=m can contribute to the maximum.
     max_relevant_h = min(world_count - 1, query_count)
+    # Likewise if a frontier edge cap E is declared, C_F<=E means h>=E cannot
+    # contribute a positive gap.
+    if frontier_edge_cap is not None:
+        max_relevant_h = min(max_relevant_h, frontier_edge_cap - 1)
+    if max_relevant_h < 1:
+        return 0
+
     for h in range(1, max_relevant_h + 1):
         fixed_ceiling = min(
             query_count,
@@ -120,6 +135,8 @@ def bounded_arity_gap_ceiling_over_adaptive_depth(
                 max_arity,
             ),
         )
+        if frontier_edge_cap is not None:
+            fixed_ceiling = min(fixed_ceiling, frontier_edge_cap)
         best = max(best, fixed_ceiling - h)
     return max(0, best)
 
@@ -135,9 +152,11 @@ class OscillationScopeReceipt:
     maximum_stable_gap: int
     binary_worlds_below_threshold: int
     binary_queries_below_threshold: int
+    binary_frontier_edges_below_threshold: int
     witness_world_count: int
     witness_query_count: int
     witness_max_arity: int
+    witness_frontier_edge_count: int
     witness_adaptive_cost: int
     witness_fixed_cost: int
     witness_gap: int
@@ -149,7 +168,7 @@ class OscillationScopeReceipt:
 
 
 def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
-    """Exact canonical threshold: first binary scope is 6 worlds / 5 queries.
+    """Exact canonical threshold: 6 worlds, 5 queries, 5 frontier edges.
 
     The declared response geometry is alpha=1, phi=1/2, and gain per unit
     structural gap a=1/8.
@@ -195,6 +214,19 @@ def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
         if ceiling >= required_gap:
             raise ArithmeticError("binary query threshold exclusion failed")
 
+    # Productive-frontier edge threshold: E<=4 likewise caps every binary gap at
+    # one.  Use generous world/query budgets so only the edge cap is active.
+    frontier_edges_below = 4
+    for edge_cap in range(1, frontier_edges_below + 1):
+        ceiling = bounded_arity_gap_ceiling_over_adaptive_depth(
+            generous_worlds,
+            generous_worlds,
+            2,
+            frontier_edge_cap=edge_cap,
+        )
+        if ceiling >= required_gap:
+            raise ArithmeticError("binary frontier-edge threshold exclusion failed")
+
     # Constructive sharp witness at the first joint scope.
     witness = sharp_bounded_arity_unit_cost_witness(6, 5, 2)
     ca = adaptive_minimum_resolution(witness).minimum_worst_path_cost
@@ -202,6 +234,8 @@ def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
     if ca is None or cf is None:
         raise ArithmeticError("binary oscillation witness was unresolved")
     gap = cf - ca
+    frontier = build_productive_frontier(witness)
+    frontier_edge_count = len(frontier.minimal_productive_sets)
     gain = a * gap
     stable = thresholds.lower_stability_gain < gain < thresholds.upper_stability_gain
     oscillatory = gain > thresholds.oscillation_gain
@@ -212,6 +246,7 @@ def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
         and ca == 3
         and cf == 5
         and gap == 2
+        and frontier_edge_count == 5
         and stable
         and oscillatory
     )
@@ -228,9 +263,11 @@ def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
         maximum_stable_gap=max_stable_gap,
         binary_worlds_below_threshold=worlds_below,
         binary_queries_below_threshold=queries_below,
+        binary_frontier_edges_below_threshold=frontier_edges_below,
         witness_world_count=6,
         witness_query_count=5,
         witness_max_arity=2,
+        witness_frontier_edge_count=frontier_edge_count,
         witness_adaptive_cost=ca,
         witness_fixed_cost=cf,
         witness_gap=gap,
