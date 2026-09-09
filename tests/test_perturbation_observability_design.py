@@ -3,6 +3,10 @@ import math
 import pytest
 
 from adaptive_gain.perturbation_observability_design import (
+    best_independent_candidate_design,
+    best_observation_candidate,
+    best_perturbation_candidate,
+    brute_force_candidate_design,
     factorized_visibility,
     hankel_visibility,
     normalized_hankel_visibility,
@@ -116,6 +120,45 @@ def test_repeated_eigenvalues_remove_symmetric_visibility():
     assert symmetric_max_hankel_visibility(0.5, 0.5) == pytest.approx(0.0)
 
 
+def test_independent_candidate_design_factorizes_into_separate_argmaxes():
+    J = ((0.9, 0.0), (0.0, 0.4))
+    observations = ((1.0, 0.0), (1.0, 0.2), (1.0, 1.0))
+    perturbations = ((1.0, 0.0), (1.0, 0.1), (1.0, -1.0))
+
+    oi, os = best_observation_candidate(J, observations)
+    pi, ps = best_perturbation_candidate(J, perturbations)
+    separate = best_independent_candidate_design(J, observations, perturbations)
+    brute = brute_force_candidate_design(J, observations, perturbations)
+
+    assert separate.observation_index == oi
+    assert separate.perturbation_index == pi
+    assert separate.observation_score == pytest.approx(os)
+    assert separate.perturbation_score == pytest.approx(ps)
+    assert separate.joint_score == pytest.approx(os * ps)
+    assert separate.joint_score == pytest.approx(brute.joint_score)
+    assert separate.observation_index == brute.observation_index
+    assert separate.perturbation_index == brute.perturbation_index
+
+
+def test_candidate_selector_prefers_mixed_modes_over_blind_candidates():
+    J = ((0.9, 0.0), (0.0, 0.4))
+    observations = ((1.0, 0.0), (0.0, 1.0), (1.0, 1.0))
+    perturbations = ((1.0, 0.0), (0.0, 1.0), (1.0, -1.0))
+    best = best_independent_candidate_design(J, observations, perturbations)
+    assert best.observation_index == 2
+    assert best.perturbation_index == 2
+    assert best.joint_score > 0.0
+
+
+def test_candidate_selector_tie_breaks_to_smallest_index():
+    J = ((0.9, 0.0), (0.0, 0.4))
+    observations = ((1.0, 1.0), (-1.0, -1.0))
+    perturbations = ((1.0, -1.0), (-1.0, 1.0))
+    best = best_independent_candidate_design(J, observations, perturbations)
+    assert best.observation_index == 0
+    assert best.perturbation_index == 0
+
+
 def test_invalid_inputs_raise():
     with pytest.raises(ValueError):
         normalized_observation_visibility(((1.0, 0.0), (0.0, 1.0)), (0.0, 0.0))
@@ -125,3 +168,7 @@ def test_invalid_inputs_raise():
         symmetric_single_side_visibility(1.0, 0.0, 0.0, 0.0)
     with pytest.raises(ValueError):
         hankel_visibility(((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)), (1.0, 0.0), (1.0, 0.0))
+    with pytest.raises(ValueError):
+        best_observation_candidate(((1.0, 0.0), (0.0, 1.0)), ())
+    with pytest.raises(ValueError):
+        best_perturbation_candidate(((1.0, 0.0), (0.0, 1.0)), ())
