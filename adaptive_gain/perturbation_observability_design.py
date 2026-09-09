@@ -30,7 +30,7 @@ before attempting to assign biological timescales or structural sensing gain.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import hypot, isfinite
+from math import isfinite
 from typing import Sequence
 
 _TOL = 1e-12
@@ -267,3 +267,84 @@ def summarize_visibility_design(
         observation_side_visible=abs(O) > tol,
         perturbation_side_visible=abs(C) > tol,
     )
+
+
+@dataclass(frozen=True)
+class CandidateDesignChoice:
+    observation_index: int
+    perturbation_index: int
+    observation_score: float
+    perturbation_score: float
+    joint_score: float
+
+
+def best_observation_candidate(
+    matrix: Sequence[Sequence[float]],
+    observations: Sequence[Sequence[float]],
+) -> tuple[int, float]:
+    """Return the index and normalized visibility of the best allowed observation."""
+
+    if not observations:
+        raise ValueError("observations must be non-empty")
+    scores = [normalized_observation_visibility(matrix, c) for c in observations]
+    index = max(range(len(scores)), key=lambda i: (scores[i], -i))
+    return index, scores[index]
+
+
+def best_perturbation_candidate(
+    matrix: Sequence[Sequence[float]],
+    perturbations: Sequence[Sequence[float]],
+) -> tuple[int, float]:
+    """Return the index and normalized visibility of the best allowed perturbation."""
+
+    if not perturbations:
+        raise ValueError("perturbations must be non-empty")
+    scores = [normalized_perturbation_visibility(matrix, v) for v in perturbations]
+    index = max(range(len(scores)), key=lambda i: (scores[i], -i))
+    return index, scores[index]
+
+
+def best_independent_candidate_design(
+    matrix: Sequence[Sequence[float]],
+    observations: Sequence[Sequence[float]],
+    perturbations: Sequence[Sequence[float]],
+) -> CandidateDesignChoice:
+    """Optimize an independently feasible observation/perturbation Cartesian product.
+
+    Because normalized visibility factorizes, the optimal pair is exactly the
+    independently best observation and independently best perturbation.  This
+    function deliberately assumes every listed observation can be paired with
+    every listed perturbation.
+    """
+
+    oi, os = best_observation_candidate(matrix, observations)
+    pi, ps = best_perturbation_candidate(matrix, perturbations)
+    return CandidateDesignChoice(
+        observation_index=oi,
+        perturbation_index=pi,
+        observation_score=os,
+        perturbation_score=ps,
+        joint_score=os * ps,
+    )
+
+
+def brute_force_candidate_design(
+    matrix: Sequence[Sequence[float]],
+    observations: Sequence[Sequence[float]],
+    perturbations: Sequence[Sequence[float]],
+) -> CandidateDesignChoice:
+    """Enumerate all allowed Cartesian-product pairs for an audit cross-check."""
+
+    if not observations or not perturbations:
+        raise ValueError("observations and perturbations must be non-empty")
+    best: CandidateDesignChoice | None = None
+    for oi, c in enumerate(observations):
+        os = normalized_observation_visibility(matrix, c)
+        for pi, v in enumerate(perturbations):
+            ps = normalized_perturbation_visibility(matrix, v)
+            score = normalized_hankel_visibility(matrix, c, v)
+            choice = CandidateDesignChoice(oi, pi, os, ps, score)
+            if best is None or (score, -oi, -pi) > (best.joint_score, -best.observation_index, -best.perturbation_index):
+                best = choice
+    assert best is not None
+    return best
