@@ -1,0 +1,50 @@
+{
+  "claim": "Generalized feedback geometry and query arity jointly determine the first finite-information Pareto frontier capable of stable oscillatory feedback.",
+  "mapping": "(alpha,phi,a,b) -> q_osc -> P_b(q_osc)",
+  "dynamic_thresholds": {
+    "oscillation": "G_osc=(alpha-phi)^2/[4(1-phi)]",
+    "upper_stability": "G_+=(1-alpha*phi)/(1-phi)",
+    "structural_lift": "G=a*Delta_g"
+  },
+  "fixtures": {
+    "canonical_binary": {
+      "alpha": 1.0,
+      "phi": 0.5,
+      "a": 0.125,
+      "b": 2,
+      "q_osc": 2,
+      "maximum_stable_gap": 7,
+      "pareto_frontier": [[6, 5, 5, 3]]
+    },
+    "canonical_ternary": {
+      "alpha": 1.0,
+      "phi": 0.5,
+      "a": 0.125,
+      "b": 3,
+      "q_osc": 2,
+      "pareto_frontier": [[6, 4, 4, 2]],
+      "interpretation": "same minimum world count as binary but one fewer query/frontier obligation"
+    },
+    "quaternary_tradeoff": {
+      "alpha": 1.0,
+      "phi": 0.5,
+      "a": 0.05,
+      "b": 4,
+      "q_osc": 3,
+      "maximum_stable_gap": 19,
+      "pareto_frontier": [[8, 5, 5, 2], [7, 6, 6, 3]],
+      "interpretation": "query/frontier and world minima are incompatible"
+    },
+    "skipped_stable_window": {
+      "alpha": 1.0,
+      "phi": 0.5,
+      "a": 1.1,
+      "arities_checked": [2, 3, 5],
+      "q_osc": 1,
+      "maximum_stable_gap": 0,
+      "pareto_frontier": []
+    }
+  },
+  "scope": "finite deterministic unit-cost sensing with bounded query arity and local generalized feedback dynamics",
+  "novelty_boundary": "No novelty claim for Pareto optimization, bounded-arity tree counting, or local complex-eigenvalue criteria; the contribution is their exact composition into a dynamical reachability frontier."
+}
