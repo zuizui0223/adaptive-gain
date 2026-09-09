@@ -47,7 +47,7 @@ G_+=\frac{1-\alpha\phi}{1-\phi}.
 
 No novelty is claimed for this integer rounding or for the complex-eigenvalue
 threshold.  The repository-specific result is the exact composition with the
-bounded-arity structural gap theorem and its constructive witness.
+bounded-arity and productive-frontier structural bounds and their constructive witness.
 
 ---
 
@@ -184,7 +184,53 @@ Five queries are the first query budget that can support the required gap two.
 
 ---
 
-## 4. Constructive first joint scope
+## 4. Productive-frontier edge-count exclusion
+
+The unit-cost productive-frontier theorem gives
+
+\[
+C_F\le |\mathcal H_{\min}|,
+\]
+
+where `|H_min|` is the number of minimal productive obligations.
+
+For binary tasks, gap two cannot occur with `C_A<=2`:
+
+- if `C_A=1`, a depth-one productive tree uses only one internal query, so `C_F<=1`;
+- if `C_A=2`, binary flattening gives `C_F<=3`, hence `C_F-C_A<=1`.
+
+Therefore every binary gap-two task must have
+
+\[
+C_A\ge3,
+\qquad
+C_F\ge C_A+2\ge5.
+\]
+
+Consequently
+
+\[
+\boxed{|\mathcal H_{\min}|\ge5}
+\]
+
+is necessary to enter the canonical oscillatory regime.
+
+Equivalently, every binary task with productive-frontier edge cap
+
+\[
+|\mathcal H_{\min}|\le4
+\]
+
+has structural gap at most one and cannot produce a non-real local eigenpair under
+the declared response geometry.
+
+This keeps the productive frontier itself on the dynamic main line: it is not merely
+an internal representation of `C_F`; its minimal edge count sets a sharp structural
+complexity threshold for access to the oscillatory feedback regime.
+
+---
+
+## 5. Constructive first joint scope
 
 The existing sharp bounded-arity witness at
 
@@ -196,6 +242,13 @@ has
 
 \[
 \boxed{C_A=3,\qquad C_F=5,\qquad \Delta g=2.}
+\]
+
+Every one of its five declared queries has a private opposite-target pair, so its
+minimal productive frontier consists of five singleton mandatory obligations:
+
+\[
+\boxed{|\mathcal H_{\min}|=5.}
 \]
 
 Therefore
@@ -212,23 +265,23 @@ Since
 
 this task lies in the stable oscillatory region.
 
-Combining the two impossibility statements with the constructive witness gives the
-canonical sharp threshold:
+Combining the three impossibility statements with the constructive witness gives the
+canonical sharp threshold corner
 
 \[
 \boxed{
-(6\text{ worlds},5\text{ binary queries})
+(6\text{ worlds},\ 5\text{ binary queries},\ 5\text{ minimal frontier obligations})
 }
 \]
 
-is the first joint binary finite-sensing scope that can enter stable oscillatory
-feedback under the declared response geometry.
+for entry into stable oscillatory feedback under the declared response geometry.
 
-This is a statement about the joint world/query partial order:
+In the corresponding partial order:
 
 - every binary task with `n<=5` is excluded;
 - every binary task with `m<=4` is excluded;
-- the corner `(n,m)=(6,5)` is attained constructively.
+- every binary task with `|H_min|<=4` is excluded;
+- the corner `(n,m,|H_min|)=(6,5,5)` is attained constructively.
 
 It is not a claim that the numerical normalization
 
@@ -240,13 +293,14 @@ is biologically universal.
 
 ---
 
-## 5. Relation to the paper's four pillars
+## 6. Relation to the paper's four pillars
 
 This threshold directly couples Pillar B and Pillar D.
 
 ### Pillar B — finite structural reachability
 
-The finite sensing vocabulary places a hard ceiling on attainable structural gap.
+The finite sensing vocabulary and productive frontier place hard ceilings on attainable
+structural gap.
 
 ### Pillar D — oscillation as a feedback-existence window
 
@@ -254,8 +308,8 @@ A non-real local eigenpair forces positive feedback within the generalized model
 
 The threshold therefore says:
 
-> below a sharp binary information scope, the regime that can qualitatively force
-> feedback existence is structurally unreachable.
+> below a sharp binary information/frontier scope, the regime that can qualitatively
+> force feedback existence is structurally unreachable.
 
 This is stronger than saying that information structure merely changes the magnitude
 of selection.  It determines whether a qualitatively different dynamical/identifiability
@@ -263,7 +317,7 @@ regime is even accessible.
 
 ---
 
-## 6. Scope and novelty boundary
+## 7. Scope and novelty boundary
 
 The theorem assumes:
 
@@ -273,12 +327,13 @@ The theorem assumes:
 - linear gain lift `G=a Delta_g`;
 - local deterministic dynamics.
 
-No novelty is claimed for bounded-arity decision-tree counting by itself, nor for the
-standard complex-eigenvalue threshold.  The contribution is their exact composition:
+No novelty is claimed for bounded-arity decision-tree counting, the productive-frontier
+hitting-set inequality, or the standard complex-eigenvalue threshold by themselves.
+The contribution is their exact composition:
 
 \[
 \boxed{
-\text{finite information scope}
+\text{finite information/frontier scope}
 \to
 \text{sharp structural-gap threshold}
 \to
