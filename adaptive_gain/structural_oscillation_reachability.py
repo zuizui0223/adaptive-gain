@@ -102,7 +102,10 @@ def bounded_arity_gap_ceiling_over_adaptive_depth(
         raise ValueError("max_arity must be an integer at least 2")
 
     best = 0
-    for h in range(1, world_count):
+    # If h>m, then C_F<=m<h=C_A, so no positive structural gap is possible.
+    # Hence only h<=m can contribute to the maximum.
+    max_relevant_h = min(world_count - 1, query_count)
+    for h in range(1, max_relevant_h + 1):
         fixed_ceiling = min(
             query_count,
             maximum_bounded_arity_tree_internal_nodes(
@@ -173,11 +176,10 @@ def first_binary_oscillation_scope_receipt() -> OscillationScopeReceipt:
             raise ArithmeticError("binary world threshold exclusion failed")
 
     # Query threshold: for any world count, m<=4 cannot realize gap two under
-    # binary routing.  It suffices to note that h>=5 gives m-h<0, so scan the
-    # only potentially relevant depths and use a generous world budget where
-    # binary productive trees saturate those depths.
+    # binary routing.  h>m cannot contribute a positive gap, so a world budget
+    # large enough to saturate all h<=4 binary trees is sufficient.
     queries_below = 4
-    generous_worlds = 1 << 6
+    generous_worlds = 16
     for m in range(1, queries_below + 1):
         ceiling = bounded_arity_gap_ceiling_over_adaptive_depth(
             generous_worlds,
