@@ -2,312 +2,180 @@
 
 ## Purpose
 
-This map fixes the logical hierarchy of the repository's ecological/evolutionary extension.
-It distinguishes:
+This map fixes the main theoretical hierarchy after removing observation-design work from scope.
+The paper-level line is:
 
-1. exact finite sensing structure;
-2. exogenous temporal filtering;
-3. endogenous eco-evolutionary feedback;
-4. a special haploid-logit inverse;
-5. a generalized evolutionary response;
-6. generalized observability and identifiability limits.
+```text
+finite individual information structure
+    -> state-specific structural selection
+    -> community-state temporal geometry
+    -> short-term evolutionary amplitude
+    -> long-term retention / cancellation / restoring dynamics
+    -> reachable dynamical phases
+```
 
-The point is not that every layer is equally general.  Each stronger layer either adds a
-mechanism or relaxes an assumption from the layer below it.
+The generalized nonidentifiability result is retained only as a **limit on interpreting time**. It is not an observation-design program.
 
 ---
 
-## 0. Static structural core: finite sensing tasks
+## 0. Static structural core
 
-For a finite deterministic sensing task, the repository defines
-
-\[
-C_A=\text{minimum worst-path adaptive resolution cost},
-\]
+For each finite sensing task,
 
 \[
-C_F=\text{minimum fixed resolving-bundle cost}.
+C_A=\text{minimum adaptive worst-path cost},
+\qquad
+C_F=\text{minimum fixed resolving cost},
 \]
 
-The static adaptive advantage is
+with structural advantage
 
 \[
 \boxed{g=C_F-C_A.}
 \]
 
-This layer contains the repository's exact structural mathematics:
+The static layer contains:
 
-- continuation structure for the adaptive side;
-- productive-frontier / hitting-set structure for the fixed side;
-- the decomposition
+- continuation structure for adaptive resolution;
+- productive-frontier / hitting-set structure for fixed resolution;
+- exact decomposition of the adaptive-fixed gap;
+- sharp bounded-arity and frontier-edge extremal bounds;
+- adaptive-only budget windows.
 
-  \[
-  C_F-C_A
-  =(U-C_A)-(C_U-C_F)-(U-C_U);
-  \]
-
-- exact finite classifications;
-- sharp bounded-arity / edge-cap extremal bounds;
-- adaptive-only budget windows
-
-  \[
-  C_A\le B<C_F.
-  \]
-
-Ecological interpretation:
-
-> natural history supplies the feasible cue graph; the static theory computes how much
-> conditional routing can save relative to a fixed sensing repertoire.
-
-This is the upstream structural source used by every later layer.
-
----
-
-## 1. Exogenous community timescales
-
-Branch / PR lineage: `theory/evolutionary-timescale-filter` / PR #2.
-
-Each recurrent community state `i` carries a structural selection reward `s_i` generated
-from its finite sensing task, while the community transition process is treated as
-exogenous.
-
-For finite-state Markov community dynamics with transition matrix `P`, stationary
-probability `pi`, and reward vector `s`,
-
-\[
-\bar s=\sum_i\pi_i s_i
-\]
-
-is the long-run directional component and
-
-\[
-\gamma(k)=\sum_i\pi_i(s_i-\bar s)[P^k(s-\bar s)]_i
-\]
-
-is the selection autocovariance.
-
-The finite-horizon accumulated selection variance is
-
-\[
-\operatorname{Var}(S_H)
-=H\gamma(0)+2\sum_{k=1}^{H-1}(H-k)\gamma(k).
-\]
-
-For zero-mean selection, evolutionary activity can remain large while the retained
-fraction decays like `H^-1/2`.
-
-This layer separates three quantities:
-
-```text
-instantaneous magnitude
-    how hard evolution moves in one generation
-
-temporal coherence
-    how long selection keeps the same dynamical direction
-
-long-run directional bias
-    whether one direction wins after temporal averaging
-```
-
-Important conclusion:
+The dynamic paper does **not** need every static object downstream. The part that carries decisive weight is the exact extremal ceiling
 
 \[
 \boxed{
-\text{rapid short-term evolution does not imply large long-term accumulated change.}
+\Delta g\le \Delta g_{\max}(n,m,b,h,E).
 }
 \]
 
-The spectral extension replaces a single two-state autocorrelation coefficient by
-reward-weighted community relaxation modes.  Hence
-
-\[
-\boxed{
-\text{community persistence}\ne\text{evolutionarily experienced persistence}.
-}
-\]
-
-A slow community mode matters only if structural selection projects onto that mode.
+Natural history defines the feasible cue/state structure; the finite theory constrains how much structural selection contrast that state can generate.
 
 ---
 
-## 2. Endogenous eco-evolutionary feedback
+## 1. Exogenous temporal filtering: cancellation stasis
 
-Branch / PR lineage: `theory/endogenous-community-feedback` / PR #3.
+Branch lineage: `theory/evolutionary-timescale-filter` / PR #2.
 
-Now evolution changes the future community state that generates its own selection.
+Each recurrent community state `i` carries a structurally generated selection reward `s_i`, while the community transition process `P` is exogenous.
 
-Let
+For stationary finite-state dynamics,
 
 \[
-p_t=\text{frequency of the contingent sensing architecture},
+\bar s=\sum_i\pi_i s_i,
 \]
 
 \[
-q_t=\text{occupancy of the high-opportunity community state}.
+\gamma(k)
+=\sum_i\pi_i(s_i-\bar s)[P^k(s-\bar s)]_i.
 \]
 
-The parent closed loop is
+The key nonstandard composition is that `s` and `P` live on the **same ecological state space**. Selection amplitude and temporal recurrence are therefore not introduced as unrelated free parameters.
+
+For reversible community dynamics,
 
 \[
-q_{t+1}=\phi q_t+(1-\phi)q_{target}(p_t),
+\sigma_{\rm eff}^2
+=\sum_r w_r\frac{1+\lambda_r}{1-\lambda_r},
 \]
+
+where `w_r` is the projection of the structurally generated reward onto community relaxation mode `r`.
+
+Hence
 
 \[
-\operatorname{logit}(p_{t+1})
-=\operatorname{logit}(p_t)+s_-+(s_+-s_-)q_t.
+\boxed{
+\text{slow community modes matter only when structural selection projects onto them.}
+}
 \]
 
-At an interior equilibrium the Jacobian in `(z=logit p,q)` coordinates is
+For zero-mean finite-correlation selection, short-term activity can remain large while the retained fraction scales as
 
 \[
-J=
-\begin{pmatrix}
-1 & \Delta s\\
-(1-\phi)\eta p^*(1-p^*) & \phi
-\end{pmatrix}.
+O(H^{-1/2}).
 \]
 
-Define
+This is **cancellation stasis**, not restoring feedback.
+
+---
+
+## 2. Endogenous eco-evolutionary feedback: restoring stasis
+
+Branch lineage: `theory/endogenous-community-feedback` / PR #3.
+
+Evolution now changes the community state that generates its future selection.
+For the parent haploid/logit model, define
 
 \[
-\boxed{L=-\eta\Delta s\,p^*(1-p^*).}
+L=-\eta\Delta s\,p^*(1-p^*).
 \]
 
-Then local stability is exactly
+The exact local stability interval is
 
 \[
 \boxed{0<L<1.}
 \]
 
-The local phase split is
+Stable nonoscillatory return occurs for
 
 \[
-0<L\le(1-\phi)/4
+0<L\le(1-\phi)/4,
 \]
 
-for stable nonoscillatory return and
+and stable damped oscillation for
 
 \[
-(1-\phi)/4<L<1
+(1-\phi)/4<L<1.
 \]
 
-for stable damped oscillation.
-
-At `L=1`, a conjugate eigenvalue pair reaches the unit circle.
-
-Under the continuous structural lift
+Under
 
 \[
 \Delta s=\lambda\Delta g,
 \]
 
-so
-
-\[
-\boxed{L=(-\eta)\lambda\Delta g\,p^*(1-p^*).}
-\]
-
-This is the first exact bridge from the static structural gap to a dynamical
-closed-loop gain.
-
-The inherited bounded-arity theory gives one-sided phase-exclusion certificates and,
-using integer unit-cost gaps, finite ceilings on stable damping time and oscillation
-period.
-
-Status of this layer:
-
-- deterministic;
-- two community states;
-- haploid/logit evolutionary coordinate;
-- exact local theory and validated executable witnesses.
-
----
-
-## 3. Special inverse under the haploid-logit response law
-
-Branch / PR lineage: `theory/feedback-inverse-diagnostics` / PR #4.
-
-This inverse is **conditional on the parent response law**.
-
-For the parent Jacobian,
-
-\[
-T=1+\phi,
-\qquad
-D=\phi+(1-\phi)L.
-\]
-
-Thus an ideal local trajectory that identifies `(T,D)` gives
-
-\[
-\boxed{\phi=T-1}
-\]
-
-and
-
-\[
-\boxed{L=\frac{D-\phi}{1-\phi}.}
-\]
-
-Equivalent routes use
-
-- the local eigenvalue pair;
-- damping time + principal period;
-- phenotype-logit AR(2) coefficients.
-
-The empirical factorization is deliberately staged:
-
-```text
-transient
-    -> phi, L
-    -> independently measured eta and p*
-    -> inferred selection contrast Delta_s
-    -> direct state-specific fitness test
-    -> natural-history finite sensing tasks
-    -> Delta_g
-    -> continuous-lift calibration or rejection
-```
-
-This branch also shows that inverse conditioning worsens as `phi -> 1`.
-
-Crucial scope statement:
+the static structural gap becomes dynamical loop gain:
 
 \[
 \boxed{
-\text{the time-series-only }(\phi,L)\text{ inverse is not generic.}
+L=(-\eta)\lambda\Delta g\,p^*(1-p^*).
 }
 \]
 
-It survives only because this branch fixes intrinsic evolutionary persistence to the
-parent value `alpha=1`.
+This is the first exact bridge from finite sensing structure to endogenous dynamics.
 
 ---
 
-## 4. General evolutionary response
+## 3. General evolutionary response
 
-Branch / PR lineage: `theory/general-evolutionary-response` / PR #5.
+Branch lineage: `theory/general-evolutionary-response` / PR #5.
 
-Replace the specific haploid-logit update by a differentiable local evolutionary map
+Let
 
 \[
 x_{t+1}=F(x_t,s(q_t)),
-\]
-
-\[
+\qquad
 q_{t+1}=\phi q_t+(1-\phi)Q(x_t).
 \]
 
-At equilibrium define
+At an interior equilibrium define
 
 \[
 \alpha=\partial_xF,
-\qquad
+\quad
 \beta=\partial_sF,
-\qquad
-e=Q'(x^*).
+\quad
+e=Q'(x^*),
 \]
 
-The local Jacobian is
+and generalized loop gain
+
+\[
+\boxed{G=-\beta\Delta s\,e.}
+\]
+
+The Jacobian is
 
 \[
 J=
@@ -317,21 +185,7 @@ J=
 \end{pmatrix}.
 \]
 
-Define generalized loop gain
-
-\[
-\boxed{G=-\beta\Delta s\,e.}
-\]
-
-For
-
-\[
-0\le\alpha\le1,
-\qquad
-0\le\phi<1,
-\]
-
-stability is exactly
+For `0<=alpha<=1` and `0<=phi<1`, stability is exactly
 
 \[
 \boxed{
@@ -349,359 +203,257 @@ G_{osc}=\frac{(\alpha-\phi)^2}{4(1-\phi)}.
 }
 \]
 
-Hence
+Thus intrinsic evolutionary persistence, community memory, and feedback gain jointly determine transient form and duration.
 
-```text
-G_- < G <= G_osc
-    stable nonoscillatory return
-
-G_osc < G < G_+
-    stable damped oscillation
-```
-
-The parent model is recovered exactly with
-
-\[
-\alpha=1,
-\quad\beta=1,
-\quad e=\eta p^*(1-p^*),
-\quad G=L.
-\]
-
-A qualitative parent conclusion does **not** survive:
-
-\[
-\alpha<1
-\]
-
-allows a finite stable interval with reinforcing ecological feedback,
-
-\[
-\boxed{\alpha-1<G<0.}
-\]
-
-Thus intrinsic evolutionary damping can buffer weak positive feedback.
-
-There are two distinct critical-slowing boundaries:
-
-### Lower weak-restoring boundary
-
-\[
-\boxed{
-\tau_{lower}
-\sim
-\frac{2-\alpha-\phi}
-{(1-\phi)(G-G_-)}.
-}
-\]
-
-This is slow nonoscillatory return.
-
-### Upper strong-feedback boundary
-
-\[
-\boxed{
-\tau_{upper}
-\sim
-\frac{2}{(1-\phi)(G_+-G)}.
-}
-\]
-
-This is slow damped oscillation near the unit-circle boundary.
-
-The finite sensing theory still acts upstream through
-
-\[
-G=-\beta\lambda\Delta g\,e.
-\]
-
-Therefore natural-history structure constrains the available gain ladder, but response
-geometry sets the dynamical phase boundaries.
+The parent model is the exact special case `alpha=beta=1` and `G=L`.
 
 ---
 
-## 5. General observability and identifiability
+## 4. Static extremal theory as a dynamical reachability ceiling
 
-Branch / PR lineage: `theory/general-response-identifiability` / PR #6.
+This is the main reason the original combinatorics stays on the paper's central line.
 
-Once `alpha` is free, the earlier time-series-only inverse no longer identifies
-biological timescales.
-
-The generalized characteristic invariants are
+If
 
 \[
-\boxed{T=\alpha+\phi}
+\Delta g\le\Delta g_{\max}(n,m,b,h,E)
 \]
 
 and
 
 \[
-\boxed{D=\alpha\phi+(1-\phi)G.}
+G=(-\beta e)\lambda\Delta g,
 \]
 
-The scalar evolutionary coordinate obeys
-
-\[
-x_{t+2}=T x_{t+1}-D x_t.
-\]
-
-But inversion has **two distinct gates**.
-
-### Gate 1: scalar mode observability
-
-Four noiseless scalar observations recover `(T,D)` only when
-
-\[
-\boxed{R=x_0x_2-x_1^2\ne0.}
-\]
-
-Then
+then
 
 \[
 \boxed{
-T=\frac{x_0x_3-x_1x_2}{R},
-\qquad
-D=\frac{x_1x_3-x_2^2}{R}.
+G\le(-\beta e)\lambda\Delta g_{\max}.
 }
 \]
 
-For a two-real-mode trajectory
+Therefore finite cue repertoire, arity, depth, and productive-frontier size impose a ceiling on attainable selection contrast and closed-loop gain.
+
+Consequences include exact one-sided exclusions such as
 
 \[
-x_t=c_1r_1^t+c_2r_2^t,
-\]
-
-\[
-\boxed{R=c_1c_2(r_1-r_2)^2.}
-\]
-
-Therefore a long time series is not enough.  The perturbation/observable must expose
-both local modes.
-
-### Gate 2: biological decomposition
-
-Even when `(T,D)` are known, every feasible candidate memory `phi` generates
-
-\[
-\boxed{\alpha(\phi)=T-\phi}
-\]
-
-and
-
-\[
-\boxed{
-G(\phi)=\frac{D-T\phi+\phi^2}{1-\phi}
-}
-\]
-
-with exactly the same scalar transient.
-
-Thus
-
-\[
-\boxed{
-(T,D)\text{ do not jointly identify }(\alpha,\phi,G).
-}
-\]
-
-Either one independent persistence measurement is locally sufficient:
-
-```text
-independent alpha
-    -> phi=T-alpha
-    -> recover G
-
-independent phi
-    -> alpha=T-phi
-    -> recover G
-```
-
-The parent inverse is the exact special case obtained by fixing `alpha=1`.
-
-A stronger nonidentifiability result holds for stable high-trace trajectories:
-
-\[
-\boxed{
-T\ge1
+G_{\max}\le G_{osc}
 \Rightarrow
-G(\phi)\to+\infty
-\text{ as }\phi\to1^-.
-}
+\text{stable damped oscillation is structurally unreachable},
 \]
 
-So the free transient alone may not even provide a finite upper bound on generalized
-feedback gain or on the structural sensing mechanism that would be required to
-produce it.
-
----
-
-## 6. What "evolutionary time" means in the full hierarchy
-
-The repository now distinguishes at least five clocks / timescale generators.
-
-### 6.1 Within-individual information time
-
-Cue acquisition and routing occur sequentially within an encounter or decision episode.
-This is the original adaptive-observation logic.
-
-### 6.2 Community-state residence / memory
-
-`phi` or, in the finite-state Markov layer, reward-weighted relaxation modes determine how
-long ecological conditions persist.
-
-### 6.3 Intrinsic evolutionary persistence
-
-`alpha` determines how strongly the evolutionary state carries itself into the next step
-in the generalized local response.
-
-### 6.4 Feedback gain
-
-`G` couples the structural selection contrast back through ecological response and
-selection responsiveness.
-
-### 6.5 Long-run directional bias
-
-The stationary mean selection determines whether short-term movement accumulates into a
-long-term directional trend or cancels.
-
-Hence there is no single scalar "evolutionary timescale" that can be read from a
-phenotype trajectory without a model and independent measurements.
-
-A compact summary is
+and
 
 \[
-\boxed{
-\text{observed trajectory geometry}
-=\text{evolutionary persistence}
-\oplus\text{community persistence}
-\oplus\text{feedback coupling}
-\oplus\text{directional bias}.
-}
+G_{\max}<G_+
+\Rightarrow
+\text{upper feedback instability is structurally unreachable}.
 \]
 
-The symbol `oplus` is conceptual, not an algebraic direct sum.
+The novelty target is not the extremal formula itself, but its use as a **dynamical reachability constraint**.
 
 ---
 
-## 7. Natural history in the hierarchy
+## 5. Two origins of stasis are dynamically inequivalent
 
-Natural history enters at three nonredundant points.
+See `TWO_ORIGINS_OF_STASIS.md`.
 
-### 7.1 It defines the feasible sensing graph
+### Cancellation stasis
 
-Examples:
+In the additive weak-selection coordinate
+
+\[
+z_{t+1}=z_t+E\beta_t,
+\]
+
+a periodic zero-sum cycle has
+
+\[
+\boxed{F_P(z)=z}
+\]
+
+and period multiplier exactly
+
+\[
+\boxed{1}.
+\]
+
+Short-term activity can be arbitrarily large while perturbations survive unchanged after every complete cycle. This is neutral stasis generated by temporal cancellation.
+
+### Restoring stasis
+
+For an endogenous fixed point with Jacobian `J`,
+
+\[
+\boxed{\rho(J)<1}
+\]
+
+implies local attraction. Perturbations decay.
+
+Thus the same observation of little long-run net change can arise from
 
 ```text
-long-range detection
-    -> approach
-    -> contact
-    -> handling
-    -> reward / host / mate assessment
+cancellation stasis
+    zero period drift + neutral return map
+
+restoring stasis
+    zero equilibrium drift + attractive local map
 ```
 
-This determines which finite queries and continuations are biologically possible and
-therefore constrains `C_A`, `C_F`, and `Delta_g`.
-
-### 7.2 It determines eco-evolutionary feedback sign and magnitude
-
-The same sensory architecture can deplete, reinforce, or otherwise rewire the future
-community state.  This enters through `eta` in the parent model or `e=Q'(x*)` in the
-general response.
-
-### 7.3 It determines what perturbation reveals the hidden modes
-
-The scalar-observability gate shows that merely watching a system is insufficient.
-A perturbation must project onto both local dynamical modes if both timescales are to be
-recovered.
-
-Thus natural history is not decoration or post-hoc interpretation.  It supplies both the
-forward structural model and the interventions needed for inverse identification.
+These mechanisms must not be collapsed into one category.
 
 ---
 
-## 8. Claim hierarchy
+## 6. Oscillation creates a feedback-existence window
 
-### Exact structural claims
+Branch lineage: `theory/general-response-identifiability` / PR #6.
 
-Supported directly by the finite sensing theory:
+The generalized local invariants are
 
-- `C_A`, `C_F`, strict adaptive gain, decomposition;
-- productive-frontier / continuation sufficiency;
-- sharp bounded-arity and edge-cap bounds;
-- adaptive-only budget windows.
+\[
+T=\alpha+\phi,
+\qquad
+D=\alpha\phi+(1-\phi)G.
+\]
 
-### Exact local dynamical claims
+For any admissible candidate `phi<1`,
 
-Supported by the deterministic feedback layers:
+\[
+G(\phi)=\frac{\phi^2-T\phi+D}{1-\phi}.
+\]
 
-- parent loop-gain phase diagram;
-- generalized response phase diagram;
-- critical-slowing laws;
-- finite structural phase-exclusion and transient-time ceilings.
+The numerator is the characteristic polynomial evaluated at `phi`.
 
-### Exact local inverse / noninverse claims
+### Stable real nonnegative eigenvalues
 
-Supported by the identifiability layers:
+If
 
-- parent inverse under `alpha=1`;
-- scalar mode-observability determinant;
-- generalized `(alpha,phi,G)` equivalence ridge;
-- high-trace unbounded-gain nonidentifiability.
+\[
+0\le r_1,r_2<1,
+\]
 
-### Not yet claimed
+then choosing `phi=r_1` and `alpha=r_2` gives
 
-- noisy statistical consistency from finite empirical time series;
-- process-noise / measurement-noise identifiability;
-- multivariate quantitative genetics;
-- explicit diploid genotype dynamics;
-- mutation, migration, drift;
-- globally nonlinear bifurcation classification;
-- empirical confirmation in a real natural-history system;
-- novelty of generic feedback, AR(2), Jury stability, critical slowing, or trace/determinant inversion.
+\[
+\boxed{G=0.}
+\]
+
+Therefore monotone stable return does not, by itself, establish feedback existence in this model class.
+
+### Complex eigenvalues
+
+If the eigenvalues form a non-real conjugate pair, the characteristic polynomial is strictly positive for every real `phi`; with `phi<1`,
+
+\[
+\boxed{G(\phi)>0}
+\]
+
+for every compatible decomposition.
+
+Therefore oscillatory local dynamics force feedback existence within the generalized model, although feedback magnitude remains unidentified.
+
+This is retained as a **mechanism-identification theorem**, not as an observation-design program.
 
 ---
 
-## 9. Recommended conceptual paper spine
+## 7. Time-interpretation limit
 
-The strongest unified ecological/evolutionary statement is not
+Even if local characteristic invariants `(T,D)` are known, they generally do not identify
 
-> adaptive measurement is useful.
+\[
+(\alpha,\phi,G).
+\]
 
-It is closer to
+Indeed,
 
-> ecological structure determines which information pathways are available and how much
-> conditional sensing can gain; community dynamics and evolutionary response determine
-> whether that structural opportunity appears as a short burst, reversible fluctuation,
-> long transient, instability, or long-term trend; observed evolutionary time alone does
-> not identify which clock generated it.
+\[
+\alpha(\phi)=T-\phi,
+\qquad
+G(\phi)=\frac{D-T\phi+\phi^2}{1-\phi}
+\]
 
-A compact mathematical spine is
+produce the same characteristic polynomial over the compatible ridge.
+
+Hence an observed evolutionary timescale cannot generally be assigned uniquely to
+
+- intrinsic evolutionary persistence `alpha`;
+- community memory `phi`;
+- feedback coupling `G`.
+
+This nonidentifiability is retained only as a limit on interpreting temporal dynamics. The paper does not propose an observation or perturbation design program.
+
+---
+
+## 8. Four-pillar paper structure
+
+### Pillar A — common structural origin
+
+Selection amplitude and temporal recurrence are generated on the same ecological state space rather than chosen independently.
+
+### Pillar B — finite structural reachability
+
+Exact finite sensing ceilings bound attainable selection contrast and reachable dynamical phases.
+
+### Pillar C — two origins of stasis
+
+Cancellation is neutral across the forcing cycle; endogenous restoration is attractive around a fixed point.
+
+### Pillar D — oscillation as a feedback-existence window
+
+Monotone stable return may admit a zero-feedback decomposition, whereas a complex local eigenpair forces positive feedback within the generalized model.
+
+---
+
+## 9. Natural history in the retained main line
+
+Natural history has two roles here.
+
+### 9.1 It defines the feasible individual information structure
+
+Examples such as
+
+```text
+long-range cue
+    -> approach
+    -> contact cue
+    -> handling / reward / host assessment
+```
+
+define biologically possible queries and continuations, hence constrain `C_A`, `C_F`, and `Delta_g`.
+
+### 9.2 It determines how information-mediated behavior rewires future community states
+
+This supplies the ecological feedback sign and strength represented by `eta` in the parent model or `e=Q'(x*)` in the generalized model.
+
+No observation-design role is claimed here.
+
+---
+
+## 10. What is not the novelty claim
+
+Do not lead with:
+
+- rapid short-term evolution can fail to accumulate;
+- fluctuating selection can generate stasis;
+- temporal autocorrelation matters;
+- generic feedback can generate oscillation;
+- Jury stability or characteristic-polynomial algebra;
+- identity period maps or spectral-radius stability;
+- generic nonidentifiability.
+
+The candidate novelty is the composition
 
 \[
 \boxed{
-\text{natural-history cue structure}
-\to(C_A,C_F)
-\to\Delta g
-\to\Delta s
-\to G
-\to\text{phase / timescale}
+\text{finite information structure}
+\to
+\text{structural selection}
+\to
+\text{community-mode alignment}
+\to
+\text{bounded reachable evolutionary timescales and phases}.
 }
 \]
 
-for the forward direction, and
-
-\[
-\boxed{
-\text{trajectory}
-\to\text{mode observability}
-\to(T,D)
-\to\text{persistence measurement}
-\to G
-\to\text{structural compatibility / falsification}
-}
-\]
-
-for the inverse direction.
-
-The two arrows meet only when natural history and independent ecological/evolutionary
-measurements supply the factors that the time series itself cannot identify.
+That is the main line to preserve.
