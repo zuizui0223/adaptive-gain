@@ -39,7 +39,7 @@ extremal bounds and their constructive witness.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import ceil, floor, isfinite
+from math import floor, isclose, isfinite
 
 from .bounded_arity_extremal_bounds import (
     maximum_bounded_arity_tree_internal_nodes,
@@ -47,6 +47,32 @@ from .bounded_arity_extremal_bounds import (
 )
 from .core import adaptive_minimum_resolution, fixed_minimum_resolution
 from .general_evolutionary_response import general_response_thresholds
+
+_TOL = 1e-12
+
+
+def _strictly_above_integer_threshold(value: float) -> int:
+    """Smallest integer strictly greater than a finite nonnegative value."""
+
+    x = float(value)
+    if not isfinite(x) or x < 0.0:
+        raise ValueError("threshold ratio must be finite and non-negative")
+    nearest = round(x)
+    if isclose(x, nearest, rel_tol=_TOL, abs_tol=_TOL):
+        return int(nearest) + 1
+    return floor(x) + 1
+
+
+def _strictly_below_integer_threshold(value: float) -> int:
+    """Largest nonnegative integer strictly below a finite positive value."""
+
+    x = float(value)
+    if not isfinite(x) or x <= 0.0:
+        raise ValueError("threshold ratio must be finite and positive")
+    nearest = round(x)
+    if isclose(x, nearest, rel_tol=_TOL, abs_tol=_TOL):
+        return max(0, int(nearest) - 1)
+    return max(0, floor(x))
 
 
 def minimum_integer_gap_for_oscillation(
@@ -64,7 +90,7 @@ def minimum_integer_gap_for_oscillation(
         evolutionary_persistence,
         community_memory,
     ).oscillation_gain
-    return floor(threshold / a) + 1
+    return _strictly_above_integer_threshold(threshold / a)
 
 
 def maximum_integer_gap_for_stable_response(
@@ -82,9 +108,7 @@ def maximum_integer_gap_for_stable_response(
         evolutionary_persistence,
         community_memory,
     ).upper_stability_gain
-    # For strict inequality g < upper/a, ceil(x)-1 is exact for both integer and
-    # non-integer x.
-    return max(0, ceil(upper / a) - 1)
+    return _strictly_below_integer_threshold(upper / a)
 
 
 def bounded_arity_gap_ceiling_over_adaptive_depth(
