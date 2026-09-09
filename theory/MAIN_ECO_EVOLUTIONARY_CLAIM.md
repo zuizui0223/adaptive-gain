@@ -105,7 +105,9 @@ g_i=C_F(i)-C_A(i)
 
 and thereby relegate productive frontiers, continuation quotients, and sharp extremal structure to an appendix.
 
-The part of the static theory that carries nontrivial weight downstream is the **sharp extremal ceiling**.
+The static theory survives downstream in **three** direct roles.
+
+### 2.1 Finite structural ceilings restrict reachable dynamics
 
 Suppose the continuous structural lift is
 
@@ -125,55 +127,141 @@ For the generalized local response,
 G=(-\beta e)\lambda\Delta g.
 \]
 
-The finite sensing theory provides sharp or one-sided bounds on the attainable structural gap from scope variables such as
-
-- world count `n`;
-- query count `m`;
-- query arity bound `b`;
-- adaptive depth / cost `h`;
-- productive-frontier edge cap `E`.
-
-Schematically,
+The finite sensing theory supplies sharp or one-sided bounds
 
 \[
-\Delta g
+\Delta g\le\Delta g_{\max}(n,m,b,h,E),
+\]
+
+where `E=|H_min|` is an optional productive-frontier edge cap. Therefore
+
+\[
+\boxed{
+G\le(-\beta e)\lambda\Delta g_{\max}.
+}
+\]
+
+If this ceiling lies below a dynamical phase threshold, that entire phase is structurally unreachable for the declared information scope.
+
+### 2.2 Structural and temporal ceilings combine in one long-run bound
+
+If all recurrent states satisfy
+
+\[
+0\le g_i\le g_{\max},
+\]
+
+and the community process is a finite ergodic reversible chain whose largest nontrivial algebraic eigenvalue is `r_max<1`, then
+
+\[
+\boxed{
+\sigma_{\rm eff}^2
 \le
-\Delta g_{\max}(n,m,b,h,E).
+\frac{(\lambda g_{\max})^2}{4}
+\frac{1+r_{\max}}{1-r_{\max}}.
+}
+\]
+
+A symmetric two-state chain with endpoint rewards attains equality. Thus finite information structure and temporal persistence jointly constrain one downstream long-run fluctuation quantity.
+
+For a nonzero stationary mean-selection magnitude `|mu|`, the associated asymptotic mean-versus-fluctuation crossover proxy also obeys
+
+\[
+H_{\times}^{\rm asy}
+\le
+\frac{(\lambda g_{\max})^2}{4\mu^2}
+\frac{1+r_{\max}}{1-r_{\max}}.
+\]
+
+This is a proxy ceiling, not an exact finite-time hitting-time theorem.
+
+### 2.3 Required dynamical gain determines minimum information complexity
+
+For binary deterministic unit-cost sensing, suppose a downstream dynamical regime requires integer structural gap
+
+\[
+q\ge1.
+\]
+
+Define
+
+\[
+\boxed{
+h^*(q)=\min\{h\ge1:2^h-1-h\ge q\}.}
+\]
+
+Then the componentwise first binary corner capable of gap `q` is
+
+\[
+\boxed{
+n^*=h^*+q+1,\qquad
+m^*=h^*+q,\qquad
+E^*=h^*+q.}
+\]
+
+Here `E*=|H_min|` is the minimum productive-frontier obligation count. The private-pair tree construction attains this corner.
+
+Moreover, with
+
+\[
+k(q)=\lceil\log_2(q+1)\rceil,
+\]
+
+one has
+
+\[
+\boxed{h^*(q)\in\{k(q),k(q)+1\}.}
 \]
 
 Therefore
 
 \[
 \boxed{
-G
-\le
-(-\beta e)\lambda\Delta g_{\max}.
+h^*(q)=\log_2 q+O(1),\qquad
+n^*,m^*,E^*=q+\log_2 q+O(1).}
+\]
+
+The main structural interpretation is:
+
+> increasing the required dynamical gain raises mandatory fixed-information obligations essentially linearly, while the adaptive routing overhead grows only logarithmically.
+
+For generalized feedback
+
+\[
+G=a\Delta g,
+\]
+
+the strict complex-eigenvalue threshold gives a required integer gap `q_osc`, and therefore the direct map
+
+\[
+\boxed{
+(\alpha,\phi,a)
+\longrightarrow
+q_{\rm osc}
+\longrightarrow
+h^*(q_{\rm osc})
+\longrightarrow
+(n^*,m^*,E^*).
 }
 \]
 
-The static extremal theorem now has a direct dynamical consequence:
+This is the strongest way the original finite combinatorics remains on the dynamic main line: a required dynamical regime determines a minimum individual-information complexity.
 
-> a finite cue repertoire of given size and arity cannot generate arbitrarily large selection contrast or arbitrarily large feedback gain.
-
-Hence some dynamical phases are structurally unreachable.
-
-For example, if
+The earlier canonical result
 
 \[
-G_{\max}\le G_{\rm osc},
+(\alpha,\phi,a)=(1,1/2,1/8)
 \]
 
-stable damped oscillation is impossible throughout that entire sensing scope. If
+gives `q_osc=2`, `h*=3`, and therefore
 
 \[
-G_{\max}<G_+,
+(n^*,m^*,E^*)=(6,5,5),
 \]
 
-the upper feedback instability is impossible.
+but that is only a corollary of the general theorem.
 
-This is the main way the static combinatorics belongs in the dynamic paper.
-
-The claim is not that the extremal formula itself is novel. The contribution is the use of exact finite sensing ceilings as **dynamical reachability constraints**.
+No novelty is claimed for full-binary-tree counting, hitting-set inequalities, or the standard complex-eigenvalue criterion. The candidate contribution is their exact composition with the adaptive/fixed structural gap and evolutionary feedback thresholds.
 
 ---
 
@@ -196,15 +284,16 @@ can grow linearly, while retained net change grows much more slowly.
 In a zero-mean finite-correlation case,
 
 \[
-\frac{R_H^{\rm RMS}}{A_H}
-=O(H^{-1/2}).
+\frac{R_H^{\rm RMS}}{A_H}=O(H^{-1/2}).
 \]
+
+For additive periodic weak selection with zero sum over one cycle, the one-cycle map is exactly the identity and its multiplier is one. This is neutral cancellation, not attraction.
 
 Mechanism:
 
 \[
 \boxed{
-\text{large movement + temporal sign cancellation.}
+\text{large movement + temporal sign cancellation + neutral period map.}
 }
 \]
 
@@ -212,32 +301,30 @@ Mechanism:
 
 Evolution changes the community state that generates future selection. The coupled system can return toward an interior equilibrium.
 
+If the local Jacobian has
+
+\[
+\rho(J)<1,
+\]
+
+small perturbations decay toward that equilibrium. Stable complex eigenvalues give oscillatory restoring dynamics.
+
 Mechanism:
 
 \[
 \boxed{
-\text{feedback-generated restoring dynamics.}
+\text{feedback-generated restoring attraction.}
 }
 \]
 
-These are not two descriptions of the same process. They are distinct models with different causal structure.
-
-The paper should therefore avoid a single undifferentiated category called `stasis`.
-
-A useful classification is
+Thus cancellation stasis and restoring stasis are not two descriptions of one phenomenon:
 
 ```text
-trend
-    nonzero long-run directional component
-
 cancellation stasis
-    large short-term activity, weak retained directional change
+    zero period drift + neutral return map
 
 restoring stasis
-    endogenous return toward an interior equilibrium
-
-oscillatory restoring dynamics
-    endogenous feedback with a complex local eigenpair
+    zero equilibrium drift + attractive local map
 ```
 
 ---
@@ -264,7 +351,7 @@ The numerator is exactly the characteristic polynomial evaluated at `phi`.
 
 ### Real nonnegative local modes
 
-If the two observed eigenvalues satisfy
+If the two local eigenvalues satisfy
 
 \[
 0\le r_1,r_2<1,
@@ -317,15 +404,11 @@ Therefore
 }
 \]
 
-The magnitude of feedback remains unidentified without additional information, but its existence is no longer optional.
-
-This is the cleanest qualitative consequence of the generalized nonidentifiability analysis.
+Feedback magnitude remains unidentified without additional information, but feedback existence is no longer optional.
 
 ---
 
 ## 5. The four-pillar structure of the paper
-
-The theoretical paper should therefore be organized around four claims rather than around generic short-versus-long evolution.
 
 ### Pillar A — common structural origin
 
@@ -333,11 +416,11 @@ Short-term selection amplitude and long-term temporal filtering are generated on
 
 ### Pillar B — finite structural reachability
 
-Sharp finite sensing bounds limit the maximum attainable selection contrast and therefore restrict which eco-evolutionary phases are reachable.
+Finite sensing structure both bounds reachable dynamics and, conversely, admits an exact minimum-complexity theorem for a required structural/dynamical gap.
 
 ### Pillar C — two origins of stasis
 
-Exogenous cancellation and endogenous restoring feedback are distinct mechanisms and should not be collapsed into one explanation.
+Exogenous cancellation is neutral over a full cycle; endogenous restoring feedback is attractive around an equilibrium.
 
 ### Pillar D — oscillation as a feedback-existence window
 
@@ -354,6 +437,7 @@ Do not lead with any of the following as the claimed novelty:
 - temporal autocorrelation matters;
 - generic eco-evolutionary feedback can create oscillation;
 - Jury stability or characteristic-polynomial algebra;
+- full-binary-tree counting or hitting-set bounds;
 - AR(2) inversion or generic nonidentifiability.
 
 Those are prior-art or standard mathematical components.
@@ -362,11 +446,11 @@ The candidate novelty lies in the composition:
 
 \[
 \boxed{
-\text{finite individual information structure}
+\text{required dynamical gain}
 \to
-\text{state-specific structural selection}
+\text{required structural gap}
 \to
-\text{community-mode alignment}
+\text{minimum finite individual-information complexity}
 \to
 \text{reachable evolutionary timescales and phases}.
 }
