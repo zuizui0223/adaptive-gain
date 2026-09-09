@@ -1,0 +1,17 @@
+{
+  "claim": "two-dimensional perturbation-observation visibility factorization and symmetric optimal-mixture special case",
+  "branch": "theory/perturbation-observability-design",
+  "factorization_audit": {
+    "seed": 20260909,
+    "random_models": 200000,
+    "check": "R=x0*x2-x1^2 versus det([c^T;c^T J])*det([v,Jv])",
+    "maximum_absolute_error": 3.410605131648481e-13
+  },
+  "symmetric_single_side_audit": {
+    "seed": 20260909,
+    "random_cases": 200000,
+    "check": "direct normalized one-side determinant versus |r1-r2|*|sin(2 theta)|/2",
+    "maximum_absolute_error": 3.3306690738754696e-16
+  },
+  "scope": "Exact deterministic 2x2 local linearization. The factorization is standard linear-systems algebra; the repository-specific use is natural-history perturbation and observation design before eco-evolutionary timescale inversion."
+}
