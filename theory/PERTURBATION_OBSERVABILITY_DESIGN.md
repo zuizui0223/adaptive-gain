@@ -214,7 +214,62 @@ Thus in the orthogonal-mode case, the best local experiment is not to align with
 
 ---
 
-## 5. Natural-history interpretation
+## 5. Finite natural-history candidate sets: exact separability
+
+Suppose natural history restricts the design to a finite set of admissible scalar observations
+
+\[
+\mathcal C=\{c_1,\ldots,c_k\}
+\]
+
+and admissible perturbations
+
+\[
+\mathcal V=\{v_1,\ldots,v_\ell\}.
+\]
+
+Assume every observation can be paired with every perturbation, so the feasible design set is the Cartesian product
+
+\[
+\mathcal C\times\mathcal V.
+\]
+
+Because
+
+\[
+V_R(c,v)=V_O(c)V_C(v),
+\]
+
+we obtain the exact design separation
+
+\[
+\boxed{
+\max_{c\in\mathcal C,\,v\in\mathcal V}V_R(c,v)
+=
+\left(\max_{c\in\mathcal C}V_O(c)\right)
+\left(\max_{v\in\mathcal V}V_C(v)\right).
+}
+\]
+
+Therefore the best admissible observation and the best admissible perturbation can be chosen independently:
+
+\[
+\boxed{
+(c^*,v^*)
+\in
+\arg\max_c V_O(c)
+\times
+\arg\max_v V_C(v).
+}
+\]
+
+This matters for field design because one does not need to evaluate every intervention-measurement pair when feasibility is independent.
+
+The result stops applying when feasibility is joint, for example if a particular perturbation destroys or prevents a particular measurement. In that case pairwise constraints must be retained and the Cartesian-product reduction is invalid.
+
+---
+
+## 6. Natural-history interpretation
 
 The factorization gives natural history two distinct experimental roles.
 
@@ -257,7 +312,7 @@ The correct natural-history experiment therefore asks not only **what changes af
 
 ---
 
-## 6. Relation to the identifiability hierarchy
+## 7. Relation to the identifiability hierarchy
 
 The inverse ladder is now
 
@@ -295,7 +350,7 @@ This makes experimental design logically prior to biological parameter identific
 
 ---
 
-## 7. Claim boundary
+## 8. Claim boundary
 
 This note does **not** yet provide
 
