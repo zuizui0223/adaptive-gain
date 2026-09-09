@@ -1,7 +1,10 @@
+from math import ceil, log2
+
 import pytest
 
 from adaptive_gain.binary_oscillation_scope_formula import (
     binary_gap_capacity_at_depth,
+    binary_gap_corner_audit,
     binary_scope_formula_matches_bounded_arity_ceiling,
     first_binary_scope_for_stable_oscillation,
     first_binary_scope_for_structural_gap,
@@ -34,11 +37,39 @@ def test_first_scope_for_small_required_gaps():
 
 
 def test_minimum_depth_is_exact_not_just_sufficient():
-    for q in range(1, 41):
+    for q in range(1, 101):
         h = minimum_binary_adaptive_depth_for_gap(q)
         assert binary_gap_capacity_at_depth(h) >= q
         if h > 1:
             assert binary_gap_capacity_at_depth(h - 1) < q
+
+
+def test_logarithmic_routing_overhead_has_two_point_bracket():
+    for q in range(1, 1001):
+        k = ceil(log2(q + 1))
+        h = minimum_binary_adaptive_depth_for_gap(q)
+        assert h in (k, k + 1)
+
+
+def test_constructive_corner_directly_attains_theorem_for_solver_sized_gaps():
+    # These corners stay below the exact solver's 20-query cap.
+    for q in (1, 2, 3, 4, 5, 11):
+        audit = binary_gap_corner_audit(q)
+        assert audit.theorem_holds
+        assert audit.direct_check_performed
+        assert audit.observed_adaptive_cost == audit.expected_adaptive_cost
+        assert audit.observed_fixed_cost == audit.expected_fixed_cost
+        assert audit.observed_fixed_cost - audit.observed_adaptive_cost == q
+        assert audit.observed_frontier_edge_count == audit.expected_query_count
+
+
+def test_large_corner_remains_constructive_without_forcing_exponential_solver():
+    audit = binary_gap_corner_audit(26)
+    assert audit.theorem_holds
+    assert not audit.direct_check_performed
+    assert audit.expected_adaptive_cost == 5
+    assert audit.expected_fixed_cost == 31
+    assert audit.expected_world_count == 32
 
 
 def test_canonical_response_geometry_recovers_six_five_five_corner():
