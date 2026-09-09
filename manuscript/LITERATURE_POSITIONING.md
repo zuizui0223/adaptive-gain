@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file records the ecological/evolutionary literature boundary for the manuscript. It is intentionally conservative: standard results should be cited as prior art rather than repackaged as novelty.
+This file records the ecological/evolutionary and combinatorial literature boundary for the manuscript. It is intentionally conservative: standard results should be cited as prior art rather than repackaged as novelty.
 
 ## 1. Rapid evolution and evolutionary time
 
@@ -30,21 +30,28 @@ This file records the ecological/evolutionary literature boundary for the manusc
 
 The paper should not ask merely why rapid short-term evolution can coexist with long-term stasis. Its narrower question is whether finite individual information structure constrains which amplitudes, retention regimes, and feedback phases are reachable.
 
-## 2. Information use in evolutionary ecology
+## 2. Information use and sequential decision making in evolutionary ecology
 
 ### Established
 
 - Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. *Trends in Ecology & Evolution* 20:187–193. DOI: 10.1016/j.tree.2005.01.010.
   - Use for: information is an explicit evolutionary-ecological currency; animal information use can be analysed with statistical decision theory.
-  - Do not claim: introducing information theory/decision theory to evolutionary ecology.
+  - Do not claim: introducing information/decision theory to evolutionary ecology.
+
+- Schmidt, K. A., Dall, S. R. X. & van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos*.
+  - Use for: acquisition, processing, decision making, and ecological consequences are already treated as one ecological topic.
+  - Do not claim: first connection between information use and population/community/ecosystem consequences.
+
+- Movement and foraging literatures already treat repeated information acquisition, context/state dependence, and feedback between action and subsequent information acquisition.
+  - Do not claim: sequential cue use, repeated sampling, or cue ordering as the paper-level novelty.
 
 ### Candidate distinction
 
-The present framework is not primarily about how much information an animal has. It distinguishes adaptive sequential information use from a fixed one-shot information requirement and uses the gap between them as a structural quantity. The ecological claim depends on the downstream consequence of that finite structure:
+The present framework is not primarily about how much information an animal has or whether it samples sequentially. It distinguishes a finite adaptive identification cost from the corresponding fixed separating-test requirement and then uses the resulting structural constraints downstream.
+
+The ecological claim is:
 
 `finite sensing task -> structural gap/frontier obligations -> selection or feedback gain -> reachable evolutionary timescales/phases`.
-
-A targeted audit is still required for prior ecological work that explicitly constrains evolution by decision-tree depth, fixed-vs-adaptive test cost, test cover, or finite query arity.
 
 ## 3. Eco-evolutionary feedback
 
@@ -76,7 +83,55 @@ Starter reference:
 
 The manuscript does not claim that autocorrelation matters. The structural-temporal theorem combines a finite structural reward ceiling with temporal persistence in one sharp downstream bound, and reward-mode alignment determines which community timescales matter.
 
-## 5. Dynamical-systems results
+## 5. Fixed information side: minimum test set / test cover
+
+### Established
+
+The fixed identification problem is a standard minimum test collection / minimum test set / test cover problem: choose a smallest subset of tests whose signatures distinguish every item.
+
+Relevant anchors:
+
+- Halldórsson, Halldórsson & Ravi (2001), cited throughout later minimum-test-collection literature.
+- Crowston, Gutin, Jones, Saurabh & Yeo. 2012/2013. Parameterized Study of the Test Cover Problem.
+- later stochastic test-collection literature explicitly describes minimum test collection/test set/test cover as well studied.
+
+### Do not claim
+
+- novelty for the pair-separation formulation;
+- novelty for minimum separating-test collections;
+- generic test-cover hardness/approximation behavior;
+- novelty for using test signatures to distinguish finite states.
+
+The fixed side should be presented as imported/independently re-derived combinatorial machinery.
+
+## 6. Adaptive information side: optimal decision trees and adaptivity gaps
+
+### Established
+
+Adaptive identification by decision trees is classical.
+
+- Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17.
+- Adler, M. & Heeringa, B. 2012. Approximating optimal binary decision trees. *Algorithmica* 62:1112–1121.
+- Gupta, Nagarajan & Ravi: approximation algorithms for optimal decision trees and adaptive search problems.
+- Moshkov and collaborators: extensive test-theory / information-system treatment of tests, decision trees, rules, and complexity.
+
+The computer-science literature also explicitly uses the term `adaptivity gap` for comparisons between adaptive and non-adaptive strategies.
+
+### Do not claim
+
+- novelty for adaptive test sequencing;
+- novelty for decision-tree depth as an information-acquisition cost;
+- novelty for adaptive outperforming non-adaptive;
+- generic adaptivity gaps;
+- generic binary-tree counting or decision-tree complexity.
+
+### Candidate ecological use
+
+The ecological contribution begins after the static gap is treated as an upstream structural coordinate and composed with evolutionary dynamics:
+
+`required dynamical regime -> required structural gap -> minimum/Pareto-minimal finite information structure`.
+
+## 7. Dynamical-systems results
 
 ### Treat as standard mathematics
 
@@ -97,46 +152,39 @@ The manuscript's use of these results is biological/compositional:
 1. finite information structure bounds attainable feedback gain;
 2. attainable gain determines which local phases can be reached;
 3. complex local modes exclude every zero-feedback decomposition inside the declared generalized model;
-4. therefore the finite sensing extremal theory can exclude or permit a regime that has a qualitative mechanistic interpretation.
+4. finite sensing extremal theory can therefore exclude or permit a regime with a qualitative mechanistic interpretation.
 
-## 6. Combinatorial prior art
+## 8. Strongest defensible novelty statement
 
-The fixed side overlaps minimum test set / test cover; the adaptive side overlaps optimal decision trees and adaptive query complexity. The bounded-arity extremal formulas must be checked against the exact test-cover / decision-tree literature before submission.
+Use wording close to:
 
-Do not claim novelty for a known extremal formula merely because it is re-derived in repository notation. The ecological contribution can instead be:
+> Evolutionary ecology already treats information acquisition as an adaptive decision problem, while computer science and test theory separately characterize the costs of fixed separating test sets and adaptive decision trees. Fluctuating selection and eco-evolutionary feedback likewise already explain how rapid short-term change can fail to accumulate or can be dynamically restored. Our contribution lies in composing these previously separate levels. We show that finite information structure places exact ceilings on structurally generated selection, that those ceilings combine with community persistence to bound long-run evolutionary fluctuation, and that a required feedback regime implies a minimum or Pareto-minimal finite information structure. Thus the combinatorial structure of individual information use restricts which evolutionary timescales and local feedback phases are reachable.
 
-`known or independently proved combinatorial extremal result -> exact ecological reachability bound`.
+Do not replace `our contribution lies in composing` with `for the first time` until the remaining audit supports it.
 
-This is a legitimate use of prior mathematics if attribution is explicit.
-
-## 7. Target-journal fit
+## 9. Target-journal fit
 
 ### Theoretical Ecology
 
-The journal explicitly welcomes theoretical approaches across ecology, including evolutionary ecology and work relying heavily on careful mathematical arguments, provided the questions are ecological and the paper is readable by a broad ecological audience.
-
 Fit requirements for this manuscript:
 
-- lead with the ecological question, not the query-complexity machinery;
+- lead with the ecological reachability question, not query-complexity machinery;
 - keep four headline theorems only;
 - translate `world`, `query`, `arity`, and `productive frontier` into biological meaning before formal definitions;
 - move continuation quotients, proof DAGs, exhaustive enumeration, and solver details to Supplement;
-- use at least one running natural-history example to make finite sensing states concrete, without turning the paper into an empirical validation paper.
+- use at least one running natural-history example to make finite sensing states concrete without turning the paper into an empirical validation paper.
 
 ### More ambitious alternative
 
-*The American Naturalist* becomes plausible only if the biological synthesis is made broader and the information-structure result is shown to change how evolutionary stasis/feedback should be conceptualized, not merely to provide mathematical bounds. The current theory is closer to *Theoretical Ecology* in presentation and scope.
+*The American Naturalist* becomes plausible only if the biological synthesis is shown to change how evolutionary stasis/feedback should be conceptualized, not merely to provide mathematical bounds. The current theory is closer to *Theoretical Ecology* in presentation and scope.
 
-## 8. Immediate literature audit still required
+## 10. Remaining audit before submission
 
-Before submission, search specifically for:
+The broad boundary is now established. The remaining checks are narrow:
 
-1. sequential sampling / sequential decision making in animal behaviour;
-2. adaptive information acquisition and cue ordering;
-3. ecological applications of decision trees, test cover, or query complexity;
-4. bounded cue repertoires and limits to adaptive plasticity/decision making;
-5. Markov-switching environments linked to evolutionary selection rewards;
-6. information constraints in eco-evolutionary feedback or niche construction;
-7. exact prior art for bounded-arity minimum-test-set extremal formulas and adaptivity gaps.
+1. exact equivalence, if any, between the repository bounded-arity extremal formulas and published test-theory results;
+2. whether the productive-frontier edge lower bound has an established equivalent under another name;
+3. ecological/evolutionary theory that maps finite cue repertoire or decision-tree complexity to a ceiling on evolutionary response;
+4. models in which selection reward and environmental/community recurrence are generated on the same finite state space and jointly bounded rather than independently parameterized.
 
-No final novelty claim should be written until these searches are complete.
+Until those four checks are complete, novelty should be stated as a conservative synthesis/reachability contribution rather than a first-ever theorem claim.
