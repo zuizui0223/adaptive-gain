@@ -1,0 +1,39 @@
+{
+  "claim": "generalized evolutionary persistence, community memory, and loop gain are not jointly identified by local transient geometry",
+  "branch": "theory/general-response-identifiability",
+  "observable_invariants": {
+    "trace": "T = alpha + phi",
+    "determinant": "D = alpha*phi + (1-phi)*G",
+    "scalar_recurrence": "x[t+2] = T*x[t+1] - D*x[t]"
+  },
+  "equivalence_ridge": {
+    "alpha_of_phi": "alpha(phi) = T-phi",
+    "gain_of_phi": "G(phi) = [D - T*phi + phi^2]/(1-phi)",
+    "feasible_memory": "max(0,T-1) <= phi <= T when T<1; T-1 <= phi < 1 when T>=1"
+  },
+  "stable_high_trace_result": {
+    "condition": "Schur stable and T>=1",
+    "jury_margin": "1-T+D > 0",
+    "conclusion": "G(phi) -> +infinity as phi -> 1-; no finite upper bound on generalized loop gain from transient geometry alone"
+  },
+  "repo_native_collision": {
+    "trace": 1.8,
+    "determinant": 0.825,
+    "compatible_parameterizations": [
+      {"alpha": 1.0, "phi": 0.8, "G": 0.125},
+      {"alpha": 0.9, "phi": 0.9, "G": 0.15},
+      {"alpha": 0.81, "phi": 0.99, "G": 2.31}
+    ]
+  },
+  "independent_random_audit": {
+    "seed": 20260909,
+    "stable_models": 200000,
+    "models_with_trace_ge_1": 99791,
+    "models_with_trace_lt_1": 100209,
+    "maximum_trace_determinant_reconstruction_error": 2.220446049250313e-16,
+    "unbounded_gain_criterion_failures": 0,
+    "finite_envelope_random_point_violations": 0
+  },
+  "identification_boundary": "Independent alpha or independent phi collapses the ridge and identifies the other persistence term plus G. The alpha=1 parent inverse is an exact special case.",
+  "scope": "local deterministic scalar evolutionary coordinate plus scalar community state; algebraic identified set only; no finite-sample, process-noise, or measurement-noise consistency claim"
+}
