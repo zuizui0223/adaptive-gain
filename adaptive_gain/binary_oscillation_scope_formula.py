@@ -39,7 +39,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .bounded_arity_extremal_bounds import maximum_bounded_arity_tree_internal_nodes
+from .bounded_arity_extremal_bounds import (
+    _height,
+    _internal_count,
+    _maximum_tree,
+    _tree_task,
+    maximum_bounded_arity_tree_internal_nodes,
+)
+from .core import FiniteTask, adaptive_minimum_resolution, fixed_minimum_resolution
+from .productive_frontier import build_productive_frontier
 from .structural_oscillation_reachability import (
     maximum_integer_gap_for_stable_response,
     minimum_integer_gap_for_oscillation,
@@ -92,6 +100,103 @@ def first_binary_scope_for_structural_gap(required_gap: int) -> BinaryGapScopeTh
         minimum_query_count=fixed,
         minimum_productive_frontier_edge_count=fixed,
         binary_gap_capacity_at_minimum_depth=binary_gap_capacity_at_depth(h),
+    )
+
+
+@dataclass(frozen=True)
+class BinaryGapCornerAudit:
+    required_structural_gap: int
+    expected_adaptive_cost: int
+    expected_fixed_cost: int
+    expected_world_count: int
+    expected_query_count: int
+    constructed_tree_height: int
+    constructed_internal_count: int
+    private_pair_count: int
+    direct_check_performed: bool
+    observed_adaptive_cost: int | None
+    observed_fixed_cost: int | None
+    observed_frontier_edge_count: int | None
+    theorem_holds: bool
+    scope: str = "constructive_binary_gap_corner_audit"
+
+
+def binary_gap_corner_witness(required_gap: int) -> FiniteTask:
+    """Construct the componentwise first binary task attaining gap q.
+
+    The corner has ``I=h*+q`` internal nodes and ``I+1`` worlds.  At the minimal
+    depth ``h*``, the exact binary recurrence has capacity at least ``I`` while
+    depth ``h*-1`` has capacity strictly below ``I``.  Hence the maximizing tree
+    at the corner has height exactly ``h*`` and exactly ``I`` internal nodes.
+    """
+
+    receipt = first_binary_scope_for_structural_gap(required_gap)
+    h = receipt.minimum_adaptive_depth
+    n = receipt.minimum_world_count
+    m = receipt.minimum_query_count
+    tree = _maximum_tree(n, h, 2)
+    if _height(tree) != h:
+        raise ArithmeticError("binary corner tree did not attain the required height")
+    if _internal_count(tree) != m:
+        raise ArithmeticError("binary corner tree did not attain the required internal count")
+    task, private_count = _tree_task(tree, n, m)
+    if private_count != m:
+        raise ArithmeticError("binary corner witness lost private-pair obligations")
+    return task
+
+
+def binary_gap_corner_audit(
+    required_gap: int,
+    *,
+    direct_check: bool = True,
+) -> BinaryGapCornerAudit:
+    """Audit the constructive corner; exact solver checks are capped at 20 queries."""
+
+    receipt = first_binary_scope_for_structural_gap(required_gap)
+    task = binary_gap_corner_witness(required_gap)
+    h = receipt.minimum_adaptive_depth
+    m = receipt.minimum_query_count
+
+    observed_ca = observed_cf = observed_edges = None
+    perform = bool(direct_check and m <= 20)
+    if perform:
+        observed_ca = adaptive_minimum_resolution(task).minimum_worst_path_cost
+        observed_cf = fixed_minimum_resolution(task).minimum_cost
+        observed_edges = len(build_productive_frontier(task).minimal_productive_sets)
+
+    structural_checks = (
+        len(task.worlds) == receipt.minimum_world_count
+        and len(task.queries) == m
+        and receipt.minimum_world_count == m + 1
+        and receipt.minimum_productive_frontier_edge_count == m
+    )
+    direct_agrees = (
+        not perform
+        or (
+            observed_ca == h
+            and observed_cf == m
+            and observed_cf - observed_ca == required_gap
+            and observed_edges == m
+        )
+    )
+    theorem_holds = structural_checks and direct_agrees
+    if not theorem_holds:
+        raise ArithmeticError("binary gap corner constructive audit failed")
+
+    return BinaryGapCornerAudit(
+        required_structural_gap=required_gap,
+        expected_adaptive_cost=h,
+        expected_fixed_cost=m,
+        expected_world_count=receipt.minimum_world_count,
+        expected_query_count=m,
+        constructed_tree_height=h,
+        constructed_internal_count=m,
+        private_pair_count=m,
+        direct_check_performed=perform,
+        observed_adaptive_cost=observed_ca,
+        observed_fixed_cost=observed_cf,
+        observed_frontier_edge_count=observed_edges,
+        theorem_holds=theorem_holds,
     )
 
 
