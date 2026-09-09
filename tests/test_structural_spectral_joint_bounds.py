@@ -4,7 +4,9 @@ import pytest
 
 from adaptive_gain.community_spectral_timescale import asymptotic_variance_rate
 from adaptive_gain.structural_spectral_joint_bounds import (
+    bounded_arity_directional_crossover_proxy_upper_bound,
     bounded_arity_spectral_ceiling,
+    directional_crossover_proxy_upper_bound,
     joint_asymptotic_variance_upper_bound,
     reversible_temporal_amplification_upper_bound,
     structural_reward_variance_upper_bound,
@@ -33,6 +35,24 @@ def test_joint_ceiling_multiplies_structural_amplitude_and_temporal_coherence():
         maximal_nontrivial_eigenvalue=0.5,
     )
     assert isclose(ceiling, 27.0)
+
+
+def test_directional_crossover_proxy_ceiling_divides_by_mean_selection_squared():
+    # Joint variance ceiling is 27.  A declared |mu|=0.3 gives 27 / 0.09 = 300.
+    bound = directional_crossover_proxy_upper_bound(
+        3,
+        lambda_cost=2.0,
+        maximal_nontrivial_eigenvalue=0.5,
+        stationary_mean_selection_magnitude=0.3,
+    )
+    assert isclose(bound, 300.0)
+    with pytest.raises(ValueError):
+        directional_crossover_proxy_upper_bound(
+            3,
+            lambda_cost=2.0,
+            maximal_nontrivial_eigenvalue=0.5,
+            stationary_mean_selection_magnitude=0.0,
+        )
 
 
 def test_two_state_symmetric_chain_attains_joint_bound_exactly():
@@ -72,6 +92,17 @@ def test_bounded_arity_parent_scope_yields_joint_ceiling():
     assert isclose(receipt.instantaneous_variance_upper_bound, 1.0)
     assert isclose(receipt.temporal_amplification_upper_bound, 3.0)
     assert isclose(receipt.asymptotic_variance_upper_bound, 3.0)
+
+    crossover = bounded_arity_directional_crossover_proxy_upper_bound(
+        4,
+        3,
+        2,
+        2,
+        lambda_cost=2.0,
+        maximal_nontrivial_eigenvalue=0.5,
+        stationary_mean_selection_magnitude=0.25,
+    )
+    assert isclose(crossover, 48.0)
 
 
 def test_frontier_edge_cap_can_tighten_joint_temporal_ceiling():
