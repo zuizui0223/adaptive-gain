@@ -1,122 +1,18 @@
 # General-response identifiability branch
 
-This dependent branch asks which parts of the generalized eco-evolutionary
-feedback model can actually be recovered from an observed local evolutionary
-trajectory.
+This branch sits downstream of the generalized evolutionary-response theory and sharpens the interpretation limits of local evolutionary transients.
 
-For the full hierarchy from static sensing structure through exogenous timescale
-filtering, endogenous feedback, generalized evolutionary response, and inverse
-identifiability, read `ECO_EVOLUTIONARY_TIMESCALE_THEORY_MAP.md` first.
+The main paper-level focus is **not** observation design. It is the relation among structurally generated selection amplitude, community temporal structure, long-term retention, and feedback geometry.
 
-The inverse now has two distinct gates before structural interpretation:
+Start with:
 
-```text
-phenotype / evolutionary transient
-        |
-        v
-Gate 1: scalar mode observability
-        R = x0*x2 - x1^2
-        |
-        | R != 0
-        v
-trace T + determinant D
-        |
-        v
-Gate 2: biological identifiability ridge E(T,D)
-        |
-        +--> independent alpha  -> phi, G
-        |
-        +--> independent phi    -> alpha, G
-        |
-        v
-selection / ecological factorization
-        |
-        v
-finite sensing structure Delta_g
-```
+- `MAIN_ECO_EVOLUTIONARY_CLAIM.md` — four-pillar synthesis for the main theoretical paper;
+- `ECO_EVOLUTIONARY_TIMESCALE_THEORY_MAP.md` — hierarchy of the structural, temporal, feedback, and identifiability layers;
+- `FEEDBACK_EXISTENCE_FROM_OSCILLATION.md` — qualitative feedback-existence corollary.
 
-Read in this order:
+## Generalized local invariants
 
-1. `ECO_EVOLUTIONARY_TIMESCALE_THEORY_MAP.md`
-   - fixes the logical hierarchy of static sensing structure, exogenous temporal
-     filtering, endogenous feedback, the parent inverse, the generalized
-     evolutionary response, and the generalized identifiability boundary;
-   - separates exact general claims from special-case claims and open empirical
-     layers;
-   - gives the forward and inverse research spines in one place.
-
-2. `SCALAR_TRANSIENT_OBSERVABILITY.md`
-   - states when one observed scalar trajectory can recover the second-order
-     invariants at all;
-   - derives the four-point rank condition
-
-     \[
-     R=x_0x_2-x_1^2;
-     \]
-
-   - shows a pure single eigenmode has `R=0` even with an arbitrarily long time
-     series;
-   - distinguishes exact non-observability from near-degenerate numerical
-     conditioning.
-
-3. `GENERAL_RESPONSE_IDENTIFIABILITY.md`
-   - assumes `(T,D)` have passed the first gate;
-   - derives the exact `(alpha,phi,G)` equivalence ridge;
-   - recovers the earlier `alpha=1` inverse as a special case;
-   - proves stable high-trace transients can leave generalized loop gain
-     unbounded above;
-   - states the independent persistence measurement needed to collapse the
-     ridge.
-
-Executable layers:
-
-- `adaptive_gain/general_response_scalar_observability.py`
-- `adaptive_gain/general_response_identifiability.py`
-- `tests/test_general_response_scalar_observability.py`
-- `tests/test_general_response_identifiability.py`
-- `validation/general_response_scalar_observability_v1.json`
-- `validation/general_response_identifiability_v1.json`
-
-## Gate 1 — does the scalar trajectory expose two local modes?
-
-Every scalar coordinate obeys
-
-\[
-x_{t+2}=T x_{t+1}-D x_t.
-\]
-
-Four points identify `(T,D)` only when
-
-\[
-\boxed{R=x_0x_2-x_1^2\ne0.}
-\]
-
-Then
-
-\[
-\boxed{
-T=\frac{x_0x_3-x_1x_2}{R},
-\qquad
-D=\frac{x_1x_3-x_2^2}{R}.
-}
-\]
-
-For two real modes
-
-\[
-x_t=c_1r_1^t+c_2r_2^t,
-\]
-
-\[
-\boxed{R=c_1c_2(r_1-r_2)^2.}
-\]
-
-So the gate closes if one mode is absent or the modes coincide.  More data on
-the same pure mode do not reveal the missing timescale.
-
-## Gate 2 — can the observed invariants be assigned biologically?
-
-The generalized local invariants are
+The generalized local response has
 
 \[
 T=\alpha+\phi,
@@ -124,94 +20,87 @@ T=\alpha+\phi,
 D=\alpha\phi+(1-\phi)G.
 \]
 
-For every feasible candidate community memory,
+A free scalar transient can identify the characteristic invariants `(T,D)` when both local modes are visible, but does not generally identify `(alpha,phi,G)` separately.
+
+For every feasible candidate community memory `phi`,
 
 \[
-\boxed{\alpha(\phi)=T-\phi}
+\alpha(\phi)=T-\phi,
 \]
 
-and
-
 \[
-\boxed{
 G(\phi)=\frac{D-T\phi+\phi^2}{1-\phi}
-}
 \]
 
-produce exactly the same transient geometry.
+produce the same local characteristic polynomial.
 
-The earlier inverse branch is recovered by imposing
+Thus the broad boundary remains
 
 \[
-\alpha=1,
+\boxed{(T,D)\text{ do not jointly identify }(\alpha,\phi,G).}
 \]
 
-which collapses the ridge to
+## Feedback existence has a sharper asymmetry
+
+The numerator of `G(phi)` is exactly the characteristic polynomial evaluated at `phi`.
+
+If both observed local eigenvalues are real and lie in `[0,1)`, assigning one to `phi` and the other to `alpha` yields
 
 \[
-\phi=T-1.
+G=0.
 \]
 
-The strongest generalized nonidentifiability result is
+Therefore a stable monotone transient cannot by itself establish feedback existence.
+
+If instead the local eigenvalues are a non-real conjugate pair, the characteristic polynomial is strictly positive for every real `phi`. Since `1-phi>0` for every admissible `phi<1`,
 
 \[
-\boxed{
-\text{stable }T\ge1
-\Rightarrow
-G(\phi)\to+\infty\text{ as }\phi\to1^-.
-}
+\boxed{G(\phi)>0\text{ for every compatible decomposition}.}
 \]
 
-So even after both local modes are visible, transient geometry alone can fail to
-place any finite upper bound on generalized feedback gain.
+Hence oscillatory local dynamics force feedback existence within the generalized model, even though the feedback magnitude remains unidentified.
 
-The repo-native collision
+This is the cleanest qualitative consequence of the nonidentifiability analysis.
 
-\[
-T=1.8,
-\qquad D=0.825
-\]
+## Main theoretical framing
 
-is simultaneously compatible with
+The repository should not lead with the already-standard statement that strong short-term evolution can cancel over long times.
+
+The narrower candidate contribution is
 
 ```text
-(alpha, phi, G)
-(1.00, 0.80, 0.125)
-(0.90, 0.90, 0.150)
-(0.81, 0.99, 2.310)
+finite individual information structure
+    -> state-specific structural selection amplitude
+
+same community-state space + transition geometry
+    -> recurrence / temporal filtering of those same rewards
+
+sharp finite sensing bounds
+    -> ceilings on attainable selection contrast and feedback gain
+    -> restrictions on reachable dynamical phases
 ```
 
-and the compatible gain diverges further as `phi -> 1-`.
+The theory also keeps two origins of stasis distinct:
 
-## Revised empirical ladder
+1. exogenous cancellation stasis;
+2. endogenous restoring stasis.
 
-1. design a perturbation that exposes two local modes and pass the `R != 0`
-   observability gate;
-2. recover the free-system invariants `(T,D)`;
-3. independently measure either evolutionary persistence `alpha` or community
-   memory `phi`;
-4. recover the other persistence term and generalized gain `G`;
-5. independently factor ecological and selection response;
-6. only then compare with the exact finite sensing gap and its structural bounds.
+Oscillatory restoring dynamics are special because they can force feedback existence in the generalized local model.
 
-The biological message is therefore stronger than saying evolution and ecology
-have different timescales:
+## Executable layer
 
-\[
-\boxed{
-\text{one observed long trajectory need not reveal either timescale separately.}
-}
-\]
+- `adaptive_gain/general_response_identifiability.py`
+- `adaptive_gain/general_response_scalar_observability.py`
+- `adaptive_gain/feedback_existence_identifiability.py`
+- `tests/test_general_response_identifiability.py`
+- `tests/test_general_response_scalar_observability.py`
+- `tests/test_feedback_existence_identifiability.py`
+- `validation/general_response_identifiability_v1.json`
+- `validation/general_response_scalar_observability_v1.json`
+- `validation/feedback_existence_identifiability_v1.json`
 
-It can fail first because only one mode is visible, and second because even two
-visible modes identify only their combined local eigenstructure.
+## Claim boundary
 
-Independent validation includes 200,000 random stable generalized-response
-systems for the identifiability ridge and 200,000 random two-real-mode
-trajectories for the Hankel visibility identity.  These are deterministic
-algebraic checks, not statistical guarantees under field noise.
+No novelty is claimed for generic AR(2) inversion, characteristic-polynomial algebra, observability theory, complex-eigenvalue oscillation, or generic fluctuating-selection stasis.
 
-Prior-art boundary: second-order recurrence identification, Hankel rank, and
-generic parameter nonidentifiability are standard.  The repository-specific
-consequence is the two-stage boundary they impose on reversing exact finite
-sensing structure from an observed eco-evolutionary transient.
+The repository-specific claim is the way these standard pieces constrain interpretation of the exact finite sensing-gap mechanism and its downstream eco-evolutionary dynamics.
