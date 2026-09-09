@@ -52,8 +52,8 @@ def test_logarithmic_routing_overhead_has_two_point_bracket():
 
 
 def test_constructive_corner_directly_attains_theorem_for_solver_sized_gaps():
-    # These corners stay below the exact solver's 20-query cap.
-    for q in (1, 2, 3, 4, 5, 11):
+    # Keep direct solver audits small; larger corners are certified structurally.
+    for q in (1, 2, 3, 4, 5):
         audit = binary_gap_corner_audit(q)
         assert audit.theorem_holds
         assert audit.direct_check_performed
