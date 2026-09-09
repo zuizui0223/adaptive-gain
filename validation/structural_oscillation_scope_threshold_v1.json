@@ -1,5 +1,5 @@
 {
-  "claim": "Under alpha=1, phi=1/2, and generalized gain per structural-gap unit a=1/8, the first binary finite-sensing scope that can enter the stable oscillatory feedback region is 6 worlds and 5 queries.",
+  "claim": "Under alpha=1, phi=1/2, and generalized gain per structural-gap unit a=1/8, the first binary finite-sensing scope that can enter the stable oscillatory feedback region is the corner 6 worlds, 5 queries, and 5 minimal productive-frontier obligations.",
   "response_geometry": {
     "evolutionary_persistence_alpha": 1.0,
     "community_memory_phi": 0.5,
@@ -23,10 +23,19 @@
     "4": 1,
     "5": 2
   },
+  "binary_productive_frontier_edge_gap_ceiling": {
+    "1": 0,
+    "2": 0,
+    "3": 1,
+    "4": 1,
+    "5": 2
+  },
   "sharp_witness": {
     "world_count": 6,
     "query_count": 5,
     "max_arity": 2,
+    "minimal_productive_frontier_edge_count": 5,
+    "frontier_shape": "five singleton mandatory obligations",
     "adaptive_cost": 3,
     "fixed_cost": 5,
     "structural_gap": 2,
@@ -37,9 +46,10 @@
   "logical_certificate": [
     "Every binary task with at most five represented worlds has inherited structural-gap ceiling at most one.",
     "Every binary task with at most four declared queries has inherited structural-gap ceiling at most one.",
-    "The existing sharp bounded-arity witness at six worlds and five binary queries attains gap two exactly.",
+    "Every binary task with at most four minimal productive-frontier obligations has inherited structural-gap ceiling at most one.",
+    "The existing sharp bounded-arity witness at six worlds and five binary queries has five singleton mandatory frontier obligations and attains gap two exactly.",
     "Gap one reaches only the real/complex boundary G=G_osc; gap two enters the stable complex-eigenpair regime."
   ],
   "scope": "finite deterministic unit-cost binary sensing plus declared canonical local response geometry",
-  "novelty_boundary": "No novelty claim for decision-tree extremal counting, integer threshold rounding, or the complex-eigenvalue criterion; the repository-specific contribution is their exact composition into a sharp dynamical reachability threshold."
+  "novelty_boundary": "No novelty claim for decision-tree extremal counting, productive-frontier hitting-set inequalities, integer threshold rounding, or the complex-eigenvalue criterion; the repository-specific contribution is their exact composition into a sharp dynamical reachability threshold."
 }
