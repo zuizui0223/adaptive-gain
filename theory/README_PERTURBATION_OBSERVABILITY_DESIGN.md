@@ -25,7 +25,16 @@ perturbation-side blindness
     det([v,Jv]) = 0
 ```
 
-Read `PERTURBATION_OBSERVABILITY_DESIGN.md` for the full derivation and natural-history interpretation.
+Read in this order:
+
+1. `PERTURBATION_OBSERVABILITY_DESIGN.md`
+   - derives the exact observation-side × perturbation-side factorization;
+   - defines scale-free visibility scores;
+   - gives the equal-mode optimum for symmetric local dynamics;
+   - proves finite candidate-set design separates into independent observation and perturbation choices when feasibility is a Cartesian product.
+
+2. `EXPERIMENTAL_GATE_SUMMARY.md`
+   - places the perturbation and observation checks before the PR #6 scalar observability and biological-identifiability gates.
 
 Executable layer:
 
@@ -65,10 +74,27 @@ So a clean local experimental rule emerges:
 
 > do not perturb only one mode and do not measure only one mode; deliberately mix both when possible.
 
-Prior-art boundary: this is standard 2x2 observability/controllability geometry. The repository-specific role is to place experimental design before the eco-evolutionary inverse chain
+## Finite natural-history candidate sets
+
+If allowed observations form a finite set `C` and allowed perturbations form a finite set `V`, and every observation can be paired with every perturbation, then
+
+\[
+\boxed{
+\max_{c\in C,v\in V}V_R(c,v)
+=
+\left(\max_{c\in C}V_O(c)\right)
+\left(\max_{v\in V}V_C(v)\right).
+}
+\]
+
+Therefore the best candidate observable and best candidate perturbation can be selected independently. The executable layer provides both separated selectors and a brute-force cross-check.
+
+If feasibility is joint rather than Cartesian — for example a perturbation prevents a measurement — this reduction is not valid and pairwise constraints must be kept.
+
+Prior-art boundary: this is standard 2x2 observability/controllability geometry and separable product optimization. The repository-specific role is to place experimental design before the eco-evolutionary inverse chain
 
 ```text
-perturbation + observation
+natural-history candidate perturbations + observables
     -> two-mode visibility
     -> T,D
     -> independent alpha or phi
