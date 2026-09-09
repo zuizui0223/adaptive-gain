@@ -1,0 +1,13 @@
+{
+  "claim": "feedback-existence identifiability corollary from local eigenstructure",
+  "branch": "theory/general-response-identifiability",
+  "seed": 20260909,
+  "random_models": 200000,
+  "real_nonnegative_root_cases": 43678,
+  "real_nonnegative_root_zero_feedback_failures": 0,
+  "complex_eigenpair_cases": 147494,
+  "complex_eigenpair_nonpositive_gain_failures": 0,
+  "complex_phi_grid": [0.0, 0.1, 0.3, 0.6, 0.9, 0.99],
+  "smallest_positive_gain_seen_on_complex_grid": 5.51523353549212e-05,
+  "scope": "Local deterministic generalized two-state response model. The zero-feedback construction is asserted only when both real eigenvalues lie in [0,1); complex eigenpairs force G(phi)>0 for every real phi<1."
+}
