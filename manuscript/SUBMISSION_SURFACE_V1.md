@@ -101,9 +101,10 @@ Before merging or squashing:
 4. check the four main figure specifications against the actual result hierarchy;
 5. confirm the structural-temporal ceiling is described as extremally sharp rather than as a generic realized-variance predictor;
 6. confirm the `alpha=1`, `phi<1` boundary convention is synchronized between generalized-response theory, code, tests, and prose;
-7. confirm no observation-design material entered the canonical manuscript;
-8. run full CI;
-9. prefer a squash merge or otherwise preserve a clear release/tag for the submission theory state.
+7. confirm the feedback-existence diagnostic checks model compatibility (`0<=T<2`) before treating a complex eigenpair as evidence for nonzero feedback;
+8. confirm no observation-design material entered the canonical manuscript;
+9. run full CI;
+10. prefer a squash merge or otherwise preserve a clear release/tag for the submission theory state.
 
 ## Rule going forward
 
