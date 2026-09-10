@@ -4,7 +4,7 @@
 
 Baseline manuscript: `manuscript/MANUSCRIPT_V1.md`.
 
-The purpose of this audit is to stop theory growth and identify only changes needed for a submission-ready theoretical ecology paper.
+The purpose of this audit is to stop theory growth and identify only changes needed for a submission-ready theoretical ecology paper. The integrated theory baseline is main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87`; its post-merge workflow (`34466336113`) passed Python 3.10, 3.11, and 3.12 with full `pytest`, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py`.
 
 ## 1. Core question — PASS
 
@@ -47,7 +47,7 @@ The ceiling
 
 is **sharp in the extremal sense** because a symmetric two-state endpoint-reward construction attains equality.
 
-Do not describe it as a generic prediction of realized long-run variance. The main text now exposes the two multiplicative sources of slack:
+Do not describe it as a generic prediction of realized long-run variance. The main text exposes the two multiplicative sources of slack:
 
 - range/variance saturation;
 - reward alignment with the slowest algebraic mode.
@@ -70,11 +70,9 @@ Current exact distinction:
 - cancellation stasis = zero period drift + neutral identity return;
 - restoring stasis = zero equilibrium drift + attractive return.
 
-Keep the word `local` on restoring claims because attraction is established from the local Jacobian.
+Keep the word `local` on restoring claims because attraction is established from the local Jacobian. Do not write that these are the only two possible causes of macroevolutionary stasis. Preferred wording: `two dynamically distinct mechanisms represented in the present framework`.
 
-Do not write that these are the only two possible causes of macroevolutionary stasis. Preferred wording: `two dynamically distinct mechanisms represented in the present framework`.
-
-The distinction belongs in the main text for biological interpretation, but the identity-map versus contraction algebra is standard and should remain a proposition rather than a headline theorem novelty claim.
+The distinction belongs in the main text for biological interpretation, but the identity-map versus contraction algebra is standard and remains a proposition rather than a headline theorem novelty claim.
 
 ## 7. Feedback-existence claim, alpha boundary, and model compatibility — PASS
 
@@ -97,9 +95,7 @@ Since `T=alpha+phi`, model compatibility requires exactly
 0\le T<2.
 \]
 
-If a complex pair has `T<0` or `T>=2`, do not report feedback existence. Report that the observed transient lies outside the declared persistence domain. This avoids a vacuous universal statement over an empty feasible-decomposition set.
-
-`alpha=1` is a permitted neutral boundary. A zero-feedback decomposition with one eigenvalue exactly one can be model-feasible if the other eigenvalue serves as `phi`, but it is outside the asymptotically stable monotone-return corollary. A double unit root is infeasible because it would require `phi=1`.
+If a complex pair has `T<0` or `T>=2`, report that the observed transient lies outside the declared persistence domain rather than reporting feedback existence. `alpha=1` is a permitted neutral boundary; a double unit root is infeasible because it would require `phi=1`.
 
 Always retain `within the generalized local model` or an equivalent qualifier. Do not write that oscillation empirically proves eco-evolutionary feedback in arbitrary systems.
 
@@ -109,43 +105,29 @@ For `R=1-T+D`, the public helper for
 
 `inf_{0<=phi<1} G(phi)`
 
-must preserve the exact four cases:
+preserves the exact four cases:
 
 - `R<0 -> -infinity`;
 - `R=0 -> T-2` at the excluded boundary limit;
 - `0<R<=1 -> T-2+2*sqrt(R)`;
 - `R>1 -> D` at `phi=0`.
 
-This helper optimizes over the unit community-memory interval itself; it does not additionally require the implied `alpha=T-phi` to lie in `[0,1]`. Model compatibility is checked separately before the feedback-existence inference.
-
-Regression tests include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
+This helper optimizes over the unit community-memory interval itself; model compatibility is checked separately before the feedback-existence inference. Regression tests include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
 
 ## 9. Novelty boundary — PASS
 
-Current manuscript correctly assigns prior art to:
+Current manuscript correctly assigns prior art to information use, cognitive and information-processing constraints, proximate sensing architectures, sequential sampling and memory, minimum test sets/separating systems/test cover, binary and multiway decision trees, adaptivity gaps, bounded-arity rooted-tree combinatorics used internally, fluctuating selection and temporal autocorrelation, generic eco-evolutionary feedback, standard local dynamical-systems mathematics, and identity maps versus contractions.
 
-- information use and adaptive decision making;
-- cognitive / information-processing constraints;
-- sequential sampling and memory;
-- minimum test sets / separating systems / test cover;
-- binary and multiway decision trees;
-- adaptivity gaps;
-- bounded-arity rooted-tree combinatorics used internally;
-- fluctuating selection and temporal autocorrelation;
-- generic eco-evolutionary feedback;
-- standard local dynamical-systems mathematics;
-- identity maps versus contractions.
-
-Candidate contribution is the exact ecological composition / reachability theory, with the reverse dynamics-to-information map as its strongest form.
+Candidate contribution is the exact ecological composition/reachability theory, with the reverse dynamics-to-information map as its strongest form.
 
 Files governing claim discipline:
 
-- `PRIOR_ART_AUDIT_V2.md`
-- `FINAL_PRIORITY_SEARCH_LOG.md`
-- `NOVELTY_PARAGRAPH_V1.md`
-- `LITERATURE_POSITIONING.md`
+- `PRIOR_ART_AUDIT_V2.md`;
+- `FINAL_PRIORITY_SEARCH_LOG.md`;
+- `NOVELTY_PARAGRAPH_V1.md`;
+- `LITERATURE_POSITIONING.md`.
 
-Do not add a mathematical-priority claim back into the Introduction.
+Do not add a categorical mathematical-priority claim back into the Introduction.
 
 ## 10. Observation design — PASS / EXCLUDED
 
@@ -155,15 +137,13 @@ No observation-design program belongs in this paper. Nonidentifiability remains 
 
 ## 11. Natural-history grounding — GOOD, optional insertion remains
 
-The separate running example maps:
+The separate running example maps
 
 `distant cue -> approach -> near cue -> landing/contact -> handling`
 
 to a finite branching information structure.
 
-For the final manuscript, insert at most one short paragraph or boxed example into the Model. Do not import the whole example file into the main text.
-
-Its purpose is only to explain `world`, `query`, adaptive branching, and irreducible obligations.
+For the final manuscript, insert at most one short paragraph or boxed example into the Model. Do not import the whole example file into the main text. Its purpose is only to explain `world`, `query`, adaptive branching, and irreducible obligations.
 
 ## 12. Model assumptions — PASS, but keep visible
 
@@ -193,17 +173,20 @@ Preferred biological translations:
 
 Avoid introducing `continuation bisimulation`, `proof DAG`, `residual kernel`, or certificate terminology in the main text.
 
-## 14. Citation work still needed before submission
+## 14. Citation and priority audit — PASS; journal-style rendering remains
 
-The conceptual prior-art boundary is sufficiently audited to draft the paper. Remaining citation work is bibliographic rather than theory-blocking:
+The previously open bibliography tasks are now closed at manuscript level:
 
-1. complete volume/page/DOI metadata for every cited paper;
-2. add one or two multiway decision-tree / separating-system citations in the Model or Supplement;
-3. add the information-processing-constraint references (Dukas 2004; Wright 2022) to the final bibliography;
-4. cite a temporal-autocorrelation evolutionary paper near the introduction of `P` / spectral filtering;
-5. run one final database search for a direct predecessor to the exact finite-information reachability composition.
+1. core cited ecology/evolution references have volume/page/DOI metadata where applicable;
+2. binary/multiway decision-tree and separating-system anchors are cited in the Introduction/Model;
+3. Dukas, Wright et al., Trimmer & Houston, and Eliassen et al. are present in the manuscript bibliography;
+4. Cotto & Chevin is cited near the temporal-recurrence construction;
+5. Post & Palkovacs and Schoener anchor generic eco-evolutionary feedback;
+6. the final targeted direct-predecessor search was completed on 2026-09-10.
 
-Do not delay prose drafting for additional combinatorial priority searches.
+The closest additional conceptual precursors found in the final search were Trimmer & Houston (2014) and Eliassen et al. (2016), which strengthen the prior-art boundary around evolved information-processing and sensing architecture. The search did not locate the exact reverse lower-bound map from a required dynamical regime to a required finite decision/separation structure. This is a search outcome, not proof of priority, so `first`/`no previous theory` language remains prohibited.
+
+Remaining bibliography work is journal-specific rendering: capitalization, punctuation, conference-proceedings format, and a final metadata spot-check at submission.
 
 ## 15. Figures needed
 
@@ -223,7 +206,7 @@ Move or retain outside the main text:
 - continuation equivalences;
 - fixed-side kernels;
 - proof DAGs;
-- LP / integer certificates;
+- LP/integer certificates;
 - enumeration receipts;
 - bounded-arity recurrence proof details;
 - private-pair forest construction details;
@@ -232,9 +215,11 @@ Move or retain outside the main text:
 - inverse algebra;
 - solver-cap implementation details.
 
-## 17. Submission-surface hierarchy audit — PASS
+## 17. Submission-surface hierarchy audit — PASS after one editorial repair
 
-The following canonical/control surfaces were checked against the same hierarchy and claim boundary:
+The original hierarchy audit correctly synchronized the theorem spine, canonical manuscript, Supplement, figure plan, shortening plan, submission surface, and novelty paragraph, but it missed one stale line in `LITERATURE_POSITIONING.md` that still said `keep four headline theorems only`. The submission-polish pass detected and corrected that inconsistency.
+
+The audited claim/control surface now explicitly includes:
 
 - `theory/PAPER_THEOREM_SPINE.md`;
 - `manuscript/MANUSCRIPT_V1.md`;
@@ -242,22 +227,25 @@ The following canonical/control surfaces were checked against the same hierarchy
 - `manuscript/FIGURE_PLAN_V1.md`;
 - `manuscript/SHORTENING_PLAN_V1.md`;
 - `manuscript/SUBMISSION_SURFACE_V1.md`;
-- `manuscript/NOVELTY_PARAGRAPH_V1.md`.
+- `manuscript/NOVELTY_PARAGRAPH_V1.md`;
+- `manuscript/LITERATURE_POSITIONING.md`;
+- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
+- `manuscript/REFERENCES_CORE_V1.md`.
 
 They consistently treat the reverse dynamics-to-information map as principal, the structural-temporal bound as an extremal envelope rather than a point predictor, oscillation as a model-gated diagnostic, and the stasis comparison as a mechanistic proposition. No observation-design program has entered the canonical manuscript surface.
 
-The integrated code state at `f7b94d73d09262161f8b4865ce40a402a4e15d58` passed the full repository workflow on Python 3.10, 3.11, and 3.12, including `pytest`, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py` (workflow run `34451352937`). PR #6 is rerunning the same workflow after fast-forwarding its head to that state.
+The integrated main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87` has tree `40ce437bac9ba4ae50d04a06b4ed0a7dac0ecc18` and passed post-merge workflow `34466336113` on Python 3.10/3.11/3.12, including full `pytest` and both repository audit scripts.
 
 ## 18. Immediate next manuscript tasks
 
 No new theorem is needed. Remaining work is manuscript-facing:
 
-1. complete bibliography metadata and the final ecological-priority search;
+1. line-edit repeated qualifiers and explanatory duplication without weakening theorem conditions;
 2. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
-3. perform a line edit for repeated qualifiers while preserving the mathematically necessary ones;
-4. make the four figure specifications into submission-ready figures;
-5. merge/squash PR #6 only after its head-branch CI is green and the manuscript surface is frozen.
+3. decide whether one short natural-history paragraph/box materially improves comprehension;
+4. turn the four figure specifications into submission-ready figures;
+5. render references and manuscript formatting to the target journal style.
 
 ## Overall assessment
 
-The theory is manuscript-limited rather than theorem-limited. Further value is more likely to come from protecting the principal reachability claim, ecological exposition, citation completeness, figure design, and shortening than from additional extremal cases or local dynamical extensions.
+The theory is manuscript-limited rather than theorem-limited. Further value is more likely to come from ecological exposition, figure design, shortening, and journal-specific presentation than from additional extremal cases or local dynamical extensions.
