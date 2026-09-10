@@ -15,30 +15,35 @@
     }
   },
   "branch": "manuscript/submission-polish-20260910",
-  "purpose": "Submission-facing editorial cleanup after freezing the integrated theory and implementation baseline.",
+  "purpose": "Submission-facing editorial cleanup and claim narrowing after freezing the integrated theory and implementation baseline.",
   "scope_audit": {
     "manuscript_files_modified": [
       "manuscript/FINAL_PRIORITY_SEARCH_LOG.md",
       "manuscript/LITERATURE_POSITIONING.md",
       "manuscript/MANUSCRIPT_QA_V1.md",
       "manuscript/MANUSCRIPT_V1.md",
+      "manuscript/NOVELTY_PARAGRAPH_V1.md",
+      "manuscript/PRIOR_ART_AUDIT_V2.md",
       "manuscript/REFERENCES_CORE_V1.md",
       "manuscript/SUBMISSION_SURFACE_V1.md"
     ],
     "code_files_modified": [],
     "test_files_modified": [],
     "theory_files_modified": [],
-    "mathematical_claim_changed": false
+    "mathematical_claim_changed": false,
+    "novelty_scope_narrowed": true
   },
   "editorial_repairs": {
     "hierarchy_consistency": "Removed the remaining Theoretical Ecology guidance that said to keep four headline theorems; the canonical hierarchy remains one principal reachability theorem, one supporting extremal theorem, one diagnostic theorem, and one mechanistic proposition.",
-    "priority_search_status": "Closed the previously pending final pre-submission search. Closest conceptual precursors were added where useful, while explicitly retaining that failure to locate a direct predecessor is not proof of priority.",
-    "bibliography_sync": "Added the newly cited conceptual precursors and completed selected bibliographic metadata, including the Hyafil-Rivest DOI; synchronized the manuscript reference list with citations actually used in the prose.",
+    "priority_search_status": "Final search completed. It recovered formal information-fitness predecessors that the first polish pass underweighted, especially Moffett and Eckford 2022, which already derives minimum mutual-information requirements for target growth and selection.",
+    "information_theory_boundary": "The manuscript now explicitly disclaims novelty for the fitness value of information, minimum mutual-information requirements for fitness or selection, and generic evolutionary information thresholds. The principal result is stated instead as a minimum or Pareto-minimal finite deterministic decision/separation structure over represented alternatives, declared cues, and irreducible obligations.",
+    "bibliography_sync": "Added Donaldson-Matasci et al. 2010, Rivoire and Leibler 2011, Moffett and Eckford 2022, and de Boer and Hogeweg 2010; completed the ICALP 2009 Part I / LNCS 5555 / pages 210-221 metadata for Chakaravarthy et al.; synchronized the manuscript reference list with citations used in the prose.",
     "submission_control": "Replaced obsolete PR #6 merge instructions with a frozen-baseline submission policy and kept side branches such as temporal-routing and inverse-diagnostics outside the canonical manuscript unless deliberately developed as separate work."
   },
   "claim_boundary": {
-    "principal_result": "required dynamical regime -> required structural gap -> minimum or Pareto-minimal finite information structure",
-    "supporting_result": "extremally sharp structural-temporal envelope; not a point prediction of realized variance",
+    "principal_result": "required local dynamical regime -> required adaptive/fixed structural gap -> minimum or Pareto-minimal finite deterministic decision/separation structure over (n,m,E)",
+    "explicit_prior_art": "minimum Shannon or mutual-information requirements for target fitness/selection are prior art",
+    "supporting_result": "extremally sharp structural-temporal envelope; not a point prediction of realized variance and not a generic fitness-value-of-information theorem",
     "diagnostic_result": "model-compatible complex local mode forces feedback existence within the generalized model, not feedback magnitude",
     "mechanistic_proposition": "neutral cancellation stasis and attractive restoring stasis are distinct",
     "novelty_escalated": false,
