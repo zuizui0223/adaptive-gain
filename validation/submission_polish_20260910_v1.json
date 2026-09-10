@@ -1,0 +1,48 @@
+{
+  "receipt": "submission_polish_20260910_v1",
+  "date": "2026-09-10",
+  "baseline": {
+    "main_commit": "569abe805cedc3cee9eeebc4a8aa9410efc12c87",
+    "main_tree": "40ce437bac9ba4ae50d04a06b4ed0a7dac0ecc18",
+    "post_merge_ci_run": 34466336113,
+    "post_merge_ci": {
+      "python_3_10": "success",
+      "python_3_11": "success",
+      "python_3_12": "success",
+      "pytest": "success",
+      "audit_witnesses": "success",
+      "audit_certificate_ladder": "success"
+    }
+  },
+  "branch": "manuscript/submission-polish-20260910",
+  "purpose": "Submission-facing editorial cleanup after freezing the integrated theory and implementation baseline.",
+  "scope_audit": {
+    "manuscript_files_modified": [
+      "manuscript/FINAL_PRIORITY_SEARCH_LOG.md",
+      "manuscript/LITERATURE_POSITIONING.md",
+      "manuscript/MANUSCRIPT_QA_V1.md",
+      "manuscript/MANUSCRIPT_V1.md",
+      "manuscript/REFERENCES_CORE_V1.md",
+      "manuscript/SUBMISSION_SURFACE_V1.md"
+    ],
+    "code_files_modified": [],
+    "test_files_modified": [],
+    "theory_files_modified": [],
+    "mathematical_claim_changed": false
+  },
+  "editorial_repairs": {
+    "hierarchy_consistency": "Removed the remaining Theoretical Ecology guidance that said to keep four headline theorems; the canonical hierarchy remains one principal reachability theorem, one supporting extremal theorem, one diagnostic theorem, and one mechanistic proposition.",
+    "priority_search_status": "Closed the previously pending final pre-submission search. Closest conceptual precursors were added where useful, while explicitly retaining that failure to locate a direct predecessor is not proof of priority.",
+    "bibliography_sync": "Added the newly cited conceptual precursors and completed selected bibliographic metadata, including the Hyafil-Rivest DOI; synchronized the manuscript reference list with citations actually used in the prose.",
+    "submission_control": "Replaced obsolete PR #6 merge instructions with a frozen-baseline submission policy and kept side branches such as temporal-routing and inverse-diagnostics outside the canonical manuscript unless deliberately developed as separate work."
+  },
+  "claim_boundary": {
+    "principal_result": "required dynamical regime -> required structural gap -> minimum or Pareto-minimal finite information structure",
+    "supporting_result": "extremally sharp structural-temporal envelope; not a point prediction of realized variance",
+    "diagnostic_result": "model-compatible complex local mode forces feedback existence within the generalized model, not feedback magnitude",
+    "mechanistic_proposition": "neutral cancellation stasis and attractive restoring stasis are distinct",
+    "novelty_escalated": false,
+    "priority_language_added": false
+  },
+  "status": "pass"
+}
