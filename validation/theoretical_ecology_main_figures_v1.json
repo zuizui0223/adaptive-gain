@@ -1,0 +1,89 @@
+{
+  "receipt": "theoretical_ecology_main_figures_v1",
+  "date": "2026-09-11",
+  "base_commit": "e1735f60a11508c7c18ed59cca1cf4848b5296eb",
+  "base_tree": "2ef73ad8bd3e090f366eeae4abf15d33c6d0dc6d",
+  "branch": "figures/theoretical-ecology-v1",
+  "generator": "manuscript/figures/generate_main_figures.py",
+  "generator_runtime": "Python standard library only",
+  "canonical_format": "SVG",
+  "canvas": "1600x900",
+  "figure_files": {
+    "figure1_state_space.svg": {
+      "sha256": "c04cc46e32479e20c0b1ab37d6f20cf03ffc7ec6b077f79216d4b7588021b965",
+      "bytes": 7725,
+      "xml_parse": "pass",
+      "contains_raster_image_tag": false,
+      "viewbox": "0 0 1600 900"
+    },
+    "figure2_reachability.svg": {
+      "sha256": "f13f77a5ae2d2031a1f11d5f28181c634420c7d5435ef8323b78062ca94273bc",
+      "bytes": 10899,
+      "xml_parse": "pass",
+      "contains_raster_image_tag": false,
+      "viewbox": "0 0 1600 900"
+    },
+    "figure3_extremal_envelope.svg": {
+      "sha256": "62521c46748e43d9fa0f88e5937abc3bff123f8e77e2c38d35182a20dd26d1f5",
+      "bytes": 10273,
+      "xml_parse": "pass",
+      "contains_raster_image_tag": false,
+      "viewbox": "0 0 1600 900"
+    },
+    "figure4_long_time_outcomes.svg": {
+      "sha256": "0a0c43c62b00a632c65583da08a90ed8e2bcd84bed6041afee60012fa58d53fc",
+      "bytes": 7921,
+      "xml_parse": "pass",
+      "contains_raster_image_tag": false,
+      "viewbox": "0 0 1600 900"
+    }
+  },
+  "numerical_fixtures": {
+    "figure2": {
+      "q2_b2_h_star": 3,
+      "q2_b2_corner_n_m_E": [6, 5, 5],
+      "q3_b4_pareto_points": [[7, 6, 6], [8, 5, 5]],
+      "q2_b2_to_b6_n_min": [6, 6, 6, 6, 6],
+      "q2_b2_to_b6_m_min_equals_E_min": [5, 4, 4, 4, 4]
+    },
+    "figure3": {
+      "three_state_P": [[0.7, 0.3, 0.0], [0.3, 0.4, 0.3], [0.0, 0.3, 0.7]],
+      "stationary_pi": ["1/3", "1/3", "1/3"],
+      "eigenvalues": [1.0, 0.7, 0.1],
+      "rewards": [0, 1, 0],
+      "range_variance_saturation": "8/9",
+      "slow_mode_alignment": "11/51",
+      "realized_to_bound": "88/459",
+      "realized_to_bound_decimal": 0.19172113289760348
+    },
+    "figure4": {
+      "alpha": 1.0,
+      "phi": 0.5,
+      "G": 0.5,
+      "T": 1.5,
+      "D": 0.75,
+      "G_osc": 0.125,
+      "stable_upper_G": 1.0,
+      "discriminant": -0.75,
+      "eigen_modulus": 0.8660254037844386,
+      "period_generations": 12.0,
+      "model_compatible": true
+    }
+  },
+  "claim_audit": {
+    "figure1": "finite sensing structure sets state-specific reward amplitude while recurrence of the same ecological states supplies temporal filtering",
+    "figure2": "principal reverse reachability result; outputs are finite structural counts rather than Shannon-information lower bounds",
+    "figure3": "extremally sharp ceiling with exact range/variance and reward-slow-mode slack factors; no generic tightness claim",
+    "figure4": "cancellation/restoration are mechanistically distinct; G>0 is forced only for a model-compatible complex local mode",
+    "new_theorem_added": false,
+    "formula_changed": false,
+    "model_domain_changed": false,
+    "manuscript_text_changed": false
+  },
+  "visual_qa": {
+    "png_previews_rendered_locally": true,
+    "manual_overlap_and_clipping_check": "pass after revisions",
+    "svg_vector_only": true,
+    "main_figure_count": 4
+  }
+}
