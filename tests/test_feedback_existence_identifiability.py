@@ -36,6 +36,14 @@ def test_real_repeated_mode_also_allows_zero_feedback():
     assert no_feedback_decomposition(T, D) == pytest.approx((r, r, 0.0))
 
 
+def test_persistence_split_trace_domain_is_exactly_half_open_zero_to_two():
+    assert not has_feasible_persistence_split(-0.1)
+    assert has_feasible_persistence_split(0.0)
+    assert has_feasible_persistence_split(1.999999)
+    assert not has_feasible_persistence_split(2.0)
+    assert not has_feasible_persistence_split(2.1)
+
+
 def test_alpha_one_neutral_boundary_is_model_feasible_for_zero_feedback():
     r_phi, r_alpha = 0.5, 1.0
     T = r_phi + r_alpha
@@ -77,6 +85,13 @@ def test_complex_pair_outside_persistence_domain_is_not_reported_as_forced_feedb
     assert not summary.model_compatible
     assert not summary.feedback_existence_forced
     assert summary.minimum_gain_over_unit_memory is None
+
+
+def test_negative_trace_complex_pair_is_also_model_incompatible():
+    T, D = -0.5, 1.0
+    assert discriminant(T, D) < 0.0
+    assert not has_feasible_persistence_split(T)
+    assert not oscillatory_transient_forces_positive_feedback(T, D)
 
 
 def test_characteristic_polynomial_is_exact_gain_numerator():
