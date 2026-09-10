@@ -1,4 +1,4 @@
-# Paper theorem spine: information structure and evolutionary timescale
+# Paper theorem spine: finite decision structure and evolutionary timescale
 
 ## Paper-level question
 
@@ -6,9 +6,9 @@ Do not frame the paper as asking whether rapid short-term evolution can coexist 
 
 The narrower question is:
 
-> **When individual information use generates state-dependent selection, how does finite information structure constrain both the amplitude and the temporal fate of evolutionary change?**
+> **When individual information use generates state-dependent selection, how does a declared finite decision/separation structure constrain the amplitude and temporal fate of evolutionary change?**
 
-The paper should treat the finite sensing theory as an upstream generator of selection structure, not as a detachable combinatorial appendix.
+The paper should treat finite sensing structure as an upstream generator of selection structure, not as a detachable combinatorial appendix. `Information` here is a structural biological term; when making novelty comparisons, distinguish this finite deterministic architecture from Shannon/mutual-information quantities.
 
 ---
 
@@ -16,7 +16,7 @@ The paper should treat the finite sensing theory as an upstream generator of sel
 
 The paper does **not** contain four equal headline theorems. The results have different jobs:
 
-1. **Principal reachability theorem** — a required dynamical regime implies a minimum or Pareto-minimal finite information structure. This is the main biological/combinatorial result.
+1. **Principal reachability theorem** — a required dynamical regime implies a minimum or Pareto-minimal finite decision/separation structure. This is the main biological/combinatorial result.
 2. **Supporting extremal theorem** — finite structural range and recurrence impose a sharp structural-temporal envelope on long-run fluctuation. This is an extremal ceiling, not a predictor of realized variance.
 3. **Diagnostic theorem** — within the generalized local model, a model-compatible complex eigenpair excludes every zero-feedback decomposition and therefore forces feedback existence, while leaving magnitude unidentified.
 4. **Mechanistic proposition** — neutral cancellation stasis and attractive restoring stasis are dynamically distinct. The distinction matters biologically, but the underlying identity-map versus contraction algebra is standard and should not carry an independent novelty claim.
@@ -27,7 +27,7 @@ This hierarchy should be visible in the Abstract, Results ordering, Discussion, 
 
 # Main-text result sequence
 
-## Principal theorem — Dynamical requirements imply minimum information complexity
+## Principal theorem — Dynamical requirements imply minimum finite decision/separation structure
 
 ### Binary exact form
 
@@ -39,7 +39,7 @@ h_2^*(q)
 \min\{h\ge1:2^h-1-h\ge q\}.
 \]
 
-Then the componentwise first binary unit-cost information corner is
+Then the componentwise first binary unit-cost structural corner is
 
 \[
 \boxed{
@@ -57,7 +57,7 @@ Moreover,
 h_2^*(q)=\log_2q+O(1).
 \]
 
-Hence fixed-mandatory information obligations grow essentially linearly with the required gap, while adaptive routing depth grows only logarithmically.
+Hence fixed-mandatory separation obligations grow essentially linearly with the required gap, while adaptive routing depth grows only logarithmically.
 
 ### Bounded-arity generalization
 
@@ -76,7 +76,7 @@ Then
 m_{\min}=E_{\min}=q+h_b^*(q),}
 \]
 
-whereas the minimum world count is arity-independent,
+whereas the minimum represented-world count is arity-independent,
 
 \[
 \boxed{n_{\min}=q+h_2^*(q)+1.}
@@ -90,7 +90,7 @@ The exact joint requirement is generally a Pareto frontier
 
 not one componentwise minimum. Binary sensing is the special case in which the frontier collapses to one exact corner.
 
-For `q=3,b=4`, the two nondominated information requirements
+For `q=3,b=4`, the two nondominated structural requirements
 
 \[
 (8,5,5)
@@ -124,7 +124,9 @@ If the integer gap ladder jumps directly beyond the upper stability threshold, t
 
 ### Why this is the principal theorem
 
-This is the strongest direct use of the repository's static extremal mathematics. A requested dynamical behavior imposes a lower bound on individual-information complexity. The result runs **backward from dynamics to required natural-history structure**, so the finite sensing theory carries a biological conclusion rather than serving only as a descriptive encoding.
+This is the strongest direct use of the repository's static extremal mathematics. A requested local dynamical behavior imposes a lower bound on a finite deterministic decision/separation architecture. The result runs **backward from dynamics to required natural-history structure**, so the finite sensing theory carries a biological conclusion rather than serving only as a descriptive encoding.
+
+The reverse idea `required evolutionary performance -> required information` is not itself a novelty claim. In particular, Moffett & Eckford (2022) derive minimum mutual-information requirements for target population growth and average selection coefficients using rate-distortion theory. The present theorem minimizes a different object: discrete finite task structure over represented alternatives, declared cues, and irreducible obligations, generally returning a Pareto set `(n,m,E)` for a required local feedback phase. Do not describe the theorem as a generic minimum-information principle.
 
 ---
 
@@ -209,7 +211,7 @@ Keep this as a corollary, not a headline result, because it is not a finite-time
 
 ### Role in the paper
 
-This theorem supplies the structural envelope around the principal reachability result. Static information structure bounds the available reward range and community persistence can amplify that range through time, but the realized fluctuation still depends on reward variance and modal alignment.
+This theorem supplies the structural envelope around the principal reachability result. Static finite decision structure bounds the available reward range and community persistence can amplify that range through time, but the realized fluctuation still depends on reward variance and modal alignment. It is not a generic fitness-value-of-information theorem.
 
 ---
 
@@ -387,9 +389,9 @@ They support the result hierarchy but should not compete with it.
 ```text
 community state i
        |
-       +--> finite information structure --> g_i --> selection amplitude
+       +--> finite decision/separation structure --> g_i --> selection amplitude
        |
-       +--> transition operator P ---------> temporal recurrence
+       +--> transition operator P -----------------> temporal recurrence
 ```
 
 Show that amplitude and time are generated on the same state space.
@@ -401,10 +403,10 @@ Show
 ```text
 required G
  -> required integer gap q
- -> binary exact corner / bounded-arity Pareto frontier
+ -> binary exact corner / bounded-arity Pareto frontier over (n,m,E)
 ```
 
-Use `q=3,b=4` and the two nondominated points `(8,5,5)` and `(7,6,6)` as the main visual example.
+Use `q=3,b=4` and the two nondominated points `(8,5,5)` and `(7,6,6)` as the main visual example. Label this explicitly as a finite decision/separation-structure requirement, not a Shannon-information lower bound.
 
 ## Figure 3 — Structural-temporal envelope and its slack
 
@@ -439,6 +441,10 @@ Do not claim novelty for:
 - rapid short-term evolution coexisting with long-term stasis;
 - temporal autocorrelation affecting evolution;
 - generic eco-evolutionary feedback;
+- the fitness value of environmental information;
+- minimum Shannon/mutual-information requirements for target fitness or selection;
+- generic evolutionary information thresholds;
+- evolved sensing or information-processing architecture;
 - oscillations from two-dimensional feedback systems;
 - Popoviciu variance bounds;
 - reversible Markov spectral formulas;
@@ -449,13 +455,13 @@ Do not claim novelty for:
 - identity maps versus contractions;
 - AR(2) inversion or generic nonidentifiability.
 
-The candidate novelty is their exact composition around one biological statement:
+The candidate novelty is the exact discrete composition around one biological statement:
 
 \[
 \boxed{
-\text{finite individual information structure constrains
-which evolutionary amplitudes, timescales, and feedback phases are reachable.}
+\text{finite deterministic decision/separation structure constrains
+which evolutionary amplitudes and local feedback phases are structurally reachable.}
 }
 \]
 
-The strongest form of that statement is the reverse reachability map from a required dynamical regime to a required finite information structure. The structural-temporal ceiling and model-compatible oscillation diagnostic support that claim; the stasis proposition prevents mechanistic overinterpretation.
+The strongest form is the reverse reachability map from a required local dynamical regime to a required adaptive/fixed gap and then to a minimum/Pareto-minimal finite `(n,m,E)` structure. The structural-temporal ceiling and model-compatible oscillation diagnostic support that claim; the stasis proposition prevents mechanistic overinterpretation. This statement complements rather than supersedes established information-theoretic minimum-information results.
