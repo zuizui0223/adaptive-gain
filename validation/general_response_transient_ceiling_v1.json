@@ -1,0 +1,61 @@
+{
+  "claim": "finite sensing structure bounds stable damped transient times under generalized evolutionary response",
+  "branch": "theory/general-evolutionary-response",
+  "structural_layer": {
+    "gap_ceiling": "Delta_g <= min(m,F_b(n,h))-h, optionally intersected with productive-frontier edge cap E",
+    "gain_per_gap": "a_g=(-beta*e)*lambda for restoring e<0",
+    "gain_ladder": "G=a_g*Delta_g with integer Delta_g"
+  },
+  "generalized_phase": {
+    "oscillation_gain": "G_osc=(alpha-phi)^2/[4(1-phi)]",
+    "upper_stability_gain": "G_plus=(1-alpha*phi)/(1-phi)",
+    "stable_damped_condition": "G_osc<G<G_plus",
+    "maximum_damping_rule": "evaluate damping time at largest structurally allowed integer gap with a_g*g<G_plus",
+    "maximum_period_rule": "evaluate period at smallest structurally allowed integer gap with G_osc<a_g*g<G_plus"
+  },
+  "independent_integer_envelope_audit": {
+    "seed": 20260909,
+    "random_models": 200000,
+    "gap_upper_range": "uniform integer 0..50",
+    "gain_per_gap_range": "10^Uniform(-2,0.3)",
+    "alpha_range": "Uniform(0,1)",
+    "phi_range": "Uniform(0,0.99)",
+    "models_with_nonempty_damped_integer_phase": 173282,
+    "largest_stable_gap_mismatches_vs_bruteforce": 0,
+    "smallest_damped_gap_mismatches_vs_bruteforce": 0
+  },
+  "parent_recovery": {
+    "scope": {"n": 12, "m": 12, "b": 2, "h": 3},
+    "alpha": 1.0,
+    "phi": 0.5,
+    "gain_per_gap": 0.125,
+    "gap_upper_bound": 4,
+    "minimum_damped_gap": 2,
+    "maximum_stable_gap": 4,
+    "damping_time_upper_bound_generations": 6.952118993564411,
+    "oscillation_period_upper_bound_generations": 19.528125814614466
+  },
+  "generalized_same_scope": {
+    "scope": {"n": 12, "m": 12, "b": 2, "h": 3},
+    "alpha": 0.8,
+    "phi": 0.5,
+    "gain_per_gap": 0.125,
+    "gap_upper_bound": 4,
+    "minimum_damped_gap": 1,
+    "maximum_stable_gap": 4,
+    "damping_time_upper_bound_generations": 4.642709646291457,
+    "oscillation_period_upper_bound_generations": 21.04927235012761
+  },
+  "minimal_scope_response_change": {
+    "scope": {"n": 4, "m": 3, "b": 2, "h": 2},
+    "gain_per_gap": 0.125,
+    "phi": 0.5,
+    "parent_alpha_1_damped_phase_possible": false,
+    "alpha_0_7_damped_phase_possible": true,
+    "alpha_0_7_damping_time_upper_bound_generations": 2.2585623060109636,
+    "alpha_0_7_oscillation_period_upper_bound_generations": 17.224120463999498
+  },
+  "interpretation": "Finite sensing constraints bound the integer generalized-gain ladder, but alpha and phi set the phase boundaries and transient geometry. The same sensing scope can therefore imply different time ceilings under different evolutionary responses.",
+  "prior_art_boundary": "Integer-envelope optimization and local eigenvalue time formulas are standard; repository-specific input is the exact finite sensing gap ceiling and its mapping into generalized gain.",
+  "scope": "local deterministic scalar generalized response, unit-cost finite sensing, restoring ecological feedback, continuous structural lift"
+}
