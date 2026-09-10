@@ -1,0 +1,25 @@
+{
+  "claim": "generalized evolutionary response has a second critical-slowing boundary at G_minus=alpha-1",
+  "branch": "theory/general-evolutionary-response",
+  "exact_lower_boundary": {
+    "G_minus": "alpha-1",
+    "boundary_eigenvalues": ["1", "alpha+phi-1"],
+    "dominant_eigenvalue_inside_stable_region": "[alpha+phi+sqrt((2-alpha-phi)^2-4(1-phi)(G-G_minus))]/2",
+    "exact_damping_time": "-1/log(lambda_plus)",
+    "critical_slowing": "tau ~ (2-alpha-phi)/[(1-phi)(G-G_minus)]"
+  },
+  "parent_recovery": {
+    "alpha": 1.0,
+    "G_minus": 0.0,
+    "asymptotic": "tau ~ 1/G"
+  },
+  "independent_asymptotic_audit": {
+    "seed": 20260909,
+    "samples": 100000,
+    "small_parameter": "chi=4(1-phi)(G-G_minus)/(2-alpha-phi)^2 <= 1e-3",
+    "maximum_absolute_deviation_of_exact_over_asymptotic_ratio_from_one": 0.0004873983570006235
+  },
+  "interpretation": "Long local evolutionary transients can arise near either the weak-restoring lower boundary or the strong-feedback upper unit-circle boundary; the two mechanisms have different transient geometry.",
+  "prior_art_boundary": "Critical slowing at an eigenvalue +1 boundary is standard. Repository-specific relevance comes from structurally generated selection entering generalized gain G.",
+  "scope": "local deterministic scalar evolutionary response coupled to one scalar community state"
+}
