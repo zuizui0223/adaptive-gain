@@ -1,0 +1,116 @@
+# Submission surface v1
+
+## Purpose
+
+PR #6 contains a large theory and validation history. This file defines the small set of files that should be treated as canonical for manuscript preparation. Everything else can support or document the work without competing as a second manuscript source of truth.
+
+## Canonical manuscript surface
+
+### 1. Main manuscript
+
+**Canonical:**
+
+- `manuscript/MANUSCRIPT_V1.md`
+
+This is the current integrated paper draft and should become the single main text after the next shortening pass.
+
+### 2. Theorem spine
+
+**Canonical:**
+
+- `theory/PAPER_THEOREM_SPINE.md`
+
+This controls the four headline theorems and the main-text / Supplement boundary. If prose conflicts with the theorem spine, fix the prose rather than silently changing the theorem.
+
+### 3. Claim / novelty boundary
+
+**Canonical:**
+
+- `manuscript/NOVELTY_PARAGRAPH_V1.md` — current content is novelty paragraph v3;
+- `manuscript/PRIOR_ART_AUDIT_V2.md`;
+- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
+- `manuscript/LITERATURE_POSITIONING.md`.
+
+These files govern what may and may not be claimed as new.
+
+### 4. Bibliography
+
+**Canonical:**
+
+- `manuscript/REFERENCES_CORE_V1.md`.
+
+This should be the seed for the final journal-formatted bibliography.
+
+### 5. Figure plan
+
+**Canonical:**
+
+- `manuscript/FIGURE_PLAN_V1.md`.
+
+Four main figures maximum.
+
+### 6. Manuscript QA
+
+**Canonical:**
+
+- `manuscript/MANUSCRIPT_QA_V1.md`;
+- `manuscript/SHORTENING_PLAN_V1.md`.
+
+These are editorial controls, not citable manuscript sections.
+
+### 7. Natural-history translation
+
+**Canonical support only:**
+
+- `manuscript/RUNNING_EXAMPLE_V1.md`.
+
+Use at most a short paragraph or box in the final manuscript. This is not an observation-design section.
+
+## Canonical theory support for the four results
+
+The main theorem surface is controlled by `PAPER_THEOREM_SPINE.md`. Important supporting theory files include:
+
+- structural-temporal / spectral ceiling theory;
+- binary dynamic scope threshold;
+- bounded-arity gap Pareto theory;
+- dynamic arity Pareto theory;
+- two-origins-of-stasis theory;
+- feedback-existence-from-oscillation theory;
+- generalized evolutionary response / identifiability theory.
+
+Exact filenames can remain implementation-facing; they should not become parallel manuscript narratives.
+
+## Non-canonical manuscript drafts
+
+The following are useful work products but should no longer be edited as competing main manuscripts after `MANUSCRIPT_V1.md` is established:
+
+- `manuscript/THEORETICAL_ECOLOGY_DRAFT.md` — earlier scaffold / integration surface;
+- `manuscript/ABSTRACT_V1.md`;
+- `manuscript/INTRODUCTION_V1.md`;
+- `manuscript/MODEL_V1.md`;
+- `manuscript/RESULTS_V1.md`;
+- `manuscript/DISCUSSION_V1.md`.
+
+They remain useful for provenance and section-level comparison. New substantive prose changes should normally be made in `MANUSCRIPT_V1.md` unless a section is intentionally being rewritten in isolation.
+
+## Historical / audit material
+
+Validation JSON receipts, proof documents, continuation quotients, solver audits, and prior branch handoffs remain evidence and Supplement support. They are not part of the submission surface.
+
+## Merge policy for PR #6
+
+Before merging or squashing:
+
+1. finish the manuscript shortening pass;
+2. ensure `MANUSCRIPT_V1.md` matches `PAPER_THEOREM_SPINE.md`;
+3. ensure the final bibliography includes every manuscript citation;
+4. check the four main figure specifications against the actual theorem statements;
+5. confirm no observation-design material entered the canonical manuscript;
+6. run full CI;
+7. prefer a squash merge or otherwise preserve a clear release/tag for the submission theory state.
+
+## Rule going forward
+
+**One manuscript, one theorem spine, one novelty boundary.**
+
+Do not create additional competing full-manuscript drafts unless there is a deliberate journal-specific fork.
