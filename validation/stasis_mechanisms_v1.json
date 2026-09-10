@@ -1,0 +1,44 @@
+{
+  "claim": "Cancellation stasis and restoring stasis are dynamically distinct even when both have zero long-run net change.",
+  "scope": {
+    "cancellation": "Additive weak-selection coordinate z[t+1] = z[t] + E*beta[t] with a periodic zero-sum selection cycle.",
+    "restoring": "Local autonomous fixed-point dynamics classified by Jacobian eigenvalues."
+  },
+  "exact_identities": {
+    "cancellation_period_map": "F_P(z) = z + E*sum(beta); if sum(beta)=0 then F_P(z)=z for every z.",
+    "cancellation_period_multiplier": 1.0,
+    "restoring_condition": "spectral_radius(J) < 1 implies local attraction."
+  },
+  "fixtures": {
+    "cancellation_cycle": {
+      "selection": [2.0, -2.0],
+      "evolvability": 1.0,
+      "activity": 4.0,
+      "retained_change": 0.0,
+      "period_multiplier": 1.0
+    },
+    "large_activity_cancellation": {
+      "selection": [100.0, -100.0],
+      "activity": 200.0,
+      "retained_change": 0.0
+    },
+    "monotone_restoring": {
+      "eigenvalues": [0.7, 0.4],
+      "spectral_radius": 0.7,
+      "locally_attractive": true,
+      "oscillatory": false
+    },
+    "oscillatory_restoring": {
+      "eigenvalues": ["0.7+0.2j", "0.7-0.2j"],
+      "spectral_radius": 0.7280109889280518,
+      "locally_attractive": true,
+      "oscillatory": true
+    },
+    "unit_multiplier_boundary": {
+      "eigenvalues": [1.0, 0.5],
+      "locally_attractive": false
+    }
+  },
+  "interpretation": "Cancellation is neutral across a full forcing cycle: perturbations persist. Restoring stasis is attractive near a fixed point: perturbations decay. The distinction is mechanism-level and does not rely on comparing observed evolutionary rates.",
+  "novelty_boundary": "No novelty claim for zero-sum periodic forcing, identity maps, Floquet multipliers, or spectral-radius stability; the repository-specific contribution is their separation within the same finite-information eco-evolutionary synthesis."
+}

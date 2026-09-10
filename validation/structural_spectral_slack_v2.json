@@ -1,0 +1,46 @@
+{
+  "claim": "exact factorization of realized structural-temporal variance slack",
+  "base_commit": "89feabd2764a46c7fa4ea4c3c87c08e3358a0d00",
+  "implementation_commit": "882ed9be67f4b78d783f82107496f6a8dff16957",
+  "test_commit": "7974c519d38c0bf502cb66482525a41c54a62184",
+  "identity": "sigma_eff^2 / B = [Var_pi(s)/V_max] * [sigma_eff^2/(Var_pi(s)*A_max)]",
+  "definitions": {
+    "V_max": "(lambda*g_max)^2/4",
+    "A_max": "(1+r_max)/(1-r_max)",
+    "B": "V_max*A_max"
+  },
+  "deterministic_checks": {
+    "sharp_two_state_witness": {
+      "structural_gap_upper_bound": 4.0,
+      "lambda_cost": 1.5,
+      "reward_width": 6.0,
+      "stationary_reward_variance": 9.0,
+      "maximal_nontrivial_eigenvalue": 0.6,
+      "temporal_amplification_ceiling": 4.0,
+      "joint_variance_ceiling": 36.0,
+      "range_variance_saturation": 1.0,
+      "reward_slow_mode_alignment": 1.0,
+      "realized_to_ceiling_ratio": 1.0
+    },
+    "loose_factorized_example": {
+      "structural_gap_upper_bound": 4.0,
+      "lambda_cost": 1.0,
+      "structural_variance_ceiling": 4.0,
+      "stationary_reward_variance": 2.0,
+      "maximal_nontrivial_eigenvalue": 0.5,
+      "temporal_amplification_ceiling": 3.0,
+      "asymptotic_variance_rate": 3.0,
+      "joint_variance_ceiling": 12.0,
+      "range_variance_saturation": 0.5,
+      "reward_slow_mode_alignment": 0.5,
+      "realized_to_ceiling_ratio": 0.25
+    },
+    "zero_reward_variance": {
+      "range_variance_saturation": 0.0,
+      "reward_slow_mode_alignment": null,
+      "realized_to_ceiling_ratio": 0.0
+    }
+  },
+  "claim_boundary": "The theorem ceiling is sharp in the extremal sense because equality is attainable. This receipt does not claim that the bound is typically tight or predictive for generic multi-state communities.",
+  "scope": "Finite reversible ergodic community chain under the declared structural reward range and algebraic largest nonstationary eigenvalue assumptions."
+}
