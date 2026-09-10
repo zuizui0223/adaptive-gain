@@ -18,7 +18,7 @@ The paper does **not** contain four equal headline theorems. The results have di
 
 1. **Principal reachability theorem** — a required dynamical regime implies a minimum or Pareto-minimal finite information structure. This is the main biological/combinatorial result.
 2. **Supporting extremal theorem** — finite structural range and recurrence impose a sharp structural-temporal envelope on long-run fluctuation. This is an extremal ceiling, not a predictor of realized variance.
-3. **Diagnostic theorem** — within the generalized local model, a complex eigenpair excludes every zero-feedback decomposition and therefore forces feedback existence, while leaving magnitude unidentified.
+3. **Diagnostic theorem** — within the generalized local model, a model-compatible complex eigenpair excludes every zero-feedback decomposition and therefore forces feedback existence, while leaving magnitude unidentified.
 4. **Mechanistic proposition** — neutral cancellation stasis and attractive restoring stasis are dynamically distinct. The distinction matters biologically, but the underlying identity-map versus contraction algebra is standard and should not carry an independent novelty claim.
 
 This hierarchy should be visible in the Abstract, Results ordering, Discussion, figures, Supplement, and PR description.
@@ -213,14 +213,28 @@ This theorem supplies the structural envelope around the principal reachability 
 
 ---
 
-## Diagnostic theorem — Oscillation forces feedback existence within the generalized model
+## Diagnostic theorem — Model-compatible oscillation forces feedback existence
 
 The local generalized response has invariants
 
 \[
 T=\alpha+\phi,
 \qquad
-D=\alpha\phi+(1-\phi)G.
+D=\alpha\phi+(1-\phi)G,
+\]
+
+with persistence domain
+
+\[
+0\le\alpha\le1,
+\qquad
+0\le\phi<1.
+\]
+
+A persistence split exists exactly when
+
+\[
+0\le T<2.
 \]
 
 For every candidate `phi<1`,
@@ -253,17 +267,19 @@ The parent generalized model itself allows `alpha=1` while requiring `phi<1`. Th
 
 ### Complex modes
 
-If the local eigenvalues are a non-real conjugate pair, the characteristic polynomial is strictly positive for every real `phi`. Hence every admissible `phi<1` gives
+If the local eigenvalues are a non-real conjugate pair **and `0<=T<2`**, the characteristic polynomial is strictly positive for every real `phi`, and the feasible persistence interval is nonempty. Hence every model-feasible decomposition gives
 
 \[
 \boxed{G(\phi)>0.}
 \]
 
-Thus oscillatory local dynamics force feedback existence, although the feedback magnitude remains unidentified.
+Thus model-compatible oscillatory local dynamics force feedback existence, although the feedback magnitude remains unidentified.
+
+If `T<0` or `T>=2`, the transient lies outside the declared persistence domain. The correct conclusion is model incompatibility, not feedback existence; do not use a universal statement over an empty feasible set as mechanistic evidence.
 
 ### Role in the paper
 
-This is a **diagnostic boundary**, not the principal reachability theorem. It says what a local transient can establish about mechanism inside the declared generalized model: oscillation can rule out `G=0`, but it cannot identify `G`, `alpha`, or `phi` separately.
+This is a **diagnostic boundary**, not the principal reachability theorem. It says what a local transient can establish about mechanism inside the declared generalized model: model-compatible oscillation can rule out `G=0`, but it cannot identify `G`, `alpha`, or `phi` separately.
 
 ---
 
@@ -412,7 +428,7 @@ Side-by-side trajectories:
 3. attractive monotone restoration;
 4. attractive oscillatory restoration.
 
-Mark that the stasis comparison is a mechanistic proposition and that only the complex local subcase forces feedback existence within the generalized model.
+Mark that the stasis comparison is a mechanistic proposition and that only a model-compatible complex local subcase forces feedback existence within the generalized model.
 
 ---
 
@@ -442,4 +458,4 @@ which evolutionary amplitudes, timescales, and feedback phases are reachable.}
 }
 \]
 
-The strongest form of that statement is the reverse reachability map from a required dynamical regime to a required finite information structure. The structural-temporal ceiling and oscillation diagnostic support that claim; the stasis proposition prevents mechanistic overinterpretation.
+The strongest form of that statement is the reverse reachability map from a required dynamical regime to a required finite information structure. The structural-temporal ceiling and model-compatible oscillation diagnostic support that claim; the stasis proposition prevents mechanistic overinterpretation.
