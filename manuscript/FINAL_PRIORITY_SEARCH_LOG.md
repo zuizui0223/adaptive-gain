@@ -19,10 +19,12 @@ The manuscript makes no priority claim for the component mathematics.
 - Dall et al. (2005): information use in evolutionary ecology and statistical decision theory.
 - Schmidt et al. (2010): ecology of information and informed decisions.
 - Dukas (2004): limited attention / information-processing rate as an evolutionary-ecological constraint with fitness consequences.
+- Trimmer & Houston (2014): evolutionary shaping of information-processing and decision mechanisms; a close conceptual precursor for treating information-processing architecture as an evolved object.
+- Eliassen et al. (2016): explicit proximate architecture from sensing and information processing to behavioural control, embedded in evolutionary modelling; a close conceptual precursor for the sensing-architecture side of the present framework.
 - complex-cue / plasticity literature: multiple cues can improve reliability and plastic responses.
-- Wright (2022): sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity jointly evolve; sampling cost constrains plasticity.
+- Wright et al. (2022): sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity jointly evolve; sampling cost constrains plasticity.
 
-Conclusion: information constraints limiting adaptive/evolutionary response are prior art.
+Conclusion: information constraints and sensing architecture limiting adaptive/evolutionary response are prior art. The final search did not find an exact reverse lower-bound theorem from a required dynamical regime to a required finite decision/separation structure in this literature.
 
 ### Eco-evolutionary feedback
 
@@ -49,6 +51,22 @@ Conclusion: short-term activity versus long-term retention is not itself novel.
 
 Conclusion: no manuscript novelty is assigned to these components. In particular, bounded test size and bounded query outcome arity are distinct restrictions, and multiway decision-tree theory is the appropriate conceptual prior art for the latter.
 
+## Final pre-submission pass (2026-09-10)
+
+A final targeted search combined the ecological/evolutionary terms `information processing`, `sensing architecture`, `decision making`, `eco-evolutionary feedback`, and `evolutionary dynamics` with structural terms such as `finite information`, `decision tree`, `information complexity`, and `minimum information`.
+
+The most relevant additional neighbors recovered were:
+
+- Trimmer & Houston (2014), *An Evolutionary Perspective on Information Processing*, which discusses how natural selection shapes information-processing and decision mechanisms;
+- Eliassen et al. (2016), *From sensing to emergent adaptations: Modelling the proximate architecture for decision-making*, which explicitly models sensing/information-processing architecture and lets that architecture evolve;
+- broader information-in-ecology and information-processing work in which local information or sensing limitations alter collective, behavioural, or ecological dynamics.
+
+These strengthen the prior-art boundary around the upstream biological premise. They do not, in the material located in this pass, supply the manuscript's exact reverse map
+
+`required dynamical regime -> required structural gap -> minimum/Pareto-minimal finite information structure`.
+
+This remains a search outcome, not proof that no such predecessor exists.
+
 ## Direct-predecessor result of the targeted search
 
 The targeted searches did not identify a paper with the full chain
@@ -73,8 +91,8 @@ and should avoid:
 
 ## Submission-safe novelty statement
 
-> Existing theory separately establishes evolutionary information use and cognitive constraints, fixed and adaptive identification complexity, fluctuating selection, temporal autocorrelation, and eco-evolutionary feedback. Here these components are composed into a finite-information reachability theory: declared sensing complexity bounds structurally generated selection, recurrence of the same community states filters those rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. The contribution is this exact ecological reachability composition, not the component decision, combinatorial, or dynamical machinery.
+> Existing theory separately establishes evolutionary information use and cognitive constraints, proximate sensing architectures, fixed and adaptive identification complexity, fluctuating selection, temporal autocorrelation, and eco-evolutionary feedback. Here these components are composed into a finite-information reachability theory: declared sensing complexity bounds structurally generated selection, recurrence of the same community states filters those rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. The contribution is this exact ecological reachability composition, not the component decision, combinatorial, or dynamical machinery.
 
 ## Status
 
-For a Theoretical Ecology submission this priority audit is sufficient to write a conservative Introduction and Discussion. A final pre-submission database search should still be performed, but no unresolved mathematical-priority question needs to block manuscript drafting.
+The final targeted pre-submission search was completed on 2026-09-10. For a Theoretical Ecology submission, the priority audit is sufficient to support conservative Introduction and Discussion wording. No mathematical-priority issue remains as a submission blocker, while the manuscript must continue to avoid categorical priority language.
