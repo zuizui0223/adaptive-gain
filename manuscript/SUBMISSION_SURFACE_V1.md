@@ -48,7 +48,15 @@ This follows the same hierarchical result order and maps every main result to pr
 - `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
 - `manuscript/LITERATURE_POSITIONING.md`.
 
-These files govern what may and may not be claimed as new. The final targeted pre-submission search was completed on 2026-09-10. It located close conceptual predecessors for evolved information processing and sensing architecture but no exact predecessor for the reverse dynamics-to-finite-information lower-bound map. This remains a search outcome, not a priority proof; categorical `first` claims remain prohibited.
+The final targeted search was completed on 2026-09-10 and materially narrowed the novelty language. The canonical boundary now explicitly recognizes:
+
+- fitness-value-of-information theory (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011);
+- **minimum mutual-information requirements for target growth/selection** (Moffett & Eckford 2022);
+- evolutionary information-threshold work (de Boer & Hogeweg 2010);
+- evolved information-processing and sensing architectures (Trimmer & Houston 2014; Eliassen et al. 2016);
+- classical separating-system and binary/multiway decision-tree theory.
+
+Therefore `minimum information` in general is **not** a novelty claim. The principal claim must be stated as a minimum/Pareto-minimal **finite deterministic decision/separation structure**, preferably with explicit `(n,m,E)` language, required through the adaptive/fixed structural gap for a local feedback regime. Failure to locate an exact predecessor for that discrete composition remains a search outcome, not a priority proof; categorical `first` claims are prohibited.
 
 ### 5. Bibliography
 
@@ -56,7 +64,7 @@ These files govern what may and may not be claimed as new. The final targeted pr
 
 - `manuscript/REFERENCES_CORE_V1.md`.
 
-Core citation metadata and the closest conceptual predecessors are synchronized with the current manuscript. Remaining work is target-journal rendering and a final metadata spot-check at submission.
+Core citation metadata and the closest conceptual/mathematical predecessors are synchronized with the current manuscript. Remaining work is target-journal rendering and a final metadata spot-check at submission.
 
 ### 6. Figure plan
 
@@ -64,7 +72,7 @@ Core citation metadata and the closest conceptual predecessors are synchronized 
 
 - `manuscript/FIGURE_PLAN_V1.md`.
 
-Four main figures maximum. Their order reflects the result hierarchy: common state space, principal reachability map, supporting extremal envelope, then mechanistic/diagnostic long-time outcomes.
+Four main figures maximum. Their order reflects the result hierarchy: common state space, principal discrete reachability map, supporting extremal envelope, then mechanistic/diagnostic long-time outcomes. Figure 2 must not visually label the principal result as a generic Shannon-information lower bound.
 
 ### 7. Editorial QA
 
@@ -104,16 +112,18 @@ Validation JSON receipts, proof documents, continuation quotients, solver audits
 
 Before any submission release or journal-formatted export:
 
-1. ensure `MANUSCRIPT_V1.md` matches `PAPER_THEOREM_SPINE.md`;
+1. ensure `MANUSCRIPT_V1.md` matches `PAPER_THEOREM_SPINE.md` mathematically;
 2. ensure `SUPPLEMENT_V1.md` maps the full result hierarchy to proof/code/test/receipt sources;
 3. ensure every in-text citation has a bibliography entry and every bibliography entry used for the submission is rendered to journal style;
-4. check the four main figure specifications against the actual result hierarchy;
-5. confirm the structural-temporal ceiling is described as extremally sharp rather than as a generic realized-variance predictor;
-6. confirm the `alpha=1`, `phi<1` boundary convention remains synchronized between generalized-response theory, code, tests, and prose;
-7. confirm the feedback-existence diagnostic checks model compatibility (`0<=T<2`) before treating a complex eigenpair as evidence for nonzero feedback;
-8. confirm no observation-design or inverse-diagnostic side program has entered the canonical manuscript;
-9. run full CI if any theory/code/test surface changed; documentation-only journal formatting need not be treated as a new theorem validation;
-10. preserve the integrated theory baseline and record the exact submission commit/tree used for the submitted manuscript.
+4. explicitly retain Moffett & Eckford (2022) and the information-fitness boundary wherever the principal result is described as a minimum information requirement;
+5. prefer `finite decision/separation structure`, `finite sensing architecture`, or explicit `(n,m,E)` wording over unqualified `minimum information` in novelty statements;
+6. check the four main figure specifications against the actual result hierarchy and this information-theory distinction;
+7. confirm the structural-temporal ceiling is described as extremally sharp rather than as a generic realized-variance predictor;
+8. confirm the `alpha=1`, `phi<1` boundary convention remains synchronized between generalized-response theory, code, tests, and prose;
+9. confirm the feedback-existence diagnostic checks model compatibility (`0<=T<2`) before treating a complex eigenpair as evidence for nonzero feedback;
+10. confirm no observation-design or inverse-diagnostic side program has entered the canonical manuscript;
+11. run full CI if any theory/code/test surface changed; documentation-only journal formatting need not be treated as a new theorem validation;
+12. preserve the integrated theory baseline and record the exact submission commit/tree used for the submitted manuscript.
 
 ## Side branches
 
