@@ -1,0 +1,48 @@
+{
+  "claim": "canonical submission surface is synchronized to the asymmetric result hierarchy",
+  "audited_content_commit": "c222a796c97fb5be7cc6bed8daa8bc3c2a7fb4d0",
+  "preintegration_code_commit": "f7b94d73d09262161f8b4865ce40a402a4e15d58",
+  "preintegration_ci_run": 34451352937,
+  "preintegration_ci": {
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "pytest": "success",
+    "audit_witnesses": "success",
+    "audit_certificate_ladder": "success"
+  },
+  "hierarchy": {
+    "principal": "dynamical requirements imply minimum or Pareto-minimal finite information complexity",
+    "supporting_extremal": "structural-temporal long-run fluctuation envelope",
+    "diagnostic": "model-compatible oscillation forces feedback existence within the generalized local model",
+    "mechanistic_proposition": "neutral cancellation and attractive restoration are dynamically distinct"
+  },
+  "canonical_surfaces_checked": [
+    "theory/PAPER_THEOREM_SPINE.md",
+    "manuscript/MANUSCRIPT_V1.md",
+    "manuscript/SUPPLEMENT_V1.md",
+    "manuscript/FIGURE_PLAN_V1.md",
+    "manuscript/MANUSCRIPT_QA_V1.md",
+    "manuscript/SHORTENING_PLAN_V1.md",
+    "manuscript/SUBMISSION_SURFACE_V1.md",
+    "manuscript/NOVELTY_PARAGRAPH_V1.md"
+  ],
+  "checks": {
+    "four_equal_headline_theorems_removed": true,
+    "principal_reachability_result_first": true,
+    "structural_temporal_bound_described_as_extremally_sharp_not_predictive": true,
+    "slack_decomposition_exposed": true,
+    "alpha_one_boundary_allowed": true,
+    "phi_one_boundary_excluded": true,
+    "feedback_diagnostic_requires_trace_in_half_open_interval_0_2": true,
+    "complex_pair_outside_persistence_domain_reported_as_model_incompatible": true,
+    "stasis_identity_vs_contraction_downgraded_to_proposition": true,
+    "novelty_boundary_not_expanded": true,
+    "observation_design_excluded": true
+  },
+  "supporting_regression_receipts": [
+    "validation/feedback_existence_boundary_regression_v2.json",
+    "validation/structural_spectral_slack_v2.json"
+  ],
+  "scope": "Editorial/theory synchronization receipt. It records claim hierarchy and code-boundary consistency; it is not an empirical validation result."
+}
