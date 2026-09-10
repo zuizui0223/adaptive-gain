@@ -1,9 +1,11 @@
 {
-  "claim": "exact unit-memory gain infimum and generalized-response alpha boundary regression",
+  "claim": "exact unit-memory gain infimum, generalized-response alpha boundary, and model-compatibility regression",
   "base_commit": "89feabd2764a46c7fa4ea4c3c87c08e3358a0d00",
-  "code_fix_commit": "72c9f5732871429f5058878895afaa73079cd1e6",
-  "test_fix_commit": "d9f6dcd6fb46052ba675325b9f8a8ab68a292c54",
-  "theory_sync_commit": "ce7c2c1e7ab947bed198c9539f63b251106223ec",
+  "gain_infimum_code_fix_commit": "72c9f5732871429f5058878895afaa73079cd1e6",
+  "gain_infimum_test_fix_commit": "d9f6dcd6fb46052ba675325b9f8a8ab68a292c54",
+  "model_compatibility_code_fix_commit": "2c1a3ee9e70f77e5c693e8a00a680fe6dfa66092",
+  "model_compatibility_test_fix_commit": "6ac216de5a7bbcedf7998aa9011faa69e693a98f",
+  "model_compatibility_theory_commit": "88a3737d0783cfa73abc3666f4e6886fcbaa6901",
   "deterministic_checks": {
     "negative_radicand": {
       "trace": 2.5,
@@ -42,10 +44,20 @@
     },
     "double_unit_root": {
       "eigenvalues": [1.0, 1.0],
+      "trace": 2.0,
       "model_feasible_zero_feedback_decomposition": false,
       "reason": "one root must serve as phi, but phi=1 is excluded"
+    },
+    "complex_pair_outside_persistence_domain": {
+      "trace": 2.5,
+      "determinant": 2.0,
+      "discriminant": -1.75,
+      "oscillatory": true,
+      "model_compatible": false,
+      "feedback_existence_forced": false,
+      "reason": "T>=2 gives no alpha in [0,1], phi in [0,1) persistence split, so the correct conclusion is model incompatibility rather than a vacuous feedback-existence inference"
     }
   },
   "prior_random_audit": "validation/feedback_existence_identifiability_v1.json",
-  "scope": "The earlier 200000-model audit is preserved unchanged. This receipt adds deterministic boundary cases that continuous random sampling was not designed to hit."
+  "scope": "The earlier 200000-model audit is preserved unchanged. This receipt adds deterministic boundary and model-domain cases that continuous random sampling was not designed to hit."
 }
