@@ -1,0 +1,74 @@
+{
+  "claim": "finite sensing structure bounds stable damped eco-evolutionary transient times",
+  "branch": "theory/endogenous-community-feedback",
+  "structural_layer": {
+    "gap_upper_bound": "Delta_g <= min(m,F_b(n,h))-h, optionally intersected with productive-frontier edge cap E",
+    "unit_cost_integrality": "Delta_g is a non-negative integer",
+    "loop_gain_per_gap": "a=(-eta)*lambda*p_star*(1-p_star)",
+    "loop_gain": "L=a*Delta_g"
+  },
+  "transient_layer": {
+    "stable_condition": "0<L<1",
+    "damped_condition": "L>(1-phi)/4",
+    "damping_time": "tau=-2/log(1-(1-phi)*(1-L))",
+    "period": "T=2*pi/acos((1+phi)/(2*sqrt(phi+(1-phi)*L)))",
+    "maximum_damping_time_rule": "evaluate tau at largest stable integer gap allowed by structural envelope",
+    "maximum_period_rule": "evaluate T at smallest damped integer gap allowed by structural envelope"
+  },
+  "independent_integer_envelope_audit": {
+    "seed": 20260909,
+    "random_models": 200000,
+    "gap_upper_range": "uniform integer 0..50",
+    "gain_per_gap_range": "10^Uniform(-2,0.3)",
+    "community_memory_range": "Uniform(0,0.99)",
+    "models_with_nonempty_damped_integer_phase": 162865,
+    "largest_stable_gap_mismatches_vs_bruteforce": 0,
+    "smallest_damped_gap_mismatches_vs_bruteforce": 0,
+    "maximum_damping_time_mismatches_vs_bruteforce": 0,
+    "maximum_period_mismatches_vs_bruteforce": 0,
+    "maximum_damping_time_absolute_error": 0.0,
+    "maximum_period_absolute_error": 0.0
+  },
+  "repo_native_examples": {
+    "minimal_scope": {
+      "n": 4,
+      "m": 3,
+      "b": 2,
+      "h": 2,
+      "gap_upper_bound": 1,
+      "lambda": 1.0,
+      "eta": -0.5,
+      "p_star": 0.5,
+      "phi": 0.5,
+      "gain_per_gap": 0.125,
+      "damped_phase_structurally_possible": false
+    },
+    "medium_binary_scope": {
+      "n": 12,
+      "m": 12,
+      "b": 2,
+      "h": 3,
+      "gap_upper_bound": 4,
+      "lambda": 1.0,
+      "eta": -0.5,
+      "p_star": 0.5,
+      "phi": 0.5,
+      "minimum_damped_gap": 2,
+      "maximum_stable_gap": 4,
+      "minimum_damped_loop_gain": 0.25,
+      "maximum_stable_loop_gain": 0.5,
+      "damping_time_upper_bound_generations": 6.952118993564411,
+      "oscillation_period_upper_bound_generations": 19.528125814614466
+    },
+    "frontier_edge_cap_example": {
+      "n": 12,
+      "m": 12,
+      "b": 2,
+      "h": 3,
+      "E": 3,
+      "gap_upper_bound": 0,
+      "damped_phase_structurally_possible": false
+    }
+  },
+  "scope": "Local deterministic two-community-state feedback, unit-cost finite sensing tasks, restoring negative feedback, gap-zero comparison state. Time ceilings are one-sided universal bounds, not existence claims."
+}
