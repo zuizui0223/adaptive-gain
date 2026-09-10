@@ -1,5 +1,6 @@
 from pathlib import Path
 from html import escape
+from functools import lru_cache
 import math
 
 OUT = Path(__file__).resolve().parent
@@ -85,6 +86,50 @@ def h_star(q,b):
     return h
 
 
+@lru_cache(None)
+def bounded_tree_internal_capacity(world_count, depth, max_arity):
+    """Independent stdlib reproduction of the exact F_b(n,h) recurrence."""
+    if world_count <= 1 or depth == 0:
+        return 0
+    best = 0
+    for child_count in range(2, min(max_arity, world_count) + 1):
+        dp = {(0, 0): 0}
+        for used_children in range(child_count):
+            nxt = {}
+            remaining_children = child_count - used_children - 1
+            for (_, used_budget), score in dp.items():
+                max_budget = world_count - used_budget - remaining_children
+                for child_budget in range(1, max_budget + 1):
+                    key = (used_children + 1, used_budget + child_budget)
+                    value = score + bounded_tree_internal_capacity(child_budget, depth - 1, max_arity)
+                    if value > nxt.get(key, -1):
+                        nxt[key] = value
+            dp = nxt
+        child_best = max(score for (used, budget), score in dp.items() if used == child_count and budget <= world_count)
+        best = max(best, 1 + child_best)
+    return best
+
+
+def minimum_worlds_for_internal_count(internal_count, depth, max_arity):
+    upper = 1 + (max_arity - 1) * internal_count
+    for n in range(2, upper + 1):
+        if bounded_tree_internal_capacity(n, depth, max_arity) >= internal_count:
+            return n
+    raise ArithmeticError('finite bounded-arity search unexpectedly failed')
+
+
+def pareto_fixture(required_gap, max_arity):
+    points = []
+    best_worlds = None
+    for h in range(h_star(required_gap, max_arity), h_star(required_gap, 2) + 1):
+        fixed = h + required_gap
+        n = minimum_worlds_for_internal_count(fixed, h, max_arity)
+        if best_worlds is None or n < best_worlds:
+            points.append((n, fixed, fixed, h))
+            best_worlds = n
+    return points
+
+
 def figure2():
     p=base('Principal reachability result: from a required local regime back to finite sensing structure')
     xs=[50,420,790,1160]; titles=['local response','required phase','integer gap','finite structure']; subs=['(α, φ, a, b)','e.g. stable oscillation','q_osc','Pareto set P_b(q)']
@@ -154,6 +199,8 @@ def figure4():
 def audit():
     assert h_star(2,2)==3
     assert [2+h_star(2,b) for b in range(2,7)]==[5,4,4,4,4]
+    assert [2+h_star(2,2)+1 for _ in range(2,7)]==[6,6,6,6,6]
+    assert pareto_fixture(3,4)==[(8,5,5,2),(7,6,6,3)]
     range_sat=8/9; align=11/51
     assert abs(range_sat*align-88/459)<1e-15
     alpha=1.; phi=.5; G=.5
