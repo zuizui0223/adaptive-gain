@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Rapid evolutionary change over short intervals can coexist with weak long-term divergence, but fluctuating- and stabilizing-selection theory already explain why short-term activity need not accumulate. We ask a different question: when state-dependent selection is generated through finite information use, which evolutionary amplitudes, timescales, and feedback phases are structurally reachable? For each recurrent community state, we represent information use as a finite sensing task with an optimal adaptive cost and a corresponding fixed separating-test cost. Their structural difference is linked, under an explicit ecological lift, to state-dependent selection or feedback, while transitions among the same states determine temporal recurrence. The principal result runs backward from dynamics to information structure: a required feedback regime implies a required structural gap and therefore a minimum, or under bounded query arity a Pareto-minimal, finite information structure. Two theorem-level results support that reachability statement. Finite structural reward range and community persistence impose a sharp extremal ceiling on long-run evolutionary fluctuation, and a complex local eigenpair forces feedback existence within the generalized model even though its magnitude remains unidentified. A mechanistic proposition separately distinguishes neutral cancellation stasis from attractive restoration. The contribution is the ecological composition of these levels: finite information structure restricts which evolutionary fluctuations and local feedback regimes are reachable within the declared model class.
+Rapid evolutionary change over short intervals can coexist with weak long-term divergence, but fluctuating- and stabilizing-selection theory already explain why short-term activity need not accumulate. We ask a different question: when state-dependent selection is generated through finite information use, which evolutionary amplitudes, timescales, and feedback phases are structurally reachable? For each recurrent community state, we represent information use as a finite sensing task with an optimal adaptive cost and a corresponding fixed separating-test cost. Their structural difference is linked, under an explicit ecological lift, to state-dependent selection or feedback, while transitions among the same states determine temporal recurrence. The principal result runs backward from dynamics to information structure: a required feedback regime implies a required structural gap and therefore a minimum, or under bounded query arity a Pareto-minimal, finite information structure. Two theorem-level results support that reachability statement. Finite structural reward range and community persistence impose a sharp extremal ceiling on long-run evolutionary fluctuation, and a model-compatible complex local eigenpair forces feedback existence within the generalized model even though its magnitude remains unidentified. A mechanistic proposition separately distinguishes neutral cancellation stasis from attractive restoration. The contribution is the ecological composition of these levels: finite information structure restricts which evolutionary fluctuations and local feedback regimes are reachable within the declared model class.
 
 ## 1. Introduction
 
@@ -18,7 +18,7 @@ g_i=C_F(i)-C_A(i)
 
 is linked, through an explicit ecological lift, to state-dependent selection or feedback. The same recurrent state space determines how those rewards reappear through time via a community transition operator. This creates a reachability problem: how large can structurally generated evolutionary fluctuations become, and what finite information complexity is required before a specified feedback regime becomes possible?
 
-The paper is organized around one principal reachability theorem rather than four equal claims. A required dynamical regime imposes a required structural gap and therefore a minimum or Pareto-minimal information structure. A structural-temporal extremal theorem bounds long-run fluctuation from above; a diagnostic theorem determines when local oscillation rules out zero feedback; and a mechanistic proposition keeps neutral cancellation stasis distinct from attractive restoration.
+The paper is organized around one principal reachability theorem rather than four equal claims. A required dynamical regime imposes a required structural gap and therefore a minimum or Pareto-minimal information structure. A structural-temporal extremal theorem bounds long-run fluctuation from above; a diagnostic theorem determines when a model-compatible local oscillation rules out zero feedback; and a mechanistic proposition keeps neutral cancellation stasis distinct from attractive restoration.
 
 ## 2. Model
 
@@ -93,7 +93,21 @@ A mechanistic factorization is `G=-beta Delta s e`. Under `Delta s=lambda Delta 
 \boxed{G=a\Delta g,}\qquad a=(-\beta e)\lambda>0
 \]
 
-for restoring negative ecological feedback. For `0<=alpha<=1` and `0<=phi<1`, local stability requires
+for restoring negative ecological feedback. The generalized persistence domain is
+
+\[
+0\le\alpha\le1,
+\qquad
+0\le\phi<1,
+\]
+
+so an observed trace admits at least one persistence split exactly when
+
+\[
+\boxed{0\le T<2.}
+\]
+
+Within this domain, local stability requires
 
 \[
 \alpha-1<G<\frac{1-\alpha\phi}{1-\phi},
@@ -199,7 +213,7 @@ H_{\times}^{\rm asy}\le\frac{(\lambda g_{\max})^2}{4\mu^2}\frac{1+r_{\max}}{1-r_
 
 an asymptotic crossover proxy rather than a finite-time hitting-time bound.
 
-### 3.3 Diagnostic result: oscillation forces feedback existence within the generalized model
+### 3.3 Diagnostic result: model-compatible oscillation forces feedback existence
 
 For every candidate `phi<1`,
 
@@ -211,13 +225,13 @@ If the local eigenvalues are real and satisfy `0<=r_1,r_2<1`, taking `phi=r_1`, 
 
 The generalized model permits the neutral boundary `alpha=1` while requiring `phi<1`. Thus a real mode exactly at one can still participate in a model-feasible zero-feedback decomposition if the other eigenvalue can serve as `phi`, but that boundary case is not asymptotically stable monotone return.
 
-If the eigenvalues are a non-real conjugate pair, the characteristic polynomial is strictly positive for every real `phi`, so every admissible decomposition satisfies
+If the eigenvalues are a non-real conjugate pair **and `0<=T<2`**, the characteristic polynomial is strictly positive for every real `phi`, while the persistence domain contains at least one feasible split. Every model-feasible decomposition therefore satisfies
 
 \[
 \boxed{G(\phi)>0.}
 \]
 
-Oscillatory local dynamics therefore force feedback existence within the generalized model, although feedback magnitude remains unidentified.
+Model-compatible oscillatory local dynamics force feedback existence within the generalized model, although feedback magnitude remains unidentified. If `T<0` or `T>=2`, the observed transient lies outside the declared persistence domain; the conclusion is model incompatibility rather than feedback existence.
 
 ### 3.4 Mechanistic proposition: stasis has two dynamically distinct origins
 
@@ -253,7 +267,7 @@ Phenomenological models can vary selection amplitude and temporal autocorrelatio
 
 ### 4.3 Oscillation has a diagnostic status
 
-Within the generalized local model, monotone return can remain compatible with zero feedback, whereas a complex local mode cannot. Oscillation therefore excludes the zero-feedback decomposition inside the declared model class. It does not identify feedback magnitude, separate evolutionary from ecological persistence, or prove that finite sensing structure caused the feedback. The result is a diagnostic boundary on mechanistic interpretation rather than the principal theorem.
+Within the generalized local model, stable monotone return can remain compatible with zero feedback, whereas a model-compatible complex local mode cannot. The trace condition `0<=T<2` must be checked before making that mechanistic inference; outside it, no allowed persistence split exists and the observation instead rejects the declared local model. Conditional on compatibility, oscillation excludes the zero-feedback decomposition but does not identify feedback magnitude, separate evolutionary from ecological persistence, or prove that finite sensing structure caused the feedback. The result is a diagnostic boundary on mechanistic interpretation rather than the principal theorem.
 
 ### 4.4 Stasis is not one mechanism
 
@@ -269,13 +283,13 @@ Information use, limited attention, sampling costs, memory, cue reliability, sep
 
 ## 5. Scope and limitations
 
-The sensing theory is finite, deterministic, and guaranteed-resolution, with unit acquisition costs in the sharp information-complexity results. Structural gaps are connected to selection or feedback through declared lifts rather than physiological derivation. The structural-temporal ceiling assumes a finite ergodic reversible community chain and is sharp only in the extremal sense; no claim is made that it predicts realized variance in a generic multi-state system. The local feedback results concern deterministic linearization around an equilibrium and are not a global bifurcation theory. The framework does not include mutation, migration, drift, demographic stochasticity, multivariate quantitative genetics, noisy cue likelihoods, or continuous compatible sets.
+The sensing theory is finite, deterministic, and guaranteed-resolution, with unit acquisition costs in the sharp information-complexity results. Structural gaps are connected to selection or feedback through declared lifts rather than physiological derivation. The structural-temporal ceiling assumes a finite ergodic reversible community chain and is sharp only in the extremal sense; no claim is made that it predicts realized variance in a generic multi-state system. The local feedback results concern deterministic linearization around an equilibrium and are not a global bifurcation theory. Feedback-existence inference additionally requires that the observed trace be compatible with the declared persistence domain, `0<=T<2`. The framework does not include mutation, migration, drift, demographic stochasticity, multivariate quantitative genetics, noisy cue likelihoods, or continuous compatible sets.
 
 The pair `(T,D)` does not uniquely identify `(alpha,phi,G)`, so an observed local timescale cannot generally be decomposed uniquely into evolutionary persistence, community persistence, and feedback. We retain this only as a limit on interpreting evolutionary time; no observation-design program is developed here.
 
 ## 6. Conclusion
 
-Finite information structure constrains which evolutionary dynamics are available to an ecological system. Most directly, a required local feedback regime implies a required structural gap and therefore a minimum or Pareto-minimal information structure. Around that principal reachability result, community recurrence supplies an extremal envelope on long-run fluctuation and local oscillation supplies a diagnostic for feedback existence. Within the declared model class, evolutionary time is therefore constrained upstream by finite individual information structure without requiring every supporting algebraic component to be novel.
+Finite information structure constrains which evolutionary dynamics are available to an ecological system. Most directly, a required local feedback regime implies a required structural gap and therefore a minimum or Pareto-minimal information structure. Around that principal reachability result, community recurrence supplies an extremal envelope on long-run fluctuation and model-compatible local oscillation supplies a diagnostic for feedback existence. Within the declared model class, evolutionary time is therefore constrained upstream by finite individual information structure without requiring every supporting algebraic component to be novel.
 
 ## References cited in the current draft
 
