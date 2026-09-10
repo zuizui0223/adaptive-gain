@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file records the ecological/evolutionary and combinatorial literature boundary for the manuscript. It is intentionally conservative: standard results are cited as prior art rather than repackaged as novelty. The more detailed search history is recorded in `PRIOR_ART_AUDIT_V2.md` and `FINAL_PRIORITY_SEARCH_LOG.md`.
+This file records the ecological/evolutionary, information-theoretic, and combinatorial literature boundary for the manuscript. It is intentionally conservative: standard results and close conceptual predecessors are cited as prior art rather than repackaged as novelty. The more detailed search history is recorded in `PRIOR_ART_AUDIT_V2.md` and `FINAL_PRIORITY_SEARCH_LOG.md`.
 
 ## 1. Rapid evolution and evolutionary time
 
@@ -14,13 +14,14 @@ Core anchors:
 - Estes & Arnold 2007 — stabilizing-selection models and stasis across timescales;
 - Bell 2010 — strong fluctuating selection;
 - Uyeda et al. 2011 — scale-dependent evolutionary divergence;
-- Messer, Ellner & Hairston 2016 — rapid short-term evolution and long-term interpretation.
+- Messer, Ellner & Hairston 2016 — rapid short-term evolution and long-term interpretation;
+- Cotto & Chevin 2020 — selection in autocorrelated environments.
 
 ### Boundary
 
-Do not claim novelty for rapid evolution, the coexistence of short-term activity and long-term stasis, temporal cancellation, or evolutionary-timescale overlap.
+Do not claim novelty for rapid evolution, the coexistence of short-term activity and long-term stasis, temporal cancellation, temporal autocorrelation, or evolutionary-timescale overlap.
 
-The paper asks instead whether finite individual information structure constrains which evolutionary amplitudes, retention regimes, and feedback phases are reachable.
+The paper asks instead how a declared finite decision/separation structure restricts the evolutionary regimes reachable downstream.
 
 ## 2. Information use and information-processing constraints
 
@@ -39,11 +40,30 @@ Core anchors:
 
 Do not claim novelty for sequential cue use, sampling, state-dependent decisions, memory, learning, cue reliability, limited attention, proximate sensing architecture, or the broad idea that information constraints can limit adaptive/evolutionary response.
 
-The candidate distinction is the exact downstream composition
+## 3. Fitness value of information and minimum informational requirements
 
-`finite discrete sensing complexity -> structural ceiling -> evolutionary reachability ceiling`.
+The final targeted search identified a closer mathematical literature than the earlier audit had emphasized.
 
-## 3. Eco-evolutionary feedback and temporal recurrence
+- Donaldson-Matasci, Bergstrom & Lachmann 2010 formalize the fitness value of environmental information and its relation to long-run growth.
+- Rivoire & Leibler 2011 develop information-fitness relations for populations in varying environments.
+- Moffett & Eckford 2022 use rate-distortion theory to ask explicitly for the minimal information needed to achieve a specified growth rate and the minimal information gain needed to achieve a specified average selection coefficient.
+- de Boer & Hogeweg 2010 study an evolutionary information threshold for coding structure in eco-evolutionary dynamics.
+
+### Boundary
+
+Do not claim novelty for the fitness value of information, information-fitness bounds, minimum mutual-information requirements for target fitness or selection, or generic evolutionary information thresholds. In particular, do not use an unqualified phrase such as `the first minimum-information requirement for evolutionary dynamics`.
+
+### Distinction used in this manuscript
+
+The manuscript does **not** minimize Shannon information or channel rate. It minimizes a discrete finite decision/separation architecture under a declared deterministic task: represented alternatives `n`, declared cues `m`, irreducible fixed-side obligations `E`, adaptive depth, and cue outcome arity. The principal ecological composition is
+
+`required local feedback regime`
+`-> required adaptive/fixed structural gap`
+`-> minimum or Pareto-minimal finite decision/separation structure (n,m,E)`.
+
+Moffett & Eckford 2022 is therefore the closest reverse-direction mathematical precursor found, but it minimizes a different information object for a different downstream target.
+
+## 4. Eco-evolutionary feedback and temporal recurrence
 
 Generic reciprocal eco-evolutionary feedback is prior art (Post & Palkovacs 2009; Schoener 2011 and later literature). Temporal autocorrelation and Markov-switching environmental effects on evolution are also established; Cotto & Chevin 2020 is one relevant anchor.
 
@@ -51,21 +71,21 @@ Generic reciprocal eco-evolutionary feedback is prior art (Post & Palkovacs 2009
 
 Do not claim novelty for feedback, oscillation, environmental persistence, temporal autocorrelation, or state-dependent selection.
 
-The candidate composition is narrower: structurally generated rewards and temporal recurrence are indexed by the same finite community-state space, which allows finite information bounds and temporal persistence to enter one exact downstream ceiling.
+The candidate composition is narrower: structurally generated rewards and temporal recurrence are indexed by the same finite community-state space, which allows the discrete structural bounds and temporal persistence to enter one downstream envelope and reachability map.
 
-## 4. Fixed information: separating systems / minimum test set / test cover
+## 5. Fixed information: separating systems / minimum test set / test cover
 
 The fixed identification problem is classical. Minimum test collection, minimum test set, test cover, and separating-system literatures already study the minimum set of tests required to distinguish finite entities.
 
-Relevant anchors include Halldórsson et al., Katona 1966, Wegener 1979, and Crowston et al. 2016.
+Relevant anchors include Katona 1966, Wegener 1979, Crowston et al. 2016 and related work.
 
 ### Important distinction
 
 Classical `bounded test size` limits the number of items contained in a separating subset. The repository's query arity `b` instead limits the number of possible outcomes of one query. These restrictions must not be cited as equivalent.
 
-## 5. Adaptive information: optimal and multiway decision trees
+## 6. Adaptive information: optimal and multiway decision trees
 
-Adaptive identification by decision trees is classical. Hyafil & Rivest 1976, Adler & Heeringa, Gupta/Nagarajan/Ravi, Chakaravarthy et al. 2009, Moshkov and others cover binary/multiway decision trees, adaptive search, and complexity. Adaptivity gaps are likewise established terminology.
+Adaptive identification by decision trees is classical. Hyafil & Rivest 1976 and Chakaravarthy et al. 2009 provide direct binary/multiway anchors; broader adaptive-search and decision-tree literatures cover related complexity and adaptivity questions.
 
 ### Boundary
 
@@ -73,19 +93,19 @@ Do not claim novelty for adaptive sequencing, decision-tree depth, binary or mul
 
 The manuscript treats this machinery as imported or independently re-derived structure.
 
-## 6. Bounded-arity extremal formulas are not a novelty claim
+## 7. Bounded-arity extremal formulas are not a novelty claim
 
 The repository recurrence `F_b(n,h)` is an elementary rooted-tree extremal count under leaf, depth, and out-degree constraints, combined with separating-test witness constructions. An exact published formula in identical notation is not required for the manuscript's contribution.
 
 No novelty claim should depend on the priority of `F_b`, its endpoint formulas, private-pair constructions, or the sharp adaptive/fixed ratios. They are supporting combinatorial machinery.
 
-## 7. Productive frontier
+## 8. Productive frontier
 
 `Productive frontier` is repository terminology for the irreducible separation obligations retained by the declared fixed-cost problem. No exact published synonym has been established, but this is not used as a priority claim.
 
 In the ecological paper, productive frontier appears only where its edge count has downstream weight: a cap on irreducible obligations caps fixed information burden, structural gap, and therefore reachable feedback gain. Rank alone does not provide the same bound.
 
-## 8. Dynamical-systems mathematics
+## 9. Dynamical-systems mathematics
 
 Treat the following as standard mathematics:
 
@@ -99,34 +119,37 @@ Treat the following as standard mathematics:
 
 The paper's contribution is not any of these ingredients separately.
 
-## 9. Submission-safe novelty statement
+## 10. Submission-safe novelty statement
 
 Use wording close to:
 
-> Evolutionary ecology already treats information acquisition, sampling, memory, and information-processing limits as factors shaping adaptive decisions and evolutionary responses. Test theory and computer science separately characterize separating systems, adaptive and multiway decision trees, and adaptivity gaps, while fluctuating-selection and eco-evolutionary theory already explain temporal cancellation and restoring feedback. We do not claim novelty for these components or for the bounded-arity tree extremal formulas used internally. Our contribution is their exact ecological composition: finite sensing complexity bounds structurally generated selection, recurrence of the same community states filters those rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. Thus declared finite information structure restricts which evolutionary fluctuations and local feedback phases are reachable within the model class.
+> Existing theory already connects environmental information to fitness and even derives minimal mutual-information requirements for target growth or selection, while evolutionary ecology treats information-processing constraints and sensing architectures as evolving mechanisms. Test theory and computer science separately characterize separating systems, adaptive and multiway decision trees, and adaptivity gaps; fluctuating-selection and eco-evolutionary theory already cover temporal recurrence and feedback. We do not claim novelty for those components. Our contribution is a narrower discrete ecological composition: a declared finite deterministic decision/separation architecture bounds structurally generated selection, recurrence of the same community states filters those rewards through time, and a required local feedback regime implies a minimum or Pareto-minimal structural requirement over represented alternatives, declared cues, and irreducible obligations.
 
 Avoid `first`, `first-ever`, `no previous theory`, or analogous priority language.
 
-## 10. Status of the priority audit
+## 11. Status of the priority audit
 
-The targeted pre-submission search was completed on 2026-09-10. It found many neighboring theories — cognitive constraints, costly sampling, plasticity, cue integration, proximate sensing architectures, fluctuating environments, and eco-evolutionary feedback — but did not identify a direct predecessor with the full exact chain
+The targeted pre-submission search was completed on 2026-09-10. The most important additional mathematical precursor is Moffett & Eckford (2022), because it already reverses the usual information-to-fitness direction and derives minimum mutual-information requirements for target growth and selection. Donaldson-Matasci et al. (2010) and Rivoire & Leibler (2011) anchor the broader fitness-value-of-information literature; de Boer & Hogeweg (2010) anchors evolutionary information-threshold work. Trimmer & Houston (2014) and Eliassen et al. (2016) remain close architecture-level precursors.
 
-`finite decision/separation complexity`
-`-> exact structural selection / feedback ceiling`
-`-> recurrence of the same state-indexed rewards`
-`-> sharp long-run fluctuation ceiling or minimum/Pareto-minimal information complexity for a feedback phase`.
+The search did not identify an exact predecessor with the full discrete chain
 
-The closest conceptual precursors located in the final pass include Trimmer & Houston (2014), which treats information-processing mechanisms as evolutionarily shaped decision systems, and Eliassen et al. (2016), which explicitly embeds sensing and information-processing architecture in evolutionary modelling. Neither supplies the reverse exact lower-bound map from a required dynamical regime to a required finite decision/separation structure.
+`finite deterministic decision/separation structure`
+`-> adaptive/fixed structural gap`
+`-> state-indexed selection or feedback gain`
+`-> required local feedback phase`
+`-> minimum/Pareto-minimal (n,m,E) structure`,
 
-This search result is not proof of priority. It supports conservative positioning, not a `first` claim. No unresolved mathematical-priority question remains as a submission blocker.
+nor one composing that structural object with the reversible reward-mode envelope used here.
+
+This is not proof of priority. It supports a narrow structural distinction and conservative wording, not a categorical novelty claim.
 
 See:
 
-- `manuscript/PRIOR_ART_AUDIT_V2.md`
-- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`
-- `manuscript/NOVELTY_PARAGRAPH_V1.md`
+- `manuscript/PRIOR_ART_AUDIT_V2.md`;
+- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
+- `manuscript/NOVELTY_PARAGRAPH_V1.md`.
 
-## 11. Target-journal fit
+## 12. Target-journal fit
 
 ### Theoretical Ecology
 
@@ -134,6 +157,7 @@ The manuscript should:
 
 - lead with the ecological reachability question rather than query-complexity machinery;
 - make the principal reachability theorem visually and rhetorically dominant;
+- name its object precisely as a finite decision/separation structure rather than generic `information` when making novelty comparisons;
 - retain the structural-temporal envelope and feedback-existence result as supporting/diagnostic theorems, and the stasis distinction as a mechanistic proposition rather than a coequal theorem headline;
 - translate `world`, `query`, `arity`, and `productive frontier` into ecological meanings before formal definitions;
 - move continuation quotients, proof DAGs, exhaustive enumeration, and solver details to Supplement;
