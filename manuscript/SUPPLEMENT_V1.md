@@ -2,37 +2,14 @@
 
 ## Purpose
 
-This supplement follows the four-theorem order of `manuscript/MANUSCRIPT_V1.md`. It is an index and proof map, not a second manuscript. Main-text claims must be traceable from theorem statement -> proof note -> executable implementation -> validation receipt.
+This supplement follows the hierarchical result order of `manuscript/MANUSCRIPT_V1.md`. It is an index and proof map, not a second manuscript. Main-text claims must be traceable from result statement -> proof note -> executable implementation -> validation receipt.
 
-## S1. Structural-temporal joint ceiling
+The hierarchy is deliberate: S1 is the principal reachability theorem, S2 the supporting structural-temporal envelope, S3 the feedback-existence diagnostic theorem, and S4 the mechanistic stasis proposition. These should not be presented as four equal novelty claims.
 
-### Main-text result
-For finite recurrent structural rewards lifted by `s_i=lambda*g_i-kappa` and a finite ergodic reversible community chain,
-
-\[
-\sigma_{\rm eff}^2\le\frac{(\lambda g_{\max})^2}{4}\frac{1+r_{\max}}{1-r_{\max}}.
-\]
-
-### Proof source
-- `theory/STRUCTURAL_SPECTRAL_JOINT_BOUND.md`
-
-### Executable source
-- `adaptive_gain/structural_spectral_joint_bounds.py`
-- `tests/test_structural_spectral_joint_bounds.py`
-
-### Validation receipt
-- `validation/structural_spectral_joint_bound_v1.json`
-
-### What remains supplementary
-- reversible-chain spectral decomposition details;
-- equality construction;
-- random reversible-chain audit;
-- asymptotic crossover corollary details.
-
-## S2. Required dynamics imply minimum or Pareto-minimal information complexity
+## S1. Principal reachability theorem: required dynamics imply minimum or Pareto-minimal information complexity
 
 ### Main-text result
-A required integer structural gap `q` implies an exact binary first corner and, for bounded arity `b>2`, a generally multi-point Pareto frontier over world count, query count, and productive-frontier obligations.
+A required integer structural gap `q` implies an exact binary first corner and, for bounded arity `b>2`, a generally multi-point Pareto frontier over world count, query count, and productive-frontier obligations. Under the declared structural feedback lift, a required local dynamical phase therefore imposes a minimum or Pareto-minimal finite information structure.
 
 ### Binary theorem sources
 - `theory/GENERAL_BINARY_DYNAMIC_SCOPE_THRESHOLD.md`
@@ -56,6 +33,9 @@ A required integer structural gap `q` implies an exact binary first corner and, 
 - `adaptive_gain/structural_oscillation_reachability.py`
 - `tests/test_structural_oscillation_reachability.py`
 
+### Canonical Pareto example
+For `q=3,b=4`, `(8,5,5)` and `(7,6,6)` are both nondominated. The example is retained in the main text because it shows that reducing query/frontier burden and reducing represented-world count are not the same objective.
+
 ### Static support inherited from the repository
 The main text uses but does not claim priority for bounded-arity rooted-tree extremal counting, fixed-versus-adaptive separation costs, and productive-frontier obligations. Their detailed proofs, private-pair constructions, continuation quotients, and certificate ladders remain outside the ecological narrative.
 
@@ -67,31 +47,83 @@ The main text uses but does not claim priority for bounded-arity rooted-tree ext
 - Pareto dominance checks;
 - integer-gap ladder edge cases.
 
-## S3. Two origins of stasis
+## S2. Supporting structural-temporal extremal envelope
 
 ### Main-text result
-Neutral cancellation stasis and attractive restoring stasis can both yield little retained long-term change but have different return-map structure.
+For finite recurrent structural rewards lifted by `s_i=lambda*g_i-kappa` and a finite ergodic reversible community chain,
 
-### Theory source
-- `theory/TWO_ORIGINS_OF_STASIS.md`
+\[
+\sigma_{\rm eff}^2\le\frac{(\lambda g_{\max})^2}{4}\frac{1+r_{\max}}{1-r_{\max}}.
+\]
+
+The bound is sharp because an equality witness exists, but it is an extremal envelope rather than a generic predictor of realized multi-state variance.
+
+### Tightness decomposition
+Writing
+
+\[
+f(r)=\frac{1+r}{1-r},
+\qquad
+B=\frac{(\lambda g_{\max})^2}{4}f(r_{\max}),
+\]
+
+and `tilde w_j=w_j/Var_pi(s)` when the stationary reward variance is positive,
+
+\[
+\frac{\sigma_{\rm eff}^2}{B}
+=
+\frac{4\operatorname{Var}_\pi(s)}{(\lambda g_{\max})^2}
+\frac{\sum_j\widetilde w_j f(r_j)}{f(r_{\max})}.
+\]
+
+The first factor records range/variance saturation and the second reward alignment with the slowest algebraic mode. Both must equal one for equality in the headline bound.
+
+### Proof source
+- `theory/STRUCTURAL_SPECTRAL_JOINT_BOUND.md`
+- `theory/STRUCTURAL_REWARD_MODE_ALIGNMENT.md`
 
 ### Executable source
-- `adaptive_gain/stasis_mechanisms.py`
-- `tests/test_stasis_mechanisms.py`
+- `adaptive_gain/structural_spectral_joint_bounds.py`
+- `tests/test_structural_spectral_joint_bounds.py`
 
 ### Validation receipt
-- `validation/stasis_mechanisms_v1.json`
+- `validation/structural_spectral_joint_bound_v1.json`
 
 ### What remains supplementary
-- periodic-map derivation;
-- neutral multiplier proof;
-- real versus complex attractive fixtures;
-- exact transient-period calculations.
+- reversible-chain spectral decomposition details;
+- equality construction;
+- random reversible-chain audit;
+- asymptotic crossover corollary details.
 
-## S4. Oscillation forces feedback existence within the generalized local model
+## S3. Diagnostic theorem: oscillation forces feedback existence within the generalized local model
 
 ### Main-text result
-Real nonnegative stable modes can admit a zero-feedback decomposition, whereas a non-real conjugate eigenpair forces `G>0` for every admissible real `phi<1` within the declared model class.
+Stable real nonnegative modes can admit a zero-feedback decomposition, whereas a non-real conjugate eigenpair forces `G>0` for every admissible real `phi<1` within the declared model class. Feedback magnitude remains unidentified.
+
+The parent generalized model permits `alpha=1` but requires `phi<1`. Thus a neutral real mode exactly at one can be model-feasible in a zero-feedback decomposition when the other eigenvalue serves as `phi`, even though that case is outside the asymptotically stable monotone-return corollary.
+
+### Exact gain-infimum helper
+For
+
+\[
+G(\phi)=\frac{\phi^2-T\phi+D}{1-\phi},
+\qquad
+R=1-T+D,
+\]
+
+setting `x=1-phi` gives `G=R/x+(T-2)+x` on `0<x<=1`. Therefore
+
+\[
+\inf_{0\le\phi<1}G(\phi)=
+\begin{cases}
+-\infty,&R<0,\\
+T-2,&R=0,\\
+T-2+2\sqrt R,&0<R\le1,\\
+D,&R>1.
+\end{cases}
+\]
+
+This piecewise expression is implemented directly and regression-tested, including the `R<0` and excluded-boundary `R=0` cases.
 
 ### Theory sources
 - `theory/FEEDBACK_EXISTENCE_FROM_OSCILLATION.md`
@@ -118,15 +150,38 @@ Real nonnegative stable modes can admit a zero-feedback decomposition, whereas a
 - scalar nonidentifiability algebra;
 - critical-slowing and AR(2) inversion details.
 
+## S4. Mechanistic proposition: two origins of stasis
+
+### Main-text result
+Neutral cancellation stasis and attractive restoring stasis can both yield little retained long-term change but have different return-map structure.
+
+This distinction is retained for biological interpretation. The identity-map versus contraction algebra is standard and is not presented as a separate mathematical novelty claim.
+
+### Theory source
+- `theory/TWO_ORIGINS_OF_STASIS.md`
+
+### Executable source
+- `adaptive_gain/stasis_mechanisms.py`
+- `tests/test_stasis_mechanisms.py`
+
+### Validation receipt
+- `validation/stasis_mechanisms_v1.json`
+
+### What remains supplementary
+- periodic-map derivation;
+- neutral multiplier proof;
+- real versus complex attractive fixtures;
+- exact transient-period calculations.
+
 ## S5. Claim and provenance discipline
 
-The canonical paper-level theorem hierarchy is `theory/PAPER_THEOREM_SPINE.md`. The ecological claim boundary is recorded in:
+The canonical paper-level result hierarchy is `theory/PAPER_THEOREM_SPINE.md`. The ecological claim boundary is recorded in:
 
 - `manuscript/NOVELTY_PARAGRAPH_V1.md`;
 - `manuscript/PRIOR_ART_AUDIT_V2.md`;
 - `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`.
 
-No novelty is claimed for generic information use, sequential cue acquisition, test cover, decision trees, adaptivity gaps, bounded-arity tree counting, fluctuating selection, temporal autocorrelation, eco-evolutionary feedback, Jury/Schur stability, spectral formulas, or generic nonidentifiability.
+No novelty is claimed for generic information use, sequential cue acquisition, test cover, decision trees, adaptivity gaps, bounded-arity tree counting, fluctuating selection, temporal autocorrelation, eco-evolutionary feedback, Jury/Schur stability, spectral formulas, identity maps versus contractions, or generic nonidentifiability.
 
 ## S6. Explicit exclusions
 
@@ -134,4 +189,4 @@ This supplement does not extend the main paper into observation design, stochast
 
 ## S7. Reproducibility entry points
 
-Run the repository test suite and the two existing audit scripts from the repository root. The current paper branch is designed so that theorem statements, executable implementations, tests, and validation receipts remain synchronized under CI.
+Run the repository test suite and the two existing audit scripts from the repository root. The current paper branch is designed so that result statements, executable implementations, tests, and validation receipts remain synchronized under CI.
