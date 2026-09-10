@@ -24,7 +24,7 @@ Suggested callout sentence: `The reverse map, its binary exact corner, and the b
 
 **Preferred first callout:** end of Results section 3.2.
 
-Suggested callout sentence: `Figure 3 separates extremal sharpness from realized tightness by displaying the two exact multiplicative sources of slack.`
+Suggested callout sentence: `Fig. 3 separates extremal sharpness from realized tightness by displaying the two exact multiplicative sources of slack.`
 
 ## Figure 4. Long-time outcomes and the diagnostic status of oscillation
 
