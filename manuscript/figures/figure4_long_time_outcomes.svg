@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect x="0" y="0" width="1600" height="900" fill="#ffffff"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#111111"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif}</style>
+<text x="50" y="55" font-size="34" font-weight="bold" text-anchor="start" fill="#111111" style="">Long-term similarity can hide different return dynamics</text>
+<text x="50" y="88" font-size="20" font-weight="normal" text-anchor="start" fill="#60656b" style="">Only a model-compatible complex local mode has the stronger diagnostic implication G &gt; 0.</text>
+<text x="45" y="150" font-size="28" font-weight="bold" text-anchor="start" fill="#111111" style="">A</text>
+<text x="87" y="150" font-size="23" font-weight="bold" text-anchor="start" fill="#111111" style="">Directional accumulation</text>
+<text x="440" y="150" font-size="28" font-weight="bold" text-anchor="start" fill="#111111" style="">B</text>
+<text x="482" y="150" font-size="23" font-weight="bold" text-anchor="start" fill="#111111" style="">Neutral cancellation</text>
+<text x="835" y="150" font-size="28" font-weight="bold" text-anchor="start" fill="#111111" style="">C</text>
+<text x="877" y="150" font-size="23" font-weight="bold" text-anchor="start" fill="#111111" style="">Monotone restoration</text>
+<text x="1230" y="150" font-size="28" font-weight="bold" text-anchor="start" fill="#111111" style="">D</text>
+<text x="1272" y="150" font-size="23" font-weight="bold" text-anchor="start" fill="#111111" style="">Oscillatory restoration</text>
+<rect x="45" y="180" width="330" height="325" rx="0" fill="#ffffff" stroke="#d6dadd" stroke-width="2"/>
+<line x1="45" y1="340" x2="375" y2="340" stroke="#d6dadd" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="210" y="540" font-size="16" font-weight="normal" text-anchor="middle" fill="#60656b" style="">time</text>
+<rect x="440" y="180" width="330" height="325" rx="0" fill="#ffffff" stroke="#d6dadd" stroke-width="2"/>
+<line x1="440" y1="340" x2="770" y2="340" stroke="#d6dadd" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="605" y="540" font-size="16" font-weight="normal" text-anchor="middle" fill="#60656b" style="">time</text>
+<rect x="835" y="180" width="330" height="325" rx="0" fill="#ffffff" stroke="#d6dadd" stroke-width="2"/>
+<line x1="835" y1="340" x2="1165" y2="340" stroke="#d6dadd" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="1000" y="540" font-size="16" font-weight="normal" text-anchor="middle" fill="#60656b" style="">time</text>
+<rect x="1230" y="180" width="330" height="325" rx="0" fill="#ffffff" stroke="#d6dadd" stroke-width="2"/>
+<line x1="1230" y1="340" x2="1560" y2="340" stroke="#d6dadd" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="1395" y="540" font-size="16" font-weight="normal" text-anchor="middle" fill="#60656b" style="">time</text>
+<polyline points="45.00,323.20 58.75,318.30 72.50,313.40 86.25,308.50 100.00,303.60 113.75,298.70 127.50,293.80 141.25,288.90 155.00,284.00 168.75,279.10 182.50,274.20 196.25,269.30 210.00,264.40 223.75,259.50 237.50,254.60 251.25,249.70 265.00,244.80 278.75,239.90 292.50,235.00 306.25,230.10 320.00,225.20 333.75,220.30 347.50,215.40 361.25,210.50 375.00,205.60" fill="none" stroke="#111111" stroke-width="3"/>
+<polyline points="440.00,340.00 453.75,289.60 467.50,340.00 481.25,342.80 495.00,340.00 508.75,289.60 522.50,340.00 536.25,342.80 550.00,340.00 563.75,289.60 577.50,340.00 591.25,342.80 605.00,340.00 618.75,289.60 632.50,340.00 646.25,342.80 660.00,340.00 673.75,289.60 687.50,340.00 701.25,342.80 715.00,340.00 728.75,289.60 742.50,340.00 756.25,342.80 770.00,340.00" fill="none" stroke="#111111" stroke-width="3"/>
+<polyline points="835.00,221.00 848.75,253.13 862.50,276.58 876.25,293.71 890.00,306.21 903.75,315.33 917.50,321.99 931.25,326.85 945.00,330.40 958.75,332.99 972.50,334.89 986.25,336.27 1000.00,337.27 1013.75,338.01 1027.50,338.55 1041.25,338.94 1055.00,339.23 1068.75,339.44 1082.50,339.59 1096.25,339.70 1110.00,339.78 1123.75,339.84 1137.50,339.88 1151.25,339.91 1165.00,339.94" fill="none" stroke="#111111" stroke-width="3"/>
+<polyline points="1230.00,221.00 1243.75,263.00 1257.50,313.75 1271.25,358.38 1285.00,387.25 1298.75,397.09 1312.50,390.20 1326.25,372.48 1340.00,351.07 1353.75,332.25 1367.50,320.07 1381.25,315.91 1395.00,318.82 1408.75,326.30 1422.50,335.33 1436.25,343.27 1450.00,348.41 1463.75,350.16 1477.50,348.94 1491.25,345.78 1505.00,341.97 1518.75,338.62 1532.50,336.45 1546.25,335.71 1560.00,336.23" fill="none" stroke="#111111" stroke-width="3"/>
+<text x="210" y="585" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">persistent mean bias</text>
+<text x="210" y="613" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">net displacement accumulates</text>
+<rect x="75" y="635" width="270" height="52" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="210" y="669" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">trend</text>
+<text x="605" y="585" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">period drift = 0</text>
+<text x="605" y="613" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">period map multiplier = 1</text>
+<rect x="470" y="635" width="270" height="52" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="605" y="669" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">mechanistic proposition</text>
+<text x="1000" y="585" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">real stable modes</text>
+<text x="1000" y="613" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">G = 0 can remain compatible</text>
+<rect x="865" y="635" width="270" height="52" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="1000" y="669" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">attractive return</text>
+<text x="1395" y="585" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">α = 1, φ = 0.5, G = 0.5</text>
+<text x="1395" y="613" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">complex stable mode; period = 12</text>
+<rect x="1260" y="635" width="270" height="52" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="1395" y="669" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111" style="">diagnostic theorem</text>
+<rect x="85" y="720" width="1430" height="115" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="300" y="758" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111" style="">Stable real modes</text>
+<text x="300" y="795" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">may admit φ = r₁, α = r₂ ⇒ G = 0</text>
+<text x="800" y="758" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111" style="">Model-compatible complex mode</text>
+<text x="800" y="795" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">0 ≤ T &lt; 2 and discriminant &lt; 0 ⇒ every feasible decomposition has G &gt; 0</text>
+<text x="1320" y="758" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111" style="">Outside trace domain</text>
+<text x="1320" y="795" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111" style="">T &lt; 0 or T ≥ 2 ⇒ model incompatible</text>
+<text x="800" y="875" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111" style="">Cancellation and restoration can both look like stasis over long windows, but only restoration erases perturbations.</text>
+</svg>
