@@ -2,7 +2,7 @@
 
 ## Goal
 
-Reduce repetition without weakening theorem qualifiers or the ecological framing. No new theory should be introduced during this pass.
+Reduce repetition without weakening theorem qualifiers, the ecological framing, or the result hierarchy. No new theorem should be introduced during this pass.
 
 ## Repeated ideas that should appear only once in full
 
@@ -41,15 +41,29 @@ In Introduction use one compact paragraph.
 
 Do not list all prior-art component areas twice.
 
+### 5. Result hierarchy
+
+State the hierarchy once in the Introduction roadmap:
+
+- principal reachability theorem;
+- supporting structural-temporal extremal theorem;
+- diagnostic feedback-existence theorem;
+- mechanistic stasis proposition.
+
+Do not repeatedly call these `four results` in a way that makes them sound equal in novelty or evidential weight.
+
 ## Section-specific cuts
 
 ### Abstract
 
-Aim for approximately 180–230 words. Current abstract is conceptually complete; likely cuts:
+Aim for approximately 180–230 words. Preserve:
 
-- compress the sentence listing already-known component literatures;
-- preserve all four results but shorten their clauses;
-- keep `within the declared model class` only on the feedback-existence statement or final sentence.
+- the principal reverse map from required dynamics to required information structure;
+- the structural-temporal result as an **extremal envelope**, not a generic realized-variance prediction;
+- the oscillation result as a **diagnostic** theorem;
+- the stasis distinction as a **mechanistic proposition** rather than an independent novelty claim.
+
+Keep `within the declared model class` only where mathematically necessary.
 
 ### Introduction
 
@@ -59,7 +73,7 @@ Target structure:
 2. information constraints are known;
 3. decision-tree/test-cover machinery is known;
 4. exact gap: ecological reachability composition;
-5. four-result roadmap.
+5. hierarchical roadmap with the principal reachability theorem first.
 
 Avoid a second mini-Discussion in the Introduction.
 
@@ -74,6 +88,7 @@ Keep:
 - declared lift;
 - common state space with `P`;
 - generalized local response;
+- `0<=alpha<=1`, `0<=phi<1`;
 - one supporting information-complexity inequality.
 
 Move to Supplement or theorem notes:
@@ -84,21 +99,29 @@ Move to Supplement or theorem notes:
 
 ### Results
 
-Each result should follow the same template:
+Order results by argumentative weight, not historical development:
 
-1. biological question;
-2. theorem equation;
-3. one proof idea sentence;
-4. sharpness/example if needed;
-5. ecological interpretation.
+1. principal reachability theorem;
+2. supporting structural-temporal envelope;
+3. diagnostic oscillation/feedback theorem;
+4. mechanistic stasis proposition.
+
+For the principal theorem, retain the `q=3,b=4` Pareto example because it carries the biological tradeoff.
+
+For the structural-temporal envelope, retain only enough of the slack decomposition to make `extremally sharp != generically tight` unambiguous. The two factors are:
+
+- range/variance saturation;
+- reward--slow-mode alignment.
 
 Do not re-derive definitions already introduced in Model.
 
 ### Discussion
 
-Each subsection should answer `what changes biologically?` rather than restating the theorem.
+Each subsection should answer `what changes biologically?` rather than restating the result.
 
-Cut repeated equations unless they are essential to the interpretation.
+Lead with the reverse reachability interpretation. Discuss the fluctuation theorem second as an extremal envelope. Keep the oscillation theorem explicitly diagnostic and the stasis result explicitly mechanistic.
+
+Cut repeated equations unless they are essential to those interpretations.
 
 ## Phrases to use sparingly
 
@@ -106,6 +129,7 @@ Cut repeated equations unless they are essential to the interpretation.
 - `exact ecological composition` — use in Introduction novelty paragraph and final Discussion only.
 - `finite information structure` — unavoidable central term, but alternate with `finite sensing structure` only when meaning is identical.
 - `structurally generated selection` — define once, then use `state-dependent structural reward` where shorter.
+- `sharp` — when applied to the structural-temporal ceiling, pair with `extremal` or explicitly distinguish it from realized tightness.
 
 ## Terminology consistency
 
@@ -116,19 +140,23 @@ Use consistently:
 - `query arity` = number of possible cue outcomes;
 - `productive-frontier obligation count E` rather than switching among edge count / mandatory pair count / frontier size without warning;
 - `structural gap g` for a state and `Delta g` for a contrast between states;
-- `feedback gain G` for the generalized local system.
+- `feedback gain G` for the generalized local system;
+- `extremal envelope` for the structural-temporal upper bound;
+- `diagnostic theorem` for the oscillation/feedback-existence result.
 
 ## What must not be shortened away
 
 Retain visibly:
 
 - the structural lift is an assumption;
-- reversibility is required for the sharp spectral ceiling;
+- reversibility is required for the structural-temporal ceiling;
+- the ceiling is extremally sharp but not claimed to predict realized multi-state variance;
 - unit costs / deterministic finite sensing are required for the sharp information-complexity results;
 - feedback-existence statement is conditional on the generalized local model;
+- `alpha=1` is allowed while `phi<1`, so model feasibility and asymptotically stable monotone return are not identical domains;
 - bounded arity generally gives a Pareto frontier, not one universal minimum;
 - nonidentifiability remains a time-interpretation limit.
 
 ## Desired endpoint
 
-The submission draft should feel like one ecological argument with four consequences, not four independent mathematical notes stitched together.
+The submission draft should feel like one ecological argument centered on a principal reverse reachability theorem, with an extremal envelope and a diagnostic theorem supporting it and a mechanistic stasis proposition preventing overinterpretation. It should not read like four independent mathematical notes stitched together.
