@@ -16,27 +16,45 @@ Current question:
 
 This is the correct paper-level question.
 
-## 2. Four-theorem spine — PASS
+## 2. Result hierarchy — PASS
 
-The main text contains exactly four headline results:
+The main text no longer presents four equal headline theorems. The canonical hierarchy is:
 
-1. structural-temporal joint ceiling;
-2. dynamical requirement -> minimum/Pareto-minimal information complexity;
-3. two dynamically distinct origins of stasis;
-4. complex local modes force feedback existence within the generalized model.
+1. **principal reachability theorem** — dynamical requirement -> minimum/Pareto-minimal information complexity;
+2. **supporting extremal theorem** — structural-temporal envelope on long-run fluctuation;
+3. **diagnostic theorem** — complex local modes force feedback existence within the generalized model;
+4. **mechanistic proposition** — neutral cancellation and attractive restoring stasis are dynamically distinct.
 
-No continuation quotient, certificate ladder, solver enumeration, AR(2) inversion, or critical-slowing theorem is promoted to headline status.
+No continuation quotient, certificate ladder, solver enumeration, AR(2) inversion, critical-slowing result, or stasis identity/contraction algebra is promoted into an independent novelty headline.
 
-## 3. Static mathematics carries downstream weight — PASS
+## 3. Principal theorem carries the main biological conclusion — PASS
 
-The finite sensing theory is not merely an appendix because it enters the biological conclusions in two ways:
+The reverse map
 
-- `g_max` bounds long-run evolutionary fluctuation through the joint structural-spectral ceiling;
-- a required feedback gain gives required integer gap `q`, which gives a minimum/Pareto-minimal information structure.
+`required dynamical regime -> required structural gap q -> minimum/Pareto-minimal finite information structure`
 
-Productive-frontier edge count appears only where it constrains the fixed burden and reachable gain. This is the right level of exposure for the ecology manuscript.
+is the manuscript's strongest claim. The finite sensing theory therefore carries a biological conclusion rather than serving only as a structural encoding.
 
-## 4. Binary versus bounded-arity claims — PASS
+The `q=3,b=4` Pareto example is especially useful because `(8,5,5)` and `(7,6,6)` show that reducing query/frontier burden and reducing represented-world count are not the same objective.
+
+## 4. Structural-temporal theorem: sharpness versus tightness — PASS with wording discipline
+
+The ceiling
+
+\[
+\sigma_{\rm eff}^2\le\frac{(\lambda g_{\max})^2}{4}\frac{1+r_{\max}}{1-r_{\max}}
+\]
+
+is **sharp in the extremal sense** because a symmetric two-state endpoint-reward construction attains equality.
+
+Do not describe it as a generic prediction of realized long-run variance. The main text now exposes the two multiplicative sources of slack:
+
+- range/variance saturation;
+- reward alignment with the slowest algebraic mode.
+
+This distinction must remain visible in Results, Discussion, Figure 3, and Scope.
+
+## 5. Binary versus bounded-arity claims — PASS
 
 The manuscript correctly distinguishes:
 
@@ -45,7 +63,7 @@ The manuscript correctly distinguishes:
 
 The binary `(6,5,5)` example is presented as a canonical corollary, not a universal minimum.
 
-## 5. Stasis claims — PASS with wording discipline
+## 6. Stasis proposition — PASS with downgraded novelty status
 
 Current exact distinction:
 
@@ -56,7 +74,9 @@ Keep the word `local` on restoring claims because attraction is established from
 
 Do not write that these are the only two possible causes of macroevolutionary stasis. Preferred wording: `two dynamically distinct mechanisms represented in the present framework`.
 
-## 6. Feedback-existence claim — PASS with model-class qualifier
+The distinction belongs in the main text for biological interpretation, but the identity-map versus contraction algebra is standard and should remain a proposition rather than a headline theorem novelty claim.
+
+## 7. Feedback-existence claim and alpha boundary — PASS
 
 The strong result is conditional:
 
@@ -65,9 +85,26 @@ The strong result is conditional:
 
 Always retain `within the generalized local model` or an equivalent qualifier.
 
+The generalized response domain is `0<=alpha<=1`, `0<=phi<1`. Therefore `alpha=1` is a permitted neutral boundary. A zero-feedback decomposition with one eigenvalue exactly one can be model-feasible if the other eigenvalue serves as `phi`, but it is outside the asymptotically stable monotone-return corollary.
+
 Do not write that oscillation empirically proves eco-evolutionary feedback in arbitrary systems.
 
-## 7. Novelty boundary — PASS
+## 8. Gain-infimum helper — PASS after boundary repair
+
+For `R=1-T+D`, the public helper for
+
+`inf_{0<=phi<1} G(phi)`
+
+must preserve the exact four cases:
+
+- `R<0 -> -infinity`;
+- `R=0 -> T-2` at the excluded boundary limit;
+- `0<R<=1 -> T-2+2*sqrt(R)`;
+- `R>1 -> D` at `phi=0`.
+
+Regression tests must include both `R<0` and `R=0`; the previous oscillatory-only coverage was insufficient.
+
+## 9. Novelty boundary — PASS
 
 Current manuscript correctly assigns prior art to:
 
@@ -80,9 +117,10 @@ Current manuscript correctly assigns prior art to:
 - bounded-arity rooted-tree combinatorics used internally;
 - fluctuating selection and temporal autocorrelation;
 - generic eco-evolutionary feedback;
-- standard local dynamical-systems mathematics.
+- standard local dynamical-systems mathematics;
+- identity maps versus contractions.
 
-Candidate contribution is the exact ecological composition / reachability theory.
+Candidate contribution is the exact ecological composition / reachability theory, with the reverse dynamics-to-information map as its strongest form.
 
 Files governing claim discipline:
 
@@ -93,13 +131,13 @@ Files governing claim discipline:
 
 Do not add a mathematical-priority claim back into the Introduction.
 
-## 8. Observation design — PASS / EXCLUDED
+## 10. Observation design — PASS / EXCLUDED
 
 No observation-design program belongs in this paper. Nonidentifiability remains only as a limit on interpreting evolutionary time.
 
 `RUNNING_EXAMPLE_V1.md` is acceptable because it translates notation into natural history and explicitly states that it is not an observation-design proposal.
 
-## 9. Natural-history grounding — GOOD, optional insertion remains
+## 11. Natural-history grounding — GOOD, optional insertion remains
 
 The separate running example maps:
 
@@ -111,7 +149,7 @@ For the final manuscript, insert at most one short paragraph or boxed example in
 
 Its purpose is only to explain `world`, `query`, adaptive branching, and irreducible obligations.
 
-## 10. Model assumptions — PASS, but keep visible
+## 12. Model assumptions — PASS, but keep visible
 
 The manuscript currently exposes the major assumptions:
 
@@ -120,12 +158,13 @@ The manuscript currently exposes the major assumptions:
 - guaranteed resolution;
 - unit query costs for sharp information-complexity theorems;
 - declared linear structural lift;
-- finite ergodic reversible community chain for the sharp spectral ceiling;
-- local deterministic feedback linearization.
+- finite ergodic reversible community chain for the structural-temporal envelope;
+- local deterministic feedback linearization;
+- `0<=alpha<=1` and `0<=phi<1` for the generalized response model.
 
 These assumptions must remain in the main manuscript, not only the Supplement.
 
-## 11. Terminology — mostly PASS
+## 13. Terminology — mostly PASS
 
 Preferred biological translations:
 
@@ -137,7 +176,7 @@ Preferred biological translations:
 
 Avoid introducing `continuation bisimulation`, `proof DAG`, `residual kernel`, or certificate terminology in the main text.
 
-## 12. Citation work still needed before submission
+## 14. Citation work still needed before submission
 
 The conceptual prior-art boundary is sufficiently audited to draft the paper. Remaining citation work is bibliographic rather than theory-blocking:
 
@@ -149,18 +188,18 @@ The conceptual prior-art boundary is sufficiently audited to draft the paper. Re
 
 Do not delay prose drafting for additional combinatorial priority searches.
 
-## 13. Figures needed
+## 15. Figures needed
 
-Keep four figures maximum:
+Keep four figures maximum in this order:
 
 1. common state space: finite sensing reward + community recurrence;
-2. structural-temporal sharp ceiling and reward-mode alignment;
-3. required gain -> required gap -> binary corner / bounded-arity Pareto frontier;
-4. directional change, neutral cancellation stasis, monotone restoring stasis, oscillatory restoring stasis, marking only the latter as forcing feedback existence inside the model.
+2. **principal reachability map**: required gain -> required gap -> binary corner / bounded-arity Pareto frontier;
+3. **supporting structural-temporal envelope** with explicit slack factors and equality witness;
+4. directional change, neutral cancellation stasis, monotone restoring stasis, oscillatory restoring stasis, marking the stasis comparison as a mechanistic proposition and only the complex local regime as forcing feedback existence inside the model.
 
 Do not add a separate observation-design figure.
 
-## 14. Supplement boundary — PASS
+## 16. Supplement boundary — PASS
 
 Move or retain outside the main text:
 
@@ -176,17 +215,17 @@ Move or retain outside the main text:
 - inverse algebra;
 - solver-cap implementation details.
 
-## 15. Immediate next manuscript tasks
+## 17. Immediate next manuscript tasks
 
 No new theorem is needed before these tasks:
 
-1. reconcile `MANUSCRIPT_V1.md` with one short running-example paragraph;
-2. complete bibliography metadata;
-3. prepare four figure specifications;
+1. complete the code/test CI check for the gain-infimum and `alpha=1` boundary repair;
+2. reconcile any remaining canonical files with the hierarchical result spine;
+3. complete bibliography metadata;
 4. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
 5. perform a line edit for repeated phrases such as `within the declared model class`, retaining the qualifier where mathematically necessary;
 6. decide whether to merge/squash PR #6 only after the manuscript surface stabilizes.
 
 ## Overall assessment
 
-The theory is now manuscript-limited rather than theorem-limited. Further value is more likely to come from ecological exposition, citation completeness, figure design, and shortening than from additional extremal cases or local dynamical extensions.
+The theory is manuscript-limited rather than theorem-limited. Further value is more likely to come from protecting the principal reachability claim, ecological exposition, citation completeness, figure design, and shortening than from additional extremal cases or local dynamical extensions.
