@@ -6,10 +6,10 @@ This supplement follows the hierarchical result order of `manuscript/MANUSCRIPT_
 
 The hierarchy is deliberate: S1 is the principal reachability theorem, S2 the supporting structural-temporal envelope, S3 the feedback-existence diagnostic theorem, and S4 the mechanistic stasis proposition. These should not be presented as four equal novelty claims.
 
-## S1. Principal reachability theorem: required dynamics imply minimum or Pareto-minimal information complexity
+## S1. Principal reachability theorem: required dynamics imply minimum or Pareto-minimal finite decision/separation structure
 
 ### Main-text result
-A required integer structural gap `q` implies an exact binary first corner and, for bounded arity `b>2`, a generally multi-point Pareto frontier over world count, query count, and productive-frontier obligations. Under the declared structural feedback lift, a required local dynamical phase therefore imposes a minimum or Pareto-minimal finite information structure.
+A required integer structural gap `q` implies an exact binary first corner and, for bounded arity `b>2`, a generally multi-point Pareto frontier over represented-world count, declared-query count, and productive-frontier obligations. Under the declared structural feedback lift, a required local dynamical phase therefore imposes a minimum or Pareto-minimal finite deterministic decision/separation structure. This is a discrete structural result, not a lower bound on Shannon mutual information.
 
 ### Binary theorem sources
 - `theory/GENERAL_BINARY_DYNAMIC_SCOPE_THRESHOLD.md`
@@ -38,6 +38,9 @@ For `q=3,b=4`, `(8,5,5)` and `(7,6,6)` are both nondominated. The example is ret
 
 ### Static support inherited from the repository
 The main text uses but does not claim priority for bounded-arity rooted-tree extremal counting, fixed-versus-adaptive separation costs, and productive-frontier obligations. Their detailed proofs, private-pair constructions, continuation quotients, and certificate ladders remain outside the ecological narrative.
+
+### Information-theory boundary
+The reverse direction is not itself a novelty claim. Moffett & Eckford (2022) already derive minimum mutual-information requirements for target population growth and average selection coefficients using rate-distortion theory, within the broader fitness-value-of-information literature. S1 instead minimizes a finite deterministic decision/separation architecture and returns componentwise minima or a Pareto set over `(n,m,E)` for a required local feedback phase. Do not describe S1 as a generic `minimum information` theorem.
 
 ### What remains supplementary
 - exact recurrence for `F_b(n,h)`;
@@ -200,9 +203,12 @@ The canonical paper-level result hierarchy is `theory/PAPER_THEOREM_SPINE.md`. T
 
 - `manuscript/NOVELTY_PARAGRAPH_V1.md`;
 - `manuscript/PRIOR_ART_AUDIT_V2.md`;
-- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`.
+- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
+- `manuscript/LITERATURE_POSITIONING.md`.
 
-No novelty is claimed for generic information use, sequential cue acquisition, test cover, decision trees, adaptivity gaps, bounded-arity tree counting, fluctuating selection, temporal autocorrelation, eco-evolutionary feedback, Jury/Schur stability, spectral formulas, identity maps versus contractions, or generic nonidentifiability.
+No novelty is claimed for generic information use, sequential cue acquisition, the fitness value of information, minimum Shannon/mutual-information requirements for target fitness or selection, generic evolutionary information thresholds, evolved sensing architecture, test cover, decision trees, adaptivity gaps, bounded-arity tree counting, fluctuating selection, temporal autocorrelation, eco-evolutionary feedback, Jury/Schur stability, spectral formulas, identity maps versus contractions, or generic nonidentifiability.
+
+The novelty boundary is the exact **discrete** ecological composition from a required local dynamical regime through a structural adaptive/fixed gap to a minimum/Pareto-minimal finite decision/separation architecture, with the recurrence envelope as a supporting result.
 
 ## S6. Explicit exclusions
 
@@ -210,4 +216,4 @@ This supplement does not extend the main paper into observation design, stochast
 
 ## S7. Reproducibility entry points
 
-Run the repository test suite and the two existing audit scripts from the repository root. The current paper branch is designed so that result statements, executable implementations, tests, and validation receipts remain synchronized under CI.
+Run the repository test suite and the two existing audit scripts from the repository root. The frozen mathematical baseline is main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87`; the submission-polish branch changes claim wording and bibliography, not the executable theorem implementation.
