@@ -2,7 +2,7 @@
 
 ## Design principle
 
-Use no more than four main figures. Each figure must carry one theorem-level message and should be understandable before the reader sees the combinatorial proof machinery. The visual sequence should move from biological structure to temporal consequence.
+Use no more than four main figures. The visual sequence should reflect the result hierarchy rather than implying four equal theorem claims: first establish the shared biological state space, then show the principal reachability theorem, then the supporting structural-temporal envelope, and finally the mechanistic/diagnostic distinction among long-time outcomes.
 
 No observation-design figure belongs in the paper.
 
@@ -57,61 +57,7 @@ Do not turn this into a measurement protocol.
 
 ---
 
-## Figure 2 — Structural-temporal sharp ceiling
-
-### Message
-
-Finite information amplitude and community persistence jointly cap long-run evolutionary fluctuation.
-
-### Main equation
-
-\[
-\boxed{
-\sigma_{\rm eff}^2
-\le
-\frac{(\lambda g_{\max})^2}{4}
-\frac{1+r_{\max}}{1-r_{\max}}
-}
-\]
-
-### Suggested layout
-
-Panel A: amplitude ceiling.
-
-Show structural rewards confined to `[0,g_max]`, with maximum centered variance at endpoint occupancy.
-
-Label:
-
-`structural ceiling = (lambda*g_max)^2/4`.
-
-Panel B: temporal multiplier.
-
-Plot
-
-\[
-(1+r)/(1-r)
-\]
-
-against `r` for `0<=r<1`.
-
-Panel C: reward-mode alignment.
-
-Use one slow and one fast community mode. Show two reward vectors:
-
-- reward aligned with slow mode -> large temporal amplification;
-- reward orthogonal to slow mode -> slow ecological persistence is evolutionarily irrelevant.
-
-Panel D: equality witness.
-
-Two-state symmetric chain, endpoint rewards; mark equality with the theorem bound.
-
-### Takeaway
-
-**Community persistence matters evolutionarily only when structurally generated reward loads onto the persistent mode.**
-
----
-
-## Figure 3 — Required dynamics imply required finite information complexity
+## Figure 2 — Principal result: required dynamics imply required finite information complexity
 
 ### Message
 
@@ -125,6 +71,8 @@ A requested local dynamical phase imposes a required structural gap, which impos
 \to q_{\rm osc}
 \to \mathcal P_b(q_{\rm osc})
 \]
+
+Make this the strongest visual statement in the paper.
 
 ### Panel A: binary exact corner
 
@@ -151,7 +99,7 @@ For `q=3,b=4`, mark both nondominated points:
 - `(7,6,6)`;
 - `(8,5,5)`.
 
-Show why neither dominates the other.
+Show visually why neither dominates the other.
 
 ### Panel C: arity asymmetry
 
@@ -167,11 +115,77 @@ A compact comparison:
 
 ---
 
-## Figure 4 — Long-term outcomes and mechanistic status
+## Figure 3 — Supporting result: structural-temporal extremal envelope and its slack
 
 ### Message
 
-Similar long-term net change can arise from different dynamics, and only the oscillatory local regime forces feedback existence inside the generalized model.
+Finite information amplitude and community persistence impose an exact upper envelope on long-run evolutionary fluctuation, but realized variance can lie well below that envelope.
+
+### Main equation
+
+\[
+\boxed{
+\sigma_{\rm eff}^2
+\le
+\frac{(\lambda g_{\max})^2}{4}
+\frac{1+r_{\max}}{1-r_{\max}}
+}
+\]
+
+Label this explicitly as **extremally sharp**, not as a generic realized-variance prediction.
+
+### Panel A: amplitude ceiling
+
+Show structural rewards confined to `[0,g_max]`, with maximum centered variance at endpoint occupancy.
+
+Label:
+
+`range/variance saturation <= 1`.
+
+### Panel B: temporal multiplier and mode alignment
+
+Plot
+
+\[
+(1+r)/(1-r)
+\]
+
+against `r` for `0<=r<1`.
+
+Use one slow and one fast community mode. Show two reward vectors:
+
+- reward aligned with slow mode -> large temporal amplification;
+- reward weakly aligned with slow mode -> realized fluctuation well below the extremal ceiling.
+
+### Panel C: exact slack decomposition
+
+Show
+
+\[
+\frac{\sigma_{\rm eff}^2}{B}
+=
+\underbrace{\frac{4\operatorname{Var}_\pi(s)}{(\lambda g_{\max})^2}}_{\text{range/variance saturation}}
+\times
+\underbrace{\frac{\sum_j\widetilde w_j f(r_j)}{f(r_{\max})}}_{\text{reward--slow-mode alignment}},
+\]
+
+where `B` is the theorem ceiling and `f(r)=(1+r)/(1-r)`.
+
+### Panel D: equality witness
+
+Two-state symmetric chain, endpoint rewards; mark equality with the theorem bound. Add a contrasting multi-state schematic where one or both slack factors are below one.
+
+### Takeaway
+
+**The ceiling is mathematically sharp because equality is attainable; its realized tightness depends on reward variance and modal alignment.**
+
+---
+
+## Figure 4 — Mechanistic long-time outcomes and diagnostic status
+
+### Message
+
+Similar long-term net change can arise from different dynamics. The cancellation/restoration distinction is interpretive, while only the oscillatory local regime forces feedback existence inside the generalized model.
 
 ### Four side-by-side trajectories
 
@@ -183,7 +197,8 @@ Similar long-term net change can arise from different dynamics, and only the osc
    - large within-cycle movement;
    - period returns exactly;
    - perturbation remains;
-   - label `period multiplier = 1`.
+   - label `period multiplier = 1`;
+   - mark as **mechanistic proposition**, not independent theorem novelty.
 
 3. **Monotone restoring stasis**
    - perturbation decays monotonically;
@@ -193,11 +208,12 @@ Similar long-term net change can arise from different dynamics, and only the osc
 4. **Oscillatory restoring stasis**
    - damped oscillation to equilibrium;
    - complex eigenpair;
-   - highlight `G>0 forced within model class`.
+   - highlight `G>0 forced within model class`;
+   - mark as **diagnostic theorem**.
 
 ### Bottom algebraic strip
 
-Real nonnegative modes:
+Stable real nonnegative modes:
 
 \[
 \phi=r_1,\ \alpha=r_2\Rightarrow G=0.
@@ -208,6 +224,8 @@ Complex modes:
 \[
 \phi^2-T\phi+D>0\Rightarrow G(\phi)>0.
 \]
+
+Boundary note: `alpha=1` is allowed by the generalized model, while `phi<1`; a neutral unit eigenvalue is therefore model-feasible in a zero-feedback decomposition but is not asymptotically stable return.
 
 ### Takeaway
 
