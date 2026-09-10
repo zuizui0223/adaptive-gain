@@ -12,9 +12,11 @@ so for any candidate community memory phi < 1,
 The numerator is exactly the characteristic polynomial of the observed local
 Jacobian evaluated at phi.  This gives a sharp qualitative corollary:
 
-* if the observed eigenvalues are real and both lie in [0,1), choosing phi to
-  equal either eigenvalue yields G=0 and alpha equal to the other eigenvalue;
-  therefore the scalar monotone transient cannot establish feedback existence;
+* if the observed eigenvalues are real and nonnegative, a G=0 decomposition is
+  feasible whenever one eigenvalue can be assigned to community memory
+  ``phi in [0,1)`` and the other to evolutionary persistence
+  ``alpha in [0,1]``; in particular stable monotone return with both modes in
+  ``[0,1)`` cannot establish feedback existence;
 * if the observed eigenvalues are a non-real conjugate pair, the characteristic
   polynomial is strictly positive for every real phi, hence every feasible
   decomposition with phi<1 has G>0; feedback existence is forced, although its
@@ -71,21 +73,29 @@ def real_eigenvalues(trace: float, determinant: float) -> tuple[float, float]:
 def has_nonnegative_real_no_feedback_decomposition(
     trace: float, determinant: float
 ) -> bool:
-    """Whether a decomposition with G=0 and alpha,phi in [0,1) exists."""
+    """Whether a model-feasible nonnegative real ``G=0`` decomposition exists.
+
+    The generalized response model allows ``0 <= alpha <= 1`` but requires
+    ``0 <= phi < 1``.  With ``G=0`` the two eigenvalues are exactly ``alpha``
+    and ``phi``.  Sorting the real eigenvalues therefore gives a feasible
+    decomposition precisely when the smaller one can serve as ``phi`` and the
+    larger one as ``alpha``.
+    """
 
     disc = discriminant(trace, determinant)
     if disc < -_TOL:
         return False
     r1, r2 = real_eigenvalues(trace, determinant)
-    return (-_TOL <= r1 < 1.0 - _TOL) and (-_TOL <= r2 < 1.0 - _TOL)
+    return (-_TOL <= r1 < 1.0) and (-_TOL <= r2 <= 1.0)
 
 
 def no_feedback_decomposition(
     trace: float, determinant: float
 ) -> tuple[float, float, float]:
-    """Return ``(alpha, phi, G=0)`` when the real nonnegative decomposition exists.
+    """Return ``(alpha, phi, G=0)`` when a model-feasible decomposition exists.
 
-    The smaller eigenvalue is used as ``phi`` for deterministic tie-breaking.
+    The smaller eigenvalue is used as ``phi`` and the larger as ``alpha``.
+    Thus the neutral boundary ``alpha=1`` is allowed, whereas ``phi=1`` is not.
     """
 
     if not has_nonnegative_real_no_feedback_decomposition(trace, determinant):
@@ -110,26 +120,37 @@ def oscillatory_transient_forces_positive_feedback(
 def minimum_compatible_gain_over_unit_memory_interval(
     trace: float, determinant: float
 ) -> float:
-    """Return the infimum of G(phi) over 0 <= phi < 1.
+    """Return ``inf G(phi)`` over ``0 <= phi < 1``.
 
-    For an oscillatory transient the infimum is strictly positive.  The minimum
-    is attained at the unique stationary point when it lies in [0,1), otherwise
-    at phi=0.  The limit phi->1- is +infinity for Schur-stable oscillatory cases.
+    Writing ``R = 1 - T + D`` and ``x = 1 - phi`` gives
+
+        G = R/x + (T-2) + x,    0 < x <= 1.
+
+    Therefore the exact infimum is
+
+    * ``-inf`` when ``R < 0``;
+    * ``T-2`` when ``R == 0`` (approached as ``phi -> 1-``);
+    * ``T-2 + 2*sqrt(R)`` when ``0 < R <= 1``;
+    * ``D`` when ``R > 1`` (attained at ``phi=0``).
+
+    In the Schur-stable oscillatory regime used by
+    :func:`summarize_feedback_existence`, ``R>0`` automatically and the
+    infimum is strictly positive.
     """
 
     T = float(trace)
     D = float(determinant)
     if not isfinite(T) or not isfinite(D):
         raise ValueError("trace and determinant must be finite")
-    # d/dphi [(phi^2-T phi+D)/(1-phi)] =
-    # [1 - T + D - (1-phi)^2] / (1-phi)^2.
+
     radicand = 1.0 - T + D
-    candidates = [0.0]
-    if radicand >= 0.0:
-        phi_star = 1.0 - sqrt(radicand)
-        if 0.0 <= phi_star < 1.0:
-            candidates.append(phi_star)
-    return min(compatible_gain(T, D, phi) for phi in candidates)
+    if radicand < 0.0:
+        return float("-inf")
+    if radicand == 0.0:
+        return T - 2.0
+    if radicand <= 1.0:
+        return T - 2.0 + 2.0 * sqrt(radicand)
+    return D
 
 
 @dataclass(frozen=True)
