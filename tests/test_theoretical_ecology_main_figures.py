@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import runpy
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
@@ -44,7 +45,6 @@ def test_main_figures_are_exactly_reproducible() -> None:
 
 
 def test_generator_declares_and_passes_numerical_audit() -> None:
-    namespace: dict[str, object] = {"__name__": "figure_audit_import"}
-    exec(GENERATOR.read_text(encoding="utf-8"), namespace)
+    namespace = runpy.run_path(str(GENERATOR), run_name="figure_audit_import")
     namespace["audit"]()
     assert namespace["pareto_fixture"](3, 4) == [(8, 5, 5, 2), (7, 6, 6, 3)]
