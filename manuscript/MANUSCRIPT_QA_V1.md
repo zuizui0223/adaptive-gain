@@ -4,7 +4,7 @@
 
 Baseline manuscript: `manuscript/MANUSCRIPT_V1.md`.
 
-The purpose of this audit is to stop theory growth and identify only changes needed for a submission-ready theoretical ecology paper. The integrated theory baseline is main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87`; its post-merge workflow (`34466336113`) passed Python 3.10, 3.11, and 3.12 with full `pytest`, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py`.
+The purpose of this audit is to stop theory growth and identify only changes needed for a submission-ready theoretical ecology paper. The frozen submission candidate before the current readability pass is main commit `fa87a79d6f3d99048f357ad9253d53706cf227ff`; its post-merge workflow (`34473656265`) passed Python 3.10, 3.11, and 3.12 with full `pytest`, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py`.
 
 ## 1. Core question — PASS
 
@@ -147,17 +147,15 @@ Do not add a categorical mathematical-priority claim back into the Introduction.
 
 No observation-design program belongs in this paper. Nonidentifiability remains only as a limit on interpreting evolutionary time.
 
-`RUNNING_EXAMPLE_V1.md` is acceptable because it translates notation into natural history and explicitly states that it is not an observation-design proposal.
+`RUNNING_EXAMPLE_V1.md` remains support material and is not an observation-design proposal.
 
-## 11. Natural-history grounding — GOOD, optional insertion remains
+## 11. Natural-history grounding — PASS after minimal insertion
 
-The separate running example maps
+The line-edit pass inserted one short generic example of sequential habitat/resource assessment into Model 2.1:
 
-`distant cue -> approach -> near cue -> landing/contact -> handling`
+`coarse cue -> branch choice -> fine-scale cue -> action`.
 
-to a finite branching information structure.
-
-For the final manuscript, insert at most one short paragraph or boxed example into the Model. Do not import the whole example file into the main text. Its purpose is only to explain `world`, `query`, adaptive branching, and irreducible obligations.
+Its only job is to explain why contingent sensing can require fewer cues than a fixed strategy. The paragraph explicitly avoids prescribing an empirical measurement protocol and does not import the full running example into the main text.
 
 ## 12. Model assumptions — PASS, but keep visible
 
@@ -185,7 +183,7 @@ Preferred biological translations:
 - `productive-frontier edge` -> irreducible required distinction / information obligation;
 - `gap` -> avoidable fixed-information burden under adaptive branching.
 
-For the principal novelty claim prefer `finite decision/separation structure`, `finite sensing architecture`, or explicit `(n,m,E)` language. Do not use `minimum information` by itself because it is ambiguous with Shannon/mutual-information theory.
+For the principal novelty claim prefer `finite sensing architecture`, `finite decision/separation structure`, or explicit `(n,m,E)` language. Do not use `minimum information` by itself because it is ambiguous with Shannon/mutual-information theory.
 
 Avoid introducing `continuation bisimulation`, `proof DAG`, `residual kernel`, or certificate terminology in the main text.
 
@@ -205,8 +203,6 @@ The exact distinction retained is:
 
 - prior art: scalar Shannon/mutual-information or coding-information requirements for fitness/selection;
 - present manuscript: finite deterministic decision/separation structure, with exact componentwise minima or a Pareto frontier over represented alternatives, declared cues, and irreducible obligations, composed with a local feedback phase.
-
-Decision-tree/separating-system metadata were also completed, including ICALP 2009 Part I, LNCS 5555, pages 210–221 for Chakaravarthy et al.
 
 Remaining bibliography work is journal-specific rendering and a final metadata spot-check, not a conceptual priority search.
 
@@ -237,14 +233,11 @@ Move or retain outside the main text:
 - inverse algebra;
 - solver-cap implementation details.
 
-## 17. Submission-surface hierarchy and claim audit — PASS after two repairs
+## 17. Submission-surface hierarchy and claim audit — PASS
 
-The submission-polish pass found two issues that the earlier audit had missed:
+The prior submission-polish pass repaired the stale four-theorem wording and narrowed the information-theory novelty boundary after recovering Moffett & Eckford (2022). The current readability pass changes ecological exposition, not theorem content.
 
-1. one stale line in `LITERATURE_POSITIONING.md` still said `keep four headline theorems only`;
-2. the initial final-search wording failed to foreground the formal information-fitness literature, especially Moffett & Eckford (2022).
-
-Both are now corrected. The audited claim/control surface explicitly includes:
+The canonical/control surface remains:
 
 - `theory/PAPER_THEOREM_SPINE.md`;
 - `manuscript/MANUSCRIPT_V1.md`;
@@ -258,20 +251,32 @@ Both are now corrected. The audited claim/control surface explicitly includes:
 - `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
 - `manuscript/REFERENCES_CORE_V1.md`.
 
-The theorem hierarchy is unchanged. The novelty boundary is narrower and more precise.
+The theorem hierarchy and novelty boundary are unchanged by the line edit.
 
-The integrated main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87` has tree `40ce437bac9ba4ae50d04a06b4ed0a7dac0ecc18` and passed post-merge workflow `34466336113` on Python 3.10/3.11/3.12, including full `pytest` and both repository audit scripts.
+## 18. Theoretical Ecology readability pass — PASS pending branch CI
 
-## 18. Immediate next manuscript tasks
+Current proposed title:
 
-No new theorem is needed. Remaining work is manuscript-facing:
+> Finite sensing structure constrains eco-evolutionary feedback regimes
 
-1. line-edit repeated qualifiers and explanatory duplication without weakening theorem conditions;
-2. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
-3. decide whether one short natural-history paragraph/box materially improves comprehension;
-4. turn the four figure specifications into submission-ready figures;
-5. render references and manuscript formatting to the target journal style.
+The title is seven words and avoids using broad `information structure` language as the paper's primary branding. The abstract is approximately 190 words, contains no citations, and introduces contingent versus fixed cue use before formal decision-tree terminology. Five keywords are included.
+
+The Introduction now proceeds in the order:
+
+`ecological question -> information/sensing prior art -> finite decision architecture -> structural gap -> reverse reachability theorem`.
+
+This matches the journal-level goal that theoretical work answer a question of ecological interest and remain readable by a broad ecological audience.
+
+## 19. Immediate next manuscript tasks
+
+No new theorem is needed. Remaining work is submission-facing:
+
+1. complete Figure 1-4 as publication-ready conceptual/theoretical figures;
+2. add final title-page author and affiliation metadata;
+3. add required declarations (funding, competing interests, authorship/contributions, and code/data availability as applicable);
+4. render references and manuscript formatting to the target journal's current submission style;
+5. record the exact submitted manuscript commit/tree.
 
 ## Overall assessment
 
-The theory remains manuscript-limited rather than theorem-limited. The final prior-art pass did not remove the principal discrete reachability result, but it made its proper novelty boundary substantially narrower: **finite decision/separation architecture and its exact local-phase/Pareto mapping**, not minimum information for evolutionary performance in general.
+The theory remains manuscript-limited rather than theorem-limited. The final prior-art pass did not remove the principal discrete reachability result, but it made its proper novelty boundary substantially narrower: **finite decision/separation architecture and its exact local-phase/Pareto mapping**, not minimum information for evolutionary performance in general. The current line edit makes that narrower claim more legible to an ecological reader without adding mathematics.

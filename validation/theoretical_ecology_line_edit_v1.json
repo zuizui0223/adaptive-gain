@@ -1,0 +1,52 @@
+{
+  "receipt": "theoretical_ecology_line_edit_v1",
+  "date": "2026-09-10",
+  "base_commit": "fa87a79d6f3d99048f357ad9253d53706cf227ff",
+  "branch": "manuscript/theoretical-ecology-line-edit-20260910",
+  "target_journal": "Theoretical Ecology",
+  "purpose": "Improve ecological readability and target-journal fit without changing theorem content.",
+  "journal_fit_check": {
+    "source": "https://link.springer.com/article/10.1007/s12080-010-0070-4",
+    "criterion": "theoretical approaches should answer questions of ecological interest and be readable by a broad audience of ecologists",
+    "checked_on": "2026-09-10"
+  },
+  "manuscript_edits": {
+    "title_before": "Finite information structure constrains evolutionary timescales and feedback phases",
+    "title_after": "Finite sensing structure constrains eco-evolutionary feedback regimes",
+    "title_word_count": 7,
+    "abstract_word_count_approx": 190,
+    "keywords_added": 5,
+    "natural_history_paragraph_added": true,
+    "terminology_shift": "Readers meet contingent versus fixed cue use and sensing architecture before decision-tree/separation terminology.",
+    "qa_surface_synchronized": true
+  },
+  "claim_audit": {
+    "principal_result_preserved": "required local dynamical regime -> required structural gap -> minimum/Pareto-minimal finite deterministic sensing architecture",
+    "structural_temporal_envelope_preserved": true,
+    "feedback_model_compatibility_gate_preserved": "0 <= T < 2",
+    "alpha_boundary_preserved": "0 <= alpha <= 1 and 0 <= phi < 1",
+    "stasis_result_status_preserved": "mechanistic proposition",
+    "shannon_information_boundary_preserved": true,
+    "mathematical_formula_changed": false,
+    "model_domain_changed": false,
+    "new_theorem_added": false
+  },
+  "scope": {
+    "adaptive_gain_files_changed": [],
+    "test_files_changed": [],
+    "theory_files_changed": [],
+    "manuscript_files_changed": [
+      "manuscript/MANUSCRIPT_V1.md",
+      "manuscript/MANUSCRIPT_QA_V1.md",
+      "manuscript/THEORETICAL_ECOLOGY_SUBMISSION_CHECKLIST_V1.md"
+    ]
+  },
+  "remaining_submission_work": [
+    "publication-ready Figures 1-4",
+    "final title-page author/affiliation metadata",
+    "submission declarations",
+    "journal-style reference rendering",
+    "record exact submission commit/tree"
+  ],
+  "next_gate": "Run full repository CI and review the branch diff before merging."
+}
