@@ -1,0 +1,26 @@
+{
+  "claim": "community-state selection transition decomposes into fixed/frontier, adaptive/continuation, and control-cost channels",
+  "identity": "Delta s = lambda * Delta C_F - lambda * Delta C_A - Delta kappa",
+  "registered_collision": {
+    "source": "resource_role_profile_collision()",
+    "shared_properties": [
+      "same adaptive continuation root type",
+      "same multiset of complete per-resource abstract role profiles",
+      "C_A = 2 in both tasks"
+    ],
+    "from": {"C_A": 2, "C_F": 2},
+    "to": {"C_A": 2, "C_F": 3},
+    "lambda": 2.0,
+    "constant_kappa": 0.5,
+    "channels": {
+      "Delta C_A": 0,
+      "Delta C_F": 1,
+      "fixed_frontier_channel": 2.0,
+      "adaptive_continuation_channel": 0.0,
+      "control_channel": 0.0,
+      "Delta s": 2.0
+    }
+  },
+  "interpretation": "The registered collision isolates a state transition whose change in structural selection is entirely fixed/productive-frontier-side; adaptive continuation complexity and weaker marginal resource-role summaries remain unchanged.",
+  "scope": "Conditional on the minimal cost-to-log-fitness mapping s(X)=lambda[C_F(X)-C_A(X)]-kappa(X); not an empirical claim that natural community changes realize these finite tasks."
+}

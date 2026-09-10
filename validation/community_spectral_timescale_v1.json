@@ -1,0 +1,26 @@
+{
+  "claim": "finite-community Poisson timescale layer and reward-weighted spectral interpretation",
+  "branch": "theory/evolutionary-timescale-filter",
+  "two_state_recovery": {
+    "checks": [
+      "Poisson asymptotic variance recovers delta^2(1-m^2)(1+phi)/(1-phi)",
+      "general crossover sigma_eff^2/mu^2 recovers prior two-state crossover formula"
+    ]
+  },
+  "three_state_exact_modes": {
+    "community_nonstationary_eigenvalues": [0.7, 0.1],
+    "equal_stationary_reward_variance": 1.0,
+    "slow_mode_asymptotic_variance": 5.666666666666667,
+    "fast_mode_asymptotic_variance": 1.2222222222222223,
+    "interpretation": "same community chain and same reward variance, different evolutionary timescale because reward aligns with different relaxation modes"
+  },
+  "independent_reversible_chain_audit": {
+    "seed": 20260908,
+    "random_models": 500,
+    "state_count_range": [2, 6],
+    "construction": "positive symmetric edge weights -> reversible irreducible transition matrix; random finite reward vector",
+    "comparison": "Poisson-equation asymptotic variance vs independent symmetric-eigendecomposition sum_r w_r(1+lambda_r)/(1-lambda_r)",
+    "maximum_absolute_error": 1.0658141036401503e-14
+  },
+  "scope": "standard finite Markov-reward identities; repository-specific claim is the upstream mapping from community-dependent finite sensing structure to state-specific selection reward"
+}

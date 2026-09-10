@@ -1,0 +1,37 @@
+{
+  "claim": "evolutionary activity versus retained-change filter and structural selection bridge",
+  "branch": "theory/evolutionary-timescale-filter",
+  "independent_formula_checks": {
+    "selection_path_enumeration": {
+      "values": [-2, -1, 0, 1, 2],
+      "horizons": [1, 2, 3, 4, 5, 6],
+      "paths_checked": 19530,
+      "identity": "abs(sum(s_t)) <= sum(abs(s_t))",
+      "violations": 0,
+      "maximum_retention_ratio": 1.0
+    },
+    "ar1_partial_sum_closed_form": {
+      "horizons": "1..50",
+      "phi_grid": "-1.00,-0.98,...,1.00",
+      "comparisons": 5050,
+      "direct_expression": "H + 2*sum_{k=1}^{H-1}(H-k)*phi^k",
+      "maximum_absolute_error": 5.4569682106375694e-12
+    },
+    "haploid_log_odds_additivity": {
+      "seed": 20260908,
+      "random_paths": 5000,
+      "horizon_range": "1..20",
+      "selection_range": "uniform[-3,3]",
+      "check": "sequential viability-selection frequency update vs one update by summed log-fitness ratio",
+      "maximum_absolute_frequency_error": 1.1844969449725795e-12
+    }
+  },
+  "repository_witnesses_exercised_by_tests": [
+    "payoff_routing_task: expected C_A=2,C_F=3",
+    "routing_bypass_control: expected C_A=2,C_F=2",
+    "partial_external_bypass_gain_control: expected C_A=3,C_F=4,C_U=5,U=5",
+    "partial_internal_bypass_gain_control: expected C_A=3,C_F=4,C_U=4,U=5",
+    "extremal_routing_task(6): expected C_A=2,C_F=7"
+  ],
+  "scope": "The structural-to-fitness mapping is a minimal model: one unit of sensing-cost saving contributes lambda log-fitness units and contingent control costs kappa. The population recurrence assumes haploid viability selection with no mutation, migration, drift, or frequency dependence."
+}

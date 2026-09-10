@@ -1,0 +1,28 @@
+{
+  "claim": "state-independent maintenance cost shifts long-run mean selection without changing centered community fluctuation geometry",
+  "branch": "theory/evolutionary-timescale-filter",
+  "repository_native_witness": {
+    "tasks": [
+      "routing_bypass_control: gap 0",
+      "payoff_routing_task: gap 1",
+      "extremal_routing_task(3): gap 2"
+    ],
+    "stationary_distribution": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+    "lambda_cost": 1.0,
+    "critical_control_cost": 1.0,
+    "centered_reward_vector": [-1.0, 0.0, 1.0],
+    "checks": [
+      "stationary mean selection is zero at kappa_star",
+      "asymptotic variance is unchanged across common control-cost shifts",
+      "halving distance to kappa_star multiplies crossover horizon by four"
+    ]
+  },
+  "independent_random_reversible_audit": {
+    "seed": 20260908,
+    "models": 500,
+    "state_count_range": [2, 6],
+    "max_absolute_error_under_constant_reward_shift": 2.6645352591003757e-15,
+    "max_absolute_error_for_lambda_squared_variance_scaling": 2.1316282072803006e-14
+  },
+  "scope": "continuous structural lift s_i=lambda(C_F-C_A)_i-kappa with state-independent kappa; covariance-centering algebra is standard"
+}
