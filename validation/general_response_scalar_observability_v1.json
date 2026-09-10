@@ -1,0 +1,29 @@
+{
+  "claim": "a scalar local trajectory identifies trace and determinant only when two local modes are visible",
+  "branch": "theory/general-response-identifiability",
+  "recurrence": "x[t+2] = T*x[t+1] - D*x[t]",
+  "four_point_gate": {
+    "visibility_determinant": "R = x0*x2 - x1^2",
+    "identified_if": "R != 0",
+    "trace": "T = (x0*x3 - x1*x2)/R",
+    "determinant": "D = (x1*x3 - x2^2)/R"
+  },
+  "two_real_mode_identity": {
+    "trajectory": "x_t = c1*r1^t + c2*r2^t",
+    "identity": "R = c1*c2*(r1-r2)^2",
+    "interpretation": "rank vanishes when either mode is absent or the two eigenvalues coincide"
+  },
+  "independent_random_audit": {
+    "seed": 20260909,
+    "random_two_mode_trajectories": 200000,
+    "maximum_hankel_identity_absolute_error": 5.329070518200751e-15
+  },
+  "test_boundaries": [
+    "nondegenerate four-point recurrence recovers T,D",
+    "single visible mode rejected",
+    "repeated eigenvalue rejected",
+    "missing mode rejected",
+    "near-single-mode trajectory can be rejected by a numerical visibility tolerance"
+  ],
+  "scope": "deterministic local scalar recurrence; numerical singularity gate only; no statistical observability or finite-sample uncertainty claim"
+}
