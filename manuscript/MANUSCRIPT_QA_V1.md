@@ -22,7 +22,7 @@ The main text no longer presents four equal headline theorems. The canonical hie
 
 1. **principal reachability theorem** — dynamical requirement -> minimum/Pareto-minimal information complexity;
 2. **supporting extremal theorem** — structural-temporal envelope on long-run fluctuation;
-3. **diagnostic theorem** — complex local modes force feedback existence within the generalized model;
+3. **diagnostic theorem** — a model-compatible complex local mode forces feedback existence within the generalized model;
 4. **mechanistic proposition** — neutral cancellation and attractive restoring stasis are dynamically distinct.
 
 No continuation quotient, certificate ladder, solver enumeration, AR(2) inversion, critical-slowing result, or stasis identity/contraction algebra is promoted into an independent novelty headline.
@@ -76,18 +76,32 @@ Do not write that these are the only two possible causes of macroevolutionary st
 
 The distinction belongs in the main text for biological interpretation, but the identity-map versus contraction algebra is standard and should remain a proposition rather than a headline theorem novelty claim.
 
-## 7. Feedback-existence claim and alpha boundary — PASS
+## 7. Feedback-existence claim, alpha boundary, and model compatibility — PASS
 
 The strong result is conditional:
 
-- real nonnegative stable modes can admit `G=0`;
-- a non-real local eigenpair forces `G>0` for every compatible decomposition in the generalized model.
+- stable real nonnegative modes can admit `G=0`;
+- a non-real local eigenpair forces `G>0` for every compatible decomposition **only when the observed trace admits at least one persistence split in the generalized model**.
 
-Always retain `within the generalized local model` or an equivalent qualifier.
+The generalized response domain is
 
-The generalized response domain is `0<=alpha<=1`, `0<=phi<1`. Therefore `alpha=1` is a permitted neutral boundary. A zero-feedback decomposition with one eigenvalue exactly one can be model-feasible if the other eigenvalue serves as `phi`, but it is outside the asymptotically stable monotone-return corollary.
+\[
+0\le\alpha\le1,
+\qquad
+0\le\phi<1.
+\]
 
-Do not write that oscillation empirically proves eco-evolutionary feedback in arbitrary systems.
+Since `T=alpha+phi`, model compatibility requires exactly
+
+\[
+0\le T<2.
+\]
+
+If a complex pair has `T<0` or `T>=2`, do not report feedback existence. Report that the observed transient lies outside the declared persistence domain. This avoids a vacuous universal statement over an empty feasible-decomposition set.
+
+`alpha=1` is a permitted neutral boundary. A zero-feedback decomposition with one eigenvalue exactly one can be model-feasible if the other eigenvalue serves as `phi`, but it is outside the asymptotically stable monotone-return corollary. A double unit root is infeasible because it would require `phi=1`.
+
+Always retain `within the generalized local model` or an equivalent qualifier. Do not write that oscillation empirically proves eco-evolutionary feedback in arbitrary systems.
 
 ## 8. Gain-infimum helper — PASS after boundary repair
 
@@ -102,7 +116,9 @@ must preserve the exact four cases:
 - `0<R<=1 -> T-2+2*sqrt(R)`;
 - `R>1 -> D` at `phi=0`.
 
-Regression tests must include both `R<0` and `R=0`; the previous oscillatory-only coverage was insufficient.
+This helper optimizes over the unit community-memory interval itself; it does not additionally require the implied `alpha=T-phi` to lie in `[0,1]`. Model compatibility is checked separately before the feedback-existence inference.
+
+Regression tests must include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
 
 ## 9. Novelty boundary — PASS
 
@@ -160,7 +176,8 @@ The manuscript currently exposes the major assumptions:
 - declared linear structural lift;
 - finite ergodic reversible community chain for the structural-temporal envelope;
 - local deterministic feedback linearization;
-- `0<=alpha<=1` and `0<=phi<1` for the generalized response model.
+- `0<=alpha<=1` and `0<=phi<1` for the generalized response model;
+- model-compatibility gate `0<=T<2` before feedback-existence inference.
 
 These assumptions must remain in the main manuscript, not only the Supplement.
 
@@ -195,7 +212,7 @@ Keep four figures maximum in this order:
 1. common state space: finite sensing reward + community recurrence;
 2. **principal reachability map**: required gain -> required gap -> binary corner / bounded-arity Pareto frontier;
 3. **supporting structural-temporal envelope** with explicit slack factors and equality witness;
-4. directional change, neutral cancellation stasis, monotone restoring stasis, oscillatory restoring stasis, marking the stasis comparison as a mechanistic proposition and only the complex local regime as forcing feedback existence inside the model.
+4. directional change, neutral cancellation stasis, monotone restoring stasis, oscillatory restoring stasis, marking the stasis comparison as a mechanistic proposition and only a **model-compatible** complex local regime as forcing feedback existence inside the model.
 
 Do not add a separate observation-design figure.
 
@@ -219,12 +236,11 @@ Move or retain outside the main text:
 
 No new theorem is needed before these tasks:
 
-1. complete the code/test CI check for the gain-infimum and `alpha=1` boundary repair;
-2. reconcile any remaining canonical files with the hierarchical result spine;
-3. complete bibliography metadata;
-4. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
-5. perform a line edit for repeated phrases such as `within the declared model class`, retaining the qualifier where mathematically necessary;
-6. decide whether to merge/squash PR #6 only after the manuscript surface stabilizes.
+1. complete the full CI check for the gain-infimum, `alpha=1`, and model-compatibility repairs;
+2. complete bibliography metadata;
+3. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
+4. perform a line edit for repeated phrases such as `within the declared model class`, retaining the qualifier where mathematically necessary;
+5. decide whether to merge/squash PR #6 only after the manuscript surface stabilizes.
 
 ## Overall assessment
 
