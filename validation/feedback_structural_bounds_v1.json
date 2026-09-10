@@ -1,0 +1,51 @@
+{
+  "claim": "bounded-arity and productive-frontier caps imply rigorous upper bounds on endogenous loop gain",
+  "branch": "theory/endogenous-community-feedback",
+  "source_theorem": "C_F <= min(m, F_b(n,h)) for unit-cost tasks with C_A=h; with frontier edge cap E, C_F <= min(m,E,F_b(n,h))",
+  "lift": {
+    "gap_bound": "Delta_g <= min(m,F_b(n,h))-h",
+    "edge_capped_gap_bound": "Delta_g <= min(m,E,F_b(n,h))-h",
+    "loop_gain_bound": "L <= (-eta)*lambda*p_star*(1-p_star)*Delta_g_bound for eta<0",
+    "oscillation_exclusion": "if L_max <= (1-phi)/4 then stable damped oscillation is structurally impossible",
+    "instability_exclusion": "if L_max < 1 then strong-feedback unit-circle instability is structurally impossible"
+  },
+  "repo_native_boundary_witness": {
+    "task": "payoff_routing_task",
+    "scope": {"n": 4, "m": 3, "b": 2, "h": 2},
+    "F_b": 3,
+    "gap_upper_bound": 1,
+    "observed_gap": 1,
+    "lambda_cost": 1.0,
+    "feedback_strength": -0.5,
+    "p_star": 0.5,
+    "phi": 0.5,
+    "loop_gain_upper_bound": 0.125,
+    "oscillation_threshold": 0.125,
+    "damped_oscillation_excluded": true,
+    "strong_feedback_instability_excluded": true
+  },
+  "binary_scope_example": {
+    "scope": {"n": 12, "m": 12, "b": 2, "h": 3},
+    "F_b": 7,
+    "gap_upper_bound": 4,
+    "parameters": {"lambda_cost": 1.0, "feedback_strength": -0.5, "p_star": 0.5, "phi": 0.5},
+    "loop_gain_upper_bound": 0.5,
+    "damped_oscillation_excluded": false,
+    "strong_feedback_instability_excluded": true
+  },
+  "frontier_edge_cap_example": {
+    "scope": {"n": 12, "m": 12, "b": 2, "h": 3, "E": 3},
+    "gap_upper_bound": 0,
+    "loop_gain_upper_bound": 0.0,
+    "damped_oscillation_excluded": true,
+    "strong_feedback_instability_excluded": true
+  },
+  "extremal_family_scope_check": {
+    "task": "extremal_routing_task(3)",
+    "scope": {"n": 6, "m": 4, "b": 3, "h": 2},
+    "gap_upper_bound": 2,
+    "observed_gap": 2
+  },
+  "interpretation_boundary": "possible=true means only not excluded by the upper bound; possible=false is the rigorous phase-exclusion conclusion",
+  "scope": "finite deterministic unit-cost sensing, gap-zero low-state comparator, continuous structural lift, local two-community-state feedback"
+}

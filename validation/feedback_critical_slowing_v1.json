@@ -1,0 +1,33 @@
+{
+  "claim": "exact damping time and critical-slowing asymptotics in the stable damped feedback phase",
+  "branch": "theory/endogenous-community-feedback",
+  "exact_formulas": {
+    "spectral_radius_squared": "rho^2 = phi + (1-phi)L = 1-(1-phi)(1-L)",
+    "damping_time": "tau = -2/log[1-(1-phi)(1-L)]",
+    "critical_slowing": "tau ~ 2/[(1-phi)(1-L)]",
+    "unit_circle_period": "T_c = 2*pi/acos[(1+phi)/2]",
+    "long_memory_period": "T_c ~ 2*pi/sqrt(1-phi)"
+  },
+  "direct_eigenvalue_audit": {
+    "seed": 20260909,
+    "samples": 200000,
+    "domain": "stable damped region (1-phi)/4 < L < 1, 0 <= phi < 1",
+    "maximum_spectral_radius_absolute_error": 1.1102230246251565e-16,
+    "maximum_damping_time_relative_error": 4.148387851361082e-10
+  },
+  "critical_slowing_asymptotic_audit": {
+    "seed": 20260909,
+    "samples": 100000,
+    "epsilon": "epsilon=(1-phi)(1-L), sampled with epsilon <= 1e-3",
+    "scaled_ratio": "tau*epsilon/2",
+    "maximum_absolute_deviation_from_one": 0.0005000651690545421
+  },
+  "long_memory_period_asymptotic_audit": {
+    "seed": 20260909,
+    "samples": 100000,
+    "domain": "1e-6 <= 1-phi <= 1e-2",
+    "maximum_relative_error": 0.0004170702617573422
+  },
+  "interpretation": "A stable endogenous eco-evolutionary loop can remain visibly dynamic for many generations because community memory and distance to the structural loop-gain boundary multiply in the damping timescale.",
+  "scope": "local deterministic two-community-state feedback; critical-slowing and bifurcation asymptotics are standard, repository-specific input is structural loop gain from exact finite sensing gaps"
+}
