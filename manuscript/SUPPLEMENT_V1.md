@@ -139,9 +139,10 @@ This piecewise expression is implemented directly and regression-tested, includi
 - `tests/test_general_response_scalar_observability.py`
 
 ### Validation receipts
-- `validation/feedback_existence_identifiability_v1.json`
-- `validation/general_response_identifiability_v1.json`
-- `validation/general_response_scalar_observability_v1.json`
+- `validation/feedback_existence_identifiability_v1.json` — original 200,000-model random audit;
+- `validation/feedback_existence_boundary_regression_v2.json` — deterministic `R<0`, `R=0`, interior, `R>1`, `alpha=1`, and double-unit-root boundary checks;
+- `validation/general_response_identifiability_v1.json`;
+- `validation/general_response_scalar_observability_v1.json`.
 
 ### What remains supplementary
 - characteristic-polynomial derivation;
