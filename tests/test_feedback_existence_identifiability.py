@@ -6,6 +6,7 @@ from adaptive_gain.feedback_existence_identifiability import (
     characteristic_polynomial_at,
     compatible_gain,
     discriminant,
+    has_feasible_persistence_split,
     has_nonnegative_real_no_feedback_decomposition,
     minimum_compatible_gain_over_unit_memory_interval,
     no_feedback_decomposition,
@@ -39,6 +40,7 @@ def test_alpha_one_neutral_boundary_is_model_feasible_for_zero_feedback():
     r_phi, r_alpha = 0.5, 1.0
     T = r_phi + r_alpha
     D = r_phi * r_alpha
+    assert has_feasible_persistence_split(T)
     assert has_nonnegative_real_no_feedback_decomposition(T, D)
     assert no_feedback_decomposition(T, D) == pytest.approx((1.0, 0.5, 0.0))
 
@@ -46,6 +48,7 @@ def test_alpha_one_neutral_boundary_is_model_feasible_for_zero_feedback():
 def test_double_unit_root_is_not_feasible_because_phi_must_be_below_one():
     T, D = 2.0, 1.0
     assert real_eigenvalues(T, D) == pytest.approx((1.0, 1.0))
+    assert not has_feasible_persistence_split(T)
     assert not has_nonnegative_real_no_feedback_decomposition(T, D)
     with pytest.raises(ValueError):
         no_feedback_decomposition(T, D)
@@ -56,11 +59,24 @@ def test_complex_eigenpair_forces_positive_feedback_for_all_unit_interval_memori
     theta = 0.7
     T = 2.0 * rho * math.cos(theta)
     D = rho * rho
+    assert has_feasible_persistence_split(T)
     assert oscillatory_transient_forces_positive_feedback(T, D)
     assert discriminant(T, D) < 0.0
     for phi in (0.0, 0.1, 0.3, 0.6, 0.9, 0.99):
         assert compatible_gain(T, D, phi) > 0.0
     assert minimum_compatible_gain_over_unit_memory_interval(T, D) > 0.0
+
+
+def test_complex_pair_outside_persistence_domain_is_not_reported_as_forced_feedback():
+    T, D = 2.5, 2.0
+    assert discriminant(T, D) < 0.0
+    assert not has_feasible_persistence_split(T)
+    assert not oscillatory_transient_forces_positive_feedback(T, D)
+    summary = summarize_feedback_existence(T, D)
+    assert summary.oscillatory
+    assert not summary.model_compatible
+    assert not summary.feedback_existence_forced
+    assert summary.minimum_gain_over_unit_memory is None
 
 
 def test_characteristic_polynomial_is_exact_gain_numerator():
@@ -123,6 +139,7 @@ def test_parent_oscillatory_example_forces_feedback():
     T, D = 1.2, 0.5
     summary = summarize_feedback_existence(T, D)
     assert summary.oscillatory
+    assert summary.model_compatible
     assert summary.feedback_existence_forced
     assert not summary.no_feedback_decomposition_exists
     assert summary.minimum_gain_over_unit_memory is not None
@@ -134,6 +151,7 @@ def test_monotone_stable_example_cannot_establish_feedback_existence():
     T, D = r1 + r2, r1 * r2
     summary = summarize_feedback_existence(T, D)
     assert not summary.oscillatory
+    assert summary.model_compatible
     assert summary.no_feedback_decomposition_exists
     assert not summary.feedback_existence_forced
 
