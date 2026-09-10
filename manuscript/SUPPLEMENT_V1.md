@@ -78,6 +78,17 @@ and `tilde w_j=w_j/Var_pi(s)` when the stationary reward variance is positive,
 
 The first factor records range/variance saturation and the second reward alignment with the slowest algebraic mode. Both must equal one for equality in the headline bound.
 
+The executable audit helper uses the equivalent observable factorization
+
+\[
+\frac{\sigma_{\rm eff}^2}{B}
+=
+\frac{\operatorname{Var}_\pi(s)}{V_{\max}}
+\frac{\sigma_{\rm eff}^2}{\operatorname{Var}_\pi(s)A_{\max}},
+\]
+
+where `V_max=(lambda*g_max)^2/4` and `A_max=(1+r_max)/(1-r_max)`. This avoids requiring an explicit eigendecomposition merely to audit how much slack comes from reward-range saturation versus temporal mode alignment.
+
 ### Proof source
 - `theory/STRUCTURAL_SPECTRAL_JOINT_BOUND.md`
 - `theory/STRUCTURAL_REWARD_MODE_ALIGNMENT.md`
@@ -86,8 +97,9 @@ The first factor records range/variance saturation and the second reward alignme
 - `adaptive_gain/structural_spectral_joint_bounds.py`
 - `tests/test_structural_spectral_joint_bounds.py`
 
-### Validation receipt
-- `validation/structural_spectral_joint_bound_v1.json`
+### Validation receipts
+- `validation/structural_spectral_joint_bound_v1.json` — original sharp-ceiling validation;
+- `validation/structural_spectral_slack_v2.json` — deterministic equality and loose-factorization checks.
 
 ### What remains supplementary
 - reversible-chain spectral decomposition details;
