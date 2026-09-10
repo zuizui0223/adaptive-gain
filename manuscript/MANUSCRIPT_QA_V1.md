@@ -12,7 +12,7 @@ The manuscript no longer asks the already-solved question "why can rapid short-t
 
 Current question:
 
-> When state-dependent selection is generated through finite information use, which evolutionary amplitudes, temporal fluctuations, and local feedback phases are structurally reachable?
+> When state-dependent selection is generated through a declared finite decision/separation architecture, which evolutionary amplitudes, temporal fluctuations, and local feedback phases are structurally reachable?
 
 This is the correct paper-level question.
 
@@ -20,22 +20,24 @@ This is the correct paper-level question.
 
 The main text no longer presents four equal headline theorems. The canonical hierarchy is:
 
-1. **principal reachability theorem** — dynamical requirement -> minimum/Pareto-minimal information complexity;
+1. **principal reachability theorem** — dynamical requirement -> required structural gap -> minimum/Pareto-minimal finite decision/separation structure;
 2. **supporting extremal theorem** — structural-temporal envelope on long-run fluctuation;
 3. **diagnostic theorem** — a model-compatible complex local mode forces feedback existence within the generalized model;
 4. **mechanistic proposition** — neutral cancellation and attractive restoring stasis are dynamically distinct.
 
 No continuation quotient, certificate ladder, solver enumeration, AR(2) inversion, critical-slowing result, or stasis identity/contraction algebra is promoted into an independent novelty headline.
 
-## 3. Principal theorem carries the main biological conclusion — PASS
+## 3. Principal theorem carries the main biological conclusion — PASS with terminology constraint
 
 The reverse map
 
-`required dynamical regime -> required structural gap q -> minimum/Pareto-minimal finite information structure`
+`required local dynamical regime -> required structural gap q -> minimum/Pareto-minimal finite decision/separation structure`
 
 is the manuscript's strongest claim. The finite sensing theory therefore carries a biological conclusion rather than serving only as a structural encoding.
 
 The `q=3,b=4` Pareto example is especially useful because `(8,5,5)` and `(7,6,6)` show that reducing query/frontier burden and reducing represented-world count are not the same objective.
+
+**Terminology constraint:** do not shorten this novelty claim to unqualified `minimum information`. Moffett & Eckford (2022) already derive minimum mutual-information requirements for target growth and average selection coefficients. The present theorem concerns a different discrete object: represented alternatives, declared cues, irreducible fixed-side obligations, adaptive depth, and outcome arity.
 
 ## 4. Structural-temporal theorem: sharpness versus tightness — PASS with wording discipline
 
@@ -114,11 +116,23 @@ preserves the exact four cases:
 
 This helper optimizes over the unit community-memory interval itself; model compatibility is checked separately before the feedback-existence inference. Regression tests include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
 
-## 9. Novelty boundary — PASS
+## 9. Novelty boundary — PASS after material narrowing
 
-Current manuscript correctly assigns prior art to information use, cognitive and information-processing constraints, proximate sensing architectures, sequential sampling and memory, minimum test sets/separating systems/test cover, binary and multiway decision trees, adaptivity gaps, bounded-arity rooted-tree combinatorics used internally, fluctuating selection and temporal autocorrelation, generic eco-evolutionary feedback, standard local dynamical-systems mathematics, and identity maps versus contractions.
+Current manuscript assigns prior art to:
 
-Candidate contribution is the exact ecological composition/reachability theory, with the reverse dynamics-to-information map as its strongest form.
+- evolutionary information use, cognitive/information-processing constraints, and evolved sensing architectures;
+- the fitness value of information and information-fitness relations;
+- **minimum mutual-information requirements for target fitness/selection** (Moffett & Eckford 2022);
+- evolutionary information thresholds (de Boer & Hogeweg 2010);
+- minimum test sets / separating systems / test cover;
+- binary and multiway decision trees and generic adaptivity gaps;
+- bounded-arity rooted-tree combinatorics used internally;
+- fluctuating selection, temporal autocorrelation, and generic eco-evolutionary feedback;
+- standard local dynamical-systems mathematics and identity maps versus contractions.
+
+Candidate contribution is narrower: an exact discrete ecological composition in which a required local dynamical regime implies a required adaptive/fixed structural gap and therefore a minimum/Pareto-minimal finite decision/separation architecture over `(n,m,E)` under a declared outcome-arity cap.
+
+The supporting structural-temporal theorem composes the finite structural reward range with recurrence of the same state-indexed rewards; it is not a new information-fitness-value theorem.
 
 Files governing claim discipline:
 
@@ -152,7 +166,7 @@ The manuscript currently exposes the major assumptions:
 - finite state space;
 - deterministic cue outcomes;
 - guaranteed resolution;
-- unit query costs for sharp information-complexity theorems;
+- unit query costs for sharp decision/separation-structure theorems;
 - declared linear structural lift;
 - finite ergodic reversible community chain for the structural-temporal envelope;
 - local deterministic feedback linearization;
@@ -161,7 +175,7 @@ The manuscript currently exposes the major assumptions:
 
 These assumptions must remain in the main manuscript, not only the Supplement.
 
-## 13. Terminology — mostly PASS
+## 13. Terminology — PASS with information-theory distinction
 
 Preferred biological translations:
 
@@ -171,29 +185,37 @@ Preferred biological translations:
 - `productive-frontier edge` -> irreducible required distinction / information obligation;
 - `gap` -> avoidable fixed-information burden under adaptive branching.
 
+For the principal novelty claim prefer `finite decision/separation structure`, `finite sensing architecture`, or explicit `(n,m,E)` language. Do not use `minimum information` by itself because it is ambiguous with Shannon/mutual-information theory.
+
 Avoid introducing `continuation bisimulation`, `proof DAG`, `residual kernel`, or certificate terminology in the main text.
 
-## 14. Citation and priority audit — PASS; journal-style rendering remains
+## 14. Citation and priority audit — PASS after final close-precursor correction
 
-The previously open bibliography tasks are now closed at manuscript level:
+The final targeted search on 2026-09-10 recovered a more important mathematical precursor than the initial submission-polish pass had recorded:
 
-1. core cited ecology/evolution references have volume/page/DOI metadata where applicable;
-2. binary/multiway decision-tree and separating-system anchors are cited in the Introduction/Model;
-3. Dukas, Wright et al., Trimmer & Houston, and Eliassen et al. are present in the manuscript bibliography;
-4. Cotto & Chevin is cited near the temporal-recurrence construction;
-5. Post & Palkovacs and Schoener anchor generic eco-evolutionary feedback;
-6. the final targeted direct-predecessor search was completed on 2026-09-10.
+- Donaldson-Matasci et al. (2010): fitness value of information;
+- Rivoire & Leibler (2011): information-fitness relations in varying environments;
+- **Moffett & Eckford (2022): minimal mutual-information requirements for target growth and average selection coefficient**;
+- de Boer & Hogeweg (2010): evolutionary information threshold;
+- Trimmer & Houston (2014) and Eliassen et al. (2016): evolved information-processing/sensing architecture.
 
-The closest additional conceptual precursors found in the final search were Trimmer & Houston (2014) and Eliassen et al. (2016), which strengthen the prior-art boundary around evolved information-processing and sensing architecture. The search did not locate the exact reverse lower-bound map from a required dynamical regime to a required finite decision/separation structure. This is a search outcome, not proof of priority, so `first`/`no previous theory` language remains prohibited.
+Moffett & Eckford materially narrows the novelty wording. It does not invalidate the principal theorem because the minimized object is different, but it means the manuscript cannot claim that reverse `required evolutionary performance -> required information` reasoning is new.
 
-Remaining bibliography work is journal-specific rendering: capitalization, punctuation, conference-proceedings format, and a final metadata spot-check at submission.
+The exact distinction retained is:
+
+- prior art: scalar Shannon/mutual-information or coding-information requirements for fitness/selection;
+- present manuscript: finite deterministic decision/separation structure, with exact componentwise minima or a Pareto frontier over represented alternatives, declared cues, and irreducible obligations, composed with a local feedback phase.
+
+Decision-tree/separating-system metadata were also completed, including ICALP 2009 Part I, LNCS 5555, pages 210–221 for Chakaravarthy et al.
+
+Remaining bibliography work is journal-specific rendering and a final metadata spot-check, not a conceptual priority search.
 
 ## 15. Figures needed
 
 Keep four figures maximum in this order:
 
 1. common state space: finite sensing reward + community recurrence;
-2. **principal reachability map**: required gain -> required gap -> binary corner / bounded-arity Pareto frontier;
+2. **principal reachability map**: required gain -> required gap -> binary corner / bounded-arity Pareto frontier, labelled explicitly as finite decision/separation structure rather than Shannon information;
 3. **supporting structural-temporal envelope** with explicit slack factors and equality witness;
 4. directional change, neutral cancellation stasis, monotone restoring stasis, oscillatory restoring stasis, marking the stasis comparison as a mechanistic proposition and only a **model-compatible** complex local regime as forcing feedback existence inside the model.
 
@@ -215,11 +237,14 @@ Move or retain outside the main text:
 - inverse algebra;
 - solver-cap implementation details.
 
-## 17. Submission-surface hierarchy audit — PASS after one editorial repair
+## 17. Submission-surface hierarchy and claim audit — PASS after two repairs
 
-The original hierarchy audit correctly synchronized the theorem spine, canonical manuscript, Supplement, figure plan, shortening plan, submission surface, and novelty paragraph, but it missed one stale line in `LITERATURE_POSITIONING.md` that still said `keep four headline theorems only`. The submission-polish pass detected and corrected that inconsistency.
+The submission-polish pass found two issues that the earlier audit had missed:
 
-The audited claim/control surface now explicitly includes:
+1. one stale line in `LITERATURE_POSITIONING.md` still said `keep four headline theorems only`;
+2. the initial final-search wording failed to foreground the formal information-fitness literature, especially Moffett & Eckford (2022).
+
+Both are now corrected. The audited claim/control surface explicitly includes:
 
 - `theory/PAPER_THEOREM_SPINE.md`;
 - `manuscript/MANUSCRIPT_V1.md`;
@@ -228,11 +253,12 @@ The audited claim/control surface now explicitly includes:
 - `manuscript/SHORTENING_PLAN_V1.md`;
 - `manuscript/SUBMISSION_SURFACE_V1.md`;
 - `manuscript/NOVELTY_PARAGRAPH_V1.md`;
+- `manuscript/PRIOR_ART_AUDIT_V2.md`;
 - `manuscript/LITERATURE_POSITIONING.md`;
 - `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`;
 - `manuscript/REFERENCES_CORE_V1.md`.
 
-They consistently treat the reverse dynamics-to-information map as principal, the structural-temporal bound as an extremal envelope rather than a point predictor, oscillation as a model-gated diagnostic, and the stasis comparison as a mechanistic proposition. No observation-design program has entered the canonical manuscript surface.
+The theorem hierarchy is unchanged. The novelty boundary is narrower and more precise.
 
 The integrated main commit `569abe805cedc3cee9eeebc4a8aa9410efc12c87` has tree `40ce437bac9ba4ae50d04a06b4ed0a7dac0ecc18` and passed post-merge workflow `34466336113` on Python 3.10/3.11/3.12, including full `pytest` and both repository audit scripts.
 
@@ -248,4 +274,4 @@ No new theorem is needed. Remaining work is manuscript-facing:
 
 ## Overall assessment
 
-The theory is manuscript-limited rather than theorem-limited. Further value is more likely to come from ecological exposition, figure design, shortening, and journal-specific presentation than from additional extremal cases or local dynamical extensions.
+The theory remains manuscript-limited rather than theorem-limited. The final prior-art pass did not remove the principal discrete reachability result, but it made its proper novelty boundary substantially narrower: **finite decision/separation architecture and its exact local-phase/Pareto mapping**, not minimum information for evolutionary performance in general.
