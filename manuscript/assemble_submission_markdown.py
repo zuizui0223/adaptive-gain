@@ -33,7 +33,7 @@ CALLOUTS = (
     ),
     (
         "an asymptotic crossover proxy rather than a finite-time hitting-time bound.",
-        "Figure 3 separates extremal sharpness from realized tightness by displaying the two exact multiplicative sources of slack.",
+        "Fig. 3 separates extremal sharpness from realized tightness by displaying the two exact multiplicative sources of slack.",
     ),
     (
         "The distinction matters because the two mechanisms respond differently to perturbation; the underlying identity-map versus contraction algebra is standard.",
