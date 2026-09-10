@@ -185,7 +185,7 @@ Two-state symmetric chain, endpoint rewards; mark equality with the theorem boun
 
 ### Message
 
-Similar long-term net change can arise from different dynamics. The cancellation/restoration distinction is interpretive, while only the oscillatory local regime forces feedback existence inside the generalized model.
+Similar long-term net change can arise from different dynamics. The cancellation/restoration distinction is interpretive, while only a model-compatible oscillatory local regime forces feedback existence inside the generalized model.
 
 ### Four side-by-side trajectories
 
@@ -208,7 +208,8 @@ Similar long-term net change can arise from different dynamics. The cancellation
 4. **Oscillatory restoring stasis**
    - damped oscillation to equilibrium;
    - complex eigenpair;
-   - highlight `G>0 forced within model class`;
+   - first check `0<=T<2`;
+   - highlight `G>0 forced within model class` only after that compatibility check;
    - mark as **diagnostic theorem**.
 
 ### Bottom algebraic strip
@@ -219,17 +220,20 @@ Stable real nonnegative modes:
 \phi=r_1,\ \alpha=r_2\Rightarrow G=0.
 \]
 
-Complex modes:
+Model-compatible complex modes:
 
 \[
-\phi^2-T\phi+D>0\Rightarrow G(\phi)>0.
+0\le T<2,
+\qquad
+\phi^2-T\phi+D>0
+\Rightarrow G(\phi)>0.
 \]
 
-Boundary note: `alpha=1` is allowed by the generalized model, while `phi<1`; a neutral unit eigenvalue is therefore model-feasible in a zero-feedback decomposition but is not asymptotically stable return.
+Boundary note: `alpha=1` is allowed by the generalized model, while `phi<1`; a neutral unit eigenvalue is therefore model-feasible in a zero-feedback decomposition but is not asymptotically stable return. If a complex transient has `T<0` or `T>=2`, label it **outside model domain**, not `feedback forced`.
 
 ### Takeaway
 
-**Stasis is not one mechanism; oscillatory restoration has a stronger feedback implication than monotone return.**
+**Stasis is not one mechanism; model-compatible oscillatory restoration has a stronger feedback implication than monotone return.**
 
 ---
 
