@@ -10,6 +10,16 @@ It does **not** identify the magnitude of eco-evolutionary feedback from a scala
 
 For the generalized two-state response model, the answer depends sharply on whether the observed local eigenvalues are real or complex.
 
+The generalized response domain used by the parent theory is
+
+\[
+0\le\alpha\le1,
+\qquad
+0\le\phi<1.
+\]
+
+The distinction between `alpha<=1` and `phi<1` matters at the neutral boundary and is kept explicit below.
+
 ---
 
 ## 1. Generalized characteristic invariants
@@ -57,7 +67,7 @@ This elementary identity yields a useful qualitative corollary.
 
 ---
 
-## 2. Real nonnegative eigenvalues: feedback existence is not identifiable
+## 2. Real nonnegative eigenvalues: stable monotone return does not identify feedback existence
 
 Suppose the two local eigenvalues are real and satisfy
 
@@ -93,13 +103,35 @@ Therefore
 }
 \]
 
-The same scalar transient is always compatible with a no-feedback decomposition obtained by assigning the two observed roots to intrinsic evolutionary persistence and community persistence.
+The same scalar transient is compatible with a no-feedback decomposition obtained by assigning the two observed roots to intrinsic evolutionary persistence and community persistence.
 
 This is stronger than saying that feedback magnitude is not identified: under these conditions even the proposition \(G\ne0\) is not identified.
 
-### Scope of this statement
+### Model-feasible neutral boundary
 
-The argument requires both observed roots to lie in the admissible persistence interval \([0,1)\). Real transients with a negative mode are outside this particular no-feedback construction and must be treated separately.
+The parent model allows `alpha=1` but still requires `phi<1`. Therefore the no-feedback construction extends one step beyond the asymptotically stable statement. If the ordered real roots satisfy
+
+\[
+0\le r_1<1,
+\qquad
+0\le r_2\le1,
+\]
+
+then choosing
+
+\[
+\phi=r_1,
+\qquad
+\alpha=r_2
+\]
+
+is model-feasible and gives `G=0`. In particular, `r_2=1` is an allowed **neutral** boundary case. It is not asymptotically stable return, so it should not be used to broaden the stable-monotone corollary itself.
+
+A double unit root is not feasible under this assignment because it would require `phi=1`, which is excluded.
+
+### Scope of the real-root statement
+
+Real transients with a negative mode are outside this particular nonnegative-persistence construction and must be treated separately.
 
 ---
 
@@ -152,13 +184,57 @@ The magnitude of \(G\) remains unidentified unless one persistence parameter is 
 
 ---
 
-## 4. Interpretation for stasis versus oscillation
+## 4. Exact gain infimum over the unit memory interval
+
+The public executable helper also reports
+
+\[
+\inf_{0\le\phi<1}G(\phi).
+\]
+
+This quantity should not silently inherit the Schur-stable oscillatory assumptions of the main corollary. Let
+
+\[
+R=1-T+D,
+\qquad
+x=1-\phi.
+\]
+
+Then `0<x<=1` and
+
+\[
+G
+=\frac{R}{x}+(T-2)+x.
+\]
+
+Therefore
+
+\[
+\boxed{
+\inf_{0\le\phi<1}G(\phi)
+=
+\begin{cases}
+-\infty,&R<0,\\
+T-2,&R=0,\\
+T-2+2\sqrt R,&0<R\le1,\\
+D,&R>1.
+\end{cases}
+}
+\]
+
+The `R=0` value is an infimum approached as `phi->1-`; it is not attained because `phi=1` is excluded. For `R>1`, the infimum is attained at `phi=0`. For `0<R<=1`, it is attained at the stationary point `phi=1-sqrt(R)`.
+
+This piecewise result matters for software correctness even though the main oscillatory corollary uses only a regime in which `R>0` and the gain infimum is positive.
+
+---
+
+## 5. Interpretation for stasis versus oscillation
 
 This creates an asymmetry between two superficially similar long-lived regimes.
 
 ### Monotone return / stasis-like trajectory
 
-If the local eigenvalues are real and nonnegative, a zero-feedback decomposition always remains available.
+If the local eigenvalues are real, nonnegative, and asymptotically stable, a zero-feedback decomposition remains available.
 
 Therefore monotone return cannot distinguish among, for example,
 
@@ -182,7 +258,7 @@ This does **not** mean that all biological oscillations imply this specific sens
 
 ---
 
-## 5. Relation to the main timescale question
+## 6. Relation to the main timescale question
 
 The broader theory distinguishes two sources of stasis-like behavior:
 
@@ -194,26 +270,18 @@ The present corollary adds an identification asymmetry:
 - monotone endogenous return can be observationally indistinguishable from a no-feedback decomposition;
 - damped oscillatory return cannot.
 
-So the useful theoretical contrast is not simply `trend versus stasis`. It is
-
-```text
-short-term structural amplitude
-    + temporal coherence / cancellation
-    + feedback geometry
-    -> long-run trend, monotone stasis, or oscillatory return
-```
-
-with oscillation uniquely informative about feedback existence in the stated model class.
+This result is diagnostic support for the paper's principal reachability theorem, not a competing principal theorem.
 
 ---
 
-## 6. Prior-art boundary
+## 7. Prior-art boundary
 
 No novelty is claimed for
 
 - the characteristic polynomial identity;
 - the fact that a real-root quadratic vanishes at its eigenvalues;
 - the positivity of a monic quadratic with negative discriminant;
+- elementary one-variable minimization of the compatible-gain expression;
 - generic interpretations of complex eigenvalues as damped oscillation.
 
 The repository-specific contribution is the consequence these elementary facts have for the exact eco-evolutionary decomposition
@@ -226,7 +294,7 @@ that sits downstream of the finite sensing-gap theory.
 
 ---
 
-## 7. Claim boundary
+## 8. Claim boundary
 
 This note does not claim
 
