@@ -60,7 +60,7 @@ Aim for approximately 180–230 words. Preserve:
 
 - the principal reverse map from required dynamics to required information structure;
 - the structural-temporal result as an **extremal envelope**, not a generic realized-variance prediction;
-- the oscillation result as a **diagnostic** theorem;
+- the oscillation result as a **diagnostic** theorem, conditional on model compatibility;
 - the stasis distinction as a **mechanistic proposition** rather than an independent novelty claim.
 
 Keep `within the declared model class` only where mathematically necessary.
@@ -89,6 +89,7 @@ Keep:
 - common state space with `P`;
 - generalized local response;
 - `0<=alpha<=1`, `0<=phi<1`;
+- consequent trace-compatibility domain `0<=T<2`;
 - one supporting information-complexity inequality.
 
 Move to Supplement or theorem notes:
@@ -113,13 +114,15 @@ For the structural-temporal envelope, retain only enough of the slack decomposit
 - range/variance saturation;
 - reward--slow-mode alignment.
 
+For the diagnostic theorem, one sentence must preserve the gate: a complex eigenpair forces feedback only after `0<=T<2` establishes that the generalized persistence domain is nonempty. Outside that trace range, say `model incompatible`, not `feedback forced`.
+
 Do not re-derive definitions already introduced in Model.
 
 ### Discussion
 
 Each subsection should answer `what changes biologically?` rather than restating the result.
 
-Lead with the reverse reachability interpretation. Discuss the fluctuation theorem second as an extremal envelope. Keep the oscillation theorem explicitly diagnostic and the stasis result explicitly mechanistic.
+Lead with the reverse reachability interpretation. Discuss the fluctuation theorem second as an extremal envelope. Keep the oscillation theorem explicitly diagnostic and conditional on model compatibility, and the stasis result explicitly mechanistic.
 
 Cut repeated equations unless they are essential to those interpretations.
 
@@ -137,12 +140,13 @@ Use consistently:
 
 - `represented ecological alternatives` at first use, then `worlds` only in formal/proof contexts;
 - `declared cues` at first use, then `queries` only where needed for the theorem;
-- `query arity` = number of possible cue outcomes;
+- `query arity` = number of possible outcomes of one cue;
 - `productive-frontier obligation count E` rather than switching among edge count / mandatory pair count / frontier size without warning;
 - `structural gap g` for a state and `Delta g` for a contrast between states;
 - `feedback gain G` for the generalized local system;
 - `extremal envelope` for the structural-temporal upper bound;
-- `diagnostic theorem` for the oscillation/feedback-existence result.
+- `diagnostic theorem` for the oscillation/feedback-existence result;
+- `model-compatible` for a transient whose trace satisfies `0<=T<2` before feedback inference.
 
 ## What must not be shortened away
 
@@ -154,6 +158,7 @@ Retain visibly:
 - unit costs / deterministic finite sensing are required for the sharp information-complexity results;
 - feedback-existence statement is conditional on the generalized local model;
 - `alpha=1` is allowed while `phi<1`, so model feasibility and asymptotically stable monotone return are not identical domains;
+- the trace gate `0<=T<2` must be checked before a complex eigenpair is interpreted as forcing feedback;
 - bounded arity generally gives a Pareto frontier, not one universal minimum;
 - nonidentifiability remains a time-interpretation limit.
 
