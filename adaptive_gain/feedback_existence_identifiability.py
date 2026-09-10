@@ -17,10 +17,11 @@ Jacobian evaluated at phi.  This gives a sharp qualitative corollary:
   ``phi in [0,1)`` and the other to evolutionary persistence
   ``alpha in [0,1]``; in particular stable monotone return with both modes in
   ``[0,1)`` cannot establish feedback existence;
-* if the observed eigenvalues are a non-real conjugate pair, the characteristic
-  polynomial is strictly positive for every real phi, hence every feasible
-  decomposition with phi<1 has G>0; feedback existence is forced, although its
-  magnitude remains unidentified without an independent persistence measure.
+* if the observed eigenvalues are a non-real conjugate pair and the observed
+  trace is compatible with at least one persistence split in the generalized
+  model, every feasible decomposition has G>0; feedback existence is forced,
+  although its magnitude remains unidentified without an independent
+  persistence measure.
 
 The algebra itself is elementary.  The repository-specific use is to sharpen
 what the generalized nonidentifiability layer says about the interpretation of
@@ -70,6 +71,19 @@ def real_eigenvalues(trace: float, determinant: float) -> tuple[float, float]:
     return ((T - root) / 2.0, (T + root) / 2.0)
 
 
+def has_feasible_persistence_split(trace: float) -> bool:
+    """Whether ``T=alpha+phi`` admits ``alpha in [0,1]``, ``phi in [0,1)``.
+
+    Because the loop gain is otherwise unrestricted in this local model, the
+    persistence domain is nonempty exactly for ``0 <= T < 2``.
+    """
+
+    T = float(trace)
+    if not isfinite(T):
+        raise ValueError("trace must be finite")
+    return 0.0 <= T < 2.0
+
+
 def has_nonnegative_real_no_feedback_decomposition(
     trace: float, determinant: float
 ) -> bool:
@@ -112,9 +126,15 @@ def no_feedback_decomposition(
 def oscillatory_transient_forces_positive_feedback(
     trace: float, determinant: float
 ) -> bool:
-    """Whether a non-real eigenpair forces G(phi)>0 for every real phi<1."""
+    """Whether an oscillatory transient forces feedback inside the model domain.
 
-    return discriminant(trace, determinant) < -_TOL
+    A non-real eigenpair makes ``G(phi)>0`` for every real ``phi<1``.  To turn
+    that algebraic fact into a model-level feedback-existence statement, at
+    least one persistence split must also be feasible, i.e. ``0<=T<2``.
+    """
+
+    disc = discriminant(trace, determinant)
+    return has_feasible_persistence_split(trace) and disc < -_TOL
 
 
 def minimum_compatible_gain_over_unit_memory_interval(
@@ -122,7 +142,9 @@ def minimum_compatible_gain_over_unit_memory_interval(
 ) -> float:
     """Return ``inf G(phi)`` over ``0 <= phi < 1``.
 
-    Writing ``R = 1 - T + D`` and ``x = 1 - phi`` gives
+    This helper optimizes over the unit community-memory interval itself; it
+    does not additionally restrict the implied ``alpha=T-phi``.  Writing
+    ``R = 1 - T + D`` and ``x = 1 - phi`` gives
 
         G = R/x + (T-2) + x,    0 < x <= 1.
 
@@ -133,7 +155,7 @@ def minimum_compatible_gain_over_unit_memory_interval(
     * ``T-2 + 2*sqrt(R)`` when ``0 < R <= 1``;
     * ``D`` when ``R > 1`` (attained at ``phi=0``).
 
-    In the Schur-stable oscillatory regime used by
+    In the model-compatible Schur-stable oscillatory regime used by
     :func:`summarize_feedback_existence`, ``R>0`` automatically and the
     infimum is strictly positive.
     """
@@ -159,6 +181,7 @@ class FeedbackExistenceSummary:
     determinant: float
     discriminant: float
     oscillatory: bool
+    model_compatible: bool
     no_feedback_decomposition_exists: bool
     feedback_existence_forced: bool
     minimum_gain_over_unit_memory: float | None
@@ -169,10 +192,12 @@ def summarize_feedback_existence(
 ) -> FeedbackExistenceSummary:
     disc = discriminant(trace, determinant)
     oscillatory = disc < -_TOL
+    model_compatible = has_feasible_persistence_split(trace)
     zero_exists = has_nonnegative_real_no_feedback_decomposition(trace, determinant)
+    feedback_forced = model_compatible and oscillatory
     minimum = (
         minimum_compatible_gain_over_unit_memory_interval(trace, determinant)
-        if oscillatory
+        if feedback_forced
         else None
     )
     return FeedbackExistenceSummary(
@@ -180,7 +205,8 @@ def summarize_feedback_existence(
         determinant=float(determinant),
         discriminant=disc,
         oscillatory=oscillatory,
+        model_compatible=model_compatible,
         no_feedback_decomposition_exists=zero_exists,
-        feedback_existence_forced=oscillatory,
+        feedback_existence_forced=feedback_forced,
         minimum_gain_over_unit_memory=minimum,
     )
