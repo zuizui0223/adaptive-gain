@@ -54,13 +54,21 @@ This does not establish novelty. Until a deeper combinatorial audit is complete,
 - its role is to retain only the irreducible separation obligations relevant to the declared fixed-cost problem;
 - edge-count consequences should be stated as consequences of the declared construction rather than as a newly named classical invariant.
 
-## 5. Ecology-side direct predecessor search
+## 5. Ecology-side constraints on information processing are also prior art
 
-The targeted audit found extensive work on cue repertoires, cue reliability, learning, plasticity, and information use, but did not identify a direct predecessor with the full composition
+The targeted ecology search found several closer predecessors than generic information-use reviews:
 
-`finite decision-tree / separating-test complexity -> exact ceiling on selection or feedback gain -> reachable evolutionary timescale/phase`.
+- Dukas (2004) treats limited attention / restricted information-processing rate as an evolutionary-ecological constraint with fitness consequences.
+- Work on complex cues and plasticity argues that richer cue integration can increase adaptive plasticity and reduce mismatches.
+- Wright (2022) explicitly models sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity jointly; sampling costs limit the adaptive upper range of plastic responses and memory becomes advantageous when temporal autocorrelation is high.
 
-This is evidence for a candidate distinction, not proof of first-ever novelty. The manuscript should still avoid `first` claims.
+Therefore the manuscript must not claim novelty for the broad idea that limited information processing, sampling costs, cue reliability, or memory can constrain evolutionary responses.
+
+The remaining candidate distinction is much narrower and more formal:
+
+`finite discrete decision/separation complexity -> exact structural ceiling -> exact reachability bound on long-run fluctuation or local feedback phase`.
+
+The audit has not identified a direct ecological predecessor with this full exact composition. This is evidence for a candidate distinction, not proof of first-ever novelty.
 
 ## 6. Shared-state-space reward and recurrence
 
@@ -77,7 +85,7 @@ The audit has not yet identified a prior ecological model using this exact finit
 
 The strongest defensible statement is now:
 
-> Information use, sequential decision making, separating systems, multiway decision trees, adaptivity gaps, fluctuating selection, and eco-evolutionary feedback are all prior art. The contribution of the present framework is the composition of finite information-structure bounds with evolutionary dynamics: structurally generated selection is bounded by finite sensing complexity, community recurrence filters those same state-indexed rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. The novelty claim therefore concerns ecological reachability under declared finite information constraints, not the underlying decision-tree, test-cover, or dynamical-systems machinery.
+> Information use, sequential decision making, cognitive/information-processing constraints, separating systems, multiway decision trees, adaptivity gaps, fluctuating selection, and eco-evolutionary feedback are all prior art. The contribution of the present framework is the exact composition of finite information-structure bounds with evolutionary dynamics: structurally generated selection is bounded by finite sensing complexity, community recurrence filters those same state-indexed rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. The novelty claim therefore concerns ecological reachability under declared finite information constraints, not the underlying decision-tree, test-cover, cognitive-constraint, or dynamical-systems machinery.
 
 ## 8. Remaining checks before submission
 
@@ -95,3 +103,5 @@ The productive-frontier naming question is now secondary: attribution can be han
 - Crowston, R., Gutin, G., Jones, M., Muciaccia, G. & Yeo, A. 2016. Parameterizations of Test Cover with Bounded Test Sizes. Algorithmica 74:367–384. DOI: 10.1007/s00453-014-9948-7.
 - Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating Decision Trees with Multiway Branches. ICALP 2009. DOI: 10.1007/978-3-642-02927-1_19.
 - Moshkov, M. 2023. Time and space complexity of deterministic and nondeterministic decision trees. Annals of Mathematics and Artificial Intelligence 91:45–74. DOI: 10.1007/s10472-022-09814-1.
+- Dukas, R. 2004. Causes and consequences of limited attention. Brain, Behavior and Evolution 63:197–210. DOI: 10.1159/000076781.
+- Wright, J. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. Biological Reviews. DOI: 10.1111/brv.12879.
