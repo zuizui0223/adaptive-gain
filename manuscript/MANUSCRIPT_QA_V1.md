@@ -118,7 +118,7 @@ must preserve the exact four cases:
 
 This helper optimizes over the unit community-memory interval itself; it does not additionally require the implied `alpha=T-phi` to lie in `[0,1]`. Model compatibility is checked separately before the feedback-existence inference.
 
-Regression tests must include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
+Regression tests include `R<0`, `R=0`, `alpha=1`, the half-open trace domain `0<=T<2`, and a complex eigenpair outside that domain.
 
 ## 9. Novelty boundary — PASS
 
@@ -232,15 +232,31 @@ Move or retain outside the main text:
 - inverse algebra;
 - solver-cap implementation details.
 
-## 17. Immediate next manuscript tasks
+## 17. Submission-surface hierarchy audit — PASS
 
-No new theorem is needed before these tasks:
+The following canonical/control surfaces were checked against the same hierarchy and claim boundary:
 
-1. complete the full CI check for the gain-infimum, `alpha=1`, and model-compatibility repairs;
-2. complete bibliography metadata;
-3. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
-4. perform a line edit for repeated phrases such as `within the declared model class`, retaining the qualifier where mathematically necessary;
-5. decide whether to merge/squash PR #6 only after the manuscript surface stabilizes.
+- `theory/PAPER_THEOREM_SPINE.md`;
+- `manuscript/MANUSCRIPT_V1.md`;
+- `manuscript/SUPPLEMENT_V1.md`;
+- `manuscript/FIGURE_PLAN_V1.md`;
+- `manuscript/SHORTENING_PLAN_V1.md`;
+- `manuscript/SUBMISSION_SURFACE_V1.md`;
+- `manuscript/NOVELTY_PARAGRAPH_V1.md`.
+
+They consistently treat the reverse dynamics-to-information map as principal, the structural-temporal bound as an extremal envelope rather than a point predictor, oscillation as a model-gated diagnostic, and the stasis comparison as a mechanistic proposition. No observation-design program has entered the canonical manuscript surface.
+
+The integrated code state at `f7b94d73d09262161f8b4865ce40a402a4e15d58` passed the full repository workflow on Python 3.10, 3.11, and 3.12, including `pytest`, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py` (workflow run `34451352937`). PR #6 is rerunning the same workflow after fast-forwarding its head to that state.
+
+## 18. Immediate next manuscript tasks
+
+No new theorem is needed. Remaining work is manuscript-facing:
+
+1. complete bibliography metadata and the final ecological-priority search;
+2. tighten Results proof sketches to the minimum needed for a theoretical-ecology reader;
+3. perform a line edit for repeated qualifiers while preserving the mathematically necessary ones;
+4. make the four figure specifications into submission-ready figures;
+5. merge/squash PR #6 only after its head-branch CI is green and the manuscript surface is frozen.
 
 ## Overall assessment
 
