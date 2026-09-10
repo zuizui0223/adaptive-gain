@@ -31,11 +31,13 @@ Core anchors:
 - Dall et al. 2005 — information use as an evolutionary-ecological decision problem;
 - Schmidt et al. 2010 — ecology of information and informed decisions;
 - Dukas 2004 — limited attention / information-processing rate as an evolutionary-ecological constraint;
-- Wright 2022 — sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity.
+- Trimmer & Houston 2014 — evolutionary shaping of information-processing and decision mechanisms;
+- Eliassen et al. 2016 — explicit proximate sensing/information-processing architecture embedded in evolutionary modelling;
+- Wright et al. 2022 — sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity.
 
 ### Boundary
 
-Do not claim novelty for sequential cue use, sampling, state-dependent decisions, memory, learning, cue reliability, limited attention, or the broad idea that information constraints can limit adaptive/evolutionary response.
+Do not claim novelty for sequential cue use, sampling, state-dependent decisions, memory, learning, cue reliability, limited attention, proximate sensing architecture, or the broad idea that information constraints can limit adaptive/evolutionary response.
 
 The candidate distinction is the exact downstream composition
 
@@ -107,16 +109,16 @@ Avoid `first`, `first-ever`, `no previous theory`, or analogous priority languag
 
 ## 10. Status of the priority audit
 
-The broad prior-art audit is complete enough to draft the manuscript conservatively.
-
-Targeted searches found many neighboring theories — cognitive constraints, costly sampling, plasticity, cue integration, fluctuating environments, and eco-evolutionary feedback — but did not identify a direct predecessor with the full exact chain
+The targeted pre-submission search was completed on 2026-09-10. It found many neighboring theories — cognitive constraints, costly sampling, plasticity, cue integration, proximate sensing architectures, fluctuating environments, and eco-evolutionary feedback — but did not identify a direct predecessor with the full exact chain
 
 `finite decision/separation complexity`
 `-> exact structural selection / feedback ceiling`
 `-> recurrence of the same state-indexed rewards`
 `-> sharp long-run fluctuation ceiling or minimum/Pareto-minimal information complexity for a feedback phase`.
 
-This search result is not proof of priority. One final pre-submission database search should still be performed, but no unresolved mathematical-priority question needs to block manuscript drafting.
+The closest conceptual precursors located in the final pass include Trimmer & Houston (2014), which treats information-processing mechanisms as evolutionarily shaped decision systems, and Eliassen et al. (2016), which explicitly embeds sensing and information-processing architecture in evolutionary modelling. Neither supplies the reverse exact lower-bound map from a required dynamical regime to a required finite decision/separation structure.
+
+This search result is not proof of priority. It supports conservative positioning, not a `first` claim. No unresolved mathematical-priority question remains as a submission blocker.
 
 See:
 
@@ -131,7 +133,8 @@ See:
 The manuscript should:
 
 - lead with the ecological reachability question rather than query-complexity machinery;
-- keep four headline theorems only;
+- make the principal reachability theorem visually and rhetorically dominant;
+- retain the structural-temporal envelope and feedback-existence result as supporting/diagnostic theorems, and the stasis distinction as a mechanistic proposition rather than a coequal theorem headline;
 - translate `world`, `query`, `arity`, and `productive frontier` into ecological meanings before formal definitions;
 - move continuation quotients, proof DAGs, exhaustive enumeration, and solver details to Supplement;
 - use natural-history motivation only to make the finite-state model biologically intelligible, not to turn the paper into an observation-design or empirical-methods paper.
