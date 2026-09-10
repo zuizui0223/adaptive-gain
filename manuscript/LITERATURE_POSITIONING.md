@@ -2,189 +2,140 @@
 
 ## Purpose
 
-This file records the ecological/evolutionary and combinatorial literature boundary for the manuscript. It is intentionally conservative: standard results should be cited as prior art rather than repackaged as novelty.
+This file records the ecological/evolutionary and combinatorial literature boundary for the manuscript. It is intentionally conservative: standard results are cited as prior art rather than repackaged as novelty. The more detailed search history is recorded in `PRIOR_ART_AUDIT_V2.md` and `FINAL_PRIORITY_SEARCH_LOG.md`.
 
 ## 1. Rapid evolution and evolutionary time
 
-### Established
+Established theory already shows that ecological and evolutionary processes can operate on overlapping timescales, that selection can fluctuate strongly, and that rapid short-term change can coexist with long periods of bounded or weak net divergence.
 
-- Hairston, N. G. Jr., Ellner, S. P., Geber, M. A., Yoshida, T. & Fox, J. A. 2005. Rapid evolution and the convergence of ecological and evolutionary time. *Ecology Letters*. DOI: 10.1111/j.1461-0248.2005.00812.x.
-  - Use for: ecological and evolutionary processes can operate on overlapping timescales.
-  - Do not claim: recognizing ecological-timescale evolution.
+Core anchors:
 
-- Bell, G. 2010. Fluctuating selection: the perpetual renewal of adaptation in variable environments. *Philosophical Transactions of the Royal Society B* 365:87–97. DOI: 10.1098/rstb.2009.0150.
-  - Use for: strong and directionally fluctuating natural selection.
-  - Do not claim: fluctuating selection can maintain rapid short-term response without indefinite directional accumulation.
+- Hairston et al. 2005 — rapid evolution and convergence of ecological/evolutionary time;
+- Estes & Arnold 2007 — stabilizing-selection models and stasis across timescales;
+- Bell 2010 — strong fluctuating selection;
+- Uyeda et al. 2011 — scale-dependent evolutionary divergence;
+- Messer, Ellner & Hairston 2016 — rapid short-term evolution and long-term interpretation.
 
-- Messer, P. W., Ellner, S. P. & Hairston, N. G. Jr. 2016. Can population genetics adapt to rapid evolution? *Trends in Genetics* 32:408–418. DOI: 10.1016/j.tig.2016.04.005.
-  - Use for: phenotypic evolution can be rapid and fluctuating direction can reconcile short- and long-term patterns.
+### Boundary
 
-- Estes, S. & Arnold, S. J. 2007. Resolving the paradox of stasis: models with stabilizing selection explain evolutionary divergence on all timescales. *The American Naturalist* 169:227–244. DOI: 10.1086/510633.
-  - Use for: explicit quantitative-genetic models can reconcile short-term dynamics with long-term stasis.
-  - Do not claim: stasis requires an absence of short-term evolution.
+Do not claim novelty for rapid evolution, the coexistence of short-term activity and long-term stasis, temporal cancellation, or evolutionary-timescale overlap.
 
-- Uyeda, J. C., Hansen, T. F., Arnold, S. J. & Pienaar, J. 2011. The million-year wait for macroevolutionary bursts. *PNAS* 108:15908–15913. DOI: 10.1073/pnas.1014503108.
-  - Use for: evolutionary divergence changes character across timescales; long periods of bounded evolution can coexist with rare larger shifts.
+The paper asks instead whether finite individual information structure constrains which evolutionary amplitudes, retention regimes, and feedback phases are reachable.
 
-### Manuscript boundary
+## 2. Information use and information-processing constraints
 
-The paper should not ask merely why rapid short-term evolution can coexist with long-term stasis. Its narrower question is whether finite individual information structure constrains which amplitudes, retention regimes, and feedback phases are reachable.
+Information acquisition and use are established topics in evolutionary ecology.
 
-## 2. Information use and sequential decision making in evolutionary ecology
+Core anchors:
 
-### Established
+- Dall et al. 2005 — information use as an evolutionary-ecological decision problem;
+- Schmidt et al. 2010 — ecology of information and informed decisions;
+- Dukas 2004 — limited attention / information-processing rate as an evolutionary-ecological constraint;
+- Wright 2022 — sampling effort, memory, cue reliability, temporal autocorrelation, and plasticity.
 
-- Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. *Trends in Ecology & Evolution* 20:187–193. DOI: 10.1016/j.tree.2005.01.010.
-  - Use for: information is an explicit evolutionary-ecological currency; animal information use can be analysed with statistical decision theory.
-  - Do not claim: introducing information/decision theory to evolutionary ecology.
+### Boundary
 
-- Schmidt, K. A., Dall, S. R. X. & van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos*.
-  - Use for: acquisition, processing, decision making, and ecological consequences are already treated as one ecological topic.
-  - Do not claim: first connection between information use and population/community/ecosystem consequences.
+Do not claim novelty for sequential cue use, sampling, state-dependent decisions, memory, learning, cue reliability, limited attention, or the broad idea that information constraints can limit adaptive/evolutionary response.
 
-- Movement and foraging literatures already treat repeated information acquisition, context/state dependence, and feedback between action and subsequent information acquisition.
-  - Do not claim: sequential cue use, repeated sampling, or cue ordering as the paper-level novelty.
+The candidate distinction is the exact downstream composition
 
-### Candidate distinction
+`finite discrete sensing complexity -> structural ceiling -> evolutionary reachability ceiling`.
 
-The present framework is not primarily about how much information an animal has or whether it samples sequentially. It distinguishes a finite adaptive identification cost from the corresponding fixed separating-test requirement and then uses the resulting structural constraints downstream.
+## 3. Eco-evolutionary feedback and temporal recurrence
 
-The ecological claim is:
+Generic reciprocal eco-evolutionary feedback is prior art (Post & Palkovacs 2009; Schoener 2011 and later literature). Temporal autocorrelation and Markov-switching environmental effects on evolution are also established; Cotto & Chevin 2020 is one relevant anchor.
 
-`finite sensing task -> structural gap/frontier obligations -> selection or feedback gain -> reachable evolutionary timescales/phases`.
+### Boundary
 
-## 3. Eco-evolutionary feedback
+Do not claim novelty for feedback, oscillation, environmental persistence, temporal autocorrelation, or state-dependent selection.
 
-### Established
+The candidate composition is narrower: structurally generated rewards and temporal recurrence are indexed by the same finite community-state space, which allows finite information bounds and temporal persistence to enter one exact downstream ceiling.
 
-- Post, D. M. & Palkovacs, E. P. 2009. Eco-evolutionary feedbacks in community and ecosystem ecology: interactions between the ecological theatre and the evolutionary play. *Philosophical Transactions of the Royal Society B* 364:1629–1640. DOI: 10.1098/rstb.2009.0012.
-  - Use for: reciprocal ecology-evolution feedbacks and organism-induced environmental change.
-  - Do not claim: feedback between evolution and ecological state.
+## 4. Fixed information: separating systems / minimum test set / test cover
 
-- Schoener, T. W. 2011. The newest synthesis: understanding the interplay of evolutionary and ecological dynamics. *Science* 331:426–429. DOI: 10.1126/science.1193954.
-  - Use for: ecological and evolutionary dynamics can be reciprocally coupled on overlapping timescales.
-  - Do not claim: eco-evolutionary feedback as a novel concept.
+The fixed identification problem is classical. Minimum test collection, minimum test set, test cover, and separating-system literatures already study the minimum set of tests required to distinguish finite entities.
 
-### Candidate distinction
+Relevant anchors include Halldórsson et al., Katona 1966, Wegener 1979, and Crowston et al. 2016.
 
-The manuscript does not claim novelty for feedback or oscillation in a two-dimensional feedback system. The candidate result is upstream structural reachability: a required feedback regime imposes a minimum or Pareto-minimal finite information structure.
+### Important distinction
 
-## 4. Temporal autocorrelation and fluctuating environments
+Classical `bounded test size` limits the number of items contained in a separating subset. The repository's query arity `b` instead limits the number of possible outcomes of one query. These restrictions must not be cited as equivalent.
 
-### Established
+## 5. Adaptive information: optimal and multiway decision trees
 
-Temporal autocorrelation in environments and selection can alter evolutionary dynamics. This literature must be cited wherever `P`, `r_max`, or temporal filtering is introduced.
+Adaptive identification by decision trees is classical. Hyafil & Rivest 1976, Adler & Heeringa, Gupta/Nagarajan/Ravi, Chakaravarthy et al. 2009, Moshkov and others cover binary/multiway decision trees, adaptive search, and complexity. Adaptivity gaps are likewise established terminology.
 
-Starter reference:
+### Boundary
 
-- Cotto, O. & Chevin, L.-M. 2020. Fluctuations in lifetime selection in an autocorrelated environment. *Theoretical Population Biology* 134:119–128. DOI: 10.1016/j.tpb.2020.03.002.
+Do not claim novelty for adaptive sequencing, decision-tree depth, binary or multiway queries, bounded outcome arity as a modelling idea, adaptive outperforming fixed acquisition, or generic adaptivity gaps.
 
-### Candidate distinction
+The manuscript treats this machinery as imported or independently re-derived structure.
 
-The manuscript does not claim that autocorrelation matters. The structural-temporal theorem combines a finite structural reward ceiling with temporal persistence in one sharp downstream bound, and reward-mode alignment determines which community timescales matter.
+## 6. Bounded-arity extremal formulas are not a novelty claim
 
-## 5. Fixed information side: minimum test set / test cover
+The repository recurrence `F_b(n,h)` is an elementary rooted-tree extremal count under leaf, depth, and out-degree constraints, combined with separating-test witness constructions. An exact published formula in identical notation is not required for the manuscript's contribution.
 
-### Established
+No novelty claim should depend on the priority of `F_b`, its endpoint formulas, private-pair constructions, or the sharp adaptive/fixed ratios. They are supporting combinatorial machinery.
 
-The fixed identification problem is a standard minimum test collection / minimum test set / test cover problem: choose a smallest subset of tests whose signatures distinguish every item.
+## 7. Productive frontier
 
-Relevant anchors:
+`Productive frontier` is repository terminology for the irreducible separation obligations retained by the declared fixed-cost problem. No exact published synonym has been established, but this is not used as a priority claim.
 
-- Halldórsson, Halldórsson & Ravi (2001), cited throughout later minimum-test-collection literature.
-- Crowston, Gutin, Jones, Saurabh & Yeo. 2012/2013. Parameterized Study of the Test Cover Problem.
-- later stochastic test-collection literature explicitly describes minimum test collection/test set/test cover as well studied.
+In the ecological paper, productive frontier appears only where its edge count has downstream weight: a cap on irreducible obligations caps fixed information burden, structural gap, and therefore reachable feedback gain. Rank alone does not provide the same bound.
 
-### Do not claim
+## 8. Dynamical-systems mathematics
 
-- novelty for the pair-separation formulation;
-- novelty for minimum separating-test collections;
-- generic test-cover hardness/approximation behavior;
-- novelty for using test signatures to distinguish finite states.
+Treat the following as standard mathematics:
 
-The fixed side should be presented as imported/independently re-derived combinatorial machinery.
-
-## 6. Adaptive information side: optimal decision trees and adaptivity gaps
-
-### Established
-
-Adaptive identification by decision trees is classical.
-
-- Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17.
-- Adler, M. & Heeringa, B. 2012. Approximating optimal binary decision trees. *Algorithmica* 62:1112–1121.
-- Gupta, Nagarajan & Ravi: approximation algorithms for optimal decision trees and adaptive search problems.
-- Moshkov and collaborators: extensive test-theory / information-system treatment of tests, decision trees, rules, and complexity.
-
-The computer-science literature also explicitly uses the term `adaptivity gap` for comparisons between adaptive and non-adaptive strategies.
-
-### Do not claim
-
-- novelty for adaptive test sequencing;
-- novelty for decision-tree depth as an information-acquisition cost;
-- novelty for adaptive outperforming non-adaptive;
-- generic adaptivity gaps;
-- generic binary-tree counting or decision-tree complexity.
-
-### Candidate ecological use
-
-The ecological contribution begins after the static gap is treated as an upstream structural coordinate and composed with evolutionary dynamics:
-
-`required dynamical regime -> required structural gap -> minimum/Pareto-minimal finite information structure`.
-
-## 7. Dynamical-systems results
-
-### Treat as standard mathematics
-
-Do not claim novelty for:
-
-- eigenvalue classification of a two-dimensional local map;
-- Jury/Schur stability conditions;
-- complex eigenvalues implying damped oscillatory return;
+- Jury/Schur stability;
+- eigenvalue classification;
+- complex eigenvalues and damped oscillation;
 - characteristic-polynomial algebra;
-- spectral formulas for reversible Markov chains;
-- Popoviciu-type variance bounds;
-- Floquet/period-map distinction between neutral and attractive dynamics.
+- reversible Markov spectral formulas;
+- variance range bounds;
+- neutral versus attractive return maps.
 
-### Candidate composition
+The paper's contribution is not any of these ingredients separately.
 
-The manuscript's use of these results is biological/compositional:
-
-1. finite information structure bounds attainable feedback gain;
-2. attainable gain determines which local phases can be reached;
-3. complex local modes exclude every zero-feedback decomposition inside the declared generalized model;
-4. finite sensing extremal theory can therefore exclude or permit a regime with a qualitative mechanistic interpretation.
-
-## 8. Strongest defensible novelty statement
+## 9. Submission-safe novelty statement
 
 Use wording close to:
 
-> Evolutionary ecology already treats information acquisition as an adaptive decision problem, while computer science and test theory separately characterize the costs of fixed separating test sets and adaptive decision trees. Fluctuating selection and eco-evolutionary feedback likewise already explain how rapid short-term change can fail to accumulate or can be dynamically restored. Our contribution lies in composing these previously separate levels. We show that finite information structure places exact ceilings on structurally generated selection, that those ceilings combine with community persistence to bound long-run evolutionary fluctuation, and that a required feedback regime implies a minimum or Pareto-minimal finite information structure. Thus the combinatorial structure of individual information use restricts which evolutionary timescales and local feedback phases are reachable.
+> Evolutionary ecology already treats information acquisition, sampling, memory, and information-processing limits as factors shaping adaptive decisions and evolutionary responses. Test theory and computer science separately characterize separating systems, adaptive and multiway decision trees, and adaptivity gaps, while fluctuating-selection and eco-evolutionary theory already explain temporal cancellation and restoring feedback. We do not claim novelty for these components or for the bounded-arity tree extremal formulas used internally. Our contribution is their exact ecological composition: finite sensing complexity bounds structurally generated selection, recurrence of the same community states filters those rewards through time, and required dynamical regimes imply minimum or Pareto-minimal finite information structures. Thus declared finite information structure restricts which evolutionary fluctuations and local feedback phases are reachable within the model class.
 
-Do not replace `our contribution lies in composing` with `for the first time` until the remaining audit supports it.
+Avoid `first`, `first-ever`, `no previous theory`, or analogous priority language.
 
-## 9. Target-journal fit
+## 10. Status of the priority audit
+
+The broad prior-art audit is complete enough to draft the manuscript conservatively.
+
+Targeted searches found many neighboring theories — cognitive constraints, costly sampling, plasticity, cue integration, fluctuating environments, and eco-evolutionary feedback — but did not identify a direct predecessor with the full exact chain
+
+`finite decision/separation complexity`
+`-> exact structural selection / feedback ceiling`
+`-> recurrence of the same state-indexed rewards`
+`-> sharp long-run fluctuation ceiling or minimum/Pareto-minimal information complexity for a feedback phase`.
+
+This search result is not proof of priority. One final pre-submission database search should still be performed, but no unresolved mathematical-priority question needs to block manuscript drafting.
+
+See:
+
+- `manuscript/PRIOR_ART_AUDIT_V2.md`
+- `manuscript/FINAL_PRIORITY_SEARCH_LOG.md`
+- `manuscript/NOVELTY_PARAGRAPH_V1.md`
+
+## 11. Target-journal fit
 
 ### Theoretical Ecology
 
-Fit requirements for this manuscript:
+The manuscript should:
 
-- lead with the ecological reachability question, not query-complexity machinery;
+- lead with the ecological reachability question rather than query-complexity machinery;
 - keep four headline theorems only;
-- translate `world`, `query`, `arity`, and `productive frontier` into biological meaning before formal definitions;
+- translate `world`, `query`, `arity`, and `productive frontier` into ecological meanings before formal definitions;
 - move continuation quotients, proof DAGs, exhaustive enumeration, and solver details to Supplement;
-- use at least one running natural-history example to make finite sensing states concrete without turning the paper into an empirical validation paper.
+- use natural-history motivation only to make the finite-state model biologically intelligible, not to turn the paper into an observation-design or empirical-methods paper.
 
 ### More ambitious alternative
 
-*The American Naturalist* becomes plausible only if the biological synthesis is shown to change how evolutionary stasis/feedback should be conceptualized, not merely to provide mathematical bounds. The current theory is closer to *Theoretical Ecology* in presentation and scope.
-
-## 10. Remaining audit before submission
-
-The broad boundary is now established. The remaining checks are narrow:
-
-1. exact equivalence, if any, between the repository bounded-arity extremal formulas and published test-theory results;
-2. whether the productive-frontier edge lower bound has an established equivalent under another name;
-3. ecological/evolutionary theory that maps finite cue repertoire or decision-tree complexity to a ceiling on evolutionary response;
-4. models in which selection reward and environmental/community recurrence are generated on the same finite state space and jointly bounded rather than independently parameterized.
-
-Until those four checks are complete, novelty should be stated as a conservative synthesis/reachability contribution rather than a first-ever theorem claim.
+The American Naturalist would require a broader biological synthesis showing that the theory changes how stasis and eco-evolutionary feedback should be conceptualized. The current manuscript remains better matched to Theoretical Ecology.
