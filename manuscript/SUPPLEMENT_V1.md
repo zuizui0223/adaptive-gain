@@ -95,12 +95,20 @@ The first factor records range/variance saturation and the second reward alignme
 - random reversible-chain audit;
 - asymptotic crossover corollary details.
 
-## S3. Diagnostic theorem: oscillation forces feedback existence within the generalized local model
+## S3. Diagnostic theorem: model-compatible oscillation forces feedback existence
 
 ### Main-text result
-Stable real nonnegative modes can admit a zero-feedback decomposition, whereas a non-real conjugate eigenpair forces `G>0` for every admissible real `phi<1` within the declared model class. Feedback magnitude remains unidentified.
+Stable real nonnegative modes can admit a zero-feedback decomposition. A non-real conjugate eigenpair forces `G>0` for every admissible real `phi<1` only after the observed invariants are shown to lie inside the declared generalized persistence domain.
 
-The parent generalized model permits `alpha=1` but requires `phi<1`. Thus a neutral real mode exactly at one can be model-feasible in a zero-feedback decomposition when the other eigenvalue serves as `phi`, even though that case is outside the asymptotically stable monotone-return corollary.
+The parent generalized model permits `0<=alpha<=1` and requires `0<=phi<1`. Since `T=alpha+phi`, at least one persistence split exists exactly when
+
+\[
+0\le T<2.
+\]
+
+For a complex eigenpair satisfying this compatibility condition, every model-feasible decomposition has `G>0`; feedback magnitude remains unidentified. If `T<0` or `T>=2`, the correct conclusion is model incompatibility rather than feedback existence.
+
+The neutral real boundary `alpha=1` remains permitted. Thus a real mode exactly at one can be model-feasible in a zero-feedback decomposition when the other eigenvalue serves as `phi`, even though that case is outside the asymptotically stable monotone-return corollary. A double unit root is infeasible because it would require `phi=1`.
 
 ### Exact gain-infimum helper
 For
@@ -111,7 +119,7 @@ G(\phi)=\frac{\phi^2-T\phi+D}{1-\phi},
 R=1-T+D,
 \]
 
-setting `x=1-phi` gives `G=R/x+(T-2)+x` on `0<x<=1`. Therefore
+setting `x=1-phi` gives `G=R/x+(T-2)+x` on `0<x<=1`. This public helper optimizes over the unit community-memory interval and does not additionally restrict the implied `alpha=T-phi`. Therefore
 
 \[
 \inf_{0\le\phi<1}G(\phi)=
@@ -140,7 +148,7 @@ This piecewise expression is implemented directly and regression-tested, includi
 
 ### Validation receipts
 - `validation/feedback_existence_identifiability_v1.json` — original 200,000-model random audit;
-- `validation/feedback_existence_boundary_regression_v2.json` — deterministic `R<0`, `R=0`, interior, `R>1`, `alpha=1`, and double-unit-root boundary checks;
+- `validation/feedback_existence_boundary_regression_v2.json` — deterministic `R<0`, `R=0`, interior, `R>1`, `alpha=1`, double-unit-root, and complex-outside-model checks;
 - `validation/general_response_identifiability_v1.json`;
 - `validation/general_response_scalar_observability_v1.json`.
 
