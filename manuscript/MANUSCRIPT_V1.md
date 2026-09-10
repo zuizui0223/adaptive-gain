@@ -2,13 +2,15 @@
 
 ## Abstract
 
-Rapid evolutionary change over short intervals can coexist with weak long-term divergence, but fluctuating- and stabilizing-selection theory already explain why short-term activity need not accumulate. We ask a different question: when state-dependent selection is generated through finite information use, which evolutionary amplitudes, timescales, and feedback phases are structurally reachable? For each recurrent community state, we represent information use as a finite sensing task with an optimal adaptive cost and a corresponding fixed separating-test cost. Their structural difference is linked, under an explicit ecological lift, to state-dependent selection or feedback, while transitions among the same states determine temporal recurrence. The principal result runs backward from dynamics to information structure: a required feedback regime implies a required structural gap and therefore a minimum, or under bounded query arity a Pareto-minimal, finite information structure. Two theorem-level results support that reachability statement. Finite structural reward range and community persistence impose a sharp extremal ceiling on long-run evolutionary fluctuation, and a model-compatible complex local eigenpair forces feedback existence within the generalized model even though its magnitude remains unidentified. A mechanistic proposition separately distinguishes neutral cancellation stasis from attractive restoration. The contribution is the ecological composition of these levels: finite information structure restricts which evolutionary fluctuations and local feedback regimes are reachable within the declared model class.
+Rapid evolutionary change over short intervals can coexist with weak long-term divergence, but fluctuating- and stabilizing-selection theory already explain why short-term activity need not accumulate. We ask a different question: when state-dependent selection is generated through finite information use, which evolutionary amplitudes, timescales, and feedback phases are structurally reachable? For each recurrent community state, we represent information use as a finite deterministic sensing task with an optimal adaptive cost and a corresponding fixed separating-test cost. Their structural difference is linked, under an explicit ecological lift, to state-dependent selection or feedback, while transitions among the same states determine temporal recurrence. The principal result runs backward from dynamics to finite decision structure: a required feedback regime implies a required structural gap and therefore a minimum, or under bounded query arity a Pareto-minimal, finite decision/separation architecture. Two theorem-level results support that reachability statement. Finite structural reward range and community persistence impose a sharp extremal ceiling on long-run evolutionary fluctuation, and a model-compatible complex local eigenpair forces feedback existence within the generalized model even though its magnitude remains unidentified. A mechanistic proposition separately distinguishes neutral cancellation stasis from attractive restoration. The contribution is this discrete ecological composition: finite decision/separation structure restricts which evolutionary fluctuations and local feedback regimes are structurally reachable within the declared model class.
 
 ## 1. Introduction
 
-Rapid evolutionary change can occur on ecological timescales, yet strong short-term activity need not accumulate into comparably large long-term divergence. Ecological and evolutionary dynamics can overlap in time, selection can fluctuate strongly, and stabilizing or temporally reversing selection can reconcile rapid local change with long periods of apparent stasis (Hairston et al. 2005; Estes & Arnold 2007; Bell 2010; Uyeda et al. 2011; Messer et al. 2016). The question here is therefore not why short-term evolution can cancel or be restored, but what constrains the amplitudes and temporal regimes that are reachable upstream.
+Rapid evolutionary change can occur on ecological timescales, yet strong short-term activity need not accumulate into comparably large long-term divergence. Ecological and evolutionary dynamics can overlap in time, selection can fluctuate strongly, and stabilizing or temporally reversing selection can reconcile rapid local change with long periods of apparent stasis (Hairston et al. 2005; Estes & Arnold 2007; Bell 2010; Uyeda et al. 2011; Messer et al. 2016; Cotto & Chevin 2020). The question here is therefore not why short-term evolution can cancel or be restored, but what constrains the amplitudes and temporal regimes that are reachable upstream.
 
-Information use provides one such upstream constraint. Organisms acquire and combine finite cues under limits of sampling, attention, memory, and reliability; evolutionary ecology already treats this as an adaptive decision problem (Dall et al. 2005; Dukas 2004; Schmidt et al. 2010; Wright 2022). Separately, minimum test sets, separating systems, and adaptive decision trees characterize fixed and sequential finite-state identification. We use that machinery only as a structural coordinate and make no novelty claim for information use, test cover, decision trees, bounded outcome arity, or generic adaptive advantage.
+Information use provides one such upstream constraint. Organisms acquire and combine finite cues under limits of sampling, attention, memory, and reliability; evolutionary ecology already treats this as an adaptive decision problem, and prior theory explicitly treats information-processing and sensing architectures as evolutionarily shaped mechanisms (Dall et al. 2005; Dukas 2004; Schmidt et al. 2010; Trimmer & Houston 2014; Eliassen et al. 2016; Wright et al. 2022). Formal information-theoretic work goes further: environmental information has an established fitness value, and rate-distortion theory can ask how much mutual information is minimally required to achieve a target growth rate or average selection coefficient (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011; Moffett & Eckford 2022). Evolutionary `information thresholds` also have established meanings in coding and replication theory (de Boer & Hogeweg 2010). We therefore do not claim a new minimum-information principle in general.
+
+Our coordinate is different. Separating systems and optimal binary or multiway decision trees characterize fixed and sequential finite-state identification (Katona 1966; Hyafil & Rivest 1976; Chakaravarthy et al. 2009). We use this machinery to describe a **finite deterministic decision/separation architecture**: represented ecological alternatives, declared cues, adaptive depth, irreducible fixed-side obligations, and cue outcome arity. The object minimized below is this discrete structure, not Shannon information or channel rate.
 
 For recurrent community state `i`, let `C_A(i)` be the least guaranteed adaptive cost of resolving the declared sensing task and `C_F(i)` the corresponding fixed information requirement. Their difference
 
@@ -16,9 +18,9 @@ For recurrent community state `i`, let `C_A(i)` be the least guaranteed adaptive
 g_i=C_F(i)-C_A(i)
 \]
 
-is linked, through an explicit ecological lift, to state-dependent selection or feedback. The same recurrent state space determines how those rewards reappear through time via a community transition operator. This creates a reachability problem: how large can structurally generated evolutionary fluctuations become, and what finite information complexity is required before a specified feedback regime becomes possible?
+is linked, through an explicit ecological lift, to state-dependent selection or feedback. The same recurrent state space determines how those rewards reappear through time via a community transition operator. This creates a reachability problem: how large can structurally generated evolutionary fluctuations become, and what finite decision/separation structure is required before a specified feedback regime becomes possible?
 
-The paper is organized around one principal reachability theorem rather than four equal claims. A required dynamical regime imposes a required structural gap and therefore a minimum or Pareto-minimal information structure. A structural-temporal extremal theorem bounds long-run fluctuation from above; a diagnostic theorem determines when a model-compatible local oscillation rules out zero feedback; and a mechanistic proposition keeps neutral cancellation stasis distinct from attractive restoration.
+The paper is organized around one principal reachability theorem rather than four equal claims. A required dynamical regime imposes a required structural gap and therefore a minimum or Pareto-minimal finite decision/separation structure. A structural-temporal extremal theorem bounds long-run fluctuation from above; a diagnostic theorem determines when a model-compatible local oscillation rules out zero feedback; and a mechanistic proposition keeps neutral cancellation stasis distinct from attractive restoration.
 
 ## 2. Model
 
@@ -58,7 +60,7 @@ s_i-\bar s=\lambda(g_i-\bar g).
 
 ### 2.4 Community recurrence
 
-Let ecological states evolve as a finite ergodic Markov chain with transition matrix `P` and stationary distribution `pi`. For centered reward vector `c=s-\bar s 1`, define
+Let ecological states evolve as a finite ergodic Markov chain with transition matrix `P` and stationary distribution `pi`. Temporal autocorrelation and fluctuating selection are established evolutionary mechanisms; here the Markov representation is used only to connect recurrence of the same state-indexed structural rewards to long-run filtering (Bell 2010; Cotto & Chevin 2020). For centered reward vector `c=s-\bar s 1`, define
 
 \[
 \gamma(k)=\sum_i\pi_i c_i[P^k c]_i.
@@ -80,7 +82,7 @@ where `r_r` is a nontrivial community eigenvalue and `w_r` the squared reward pr
 
 ### 2.5 Local endogenous feedback
 
-Let `alpha` denote intrinsic evolutionary persistence, `phi` ecological/community persistence, and `G` net feedback gain. The local invariants are
+Let `alpha` denote intrinsic evolutionary persistence, `phi` ecological/community persistence, and `G` net feedback gain. Reciprocal eco-evolutionary feedback itself is established theory (Post & Palkovacs 2009; Schoener 2011); the role here is to ask how much finite sensing structure is required to reach particular local regimes. The local invariants are
 
 \[
 \boxed{T=\alpha+\phi,}\qquad
@@ -119,7 +121,7 @@ and the real-to-complex threshold is
 \boxed{G_{\rm osc}=\frac{(\alpha-\phi)^2}{4(1-\phi)}.}
 \]
 
-### 2.6 Information-complexity support
+### 2.6 Finite decision/separation support
 
 For unit-cost sensing with at most `b` outcomes per query, let `F_b(n,h)` denote the supporting rooted-tree extremal count. A task with adaptive optimum `C_A=h` obeys
 
@@ -127,11 +129,11 @@ For unit-cost sensing with at most `b` outcomes per query, let `F_b(n,h)` denote
 \boxed{C_F\le\min\{m,E,F_b(n,h)\}.}
 \]
 
-Hence gap `q=C_F-C_A` requires `min{m,E,F_b(n,h)}>=h+q`. Binary sensing yields one exact first corner; higher arity generally yields a Pareto frontier over `(n,m,E)`.
+Hence gap `q=C_F-C_A` requires `min{m,E,F_b(n,h)}>=h+q`. Binary sensing yields one exact first corner; higher arity generally yields a Pareto frontier over `(n,m,E)`. The separating-system and multiway decision-tree literatures are used as prior-art anchors for this imported combinatorial setting, not as equivalence claims for the repository's exact arity restriction (Katona 1966; Hyafil & Rivest 1976; Chakaravarthy et al. 2009; Crowston et al. 2016).
 
 ## 3. Results
 
-### 3.1 Principal result: required dynamics imply minimum or Pareto-minimal information complexity
+### 3.1 Principal result: required dynamics imply minimum or Pareto-minimal finite decision/separation structure
 
 For binary unit-cost sensing and required integer gap `q>=1`, define
 
@@ -171,7 +173,7 @@ With local feedback `G=a Delta g`,
 
 Under `alpha=1`, `phi=1/2`, `a=1/8`, the first stable oscillatory gap is `q_osc=2`, giving `(n,m,E)=(6,5,5)`. More generally, if the integer gap ladder jumps directly beyond the upper stability boundary, the stable-oscillation Pareto set is empty.
 
-This reverse map is the principal result: a requested dynamical phase imposes a lower bound on the finite natural-history information structure capable of supporting it.
+This reverse map is the principal result: a requested local dynamical phase imposes a lower bound on the finite deterministic decision/separation architecture capable of supporting it. It is not a lower bound on Shannon mutual information.
 
 ### 3.2 Supporting result: structural and temporal constraints impose an extremal fluctuation envelope
 
@@ -257,9 +259,13 @@ This distinction is retained because the two mechanisms have different biologica
 
 ## 4. Discussion
 
-### 4.1 Required dynamics imply required information complexity
+### 4.1 Required dynamics imply required finite decision/separation structure
 
-The reverse map gives the static combinatorics a direct ecological role. A required feedback phase implies a required gain, that gain implies a structural gap, and the gap imposes lower bounds on finite sensing structure. Higher cue arity can reduce query/frontier burden without reducing the minimum number of represented alternatives, exposing a Pareto tradeoff between ecological-state complexity and information-channel complexity. This is the paper's main reachability claim.
+The reverse map gives the static combinatorics a direct ecological role. A required feedback phase implies a required gain, that gain implies a structural gap, and the gap imposes lower bounds on a finite decision/separation architecture. Higher cue arity can reduce query/frontier burden without reducing the minimum number of represented alternatives, exposing a Pareto tradeoff between ecological-state complexity and information-channel branching complexity. This is the paper's main reachability claim.
+
+The reverse direction itself is not unprecedented in information theory. Moffett & Eckford (2022) derive minimum mutual-information requirements for target population growth and average selection coefficients using rate-distortion theory. The present result asks a different question: given a local feedback phase, what finite deterministic decision/separation structure is required to generate a sufficiently large adaptive/fixed structural gap? The answer is discrete and, for bounded arity, generally Pareto-valued over `(n,m,E)` rather than a scalar information rate.
+
+The distinction is structural rather than merely terminological. Once the deterministic sensing task is declared, `C_A`, `C_F`, and the resulting `(n,m,E)` bounds are worst-case and distribution-free: they depend on which alternatives must be distinguished and which cue outcomes are available, not on a probability distribution over alternatives. Mutual information and rate-distortion quantities instead require probabilistic ingredients such as a state distribution and a channel or fitness mapping. Without adding those ingredients, neither representation generally determines the other. The Pareto frontier derived here is therefore a constraint on finite sensing architecture, not a re-expression of an information rate.
 
 ### 4.2 The structural-temporal theorem is an envelope, not a realized-variance predictor
 
@@ -279,29 +285,46 @@ Finite sensing tasks should be grounded in natural history: the application defi
 
 ### 4.6 Relation to existing theory
 
-Information use, limited attention, sampling costs, memory, cue reliability, separating systems, optimal and multiway decision trees, adaptivity gaps, fluctuating selection, temporal autocorrelation, and generic eco-evolutionary feedback are prior art. No novelty claim is made for the bounded-arity tree extremal formulas used internally, for the reversible-chain variance formula, or for identity-map versus contraction algebra. The contribution is their ecological composition, with the strongest claim being the exact reverse map from a required dynamical regime to a required finite information structure.
+The manuscript sits at the intersection of literatures that are already substantial on their own. Information use, limited attention, evolved sensing architecture, sampling costs, memory, cue reliability, separating systems, optimal and multiway decision trees, adaptivity gaps, fluctuating selection, temporal autocorrelation, and generic eco-evolutionary feedback are prior art. Information-fitness theory additionally formalizes the fitness value of environmental information (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011), and Moffett & Eckford (2022) explicitly derive minimal mutual-information requirements for target growth and selection. de Boer & Hogeweg (2010) provides a distinct evolutionary use of `information threshold` in coding structure.
+
+Accordingly, no novelty claim is made for minimum information in general, the bounded-arity tree extremal formulas used internally, the reversible-chain variance formula, or identity-map versus contraction algebra. The contribution claimed here is narrower: finite deterministic decision/separation architecture is linked through the adaptive/fixed structural gap to state-indexed selection and local feedback, yielding exact componentwise minima or Pareto-minimal `(n,m,E)` structures for a required local regime, with community recurrence supplying a supporting extremal envelope.
 
 ## 5. Scope and limitations
 
-The sensing theory is finite, deterministic, and guaranteed-resolution, with unit acquisition costs in the sharp information-complexity results. Structural gaps are connected to selection or feedback through declared lifts rather than physiological derivation. The structural-temporal ceiling assumes a finite ergodic reversible community chain and is sharp only in the extremal sense; no claim is made that it predicts realized variance in a generic multi-state system. The local feedback results concern deterministic linearization around an equilibrium and are not a global bifurcation theory. Feedback-existence inference additionally requires that the observed trace be compatible with the declared persistence domain, `0<=T<2`. The framework does not include mutation, migration, drift, demographic stochasticity, multivariate quantitative genetics, noisy cue likelihoods, or continuous compatible sets.
+The sensing theory is finite, deterministic, and guaranteed-resolution, with unit acquisition costs in the sharp decision/separation-structure results. Structural gaps are connected to selection or feedback through declared lifts rather than physiological derivation. The structural-temporal ceiling assumes a finite ergodic reversible community chain and is sharp only in the extremal sense; no claim is made that it predicts realized variance in a generic multi-state system. The local feedback results concern deterministic linearization around an equilibrium and are not a global bifurcation theory. Feedback-existence inference additionally requires that the observed trace be compatible with the declared persistence domain, `0<=T<2`. The framework does not include mutation, migration, drift, demographic stochasticity, multivariate quantitative genetics, noisy cue likelihoods, or continuous compatible sets.
 
 The pair `(T,D)` does not uniquely identify `(alpha,phi,G)`, so an observed local timescale cannot generally be decomposed uniquely into evolutionary persistence, community persistence, and feedback. We retain this only as a limit on interpreting evolutionary time; no observation-design program is developed here.
 
+The discrete structural bounds are not substitutes for mutual-information or rate-distortion analyses. They answer a different question under a stronger deterministic finite-task representation. In applications where noisy channels, probabilistic stopping, or continuous signals are biologically essential, the present `(n,m,E)` bounds should not be read as informational lower bounds in bits.
+
 ## 6. Conclusion
 
-Finite information structure constrains which evolutionary dynamics are available to an ecological system. Most directly, a required local feedback regime implies a required structural gap and therefore a minimum or Pareto-minimal information structure. Around that principal reachability result, community recurrence supplies an extremal envelope on long-run fluctuation and model-compatible local oscillation supplies a diagnostic for feedback existence. Within the declared model class, evolutionary time is therefore constrained upstream by finite individual information structure without requiring every supporting algebraic component to be novel.
+Finite decision/separation structure can constrain which evolutionary dynamics are available to an ecological system within the declared model. Most directly, a required local feedback regime implies a required adaptive/fixed structural gap and therefore a minimum or Pareto-minimal finite architecture over represented alternatives, declared cues, and irreducible obligations. Around that principal reachability result, community recurrence supplies an extremal envelope on long-run fluctuation and model-compatible local oscillation supplies a diagnostic for feedback existence. This discrete structural result complements, rather than replaces, established information-theoretic work on the fitness value and minimum required amount of environmental information.
 
 ## References cited in the current draft
 
-- Bell, G. 2010. Fluctuating selection: the perpetual renewal of adaptation in variable environments. Philosophical Transactions of the Royal Society B 365:87–97.
-- Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. Trends in Ecology & Evolution 20:187–193.
-- Dukas, R. 2004. Causes and consequences of limited attention. Brain, Behavior and Evolution 63:197–210.
-- Estes, S. & Arnold, S. J. 2007. Resolving the paradox of stasis: models with stabilizing selection explain evolutionary divergence on all timescales. The American Naturalist 169:227–244.
-- Hairston, N. G. Jr., Ellner, S. P., Geber, M. A., Yoshida, T. & Fox, J. A. 2005. Rapid evolution and the convergence of ecological and evolutionary time. Ecology Letters 8:1114–1127.
-- Messer, P. W., Ellner, S. P. & Hairston, N. G. Jr. 2016. Can population genetics adapt to rapid evolution? Trends in Genetics 32:408–418.
-- Schmidt, K. A., Dall, S. R. X. & van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. Oikos 119:304–316.
-- Uyeda, J. C., Hansen, T. F., Arnold, S. J. & Pienaar, J. 2011. The million-year wait for macroevolutionary bursts. PNAS 108:15908–15913.
-- Wright, J. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. Biological Reviews 97:1999–2021.
+- Bell, G. 2010. Fluctuating selection: the perpetual renewal of adaptation in variable environments. *Philosophical Transactions of the Royal Society B: Biological Sciences* 365(1537):87–97. https://doi.org/10.1098/rstb.2009.0150.
+- Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating decision trees with multiway branches. In *Automata, Languages and Programming*, Part I, Lecture Notes in Computer Science 5555:210–221. https://doi.org/10.1007/978-3-642-02927-1_19.
+- Cotto, O. & Chevin, L.-M. 2020. Fluctuations in lifetime selection in an autocorrelated environment. *Theoretical Population Biology* 134:119–128. https://doi.org/10.1016/j.tpb.2020.03.002.
+- Crowston, R., Gutin, G., Jones, M., Muciaccia, G. & Yeo, A. 2016. Parameterizations of Test Cover with bounded test sizes. *Algorithmica* 74(1):367–384. https://doi.org/10.1007/s00453-014-9948-7.
+- Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. *Trends in Ecology & Evolution* 20(4):187–193. https://doi.org/10.1016/j.tree.2005.01.010.
+- de Boer, F. K. & Hogeweg, P. 2010. Eco-evolutionary dynamics, coding structure and the information threshold. *BMC Evolutionary Biology* 10:361. https://doi.org/10.1186/1471-2148-10-361.
+- Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119(2):219–230. https://doi.org/10.1111/j.1600-0706.2009.17781.x.
+- Dukas, R. 2004. Causes and consequences of limited attention. *Brain, Behavior and Evolution* 63(4):197–210. https://doi.org/10.1159/000076781.
+- Eliassen, S., Andersen, B. S., Jørgensen, C. & Giske, J. 2016. From sensing to emergent adaptations: Modelling the proximate architecture for decision-making. *Ecological Modelling* 326:90–100. https://doi.org/10.1016/j.ecolmodel.2015.09.001.
+- Estes, S. & Arnold, S. J. 2007. Resolving the paradox of stasis: models with stabilizing selection explain evolutionary divergence on all timescales. *The American Naturalist* 169(2):227–244. https://doi.org/10.1086/510633.
+- Hairston, N. G. Jr., Ellner, S. P., Geber, M. A., Yoshida, T. & Fox, J. A. 2005. Rapid evolution and the convergence of ecological and evolutionary time. *Ecology Letters* 8(10):1114–1127. https://doi.org/10.1111/j.1461-0248.2005.00812.x.
+- Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5(1):15–17. https://doi.org/10.1016/0020-0190(76)90095-8.
+- Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1(2):174–194. https://doi.org/10.1016/S0021-9800(66)80024-8.
+- Messer, P. W., Ellner, S. P. & Hairston, N. G. Jr. 2016. Can population genetics adapt to rapid evolution? *Trends in Genetics* 32(7):408–418. https://doi.org/10.1016/j.tig.2016.04.005.
+- Moffett, A. S. & Eckford, A. W. 2022. Minimal informational requirements for fitness. *Physical Review E* 105(1):014403. https://doi.org/10.1103/PhysRevE.105.014403.
+- Post, D. M. & Palkovacs, E. P. 2009. Eco-evolutionary feedbacks in community and ecosystem ecology: interactions between the ecological theatre and the evolutionary play. *Philosophical Transactions of the Royal Society B: Biological Sciences* 364(1523):1629–1640. https://doi.org/10.1098/rstb.2009.0012.
+- Rivoire, O. & Leibler, S. 2011. The Value of Information for Populations in Varying Environments. *Journal of Statistical Physics* 142(6):1124–1166. https://doi.org/10.1007/s10955-011-0166-2.
+- Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos* 119(2):304–316. https://doi.org/10.1111/j.1600-0706.2009.17573.x.
+- Schoener, T. W. 2011. The newest synthesis: understanding the interplay of evolutionary and ecological dynamics. *Science* 331(6016):426–429. https://doi.org/10.1126/science.1193954.
+- Trimmer, P. C. & Houston, A. I. 2014. An evolutionary perspective on information processing. *Topics in Cognitive Science* 6(2):312–330. https://doi.org/10.1111/tops.12085.
+- Uyeda, J. C., Hansen, T. F., Arnold, S. J. & Pienaar, J. 2011. The million-year wait for macroevolutionary bursts. *Proceedings of the National Academy of Sciences of the USA* 108(38):15908–15913. https://doi.org/10.1073/pnas.1014503108.
+- Wright, J., Haaland, T. R., Dingemanse, N. J. & Westneat, D. F. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. *Biological Reviews* 97(5):1999–2021. https://doi.org/10.1111/brv.12879.
 
 ## Supplement map
 

@@ -1,0 +1,62 @@
+{
+  "receipt": "submission_polish_20260910_v1",
+  "date": "2026-09-10",
+  "baseline": {
+    "main_commit": "569abe805cedc3cee9eeebc4a8aa9410efc12c87",
+    "main_tree": "40ce437bac9ba4ae50d04a06b4ed0a7dac0ecc18",
+    "post_merge_ci_run": 34466336113,
+    "post_merge_ci": {
+      "python_3_10": "success",
+      "python_3_11": "success",
+      "python_3_12": "success",
+      "pytest": "success",
+      "audit_witnesses": "success",
+      "audit_certificate_ladder": "success"
+    }
+  },
+  "branch": "manuscript/submission-polish-20260910",
+  "purpose": "Submission-facing editorial cleanup and claim narrowing after freezing the integrated theory and implementation baseline.",
+  "scope_audit": {
+    "manuscript_files_modified": [
+      "manuscript/FIGURE_PLAN_V1.md",
+      "manuscript/FINAL_PRIORITY_SEARCH_LOG.md",
+      "manuscript/LITERATURE_POSITIONING.md",
+      "manuscript/MANUSCRIPT_QA_V1.md",
+      "manuscript/MANUSCRIPT_V1.md",
+      "manuscript/NOVELTY_PARAGRAPH_V1.md",
+      "manuscript/PRIOR_ART_AUDIT_V2.md",
+      "manuscript/REFERENCES_CORE_V1.md",
+      "manuscript/SHORTENING_PLAN_V1.md",
+      "manuscript/SUBMISSION_SURFACE_V1.md",
+      "manuscript/SUPPLEMENT_V1.md"
+    ],
+    "theory_files_modified": [
+      "theory/PAPER_THEOREM_SPINE.md"
+    ],
+    "theory_file_change_kind": "terminology_and_claim-boundary_only",
+    "code_files_modified": [],
+    "test_files_modified": [],
+    "mathematical_claim_changed": false,
+    "formula_changed": false,
+    "model_domain_changed": false,
+    "novelty_scope_narrowed": true
+  },
+  "editorial_repairs": {
+    "hierarchy_consistency": "Removed the remaining four-equal-theorem language and synchronized the principal/supporting/diagnostic/proposition hierarchy across the manuscript, theorem spine, Supplement, figure plan, shortening plan, QA, and submission control.",
+    "priority_search_status": "Final search completed. It recovered formal information-fitness predecessors that the first polish pass underweighted, especially Moffett and Eckford 2022, which already derives minimum mutual-information requirements for target growth and selection.",
+    "information_theory_boundary": "The manuscript now explicitly disclaims novelty for the fitness value of information, minimum mutual-information requirements for fitness or selection, and generic evolutionary information thresholds. The principal result is stated instead as a minimum or Pareto-minimal finite deterministic decision/separation structure over represented alternatives, declared cues, and irreducible obligations.",
+    "bibliography_sync": "Added Donaldson-Matasci et al. 2010, Rivoire and Leibler 2011, Moffett and Eckford 2022, and de Boer and Hogeweg 2010; completed the ICALP 2009 Part I / LNCS 5555 / pages 210-221 metadata for Chakaravarthy et al.; synchronized the manuscript reference list with citations used in the prose.",
+    "submission_control": "Replaced obsolete PR #6 merge instructions with a frozen-baseline submission policy and kept side branches such as temporal-routing and inverse-diagnostics outside the canonical manuscript unless deliberately developed as separate work."
+  },
+  "claim_boundary": {
+    "principal_result": "required local dynamical regime -> required adaptive/fixed structural gap -> minimum or Pareto-minimal finite deterministic decision/separation structure over (n,m,E)",
+    "explicit_prior_art": "minimum Shannon or mutual-information requirements for target fitness/selection are prior art",
+    "closest_reverse_precursor": "Moffett and Eckford 2022, Minimal informational requirements for fitness",
+    "supporting_result": "extremally sharp structural-temporal envelope; not a point prediction of realized variance and not a generic fitness-value-of-information theorem",
+    "diagnostic_result": "model-compatible complex local mode forces feedback existence within the generalized model, not feedback magnitude",
+    "mechanistic_proposition": "neutral cancellation stasis and attractive restoring stasis are distinct",
+    "novelty_escalated": false,
+    "priority_language_added": false
+  },
+  "status": "pass"
+}

@@ -38,7 +38,7 @@ and
 
 ### One-sentence takeaway printed on figure
 
-**Finite sensing structure sets state-specific amplitude; recurrence of the same states sets temporal filtering.**
+**Finite decision/separation structure sets state-specific amplitude; recurrence of the same states sets temporal filtering.**
 
 ### Optional natural-history inset
 
@@ -57,11 +57,11 @@ Do not turn this into a measurement protocol.
 
 ---
 
-## Figure 2 — Principal result: required dynamics imply required finite information complexity
+## Figure 2 — Principal result: required dynamics imply required finite decision/separation structure
 
 ### Message
 
-A requested local dynamical phase imposes a required structural gap, which imposes a minimum or Pareto-minimal sensing structure.
+A requested local dynamical phase imposes a required structural gap, which imposes a minimum or Pareto-minimal **discrete sensing architecture**. Label the axes and boxes as represented alternatives, declared cues, and irreducible obligations; do not present the output as Shannon bits or generic mutual information.
 
 ### Top flow
 
@@ -92,7 +92,7 @@ Use the canonical example `q=2 -> (6,5,5)` as a small annotation, not the headli
 
 ### Panel B: bounded-arity Pareto frontier
 
-Plot world count `n` on x-axis and query/frontier burden on y-axis.
+Plot represented-alternative count `n` on x-axis and declared-query/frontier burden on y-axis.
 
 For `q=3,b=4`, mark both nondominated points:
 
@@ -109,9 +109,19 @@ A compact comparison:
 
 `m_min = E_min = q + h_b*(q)` — improves with arity.
 
+### Prior-art boundary cue
+
+A small side note, not a fifth panel:
+
+`not a mutual-information lower bound`
+
+`closest reverse precursor: Moffett & Eckford 2022 (rate-distortion / fitness)`
+
+The visual distinction matters because the novelty claim is the phase-to-**finite-structure** map, not the generic idea of a minimum information requirement.
+
 ### Takeaway
 
-**Richer cues compress routing burden, but they do not necessarily reduce the ecological alternatives that make the decision difficult.**
+**Richer cue outcomes compress routing burden, but they do not necessarily reduce the ecological alternatives that make the decision difficult.**
 
 ---
 
@@ -119,7 +129,7 @@ A compact comparison:
 
 ### Message
 
-Finite information amplitude and community persistence impose an exact upper envelope on long-run evolutionary fluctuation, but realized variance can lie well below that envelope.
+Finite structural reward amplitude and community persistence impose an exact upper envelope on long-run evolutionary fluctuation, but realized variance can lie well below that envelope. This is not a generic fitness-value-of-information curve.
 
 ### Main equation
 

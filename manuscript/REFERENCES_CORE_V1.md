@@ -22,7 +22,21 @@ Dukas, R. 2004. Causes and consequences of limited attention. *Brain, Behavior a
 
 Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos* 119(2):304–316. https://doi.org/10.1111/j.1600-0706.2009.17573.x.
 
+Trimmer, P. C. & Houston, A. I. 2014. An evolutionary perspective on information processing. *Topics in Cognitive Science* 6(2):312–330. https://doi.org/10.1111/tops.12085.
+
+Eliassen, S., Andersen, B. S., Jørgensen, C. & Giske, J. 2016. From sensing to emergent adaptations: Modelling the proximate architecture for decision-making. *Ecological Modelling* 326:90–100. https://doi.org/10.1016/j.ecolmodel.2015.09.001.
+
 Wright, J., Haaland, T. R., Dingemanse, N. J. & Westneat, D. F. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. *Biological Reviews* 97(5):1999–2021. https://doi.org/10.1111/brv.12879.
+
+## Fitness value of information and information thresholds
+
+Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119(2):219–230. https://doi.org/10.1111/j.1600-0706.2009.17781.x.
+
+Rivoire, O. & Leibler, S. 2011. The Value of Information for Populations in Varying Environments. *Journal of Statistical Physics* 142(6):1124–1166. https://doi.org/10.1007/s10955-011-0166-2.
+
+Moffett, A. S. & Eckford, A. W. 2022. Minimal informational requirements for fitness. *Physical Review E* 105(1):014403. https://doi.org/10.1103/PhysRevE.105.014403.
+
+de Boer, F. K. & Hogeweg, P. 2010. Eco-evolutionary dynamics, coding structure and the information threshold. *BMC Evolutionary Biology* 10:361. https://doi.org/10.1186/1471-2148-10-361.
 
 ## Eco-evolutionary feedback
 
@@ -32,18 +46,18 @@ Schoener, T. W. 2011. The newest synthesis: understanding the interplay of evolu
 
 ## Decision-tree / separating-system anchors for Model or Supplement
 
-Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17.
+Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5(1):15–17. https://doi.org/10.1016/0020-0190(76)90095-8.
 
-Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating decision trees with multiway branches. In *ICALP 2009*. https://doi.org/10.1007/978-3-642-02927-1_19.
+Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating decision trees with multiway branches. In *Automata, Languages and Programming*, Part I, Lecture Notes in Computer Science 5555:210–221. https://doi.org/10.1007/978-3-642-02927-1_19.
 
-Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194. https://doi.org/10.1016/S0021-9800(66)80024-8.
+Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1(2):174–194. https://doi.org/10.1016/S0021-9800(66)80024-8.
 
 Wegener, I. 1979. On separating systems whose elements are sets of at most k elements. *Discrete Mathematics* 28:219–222. https://doi.org/10.1016/0012-365X(79)90101-8.
 
-Crowston, R., Gutin, G., Jones, M., Muciaccia, G. & Yeo, A. 2016. Parameterizations of Test Cover with bounded test sizes. *Algorithmica* 74:367–384. https://doi.org/10.1007/s00453-014-9948-7.
+Crowston, R., Gutin, G., Jones, M., Muciaccia, G. & Yeo, A. 2016. Parameterizations of Test Cover with bounded test sizes. *Algorithmica* 74(1):367–384. https://doi.org/10.1007/s00453-014-9948-7.
 
 ## Citation discipline
 
-The ecology manuscript does not need a comprehensive computer-science review. Use enough references to establish that separating systems, binary/multiway decision trees, and bounded-test variants are prior art. Keep the detailed combinatorial bibliography in the Supplement.
+The ecology manuscript does not need a comprehensive computer-science or information-theory review. Use enough references to establish four boundaries: information use/sensing architecture, information-fitness theory including reverse minimum-information results, fixed/adaptive finite identification, and generic eco-evolutionary feedback/temporal recurrence. Keep detailed combinatorial bibliography in the Supplement.
 
-Before submission, verify journal-specific capitalization and reference style and add any final direct predecessor discovered in the last database search.
+Before submission, verify target-journal capitalization and reference style. Do not omit Moffett & Eckford (2022) from any submission version that uses `minimum information` or `minimum information structure` language.
