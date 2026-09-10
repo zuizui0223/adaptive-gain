@@ -6,9 +6,9 @@ Rapid evolutionary change over short intervals can coexist with weak long-term d
 
 ## 1. Introduction
 
-Rapid evolutionary change can occur on ecological timescales, yet strong short-term activity need not accumulate into comparably large long-term divergence. Ecological and evolutionary dynamics can overlap in time, selection can fluctuate strongly, and stabilizing or temporally reversing selection can reconcile rapid local change with long periods of apparent stasis (Hairston et al. 2005; Estes & Arnold 2007; Bell 2010; Uyeda et al. 2011; Messer et al. 2016). The question here is therefore not why short-term evolution can cancel or be restored, but what constrains the amplitudes and temporal regimes that are reachable upstream.
+Rapid evolutionary change can occur on ecological timescales, yet strong short-term activity need not accumulate into comparably large long-term divergence. Ecological and evolutionary dynamics can overlap in time, selection can fluctuate strongly, and stabilizing or temporally reversing selection can reconcile rapid local change with long periods of apparent stasis (Hairston et al. 2005; Estes & Arnold 2007; Bell 2010; Uyeda et al. 2011; Messer et al. 2016; Cotto & Chevin 2020). The question here is therefore not why short-term evolution can cancel or be restored, but what constrains the amplitudes and temporal regimes that are reachable upstream.
 
-Information use provides one such upstream constraint. Organisms acquire and combine finite cues under limits of sampling, attention, memory, and reliability; evolutionary ecology already treats this as an adaptive decision problem (Dall et al. 2005; Dukas 2004; Schmidt et al. 2010; Wright 2022). Separately, minimum test sets, separating systems, and adaptive decision trees characterize fixed and sequential finite-state identification. We use that machinery only as a structural coordinate and make no novelty claim for information use, test cover, decision trees, bounded outcome arity, or generic adaptive advantage.
+Information use provides one such upstream constraint. Organisms acquire and combine finite cues under limits of sampling, attention, memory, and reliability; evolutionary ecology already treats this as an adaptive decision problem, and prior theory explicitly treats information-processing and sensing architectures as evolutionarily shaped mechanisms (Dall et al. 2005; Dukas 2004; Schmidt et al. 2010; Trimmer & Houston 2014; Eliassen et al. 2016; Wright et al. 2022). Separately, separating systems and optimal binary or multiway decision trees characterize fixed and sequential finite-state identification (Katona 1966; Hyafil & Rivest 1976; Chakaravarthy et al. 2009). We use that machinery only as a structural coordinate and make no novelty claim for information use, test cover, decision trees, bounded outcome arity, or generic adaptive advantage.
 
 For recurrent community state `i`, let `C_A(i)` be the least guaranteed adaptive cost of resolving the declared sensing task and `C_F(i)` the corresponding fixed information requirement. Their difference
 
@@ -58,7 +58,7 @@ s_i-\bar s=\lambda(g_i-\bar g).
 
 ### 2.4 Community recurrence
 
-Let ecological states evolve as a finite ergodic Markov chain with transition matrix `P` and stationary distribution `pi`. For centered reward vector `c=s-\bar s 1`, define
+Let ecological states evolve as a finite ergodic Markov chain with transition matrix `P` and stationary distribution `pi`. Temporal autocorrelation and fluctuating selection are established evolutionary mechanisms; here the Markov representation is used only to connect recurrence of the same state-indexed structural rewards to long-run filtering (Bell 2010; Cotto & Chevin 2020). For centered reward vector `c=s-\bar s 1`, define
 
 \[
 \gamma(k)=\sum_i\pi_i c_i[P^k c]_i.
@@ -80,7 +80,7 @@ where `r_r` is a nontrivial community eigenvalue and `w_r` the squared reward pr
 
 ### 2.5 Local endogenous feedback
 
-Let `alpha` denote intrinsic evolutionary persistence, `phi` ecological/community persistence, and `G` net feedback gain. The local invariants are
+Let `alpha` denote intrinsic evolutionary persistence, `phi` ecological/community persistence, and `G` net feedback gain. Reciprocal eco-evolutionary feedback itself is established theory (Post & Palkovacs 2009; Schoener 2011); the role here is to ask how much finite sensing structure is required to reach particular local regimes. The local invariants are
 
 \[
 \boxed{T=\alpha+\phi,}\qquad
@@ -127,7 +127,7 @@ For unit-cost sensing with at most `b` outcomes per query, let `F_b(n,h)` denote
 \boxed{C_F\le\min\{m,E,F_b(n,h)\}.}
 \]
 
-Hence gap `q=C_F-C_A` requires `min{m,E,F_b(n,h)}>=h+q`. Binary sensing yields one exact first corner; higher arity generally yields a Pareto frontier over `(n,m,E)`.
+Hence gap `q=C_F-C_A` requires `min{m,E,F_b(n,h)}>=h+q`. Binary sensing yields one exact first corner; higher arity generally yields a Pareto frontier over `(n,m,E)`. The separating-system and multiway decision-tree literatures are used as prior-art anchors for this imported combinatorial setting, not as equivalence claims for the repository's exact arity restriction (Katona 1966; Hyafil & Rivest 1976; Chakaravarthy et al. 2009; Crowston et al. 2016).
 
 ## 3. Results
 
@@ -279,7 +279,7 @@ Finite sensing tasks should be grounded in natural history: the application defi
 
 ### 4.6 Relation to existing theory
 
-Information use, limited attention, sampling costs, memory, cue reliability, separating systems, optimal and multiway decision trees, adaptivity gaps, fluctuating selection, temporal autocorrelation, and generic eco-evolutionary feedback are prior art. No novelty claim is made for the bounded-arity tree extremal formulas used internally, for the reversible-chain variance formula, or for identity-map versus contraction algebra. The contribution is their ecological composition, with the strongest claim being the exact reverse map from a required dynamical regime to a required finite information structure.
+Information use, limited attention, evolved sensing architecture, sampling costs, memory, cue reliability, separating systems, optimal and multiway decision trees, adaptivity gaps, fluctuating selection, temporal autocorrelation, and generic eco-evolutionary feedback are prior art. The closest conceptual precursors located in the final targeted search explicitly evolve or analyze information-processing and sensing architectures (Trimmer & Houston 2014; Eliassen et al. 2016), but the search did not locate the exact reverse lower-bound map developed here. No novelty claim is made for the bounded-arity tree extremal formulas used internally, for the reversible-chain variance formula, or for identity-map versus contraction algebra. The contribution is their ecological composition, with the strongest claim being the exact reverse map from a required dynamical regime to a required finite information structure.
 
 ## 5. Scope and limitations
 
@@ -293,15 +293,24 @@ Finite information structure constrains which evolutionary dynamics are availabl
 
 ## References cited in the current draft
 
-- Bell, G. 2010. Fluctuating selection: the perpetual renewal of adaptation in variable environments. Philosophical Transactions of the Royal Society B 365:87–97.
-- Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. Trends in Ecology & Evolution 20:187–193.
-- Dukas, R. 2004. Causes and consequences of limited attention. Brain, Behavior and Evolution 63:197–210.
-- Estes, S. & Arnold, S. J. 2007. Resolving the paradox of stasis: models with stabilizing selection explain evolutionary divergence on all timescales. The American Naturalist 169:227–244.
-- Hairston, N. G. Jr., Ellner, S. P., Geber, M. A., Yoshida, T. & Fox, J. A. 2005. Rapid evolution and the convergence of ecological and evolutionary time. Ecology Letters 8:1114–1127.
-- Messer, P. W., Ellner, S. P. & Hairston, N. G. Jr. 2016. Can population genetics adapt to rapid evolution? Trends in Genetics 32:408–418.
-- Schmidt, K. A., Dall, S. R. X. & van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. Oikos 119:304–316.
-- Uyeda, J. C., Hansen, T. F., Arnold, S. J. & Pienaar, J. 2011. The million-year wait for macroevolutionary bursts. PNAS 108:15908–15913.
-- Wright, J. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. Biological Reviews 97:1999–2021.
+- Bell, G. 2010. Fluctuating selection: the perpetual renewal of adaptation in variable environments. *Philosophical Transactions of the Royal Society B: Biological Sciences* 365(1537):87–97. https://doi.org/10.1098/rstb.2009.0150.
+- Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating decision trees with multiway branches. In *Automata, Languages and Programming (ICALP 2009)*. https://doi.org/10.1007/978-3-642-02927-1_19.
+- Cotto, O. & Chevin, L.-M. 2020. Fluctuations in lifetime selection in an autocorrelated environment. *Theoretical Population Biology* 134:119–128. https://doi.org/10.1016/j.tpb.2020.03.002.
+- Crowston, R., Gutin, G., Jones, M., Muciaccia, G. & Yeo, A. 2016. Parameterizations of Test Cover with bounded test sizes. *Algorithmica* 74(1):367–384. https://doi.org/10.1007/s00453-014-9948-7.
+- Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. *Trends in Ecology & Evolution* 20(4):187–193. https://doi.org/10.1016/j.tree.2005.01.010.
+- Dukas, R. 2004. Causes and consequences of limited attention. *Brain, Behavior and Evolution* 63(4):197–210. https://doi.org/10.1159/000076781.
+- Eliassen, S., Andersen, B. S., Jørgensen, C. & Giske, J. 2016. From sensing to emergent adaptations: Modelling the proximate architecture for decision-making. *Ecological Modelling* 326:90–100. https://doi.org/10.1016/j.ecolmodel.2015.09.001.
+- Estes, S. & Arnold, S. J. 2007. Resolving the paradox of stasis: models with stabilizing selection explain evolutionary divergence on all timescales. *The American Naturalist* 169(2):227–244. https://doi.org/10.1086/510633.
+- Hairston, N. G. Jr., Ellner, S. P., Geber, M. A., Yoshida, T. & Fox, J. A. 2005. Rapid evolution and the convergence of ecological and evolutionary time. *Ecology Letters* 8(10):1114–1127. https://doi.org/10.1111/j.1461-0248.2005.00812.x.
+- Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5(1):15–17. https://doi.org/10.1016/0020-0190(76)90095-8.
+- Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1(2):174–194. https://doi.org/10.1016/S0021-9800(66)80024-8.
+- Messer, P. W., Ellner, S. P. & Hairston, N. G. Jr. 2016. Can population genetics adapt to rapid evolution? *Trends in Genetics* 32(7):408–418. https://doi.org/10.1016/j.tig.2016.04.005.
+- Post, D. M. & Palkovacs, E. P. 2009. Eco-evolutionary feedbacks in community and ecosystem ecology: interactions between the ecological theatre and the evolutionary play. *Philosophical Transactions of the Royal Society B: Biological Sciences* 364(1523):1629–1640. https://doi.org/10.1098/rstb.2009.0012.
+- Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos* 119(2):304–316. https://doi.org/10.1111/j.1600-0706.2009.17573.x.
+- Schoener, T. W. 2011. The newest synthesis: understanding the interplay of evolutionary and ecological dynamics. *Science* 331(6016):426–429. https://doi.org/10.1126/science.1193954.
+- Trimmer, P. C. & Houston, A. I. 2014. An evolutionary perspective on information processing. *Topics in Cognitive Science* 6(2):312–330. https://doi.org/10.1111/tops.12085.
+- Uyeda, J. C., Hansen, T. F., Arnold, S. J. & Pienaar, J. 2011. The million-year wait for macroevolutionary bursts. *Proceedings of the National Academy of Sciences of the USA* 108(38):15908–15913. https://doi.org/10.1073/pnas.1014503108.
+- Wright, J., Haaland, T. R., Dingemanse, N. J. & Westneat, D. F. 2022. A reaction norm framework for the evolution of learning: how cumulative experience shapes phenotypic plasticity. *Biological Reviews* 97(5):1999–2021. https://doi.org/10.1111/brv.12879.
 
 ## Supplement map
 
