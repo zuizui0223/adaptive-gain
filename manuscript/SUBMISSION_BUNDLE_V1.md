@@ -14,7 +14,7 @@ Default output:
 
 `dist/theoretical-ecology-scientific-bundle-v1.zip`
 
-The ZIP uses stable file ordering, fixed timestamps, stored entries, and fixed POSIX file metadata so identical source content produces identical bytes across supported Python versions.
+The ZIP uses stable file ordering, fixed timestamps, stored entries, and fixed POSIX file metadata. CI verifies deterministic repeated builds independently under Python 3.10, 3.11, and 3.12. Cross-version byte identity is not claimed unless separately compared.
 
 ## Contents
 
@@ -50,7 +50,7 @@ Those are controlled in `SUBMISSION_DECLARATIONS_V1.md` and `SUBMISSION_METADATA
 - the manuscript assembly step is already tested as pure insertion;
 - all four figures remain the checksum-frozen deterministic SVGs;
 - the bundle manifest hashes the scientific payloads actually placed into the archive;
-- two independent bundle builds must be byte-identical in CI;
+- two independent bundle builds must be byte-identical in each supported CI runtime;
 - archive entries must use the fixed timestamp `1980-01-01 00:00:00` and contain no extra files.
 
 The scientific source baseline is `release/theoretical-ecology-submission-finalization-v1`.
