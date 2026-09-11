@@ -4,6 +4,9 @@ from collections import deque
 from itertools import combinations
 from math import inf
 
+from adaptive_gain.component_context_obligation import (
+    minimum_edge_mutations_to_required_gap_context_bypassable,
+)
 from adaptive_gain.component_routing_bridge import (
     component_count,
     minimum_edge_mutations_to_required_gap,
@@ -80,6 +83,46 @@ def test_cr3_matches_full_edge_flip_bfs_for_all_simple_graphs_through_four_nodes
                 )
                 assert receipt.target_possible is True
                 assert receipt.minimum_edge_mutations == int(brute)
+
+
+def test_context_bypass_cut_transform_matches_full_edge_flip_bfs() -> None:
+    # Under bypassable context, positive q requires at least q+2 components.
+    # Verify the transformed-threshold implementation against the same independent
+    # full edge-flip BFS for every labeled simple graph through four function nodes.
+    for n in range(1, 5):
+        nodes = tuple(range(n))
+        universe = _edge_universe(nodes)
+        for mask in range(1 << len(universe)):
+            start_edges = frozenset(
+                edge for index, edge in enumerate(universe) if mask & (1 << index)
+            )
+            graph = _adjacency(nodes, start_edges)
+
+            zero = minimum_edge_mutations_to_required_gap_context_bypassable(
+                graph,
+                0,
+                edge_enumeration_limit=len(universe),
+            )
+            assert zero.minimum_edge_mutations == 0
+
+            for required_gap in range(1, max(1, n - 1)):
+                target_components = required_gap + 2
+                receipt = minimum_edge_mutations_to_required_gap_context_bypassable(
+                    graph,
+                    required_gap,
+                    edge_enumeration_limit=len(universe),
+                )
+                if target_components > n:
+                    assert receipt.structurally_impossible is True
+                    assert receipt.minimum_edge_mutations is None
+                else:
+                    brute = _brute_force_edge_flip_distance(
+                        nodes,
+                        start_edges,
+                        target_components,
+                    )
+                    assert receipt.target_possible is True
+                    assert receipt.minimum_edge_mutations == int(brute)
 
 
 def test_cr3_impossible_threshold_matches_vertex_count() -> None:
