@@ -1,150 +1,83 @@
-# Reversible-mutation representation certificate
+# Reversible mutation representation certificate
 
 Status: stacked side theory on `theory/routing-reversible-mutation-certificate`. This is not part of the frozen Theoretical Ecology submission.
 
-## 1. Why another representation result is needed
+## 1. Question
 
-PR #24 proves by direct contrast that the same required gap `q`, the same phenotype gain set and the same phenotype-level fitness schedule can produce different mutational accessibility and different stationary phase occupancy under different genotype encodings.
+The representation-dependence line shows that the same required gap `q` and the same phenotype-level fitness schedule can lead to different mutational accessibility and stationary phase occupancy under different genotype-policy encodings.
 
-The next question is not whether representation matters. That is established prior art in genotype-phenotype map theory. The useful question is:
+The minimal declaration needed for the finite-population extension is:
 
-> What is the minimal representation information that must be declared before accessibility or stationary occupancy can be inferred?
+- a finite genotype set `X`;
+- a gain map `g:X->{0,...,q}`;
+- a connected neutral mutation proposal kernel `Q`;
+- a positive neutral stationary measure `mu` satisfying detailed balance;
+- a declared start genotype for accessibility questions.
 
-For the finite origin-fixation extension, two logically separate objects are required:
+The aim is not to discover mutation-selection balance, but to state exactly which representation inputs are required before the adaptive-gain extension can make population-level claims.
 
-```text
-1. support graph of the neutral mutation proposal -> accessibility,
-2. neutral mutation stationary mass by phenotype -> stationary occupancy.
-```
+## 2. Neutral mutation certificate
 
-Raw genotype counts are only a special case of item 2.
-
-## 2. General finite representation
-
-Let `X` be a finite connected genotype set. Each genotype has a routing gain
+Require
 
 ```text
-g(x) in {0,...,q}.
+mu_x Q_xy = mu_y Q_yx
 ```
 
-Let `Q` be a neutral mutation-proposal Markov kernel. Assume `Q` is reversible with respect to a strictly positive probability measure `mu`:
+for all genotype states `x,y`.
+
+Thus `Q` is reversible with neutral stationary measure `mu`.
+
+The support graph of `Q` and its stationary measure play distinct roles:
+
+- support graph -> mutational reachability and shortest distance;
+- neutral stationary measure -> mutation/representation bias among genotypes.
+
+## 3. RGC1 — selected stationary law
+
+Use the same Moran origin-fixation rule as the routing population layer and phenotype fitness
 
 ```text
-mu_x Q_xy = mu_y Q_yx.
+W(x)=a^g(x),
 ```
 
-The proposal support graph is the undirected graph whose edges are pairs with positive proposal probability.
-
-Declare a start genotype `x0` for accessibility questions.
-
-As in PR #20, use a monomorphic rare-mutation Moran origin-fixation process in a population of size `N>=2`, with phenotype-level fitness
-
-```text
-W(x)=a^g(x),  a>=1.
-```
-
-Define
+with population size `N` and
 
 ```text
 theta=a^(N-1).
 ```
 
-No claim is made that this process is a universal model of sensory evolution.
-
-## Theorem RGC1 — exact selected stationary law under a reversible neutral proposal
-
-For a proposed move `x -> y`, the Moran fixation probabilities satisfy
+The Moran fixation-ratio identity gives
 
 ```text
 rho(W_y/W_x) / rho(W_x/W_y)
-= (W_y/W_x)^(N-1).
+= (W_y/W_x)^(N-1)
+= theta^(g(y)-g(x)).
 ```
 
-By reversibility of the neutral proposal,
-
-```text
-mu_x Q_xy = mu_y Q_yx.
-```
-
-Therefore the selected origin-fixation transition probabilities satisfy detailed balance with
+Combining this with neutral reversibility gives selected detailed balance for
 
 ```text
 boxed: pi_x proportional to mu_x theta^g(x).
 ```
 
-### Proof
-
-For `x!=y`, write the off-diagonal selected transition probability as
+Therefore stationary gain-layer weight is
 
 ```text
-P_xy = Q_xy rho(W_y/W_x).
+B_r theta^r,
 ```
 
-Then
-
-```text
-[mu_x theta^g(x)] P_xy
-/
-[mu_y theta^g(y)] P_yx
-```
-
-is the product of
-
-```text
-(mu_x Q_xy)/(mu_y Q_yx) = 1
-```
-
-and
-
-```text
-theta^(g(x)-g(y))
-* rho(W_y/W_x)/rho(W_x/W_y).
-```
-
-Since `W_y/W_x=a^(g(y)-g(x))`, the fixation-probability ratio equals
-
-```text
-a^((N-1)(g(y)-g(x)))
-= theta^(g(y)-g(x)),
-```
-
-so the product is one. Hence detailed balance holds. Connectivity gives a unique stationary law. QED.
-
-This is a standard reversible mutation-selection result in a routing-specific notation, not a priority claim.
-
-## 3. Neutral mutation mass, not raw multiplicity, is the stationary representation coordinate
-
-Define the neutral mutation mass of gain layer `r` by
+where
 
 ```text
 B_r = sum_{x:g(x)=r} mu_x.
 ```
 
-Aggregating RGC1 over a gain layer gives stationary layer weight
+Raw genotype multiplicity is only the special case in which `mu` is uniform.
 
-```text
-boxed: M_r(theta)=B_r theta^r.
-```
+## 4. RGC2 — exact modal inequalities
 
-Thus the stationary gain distribution is
-
-```text
-P(g=r)=B_r theta^r / sum_j B_j theta^j.
-```
-
-If the neutral proposal is symmetric and therefore has uniform neutral measure, then
-
-```text
-B_r = (# genotypes in layer r)/(# all genotypes),
-```
-
-and raw genotype multiplicity is sufficient up to a common normalization. This is exactly the special case used in PR #20.
-
-For a nonuniform reversible mutation proposal, equal genotype counts do not imply equal neutral mutation mass.
-
-## Theorem RGC2 — exact full-phase modal inequalities
-
-The full gain layer `q` is stationary-modal if and only if, for every `r<q`,
+Let `q` be the full required phase. The full phase is stationary-modal exactly when, for every `r<q`,
 
 ```text
 B_q theta^q >= B_r theta^r.
@@ -156,140 +89,206 @@ Equivalently,
 boxed: theta^(q-r) >= B_r/B_q  for every r<q.
 ```
 
-So `q` and phenotype fitness alone do not identify the stationary mode. The additional representation input needed is the neutral layer-mass vector
+Thus `q` and phenotype fitness alone do not identify stationary occupancy. The neutral gain-mass vector
 
 ```text
-(B_0,...,B_q).
+(B_0,...,B_q)
 ```
 
-The product-routing modal threshold `2^(q+1)-1` is one special evaluation of these inequalities under the branch-product uniform proposal.
+is an additional required representation coordinate.
 
-## 4. Accessibility is a different representation coordinate
+## 5. Accessibility coordinate
 
-Stationary layer masses do not determine mutation distance.
+Stationary mass does not determine shortest mutational access.
 
-For a declared start genotype `x0`, shortest access to gain at least `r` is
+Define the support graph of `Q` by an edge whenever either direction has positive proposal probability. Starting from the declared genotype `x_0`, shortest access to gain `r` is
 
 ```text
-d_Q(x0,r)
-=
-shortest support-graph distance from x0 to {x:g(x)>=r}.
+d_Q(x_0,{x:g(x)>=r}).
 ```
 
-This depends on the support graph of `Q`, not only on its neutral stationary measure.
+The tests include two symmetric four-state kernels with identical gain labels and the same uniform neutral measure, hence identical selected stationary layer distributions, but different support distances to the full phase.
 
-The executable audit includes two symmetric mutation kernels with:
+So accessibility and stationary occupancy require different parts of the representation declaration.
+
+## 6. Nonuniform mutation-bias witness
+
+Consider one genotype at each gain level `0,1,2` and neutral proposal
 
 ```text
-same genotypes,
-same gains,
-same uniform neutral measure,
-same stationary layer distribution,
+[[1/2,1/2,0],
+ [1/4,1/2,1/4],
+ [0,1/2,1/2]].
 ```
 
-but full-phase support distances `3` and `1`, respectively.
-
-Therefore the representation declaration cannot be compressed to a single scalar or to phenotype multiplicities alone.
-
-## 5. Exact nonuniform-mutation witness
-
-Consider three genotypes with gains
-
-```text
-(0,1,2)
-```
-
-and reversible neutral proposal
-
-```text
-Q =
-[1/2  1/2   0 ]
-[1/4  1/2  1/4]
-[ 0   1/2  1/2].
-```
-
-Its neutral stationary measure is
+Its neutral reversible measure is
 
 ```text
 mu=(1/4,1/2,1/4).
 ```
 
-There is still exactly one genotype per gain level, but at `theta=2` the selected raw layer weights are
+At `theta=2`, selected weights are
 
 ```text
 (1/4, 1, 1),
 ```
 
-so the normalized stationary distribution is
+so normalized stationary gain mass is
 
 ```text
 (1/9,4/9,4/9).
 ```
 
-The full phase only ties the middle gain layer.
-
-By contrast, the symmetric compressed gain chain from PR #24 has uniform neutral measure, giving at the same `theta=2`
+A symmetric gain chain with the same raw multiplicity `(1,1,1)` instead has
 
 ```text
-(1,2,4)/7,
+(1/7,2/7,4/7).
 ```
 
-so the full phase is uniquely modal with mass `4/7`.
+Therefore raw genotype count alone is insufficient; mutation bias changes stationary phase occupancy.
 
-This shows that even raw phenotype multiplicity is not enough when mutation proposal bias changes the neutral stationary measure.
+## 7. RGC3 — fixed-support nonidentifiability under unspecified mutation bias
 
-## 6. Representation certificate for downstream claims
+A stronger result holds even when the support graph is fixed.
 
-The extended adaptive-gain chain should therefore be written as
+Fix gain levels
 
 ```text
-required local feedback phase
+0,1,...,q
+```
+
+with the same local path support
+
+```text
+0 <-> 1 <-> ... <-> q,
+```
+
+and fix any positive finite-population tilt `theta`.
+
+For **any strictly positive target stationary distribution**
+
+```text
+p=(p_0,...,p_q),
+```
+
+choose
+
+```text
+mu_r proportional to p_r theta^{-r}.
+```
+
+Then place any positive reversible conductance on every adjacent path edge, for example
+
+```text
+c_r = epsilon min(mu_r,mu_{r+1}),
+0<epsilon<=1/2,
+```
+
+and set
+
+```text
+Q_{r,r+1}=c_r/mu_r,
+Q_{r+1,r}=c_r/mu_{r+1},
+```
+
+with diagonal entries completing each row to one.
+
+This keeps the **same path support** and satisfies
+
+```text
+mu_r Q_{r,r+1}=c_r=mu_{r+1}Q_{r+1,r}.
+```
+
+The selected law is therefore
+
+```text
+pi_r proportional to mu_r theta^r
+                proportional to p_r,
+```
+
+hence after normalization
+
+```text
+boxed: pi=p.
+```
+
+So even the combined information
+
+```text
+q + phenotype fitness schedule + local +/-1 mutation support
+```
+
+still does not identify stationary phase occupancy. The neutral mutation measure / proposal bias is an additional causal input.
+
+### Exact contradiction witness
+
+For `q=2`, `theta=2`, and the same path support `0<->1<->2`, two valid reversible mutation kernels can have selected stationary laws
+
+```text
+A=(1/10,1/10,4/5),
+B=(9/20,9/20,1/10).
+```
+
+Both have the same shortest support distances
+
+```text
+(0,1,2),
+```
+
+but the full phase has stationary mass `4/5` in A and `1/10` in B.
+
+Thus fixing mutation locality still does not fix the evolutionary conclusion unless proposal bias is also declared.
+
+## 8. Declaration contract
+
+The extended chain should therefore be written as
+
+```text
+required eco-evolutionary phase
 -> required structural gap q
 -> finite sensing phenotype requirement
--> declared genotype-policy representation
-   - support graph of Q
-   - reversible neutral measure mu
-   - gain map g(x)
--> mutation accessibility / finite-population stationary occupancy.
+-> genotype-policy map
+-> mutation support graph
+-> neutral mutation measure / proposal kernel
+-> accessibility / stationary phase occupancy.
 ```
 
-For stationary occupancy, the sufficient compressed object is the neutral gain-mass vector `(B_r)` under the reversible origin-fixation assumptions.
+The support graph and neutral mutation measure are logically distinct representation inputs.
 
-For mutational accessibility, the support graph remains necessary.
-
-Neither object is identified by the upstream finite-sensing theorem.
-
-## 7. Prior-art ceiling
+## 9. Prior-art ceiling
 
 Do not claim novelty for:
 
-- reversible mutation-selection chains;
-- mutation bias in equilibrium distributions;
-- Moran origin-fixation stationary laws;
-- genotype-phenotype redundancy;
+- reversible mutation-selection laws;
+- mutation bias;
+- Moran origin-fixation stationary distributions;
+- genotype-phenotype maps;
 - phenotype abundance bias;
 - neutral networks;
-- representation-dependent accessibility or evolvability;
-- free fitness / fitness-entropy competition.
+- free fitness;
+- representation-dependent evolvability.
 
-Relevant established context includes Sella & Hirsh (2005) on statistical-physics formulations of finite-population evolution and the extensive GP-map literature on redundancy, phenotypic bias, neutral networks and accessibility. The `arrival of the frequent` literature likewise shows that common phenotypes can dominate evolutionary outcomes even when rarer alternatives are fitter.
+The value of this side line is as an exact declaration/identifiability theorem for the adaptive-gain extension.
 
-The value here is therefore a model-declaration result:
+## 10. Executable audit
 
-> the adaptive-gain extension requires two additional representation certificates beyond the ecological required gap: a mutation support graph for accessibility and a neutral mutation mass by gain layer for stationary occupancy.
-
-## 8. Executable audit
-
-Implementation:
+Core certificate:
 
 ```text
 adaptive_gain/routing_reversible_certificate.py
+```
+
+Fixed-support nonidentifiability construction:
+
+```text
+adaptive_gain/routing_mutation_bias_nonidentifiability.py
 ```
 
 Tests:
 
 ```text
 tests/test_routing_reversible_certificate.py
+tests/test_routing_mutation_bias_nonidentifiability.py
 ```
 
-The tests use exact `Fraction` arithmetic to verify reversibility, selected detailed balance, `pi P=pi`, the nonuniform three-state witness, the uniform branch-product special case and the independence of support distance from neutral layer mass.
+All calculations use exact `Fraction` arithmetic in the audited finite examples.
