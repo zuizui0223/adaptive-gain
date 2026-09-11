@@ -49,11 +49,17 @@ def test_balanced_radius_k_path_gains_one_per_event() -> None:
             path = balanced_strict_improvement_path(k, r, k)
             assert len(path) == r + 1
             assert [state.realized_structural_gain for state in path] == list(range(r + 1))
-            for before, after in zip(path, path[1:], strict=True):
+            for before, after in zip(path, path[1:]):
                 elementary_edits = sum(
-                    a - b for a, b in zip(before.branch_lengths, after.branch_lengths, strict=True)
+                    a - b
+                    for a, b in zip(
+                        before.branch_lengths,
+                        after.branch_lengths,
+                        strict=True,
+                    )
                 )
                 assert elementary_edits == k
+                assert after.realized_structural_gain == before.realized_structural_gain + 1
 
 
 def test_radius_receipt_separates_first_gain_and_direct_target_thresholds() -> None:

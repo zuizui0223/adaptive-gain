@@ -1,8 +1,8 @@
 """Coordinated edit-radius thresholds for the local routing-pruning model.
 
-This is a side-model extension of local_routing_mutation.py.  A radius-rho
+This is a side-model extension of local_routing_mutation.py. A radius-rho
 mutation may bundle at most rho of the elementary branch-pruning edits into one
-mutation event.  The task, cues and target remain fixed.
+mutation event. The task, cues and target remain fixed.
 
 The results are elementary consequences of the declared L1 edit geometry and are
 used only to make the small-jump/accessibility distinction explicit.
@@ -55,7 +55,7 @@ def balanced_strict_improvement_path(
     """Construct a strictly gain-increasing path when rho>=k.
 
     Each step prunes one occurrence from every branch, using exactly k elementary
-    edits.  Hence gain rises by one per mutation event until required_gain is met.
+    edits. Hence gain rises by one per mutation event until required_gain is met.
     """
 
     k = branch_count
@@ -114,11 +114,19 @@ def routing_mutation_radius_receipt(
         path = balanced_strict_improvement_path(k, r, k)
         if len(path) - 1 != r:
             raise ArithmeticError("balanced strict-improvement construction failed")
-        if any(
-            b.realized_structural_gain <= a.realized_structural_gain
-            for a, b in zip(path, path[1:], strict=True)
-        ):
-            raise ArithmeticError("balanced path contained a non-improving mutation")
+        for before, after in zip(path, path[1:]):
+            if after.realized_structural_gain != before.realized_structural_gain + 1:
+                raise ArithmeticError("balanced path did not raise gain by exactly one")
+            elementary_edits = sum(
+                a - b
+                for a, b in zip(
+                    before.branch_lengths,
+                    after.branch_lengths,
+                    strict=True,
+                )
+            )
+            if elementary_edits != k:
+                raise ArithmeticError("balanced path event did not use exactly k elementary edits")
     return RoutingMutationRadiusReceipt(
         branch_count=k,
         required_gain=r,
