@@ -2,11 +2,11 @@
 
 This module does not construct the biological map psi: topology -> sensing task.
 It assumes that exact topology-specific structural gaps have already been supplied
-by a separately declared and justified map.  It then composes those gaps with an
+by a separately declared and justified map. It then composes those gaps with an
 undirected mutation graph and topology payoffs.
 
 The mathematics is elementary graph theory and a set-valued corollary of the
-PAYOFF topology-valley construction.  It is side-theory infrastructure, not an
+PAYOFF topology-valley construction. It is side-theory infrastructure, not an
 independent novelty claim.
 """
 
@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from heapq import heappop, heappush
 from itertools import count
 from math import inf, isfinite
-from typing import Hashable, Mapping, Iterable
+from typing import Hashable, Iterable, Mapping
 
 
 Node = Hashable
@@ -69,12 +69,22 @@ def _validated_neighbors(
     if not nodes:
         raise ValueError("topology graph must contain at least one node")
 
-    missing_gap = nodes.difference(gaps)
-    missing_payoff = nodes.difference(payoffs)
-    if missing_gap:
-        raise ValueError(f"missing structural gaps for nodes: {sorted(map(str, missing_gap))}")
-    if missing_payoff:
-        raise ValueError(f"missing payoffs for nodes: {sorted(map(str, missing_payoff))}")
+    gap_nodes = set(gaps)
+    payoff_nodes = set(payoffs)
+    if gap_nodes != nodes:
+        missing = nodes.difference(gap_nodes)
+        extra = gap_nodes.difference(nodes)
+        raise ValueError(
+            "structural-gap node set must exactly match topology graph nodes; "
+            f"missing={sorted(map(str, missing))}, extra={sorted(map(str, extra))}"
+        )
+    if payoff_nodes != nodes:
+        missing = nodes.difference(payoff_nodes)
+        extra = payoff_nodes.difference(nodes)
+        raise ValueError(
+            "payoff node set must exactly match topology graph nodes; "
+            f"missing={sorted(map(str, missing))}, extra={sorted(map(str, extra))}"
+        )
 
     normalized: dict[Node, frozenset[Node]] = {}
     for node in nodes:
@@ -157,7 +167,7 @@ def best_bottleneck_payoff(
     """Maximize the minimum node payoff along a path to any target.
 
     This is the widest-path / maximin bottleneck problem with node rather than
-    edge weights.  The start payoff is included in every path bottleneck.
+    edge weights. The start payoff is included in every path bottleneck.
     Returns None when no target is graph-reachable.
     """
 
@@ -196,8 +206,10 @@ def topology_regime_reachability(
 ) -> TopologyRegimeReachability:
     """Compose a supplied gap landscape with mutation-graph accessibility.
 
-    No topology-to-sensing map is inferred here.  `gaps` must be externally
+    No topology-to-sensing map is inferred here. `gaps` must be externally
     supplied after that biological bridge has been declared and solved.
+    The graph, gap map, and payoff map must describe exactly the same topology
+    family; extra nodes are rejected rather than treated as inaccessible states.
     """
 
     normalized = _validated_neighbors(adjacency, gaps, payoffs)

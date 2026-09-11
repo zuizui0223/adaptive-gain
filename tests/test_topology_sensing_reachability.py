@@ -160,3 +160,25 @@ def test_gap_and_payoff_validation() -> None:
             "A",
             1,
         )
+
+
+def test_gap_and_payoff_node_sets_must_match_graph_exactly() -> None:
+    adjacency = {"A": {"B"}, "B": {"A"}}
+
+    with pytest.raises(ValueError, match="structural-gap node set"):
+        topology_regime_reachability(
+            adjacency=adjacency,
+            payoffs={"A": 0.0, "B": 1.0},
+            gaps={"A": 0, "B": 1, "ghost": 5},
+            start="A",
+            required_gap=1,
+        )
+
+    with pytest.raises(ValueError, match="payoff node set"):
+        topology_regime_reachability(
+            adjacency=adjacency,
+            payoffs={"A": 0.0, "B": 1.0, "ghost": 9.0},
+            gaps={"A": 0, "B": 1},
+            start="A",
+            required_gap=1,
+        )
