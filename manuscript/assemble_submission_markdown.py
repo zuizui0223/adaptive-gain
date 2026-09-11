@@ -78,9 +78,11 @@ def assemble(source_text: str, legend_text: str) -> str:
     legend_block = "## Figure legends\n\n" + "\n\n".join(legends) + "\n\n"
     out = out.replace(REFERENCE_HEADING, legend_block + REFERENCE_HEADING, 1)
 
-    # Submission-surface invariants.
+    # Submission-surface invariants. Check the controlled strings, not broad
+    # abbreviations such as "Fig. 1." that may legitimately occur elsewhere.
+    for _, callout in CALLOUTS:
+        assert out.count(callout) == 1
     for number in range(1, 5):
-        assert out.count(f"Fig. {number}.") == 1
         assert out.count(f"Figure {number} |") == 1
     assert out.count("## Figure legends") == 1
     assert out.count(REFERENCE_HEADING) == 1

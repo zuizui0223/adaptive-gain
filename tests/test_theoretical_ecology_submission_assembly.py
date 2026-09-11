@@ -35,6 +35,7 @@ def test_submission_assembly_is_pure_insertion() -> None:
 
     stripped = assembled
     for _, callout in callouts:
+        assert assembled.count(callout) == 1
         stripped = stripped.replace("\n\n" + callout, "", 1)
     stripped = stripped.replace(legend_block, "", 1)
 
@@ -43,7 +44,6 @@ def test_submission_assembly_is_pure_insertion() -> None:
     assert assembled.count("## Figure legends") == 1
     assert assembled.index("## Figure legends") < assembled.index(reference_heading)
     for number in range(1, 5):
-        assert assembled.count(f"Fig. {number}.") == 1
         assert assembled.count(f"Figure {number} |") == 1
 
 
@@ -62,5 +62,8 @@ def test_cli_assembly_does_not_mutate_scientific_source(tmp_path: Path) -> None:
     text = output.read_text(encoding="utf-8")
     assert "## Figure legends" in text
     assert "AUTHOR INPUT REQUIRED" not in text
+    namespace = _load_namespace()
+    for _, callout in namespace["CALLOUTS"]:
+        assert text.count(callout) == 1
     for number in range(1, 5):
         assert f"Figure {number} |" in text
