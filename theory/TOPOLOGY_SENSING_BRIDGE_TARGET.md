@@ -1,249 +1,264 @@
 # Topology-to-sensing bridge target
 
-Status: conditional side theorem target. This is **not** part of the frozen Theoretical Ecology submission. It isolates the exact additional object needed to compose PAYOFF topology accessibility with adaptive-gain structural reachability.
+Status: side-theory target. This is **not** part of the frozen Theoretical Ecology submission.
 
-## 1. Why topology is the cleaner bridge coordinate
+## 1. The original bridge problem
 
-PAYOFF already contains a discrete architecture state space under vertex/topology selection. With binary retained-versus-released coupling edges, architectures are nodes of a hypercube and single-edge architectural mutations connect Hamming-neighbor topologies.
+PAYOFF already supplies a discrete architecture state space under retained-versus-released coupling topologies. Single-edge architectural mutations connect neighboring topologies, while PAYOFF can attach intrinsic optimized payoff and valley/accessibility quantities to those states.
 
-This is cleaner than forcing the continuous recovery coordinate `r` directly into adaptive-gain because both sides can then be finite/discrete:
+adaptive-gain supplies finite sensing tasks and exact adaptive/fixed structural gaps.
 
-```text
-PAYOFF topology T
--> biological sensing task S(T)
--> adaptive/fixed gap g(T)
--> downstream feedback capability.
-```
-
-The missing scientific object is the map
+A joint theory therefore needs a declared biological map
 
 ```text
-psi: T -> S(T).
+psi: topology T -> finite sensing task S(T).
 ```
 
-It must be defined from natural-history / mechanism semantics, not fitted after seeing the desired adaptive-gain result.
-
-## 2. Source-side PAYOFF structure
-
-Let the finite topology graph be
-
-```text
-G_top=(V,E),
-```
-
-where `T,T' in V` are adjacent when one declared architectural edge changes state.
-
-PAYOFF supplies for each topology an intrinsic optimized payoff
-
-```text
-b_T,
-```
-
-and for source `S` and target `G` the single-edge intrinsic valley depth
-
-```text
-B(S->G)
-=max[0, b_S - m*(S,G)],
-```
-
-where `m*(S,G)` is the best bottleneck payoff among all single-edge paths.
-
-PAYOFF's TRM4 states:
-
-```text
-B(S->G)=0
-```
-
-iff there exists a single-edge path from `S` to `G` whose every visited topology has payoff at least `b_S`.
-
-This is an accessibility statement, not a fixation-time theorem.
-
-## 3. Sensing-side adaptive-gain structure
-
-For a declared task `S(T)=psi(T)`, define
+For a declared task define
 
 ```text
 g(T)=C_F(S(T))-C_A(S(T)).
 ```
 
-Suppose a requested local eco-evolutionary regime requires structural gap at least
+and for a target local eco-evolutionary regime requiring gap `q`,
 
 ```text
-q>=1.
+V_q={T:g(T)>=q}.
 ```
 
-The current adaptive-gain reachability theorem then constrains which finite sensing structures can realize `g>=q`.
+The map must be defined before inspecting `g(T)`, `V_q`, or any desired downstream phase result.
 
-Define the regime-capable topology set
+---
+
+## 2. Topology alone is not enough
+
+`TOPOLOGY_ONLY_BRIDGE_NONIDENTIFIABILITY.md` establishes an exact repository witness that bare PAYOFF topology semantics do not identify `g(T)`. The missing ingredients include represented worlds, target distinctions, cue resources, outcome maps, costs, and physical dependency/availability rules.
+
+This means the bridge cannot be recovered by relabelling a topology edge as a cue edge after the fact.
+
+`TOPOLOGY_SENSING_SUFFICIENT_KERNEL.md` gives the constructive replacement. A future bridge does not need to reconstruct every detail of a full finite task; it is enough to generate
 
 ```text
-V_q={T in V : g(T)>=q}.
+K_A(T)      = adaptive continuation information sufficient for C_A,
+H_min(T)    = minimal productive frontier sufficient for C_F,
+resource costs.
 ```
 
-This set is meaningful only after `psi` has been declared and the tasks have been solved exactly or certified.
-
-## 4. Structural-regime distance
-
-Define
+Call such a prospective generative rule
 
 ```text
-d_q(S)
-=min{ d_H(S,G) : G in V_q },
+Gamma_K(T).
 ```
 
-with `d_q(S)=infinity` when `V_q` is empty.
-
-Here `d_H` is Hamming distance on binary topology states, equivalently the minimum number of single-edge changes ignoring selection/fixation.
-
-### Proposition TS1 — mutation-step lower bound
-
-If mutations change at most one topology edge per substitution, every route from `S` to a topology capable of the target regime requires at least
+Then
 
 ```text
-d_q(S)
+Gamma_K(T)
+-> g(T)
+-> V_q
+-> mutation / payoff accessibility.
 ```
 
-substitutions.
+---
 
-This is a graph-distance identity, not a novelty claim.
+## 3. Conditional topology-regime reachability after g(T) is supplied
 
-## 5. Structural-regime valley depth
+Let the topology mutation graph have one node per architecture state and one edge per allowed single-edge architectural mutation.
 
-Define the minimum intrinsic valley depth to the regime-capable set:
+For source `S`, define
 
 ```text
-B_q(S)
-=min{ B(S->G) : G in V_q },
+d_q(S)=minimum mutation-graph distance from S to V_q.
 ```
 
-with `B_q(S)=infinity` if `V_q` is empty.
-
-### Proposition TS2 — exact zero-valley characterization
-
-Assume `V_q` is nonempty. Then
+With PAYOFF intrinsic topology payoff `b_T`, define the best bottleneck payoff from source `S` to target `G` and PAYOFF valley depth
 
 ```text
-B_q(S)=0
+B(S->G)=max[0,b_S-m*(S,G)].
 ```
 
-iff there exists at least one regime-capable topology `G in V_q` and a single-edge path from `S` to `G` such that every visited topology `T_i` satisfies
+Then define
 
 ```text
-b_{T_i} >= b_S.
+B_q(S)=min_{G in V_q} B(S->G).
 ```
 
-### Proof
+The executable side module `topology_sensing_reachability.py` computes the corresponding finite-graph quantities after exact topology-specific gaps have been supplied.
 
-If `B_q(S)=0`, some `G in V_q` attains `B(S->G)=0`; PAYOFF TRM4 gives the required path. Conversely, any such path implies `B(S->G)=0` for that target and therefore `B_q(S)=0`. QED.
+### Exact interpretation
 
-This proposition is a set-valued corollary of PAYOFF TRM4 after the adaptive-gain structural target set `V_q` is declared. It should not be presented as an independent mathematical priority claim.
+- `V_q=empty`: no topology in the declared family is structurally capable of the target phase;
+- `V_q!=empty` but no capable topology lies in the source mutation component: structural capability exists somewhere but is mutation-disconnected;
+- finite `d_q>0`: at least that many topology substitutions are required before any capable state can be reached, ignoring selection/fixation;
+- `B_q=0`: some capable topology is reachable along a single-edge path whose every visited topology has intrinsic payoff at least the source payoff;
+- `B_q>0`: every route to every capable topology crosses an intrinsic-payoff valley below the source.
 
-### Proposition TS3 — positive joint barrier
+These are graph/accessibility compositions, not independent novelty claims.
 
-If
+---
+
+## 4. Source-derived bridge remains unresolved
+
+The current PAYOFF source does **not** license `psi` automatically.
+
+PAYOFF topology edges represent developmental/genetic/structural integration among fitness-relevant functions. Its adaptive finite-panel queries are researcher-side phase-identification measurements. There is no source rule saying
 
 ```text
-0 < B_q(S) < infinity,
+released coupling edge = new organismal cue
 ```
 
-then every single-edge path from `S` to **every** topology capable of the target regime must pass through at least one topology whose intrinsic payoff lies below the source by at least `B_q(S)`.
-
-This is the exact sense in which a target feedback regime can be structurally realizable somewhere in the architecture family yet inaccessible by an all-above-source single-edge route from the current topology.
-
-## 6. Three distinct failure modes
-
-The topology bridge separates three exclusions that should never be collapsed:
-
-### Structural-family exclusion
+or
 
 ```text
-V_q = empty.
+topology state = contingent sensory policy.
 ```
 
-No topology in the declared family carries enough finite sensing gap for the target regime. Mutation dynamics are irrelevant because there is nowhere structurally capable to go.
+Therefore a **source-derived** `psi(T)` has not yet been recovered from PAYOFF as currently written.
 
-### Mutation-distance burden
+This remains the hard stop for any empirical/source claim.
+
+---
+
+## 5. Prospective bridge now available: Gamma_comp
+
+A separate prospective model is developed in
 
 ```text
-V_q != empty,
-d_q(S) > 0.
+theory/COMPONENT_ROUTING_BRIDGE.md
+adaptive_gain/component_routing_bridge.py
 ```
 
-At least `d_q(S)` single-edge changes are required before any regime-capable topology can be reached, even before fitness valleys are considered.
-
-### Fitness-valley barrier
+The component-addressability axiom declares:
 
 ```text
-V_q != empty,
-B_q(S) > 0.
+one connected topology component
+= one jointly controlled functional module;
+
+different connected components
+= independently addressable modules;
+
+coarse context cue
+-> relevant module;
+
+module-specific terminal cue
+-> local target.
 ```
 
-Regime-capable topologies exist, but every single-edge route to all of them crosses an intrinsic-payoff valley below the source.
+This is an **added biological axiom**, not a fact inferred from PAYOFF topology alone.
 
-Actual fixation or first-passage probability additionally depends on mutation rates, population size, selection strength, topology-distance feedback and other process details. `B_q` is not itself a waiting time.
-
-## 7. Relation to the continuous small-jump bridge
-
-The earlier continuous proposal
+Under this rule, if `c(T)` is the number of connected components,
 
 ```text
-psi: r -> S(r)
+Gamma_comp(T)
+-> exact finite routing task
+-> induced joint structural kernel
+-> g(T)=c(T)-1.
 ```
 
-and structural jump modulus
+The implementation verifies both sides of the sufficient kernel: the continuation quotient recovers the exact adaptive cost and the productive frontier recovers the exact fixed cost.
+
+Thus the side theory now contains its first explicit prospective `Gamma_K(T)` realization, while preserving the topology-only nonidentifiability result for the unaugmented source semantics.
+
+---
+
+## 6. New mutation-accessibility theorem under Gamma_comp
+
+If architectural mutation flips one retained/released edge at a time, a target gap `q` requires at least
 
 ```text
-J_g(delta)
+q+1 connected components.
 ```
 
-remain valid as a more general target. But the topology route has two practical advantages:
-
-1. PAYOFF already supplies an exact discrete mutation graph and exact valley-depth theorem;
-2. adaptive-gain already operates on finite tasks, so no continuous-to-discrete limiting argument is required once `psi(T)` is biologically specified.
-
-Therefore the recommended development order is:
+The exact minimum number of topology edge mutations needed to reach `g>=q` from a topology `T` is
 
 ```text
-first:  topology T -> finite sensing task S(T)
-then:   compute g(T), V_q, d_q, B_q
-later:  ask whether these converge to / embed in a continuous r-based bridge.
+min |F|
+such that
+F subset E(T)
+and
+components(T-F)>=q+1.
 ```
 
-## 8. What remains genuinely hard
+This is the classical unweighted minimum `(q+1)`-cut objective applied to the bridge model.
 
-None of TS1-TS3 solves the biological mapping problem. The hard step is to justify that changing one PAYOFF architecture edge changes the organism's feasible cue-routing problem in a specific, reproducible way.
+The graph-theoretic object is established prior art; the side-theory role is the biological composition
 
-A valid `psi(T)` should specify, for every topology:
+```text
+required feedback phase
+-> required structural gap q
+-> required independently addressable modules q+1
+-> topology mutation burden via k-cut.
+```
 
-- represented ecological alternatives;
-- available cues / outcomes;
-- target distinctions relevant to fitness;
-- acquisition costs;
-- which cue dependencies are physically available under that topology.
+### Important consequence
 
-The map must be declared before evaluating `g(T)`.
+`q-g(T)` is only a lower bound on mutation distance.
 
-## 9. Candidate empirical / source-derived construction strategy
+Cycles can make early edge deletions structurally neutral. Therefore two topologies with the same current gap can have different accessibility to the same target gap.
 
-The most defensible first construction is not to invent arbitrary tasks. Start from a small PAYOFF network family where topology has a direct mechanistic meaning (retained versus released coupling among functions) and define sensing resources from those functions or their measurable state contrasts.
+Example:
 
-Then require:
+```text
+3-node path:     g=0, one deletion reaches g=1;
+3-node triangle: g=0, two deletions are required;
+K4:              g=0, three deletions are required to obtain the first extra component.
+```
 
-1. the same natural-history rule generates `S(T)` for every topology;
-2. no topology is hand-assigned a target gap;
-3. `C_A` and `C_F` are solved by the existing adaptive-gain machinery;
-4. the target phase threshold `q` is fixed before inspecting `g(T)`;
-5. `V_q`, `d_q`, and `B_q` are computed prospectively.
+For a connected source and target `q=1`, the mutation burden is ordinary edge connectivity.
 
-A successful example in which `V_q` is nonempty but `B_q>0` would be the first nontrivial joint witness: the regime is structurally available in the architecture family but separated from the resident by an evolutionary accessibility barrier.
+This distinction between current capability and accessibility is the main new mathematical consequence of the prospective bridge.
 
-## 10. Novelty ceiling
+---
 
-Do not claim TS1-TS3 as deep new graph theory. They are exact compositions of an existing PAYOFF accessibility theorem with a new finite sensing target set.
+## 7. Two bridge tracks must remain distinct
 
-Possible future novelty would have to come from one or more of:
+### Track A — source-derived / empirical bridge
 
-- a biologically nontrivial `psi(T)` whose finite sensing gaps can be characterized analytically;
-- an exact relation between topology distance / valley depth and adaptive-gain Pareto structure;
-- a theorem showing when architecture mutation cannot change `g` fast enough to reach a requested feedback phase;
-- an empirically testable prediction that separates structurally capable but evolutionarily inaccessible regimes from genuinely structurally impossible regimes.
+Still unresolved. A valid completion must show that real or source-model architecture variables actually determine the sensing/control kernel without an added post hoc mapping.
+
+### Track B — prospective component-addressability bridge
+
+Mathematically explicit and executable. It can support a companion theoretical model if natural-history assumptions justify the component-addressability axiom.
+
+Do not use Track B as evidence that PAYOFF already contained organismal sensory modules.
+
+---
+
+## 8. Completion criteria for a stronger bridge
+
+For a source-derived or empirically grounded companion result:
+
+1. choose a heritable architecture family with explicit topology semantics;
+2. predeclare the rule generating `K_A(T)`, `H_min(T)`, and resource costs;
+3. show that the rule is biologically motivated rather than selected to manufacture a desired gap pattern;
+4. compute exact `C_A(T), C_F(T), g(T)`;
+5. fix the downstream phase threshold `q` before inspecting topology gaps;
+6. compute `V_q`, mutation distance, and PAYOFF valley/accessibility quantities prospectively;
+7. seek a nontrivial witness such as `V_q!=empty` but positive topology/payoff barrier from the resident;
+8. keep identification/reportability gates separate from mutation accessibility;
+9. perform a fresh prior-art audit before any companion novelty claim.
+
+---
+
+## 9. Novelty ceiling
+
+Do not claim novelty for:
+
+- small mutations or adaptive dynamics;
+- Hegselmann-Krause/bounded confidence;
+- replicator-mutator / mesoscopic trait distributions;
+- topology mutation graphs or valley crossing;
+- modular neural/sensory networks;
+- minimum `k`-cut or edge connectivity;
+- decision trees or generic adaptivity gaps;
+- generic possible-versus-accessible distinctions.
+
+The current frozen flagship novelty candidate remains
+
+```text
+required local feedback phase
+-> required adaptive/fixed structural gap
+-> exact minimum/Pareto finite (n,m,E) sensing structure.
+```
+
+A future companion novelty would require an exact, biologically defensible architecture-to-sensing generative rule that makes mutation accessibility and finite sensing phase reachability jointly testable in the same state space. `Gamma_comp` is now one mathematically complete prospective candidate, but its biological axiom still requires independent justification.
