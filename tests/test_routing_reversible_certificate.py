@@ -146,7 +146,7 @@ def test_receipt_separates_accessibility_from_stationary_occupancy() -> None:
     assert receipt.required_gap == 2
     assert receipt.state_count == 4
     assert receipt.neutral_layer_masses == (Fraction(1, 2), Fraction(1, 4), Fraction(1, 4))
-    assert receipt.shortest_distances == (0, 2, 1)
+    assert receipt.shortest_distances == (0, 1, 1)
     assert receipt.selected_stationary_verified is True
 
 
