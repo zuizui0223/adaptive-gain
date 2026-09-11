@@ -114,8 +114,8 @@ def test_compressed_half_mass_boundary_is_exact_predicate() -> None:
     assert compressed_full_phase_half_mass_holds(2, Fraction(3, 2)) is False
     assert compressed_full_phase_half_mass_holds(2, 2) is True
     # q=2 boundary solves theta^3-2theta^2+1=(theta-1)(theta^2-theta-1)=0.
-    assert compressed_half_mass_polynomial(2, Fraction(3, 2)) > 0
-    assert compressed_half_mass_polynomial(2, 2) < 0
+    assert compressed_half_mass_polynomial(2, Fraction(3, 2)) < 0
+    assert compressed_half_mass_polynomial(2, 2) > 0
 
 
 def test_same_gain_levels_but_different_stationary_layer_weights() -> None:
