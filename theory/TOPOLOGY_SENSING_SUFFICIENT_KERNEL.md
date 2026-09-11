@@ -102,11 +102,71 @@ This is a composition of already established repository theorems. It is not pres
 
 ## 4. Why both halves are needed
 
-The adaptive continuation object alone is insufficient. `CONTINUATION_BISIMULATION.md` contains an exact four-world collision: two tasks have the same recursive root class and the same `C_A=2`, but fixed costs 3 and 2.
+The two kernel components are independently necessary for the current exact scalar representation in the sense that either one can be held fixed while the other changes the resulting gap.
+
+### 4.1 Same adaptive continuation, different productive frontier
+
+`CONTINUATION_BISIMULATION.md` contains an exact four-world collision. Two tasks have the same recursive root continuation class and
+
+```text
+C_A=2
+```
+
+in both cases, but their fixed costs are
+
+```text
+C_F=3
+```
+
+and
+
+```text
+C_F=2.
+```
+
+Hence their gaps are 1 and 0. The difference resides entirely in fixed-side resource co-location / productive-frontier structure.
 
 The repository also contains stronger negative layers showing that several richer resource summaries still fail to determine `C_F`, including continuation structure augmented by resource-orbit capacities or per-resource role profiles.
 
-Conversely, the productive frontier alone determines `C_F` but does not encode the adaptive routing recursion needed for `C_A`.
+### 4.2 Same productive frontier, different adaptive continuation
+
+The side-theory witness
+
+```text
+same_frontier_different_adaptive_cost_collision()
+```
+
+provides the converse collision.
+
+Both tasks have:
+
+```text
+5 represented worlds,
+2+3 target balance,
+3 unit-cost binary queries,
+H_min = {{q0},{q1},{q2}},
+C_F = 3.
+```
+
+But their adaptive costs are
+
+```text
+C_A = 3
+```
+
+and
+
+```text
+C_A = 2,
+```
+
+so their gaps are 0 and 1.
+
+Thus the productive frontier alone does not determine adaptive routing value.
+
+The exact regression is in `tests/test_topology_sensing_sufficient_kernel.py`.
+
+### Consequence
 
 Therefore a topology-to-gap bridge must carry information for both:
 
@@ -117,6 +177,8 @@ fixed global separation obligations.
 ```
 
 This is the precise structural meaning of the earlier warning that local routing structure and fixed-bundle burden are different objects.
+
+The paired collisions do not establish universal categorical minimality of this representation. They do establish that neither component can simply be dropped from the current exact scalar bridge target.
 
 ---
 
