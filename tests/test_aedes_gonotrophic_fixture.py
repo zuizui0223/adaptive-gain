@@ -36,6 +36,11 @@ def test_gonotrophic_state_is_unique_optimal_adaptive_root():
 def test_only_all_three_queries_resolve_four_target_fixed_task():
     task = aedes_gonotrophic_q1_task()
     names = tuple(query.name for query in task.queries)
+    assert names == (
+        "gonotrophic_state",
+        "host_acidic_cue",
+        "oviposition_site_cue",
+    )
     assert bundle_resolves(task, names)
     for omitted in names:
         pair = tuple(name for name in names if name != omitted)
@@ -85,7 +90,7 @@ def test_unit_cost_target_coarsening_collapses_gap_to_zero():
     assert receipt.strict_gain is False
     task = aedes_gonotrophic_coarsened_target_task(1, 1, 1)
     fixed = fixed_minimum_resolution(task)
-    assert fixed.optimal_bundles == (("host_acidic_cue", "oviposition_odor_cue"),)
+    assert fixed.optimal_bundles == (("host_acidic_cue", "oviposition_site_cue"),)
 
 
 def test_coarsened_target_formula_matches_exact_solver_on_grid():
