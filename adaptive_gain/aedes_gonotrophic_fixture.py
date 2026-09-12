@@ -14,19 +14,26 @@ The declared outcome table is
     O1 =           (1,0,1)
 
 where R is gonotrophic state, A is the host-branch acidic-cue channel and B is
-the oviposition-branch odor channel.  Four distinct target actions are declared.
+the oviposition-branch odor channel.
 
-With unit costs the mathematical fixture has C_A=2, C_F=3 and g=1.  More
-generally, for positive integer costs (r,a,b), the same task has
+With four biologically distinct target actions and unit costs the mathematical
+fixture has C_A=2, C_F=3 and g=1.  More generally, for positive integer costs
+(r,a,b), the same target partition has
 
     C_A = r + max(a,b)
     C_F = r + a + b
     g   = min(a,b) > 0.
 
-Thus equal cue costs are not required for strict structural gain in this
-prospective witness.  Whether the biological system is admissible under any
-particular cue/cost semantics is a separate empirical gate and must not be
-inferred from this file.
+A target-coarsening control is included deliberately.  If host/oviposition
+actions are collapsed to generic ``accept`` versus ``reject``, then
+
+    C_F = a + b
+    C_A = min(a+b, r+max(a,b))
+    g   = max(0, min(a,b)-r).
+
+Thus the equal-cost coarsened task has g=0.  Positive gain must not be created by
+post-hoc target semantics.  Whether either target partition is biologically
+admissible is an empirical gate, not a consequence of this fixture.
 """
 from __future__ import annotations
 
@@ -48,32 +55,54 @@ def _validate_cost(value: int, name: str) -> int:
     return value
 
 
+def _queries(r: int, a: int, b: int) -> tuple[Query, ...]:
+    return (
+        Query("gonotrophic_state", r, (0, 0, 1, 1)),
+        Query("host_acidic_cue", a, (0, 1, 0, 0)),
+        Query("oviposition_odor_cue", b, (0, 0, 0, 1)),
+    )
+
+
 def aedes_gonotrophic_weighted_task(
     state_cost: int,
     host_cost: int,
     oviposition_cost: int,
 ) -> FiniteTask:
-    """Return the frozen four-world star with declared positive integer costs."""
+    """Four distinct host/oviposition target actions."""
 
     r = _validate_cost(state_cost, "state_cost")
     a = _validate_cost(host_cost, "host_cost")
     b = _validate_cost(oviposition_cost, "oviposition_cost")
     worlds = (
-        World("H0", "reject_host"),
+        World("H0", "continue_host_search"),
         World("H1", "approach_host"),
-        World("O0", "reject_oviposition"),
-        World("O1", "accept_oviposition"),
+        World("O0", "continue_oviposition_search"),
+        World("O1", "accept_oviposition_site"),
     )
-    queries = (
-        Query("gonotrophic_state", r, (0, 0, 1, 1)),
-        Query("host_acidic_cue", a, (0, 1, 0, 0)),
-        Query("oviposition_odor_cue", b, (0, 0, 0, 1)),
+    return FiniteTask(worlds, _queries(r, a, b))
+
+
+def aedes_gonotrophic_coarsened_target_task(
+    state_cost: int,
+    host_cost: int,
+    oviposition_cost: int,
+) -> FiniteTask:
+    """Falsification control collapsing the targets to generic reject/accept."""
+
+    r = _validate_cost(state_cost, "state_cost")
+    a = _validate_cost(host_cost, "host_cost")
+    b = _validate_cost(oviposition_cost, "oviposition_cost")
+    worlds = (
+        World("H0", "reject"),
+        World("H1", "accept"),
+        World("O0", "reject"),
+        World("O1", "accept"),
     )
-    return FiniteTask(worlds, queries)
+    return FiniteTask(worlds, _queries(r, a, b))
 
 
 def aedes_gonotrophic_q1_task() -> FiniteTask:
-    """Return the prospectively frozen unit-cost four-world star task."""
+    """Return the prospectively frozen unit-cost four-target star task."""
 
     return aedes_gonotrophic_weighted_task(1, 1, 1)
 
@@ -103,12 +132,25 @@ class AedesWeightedCostReceipt:
     prospective_only: bool = True
 
 
+@dataclass(frozen=True)
+class AedesTargetCoarseningReceipt:
+    state_cost: int
+    host_cost: int
+    oviposition_cost: int
+    adaptive_cost: int
+    fixed_cost: int
+    structural_gap: int
+    expected_gap: int
+    strict_gain: bool
+    prospective_only: bool = True
+
+
 def aedes_gonotrophic_weighted_receipt(
     state_cost: int,
     host_cost: int,
     oviposition_cost: int,
 ) -> AedesWeightedCostReceipt:
-    """Verify the exact unequal-cost formula against the generic solver."""
+    """Verify the exact unequal-cost four-target formula against the solver."""
 
     r = _validate_cost(state_cost, "state_cost")
     a = _validate_cost(host_cost, "host_cost")
@@ -144,8 +186,45 @@ def aedes_gonotrophic_weighted_receipt(
     )
 
 
+def aedes_target_coarsening_receipt(
+    state_cost: int,
+    host_cost: int,
+    oviposition_cost: int,
+) -> AedesTargetCoarseningReceipt:
+    """Audit the generic accept/reject target partition as a negative control."""
+
+    r = _validate_cost(state_cost, "state_cost")
+    a = _validate_cost(host_cost, "host_cost")
+    b = _validate_cost(oviposition_cost, "oviposition_cost")
+    task = aedes_gonotrophic_coarsened_target_task(r, a, b)
+    exact = adaptive_gain_receipt(task)
+    if exact.adaptive_cost is None or exact.fixed_cost is None:
+        raise ArithmeticError("coarsened Aedes control unexpectedly became unresolved")
+
+    expected_cf = a + b
+    expected_ca = min(a + b, r + max(a, b))
+    expected_gap = max(0, min(a, b) - r)
+    if (
+        exact.adaptive_cost != expected_ca
+        or exact.fixed_cost != expected_cf
+        or exact.fixed_cost - exact.adaptive_cost != expected_gap
+    ):
+        raise ArithmeticError("Aedes target-coarsening formula failed exact audit")
+
+    return AedesTargetCoarseningReceipt(
+        state_cost=r,
+        host_cost=a,
+        oviposition_cost=b,
+        adaptive_cost=exact.adaptive_cost,
+        fixed_cost=exact.fixed_cost,
+        structural_gap=exact.fixed_cost - exact.adaptive_cost,
+        expected_gap=expected_gap,
+        strict_gain=exact.strict_adaptive_gain,
+    )
+
+
 def aedes_gonotrophic_q1_receipt() -> AedesGonotrophicFixtureReceipt:
-    """Independently solve the unit-cost frozen task and return its receipt."""
+    """Independently solve the unit-cost frozen four-target task."""
 
     task = aedes_gonotrophic_q1_task()
     gain = adaptive_gain_receipt(task)
