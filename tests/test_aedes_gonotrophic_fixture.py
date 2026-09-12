@@ -1,6 +1,10 @@
+import pytest
+
 from adaptive_gain.aedes_gonotrophic_fixture import (
     aedes_gonotrophic_q1_receipt,
     aedes_gonotrophic_q1_task,
+    aedes_gonotrophic_weighted_receipt,
+    aedes_gonotrophic_weighted_task,
 )
 from adaptive_gain.core import (
     adaptive_gain_receipt,
@@ -45,3 +49,42 @@ def test_exact_solver_marks_strict_gain_without_empirical_claim():
     assert exact.status == "strict_adaptive_gain"
     assert exact.adaptive_cost == 2
     assert exact.fixed_cost == 3
+
+
+def test_unequal_positive_cost_formula_matches_exact_solver_on_grid():
+    for state_cost in range(1, 5):
+        for host_cost in range(1, 5):
+            for oviposition_cost in range(1, 5):
+                receipt = aedes_gonotrophic_weighted_receipt(
+                    state_cost,
+                    host_cost,
+                    oviposition_cost,
+                )
+                assert receipt.adaptive_cost == state_cost + max(host_cost, oviposition_cost)
+                assert receipt.fixed_cost == state_cost + host_cost + oviposition_cost
+                assert receipt.structural_gap == min(host_cost, oviposition_cost)
+                assert receipt.structural_gap > 0
+                assert receipt.exact_formula_verified is True
+                assert receipt.prospective_only is True
+
+
+def test_weighted_fixture_keeps_state_as_unique_optimal_root():
+    for costs in ((1, 2, 7), (9, 1, 5), (3, 8, 2), (12, 4, 4)):
+        task = aedes_gonotrophic_weighted_task(*costs)
+        adaptive = adaptive_minimum_resolution(task)
+        assert adaptive.optimal_first_queries == ("gonotrophic_state",)
+
+
+@pytest.mark.parametrize(
+    "costs",
+    [
+        (0, 1, 1),
+        (1, 0, 1),
+        (1, 1, 0),
+        (-1, 1, 1),
+        (1.0, 1, 1),
+    ],
+)
+def test_weighted_fixture_rejects_nonpositive_or_noninteger_costs(costs):
+    with pytest.raises(ValueError):
+        aedes_gonotrophic_weighted_task(*costs)
