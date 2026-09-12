@@ -45,8 +45,11 @@ The first screening experiment should use one common LVP background and avoid co
 At minimum:
 
 - LVP + vehicle;
-- LVP + validated NPYLR7 agonist treatment;
-- where line/rearing logistics allow, a receptor-specificity control for the drug should be added before mechanistic promotion.
+- LVP + active NPYLR7 agonist A;
+- LVP + active NPYLR7 agonist B;
+- inactive/nonspecific comparator where practical.
+
+Use two preselected active agonists because one-compound-only effects are classified as unresolved pharmacology rather than a portable state manipulation.
 
 Readouts:
 
@@ -61,7 +64,7 @@ Do **not** infer an Ir8a causal effect in LVP from the Orlando mutant literature
 At minimum:
 
 - LVP wild type;
-- Ir68a mutant(s) in the published LVP framework;
+- two independent Ir68a mutant alleles where available;
 - state-intervention and vehicle groups if the pharmacological manipulation remains effective in this physiological window.
 
 Readouts:
@@ -75,14 +78,25 @@ Readouts:
 
 Before using any NPYLR7 agonist as `R` evidence in LVP, establish all of the following in that background:
 
-1. host-seeking suppression at the preregistered dose/timing;
+1. replicated host-seeking suppression with two preselected active agonists under the frozen multiplicity rule;
 2. no gross locomotor impairment;
 3. no trivial meal/intake artifact;
 4. preferably receptor-specificity evidence, such as loss/reduction of the drug effect in a matched NPYLR7 perturbation or an equivalent specificity test.
 
 Published Orlando specificity is not automatically portable to LVP.
 
-If this gate fails, stop. Do not substitute another state drug merely to preserve the frozen architecture.
+If neither preselected active agonist transfers under a technically valid confirmatory run, stop the LVP-first route rather than hunting new compounds.
+
+## B-channel validation gate
+
+Before using Ir68a as the causal B handle, require:
+
+1. same-direction site-finding deficits for two independent Ir68a alleles under the frozen multiplicity rule;
+2. direct-placement egg-laying competence passing the prospectively frozen control margin;
+3. no gross locomotor/viability failure sufficient to explain the phenotype;
+4. mature-gravid timing meeting the frozen endpoint-domain criteria.
+
+A single positive allele is `UNRESOLVED`, not `GO`.
 
 ## A/B shift gate
 
@@ -110,6 +124,14 @@ State manipulation changes relative A/B target dependency in the predicted direc
 
 Interpretation: proceed to Stage B genetic harmonization. Do not yet claim full empirical adaptive gain.
 
+## Single-R rejection rule
+
+Published biology suggests that host suppression and mature-gravid site seeking may depend on partially distinct state controllers.
+
+If NPYLR7/NPF controls A while egg maturity / circadian `cycle` independently controls B and no shared organism-level state representation mediates the relative dependency switch, reject the single-query `R` architecture.
+
+Do not repair v1 by redefining R as an arbitrary composite after seeing the data. Any multi-state-query alternative is a new prospectively declared v2 with new exact costs.
+
 ## Genetic harmonization gate after S2
 
 Only after S2 should resources be spent on a common-background causal stack.
@@ -125,19 +147,30 @@ The minimum strong stack would contain:
 
 At that point the empirical claim gate can evaluate terminal-channel causality and state-routing causality on one coherent biological system.
 
+## Confirmatory discipline
+
+Before Stage B genetic harmonization:
+
+- Phase 1 and Phase 2 must each return machine-readable `GO` receipts;
+- receipts follow `AEDES_PHASE_RECEIPT_SCHEMA_V1.json`;
+- fixed-n confirmatory planning follows `AEDES_CONFIRMATORY_SAMPLE_SIZE_RULE_V1.md`;
+- one-compound-only or one-allele-only evidence cannot unlock the next stage.
+
 ## What this decision deliberately avoids
 
 - concatenating Orlando, LVP and UGAL effect sizes into one synthetic finite-task matrix;
 - backcrossing/recreating multiple lines before seeing any A/B routing signal;
 - treating pharmacological host suppression as proof of B recruitment;
 - treating the LVP acidic-cue response as an Ir8a causal result before same-background genetics exists;
-- replacing failed A/B channels post hoc.
+- replacing failed A/B channels post hoc;
+- adding replicates sequentially until a threshold is crossed.
 
 ## Information-value ranking
 
-1. validate NPYLR7 pharmacology in LVP;
-2. measure whether it changes A/B relative response/dependency;
-3. only then invest in same-background A genetics;
-4. only after same-background causal closure revisit genotype-policy mutation structure.
+1. validate two-agonist NPYLR7 pharmacology in LVP;
+2. validate the Ir68a B channel with independent alleles plus competence control;
+3. measure whether state manipulation changes A/B relative response/dependency;
+4. only then invest in same-background A genetics;
+5. only after same-background causal closure revisit genotype-policy mutation structure.
 
 This ordering maximizes the chance that each expensive genetic step answers a question not already falsified by cheaper experiments.
