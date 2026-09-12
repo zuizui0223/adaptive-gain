@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import pytest
 
 from adaptive_gain.ou_moving_optimum_congruence import (
@@ -114,7 +112,8 @@ def test_symmetric_reciprocal_example_is_mutual_tracking() -> None:
     a = alpha / 2.0
     # A = [[a,-a],[-a,a]] means deterministic drift
     # dX/dt = a(Y-X), dY/dt = a(X-Y): reciprocal tracking.
-    assert r.A == pytest.approx(((a, -a), (-a, a)))
+    assert r.A[0] == pytest.approx((a, -a))
+    assert r.A[1] == pytest.approx((-a, a))
     assert r.reciprocal_product == pytest.approx(a * a)
 
 
