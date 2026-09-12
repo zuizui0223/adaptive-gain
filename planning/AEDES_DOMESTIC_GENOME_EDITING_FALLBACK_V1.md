@@ -6,26 +6,33 @@ Logistics/fallback planning only. This file is downstream of `freeze/aedes-execu
 
 ## Executive conclusion
 
-If live `Ir68a^EYFP` / `Ir68a^RFP` import or transfer becomes the decisive logistics bottleneck, a **domestic reconstruction route is technically plausible**, but public evidence does not support assigning that capability to one Japanese institution alone.
+If live `Ir68a^EYFP` / `Ir68a^RFP` transfer becomes the decisive logistics bottleneck, a domestic reconstruction route is technically plausible.
 
-The strongest current domestic capability map is:
+The strongest current capability map is now:
 
-- **Jikei University School of Medicine** — clear live-mosquito / medical-entomology infrastructure and current Aedes research;
-- **Kyoto University Daimon group** — clear DIPA-CRISPR method-development expertise and coauthorship on the 2023 Aedes DIPA-CRISPR demonstration;
-- the 2023 Aedes DIPA paper was a Kyoto–Jikei collaboration.
+- **Jikei University School of Medicine** — strongest evidence for an actual live/genetically modified *Aedes aegypti* facility;
+- **Kyoto University Daimon group** — strongest domestic DIPA-CRISPR method expertise and Aedes-DIPA coauthorship;
+- **Obihiro** — strongest domestic LVP-IB12/MRA-735 pedigree/material route.
 
-Publicly accessible sources do not establish with sufficient confidence whether the live *Aedes aegypti* colony and adult injections in that study were physically performed at Kyoto or Jikei. Therefore the fallback should be described as a **Kyoto–Jikei collaborative capability**, not “Kyoto already has an Aedes editing facility.”
+The preferred fallback is therefore not “Kyoto alone,” but a domestic Aedes facility such as Jikei coupled, where needed, to Kyoto DIPA/HDR expertise.
 
-## 1. Jikei capability
+## 1. Jikei capability is stronger than a generic mosquito-handling claim
 
 Jikei currently maintains a specialized medical-entomology platform:
 
-- Tropical Medicine / Medical Entomology research centered on mosquito/vector biology;
-- Center for Medical Entomology described by Jikei as a unique university platform in Japan for medically important arthropods;
-- current Aedes feeding/vector studies;
-- Hirotaka Kanuka and Manabu Ote were coauthors on the 2023 Aedes DIPA-CRISPR paper.
+- Tropical Medicine / Center for Medical Entomology focused on disease-vector arthropods;
+- current Aedes feeding/vector research;
+- Manabu Ote and Hirotaka Kanuka coauthored the 2023 Aedes DIPA-CRISPR study;
+- a Japanese Society of Tropical Medicine researcher profile explicitly captions **genetically modified Aedes aegypti mosquitoes maintained in Dr. Kanuka's laboratory**;
+- Jikei has published a secure laboratory-rearing method for *Aedes aegypti*.
 
-This is strong evidence for mosquito handling/infrastructure, but does not by itself prove current capacity for the exact Ir68a knock-in procedure.
+This is strong public evidence that Jikei is a real domestic live-GM-Aedes facility candidate.
+
+It still does not prove current capacity for the exact `Ir68a^EYFP` / `Ir68a^RFP` HDR reconstruction.
+
+Public institutional contact:
+
+- Hirotaka Kanuka — `kanuka@jikei.ac.jp`
 
 ## 2. Kyoto capability
 
@@ -34,37 +41,59 @@ Takaaki Daimon / Kyoto University developed DIPA-CRISPR and remains an active in
 The Kyoto group:
 
 - established DIPA-CRISPR as an adult-injection gene-editing method;
-- coauthored the 2023 successful Aedes DIPA-CRISPR application;
-- continues to apply direct-parental CRISPR in other insects;
-- publicly provides the lead-contact route for DIPA method/reagent questions.
+- coauthored the 2023 successful Aedes DIPA-CRISPR application with Jikei;
+- continues direct-parental CRISPR work in other insects;
+- provides an active method/reagent contact route.
 
 Public contact:
 
 - Takaaki Daimon — `daimon.takaaki.7a@kyoto-u.ac.jp`
 
-The current evidence supports **method expertise**, not a claim that Kyoto independently maintains a live Aedes colony today.
+The current public evidence supports **method expertise**, not a claim that Kyoto independently maintains a live Aedes colony today.
 
-## 3. Why DIPA is relevant but not an immediate substitute for Tang knock-ins
+## 3. DIPA-HDR capability has advanced, but not yet specifically in Aedes
 
-The published Aedes DIPA study recovered edited G0 individuals after adult female Cas9-RNP injection, with the best reported editing efficiency when females were injected 24 h after blood feeding.
+DIPA is no longer only a mutagenesis method in principle.
 
-This is valuable because it can simplify generation of loss-of-function alleles without embryo injection.
+Published milestones include:
 
-However, the frozen Phase 2 causal asset is not merely an `Ir68a` loss-of-function:
+- 2022: precise HDR knock-in after DIPA in *Tribolium castaneum* using an ssODN donor;
+- 2026: large fluorescent-protein knock-in after DIPA-HDR in *Blattella germanica*, generating a heritable endogenous mCherry fusion.
 
-- Tang et al. used two independent tagged knock-in alleles (`Ir68a^EYFP`, `Ir68a^RFP`);
-- the tagged alleles support precise causal/reporter interpretation;
-- recreating the same HDR/knock-in architecture is more demanding than producing a simple NHEJ knockout.
+Thus adult-injection DIPA can support precise donor-mediated editing, including a large fluorescent insert, in at least some insects.
 
-Therefore DIPA-CRISPR should not be treated as a drop-in way to recreate the exact Tang lines without method development.
+However, the published 2023 *Aedes aegypti* DIPA study demonstrated mutagenesis, not the exact large tagged-HDR architecture needed to recreate the Tang Ir68a lines.
 
-## 4. Fallback hierarchy
+Therefore:
+
+`DIPA_HDR_GENERAL_FEASIBILITY = STRONG`
+
+but
+
+`AEDES_TAGGED_HDR_BY_DIPA = NOT_YET_QUALIFIED`.
+
+Do not collapse these two statements.
+
+## 4. Tang Phase-2 requirement remains stronger than a simple knockout
+
+The frozen Phase 2 causal asset is not merely loss of Ir68a function.
+
+Tang et al. used two independent tagged knock-in alleles:
+
+- `Ir68a^EYFP`;
+- `Ir68a^RFP`.
+
+The two-allele design supports replication and reporter/causal interpretation.
+
+A new simple NHEJ knockout generated domestically is therefore not an automatic substitute.
+
+## 5. Fallback hierarchy
 
 ### F0 — preferred
 
-Obtain the published `Ir68a^EYFP` and `Ir68a^RFP` lines directly from Garrity.
+Obtain the published `Ir68a^EYFP` and `Ir68a^RFP` lines directly from Garrity with their exact matched parental comparator.
 
-### F1 — if live-line transfer is blocked but DNA/reagents can move
+### F1 — if live-line transfer is blocked but molecular reagents can move
 
 Ask Garrity for:
 
@@ -73,68 +102,72 @@ Ask Garrity for:
 - guide sequences;
 - homology-arm coordinates/sequences;
 - genotype verification primers;
-- any unpublished strain-construction notes.
+- strain-construction notes.
 
-Then evaluate domestic reconstruction on the exact comparator background.
+Then evaluate reconstruction on the exact comparator background.
 
-### F2 — domestic editing feasibility study
+### F2 — domestic precise-editing capability audit
 
-Before attempting Ir68a reconstruction, ask the Kyoto–Jikei collaborators whether:
+First contact should be Jikei for live-Aedes/editing feasibility, with Kyoto/Daimon as DIPA/HDR method collaborator if needed.
 
-1. adult DIPA can support the required HDR/tagged knock-in architecture in Aedes, or only efficient mutagenesis;
-2. conventional Aedes embryo injection is available domestically for precise knock-in if DIPA is inadequate;
-3. a Liverpool/LVP-IB12 colony can be used at the editing facility;
-4. the work can be performed under the facility's current containment/compliance framework.
+Questions to Jikei:
+
+1. Can the current GM-Aedes facility receive/maintain the exact LVP comparator background?
+2. Is conventional embryo-injection HDR or another precise knock-in workflow currently available for Aedes?
+3. In the 2023 Aedes DIPA collaboration, where were the live mosquitoes/adult injections performed?
+4. Could a tagged Ir68a reconstruction be considered if direct line transfer fails?
+
+Questions to Kyoto/Daimon:
+
+1. Is current DIPA-HDR mature enough for large tagged knock-in in Aedes, or only demonstrated in other insects?
+2. Could the 2026 large-insert DIPA-HDR logic be adapted to Aedes with a partner insectary?
+3. What technical bottlenecks would make conventional embryo HDR preferable?
 
 ### F3 — simple loss-of-function substitute
 
-Do **not** replace the two tagged Tang alleles with newly generated simple knockouts merely because they are easier to make.
+Do not replace the two tagged Tang alleles with newly generated simple knockouts merely because they are easier to make.
 
-A simple knockout may become a new prospectively defined validation route, but it cannot inherit the frozen Phase 2 two-allele qualification automatically.
+A simple knockout may become a new prospectively defined validation route, but cannot inherit the frozen Phase-2 two-allele gate automatically.
 
-## 5. Specific domestic contacts to clarify capability
+## 6. Conventional Aedes HDR remains a viable technical alternative
 
-### Jikei
+Independent public protocols show that *Aedes aegypti* precise knock-in using embryo injection, donor plasmids and fluorescent markers is established methodology.
 
-Hirotaka Kanuka / Tropical Medicine and Medical Entomology
-Public institutional contact: `kanuka@jikei.ac.jp`
+Therefore, if DIPA-HDR is not mature enough for Aedes tagged knock-in, the technical fallback is conventional embryo HDR at a facility with demonstrated Aedes microinjection capability—not weakening the allele requirement.
 
-Question:
-> In the 2023 Aedes DIPA-CRISPR collaboration, where were the live Aedes colonies and adult injections performed, and does Jikei currently have capacity to generate/rear edited Aedes lines for an academic collaboration?
+Whether that exact capability is currently available at Jikei must be asked directly.
 
-### Kyoto
+## 7. Decision rules
 
-Takaaki Daimon
-`daimon.takaaki.7a@kyoto-u.ac.jp`
+### If direct Tang line transfer works
 
-Question:
-> For Aedes, is your current DIPA-CRISPR workflow suitable only for mutagenesis, or is precise donor-mediated knock-in feasible enough to recreate tagged Ir68a alleles? If live Aedes work is not performed in Kyoto, which collaborating facility currently supports the mosquito component?
+Use the published lines. Do not reconstruct them merely for convenience.
 
-## 6. Decision rules
+### If live transfer fails, but Jikei/Kyoto can recreate tagged alleles on the exact comparator background
 
-### If Jikei/Kyoto can recreate tagged alleles on the exact comparator background
-
-Domestic reconstruction becomes a viable backup **only after** direct line transfer has failed or become impractical.
+Domestic reconstruction becomes a viable backup after reagent/pedigree verification.
 
 ### If only simple DIPA knockout is practical
 
-Keep the Tang tagged-line route as primary. A simple knockout design requires a new prospective Phase 2 validation specification.
+Keep the Tang tagged-line route as primary. A simple knockout requires a new prospective Phase-2 specification.
 
 ### If no domestic precise-editing route exists
 
 Return to live-line transfer/import planning; do not weaken the allele requirement post hoc.
 
-## 7. Hard stops
+## 8. Hard stops
 
 - do not infer the physical site of the 2023 Aedes DIPA experiments from author affiliation alone;
-- do not equate DIPA mutagenesis with precise HDR knock-in capability;
+- do not equate successful DIPA-HDR in beetles/cockroaches with demonstrated tagged HDR in Aedes;
 - do not replace the published two-allele package because a simpler domestic edit is convenient;
 - do not begin line reconstruction before pedigree compatibility and receiving facility are fixed;
 - do not use edited-line feasibility as evidence for the adaptive-gain hypothesis.
 
 ## Evidence anchors
 
-- Shirai et al. 2023, Applied Entomology and Zoology: successful DIPA-CRISPR in Aedes; Kyoto and Jikei coauthors.
-- Jikei Medical Entomology / Tropical Medicine: current specialized vector/arthropod research platform.
-- Daimon lab, Kyoto University: DIPA-CRISPR method-development and continued insect editing work.
+- Shirai et al. 2023, Applied Entomology and Zoology: successful DIPA-CRISPR mutagenesis in Aedes; Kyoto and Jikei collaboration.
+- Japanese Society of Tropical Medicine, Kanuka profile: genetically modified Aedes aegypti maintained in Kanuka laboratory.
+- Ote & Kanuka 2018: secure laboratory rearing of Aedes aegypti at Jikei.
+- Shirai et al. 2022, Cell Reports Methods: DIPA-CRISPR and precise ssODN HDR knock-in in Tribolium.
+- Ferrández-Roldán & Piulachs 2026, Cell Reports Methods: large fluorescent mCherry DIPA-HDR knock-in in Blattella.
 - Tang et al. 2024 PNAS: exact Ir68a tagged knock-in construct classes and unrestricted generated-reagent request path.
