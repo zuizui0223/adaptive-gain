@@ -1,10 +1,12 @@
 import pytest
 
 from adaptive_gain.aedes_gonotrophic_fixture import (
+    aedes_gonotrophic_coarsened_target_task,
     aedes_gonotrophic_q1_receipt,
     aedes_gonotrophic_q1_task,
     aedes_gonotrophic_weighted_receipt,
     aedes_gonotrophic_weighted_task,
+    aedes_target_coarsening_receipt,
 )
 from adaptive_gain.core import (
     adaptive_gain_receipt,
@@ -31,7 +33,7 @@ def test_gonotrophic_state_is_unique_optimal_adaptive_root():
     assert adaptive.selected_policy.query == "gonotrophic_state"
 
 
-def test_only_all_three_queries_resolve_fixed_task():
+def test_only_all_three_queries_resolve_four_target_fixed_task():
     task = aedes_gonotrophic_q1_task()
     names = tuple(query.name for query in task.queries)
     assert bundle_resolves(task, names)
@@ -68,11 +70,50 @@ def test_unequal_positive_cost_formula_matches_exact_solver_on_grid():
                 assert receipt.prospective_only is True
 
 
-def test_weighted_fixture_keeps_state_as_unique_optimal_root():
+def test_weighted_four_target_fixture_keeps_state_as_unique_optimal_root():
     for costs in ((1, 2, 7), (9, 1, 5), (3, 8, 2), (12, 4, 4)):
         task = aedes_gonotrophic_weighted_task(*costs)
         adaptive = adaptive_minimum_resolution(task)
         assert adaptive.optimal_first_queries == ("gonotrophic_state",)
+
+
+def test_unit_cost_target_coarsening_collapses_gap_to_zero():
+    receipt = aedes_target_coarsening_receipt(1, 1, 1)
+    assert receipt.adaptive_cost == 2
+    assert receipt.fixed_cost == 2
+    assert receipt.structural_gap == 0
+    assert receipt.strict_gain is False
+    task = aedes_gonotrophic_coarsened_target_task(1, 1, 1)
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.optimal_bundles == (("host_acidic_cue", "oviposition_odor_cue"),)
+
+
+def test_coarsened_target_formula_matches_exact_solver_on_grid():
+    for state_cost in range(1, 5):
+        for host_cost in range(1, 5):
+            for oviposition_cost in range(1, 5):
+                receipt = aedes_target_coarsening_receipt(
+                    state_cost,
+                    host_cost,
+                    oviposition_cost,
+                )
+                expected_gap = max(0, min(host_cost, oviposition_cost) - state_cost)
+                assert receipt.fixed_cost == host_cost + oviposition_cost
+                assert receipt.adaptive_cost == min(
+                    host_cost + oviposition_cost,
+                    state_cost + max(host_cost, oviposition_cost),
+                )
+                assert receipt.structural_gap == expected_gap
+                assert receipt.strict_gain is (expected_gap > 0)
+
+
+def test_coarsened_targets_can_recover_gain_only_if_state_is_cheaper():
+    positive = aedes_target_coarsening_receipt(1, 3, 5)
+    assert positive.structural_gap == 2
+    assert positive.strict_gain is True
+    zero = aedes_target_coarsening_receipt(3, 3, 5)
+    assert zero.structural_gap == 0
+    assert zero.strict_gain is False
 
 
 @pytest.mark.parametrize(
