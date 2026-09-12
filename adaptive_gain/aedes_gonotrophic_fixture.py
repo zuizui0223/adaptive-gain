@@ -1,6 +1,6 @@
 """Prospective four-world Aedes gonotrophic finite-task fixture.
 
-This module does not encode a published empirical adaptive-gain result.  It
+This module does not encode a published empirical adaptive-gain result. It
 freezes the exact q=1 laboratory task proposed in
 ``biology/AEDES_GONOTROPHIC_FINITE_TASK_QUALIFICATION_V1.md`` so the structural
 claim can be checked independently by the repository's exact solver before any
@@ -14,25 +14,27 @@ The declared outcome table is
     O1 =           (1,0,1)
 
 where R is gonotrophic state, A is the host-branch acidic-cue channel and B is
-the oviposition-branch odor channel.
+a prospectively declared oviposition-site cue. The primary current biological
+candidate for B is Ir68a-dependent humidity/water-vapor sensing; geosmin/Orco
+remains a secondary chemical-cue candidate.
 
 With four biologically distinct target actions and unit costs the mathematical
-fixture has C_A=2, C_F=3 and g=1.  More generally, for positive integer costs
+fixture has C_A=2, C_F=3 and g=1. More generally, for positive integer costs
 (r,a,b), the same target partition has
 
     C_A = r + max(a,b)
     C_F = r + a + b
     g   = min(a,b) > 0.
 
-A target-coarsening control is included deliberately.  If host/oviposition
+A target-coarsening control is included deliberately. If host/oviposition
 actions are collapsed to generic ``accept`` versus ``reject``, then
 
     C_F = a + b
     C_A = min(a+b, r+max(a,b))
     g   = max(0, min(a,b)-r).
 
-Thus the equal-cost coarsened task has g=0.  Positive gain must not be created by
-post-hoc target semantics.  Whether either target partition is biologically
+Thus the equal-cost coarsened task has g=0. Positive gain must not be created by
+post-hoc target semantics. Whether either target partition is biologically
 admissible is an empirical gate, not a consequence of this fixture.
 """
 from __future__ import annotations
@@ -59,7 +61,7 @@ def _queries(r: int, a: int, b: int) -> tuple[Query, ...]:
     return (
         Query("gonotrophic_state", r, (0, 0, 1, 1)),
         Query("host_acidic_cue", a, (0, 1, 0, 0)),
-        Query("oviposition_odor_cue", b, (0, 0, 0, 1)),
+        Query("oviposition_site_cue", b, (0, 0, 0, 1)),
     )
 
 
@@ -240,7 +242,7 @@ def aedes_gonotrophic_q1_receipt() -> AedesGonotrophicFixtureReceipt:
     if adaptive.optimal_first_queries != ("gonotrophic_state",):
         raise ArithmeticError("gonotrophic state is no longer the unique optimal root query")
     if fixed.optimal_bundles != (
-        ("gonotrophic_state", "host_acidic_cue", "oviposition_odor_cue"),
+        ("gonotrophic_state", "host_acidic_cue", "oviposition_site_cue"),
     ):
         raise ArithmeticError("prospective Aedes fixture changed its unique optimal fixed bundle")
 
