@@ -1,0 +1,72 @@
+{
+  "schema_version": "aedes_execution_readiness_v1",
+  "frozen_scientific_ref": "freeze/aedes-pre-data-admission-v1",
+  "frozen_execution_planning_ref": "freeze/aedes-execution-planning-v1",
+  "materials": {
+    "lvp_access": "PENDING",
+    "lvp_source": null,
+    "ir68a_eyfp_access": "PENDING",
+    "ir68a_rfp_access": "PENDING",
+    "ir68a_parental_pedigree_confirmed": false,
+    "npylr7_agonist_1": {
+      "compound": "TDI-014188",
+      "access": "PENDING",
+      "path": null,
+      "purity_and_handling_documented": false
+    },
+    "npylr7_agonist_2": {
+      "compound": null,
+      "allowed_predata_candidates": [
+        "TDI-014184",
+        "TDI-014186"
+      ],
+      "access": "PENDING",
+      "path": null,
+      "purity_and_handling_documented": false
+    },
+    "ir8a_stage_b_access": "DEFERRED"
+  },
+  "regulatory_and_institutional": {
+    "local_lawful_lvp_colony_already_available": false,
+    "institutional_containment_approval": "PENDING",
+    "japan_aedes_regulatory_classification": "UNRESOLVED",
+    "moe_preimport_requirements_documented": false,
+    "bei_mra735_japan_shipping": "NOT_CONFIRMED",
+    "ir68a_lab_transfer_to_japan": "NOT_CONFIRMED"
+  },
+  "assay_readiness": {
+    "miniport_or_equivalent_host_seeking_assay_validated": false,
+    "wet_dry_container_assay_validated": false,
+    "direct_placement_egg_laying_control_validated": false,
+    "locomotor_general_impairment_control_available": false
+  },
+  "phase1_start_rule": {
+    "requires_two_preselected_agonist_paths": true,
+    "requires_lawful_lvp_access": true,
+    "requires_institutional_containment_approval": true,
+    "requires_host_seeking_assay_validation": true,
+    "requires_general_impairment_control": true,
+    "compound_hunting_after_failure_prohibited": true
+  },
+  "phase2_start_rule": {
+    "requires_two_ir68a_alleles": true,
+    "requires_parental_pedigree_confirmation": true,
+    "requires_wet_dry_assay_validation": true,
+    "requires_direct_placement_competence_control": true
+  },
+  "current_decision": "NOT_READY_TO_START_PHASE1",
+  "decision_reason": [
+    "two agonist access paths not yet closed",
+    "live-mosquito regulatory/institutional gate not yet closed",
+    "assay readiness not yet documented"
+  ],
+  "allowed_material_status_values": [
+    "AVAILABLE_DIRECT_TRANSFER",
+    "AVAILABLE_WITH_MTA_OR_INSTITUTIONAL_PROCESS",
+    "RESYNTHESIS_OR_RECREATION_REQUIRED",
+    "UNAVAILABLE",
+    "NO_RESPONSE_YET",
+    "PENDING",
+    "DEFERRED"
+  ]
+}
