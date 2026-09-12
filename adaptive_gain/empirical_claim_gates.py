@@ -1,7 +1,7 @@
 """Claim-gating helpers for prospective empirical adaptive-gain studies.
 
-This module is deliberately conservative.  It does not turn a mathematical
-finite-task fixture into empirical evidence.  Instead it records which layers
+This module is deliberately conservative. It does not turn a mathematical
+finite-task fixture into empirical evidence. Instead it records which layers
 of biological qualification have been supplied and returns only the claims
 licensed by those declarations.
 
@@ -73,7 +73,7 @@ def empirical_claim_gate_receipt(
     empirical_positive = admitted and mathematical_positive
 
     # Context-dependent sensory routing is a mechanistic claim distinct from
-    # positive structural gain.  A zero-gap system may still have real routing.
+    # positive structural gain. A zero-gap system may still have real routing.
     routing = (
         admitted
         and evidence.terminal_channel_causality_qualified
@@ -81,19 +81,22 @@ def empirical_claim_gate_receipt(
     )
     positive_routing = empirical_positive and routing
 
-    # Accessibility requires a heritable representation plus declared support
-    # and a start state; q/g alone never licenses this layer.
+    # Every downstream biological claim is stacked on an admitted finite task.
+    # A genotype representation attached only to a prospective/mathematical
+    # fixture must not bypass the biological admission gate.
     accessibility = (
-        evidence.genotype_policy_map_qualified
+        admitted
+        and evidence.genotype_policy_map_qualified
         and evidence.mutation_support_graph_qualified
         and evidence.start_state_declared
     )
 
     # Stationary occupancy additionally depends on relative mutation bias and a
-    # population process.  A start state is not mathematically required for a
+    # population process. A start state is not mathematically required for a
     # stationary law, so it is intentionally not part of this gate.
     stationary = (
-        evidence.genotype_policy_map_qualified
+        admitted
+        and evidence.genotype_policy_map_qualified
         and evidence.mutation_support_graph_qualified
         and evidence.mutation_bias_or_neutral_measure_qualified
         and evidence.population_process_declared
