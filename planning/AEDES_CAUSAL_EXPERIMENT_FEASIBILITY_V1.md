@@ -72,7 +72,7 @@ Do not spend the first experiment trying to prove a binary NPF-only H-to-O switc
 
 ### Phase 1 — reproduce the state manipulation cleanly
 
-Use a validated NPYLR7 agonist in a non-nutritive saline meal with a prospectively chosen dose and timing. The 2024 study demonstrates active compounds at 1 micromolar with testing 48 h after feeding.
+Use two preselected validated NPYLR7 agonists in non-nutritive saline with prospectively fixed dose and timing. The 2024 study demonstrates multiple active compounds at 1 micromolar with testing 48 h after feeding.
 
 Measure:
 
@@ -81,7 +81,7 @@ Measure:
 - locomotor/activity control;
 - if possible, NPYLR7-null resistance or another receptor-specificity control in the same genetic background.
 
-Gate P1-F: proceed only if host suppression is reproduced without a nutritive blood meal and without gross locomotor impairment.
+A single active-compound result is not enough. Use the `GO / UNRESOLVED / STOP` logic frozen in `AEDES_PHASE1_2_CONFIRMATORY_DECISION_RULES_V1.md`.
 
 ### Phase 2 — validate the B assay independently
 
@@ -90,10 +90,10 @@ Use the Tang et al. container-seeking geometry or a close preregistered replicat
 - mature gravid females at a fixed post-blood time and circadian phase;
 - wet versus dry container;
 - mesh geometry minimizing accidental contact;
-- Ir68a causal control;
+- two independent Ir68a alleles where available;
 - direct-placement egg-laying competence control.
 
-Gate P2-F: proceed only if the assay reproduces an Ir68a-dependent site-finding phenotype while direct egg-laying competence remains intact.
+B is qualified only if the site-finding deficit replicates causally while direct egg-laying competence remains within the prospectively frozen control rule.
 
 ### Phase 3 — test state-signal sufficiency for terminal-channel reweighting
 
@@ -110,7 +110,8 @@ Interpretation:
 
 - `A down, B unchanged`: host suppression is not sufficient for full H-to-O routing; strong negative for a single upstream state router;
 - `A down, B sensory up but no O target behavior`: sensory reweighting, not yet finite-task routing;
-- coordinated shift in A/B dependency: strongest justification to advance to Phase 4.
+- NPYLR7/NPF controls A while egg maturity / `cycle` independently controls B without a shared organism-level state representation: reject single-query R v1;
+- coordinated shift in A/B dependency through a shared state representation: strongest justification to advance to the integrated endpoint experiment.
 
 Do not score lack of egg laying in previtellogenic females as a B-channel failure; that would confound sensory routing with reproductive competence.
 
@@ -122,7 +123,19 @@ At this stage the question is whether the biological comparator really behaves l
 
 The pre-indexed control remains mandatory: if context-specific fixed policies are the biologically correct comparator, branch-local gaps are zero even though the integrated mathematical fixture is positive.
 
-## 5. What not to do
+## 5. Confirmatory discipline
+
+Component qualification uses explicit `GO / UNRESOLVED / STOP` receipts.
+
+- decision rules: `AEDES_PHASE1_2_CONFIRMATORY_DECISION_RULES_V1.md`;
+- machine-readable receipt schema: `AEDES_PHASE_RECEIPT_SCHEMA_V1.json`;
+- sample-size freezing rule: `AEDES_CONFIRMATORY_SAMPLE_SIZE_RULE_V1.md`.
+
+Confirmatory n is computed before treatment/genotype effects are opened. Sequentially adding replicates until a threshold is crossed is prohibited.
+
+Pilot data may establish assay variance, attrition, block structure and control ranges, but active-treatment pilot effects may not be used to choose `delta_min` or select the strongest compound.
+
+## 6. What not to do
 
 - do not combine published effect sizes from Orlando, LVP and UGAL as one empirical matrix;
 - do not infer B recruitment merely because host seeking is suppressed;
@@ -132,7 +145,7 @@ The pre-indexed control remains mandatory: if context-specific fixed policies ar
 - do not alter the four targets or comparator semantics after data are opened;
 - do not infer genotype accessibility, stationary occupancy or waiting time from a positive finite-task result.
 
-## 6. Practical bottlenecks ranked by information value
+## 7. Practical bottlenecks ranked by information value
 
 1. **Common-background validation of the state intervention** — highest priority. The pharmacological NPYLR7 route makes this tractable.
 2. **Cross-state A/B dependency assay** — scientific bottleneck; closes G2/state-routing causality.
@@ -140,7 +153,7 @@ The pre-indexed control remains mandatory: if context-specific fixed policies ar
 4. **Background harmonization of Ir8a and Ir68a perturbations** — necessary for strong causal integration but should follow a positive Phase 3 signal.
 5. **Genotype-policy mutation map** — later. Do not build this before the biological finite task is admitted.
 
-## 7. Current go/no-go verdict
+## 8. Current go/no-go verdict
 
 **GO for a staged causal feasibility experiment.**
 
