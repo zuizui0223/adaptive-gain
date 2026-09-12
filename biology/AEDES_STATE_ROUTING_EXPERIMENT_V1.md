@@ -31,9 +31,10 @@ Use matched cohorts with at least the following intervention logic, subject to f
 1. vehicle / sham control;
 2. NPF depletion or equivalent loss-of-function manipulation;
 3. NPF rescue where the depletion design permits it;
-4. RYamide elevation.
+4. RYamide elevation;
+5. a selective NPYLR7 agonist as a particularly useful nutrient-independent host-suppression perturbation.
 
-The key question is whether moving the endocrine signal toward the post-blood host-suppressed state changes terminal A use and/or recruits B use without a blood meal.
+The key question is whether moving the endocrine signal toward the post-blood host-suppressed state changes terminal A use and/or recruits B use without a blood meal.  An NPYLR7 agonist is especially informative here because host-seeking suppression can be induced without using a nutritive blood meal; failure to recruit B under that manipulation would show that host suppression alone is insufficient for the full H-to-O routing switch.
 
 ### Post-blood / gravid side
 
@@ -126,7 +127,7 @@ Measure or control:
 - ability to lay eggs once adjacent to the substrate;
 - terminal-channel integrity under endocrine manipulation.
 
-The 2025 longitudinal work on post-biting behavioral reprogramming makes circadian timing especially important because gravid humidity seeking is rhythmic and `cycle`-dependent.
+The longitudinal work on post-biting behavioral reprogramming makes circadian timing especially important because gravid humidity seeking is rhythmic and `cycle`-dependent.
 
 ## Decision table
 
@@ -142,9 +143,10 @@ Downstream mutational accessibility and population claims remain separately gate
 ## Literature anchors motivating, not pre-answering, the test
 
 - Dou et al. 2024, PNAS, DOI 10.1073/pnas.2408072121: reciprocal NPF/RYamide regulation of host attraction across the gonotrophic cycle.
+- Duvall et al. 2019, Cell, DOI 10.1016/j.cell.2018.12.004: NPYLR7 agonists suppress host seeking, biting and blood feeding, including pharmacological host suppression without a nutritive blood meal.
 - Siju et al. 2010, J Insect Physiol, DOI 10.1016/j.jinsphys.2010.02.002: blood-meal-dependent changes in antennal olfactory-neuron sensitivity.
 - Tallon et al. 2021, BMC Genomics, DOI 10.1186/s12864-020-07336-w: state-dependent antennal chemosensory/neuromodulatory transcriptome across the first gonotrophic cycle.
-- Liesch et al. 2017, PLoS One/related host-seeking neuromodulation study, PMID 29166650: feeding-induced sNPF/allatostatin changes in antennal lobes associated with odor-mediated host seeking.
+- Christ et al. 2017, PLOS ONE, DOI 10.1371/journal.pone.0188243: feeding-induced changes in antennal-lobe sNPF/allatostatin; peptide injections suppress odor-mediated host seeking.
 - Tang et al. 2024, PNAS, DOI 10.1073/pnas.2407394121: Ir68a-dependent Moist Cells are required for water-container seeking by gravid females, with egg-laying competence intact when placed at the site.
 - post-biting behavioral reprogramming study, PMID 41379618: gravid humidity seeking emerges rhythmically with oviposition-site search and is `cycle`-dependent.
 
