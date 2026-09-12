@@ -34,6 +34,26 @@ def test_prospective_mathematical_fixture_does_not_become_empirical_claim():
     assert "empirical_positive_adaptive_fixed_gap" in receipt.prohibited_claims
 
 
+def test_downstream_evidence_cannot_bypass_failed_task_admission():
+    evidence = EmpiricalAdmissionEvidence(
+        terminal_channel_causality_qualified=True,
+        state_routing_causality_qualified=True,
+        genotype_policy_map_qualified=True,
+        mutation_support_graph_qualified=True,
+        start_state_declared=True,
+        mutation_bias_or_neutral_measure_qualified=True,
+        population_process_declared=True,
+        absolute_rate_scale_qualified=True,
+    )
+    receipt = empirical_claim_gate_receipt(aedes_gonotrophic_q1_task(), evidence)
+    assert receipt.mathematical_positive_gap is True
+    assert receipt.empirical_task_admitted is False
+    assert receipt.context_routing_mechanism_licensed is False
+    assert receipt.mutational_accessibility_licensed is False
+    assert receipt.stationary_occupancy_licensed is False
+    assert receipt.biological_waiting_time_licensed is False
+
+
 def test_admitted_positive_task_licenses_gap_but_not_causal_routing():
     receipt = empirical_claim_gate_receipt(
         aedes_gonotrophic_q1_task(),
