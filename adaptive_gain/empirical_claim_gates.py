@@ -21,6 +21,7 @@ class EmpiricalAdmissionEvidence:
     """Declared evidence layers for one frozen biological finite task."""
 
     task_semantics_qualified: bool = False
+    comparator_semantics_qualified: bool = False
     measurement_resolution_qualified: bool = False
     target_ontology_qualified: bool = False
     cost_semantics_qualified: bool = False
@@ -62,8 +63,14 @@ def empirical_claim_gate_receipt(
     gap = None if ca is None or cf is None else cf - ca
     mathematical_positive = gap is not None and gap > 0
 
+    # Comparator semantics are a separate biological declaration.  In
+    # particular, a context variable that is externally known before policy
+    # commitment can decompose an apparently adaptive task into context-indexed
+    # fixed tasks.  A mathematical integrated gap is not empirical evidence
+    # until the adaptive-vs-fixed comparison is biologically justified.
     admitted = (
         evidence.task_semantics_qualified
+        and evidence.comparator_semantics_qualified
         and evidence.measurement_resolution_qualified
         and evidence.target_ontology_qualified
         and evidence.cost_semantics_qualified
