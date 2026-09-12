@@ -11,6 +11,7 @@ from adaptive_gain.empirical_claim_gates import (
 def _admitted_base(**overrides):
     values = dict(
         task_semantics_qualified=True,
+        comparator_semantics_qualified=True,
         measurement_resolution_qualified=True,
         target_ontology_qualified=True,
         cost_semantics_qualified=True,
@@ -52,6 +53,23 @@ def test_downstream_evidence_cannot_bypass_failed_task_admission():
     assert receipt.mutational_accessibility_licensed is False
     assert receipt.stationary_occupancy_licensed is False
     assert receipt.biological_waiting_time_licensed is False
+
+
+def test_comparator_semantics_are_independent_admission_gate():
+    evidence = EmpiricalAdmissionEvidence(
+        task_semantics_qualified=True,
+        comparator_semantics_qualified=False,
+        measurement_resolution_qualified=True,
+        target_ontology_qualified=True,
+        cost_semantics_qualified=True,
+        terminal_channel_causality_qualified=True,
+        state_routing_causality_qualified=True,
+    )
+    receipt = empirical_claim_gate_receipt(aedes_gonotrophic_q1_task(), evidence)
+    assert receipt.mathematical_positive_gap is True
+    assert receipt.empirical_task_admitted is False
+    assert receipt.empirical_positive_gap_licensed is False
+    assert receipt.context_routing_mechanism_licensed is False
 
 
 def test_admitted_positive_task_licenses_gap_but_not_causal_routing():
