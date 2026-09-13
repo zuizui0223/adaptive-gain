@@ -3,7 +3,7 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V1.md"
+MANUSCRIPT = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V2.md"
 FORMAT_RECEIPT = ROOT / "manuscript" / "EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md"
 
 
@@ -14,9 +14,7 @@ def _section(text: str, heading: str, next_heading: str) -> str:
 
 
 def _words(text: str) -> list[str]:
-    # Count prose-like word tokens while treating displayed equations and markdown
-    # punctuation as non-words. This is an internal conservative surface check,
-    # not a claim about the journal portal's eventual counter.
+    # Internal conservative surface check; not a claim about the portal counter.
     text = re.sub(r"\\\[.*?\\\]", " ", text, flags=re.S)
     text = re.sub(r"`[^`]*`", " ", text)
     return re.findall(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*", text)
@@ -55,30 +53,31 @@ def test_main_text_is_within_letter_length_and_has_required_sections():
     for heading in ("## Introduction", "## Methods", "## Results", "## Discussion", "## References"):
         assert heading in text
 
-    # Evolution Letters excludes tables, figure captions and references from the
-    # ~5000-word Letter guide. This candidate currently has no tables or figure
-    # captions in the manuscript surface, so count from Introduction to end matter.
     start = text.index("## Introduction")
     end = text.index("## Data and code availability")
-    main_text = text[start:end]
-    assert len(_words(main_text)) <= 5000
+    assert len(_words(text[start:end])) <= 5000
+
+
+def test_state_gap_and_between_state_contrast_are_not_collapsed():
+    text = MANUSCRIPT.read_text(encoding="utf-8")
+    assert "g_i=C_F(i)-C_A(i)" in text
+    assert "Delta g=g_2-g_1" in text
+    assert "Delta g=C_F-C_A" not in text
+    assert "Because every state gap is nonnegative" in text
+    assert "at least one ecological state must support `g_i>=q`" in text
 
 
 def test_no_go_claim_ceiling_is_explicit():
-    text = MANUSCRIPT.read_text(encoding="utf-8")
-    lower = text.lower()
+    lower = MANUSCRIPT.read_text(encoding="utf-8").lower()
     assert "no sensing-to-selection map" in lower
     assert "crossing the bound is only necessary" in lower
     assert "does not guarantee" in lower
     assert "within the declared model class" in lower
-
-    # The broad nonlinear theorem must not be written as a generic sufficiency claim.
-    forbidden = (
+    for phrase in (
         "gap 2 guarantees oscillation for every nonlinear",
         "above the threshold oscillation must occur",
         "finite sensing architecture determines natural feedback magnitude",
-    )
-    for phrase in forbidden:
+    ):
         assert phrase not in lower
 
 

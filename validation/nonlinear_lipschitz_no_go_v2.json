@@ -1,0 +1,56 @@
+{
+  "schema": "adaptive-gain-nonlinear-lipschitz-no-go-v2",
+  "status": "validated_theorem_receipt",
+  "claim": "A monotone sensing-to-selection lift with bounded marginal effect cannot reach a requested oscillatory feedback regime when the available between-state structural contrast is too small.",
+  "theorem": {
+    "state_gap": "g_i=C_F(i)-C_A(i)>=0",
+    "between_state_contrast": "Delta_g=g_high-g_low>=0",
+    "selection_lift_class": "nondecreasing_L_lipschitz",
+    "feedback_bound": "G <= B*L*Delta_g",
+    "oscillation_requirement": "G > G_osc",
+    "necessary_contrast": "Delta_g > G_osc/(B*L)",
+    "integer_bound": "floor(G_osc/(B*L))+1",
+    "sufficiency_claimed": false
+  },
+  "canonical_geometry": {
+    "alpha": 1.0,
+    "phi": 0.5,
+    "G_osc": 0.125,
+    "feedback_per_selection_B": 0.5,
+    "max_selection_gain_per_gap_L": 0.25,
+    "B_times_L": 0.125,
+    "necessary_integer_gap_contrast": 2
+  },
+  "binary_extremal_exclusions": {
+    "world_count_at_most_5": {
+      "state_gap_ceiling": 1,
+      "contrast_ceiling": 1,
+      "oscillation_ruled_out": true
+    },
+    "query_count_at_most_4": {
+      "state_gap_ceiling": 1,
+      "contrast_ceiling": 1,
+      "oscillation_ruled_out": true
+    },
+    "productive_frontier_edges_at_most_4": {
+      "state_gap_ceiling": 1,
+      "contrast_ceiling": 1,
+      "oscillation_ruled_out": true
+    }
+  },
+  "linear_special_case": {
+    "a": 0.125,
+    "matches_B_times_L": true,
+    "low_state_gap": 0,
+    "high_state_gap": 2,
+    "between_state_contrast": 2,
+    "role": "constructive special case pairing a zero-gap state with the known gap-two state; not required for the no-go theorem"
+  },
+  "claim_ceiling": [
+    "Crossing the necessary contrast bound is not sufficient for a generic nonlinear lift.",
+    "A state-specific adaptive gap is not itself the feedback-driving contrast; feedback uses a difference between state gaps.",
+    "No empirical value of B or L is estimated here.",
+    "The result is local to the declared generalized feedback model.",
+    "No extension to noisy probabilistic sensing is implied."
+  ]
+}

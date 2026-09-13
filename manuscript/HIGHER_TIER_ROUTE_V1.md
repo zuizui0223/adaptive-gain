@@ -1,35 +1,44 @@
 # Higher-tier publication route v1
 
-Status: **Evolution Letters candidate manuscript materialized; current Theoretical Ecology package remains an intact fallback.**
+Status: **Evolution Letters V2 candidate materialized; Theoretical Ecology package remains an intact fallback.**
 
 ## Scientific reason to reopen routing
 
-The current manuscript is stronger than a generic adaptivity-gap paper. Its principal result runs backward from a requested eco-evolutionary regime to the minimum finite decision/separation architecture capable of supporting that regime:
+The paper is stronger than a generic adaptivity-gap result. In ecological state `i`, the finite sensing task has state-specific gap
+
+```text
+g_i = C_F(i) - C_A(i) >= 0.
+```
+
+Feedback depends on the ordered contrast between ecological states,
+
+```text
+Delta g = g_2 - g_1,
+```
+
+not on one `g_i` in isolation. The principal result runs backward:
 
 ```text
 required local dynamical regime
 -> required feedback gain
--> required integer structural gap
--> exact/Pareto-minimal finite sensing architecture
+-> required between-state structural contrast
+-> at least one required high-gap state
+-> exact/Pareto-minimal finite sensing architecture for that state
 ```
-
-The nonlinear no-go theorem removes the main routing objection that this biological conclusion depends on exact linearity of `G=a Delta g`.
 
 For a nondecreasing sensing-to-selection map with marginal effect bounded above by `L`, and positive feedback-per-selection scale `B=-beta e`, every admissible lift obeys
 
 ```text
-G <= B L Delta_g.
+G <= B L Delta g.
 ```
 
-Therefore
+Thus if an architecture class bounds every state-specific gap by `0<=g_i<=q_max`, then it also bounds `Delta g<=q_max`; whenever
 
 ```text
-B L q_max <= G_osc
--> the requested oscillatory regime is impossible
-   for every lift in the declared monotone-Lipschitz class.
+B L q_max <= G_osc,
 ```
 
-The linear acquisition-cost model remains a microfounded special case, not the sole bridge.
+the requested oscillatory regime is impossible for the entire class. The linear acquisition-cost model remains a microfounded constructive special case, not the sole bridge.
 
 ---
 
@@ -37,24 +46,11 @@ The linear acquisition-cost model remains a microfounded special case, not the s
 
 ### 1. Evolution Letters — Letter
 
-**Decision: credible high-risk first shot. A dedicated Letter surface now exists at `manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V1.md`.**
+**Decision: credible high-risk first shot. Canonical candidate: `manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V2.md`.**
 
-Current official scope and format were checked on 2026-09-13 and recorded in `EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md`:
+Current official scope and format were checked on 2026-09-13 and recorded in `EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md`. The journal explicitly welcomes theoretical evolutionary studies and new analytical or methodological frameworks with broad potential influence; a typical Letter is approximately 5,000 words.
 
-- https://academic.oup.com/evlett/pages/about
-- https://academic.oup.com/evlett/pages/author-guidelines
-
-The journal explicitly welcomes theoretical evolutionary studies and new analytical or methodological frameworks with broad potential influence. A typical Letter is approximately 5,000 words, with a 300-word abstract and optional 150-word teaser.
-
-### Recent journal-side precedent
-
-Recent *Evolution Letters* content shows that mathematical work on sensing, behavioral flexibility and evolutionary decision mechanisms is within the journal's active editorial space:
-
-- Frank (2024), **A biological circuit to anticipate trend** — a compact theoretical treatment of anticipating stochastic environmental trends;
-- Han et al. (2025), **The evolution of reversible plasticity in stable environments** — mathematical theory of reversible specialization;
-- Kuijper et al. (2026), **Evolution of behavioral flexibility and the forming and breaking of habits** — evolutionary modelling of limited mental resources, attention and flexible information use.
-
-These are journal-fit precedents, not priority claims. The adaptive-gain paper differs by owning a finite-architecture necessity/no-go result rather than a forward model of one sensing or learning strategy.
+Recent *Evolution Letters* content confirms active editorial space for mathematical work on sensing and evolutionary decision mechanisms, including Frank (2024) on anticipation of environmental trends, Han et al. (2025) on reversible plasticity, and Kuijper et al. (2026) on behavioral flexibility and limited mental resources. These are fit precedents, not priority claims.
 
 ### Required framing
 
@@ -62,95 +58,59 @@ Lead with one biological claim:
 
 > **Finite sensing architecture places hard lower bounds on which eco-evolutionary feedback regimes are reachable.**
 
-The paper should not be presented as four coequal theorems. Use this hierarchy:
+Use this hierarchy:
 
-1. principal reverse reachability/no-go theorem;
-2. nonlinear robustness of the sensing-to-selection bridge;
-3. ecological recurrence as the temporal filter of structural reward;
-4. local oscillation diagnostics as interpretation rather than a second flagship claim.
+1. nonlinear between-state contrast no-go theorem;
+2. transport from required contrast to a high-gap state and finite architecture;
+3. ecological recurrence as temporal filtering of structural reward;
+4. oscillation diagnostics as interpretation rather than a second flagship claim.
 
-The old cancellation-versus-restoration stasis proposition should not be a main headline in the Letter version.
+The cancellation-versus-restoration stasis proposition is not a coequal Letter headline.
 
 ### Main desk-reject risk
 
-The editor may judge the result too abstract unless the finite architecture is biologically legible before the combinatorics. The first figure and first two pages must translate represented alternatives, cue resources, adaptive branching, fixed obligations, and recurrent community states into natural-history language.
+The editor may judge the result too abstract unless the finite architecture is biologically legible before the combinatorics. Figure 1 and the first two pages therefore define state-specific gaps and the between-state contrast before presenting extremal finite formulas.
 
 ### Compression rule
 
-Continuation quotients, proof DAGs, exhaustive finite enumeration, LP certificates, most bounded-arity construction details, and extended stasis algebra belong in Supplement. The Letter must remain about evolutionary reachability, not algorithmic machinery.
+Continuation quotients, proof DAGs, exhaustive finite enumeration, LP certificates, most bounded-arity construction details and extended stasis algebra belong in Supplement.
 
 ---
 
 ### 2. The American Naturalist — Major Article
 
-**Decision: strongest conceptual-fit fallback and potentially the best home if Evolution Letters judges the manuscript too theory-heavy for a concise Letter.**
+**Decision: strongest conceptual-fit fallback.**
 
-Current official scope checked 2026-09-13:
-
-- https://www.journals.uchicago.edu/journals/an/about
-- https://www.journals.uchicago.edu/journals/an/instruct
-- https://www.journals.uchicago.edu/journals/an/editorial
-
-The journal explicitly prioritizes conceptual unification, sophisticated methodology and innovative theoretical synthesis across ecology and evolution.
-
-### Required framing
-
-The Am Nat version may retain more of the conceptual architecture than the Evolution Letters version, especially the distinction between:
-
-- architecture-generated selection amplitude;
-- ecological recurrence of the same state-indexed rewards;
-- cancellation versus restoring stasis;
-- what oscillatory versus monotone return can establish about feedback existence.
-
-The no-go theorem should still remain the flagship result.
+The Am Nat version may retain more of the conceptual architecture: architecture-generated selection amplitude, ecological recurrence, cancellation versus restoring stasis, and what oscillatory versus monotone return can establish about feedback existence. The nonlinear no-go theorem remains the flagship result.
 
 ---
 
 ### 3. Ecology Letters — conditional challenge only
 
-**Decision: do not route there solely because the mathematics is strong.**
+Do not route there solely because the mathematics is strong. Reconsider only if the final narrative makes the ecological principle unavoidable:
 
-Current scope checked 2026-09-13:
-
-- https://onlinelibrary.wiley.com/page/journal/14610248/homepage/productinformation.html
-
-Ecology Letters prioritizes highly novel, broad ecological advances. The current theory has an ecological component because community-state recurrence and reward-mode alignment are load-bearing, but the strongest immediate identity remains evolutionary theory.
-
-Reconsider an Ecology Letters challenge only if the final paper makes the joint principle unavoidable:
-
-> what organisms can distinguish constrains structural selection amplitude, while how ecological states recur determines which part of that structural reward survives through time.
-
-A second model or empirical example is not required by declaration, but the ecological recurrence side must be visibly indispensable rather than decorative.
+> what organisms can distinguish in each ecological state constrains the available selection contrast, while how ecological states recur determines which part of that contrast survives through time.
 
 ---
 
 ### 4. Theoretical Ecology — preserved fallback
 
-The current submission package remains scientifically valid and should not be dismantled. If the higher-tier route is declined, the manuscript can return to Theoretical Ecology without adding more theorem families or changing the claim ceiling.
+The existing submission package remains scientifically valid and must not be dismantled. If the higher-tier route is declined, return to Theoretical Ecology without adding theorem families or changing the claim ceiling.
 
 ---
 
-## Promotion gates before first higher-tier submission
+## Promotion gates
 
-Current machine state:
+1. nonlinear no-go theorem implemented — **CLOSED**;
+2. state gap versus between-state contrast separated — **CLOSED in V2 surfaces**;
+3. linear lift demoted to constructive acquisition-cost special case — **CLOSED**;
+4. one principal theorem dominates Letter hierarchy — **CLOSED**;
+5. V2 Letter text + three-figure surface materialized — **CLOSED pending final CI/visual QA**;
+6. prior-art wording remains conservative — **CLOSED**;
+7. Theoretical Ecology fallback preserved — **CLOSED**.
 
-1. nonlinear monotone-Lipschitz no-go theorem tested and merged — **CLOSED**;
-2. linear lift presented as acquisition-cost special case — **CLOSED in theorem note and Letter candidate**;
-3. `architecture too simple -> requested regime impossible` in title/abstract/first result — **CLOSED**;
-4. one principal theorem dominates the Letter hierarchy — **CLOSED**;
-5. Evolution Letters main-text candidate and three-figure plan materialized — **CLOSED pending surface CI**;
-6. prior-art wording remains conservative about information-fitness bounds, decision trees and adaptivity gaps — **CLOSED**;
-7. current Theoretical Ecology submission bundle remains preserved rather than overwritten — **CLOSED**.
-
-Remaining before actual submission:
-
-- final surface/word-limit CI;
-- build the three Evolution Letters main figures from the frozen figure plan;
-- final author metadata and declarations;
-- permanent archive DOI if available;
-- dispatch-time live journal-policy check;
-- final author approval.
+Remaining before submission: final full CI, human visual review, author metadata/declarations, archive DOI if available, dispatch-time journal-policy recheck and all-author approval.
 
 ## Stop rule
 
-Do **not** add additional theorem families merely to justify a higher-status journal. If the nonlinear bridge and no-go orientation do not make the existing principal theorem sufficiently broad, return to Theoretical Ecology or Am Nat rather than theorem hunting.
+Do **not** add additional theorem families merely to justify a higher-status journal. Repair only demonstrated semantic, validation, clarity, format or visual defects.

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#111"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111}.sub{fill:#62676c}.box{fill:#f4f5f6;stroke:#111;stroke-width:2}.axis{stroke:#111;stroke-width:2}.muted{stroke:#70757a;stroke-width:2}.dash{stroke-dasharray:9 7}</style>
+<rect width="1600" height="900" fill="white"/>
+<text x="50" y="58" font-size="34" font-weight="700">Finite sensing architecture creates a dynamical no-go region</text>
+<text x="50" y="92" font-size="20" class="sub">State-specific adaptive advantages generate a between-state structural contrast.</text>
+
+<text x="50" y="145" font-size="27" font-weight="700">A  Each ecological state has its own sensing gap</text>
+<rect x="65" y="185" width="680" height="255" rx="16" class="box"/>
+<text x="105" y="230" font-size="21" font-weight="700">ecological state i</text>
+<circle cx="235" cy="300" r="48" fill="#fff" stroke="#111" stroke-width="2"/>
+<text x="235" y="307" font-size="18" font-weight="700" text-anchor="middle">coarse cue</text>
+<line x1="208" y1="340" x2="155" y2="390" class="axis" marker-end="url(#a)"/>
+<line x1="262" y1="340" x2="315" y2="390" class="axis" marker-end="url(#a)"/>
+<text x="150" y="420" font-size="17" text-anchor="middle">branch cue A</text>
+<text x="320" y="420" font-size="17" text-anchor="middle">branch cue B</text>
+<text x="465" y="255" font-size="20" font-weight="700">adaptive cost C<tspan baseline-shift="sub" font-size="14">A</tspan>(i)</text>
+<text x="465" y="302" font-size="20" font-weight="700">fixed cost C<tspan baseline-shift="sub" font-size="14">F</tspan>(i)</text>
+<rect x="445" y="340" width="250" height="72" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<text x="570" y="372" font-size="21" font-weight="700" text-anchor="middle">gᵢ = C<tspan baseline-shift="sub" font-size="14">F</tspan>(i) − C<tspan baseline-shift="sub" font-size="14">A</tspan>(i)</text>
+<text x="570" y="398" font-size="16" class="sub" text-anchor="middle">state-specific structural gap</text>
+
+<rect x="800" y="225" width="315" height="145" rx="16" class="box"/>
+<text x="957" y="265" font-size="22" font-weight="700" text-anchor="middle">between-state contrast</text>
+<text x="957" y="312" font-size="27" text-anchor="middle">Δg = g₂ − g₁</text>
+<text x="957" y="345" font-size="16" class="sub" text-anchor="middle">feedback-driving structural difference</text>
+<line x1="745" y1="300" x2="790" y2="300" class="axis" marker-end="url(#a)"/>
+
+<text x="50" y="505" font-size="27" font-weight="700">B  A broad nonlinear lift bounds the selection contrast</text>
+<line x1="105" y1="790" x2="105" y2="555" class="axis"/>
+<line x1="105" y1="790" x2="720" y2="790" class="axis"/>
+<text x="390" y="835" font-size="18" text-anchor="middle">state-specific gap g</text>
+<text x="50" y="670" font-size="18" text-anchor="middle" transform="rotate(-90 50 670)">selection contribution f(g)</text>
+<path d="M105,790 C210,730 335,665 690,570" fill="none" stroke="#111" stroke-width="4"/>
+<path d="M105,790 C245,700 410,625 690,605" fill="none" stroke="#6b7075" stroke-width="3"/>
+<path d="M105,790 L690,595" fill="none" stroke="#9a9ea2" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="550" y="548" font-size="18" font-weight="700">marginal ceiling L</text>
+<text x="555" y="627" font-size="17" class="sub">admissible nonlinear lifts</text>
+<text x="175" y="582" font-size="18" font-weight="700">Δs ≤ L Δg</text>
+<text x="175" y="614" font-size="18" font-weight="700">G ≤ B L Δg</text>
+
+<text x="830" y="505" font-size="27" font-weight="700">C  Too little contrast makes oscillation impossible</text>
+<line x1="865" y1="790" x2="865" y2="555" class="axis"/>
+<line x1="865" y1="790" x2="1535" y2="790" class="axis"/>
+<text x="1200" y="835" font-size="18" text-anchor="middle">available between-state contrast Δg</text>
+<text x="805" y="670" font-size="18" text-anchor="middle" transform="rotate(-90 805 670)">maximum feedback B L Δg</text>
+<line x1="865" y1="650" x2="1535" y2="650" class="muted dash"/>
+<text x="1460" y="637" font-size="18" font-weight="700">G<tspan baseline-shift="sub" font-size="13">osc</tspan></text>
+<line x1="865" y1="790" x2="1485" y2="575" stroke="#111" stroke-width="4"/>
+<polygon points="865,790 865,650 1268,650" fill="#eceeef"/>
+<text x="1030" y="700" font-size="20" font-weight="700" text-anchor="middle">UNREACHABLE</text>
+<text x="1030" y="728" font-size="17" text-anchor="middle" class="sub">B L Δg ≤ G<tspan baseline-shift="sub" font-size="12">osc</tspan></text>
+<line x1="1268" y1="790" x2="1268" y2="650" stroke="#111" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="1268" y="820" font-size="17" text-anchor="middle">q<tspan baseline-shift="sub" font-size="12">osc</tspan><tspan baseline-shift="super" font-size="12">nec</tspan></text>
+<text x="1390" y="700" font-size="19" font-weight="700" text-anchor="middle">not ruled out</text>
+<text x="1390" y="728" font-size="16" text-anchor="middle" class="sub">not guaranteed</text>
+
+<rect x="55" y="855" width="1490" height="32" rx="8" fill="#f4f5f6"/>
+<text x="800" y="878" font-size="18" font-weight="700" text-anchor="middle">No-go theorem: insufficient between-state structural contrast excludes the requested regime for every lift in the declared monotone-Lipschitz class.</text>
+</svg>

@@ -5,24 +5,30 @@
   "article_type": "Letter",
   "status": "scientific_surface_built_machine_validation_pending",
   "primary_claim": "finite sensing architecture can exclude local eco-evolutionary feedback regimes",
+  "canonical_letter_version": "V2",
   "scientific_assets": {
-    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V1.md",
-    "nonlinear_theorem": "theory/NONLINEAR_LIFT_NO_GO_V1.md",
+    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V2.md",
+    "nonlinear_theorem": "theory/NONLINEAR_LIFT_NO_GO_V2.md",
+    "theorem_receipt": "validation/nonlinear_lipschitz_no_go_v2.json",
     "format_receipt": "manuscript/EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md",
     "route": "manuscript/HIGHER_TIER_ROUTE_V1.md",
-    "integration_map": "manuscript/HIGHER_TIER_INTEGRATION_MAP_V1.md",
-    "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V1.md",
-    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V1.md",
+    "integration_map": "manuscript/HIGHER_TIER_INTEGRATION_MAP_V2.md",
+    "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V2.md",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V2.md",
     "figures": [
-      "manuscript/figures/figure_el1_no_go.svg",
-      "manuscript/figures/figure_el2_architecture.svg",
+      "manuscript/figures/figure_el1_no_go_v2.svg",
+      "manuscript/figures/figure_el2_architecture_v2.svg",
       "manuscript/figures/figure_el3_recurrence.svg"
-    ]
+    ],
+    "cover_letter": "manuscript/COVER_LETTER_EVOLUTION_LETTERS_V1.md",
+    "submission_checklist": "manuscript/SUBMISSION_CHECKLIST_EVOLUTION_LETTERS_V1.md"
   },
   "machine_claims": {
     "nonlinear_no_go_implemented": true,
     "linear_lift_demoted_to_constructive_special_case": true,
     "necessary_not_sufficient_firewall": true,
+    "state_gap_and_between_state_contrast_separated": true,
+    "class_gap_ceiling_transport_to_contrast_explicit": true,
     "theoretical_ecology_fallback_preserved": true,
     "letter_surface_exists": true,
     "three_letter_figures_exist": true,
