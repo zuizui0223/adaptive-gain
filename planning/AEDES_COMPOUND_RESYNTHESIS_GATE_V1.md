@@ -11,6 +11,12 @@ Execution-logistics planning only. This document is downstream of:
 
 It does not alter the frozen scientific task, locked Phase-1 compounds, confirmatory rules, or assay semantics.
 
+Current compound-gate state:
+
+`PUBLISHED_CHEMISTRY_CONTEXT_LOCATED__CORE_REVIEW_STILL_REQUIRED`
+
+This is a real advance over supplement availability alone, but it is **not** material access and does not permit Phase 1 to start.
+
 ## Locked compounds
 
 Phase 1 remains locked to:
@@ -20,17 +26,69 @@ Phase 1 remains locked to:
 
 No third compound is an allowed rescue after LVP outcome data are opened.
 
-## Why this gate exists
+## Live supplementary-method audit closed
 
-The current highest-risk material is access to the two NPYLR7 agonists. Public evidence establishes that:
+A one-off GitHub Actions run executed the repository's non-verbatim supplement audit against the official PMC Open Access distribution.
 
-- Zeledon et al. 2024 synthesized 128 analogs and states that individual synthetic reaction details are provided in Supplementary Material 3;
-- Supplementary Material 3 is the published DOCX `13071_2024_6347_MOESM3_ESM.docx`;
-- the paper is in the PMC Open Access collection (`PMC11212260`);
-- NCBI provides an official PMC-SM-BioC API that converts Open Access supplementary documents into machine-readable text;
-- the locked compounds were selected because `TDI-014188` and `TDI-014186` produced the two largest Miniport effects in the 2024 study.
+Execution receipt:
 
-The existence of a published supplement is not itself proof that an institutional chemistry core can reproduce either compound. The exact compound sections and analytical information must first be located and reviewed.
+- workflow run: `34730165648`;
+- job: `103651359191`;
+- conclusion: `success`;
+- official source used: PMC Open Access AWS object;
+- source URL: `https://pmc-oa-opendata.s3.amazonaws.com/PMC11212260.1/13071_2024_6347_MOESM3_ESM.docx`;
+- source DOCX SHA256: `abce4630ff01aaa83545a3a4690f04e3c97061acba90d2bb3ecda9256dfb33b9`;
+- extracted normalized text: 57,513 characters;
+- archived JSON receipt artifact: `10308124041` (`zeledon-supplement-audit-receipt`);
+- artifact SHA256: `7ea3bb3338a3fbddf445a095eaecb5902e25f3a369ab1d14277e751c58587cbd`.
+
+The live audit found both locked compound identifiers exactly once in chemistry-method context.
+
+### `TDI-014188`
+
+Nearby chemistry-method signals:
+
+- `chromatography`: 2;
+- `lcms`: 1;
+- `mmol`: 18;
+- `nmr`: 1.
+
+### `TDI-014186`
+
+Nearby chemistry-method signals:
+
+- `chromatography`: 1;
+- `lcms`: 2;
+- `mmol`: 15;
+- `nmr`: 2.
+
+The correct interpretation is therefore:
+
+`PUBLISHED_CHEMISTRY_CONTEXT_LOCATED__CORE_REVIEW_STILL_REQUIRED`
+
+The repository deliberately stores counts, hashes and source identifiers rather than copying the supplementary chemistry prose.
+
+Canonical machine-readable receipt:
+
+`validation/AEDES_ZELEDON_SUPPLEMENT_LIVE_AUDIT_V1.json`
+
+## Why this does not yet close resynthesis
+
+The live receipt closes two previously open questions:
+
+1. Supplementary Material 3 is retrievable through an official PMC distribution path.
+2. Both preregistered compounds occur in genuine chemistry-method context rather than only in behavioral tables.
+
+It does **not** establish that:
+
+- the reaction sequence is complete enough for independent reproduction;
+- all starting materials and intermediates are obtainable;
+- the exact final chemical form is unambiguous;
+- an institutional chemistry core judges the synthesis practical;
+- a synthesized product has the correct identity;
+- a synthesized product meets a prospectively declared purity threshold.
+
+Those remain chemistry-core / physical-material gates.
 
 ## Two admissible access routes
 
@@ -52,44 +110,34 @@ A verbal statement that the compounds exist is not a closed material receipt.
 
 ### Route B — institutional resynthesis
 
-Use only if source material transfer is unavailable, impractical, or quantitatively insufficient.
+Use if source material transfer is unavailable, impractical, or quantitatively insufficient.
 
-Close this route only after all of the following:
+Steps 1–2 below are now **closed** by the live audit:
 
-1. the published supplementary chemistry text for **both** locked compounds is retrieved;
-2. both compound identifiers are located in chemistry-method context, not merely in behavioral tables;
-3. a qualified chemistry core reviews the reaction sequence and determines that the compounds are reproducible;
-4. identity / purity acceptance criteria are prospectively declared before mosquito testing;
-5. the synthesized material passes the declared analytical identity / purity checks.
+1. [x] retrieve the published supplementary chemistry document through an official path;
+2. [x] locate both locked identifiers in chemistry-method context rather than merely behavioral tables;
+3. [ ] qualified chemistry core reviews the reaction sequence and determines whether each compound is reproducible;
+4. [ ] identity / purity acceptance criteria are prospectively declared before mosquito testing;
+5. [ ] physical synthesized material passes the declared analytical identity / purity checks.
 
-The repository helper `adaptive_gain/zeledon_supplement.py` and CLI `examples/audit_zeledon_supplement.py` are designed only to close steps 1–2 reproducibly. They do not substitute for chemistry-core review or analytical validation.
+The helper `adaptive_gain/zeledon_supplement.py` and CLI `examples/audit_zeledon_supplement.py` close only the retrieval/context layer. They do not substitute for chemistry-core review or analytical validation.
 
-## Canonical machine-readable retrieval route
+## Reproducible official retrieval routes
 
-The official NCBI PMC-SM-BioC API documents retrieval by PMCID and supplementary filename.
+The helper uses two official NCBI/PMC paths in order:
 
-For this study the locked source identifiers are:
+1. PMC-SM-BioC relevant-supplement endpoint;
+2. PMC Open Access AWS object for the published DOCX.
+
+Locked identifiers:
 
 - PMCID: `PMC11212260`;
+- PMC version: `1`;
 - supplement filename: `13071_2024_6347_MOESM3_ESM.docx`.
 
-The helper constructs the canonical endpoint:
+The successful live receipt used the AWS object. The parser extracts only DOCX WordprocessingML text and emits aggregate audit signals, not source prose.
 
-`https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/supplmat_relevant.cgi/bioc_xml/PMC11212260/13071_2024_6347_MOESM3_ESM.docx`
-
-This is preferable to scraping publisher HTML because it uses the official PMC Open Access supplementary-material text-mining service.
-
-## Repository audit states
-
-The helper may return only these interpretation classes:
-
-- `PUBLISHED_CHEMISTRY_CONTEXT_LOCATED__CORE_REVIEW_STILL_REQUIRED`;
-- `COMPOUNDS_LOCATED__CHEMISTRY_CONTEXT_NOT_YET_QUALIFIED`;
-- `SUPPLEMENT_RETRIEVED__LOCKED_COMPOUNDS_NOT_BOTH_LOCATED`.
-
-Retrieval failure is an operational failure and must remain distinct from all three scientific/material states.
-
-## Chemistry-core receipt required after retrieval
+## Chemistry-core receipt required next
 
 For each compound separately record:
 
@@ -118,26 +166,30 @@ Mixed routes are allowed (for example, one transferred and one resynthesized) pr
 ## Hard stops
 
 - no substitution of `TDI-014184` or another agonist after LVP outcomes are opened;
-- no claim that a supplement mention equals a valid synthesis protocol;
+- no claim that chemistry-context detection equals a complete synthesis protocol;
 - no mosquito experiment with unverified compound identity;
 - no use of the 2026 computational paper as a replacement for the primary 2024 chemistry methods;
 - no inference from EC50 that `TDI-014186` should fail behaviorally; its low in-vitro potency is precisely why the in-vivo replication is informative;
 - no changing dose or timing to rescue one locked compound after outcome inspection.
 
-## Current status
+## Current status summary
 
-`COMPOUND_GATE = NOT_CLOSED`
+Closed:
 
-What is closed:
+- locked compound identities;
+- primary paper / PMCID / supplement filename;
+- official machine-readable retrieval logic;
+- successful live retrieval of the primary chemistry supplement;
+- locked compound presence in chemistry-method context for both compounds;
+- reproducible source/document hashes and execution receipt.
 
-- compound identities are locked;
-- primary paper / PMCID / supplement filename are fixed;
-- publisher supplement exists;
-- official NCBI machine-readable retrieval route is defined;
-- retrieval/audit code is implemented and offline-tested.
+Still open:
 
-What remains:
+- source-material transfer response;
+- chemistry-core route-completeness / feasibility review;
+- prospectively fixed identity/purity acceptance criteria;
+- physical compound identity / purity receipt for both locked compounds.
 
-- obtain a successful live supplement audit receipt;
-- source-transfer response and/or chemistry-core review;
-- physical material identity / purity receipt for both locked compounds.
+Therefore:
+
+`COMPOUND_MATERIAL_GATE = NOT_CLOSED`
