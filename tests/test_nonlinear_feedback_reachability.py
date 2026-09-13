@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import pytest
 
 from adaptive_gain.nonlinear_feedback_reachability import (
@@ -5,6 +8,13 @@ from adaptive_gain.nonlinear_feedback_reachability import (
     maximum_feedback_gain_under_lipschitz_lift,
     minimum_integer_gap_for_oscillation_under_lipschitz_lift,
     oscillation_is_ruled_out_under_lipschitz_lift,
+)
+
+
+RECEIPT_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "validation"
+    / "nonlinear_lipschitz_no_go_v1.json"
 )
 
 
@@ -67,6 +77,40 @@ def test_canonical_binary_smaller_scopes_are_ruled_out_without_linear_lift():
     assert receipt.five_world_scope_ruled_out
     assert receipt.four_query_scope_ruled_out
     assert receipt.four_frontier_edge_scope_ruled_out
+
+
+def test_machine_readable_receipt_matches_executable_theorem():
+    stored = json.loads(RECEIPT_PATH.read_text(encoding="utf-8"))
+    receipt = canonical_binary_lipschitz_no_go_receipt()
+
+    assert stored["status"] == "validated_theorem_receipt"
+    assert stored["theorem"]["sufficiency_claimed"] is False
+    geometry = stored["canonical_geometry"]
+    assert geometry["alpha"] == receipt.evolutionary_persistence
+    assert geometry["phi"] == receipt.community_memory
+    assert geometry["G_osc"] == pytest.approx(receipt.oscillation_gain)
+    assert geometry["feedback_per_selection_B"] == receipt.feedback_per_selection
+    assert geometry["max_selection_gain_per_gap_L"] == receipt.max_selection_gain_per_gap
+    assert geometry["B_times_L"] == pytest.approx(
+        receipt.effective_gain_ceiling_per_gap
+    )
+    assert geometry["necessary_integer_gap"] == receipt.necessary_integer_gap
+
+    exclusions = stored["binary_extremal_exclusions"]
+    assert exclusions["world_count_at_most_5"]["gap_ceiling"] == (
+        receipt.binary_five_world_gap_ceiling
+    )
+    assert exclusions["query_count_at_most_4"]["gap_ceiling"] == (
+        receipt.binary_four_query_gap_ceiling
+    )
+    assert exclusions["productive_frontier_edges_at_most_4"]["gap_ceiling"] == (
+        receipt.binary_four_frontier_edge_gap_ceiling
+    )
+    assert exclusions["world_count_at_most_5"]["oscillation_ruled_out"]
+    assert exclusions["query_count_at_most_4"]["oscillation_ruled_out"]
+    assert exclusions["productive_frontier_edges_at_most_4"][
+        "oscillation_ruled_out"
+    ]
 
 
 def test_invalid_inputs_fail_closed():
