@@ -1,0 +1,75 @@
+{
+  "receipt": "hunt_2008_fixed_ou_refit_v1",
+  "date": "2026-09-13",
+  "status": "INDEPENDENT_NUMERICAL_REFIT_PASS_WITH_SOURCE_VERSION_CAVEAT",
+  "system": "fossil threespine stickleback dorsal-spine trait series",
+  "citation": "Hunt G, Bell MA, Travis MP. 2008. Evolution toward a new adaptive optimum: phenotypic evolution in a fossil stickleback lineage. Evolution 62:700-710.",
+  "doi": "10.1111/j.1558-5646.2007.00310.x",
+  "source_contract": {
+    "repository": "cran/paleoTS",
+    "commit": "6fbc4f6fa35ef2c7de73e11b9f6dda8ba73e7bc6",
+    "package_version": "0.6.2",
+    "r_version": "4.4.1",
+    "workflow_run_id": 34750002693,
+    "workflow_job_id": 103704711585,
+    "temporary_workflow_removed": true
+  },
+  "current_vignette_refit": {
+    "n": 60,
+    "anc": 1.3599167285866207,
+    "vstep_per_kyr": 0.004074958359653364,
+    "theta": 0.7851171553920003,
+    "alpha_per_kyr": 0.4030734201553071,
+    "logL": 93.44169282389461,
+    "AICc": -178.1561129205165,
+    "half_life_kyr": 1.7196548963533014,
+    "half_life_generations": 859.8274481766507,
+    "generation_conversion": "2 years/generation; 500 generations/Kyr"
+  },
+  "paper_matched_refit": {
+    "preprocessing": [
+      "post-invasion tt >= 4.5 Kyr",
+      "omit populations with n < 5",
+      "reset time",
+      "replace one zero within-sample variance with pooled variance",
+      "convert Kyr to generations at 500 generations/Kyr",
+      "fit Joint fixed OU with no additional variance pooling"
+    ],
+    "n": 57,
+    "zero_variances_replaced": 1,
+    "pooled_variance_replacement": 0.04073338588884509,
+    "time_first_generation": 0,
+    "time_last_generation": 7375,
+    "anc": 1.3608894391782618,
+    "vstep_per_generation": 0.000007043556217523495,
+    "theta": 0.7927588486238825,
+    "alpha_per_generation": 0.0008202984275902434,
+    "logL": 94.96063917217212,
+    "AICc": -181.15204757511347,
+    "half_life_generations": 844.9939159290783,
+    "published_half_life_generations": 853,
+    "absolute_half_life_difference_generations": 8.006084070921702,
+    "relative_half_life_difference": 0.009385796097211843,
+    "classification": "reproduced within 1 percent in reported half-life using pinned current source and paper-matched preprocessing"
+  },
+  "reciprocal_witness_q_half": {
+    "q": 0.5,
+    "a_per_generation": 0.0004101492137951217,
+    "d_per_generation": 0.0004101492137951217,
+    "hidden_initial": 0.22462825806950307,
+    "direct_coupling_half_life_generations": 1689.9878318581566,
+    "max_abs_mean_difference": 2.220446049250313e-16,
+    "max_abs_covariance_difference": 3.469446951953614e-18,
+    "mean_tolerance": 1e-10,
+    "covariance_tolerance": 1e-9,
+    "status": "PASS"
+  },
+  "semantic_boundary": "The fitted approximately 845-853 generation relaxation half-life remains a model-conditional observed timescale. The exact congruent reciprocal witness shows that the whole fitted alpha is not uniquely attributable to a one-way direct attraction/selection coefficient from the trait likelihood alone.",
+  "version_caveat": "The refit uses paleoTS 0.6.2 source from 2024, not the authors' original 2008 software environment; the small residual numerical difference is not interpreted as an error.",
+  "gate_effect": {
+    "independent_fixed_numerical_refits": 1,
+    "fixed_empirical_time_reciprocal_witnesses": 1,
+    "independent_moving_numerical_refits": 0,
+    "next_priority": "Voje et al. 2024 moving-optimum OUBM raw-data refit"
+  }
+}

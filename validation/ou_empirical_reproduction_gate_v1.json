@@ -1,0 +1,68 @@
+{
+  "receipt": "ou_empirical_reproduction_gate_v1",
+  "date": "2026-09-13",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "direct_systems": [
+    {
+      "id": "voje_2024_andinus",
+      "stratum": "MOVING_OPTIMUM",
+      "status": "PUBLISHED_SUMMARY_ANCHORED_RAW_REFIT_OPEN",
+      "materials": "Dryad archive publicly indexed; file bytes not materialized in current execution environment",
+      "required_to_close": [
+        "execute archived data/script workflow",
+        "match preprocessing/time scale",
+        "match OUBM fit and parameter transformations",
+        "attach reciprocal witness on empirical times"
+      ]
+    },
+    {
+      "id": "hunt_2008_stickleback",
+      "stratum": "FIXED_OPTIMUM",
+      "status": "MATERIALS_AND_WORKFLOW_RESOLVED_NUMERICAL_REFIT_OPEN",
+      "materials": "current cran/paleoTS ships dorsal.spines and preprocessing/fitting vignette",
+      "source_commit": "cran/paleoTS@6fbc4f6fa35ef2c7de73e11b9f6dda8ba73e7bc6",
+      "workflow": "filter nn>0 and tt>4.4, reset time, pool variance minN=5, fitSimple model=OU with Joint default",
+      "required_to_close": [
+        "materialize package data in R-capable environment",
+        "numerically reproduce at least one fixed-OU trait fit",
+        "store fitted parameters and likelihood",
+        "attach reciprocal witness on empirical times"
+      ]
+    },
+    {
+      "id": "lo_cascio_saetre_2017_malta",
+      "stratum": "FIXED_OPTIMUM",
+      "status": "DATA_PROVENANCE_RESOLVED_RAW_REFIT_OPEN",
+      "materials": "Dryad ReedWarblerData.xlsx plus layeranalyzer malta mirror confirmed",
+      "same_data_alternative_model_evidence": {
+        "source": "trondreitan/layeranalyzer vignette",
+        "reported_best_model": "linear-trend OU",
+        "example_log_likelihood": 36.937,
+        "example_AICc": -61.147,
+        "characteristic_time_model_specific": 2.518253,
+        "interpretation": "model-specification caution only; not an equivalent-likelihood reproduction"
+      },
+      "required_to_close": [
+        "materialize annual mean/variance/n/year table",
+        "reproduce original PaleoTS fixed-OU fit",
+        "store fitted parameters and likelihood",
+        "attach reciprocal witness on empirical times"
+      ]
+    }
+  ],
+  "counts": {
+    "direct_empirical_anchors": 3,
+    "materials_or_workflow_resolved_beyond_prose": 2,
+    "independently_reproduced_numerical_fits": 0,
+    "empirical_time_reciprocal_witnesses_after_refit": 0
+  },
+  "reproduction_definition": [
+    "empirical values obtained",
+    "observation times and sampling-error treatment reconstructed",
+    "reported/package fit numerically matched to declared tolerance",
+    "fitted parameters and likelihood receipt stored",
+    "reciprocal witness evaluated on same schedule"
+  ],
+  "dominant_next_gate": "close at least one moving-optimum and one fixed-optimum numerical refit before further theorem expansion",
+  "hard_stop": "documentation, published tables and external reanalyses do not increment independent reproduction count"
+}

@@ -1,0 +1,60 @@
+{
+  "receipt": "ou_exact_prior_art_search_v2",
+  "date": "2026-09-13",
+  "scope": "Targeted search for exact or near-exact predecessors of the evoTS moving-optimum reciprocal causal congruence and mechanistic half-life identified-set result.",
+  "search_axes": [
+    "evoTS moving/evolving/randomly moving optimum identifiability",
+    "partially observed Ornstein-Uhlenbeck causal/structural identifiability",
+    "reciprocal versus exogenous OU feedback observational equivalence",
+    "correlated/common innovations in partially observed OU systems",
+    "continuous-time OU causal law equivalence",
+    "Hansen-Pienaar-Orzack moving optimum causal identifiability",
+    "palaeontological linear-SDE / Granger causality"
+  ],
+  "closest_prior_art": [
+    {
+      "work": "Jensen 2014, Statistical Inference for Partially Observed Diffusion Processes",
+      "class": "DIRECT_MATHEMATICAL_ADJACENCY",
+      "concedes": "Two-dimensional OU identifiability under partial observation is prior art."
+    },
+    {
+      "work": "Browning et al. 2025, arXiv:2503.19241",
+      "class": "DIRECT_MATHEMATICAL_ADJACENCY",
+      "concedes": "Exact structural identifiability and identifiable parameter combinations for partially observed linear/near-linear SDEs are prior art."
+    },
+    {
+      "work": "Kania 2026, Law Equivalence for Ornstein-Uhlenbeck Dynamics Driven by Levy Noise",
+      "class": "LAW_EQUIVALENCE_ADJACENCY",
+      "concedes": "OU law comparison/equivalence under changes in drift is prior art; not the same as the present identical scalar finite-dimensional likelihood construction."
+    },
+    {
+      "work": "Bartoszek et al. 2012, A phylogenetic comparative method for studying multivariate adaptation",
+      "class": "EVOLUTIONARY_RECIPROCAL_OU_PRIOR_ART",
+      "concedes": "Reciprocal adaptive OU coupling and randomly evolving predictors are prior art."
+    },
+    {
+      "work": "Voje 2023, Fitting and evaluating univariate and multivariate models of within-lineage evolution",
+      "class": "EVOTS_RECIPROCAL_OU_PRIOR_ART",
+      "concedes": "evoTS methodology already explicitly describes reciprocal adaptation and correlated or uncorrelated stochastic changes."
+    },
+    {
+      "work": "Hannisdal & Liow 2018; Reitan 2019 layeranalyzer",
+      "class": "BIOLOGICAL_CAUSAL_SDE_PRIOR_ART",
+      "concedes": "Linear SDE/OU models for Granger-causal biological and palaeontological time-series analysis are prior art."
+    },
+    {
+      "work": "Ringen 2026, Trait coevolution and causal inference using generalized dynamic phylogenetic models",
+      "class": "CAUSAL_INTERPRETATION_ADJACENCY",
+      "concedes": "One-way versus reciprocal evolutionary effects and the dependence of causal interpretation on assumptions are active explicit methodology."
+    },
+    {
+      "work": "Adams 2024 thesis / Recke, Adams & Hansen non-Gaussian graphical precision work",
+      "class": "CAUSAL_OU_ADJACENCY",
+      "concedes": "Causal conclusions from OU observational distributions under declared structural/noise conditions are prior art."
+    }
+  ],
+  "exact_predecessor_located": false,
+  "bounded_search_conclusion": "No located work simultaneously targeted the implemented evoTS logL.joint.OU.BM nonstationary trait-only likelihood, constructed an exogenous-optimum versus reciprocal-hidden-state identical observed law, derived H_direct in [H_OU, infinity), and supplied the common-shock sensitivity envelope. This is a search outcome, not a priority proof.",
+  "novelty_boundary": "Claim only a likelihood-specific causal identified set and replacement/sensitivity analysis tied to empirical moving-optimum practice; do not claim generic OU non-identifiability, reciprocal OU adaptation, causal SDEs, or OU law equivalence as new.",
+  "status": "TARGETED_SEARCH_COMPLETE_REOPEN_IF_CLOSER_PREDECESSOR_FOUND"
+}

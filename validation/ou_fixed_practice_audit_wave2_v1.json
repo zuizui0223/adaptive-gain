@@ -1,0 +1,48 @@
+{
+  "receipt": "ou_fixed_practice_audit_wave2_v1",
+  "date": "2026-09-13",
+  "protocol": "theory/OU_PRACTICE_AUDIT_PROTOCOL_V2.md",
+  "scope": "Second fixed-optimum practice wave plus broad empirical model-class denominator; interpretation audit remains incomplete.",
+  "new_direct_empirical_target": {
+    "citation": "Voje KL. 2020. Testing eco-evolutionary predictions of fossil data using a scaling exponent. Evolution.",
+    "system": "Yellowstone fossil diatom valve-diameter time series",
+    "likelihood_class": "DIRECT_FIXED_OU",
+    "model_selection": {
+      "fixed_OU_AICc": 339.09,
+      "fixed_OU_weight": 0.579,
+      "reported_half_life_years": 1740
+    },
+    "interpretation_codes": ["F1_ATTRACTION_OR_SELECTION", "F2_ADAPTATION_SPEED"],
+    "adequacy_caution": "Present: the paper explicitly reports imperfect model adequacy and notes that the OU runs test is only barely passed.",
+    "causal_nonuniqueness_caution_F4": false,
+    "reproduction_status": "OPEN"
+  },
+  "direct_denominator_candidate": {
+    "citation": "Gearty W, McClain CR, Payne JL. 2018. Energetic tradeoffs control the size distribution of aquatic mammals. PNAS.",
+    "system": "fossil Sirenia, Pinnipedia, Odontoceti and Lutrinae time series",
+    "likelihood_class": "DIRECT_PALEOTS_JOINT_OU_DENOMINATOR_CANDIDATE",
+    "note": "The study fits fossil time-series OU models with the paleoTS joint parameterization, but the strongest mechanistic half-life language in the paper is intertwined with phylogenetic OU analyses. Count as a direct-likelihood denominator candidate only; fixed-time-series mechanistic numerator coding remains unresolved pending supplement-level source audit."
+  },
+  "systematic_model_denominator": {
+    "source_receipt": "validation/ou_pets_630_model_denominator_v1.json",
+    "saved_successful_series": 630,
+    "fixed_OU_best": 56,
+    "moving_OU_best": 69,
+    "any_OU_best": 125,
+    "any_OU_best_percent": 19.8412698413,
+    "meaning": "Broad model-class prevalence context only; not an interpretation-frequency estimate."
+  },
+  "cumulative_direct_fixed_examples_with_confirmed_mechanistic_interpretation": [
+    "Hunt et al. 2008",
+    "Lo Cascio Saetre et al. 2017",
+    "Voje 2020"
+  ],
+  "cumulative_confirmed_count": 3,
+  "interpretation": "The fixed-optimum theorem now targets at least three independent empirical systems with explicit attraction/selection or adaptation-speed interpretation, including one case with explicit model-adequacy caution. Separately, the PETS saved-object audit shows that fixed or moving OU is the minimum-AICc candidate for 125 of 630 successful broad empirical comparisons. This strengthens practice relevance without licensing a prevalence claim about causal overinterpretation.",
+  "hard_stops": [
+    "do not count Gearty 2018 in the mechanistic numerator until the fossil time-series interpretation is source-coded separately from phylogenetic OU results",
+    "do not use 3 confirmed examples as a field prevalence fraction",
+    "do not conflate model inadequacy with causal nonidentifiability",
+    "do not treat an adequacy warning as equivalent to an F4 causal-nonuniqueness warning"
+  ]
+}
