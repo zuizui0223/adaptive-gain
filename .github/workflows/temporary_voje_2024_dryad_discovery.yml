@@ -1,0 +1,58 @@
+name: temporary-voje-2024-dryad-discovery
+
+on:
+  push:
+    branches:
+      - analysis/evoTS-moving-optimum-audit
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve and inspect Dryad archive
+        shell: bash
+        run: |
+          set -euxo pipefail
+          DOI='doi%3A10.5061%2Fdryad.bk3j9kdmj'
+          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/datasets/${DOI}" -o /tmp/dataset.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/dataset.json'))
+          print('DATASET_KEYS=' + ','.join(sorted(x.keys())))
+          for k in ['id','identifier','versionNumber','publicationDate','lastModificationDate','_links']:
+              if k in x: print(f'{k.upper()}={x[k]}')
+          print('DATASET_JSON=' + json.dumps(x, sort_keys=True)[:12000])
+          PY
+          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/datasets/${DOI}/versions" -o /tmp/versions.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/versions.json'))
+          print('VERSIONS_JSON=' + json.dumps(x, sort_keys=True)[:12000])
+          PY
+          # Prefer the documented whole-dataset download endpoint.
+          curl -fL --retry 3 "https://datadryad.org/api/v2/datasets/${DOI}/download" -o /tmp/dryad_download
+          file /tmp/dryad_download
+          ls -lh /tmp/dryad_download
+          python - <<'PY'
+          import pathlib
+          p=pathlib.Path('/tmp/dryad_download')
+          print('DOWNLOAD_HEAD_HEX=' + p.read_bytes()[:32].hex())
+          PY
+          mkdir -p /tmp/dryad_unzip
+          unzip -o /tmp/dryad_download -d /tmp/dryad_unzip || true
+          find /tmp/dryad_unzip -maxdepth 4 -type f -printf '%p\t%s bytes\n' | sort || true
+          find /tmp/dryad_unzip -type f -iname '*andinus*' -o -iname '*main*analys*' | sort || true
+          if find /tmp/dryad_unzip -type f -name 'main_analyses_andinus_biwa.R' | grep -q .; then
+            SCRIPT=$(find /tmp/dryad_unzip -type f -name 'main_analyses_andinus_biwa.R' | head -1)
+            echo '---SCRIPT_HEAD---'
+            sed -n '1,260p' "$SCRIPT"
+            echo '---SCRIPT_OUBM_LINES---'
+            grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint' "$SCRIPT" | head -250 || true
+          fi
+          if find /tmp/dryad_unzip -type f -name 'andinus.txt' | grep -q .; then
+            DATA=$(find /tmp/dryad_unzip -type f -name 'andinus.txt' | head -1)
+            echo '---ANDINUS_HEAD---'
+            sed -n '1,12p' "$DATA"
+            echo "ANDINUS_LINES=$(wc -l < "$DATA")"
+          fi
