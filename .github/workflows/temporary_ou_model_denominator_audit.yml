@@ -1,0 +1,40 @@
+name: temporary-ou-model-denominator-audit
+
+on:
+  push:
+    branches:
+      - analysis/evoTS-moving-optimum-audit
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4.1'
+      - name: Count best AICc model across PETS empirical series
+        shell: Rscript {0}
+        run: |
+          url <- "https://raw.githubusercontent.com/VildeBruhn/rate_time/main/empirical_data/model_test.Rdata"
+          dest <- tempfile(fileext = ".Rdata")
+          download.file(url, dest, mode = "wb", quiet = FALSE)
+          e <- new.env(parent = emptyenv())
+          load(dest, envir = e)
+          if (!exists("model_test", envir = e, inherits = FALSE)) stop("model_test object missing")
+          model_test <- e$model_test
+          labels <- c("GRW", "URW", "STASIS", "STRICT_STASIS", "DECEL", "ACCEL", "FIXED_OU", "OUBM_ANC_EQ_OPT", "OUBM_FREE_OPT")
+          best <- vapply(model_test, function(x) {
+            a <- as.numeric(unlist(x$AICc))
+            if (length(a) != 9L || all(!is.finite(a))) return(NA_integer_)
+            which.min(a)
+          }, integer(1))
+          counts <- table(factor(best, levels = seq_along(labels), labels = labels), useNA = "ifany")
+          cat("AUDIT_SOURCE_SHA=a08b97d2153c797f4825b9d03ec9361ca9921caf\n")
+          cat("N_MODEL_TEST=", length(model_test), "\n", sep = "")
+          cat("N_VALID_BEST=", sum(!is.na(best)), "\n", sep = "")
+          cat("N_NA_BEST=", sum(is.na(best)), "\n", sep = "")
+          for (nm in labels) cat("BEST_", nm, "=", unname(counts[nm]), "\n", sep = "")
+          cat("BEST_OU_ANY=", sum(best %in% c(7L, 8L, 9L), na.rm = TRUE), "\n", sep = "")
+          cat("BEST_MOVING_OU_ANY=", sum(best %in% c(8L, 9L), na.rm = TRUE), "\n", sep = "")
+          cat("MODEL_TEST_FIRST_NAMES=", paste(names(model_test[[1]]), collapse = ";"), "\n", sep = "")
