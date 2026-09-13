@@ -20,7 +20,7 @@ jobs:
           git clone https://github.com/cran/paleoTS.git /tmp/paleoTS
           git -C /tmp/paleoTS checkout 6fbc4f6fa35ef2c7de73e11b9f6dda8ba73e7bc6
           R CMD INSTALL /tmp/paleoTS
-      - name: Refit Hunt 2008 dorsal-spine series and verify reciprocal witness
+      - name: Refit current paleoTS vignette workflow
         shell: Rscript {0}
         run: |
           library(paleoTS)
@@ -31,59 +31,70 @@ jobs:
           ds.sub <- sub.paleoTS(dorsal.spines, ok = ok1 & ok2, reset.time = TRUE)
           ds.sub.pool <- pool.var(ds.sub, minN = 5, ret.paleoTS = TRUE)
           w.ou <- fitSimple(ds.sub.pool, pool = FALSE, model = "OU", method = "Joint")
-
-          cat("N_RAW=", length(dorsal.spines$mm), "\n", sep="")
-          cat("N_REFIT=", length(ds.sub.pool$mm), "\n", sep="")
-          cat("TT=", paste(format(ds.sub.pool$tt, digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
-          cat("MM=", paste(format(ds.sub.pool$mm, digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
-          cat("SAMPLING_VAR=", paste(format(ds.sub.pool$vv/ds.sub.pool$nn, digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
-          cat("FIT_NAMES=", paste(names(w.ou), collapse=","), "\n", sep="")
-          cat("PARAM_NAMES=", paste(names(w.ou$parameters), collapse=","), "\n", sep="")
-          cat("PARAMETERS=", paste(format(unname(w.ou$parameters), digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
-          cat("LOGL=", format(w.ou$logL, digits=17), "\n", sep="")
-          cat("AICC=", format(w.ou$AICc, digits=17), "\n", sep="")
-          cat("K=", w.ou$K, "\n", sep="")
-          cat("N_FIT_OBJECT=", w.ou$n, "\n", sep="")
-
           p <- w.ou$parameters
+          alpha <- unname(p["alpha"])
+          cat("VIGNETTE_N=", length(ds.sub.pool$mm), "\n", sep="")
+          cat("VIGNETTE_PARAMETERS=", paste(format(unname(p), digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
+          cat("VIGNETTE_LOGL=", format(w.ou$logL, digits=17), "\n", sep="")
+          cat("VIGNETTE_AICC=", format(w.ou$AICc, digits=17), "\n", sep="")
+          cat("VIGNETTE_HALF_LIFE_KYR=", format(log(2)/alpha, digits=17), "\n", sep="")
+          cat("VIGNETTE_HALF_LIFE_GENERATIONS=", format((log(2)/alpha)*500, digits=17), "\n", sep="")
+      - name: Refit paper-matched preprocessing and verify reciprocal witness
+        shell: Rscript {0}
+        run: |
+          library(paleoTS)
+          data(dorsal.spines)
+
+          # Hunt et al. (2008): post-invasion series, omit n<5, use generations,
+          # and replace the one zero within-sample variance by pooled variance.
+          ok <- dorsal.spines$tt >= 4.5 & dorsal.spines$nn >= 5
+          ds <- sub.paleoTS(dorsal.spines, ok = ok, reset.time = TRUE)
+          n_zero_before <- sum(ds$vv == 0)
+          pooled_v <- pool.var(ds)
+          ds$vv[ds$vv == 0] <- pooled_v
+          ds$tt <- ds$tt * 500  # 1 Kyr = 1000 y = 500 generations at 2 y/generation.
+
+          w <- fitSimple(ds, pool = FALSE, model = "OU", method = "Joint")
+          p <- w$parameters
           anc <- unname(p["anc"])
           vstep <- unname(p["vstep"])
           theta <- unname(p["theta"])
           alpha <- unname(p["alpha"])
-          h <- log(2)/alpha
-          cat("ANC=", format(anc, digits=17), "\n", sep="")
-          cat("VSTEP=", format(vstep, digits=17), "\n", sep="")
-          cat("THETA=", format(theta, digits=17), "\n", sep="")
-          cat("ALPHA=", format(alpha, digits=17), "\n", sep="")
-          cat("HALF_LIFE_NATIVE=", format(h, digits=17), "\n", sep="")
+          half <- log(2)/alpha
 
-          # q=1/2 reciprocal realization from the exact fixed-OU congruence.
+          cat("PAPER_N=", length(ds$mm), "\n", sep="")
+          cat("PAPER_ZERO_VARIANCES_REPLACED=", n_zero_before, "\n", sep="")
+          cat("PAPER_POOLED_VARIANCE=", format(pooled_v, digits=17), "\n", sep="")
+          cat("PAPER_TT_FIRST_LAST_GENERATIONS=", format(ds$tt[1], digits=17), ",", format(tail(ds$tt,1), digits=17), "\n", sep="")
+          cat("PAPER_PARAM_NAMES=", paste(names(p), collapse=","), "\n", sep="")
+          cat("PAPER_PARAMETERS=", paste(format(unname(p), digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
+          cat("PAPER_LOGL=", format(w$logL, digits=17), "\n", sep="")
+          cat("PAPER_AICC=", format(w$AICc, digits=17), "\n", sep="")
+          cat("PAPER_ALPHA_PER_GENERATION=", format(alpha, digits=17), "\n", sep="")
+          cat("PAPER_HALF_LIFE_GENERATIONS=", format(half, digits=17), "\n", sep="")
+          cat("PUBLISHED_HALF_LIFE_GENERATIONS=853\n")
+          cat("ABS_HALF_LIFE_DIFF_GENERATIONS=", format(abs(half-853), digits=17), "\n", sep="")
+          cat("REL_HALF_LIFE_DIFF=", format(abs(half-853)/853, digits=17), "\n", sep="")
+
+          # q=1/2 exact reciprocal witness on the paper-matched empirical schedule.
           q <- 0.5
           a <- q * alpha
           d <- (1-q) * alpha
           y0 <- (alpha * theta - d * anc) / a
           sx <- sqrt(vstep)
-          tt <- ds.sub.pool$tt
-
+          tt <- ds$tt
           source_mean <- theta + (anc-theta) * exp(-alpha * tt)
           rec_mean <- vapply(tt, function(t) {
             z <- (1-exp(-alpha*t))/alpha
-            left <- 1-a*z
-            right <- a*z
-            left*anc + right*y0
+            (1-a*z)*anc + (a*z)*y0
           }, numeric(1))
-
           source_cov <- outer(tt, tt, Vectorize(function(s,t) {
-            m <- min(s,t)
-            hh <- abs(t-s)
-            vstep * (exp(-alpha*hh)-exp(-alpha*(hh+2*m))) / (2*alpha)
+            m <- min(s,t); h <- abs(t-s)
+            vstep * (exp(-alpha*h)-exp(-alpha*(h+2*m))) / (2*alpha)
           }))
-
           kernel <- function(u) {
             z <- (1-exp(-alpha*u))/alpha
-            left <- 1-a*z
-            right <- a*z
-            left*sx + right*(-d/a*sx)
+            (1-a*z)*sx + (a*z)*(-d/a*sx)
           }
           rec_cov <- outer(tt, tt, Vectorize(function(s,t) {
             m <- min(s,t)
@@ -91,18 +102,18 @@ jobs:
             integrate(function(u) kernel(s-u)*kernel(t-u), lower=0, upper=m,
                       rel.tol=1e-12, abs.tol=1e-13)$value
           }))
-
-          samp <- ds.sub.pool$vv/ds.sub.pool$nn
+          samp <- ds$vv/ds$nn
           diag(source_cov) <- diag(source_cov) + samp
           diag(rec_cov) <- diag(rec_cov) + samp
+          mean_diff <- max(abs(source_mean-rec_mean))
+          cov_diff <- max(abs(source_cov-rec_cov))
 
           cat("RECIP_Q=", q, "\n", sep="")
-          cat("RECIP_A=", format(a, digits=17), "\n", sep="")
-          cat("RECIP_D=", format(d, digits=17), "\n", sep="")
+          cat("RECIP_A_PER_GENERATION=", format(a, digits=17), "\n", sep="")
+          cat("RECIP_D_PER_GENERATION=", format(d, digits=17), "\n", sep="")
           cat("RECIP_Y0=", format(y0, digits=17), "\n", sep="")
-          cat("RECIP_DIRECT_HALF_LIFE_NATIVE=", format(log(2)/a, digits=17), "\n", sep="")
-          cat("MAX_ABS_MEAN_DIFF=", format(max(abs(source_mean-rec_mean)), digits=17, scientific=TRUE), "\n", sep="")
-          cat("MAX_ABS_COV_DIFF=", format(max(abs(source_cov-rec_cov)), digits=17, scientific=TRUE), "\n", sep="")
-
-          stopifnot(max(abs(source_mean-rec_mean)) < 1e-10)
-          stopifnot(max(abs(source_cov-rec_cov)) < 1e-9)
+          cat("RECIP_DIRECT_HALF_LIFE_GENERATIONS=", format(log(2)/a, digits=17), "\n", sep="")
+          cat("MAX_ABS_MEAN_DIFF=", format(mean_diff, digits=17, scientific=TRUE), "\n", sep="")
+          cat("MAX_ABS_COV_DIFF=", format(cov_diff, digits=17, scientific=TRUE), "\n", sep="")
+          stopifnot(mean_diff < 1e-10)
+          stopifnot(cov_diff < 1e-9)
