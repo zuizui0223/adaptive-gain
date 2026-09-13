@@ -1,0 +1,57 @@
+{
+  "receipt_version": "1.0",
+  "source_receipt": "validation/AEDES_ZELEDON_SUPPLEMENT_LIVE_AUDIT_V1.json",
+  "source_document_sha256": "abce4630ff01aaa83545a3a4690f04e3c97061acba90d2bb3ecda9256dfb33b9",
+  "review_status": "NOT_REVIEWED",
+  "reviewing_core": null,
+  "reviewer_role": null,
+  "review_date": null,
+  "compounds": [
+    {
+      "compound_id": "TDI-014188",
+      "route_completeness": "UNREVIEWED",
+      "essential_precursors_accessible": null,
+      "final_form_resolved": null,
+      "identity_method_resolved": null,
+      "purity_method_resolved": null,
+      "prospective_purity_threshold": null,
+      "synthesis_risk": "UNREVIEWED",
+      "terminal_verdict": "RESYNTHESIS_UNRESOLVED",
+      "physical_validation_status": "NOT_SYNTHESIZED"
+    },
+    {
+      "compound_id": "TDI-014186",
+      "route_completeness": "UNREVIEWED",
+      "essential_precursors_accessible": null,
+      "final_form_resolved": null,
+      "identity_method_resolved": null,
+      "purity_method_resolved": null,
+      "prospective_purity_threshold": null,
+      "synthesis_risk": "UNREVIEWED",
+      "terminal_verdict": "RESYNTHESIS_UNRESOLVED",
+      "physical_validation_status": "NOT_SYNTHESIZED"
+    }
+  ],
+  "allowed_route_completeness": [
+    "ROUTE_COMPLETE",
+    "ROUTE_INCOMPLETE",
+    "ROUTE_AMBIGUOUS"
+  ],
+  "allowed_synthesis_risk": [
+    "LOW",
+    "MODERATE",
+    "HIGH",
+    "NOT_FEASIBLE"
+  ],
+  "allowed_terminal_verdicts": [
+    "RESYNTHESIS_FEASIBLE_PENDING_PHYSICAL_VALIDATION",
+    "RESYNTHESIS_UNRESOLVED",
+    "RESYNTHESIS_NOT_FEASIBLE"
+  ],
+  "claim_boundary": {
+    "published_chemistry_context_closed": true,
+    "chemistry_core_review_closed": false,
+    "physical_material_gate_closed": false,
+    "phase1_compound_material_gate_closed": false
+  }
+}
