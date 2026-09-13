@@ -41,8 +41,9 @@
       "note": "Do not infer a published numerical error from scraped Table 2 values; resolve units and transformations from the archived source script first."
     },
     "prior_art_exact_gauge": {
-      "status": "PARTIAL",
-      "note": "Generic partially observed OU/SDE non-identifiability is conceded, including Jensen 2014 and Browning et al. arXiv:2503.19241. Exact evoTS reciprocal-gauge predecessor search remains open."
+      "status": "TARGETED_SEARCH_COMPLETE_REOPENABLE",
+      "receipt": "validation/ou_exact_prior_art_search_v2.json",
+      "note": "Generic partial-observation identifiability, reciprocal evolutionary OU models, causal/Granger OU-SDE methods, correlated innovations, and general OU law equivalence are explicitly conceded. The targeted search did not locate an exact predecessor for the implemented evoTS trait-only exogenous-vs-reciprocal equality plus mechanistic half-life identified set and common-shock sensitivity replacement. This is a bounded search result, not a priority proof."
     },
     "practice_audit_protocol": {
       "status": "FROZEN",
