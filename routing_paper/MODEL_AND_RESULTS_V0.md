@@ -1,48 +1,39 @@
-# Model and Results v0
+# Model and Results v1
 
-## 1. Finite routing representation
+## 1. Finite routing representation and occupancy estimands
 
-Let `q>=1` be the maximum routing-gain level and `k>=1` the number of routing branches. We define the finite genotype-policy representation
+Let `q>=1` be the maximum routing-gain level and `k>=1` the number of routing branches. The finite genotype-policy representation is
 
-`X_{q,k}={0,1,...,q}^k`.
+`X_{q,k}={0,1,...,q}^k`,
 
-A genotype-policy state is
-
-`x=(x_1,...,x_k)`.
-
-Overall routing gain is determined by the weakest branch,
+with state `x=(x_1,...,x_k)` and weakest-branch gain
 
 `g(x)=min_i x_i`.
 
-Thus `g(x)` takes values in `{0,...,q}`. The full-gain class `g=q` contains only
+The full-gain class `g=q` contains only `x*=(q,...,q)`.
 
-`x*=(q,...,q)`.
+For a stationary distribution `pi`, define aggregate gain-layer mass
 
-The central population-level object in this paper is not the probability of this individual genotype but the **aggregate stationary mass of a gain layer**.
+`Pi_r=sum_{x:g(x)=r} pi(x)`.
 
-For any stationary distribution `pi` on `X_{q,k}`, define
+We distinguish two population-level summaries:
 
-`Pi_r = sum_{x:g(x)=r} pi(x)`.
+- **aggregate modality:** `Pi_q=max_r Pi_r`;
+- **stationary majority:** `Pi_q>=1/2`.
 
-A gain layer is aggregate-modal if its `Pi_r` is maximal among `r=0,...,q`.
+These are different estimands. The main results characterize both.
 
 ## 2. Established origin-fixation weighting
 
-We use a standard weak-mutation origin-fixation bridge rather than introducing a new population-genetic process.
-
-Let genotype fitness depend only on routing gain through a multiplicative step
-
-`F(x)=a^{g(x)}`,
-
-with `a>=1`. For a haploid Moran process of population size `N>=2`, the fixation-probability ratio for reciprocal fitness changes is
+Let genotype fitness depend on gain through `F(x)=a^{g(x)}`, with `a>=1`. For a haploid Moran process of population size `N>=2`, the standard reciprocal fixation ratio is
 
 `rho(R)/rho(1/R)=R^(N-1)`.
 
-Therefore, under a reversible neutral mutation process with stationary measure `mu(x)`, the selected origin-fixation stationary law has the standard form
+Under a reversible neutral mutation process with stationary measure `mu(x)`, established weak-mutation theory gives
 
 `pi(x) proportional to mu(x) a^((N-1)g(x))`.
 
-Define the per-gain stationary tilt
+Define
 
 `theta=a^(N-1)`.
 
@@ -50,13 +41,11 @@ Then
 
 `pi(x) proportional to mu(x) theta^{g(x)}`.
 
-The main theorems assume the symmetric genotype-level neutral measure, so `mu(x)` is constant over `X_{q,k}`. In that case each genotype in gain layer `r` has the same unnormalized weight `theta^r`, and aggregate layer weight is
+The main routing theorems assume the symmetric genotype-level neutral measure, so each genotype in layer `r` has unnormalized weight `theta^r`. If `D_r` is the number of genotypes at gain `r`, aggregate layer weight is
 
-`W_r = D_r theta^r`,
+`W_r=D_r theta^r`.
 
-where `D_r` is the number of genotypes with gain `r`.
-
-The Moran fixation identity, reversibility argument, and neutral-measure weighting are established prior art. The new work begins with the exact routing-specific multiplicities `D_r`.
+The fixation identity, reversible stationary law, and neutral-measure factor are prior art. The routing-specific work begins with `D_r`.
 
 ---
 
@@ -64,59 +53,29 @@ The Moran fixation identity, reversibility argument, and neutral-measure weighti
 
 ## Theorem 1
 
-For `r=0,...,q`, the number of genotypes with routing gain exactly `r` is
+For `r=0,...,q`,
 
 `D_r=(q-r+1)^k-(q-r)^k`.
 
-Equivalently, if
+Equivalently, for `s=q-r`,
 
-`s=q-r`
-
-is the distance in gain levels below full gain, then
-
-`A_s := D_{q-s} = (s+1)^k-s^k`.
+`A_s:=D_{q-s}=(s+1)^k-s^k`.
 
 ### Proof
 
-A genotype has `g(x)>=r` exactly when every coordinate lies in
+`g(x)>=r` iff every coordinate lies in `{r,...,q}`, giving `(q-r+1)^k` states. Likewise `g(x)>=r+1` gives `(q-r)^k`. Their difference is the exact gain-`r` count. QED.
 
-`{r,r+1,...,q}`,
-
-which contains `q-r+1` values. Hence
-
-`#{x:g(x)>=r}=(q-r+1)^k`.
-
-Similarly,
-
-`#{x:g(x)>=r+1}=(q-r)^k`.
-
-Subtracting gives
-
-`D_r=(q-r+1)^k-(q-r)^k`.
-
-Replacing `q-r` by `s` gives the equivalent expression for `A_s`. QED.
-
-## Immediate consequences
-
-The full-gain layer has
-
-`A_0=1`.
-
-The adjacent layer has
+The full-gain layer has `A_0=1`; the adjacent layer has
 
 `A_1=2^k-1`.
 
-For the running example `q=2,k=3`,
+For `q=2,k=3`,
 
 `(D_0,D_1,D_2)=(19,7,1)`.
 
-Thus the representation contains a unique maximally adapted genotype but seven genotypes one gain step below it.
-
 ---
 
-# Result 2 — a global bound from nested subset chains
-
-The adjacent-layer multiplicity will turn out to control every lower layer.
+# Result 2 — one adjacent obstruction controls every lower layer
 
 Define
 
@@ -124,258 +83,226 @@ Define
 
 ## Theorem 2
 
-For every integer `s>=1`,
-
-`A_s <= T_k^s`.
-
-If `k>=2`, equality occurs only at `s=1`. Thus for every `s>=2`,
-
-`A_s < T_k^s`.
-
-### Proof
-
-Consider a vector
-
-`x in {0,...,s}^k`
-
-with minimum coordinate zero. Such vectors are counted by
-
-`A_s=(s+1)^k-s^k`.
-
-For each level `j=1,...,s`, define
-
-`S_j={i:x_i<j}`.
-
-Because at least one coordinate equals zero, every `S_j` is nonempty. Moreover,
-
-`S_1 subseteq S_2 subseteq ... subseteq S_s`.
-
-Conversely, a nested sequence of nonempty subsets uniquely reconstructs `x`: coordinate `i` is the number of initial levels for which `i` is absent before it enters the nested sequence, equivalently its threshold of membership. Hence the vectors counted by `A_s` are in bijection with nested length-`s` sequences of nonempty subsets of `{1,...,k}`.
-
-There are `2^k-1=T_k` nonempty subsets of `{1,...,k}`. If the nesting condition is dropped, there are exactly
-
-`T_k^s`
-
-arbitrary length-`s` sequences. Therefore
+For every `s>=1`,
 
 `A_s<=T_k^s`.
 
-At `s=1`, there is no between-level nesting restriction, so equality holds. If `k>=2` and `s>=2`, nonnested sequences exist, for example a sequence beginning with `{1},{2}`. Therefore the nested sequences form a strict subset of all sequences and
+If `k>=2`, equality occurs only at `s=1`; for every `s>=2`,
 
 `A_s<T_k^s`.
 
-QED.
+### Proof
 
-## Interpretation
+For `x in {0,...,s}^k` with `min_i x_i=0`, define
 
-This theorem is stronger than an adjacent-layer comparison. It states that once the adjacent multiplicity `T_k` is known, every layer `s` gain steps below the optimum is bounded by the `s`th power of the same constant. That reduction is what makes the stationary transition exact.
+`S_j={i:x_i<j}`, `j=1,...,s`.
+
+The `S_j` are nonempty and nested:
+
+`S_1 subseteq ... subseteq S_s`.
+
+This gives a bijection between states counted by `A_s` and nested length-`s` sequences of nonempty subsets of the `k` branch labels. There are `T_k=2^k-1` nonempty subsets. Dropping nesting yields `T_k^s` arbitrary sequences, proving the bound. At `s=1` nesting imposes no restriction. For `k>=2,s>=2`, nonnested sequences such as `{1},{2}` exist, giving strict inequality. QED.
+
+Theorem 2 is the combinatorial engine: comparison with all lower gain layers reduces to the adjacent-layer constant `T_k`.
 
 ---
 
-# Result 3 — sharp aggregate-layer modality transition
+# Result 3 — exact aggregate-mode transition
 
-Under the symmetric stationary tilt, layer `r` has unnormalized aggregate weight
+Under symmetric tilt,
 
-`W_r=D_r theta^r`.
-
-Relative to the full-gain layer,
-
-`W_{q-s}/W_q = A_s/theta^s`.
+`W_{q-s}/W_q=A_s/theta^s`.
 
 ## Theorem 3
 
 Assume `k>=2`.
 
-### Below threshold
+- If `theta<T_k`, then `W_{q-1}/W_q=T_k/theta>1`; full gain is not aggregate-modal.
+- If `theta=T_k`, then `W_{q-1}=W_q`, while every `s>=2` layer is strictly lighter by Theorem 2. Exactly `{q-1,q}` tie for maximal aggregate weight.
+- If `theta>T_k`, then for every `s>=1`,
 
-If
+  `W_{q-s}/W_q <= (T_k/theta)^s < 1`,
 
-`theta<T_k`,
+  so full gain is uniquely aggregate-modal.
 
-then
+Thus
 
-`W_{q-1}/W_q=T_k/theta>1`.
+`theta<T_k` -> full nonmodal,
 
-Hence the full-gain layer is not aggregate-modal.
+`theta=T_k` -> exact two-layer tie,
 
-### At threshold
+`theta>T_k` -> full uniquely modal.
 
-If
+### Individual genotype versus gain-layer mode
 
-`theta=T_k`,
-
-then
-
-`W_{q-1}=W_q`.
-
-For every `s>=2`, Theorem 2 gives
-
-`W_{q-s}/W_q=A_s/T_k^s<1`.
-
-Therefore exactly two layers attain maximal aggregate weight:
-
-`{q-1,q}`.
-
-### Above threshold
-
-If
-
-`theta>T_k`,
-
-then for every `s>=1`,
-
-`W_{q-s}/W_q = A_s/theta^s <= (T_k/theta)^s < 1`.
-
-Therefore the full-gain layer is uniquely aggregate-modal.
-
-Combining the three cases gives the exact trichotomy
-
-`theta<T_k`  -> full layer nonmodal,
-
-`theta=T_k`  -> exact `{q-1,q}` tie,
-
-`theta>T_k`  -> full layer uniquely modal,
-
-with
-
-`T_k=2^k-1`.
-
-QED.
-
-## Individual-genotype versus aggregate-layer modality
-
-The threshold above does not describe when the individual genotype `(q,...,q)` becomes the most probable genotype. Under the symmetric tilt, every genotype at gain `r` has per-genotype weight `theta^r`. Thus for every `theta>1`, the full-gain genotype already has strictly greater per-genotype weight than every lower-gain genotype.
-
-The factor `2^k-1` appears only because the stationary weights of all genotypes in each gain layer are summed before comparing layers.
+For every `theta>1`, the unique full-gain genotype already has greater **per-genotype** weight than every lower-gain genotype. `T_k` is therefore an aggregate-layer threshold created by multiplicity, not an individual-genotype mode switch.
 
 ---
 
-# Corollary — population-size threshold under the Moran bridge
+# Result 4 — exact stationary-majority boundary
 
-Under the multiplicative fitness step `a>1`,
+Aggregate modality does not imply that full gain contains most stationary probability.
+
+Using the distance-layer counts,
+
+`P_full(theta)=1/[1+sum_{s=1}^q A_s theta^{-s}]`.
+
+Define
+
+`H_{q,k}(theta)=sum_{s=1}^q A_s theta^{-s}`.
+
+`H_{q,k}` is continuous and strictly decreasing on `theta>0`, with limits `infinity` at zero and `0` at infinity. Hence there is a unique positive `theta_1/2(q,k)` such that
+
+`P_full(theta_1/2)=1/2`.
+
+Equivalently, `theta_1/2` is the unique positive root of
+
+`theta^q=sum_{s=1}^q A_s theta^(q-s)`.
+
+## Theorem 4
+
+For `q=1`,
+
+`theta_1/2=T_k`.
+
+For every `q>=2`,
+
+`T_k < theta_1/2 < 2T_k`.
+
+### Proof
+
+At `theta=T_k`, the adjacent layer alone has the same weight as full gain, and at least one additional lower layer contributes positive mass when `q>=2`; therefore `P_full(T_k)<1/2` and `theta_1/2>T_k`.
+
+At `theta=2T_k`, Theorem 2 gives
+
+`H_{q,k}(2T_k) <= sum_{s=1}^q 2^{-s}=1-2^{-q}<1`.
+
+Hence `P_full(2T_k)>1/2` and `theta_1/2<2T_k`. QED.
+
+For `q>=2`, the stationary ordering therefore has three biologically distinct regions:
+
+1. `theta<T_k`: full gain is not the largest gain class;
+2. `T_k<=theta<theta_1/2`: full gain is aggregate-modal at or beyond the mode boundary but still has less than half of stationary mass;
+3. `theta>=theta_1/2`: full gain is a stationary majority.
+
+## Running example
+
+For `q=2,k=3`, `A_1=7`, `A_2=19`. The majority boundary is the positive root of
+
+`theta^2-7theta-19=0`,
+
+namely
+
+`theta_1/2=(7+5 sqrt(5))/2`,
+
+between 9 and 10. Exact evaluations give
+
+`P_full(9)=81/163<1/2`,
+
+`P_full(10)=100/189>1/2`.
+
+The aggregate-mode threshold is only `T_3=7`, so the two occupancy transitions are visibly separated.
+
+---
+
+# Population-size corollaries under the Moran bridge
+
+With multiplicative fitness step `a>1`,
 
 `theta=a^(N-1)`.
 
-Therefore, for `k>=2`, the full-gain layer is aggregate-modal if and only if
+Therefore full gain is aggregate-modal iff
 
-`a^(N-1)>=2^k-1`.
+`a^(N-1)>=2^k-1`,
 
-It is uniquely aggregate-modal if and only if
+and uniquely aggregate-modal iff the inequality is strict.
 
-`a^(N-1)>2^k-1`.
+It is a stationary majority iff
 
-The smallest population size satisfying the weak inequality and the smallest population size satisfying the strict inequality need not coincide when `2^k-1` is an exact power of `a`.
+`a^(N-1)>=theta_1/2(q,k)`.
 
-For the canonical routing architecture
+## Canonical routing with `a=2`
 
-`k=q+1`,
+Set `k=q+1`.
 
-and `a=2`,
+The mode theorem gives
 
-`2^q < 2^(q+1)-1 < 2^(q+1)`.
+`N_modal=N_unique_mode=q+2`.
 
-Hence both the first modal and first uniquely modal population sizes are
+For `q=1`, majority also occurs at `N=3=q+2`.
 
-`N=q+2`.
+For every `q>=2`, majority occurs exactly one population-size step later:
 
-This corollary translates the finite representation theorem into one familiar population parameter; it does not make the underlying Moran machinery a contribution of the paper.
+`N_majority=q+3`.
+
+To see necessity, at `N=q+2` the tilt is `theta=2^k=T_k+1`. The adjacent-layer ratio is `1-2^{-k}`. The `s=2` ratio is `(3^k-2^k)/4^k`, which exceeds `2^{-k}` for `k>=3` because `3^k>2^(k+1)`. Thus those two lower layers alone outweigh full gain. Sufficiency follows from Theorem 4 because
+
+`theta_1/2<2T_k<2^(k+1)`,
+
+the tilt reached at `N=q+3`.
+
+This exact one-step separation is the canonical distinction between becoming the largest class and becoming a majority of stationary occupancy.
 
 ---
 
-# Scope Result 1 — the threshold depends on representation
+# Scope Result 1 — occupancy thresholds depend on representation
 
-The gain coordinate and fitness schedule do not identify the aggregate-mode threshold.
+Hold fixed the gain set `{0,...,q}` and phenotype-level fitness schedule.
 
-Consider the canonical branch-product representation
+For the canonical branch-product representation
 
 `X_prod={0,...,q}^{q+1}`,
 
-with the same gain map `g=min` and tilt `theta`. Its full-layer threshold is
+the aggregate-mode threshold is `2^(q+1)-1` and the majority threshold is larger for `q>=2`.
 
-`theta_prod=2^(q+1)-1`.
+For a compressed representation
 
-Now consider a compressed representation
+`X_chain={0,...,q}`
 
-`X_chain={0,...,q}`,
+with one genotype per gain, aggregate weights are `1,theta,...,theta^q`. The full layer is uniquely modal for every `theta>1`, and its majority boundary is the positive solution of
 
-with one genotype per gain level and the same phenotype-level fitness schedule. Its aggregate layer weights are simply
-
-`1, theta, ..., theta^q`.
-
-Thus the full-gain layer is aggregate-modal for `theta>=1` and uniquely modal for `theta>1`.
-
-For every
-
-`1<theta<2^(q+1)-1`,
-
-the full-gain layer is uniquely modal under the compressed representation but nonmodal under the branch-product representation.
-
-## Canonical contradiction witness
+`theta^q=sum_{r=0}^{q-1} theta^r`.
 
 At `q=2,theta=2`:
 
-compressed representation:
+- compressed weights `(1,2,4)`, `P_full=4/7>1/2`;
+- branch-product weights `(19,14,4)`, `P_full=4/37` and full gain is nonmodal.
 
-`weights=(1,2,4)`, `P(full)=4/7`;
-
-branch-product representation:
-
-`D=(19,7,1)`, `weights=(19,14,4)`, `P(full)=4/37`.
-
-The gain phenotypes and fitness schedule are identical. The stationary conclusion changes because the genotype-policy representation changes.
-
-This result is used as a claim boundary, not as a claim to have discovered representation-dependent evolvability in general.
+The phenotype levels and fitness schedule are identical. Representation changes both mode and majority conclusions.
 
 ---
 
 # Scope Result 2 — fixed mutation support is still insufficient
 
-The main theorem assumes a symmetric genotype-level neutral measure. Under a general reversible neutral mutation measure `mu`,
+Under a general reversible neutral mutation measure `mu`,
 
 `pi(x) proportional to mu(x) theta^{g(x)}`.
 
-Consequently raw genotype counts need not determine layer mass.
+On a fixed gain path `0<->1<->...<->q`, fix any `theta>0` and any strictly positive target stationary distribution `p`. Taking
 
-A stronger nonidentifiability holds even after mutation support is fixed. Consider the gain path
+`mu_r proportional to p_r theta^{-r}`
 
-`0 <-> 1 <-> ... <-> q`
+and constructing a connected reversible nearest-neighbor kernel with stationary measure `mu` yields selected stationary law `pi=p`.
 
-and fix any `theta>0`. For any strictly positive target selected stationary distribution
-
-`p=(p_0,...,p_q)`,
-
-choose
-
-`mu_r proportional to p_r theta^(-r)`.
-
-A connected reversible nearest-neighbor proposal kernel can be constructed with stationary measure `mu`; under selection, its stationary distribution then satisfies
-
-`pi_r proportional to mu_r theta^r proportional to p_r`.
-
-Thus the same gain levels, the same fitness schedule, and the same local support graph can support arbitrarily different positive stationary occupancies if the reversible mutation probabilities are changed.
-
-For `q=2,theta=2`, the frozen exact witnesses include selected stationary distributions
+Thus gain levels, phenotype fitness, and local mutation support do not identify stationary occupancy without neutral mutation weights. For the frozen `q=2,theta=2` witness, the same path support admits selected stationary distributions
 
 `(1/10,1/10,4/5)`
 
 and
 
-`(9/20,9/20,1/10)`
+`(9/20,9/20,1/10)`.
 
-on the same path support.
-
-This scope result explains precisely why `theta_c=2^k-1` must be stated as a symmetric branch-product theorem rather than a universal mutation-selection law.
+This is the claim ceiling for both the modal and majority thresholds.
 
 ---
 
-# Result hierarchy for the final paper
+# Final result hierarchy
 
-Theorems 1–3 are the mathematical contribution.
+- **Theorem 1:** exact routing-layer multiplicity.
+- **Theorem 2:** global nested-chain degeneracy bound.
+- **Theorem 3:** exact aggregate-mode trichotomy.
+- **Theorem 4:** unique stationary-majority boundary and `T_k < theta_1/2 < 2T_k` for `q>=2`.
+- **Corollary:** Moran population thresholds, including canonical `N_unique_mode=q+2` versus `N_majority=q+3` for `q>=2`.
+- **Scope controls:** representation dependence and reversible mutation-measure nonidentifiability.
 
-The Moran population-size statement is a corollary through established theory.
-
-The representation comparison and mutation-measure construction are scope controls. They prevent overgeneralization but should not compete with the central theorem sequence in title, abstract, or figure allocation.
-
-## Hard stop
-
-Do not append neutral-plateau waiting-time, mesoscopic acquisition, absolute-rate-scale, or downstream population-process results to this section. None is needed to prove or interpret the sharp aggregate-layer threshold.
+Do not append neutral-plateau waiting times, mesoscopic acquisition, absolute-rate scaling, or downstream population-process results. They are not needed for the stationary occupancy story.
