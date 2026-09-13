@@ -6,19 +6,27 @@ Keep the second-paper manuscript surface reproducible without merging unrelated 
 
 ## Base theorem surface
 
-This branch is descended from
+This manuscript PR is now based on
 
-`freeze/routing-sharp-modal-corollaries-v1`
+`freeze/routing-stationary-majority-threshold-v1`
 
-at canonical theorem head
+at canonical head
 
-`9a70ad3afa00eb0f92980c7d9c12cdccf3750992`.
+`c49876d53ab0684b01ac0d264bc843b7aa6a37fd`.
 
-That surface includes the exact-rational review fix inherited from PR #53 and the general `(q,k)` routing-layer modality theorem from PR #55.
+That surface inherits:
+
+- the exact-rational review fix from PR #53;
+- the general `(q,k)` routing-layer modality theorem from PR #55;
+- the exact stationary-majority theorem from PR #58.
+
+The inherited theorem sequence is therefore:
+
+`exact layer multiplicity -> global degeneracy bound -> aggregate-mode trichotomy -> stationary-majority boundary`.
 
 ## Independent novelty-governance dependency
 
-The claim boundary is frozen separately at
+The claim boundary remains frozen separately at
 
 `freeze/routing-second-paper-novelty-boundary-v1`
 
@@ -26,7 +34,7 @@ with canonical head
 
 `5de3acff8f9982d3726fc30cdd081700c61abfe8`.
 
-That branch is a governance dependency, not a merged code dependency. The manuscript spine reproduces its claim discipline but this branch does not merge or rewrite its history.
+That branch is a governance dependency, not a merged code dependency. The manuscript reproduces its conservative claim discipline and extends it only to account for the majority theorem.
 
 ## Supporting side-theory dependencies
 
@@ -42,8 +50,25 @@ Used as theorem implementation/audit:
 
 - `adaptive_gain/routing_layer_modality.py`
 - `tests/test_routing_layer_modality.py`
+- `theory/ROUTING_SHARP_MODAL_COROLLARIES_V1.md`
+- `theory/ROUTING_STATIONARY_MAJORITY_THRESHOLD_V1.md`
 - `adaptive_gain/routing_origin_fixation.py`
 - `tests/test_routing_origin_fixation.py`
+
+## Frozen CI receipts
+
+Sharp modality surface:
+
+- head `9a70ad3afa00eb0f92980c7d9c12cdccf3750992`;
+- CI run `34731638014`;
+- Python 3.10 / 3.11 / 3.12 all green.
+
+Majority surface:
+
+- head `c49876d53ab0684b01ac0d264bc843b7aa6a37fd`;
+- CI run `34740236273`;
+- Python 3.10 / 3.11 / 3.12 all green;
+- every job passed full pytest, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py`.
 
 ## Deliberately excluded from manuscript dependency
 
@@ -55,7 +80,7 @@ The second paper does not require the following side-theory stack as main-text d
 - absolute proposal-rate-scale nonidentifiability;
 - downstream population-process nonidentifiability ceiling.
 
-They remain valid repository results but are not needed to prove the paper's central threshold.
+They remain valid repository results but are not needed to prove the paper's stationary occupancy results.
 
 ## Flagship isolation contract
 
@@ -85,13 +110,14 @@ rather than
 
 > biological routing systems have this representation.
 
-## Next authoring gate
+## Authoring status
 
-Before adding further abstract routing theory, complete at least:
+The original authoring gate is complete:
 
-1. one coherent Introduction draft;
-2. one Model/Theory draft containing Theorems 1–3;
-3. one Discussion draft respecting the claim ledger;
-4. one focused novelty audit against the exact three candidate-new objects.
+- Introduction draft exists;
+- Model/Results draft contains the full mode-plus-majority theorem sequence;
+- Discussion draft respects the claim boundary;
+- focused novelty audit exists;
+- figure plan explicitly separates mode from majority.
 
-New side theorems do not substitute for these authoring gates.
+Therefore **new abstract routing theory is no longer the default next step**. Remaining work is literature collision testing, manuscript compression/integration, figure production, and journal fit.
