@@ -1,0 +1,51 @@
+{
+  "receipt_version": "1.0",
+  "status": "PUBLISHED_CHEMISTRY_CONTEXT_LOCATED__CORE_REVIEW_STILL_REQUIRED",
+  "source": {
+    "pmcid": "PMC11212260",
+    "supplement_filename": "13071_2024_6347_MOESM3_ESM.docx",
+    "retrieval_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC11212260.1/13071_2024_6347_MOESM3_ESM.docx",
+    "document_sha256": "abce4630ff01aaa83545a3a4690f04e3c97061acba90d2bb3ecda9256dfb33b9",
+    "extracted_text_character_count": 57513
+  },
+  "locked_compounds": [
+    {
+      "compound_id": "TDI-014188",
+      "occurrence_count": 1,
+      "chemistry_context_present": true,
+      "nearby_keyword_counts": {
+        "chromatography": 2,
+        "lcms": 1,
+        "mmol": 18,
+        "nmr": 1
+      }
+    },
+    {
+      "compound_id": "TDI-014186",
+      "occurrence_count": 1,
+      "chemistry_context_present": true,
+      "nearby_keyword_counts": {
+        "chromatography": 1,
+        "lcms": 2,
+        "mmol": 15,
+        "nmr": 2
+      }
+    }
+  ],
+  "execution_evidence": {
+    "workflow_run_id": 34730165648,
+    "job_id": 103651359191,
+    "workflow_conclusion": "success",
+    "artifact_id": 10308124041,
+    "artifact_name": "zeledon-supplement-audit-receipt",
+    "artifact_sha256": "7ea3bb3338a3fbddf445a095eaecb5902e25f3a369ab1d14277e751c58587cbd"
+  },
+  "claim_boundary": {
+    "published_chemistry_context_located_for_both_locked_compounds": true,
+    "chemistry_core_route_review_completed": false,
+    "resynthesis_feasibility_established": false,
+    "physical_compound_identity_validated": false,
+    "physical_compound_purity_validated": false,
+    "phase1_material_gate_closed": false
+  }
+}
