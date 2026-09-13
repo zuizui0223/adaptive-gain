@@ -2,21 +2,17 @@
 
 ## Verdict
 
-**Major conceptual repair complete; manuscript is now ready for focused collision review and journal-fit evaluation, not more abstract theorem expansion.**
+**Major conceptual repair and manuscript synchronization complete; the paper is ready for focused collision review and journal-fit evaluation, not more abstract theorem expansion.**
 
-The previous largest vulnerability was that the headline `2^k-1` result concerned the **modal aggregate gain layer**, while the manuscript risked letting “mode” carry an implicit majority interpretation. PR #58 has closed that gap.
+The previous largest vulnerability was that the headline `2^k-1` result concerned the **modal aggregate gain layer**, while the manuscript risked letting “mode” carry an implicit majority interpretation. PR #58 closed that mathematical gap, and the manuscript surface has now been synchronized to the resulting two-threshold structure.
 
 ## Closed concern 1 — aggregate mode versus stationary majority
 
-The manuscript now treats two different occupancy estimands explicitly.
+The manuscript treats two occupancy estimands explicitly.
 
 ### Aggregate mode
 
-With
-
-`T_k=2^k-1`,
-
-the full-gain layer is:
+With `T_k=2^k-1`, the full-gain layer is:
 
 - nonmodal for `theta<T_k`;
 - tied exactly with the adjacent layer at `theta=T_k`;
@@ -46,6 +42,25 @@ For `k=q+1`, Moran step `a=2` and `q>=2`:
 - first stationary majority: `N=q+3`.
 
 The one-step separation is exact. For `q=2`, the majority threshold is `(7+5sqrt(5))/2`, between 9 and 10.
+
+**Status: CLOSED.**
+
+## Closed concern 2 — manuscript surfaces disagreed about the majority result
+
+The following files now all encode the same mode-versus-majority distinction:
+
+- `ABSTRACT_V0.md`;
+- `INTRODUCTION_V0.md`;
+- `MODEL_AND_RESULTS_V0.md`;
+- `DISCUSSION_V0.md`;
+- `MANUSCRIPT_SPINE_V1.md`;
+- `CLAIM_LEDGER_V1.md`;
+- `FIGURE_PLAN_V1.md`;
+- `PROVENANCE_V1.md`;
+- `NOVELTY_AUDIT_V0.md`;
+- this review gate.
+
+Figure 2 explicitly marks both thresholds and the interval in which full gain is already the largest class but remains below one-half stationary mass.
 
 **Status: CLOSED.**
 
@@ -130,14 +145,12 @@ This is safer than a generic “selection–multiplicity threshold” title beca
 
 Do **not** add another theorem.
 
-The next work should be:
+The next work is now:
 
-1. synchronize all manuscript files with the majority theorem;
-2. verify the manuscript branch differs from the majority freeze only under `routing_paper/`;
-3. pass clean three-version CI;
-4. perform one deeper scholarly collision search on the exact four objects in `NOVELTY_AUDIT_V0.md`;
-5. assess journal fit using the completed manuscript, not the earlier mode-only version;
-6. only then decide whether figures and submission formatting are worth building.
+1. pass clean three-version CI on the synchronized manuscript surface;
+2. perform one deeper scholarly collision search on the exact four objects in `NOVELTY_AUDIT_V0.md`;
+3. assess journal fit using the completed mode-plus-majority manuscript;
+4. only then decide whether figures and submission formatting are worth building.
 
 ## Current impact assessment
 
