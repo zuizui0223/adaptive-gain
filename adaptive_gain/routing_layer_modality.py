@@ -1,18 +1,20 @@
-"""Exact aggregate-layer modality for finite weakest-branch routing spaces.
+"""Exact aggregate-layer occupancy for finite weakest-branch routing spaces.
 
 This module isolates the routing-specific combinatorics from the established
-origin-fixation machinery.  For x in {0,...,q}^k with gain g(x)=min_i x_i,
+origin-fixation machinery. For x in {0,...,q}^k with gain g(x)=min_i x_i,
 the gain-r layer has multiplicity
 
     D_r = (q-r+1)^k - (q-r)^k.
 
 Under a symmetric per-gain stationary tilt theta, aggregate layer mass is
-proportional to D_r * theta^r.  The full-gain layer is modal exactly when
+proportional to D_r * theta^r. The full-gain layer is modal exactly when
 
 theta >= 2^k - 1.
 
 For k>=2, equality produces a two-layer tie between gains q and q-1 only;
 strict inequality above the threshold makes the full-gain layer uniquely modal.
+The same layer hierarchy also gives an exact implicit stationary-majority
+boundary and a universal bracket for that boundary.
 """
 from __future__ import annotations
 
@@ -64,7 +66,7 @@ def degeneracy_chain_bound_is_strict(branch_count: int, steps_below_full: int) -
 
     The non-strict bound follows by encoding a distance-s routing state as a
     nested sequence of s nonempty subsets of k branch labels and then dropping
-    the nesting constraint.  For k>=2 and s>=2 that relaxation is strict: for
+    the nesting constraint. For k>=2 and s>=2 that relaxation is strict: for
     example ({1},{2},...) is an admissible arbitrary subset sequence but is not
     nested.
     """
@@ -112,13 +114,95 @@ def modal_gain_layers(
 def threshold_modal_gain_layers(max_gain: int, branch_count: int) -> tuple[int, ...]:
     """Exact modal layers at theta=2^k-1.
 
-    For k>=2 and q>=1 only q-1 and q tie.  For k=1, theta=1 and every layer
+    For k>=2 and q>=1 only q-1 and q tie. For k=1, theta=1 and every layer
     has multiplicity one, so every gain layer ties.
     """
 
     q = _positive_int(max_gain, name="max_gain")
     k = _positive_int(branch_count, name="branch_count")
     return modal_gain_layers(q, k, aggregate_modal_tilt_threshold(k))
+
+
+def full_layer_stationary_mass(
+    max_gain: int,
+    branch_count: int,
+    theta: Fraction | int,
+) -> Fraction:
+    """Normalized stationary mass of the full-gain layer under symmetric tilt."""
+
+    weights = aggregate_layer_weights(max_gain, branch_count, theta)
+    return weights[-1] / sum(weights, Fraction(0, 1))
+
+
+def stationary_majority_excess(
+    max_gain: int,
+    branch_count: int,
+    theta: Fraction | int,
+) -> Fraction:
+    """Full-layer weight minus all lower-layer weight.
+
+    The sign is equivalent to whether the normalized full-layer mass is above,
+    at, or below one half. Multiplying by theta^q gives the boundary polynomial
+
+        theta^q - sum_{s=1}^q A_s theta^(q-s).
+    """
+
+    q = _positive_int(max_gain, name="max_gain")
+    k = _positive_int(branch_count, name="branch_count")
+    tilt = as_exact_fraction(theta, name="theta")
+    if tilt <= 0:
+        raise ValueError("theta must be positive")
+    full = tilt**q
+    lower = sum(
+        Fraction(distance_layer_degeneracy(k, s)) * tilt ** (q - s)
+        for s in range(1, q + 1)
+    )
+    return full - lower
+
+
+def full_layer_has_stationary_majority(
+    max_gain: int,
+    branch_count: int,
+    theta: Fraction | int,
+) -> bool:
+    """Whether the full-gain layer has at least one half of stationary mass."""
+
+    return stationary_majority_excess(max_gain, branch_count, theta) >= 0
+
+
+def majority_boundary_polynomial_coefficients(
+    max_gain: int,
+    branch_count: int,
+) -> tuple[int, ...]:
+    """Coefficients of theta^q - sum_s A_s theta^(q-s), high degree first."""
+
+    q = _positive_int(max_gain, name="max_gain")
+    k = _positive_int(branch_count, name="branch_count")
+    return (1,) + tuple(-distance_layer_degeneracy(k, s) for s in range(1, q + 1))
+
+
+def stationary_majority_tilt_bounds(
+    max_gain: int,
+    branch_count: int,
+) -> tuple[int, int]:
+    """Exact equality for q=1; strict lower/upper bounds for q>=2.
+
+    Let theta_1/2 be the unique positive tilt at which the full layer has mass
+    exactly 1/2. If q=1, theta_1/2=T_k. If q>=2, then
+
+        T_k < theta_1/2 < 2*T_k.
+
+    The lower endpoint follows because the s=1 term already equals the full
+    layer at T_k and all additional layers add positive mass. The upper endpoint
+    follows from A_s <= T_k^s and the finite geometric sum at theta=2*T_k.
+    """
+
+    q = _positive_int(max_gain, name="max_gain")
+    k = _positive_int(branch_count, name="branch_count")
+    threshold = aggregate_modal_tilt_threshold(k)
+    if q == 1:
+        return threshold, threshold
+    return threshold, 2 * threshold
 
 
 def minimum_population_size_for_modal_full_layer(
@@ -155,5 +239,25 @@ def minimum_population_size_for_unique_modal_full_layer(
     threshold = aggregate_modal_tilt_threshold(k)
     n = 2
     while a ** (n - 1) <= threshold:
+        n += 1
+    return n
+
+
+def minimum_population_size_for_stationary_majority(
+    max_gain: int,
+    branch_count: int,
+    fitness_step: Fraction | int,
+) -> int | None:
+    """Smallest N>=2 whose Moran tilt gives the full layer >=1/2 mass."""
+
+    q = _positive_int(max_gain, name="max_gain")
+    k = _positive_int(branch_count, name="branch_count")
+    a = as_exact_fraction(fitness_step, name="fitness_step")
+    if a < 1:
+        raise ValueError("fitness_step must be at least one")
+    if a == 1:
+        return 2 if full_layer_has_stationary_majority(q, k, 1) else None
+    n = 2
+    while not full_layer_has_stationary_majority(q, k, a ** (n - 1)):
         n += 1
     return n
