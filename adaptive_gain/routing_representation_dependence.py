@@ -16,6 +16,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction
 
+from ._exact_rational import as_exact_fraction
+
 from .local_routing_mutation import minimum_local_prunings_for_gain
 from .routing_origin_fixation import (
     full_phase_is_modal_layer,
@@ -41,7 +43,7 @@ def _validate_gain(required_gap: int, realized_gain: int) -> tuple[int, int]:
 
 
 def _as_positive_fraction(value: Fraction | int, name: str) -> Fraction:
-    result = value if isinstance(value, Fraction) else Fraction(value, 1)
+    result = as_exact_fraction(value, name=name)
     if result <= 0:
         raise ValueError(f"{name} must be positive")
     return result

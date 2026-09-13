@@ -18,6 +18,8 @@ from dataclasses import dataclass
 from fractions import Fraction
 from typing import Iterable
 
+from ._exact_rational import as_exact_fraction
+
 from .routing_reversible_certificate import (
     ReversibleMutationCertificate,
     selected_layer_distribution_from_tilt,
@@ -26,12 +28,12 @@ from .routing_reversible_certificate import (
 )
 
 
-def _as_fraction(value: Fraction | int) -> Fraction:
-    return value if isinstance(value, Fraction) else Fraction(value, 1)
+def _as_fraction(value: Fraction | int, *, name: str) -> Fraction:
+    return as_exact_fraction(value, name=name)
 
 
 def normalize_positive_distribution(values: Iterable[Fraction | int]) -> tuple[Fraction, ...]:
-    weights = tuple(_as_fraction(value) for value in values)
+    weights = tuple(_as_fraction(value, name="target_distribution weight") for value in values)
     if len(weights) < 2:
         raise ValueError("target distribution must contain at least two gain levels")
     if any(weight <= 0 for weight in weights):
@@ -47,7 +49,7 @@ def neutral_measure_for_target_selected_distribution(
     """Neutral measure mu_r proportional to p_r * theta^{-r}."""
 
     target = normalize_positive_distribution(target_distribution)
-    tilt = _as_fraction(theta)
+    tilt = _as_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
     raw = tuple(target[r] / (tilt**r) for r in range(len(target)))
@@ -70,10 +72,10 @@ def reversible_path_certificate_for_target_distribution(
     """
 
     target = normalize_positive_distribution(target_distribution)
-    tilt = _as_fraction(theta)
+    tilt = _as_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
-    scale = _as_fraction(edge_scale)
+    scale = _as_fraction(edge_scale, name="edge_scale")
     if not (0 < scale <= Fraction(1, 2)):
         raise ValueError("edge_scale must lie in (0,1/2]")
 
@@ -126,7 +128,7 @@ def fixed_support_nonidentifiability_receipt(
     b = normalize_positive_distribution(target_b)
     if len(a) != len(b):
         raise ValueError("target distributions must have the same gain levels")
-    tilt = _as_fraction(theta)
+    tilt = _as_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
 
