@@ -6,7 +6,7 @@ Keep the second-paper manuscript surface reproducible without merging unrelated 
 
 ## Base theorem surface
 
-This manuscript PR is now based on
+This manuscript PR is based on
 
 `freeze/routing-stationary-majority-threshold-v1`
 
@@ -70,6 +70,31 @@ Majority surface:
 - Python 3.10 / 3.11 / 3.12 all green;
 - every job passed full pytest, `examples/audit_witnesses.py`, and `examples/audit_certificate_ladder.py`.
 
+## Manuscript integration surface
+
+The active manuscript branch is
+
+`manuscript/routing-layer-selection-v1`.
+
+Its only intended changes relative to the majority theorem base are files under
+
+`routing_paper/`.
+
+Current manuscript files:
+
+- `ABSTRACT_V0.md`
+- `INTRODUCTION_V0.md`
+- `MODEL_AND_RESULTS_V0.md`
+- `DISCUSSION_V0.md`
+- `MANUSCRIPT_SPINE_V1.md`
+- `CLAIM_LEDGER_V1.md`
+- `FIGURE_PLAN_V1.md`
+- `NOVELTY_AUDIT_V0.md`
+- `REVIEW_GATE_V0.md`
+- `PROVENANCE_V1.md`
+
+These files now all encode the same distinction among per-genotype mode, aggregate gain-layer mode, and stationary majority.
+
 ## Deliberately excluded from manuscript dependency
 
 The second paper does not require the following side-theory stack as main-text dependencies:
@@ -112,12 +137,13 @@ rather than
 
 ## Authoring status
 
-The original authoring gate is complete:
+The authoring gate is complete:
 
 - Introduction draft exists;
 - Model/Results draft contains the full mode-plus-majority theorem sequence;
 - Discussion draft respects the claim boundary;
 - focused novelty audit exists;
-- figure plan explicitly separates mode from majority.
+- Figure 2 explicitly separates mode from majority;
+- claim ledger and review gate are synchronized.
 
-Therefore **new abstract routing theory is no longer the default next step**. Remaining work is literature collision testing, manuscript compression/integration, figure production, and journal fit.
+Therefore **new abstract routing theory is no longer the default next step**. Remaining work is clean CI, deeper literature collision testing, manuscript compression/integration, figure production if warranted, and journal fit.
