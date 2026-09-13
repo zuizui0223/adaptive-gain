@@ -1,4 +1,4 @@
-name: temporary-voje-2024-dryad-discovery
+name: temporary-voje-2024-pets-refit
 
 on:
   push:
@@ -6,54 +6,103 @@ on:
       - analysis/evoTS-moving-optimum-audit
 
 jobs:
-  discover:
+  refit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test public routes for Dryad supplemental file 4460290
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4.1'
+      - name: Install paper-era paleoTS and evoTS sources
         shell: bash
         run: |
-          set -u
-          FILE_ID=4460290
-          echo "SUPPLEMENTAL_FILE_ID=$FILE_ID"
-          for URL in \
-            "https://datadryad.org/api/v2/files/${FILE_ID}/download" \
-            "https://datadryad.org/stash/downloads/file_stream/${FILE_ID}" \
-            "https://datadryad.org/downloads/file_stream/${FILE_ID}"; do
-            echo "---TRY $URL---"
-            rm -f /tmp/candidate
-            code=$(curl -L -sS -o /tmp/candidate -w '%{http_code}' "$URL" || true)
-            echo "HTTP_CODE=$code"
-            if [ -f /tmp/candidate ]; then
-              file /tmp/candidate || true
-              ls -lh /tmp/candidate || true
-              if unzip -t /tmp/candidate >/tmp/unzip_test 2>&1; then
-                echo "ZIP_ROUTE_PASS=$URL"
-                mkdir -p /tmp/u
-                unzip -o /tmp/candidate -d /tmp/u
-                find /tmp/u -maxdepth 4 -type f -printf '%p\t%s bytes\n' | sort
-                SCRIPT=$(find /tmp/u -type f -name 'main_analyses_andinus_biwa.R' | head -1)
-                DATA=$(find /tmp/u -type f -name 'andinus.txt' | head -1)
-                echo "SCRIPT_PATH=$SCRIPT"
-                echo "DATA_PATH=$DATA"
-                if [ -n "$SCRIPT" ]; then
-                  echo '---SCRIPT_HEAD---'
-                  sed -n '1,360p' "$SCRIPT"
-                  echo '---SCRIPT_RELEVANT_LINES---'
-                  grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint|pool.var|paleoTS|evoTS' "$SCRIPT" | head -350 || true
-                fi
-                if [ -n "$DATA" ]; then
-                  echo '---ANDINUS_HEAD---'
-                  sed -n '1,12p' "$DATA"
-                  echo "ANDINUS_LINES=$(wc -l < "$DATA")"
-                fi
-                exit 0
-              else
-                echo 'CANDIDATE_NOT_ZIP'
-                head -c 300 /tmp/candidate || true
-                echo
-              fi
-            fi
-          done
-          echo 'NO_PUBLIC_BINARY_ROUTE_FOUND'
-          exit 0
+          set -euxo pipefail
+          Rscript -e 'install.packages(c("mnormt","foreach","doParallel","mvtnorm","plotly","pracma","MASS"), repos="https://cloud.r-project.org")'
+          git clone https://github.com/cran/paleoTS.git /tmp/paleoTS
+          git -C /tmp/paleoTS checkout 748a37d2cb29f8e77aafb078a071e8ba4b1341cb
+          R CMD INSTALL /tmp/paleoTS
+          git clone https://github.com/klvoje/evoTS.git /tmp/evoTS
+          git -C /tmp/evoTS checkout 651458ccd4b940053f9257e3c18a4110b0c2d4db
+          R CMD INSTALL /tmp/evoTS
+      - name: Reconstruct PETS C. andinus and fit OUBM
+        shell: Rscript {0}
+        run: |
+          library(paleoTS)
+          library(evoTS)
+          cat("PALEOTS_VERSION=", as.character(packageVersion("paleoTS")), "\n", sep="")
+          cat("EVOTS_VERSION=", as.character(packageVersion("evoTS")), "\n", sep="")
+
+          ts_url <- "https://raw.githubusercontent.com/VildeBruhn/rate_time/main/empirical_data/timeseries.txt"
+          meta_url <- "https://raw.githubusercontent.com/VildeBruhn/rate_time/main/empirical_data/metadata.txt"
+          ts <- read.delim(ts_url, check.names=FALSE)
+          meta <- read.delim(meta_url, check.names=FALSE)
+          d <- ts[ts$tsID == 582, ]
+          m <- meta[meta$tsID == 582, ]
+          cat("PETS_ROWS=", nrow(d), "\n", sep="")
+          cat("PETS_META_ROWS=", nrow(m), "\n", sep="")
+          cat("PETS_SPECIES=", paste(unique(m$species), collapse=";"), "\n", sep="")
+          cat("PETS_INTERVAL_MY=", paste(unique(m$interval_MY), collapse=";"), "\n", sep="")
+          cat("PETS_LOG_TRANSFORMED=", paste(unique(m$log_transformed), collapse=";"), "\n", sep="")
+          cat("PETS_N_SUM=", sum(d$N), "\n", sep="")
+          cat("PETS_AGE_MIN_MAX_MY=", min(d$age_MY), ",", max(d$age_MY), "\n", sep="")
+
+          stopifnot(nrow(d) == 266)
+          ord <- order(d$age_MY)
+          d <- d[ord,]
+          y0 <- as.paleoTS(mm=d$trait_mean, vv=d$trait_var, nn=d$N,
+                           tt=d$age_MY, oldest="first")
+          ylog <- ln.paleoTS(y0)
+          cat("LOG_MEAN_FIRST_LAST=", ylog$mm[1], ",", tail(ylog$mm,1), "\n", sep="")
+          cat("LOG_TT_MIN_MAX_MY=", min(ylog$tt), ",", max(ylog$tt), "\n", sep="")
+          cat("LOG_N=", length(ylog$mm), "\n", sep="")
+
+          fit_one <- function(y, label, iterations=NULL) {
+            fit <- opt.joint.OUBM(y, pool=TRUE, opt.anc=TRUE,
+                                  iterations=iterations, iter.sd=1)
+            p <- fit$parameters
+            cat(label, "_PARAM_NAMES=", paste(names(p), collapse=","), "\n", sep="")
+            cat(label, "_PARAMETERS=", paste(format(unname(p), digits=17, scientific=FALSE, trim=TRUE), collapse=","), "\n", sep="")
+            cat(label, "_LOGL=", format(fit$logL, digits=17), "\n", sep="")
+            cat(label, "_AICC=", format(fit$AICc, digits=17), "\n", sep="")
+            cat(label, "_K=", fit$K, "\n", sep="")
+            alpha <- unname(p["alpha"])
+            if (is.na(alpha)) alpha <- unname(p[3])
+            cat(label, "_ALPHA=", format(alpha, digits=17), "\n", sep="")
+            cat(label, "_HALFLIFE_NATIVE=", format(log(2)/alpha, digits=17), "\n", sep="")
+            invisible(fit)
+          }
+
+          # Article: first-to-last time scaled to unit length.
+          yu <- ylog
+          interval_my <- max(yu$tt)-min(yu$tt)
+          yu$tt <- (yu$tt-min(yu$tt))/interval_my
+          cat("UNIT_INTERVAL_MY=", format(interval_my, digits=17), "\n", sep="")
+          cat("UNIT_INTERVAL_YEARS=", format(interval_my*1e6, digits=17), "\n", sep="")
+          fu <- fit_one(yu, "UNIT_DEFAULT", NULL)
+          fu_multi <- fit_one(yu, "UNIT_MULTI20", 20)
+
+          # Direct native scales are diagnostic only.
+          fmy <- fit_one(ylog, "MY_DEFAULT", NULL)
+          yy <- ylog
+          yy$tt <- yy$tt * 1e6
+          fyr <- fit_one(yy, "YEARS_DEFAULT", NULL)
+
+          # Published comparison values.
+          cat("PUBLISHED_AICC=-153.573\n")
+          cat("PUBLISHED_HALF_LIFE_YEARS=12\n")
+          cat("PUBLISHED_STATIONARY_VARIANCE=0.015\n")
+          cat("PUBLISHED_OPTIMUM_STEP_VARIANCE_UNIT=2.532\n")
+          cat("PUBLISHED_ALPHA_TABLE_UNIT=73318.010\n")
+
+          # Model comparison on unit-scaled data for directly comparable AICc.
+          f_urw <- paleoTS::opt.joint.URW(yu, pool=TRUE)
+          f_grw <- paleoTS::opt.joint.GRW(yu, pool=TRUE)
+          f_sta <- paleoTS::opt.joint.Stasis(yu, pool=TRUE)
+          f_fix <- paleoTS::opt.joint.OU(yu, pool=TRUE)
+          f_free <- opt.joint.OUBM(yu, pool=TRUE, opt.anc=FALSE)
+          for (z in list(URW=f_urw, GRW=f_grw, STASIS=f_sta, FIXED_OU=f_fix, OUBM_FREE=f_free)) {}
+          cat("UNIT_URW_AICC=", format(f_urw$AICc,digits=17), "\n", sep="")
+          cat("UNIT_GRW_AICC=", format(f_grw$AICc,digits=17), "\n", sep="")
+          cat("UNIT_STASIS_AICC=", format(f_sta$AICc,digits=17), "\n", sep="")
+          cat("UNIT_FIXED_OU_AICC=", format(f_fix$AICc,digits=17), "\n", sep="")
+          cat("UNIT_OUBM_FREE_AICC=", format(f_free$AICc,digits=17), "\n", sep="")
