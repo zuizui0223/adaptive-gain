@@ -1,204 +1,190 @@
-# Routing second paper — figure plan v1
+# Routing second paper — figure plan v2
 
 ## Design principle
 
-Three main figures are enough. The paper should look like one theorem story with two explicit scope controls, not a catalog of the routing side-theory stack.
+Three main figures remain sufficient. The key change from v1 is that Figure 2 now distinguishes **largest aggregate gain class** from **stationary majority**, eliminating the impression that the closed-form mode threshold was chosen as a proxy for all occupancy notions.
 
 ## Figure 1 — Finite routing representation creates an exact multiplicity profile
 
 ### Panel A — genotype-policy representation
 
-Show
-
-`X={0,...,q}^k`
-
-with gain
-
-`g(x)=min_i x_i`.
-
-Use canonical running example
-
-`q=2, k=3`.
-
-A small cube/lattice schematic should make clear that gain is set by the weakest coordinate.
+Show `X={0,...,q}^k` with weakest-branch gain `g(x)=min_i x_i`. Use `q=2,k=3` as the running example.
 
 ### Panel B — exact layer counts
 
-For `q=2,k=3`, show
+For `q=2,k=3`:
 
 - gain 0: `D_0=19`
 - gain 1: `D_1=7`
 - gain 2: `D_2=1`
 
-General formula beside the bars:
+Display
 
 `D_r=(q-r+1)^k-(q-r)^k`.
 
-### Panel C — distance-below-full form
+### Panel C — distance below full gain
 
 Show
 
-`A_s=(s+1)^k-s^k`
+`A_s=(s+1)^k-s^k`,
 
-and highlight
-
-`A_1=2^k-1`.
+with `A_1=2^k-1` highlighted.
 
 ### Message
 
-The maximally adapted genotype is unique, while the immediately suboptimal gain layer can be exponentially more numerous in `k`.
-
-Do not describe this alone as a selection result; Figure 1 is representation/combinatorics.
+The unique full-gain genotype can sit above a much more numerous adjacent gain class. Figure 1 is representation/combinatorics, not yet a population-genetic conclusion.
 
 ---
 
-## Figure 2 — All lower layers collapse to one sharp transition
+## Figure 2 — One layer hierarchy generates two ordered occupancy thresholds
 
 This is the central figure.
 
 ### Panel A — nested-subset-chain certificate
 
-For a small example (`k=3`, `s=2`), depict
+For `k=3,s=2`, depict
 
 `x -> (S_1 subseteq S_2)`
 
-with each `S_j` a nonempty subset of branch labels.
+with nonempty branch-label subsets. Contrast nested admissible chains with unrestricted nonempty-subset strings.
 
-Visually contrast:
-
-- admissible nested chains;
-- all arbitrary nonempty-subset strings.
-
-Write
+Display
 
 `A_s <= (2^k-1)^s`,
 
-with strict `<` for `k>=2,s>=2`.
+strict for `k>=2,s>=2`.
 
-### Panel B — aggregate stationary layer weights
+### Panel B — exact aggregate-mode transition
 
-For `q=2,k=3`, plot or diagram
+For `q=2,k=3`, aggregate layer weights are
 
 `W_r=D_r theta^r`.
 
-Use three marked regimes around
+Show three exact mode regimes:
 
-`theta_c=7`:
+- `theta=2`: `(19,14,4)` — full nonmodal;
+- `theta=7`: `(19,49,49)` — exact gain-1/gain-2 tie;
+- `theta=8`: `(19,56,64)` — full uniquely modal.
 
-- below: e.g. `theta=2`, weights `(19,14,4)`;
-- exact: `theta=7`, weights `(19,49,49)`;
-- above: e.g. `theta=8`, weights `(19,56,64)`.
+Mark
 
-The visual should explicitly label **aggregate gain-layer weight**.
+`T_3=7`.
 
-### Panel C — trichotomy
+Use the label **largest aggregate gain class**, not “dominant genotype.”
 
-Compact phase strip:
+### Panel C — stationary-majority transition
 
-`theta < 2^k-1` | `theta = 2^k-1` | `theta > 2^k-1`
+Plot or annotate
+
+`P_full(theta)=1/[1+7/theta+19/theta^2]`.
+
+Mark:
+
+- mode threshold `theta=7`, where `P_full=49/117≈0.419`;
+- majority threshold `theta_1/2=(7+5 sqrt(5))/2≈9.09`;
+- `theta=9`: `P_full=81/163<1/2`;
+- `theta=10`: `P_full=100/189>1/2`.
+
+The plot should visually expose the interval in which full gain is already the largest gain class but still not a stationary majority.
+
+### Panel D — general theorem strip
+
+For `q>=2` show the ordered regions
+
+`theta < T_k`
+
+`T_k <= theta < theta_1/2`
+
+`theta >= theta_1/2`
 
 with labels
 
-`full nonmodal` | `{q-1,q} tie` | `full uniquely modal`.
+`full nonmodal`
 
-### Panel D — Moran corollary
+`full modal but <1/2`
 
-Show mapping
+`full stationary majority`.
 
-`theta=a^(N-1)`
+Above the strip write
 
-and the boundary
+`T_k=2^k-1 < theta_1/2 < 2T_k`.
 
-`a^(N-1) ? 2^k-1`.
+At exactly `theta=T_k`, note the `{q-1,q}` tie for `k>=2`.
 
-For canonical `k=q+1,a=2`, annotate
+### Panel E — canonical Moran staircase
 
-`N*=q+2`.
+Map `theta=a^(N-1)`. For canonical `k=q+1,a=2` and `q>=2`, show
+
+`N_unique_mode=q+2`
+
+and
+
+`N_majority=q+3`.
+
+This one-step separation is the cleanest population-level consequence of having defined both estimands.
 
 ### Message
 
-The adjacent layer is not merely the first competitor: its multiplicity controls every lower-layer comparison exactly through the global bound.
+The adjacent layer controls the full lower-layer hierarchy, but “largest class” and “majority occupancy” are distinct thresholds. The same global combinatorial bound controls both.
 
 ---
 
-## Figure 3 — The sharp threshold is conditional, not universal
-
-Two scope controls in one figure.
+## Figure 3 — Occupancy thresholds are conditional on representation and mutation measure
 
 ### Panel A — representation contrast
 
-Same gain set, same fitness tilt, two encodings.
-
-At `q=2, theta=2`:
+At the same `q=2,theta=2` and the same phenotype-level fitness schedule:
 
 **Compressed chain**
 
-`weights=(1,2,4)`
-
-`P(full)=4/7`
-
-full layer uniquely modal.
+`weights=(1,2,4)`, `P(full)=4/7>1/2` — full is uniquely modal and a majority.
 
 **Branch-product routing**
 
-`multiplicity=(19,7,1)`
-
-`weights=(19,14,4)`
-
-`P(full)=4/37`
-
-full layer nonmodal.
-
-Label the conclusion:
-
-**same phenotype fitness schedule, opposite stationary gain-layer conclusion**.
-
-### Panel B — mutation-measure boundary
-
-Keep the same gain path and the same `theta`, but show two reversible neutral measures producing contrasting selected stationary laws.
-
-Use the frozen `q=2, theta=2` witness:
-
-- model A selected occupancy `(1/10,1/10,4/5)`;
-- model B selected occupancy `(9/20,9/20,1/10)`.
+`D=(19,7,1)`, `weights=(19,14,4)`, `P(full)=4/37` — full is nonmodal and far below majority.
 
 Label:
 
-**fixed support is insufficient; neutral mutation measure remains causal**.
+**same phenotype fitness schedule, opposite occupancy conclusions**.
 
-### Panel C — claim hierarchy
+### Panel B — reversible mutation-measure boundary
 
-A small dependency diagram:
+On the same gain path and at the same `theta=2`, show the frozen exact selected occupancies:
 
-`gain map + representation + neutral mutation measure + selection tilt`
+- `(1/10,1/10,4/5)`;
+- `(9/20,9/20,1/10)`.
 
-`                -> stationary gain-layer occupancy`
+Label:
 
-Highlight that `theta_c=2^k-1` is the symmetric branch-product special case.
+**fixed support is insufficient; the neutral mutation measure remains causal**.
 
-### Message
+### Panel C — dependency diagram
 
-The theorem is exact because assumptions are explicit. Representation and mutation measure are part of the causal specification, not nuisances to be inferred from gain alone.
+`gain map + genotype-policy representation + neutral mutation measure + selection tilt`
+
+`                              -> stationary gain occupancy`
+
+Annotate that both `T_k` and `theta_1/2` are properties of the symmetric branch-product specification, not universal biological constants.
 
 ---
 
-# Supplementary figures only if needed
+# Supplement only if needed
 
-Possible supplement:
+Possible supplementary figures:
 
-- broader `(q,k)` heat map of `T_k=2^k-1`;
-- exact population-size staircase for several rational `a` values;
-- accessibility-distance comparison between branch-product and compressed encodings;
-- additional fixed-support mutation-bias constructions.
+- `theta_1/2/T_k` across `(q,k)` to show the majority threshold remains within the factor-two theorem bracket;
+- population-size staircases for rational `a` values;
+- accessibility-distance contrast between branch-product and compressed encodings;
+- additional fixed-support mutation-bias witnesses.
 
-Do not make figures for neutral-plateau waiting times, mesoscopic target dynamics, absolute-rate nonidentifiability, or downstream population-process ceilings in this paper.
+Do not add figures for neutral-plateau waiting times, mesoscopic target dynamics, absolute-rate nonidentifiability, or downstream population-process ceilings.
 
 # Figure-to-claim map
 
 | Figure | Main claim |
 |---|---|
 | Fig. 1 | exact routing-layer multiplicity |
-| Fig. 2 | global bound + sharp aggregate-layer trichotomy |
-| Fig. 3 | representation and mutation-measure scope controls |
+| Fig. 2 | global bound + modal transition + majority transition |
+| Fig. 3 | representation and mutation-measure claim ceilings |
 
-If a fourth main figure becomes necessary, the manuscript is probably becoming too broad.
+A fourth main figure is a warning that the paper is becoming too broad.
