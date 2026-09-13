@@ -35,6 +35,8 @@ from itertools import product
 from math import prod
 from typing import Iterable
 
+from ._exact_rational import as_exact_fraction
+
 
 RoutingGenotype = tuple[int, ...]
 
@@ -58,7 +60,7 @@ def _validate_population_size(population_size: int) -> int:
 
 
 def _as_fraction(value: Fraction | int) -> Fraction:
-    result = value if isinstance(value, Fraction) else Fraction(value, 1)
+    result = as_exact_fraction(value, name="fitness_step")
     if result < 1:
         raise ValueError("fitness_step must be at least one in this directional-selection model")
     return result
@@ -119,7 +121,7 @@ def moran_fixation_probability(
     """
 
     n = _validate_population_size(population_size)
-    r = relative_fitness if isinstance(relative_fitness, Fraction) else Fraction(relative_fitness, 1)
+    r = as_exact_fraction(relative_fitness, name="relative_fitness")
     if r <= 0:
         raise ValueError("relative_fitness must be positive")
     if r == 1:
@@ -134,7 +136,7 @@ def moran_fixation_ratio(
     """Exact rho(R)/rho(1/R) = R^(N-1)."""
 
     n = _validate_population_size(population_size)
-    r = relative_fitness if isinstance(relative_fitness, Fraction) else Fraction(relative_fitness, 1)
+    r = as_exact_fraction(relative_fitness, name="relative_fitness")
     if r <= 0:
         raise ValueError("relative_fitness must be positive")
     forward = moran_fixation_probability(r, n)
@@ -333,7 +335,7 @@ def degeneracy_chain_bound_holds(required_gap: int, steps_below: int) -> bool:
 
 def full_phase_is_modal_layer(required_gap: int, theta: Fraction | int) -> bool:
     q = _validate_q(required_gap)
-    tilt = theta if isinstance(theta, Fraction) else Fraction(theta, 1)
+    tilt = as_exact_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
     weights = tuple(Fraction(gain_layer_degeneracy(q, r)) * tilt**r for r in range(q + 1))
@@ -342,7 +344,7 @@ def full_phase_is_modal_layer(required_gap: int, theta: Fraction | int) -> bool:
 
 def full_phase_stationary_mass_from_tilt(required_gap: int, theta: Fraction | int) -> Fraction:
     q = _validate_q(required_gap)
-    tilt = theta if isinstance(theta, Fraction) else Fraction(theta, 1)
+    tilt = as_exact_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
     weights = tuple(Fraction(gain_layer_degeneracy(q, r)) * tilt**r for r in range(q + 1))

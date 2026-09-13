@@ -26,6 +26,8 @@ from collections import deque
 from dataclasses import dataclass
 from fractions import Fraction
 
+from ._exact_rational import as_exact_fraction
+
 from .routing_origin_fixation import moran_fixation_probability, stationary_tilt
 
 
@@ -49,8 +51,8 @@ class ReversibleMutationCertificate:
         return max(self.gains)
 
 
-def _as_fraction(value: Fraction | int) -> Fraction:
-    return value if isinstance(value, Fraction) else Fraction(value, 1)
+def _as_fraction(value: Fraction | int, *, name: str) -> Fraction:
+    return as_exact_fraction(value, name=name)
 
 
 def validate_reversible_mutation_certificate(
@@ -75,14 +77,17 @@ def validate_reversible_mutation_certificate(
     if set(gains) != set(range(q + 1)):
         raise RepresentationCertificateError("every gain level 0..q must be represented")
 
-    proposal = tuple(tuple(_as_fraction(p) for p in row) for row in certificate.proposal)
+    proposal = tuple(
+        tuple(_as_fraction(p, name="proposal probability") for p in row)
+        for row in certificate.proposal
+    )
     for row in proposal:
         if any(p < 0 for p in row):
             raise RepresentationCertificateError("proposal probabilities must be nonnegative")
         if sum(row, Fraction(0, 1)) != 1:
             raise RepresentationCertificateError("each proposal row must sum to one")
 
-    mu = tuple(_as_fraction(w) for w in certificate.neutral_measure)
+    mu = tuple(_as_fraction(w, name="neutral_measure weight") for w in certificate.neutral_measure)
     if any(w <= 0 for w in mu):
         raise RepresentationCertificateError("neutral_measure weights must be strictly positive")
     if sum(mu, Fraction(0, 1)) != 1:
@@ -134,7 +139,7 @@ def selected_origin_fixation_transition_row(
         raise ValueError("resident_state is out of range")
     if type(population_size) is not int or population_size < 2:
         raise ValueError("population_size must be an integer at least 2")
-    a = _as_fraction(fitness_step)
+    a = _as_fraction(fitness_step, name="fitness_step")
     if a < 1:
         raise ValueError("fitness_step must be at least one")
 
@@ -210,7 +215,7 @@ def selected_layer_distribution_from_tilt(
     theta: Fraction | int,
 ) -> tuple[Fraction, ...]:
     cert = validate_reversible_mutation_certificate(certificate)
-    tilt = _as_fraction(theta)
+    tilt = _as_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
     masses = neutral_layer_masses(cert)
@@ -226,7 +231,7 @@ def full_phase_modal_inequalities(
     """Exact inequalities B_q theta^q >= B_r theta^r for r<q."""
 
     cert = validate_reversible_mutation_certificate(certificate)
-    tilt = _as_fraction(theta)
+    tilt = _as_fraction(theta, name="theta")
     if tilt <= 0:
         raise ValueError("theta must be positive")
     masses = neutral_layer_masses(cert)
