@@ -2,155 +2,145 @@
 
 ## Verdict
 
-**Promising theorem paper, not yet submission-ready.**
+**Major conceptual repair complete; manuscript is now ready for focused collision review and journal-fit evaluation, not more abstract theorem expansion.**
 
-The current manuscript has a clean mathematical spine and a disciplined novelty boundary, but one conceptual vulnerability is large enough that it should be repaired before journal targeting: the headline threshold is currently a threshold for the **modal aggregate gain layer**, not for stationary majority or another clearly population-dominance quantity.
+The previous largest vulnerability was that the headline `2^k-1` result concerned the **modal aggregate gain layer**, while the manuscript risked letting “mode” carry an implicit majority interpretation. PR #58 has closed that gap.
 
-## Major concern 1 — why is aggregate mode the biologically relevant estimand?
+## Closed concern 1 — aggregate mode versus stationary majority
 
-The sharp theorem at
+The manuscript now treats two different occupancy estimands explicitly.
 
-`theta_c=2^k-1`
+### Aggregate mode
 
-is mathematically exact, but “modal layer” can look chosen because it produces a closed-form threshold.
+With
 
-For the canonical running example `q=2,k=3`, at `theta=7` the layer weights are
+`T_k=2^k-1`,
 
-`(19,49,49)`.
+the full-gain layer is:
 
-The full-gain layer is tied for the mode, yet its stationary mass is only
+- nonmodal for `theta<T_k`;
+- tied exactly with the adjacent layer at `theta=T_k`;
+- uniquely modal for `theta>T_k`.
 
-`49/117 < 1/2`.
+### Stationary majority
 
-A reviewer can therefore ask:
+The normalized full-gain mass is
 
-> Why should becoming the largest single gain class count as evolutionary dominance if most stationary probability still lies outside the full-gain class?
+`P_full(theta)=1/(1+sum_{s=1}^q A_s theta^{-s})`.
 
-This is the strongest current threat to the paper’s conceptual importance.
+Its unique half-mass threshold `theta_1/2(q,k)` satisfies
 
-### Recommended repair
+`theta^q=sum_{s=1}^q A_s theta^(q-s)`.
 
-Add a **stationary-majority threshold** within the same finite routing model, not a new unrelated theory branch.
+For `q>=2`,
 
-For symmetric tilt,
+`T_k < theta_1/2 < 2T_k`.
 
-`P_full(theta) = 1 / (1 + sum_{s=1}^q A_s theta^{-s})`.
+Thus the manuscript no longer treats “largest single gain class” as synonymous with “most stationary probability.”
 
-Therefore the half-mass boundary is the unique positive solution of
+### Canonical consequence
 
-`sum_{s=1}^q A_s theta^{-s}=1`,
+For `k=q+1`, Moran step `a=2` and `q>=2`:
 
-or equivalently
+- first unique aggregate mode: `N=q+2`;
+- first stationary majority: `N=q+3`.
 
-`theta^q = sum_{s=1}^q A_s theta^{q-s}`.
+The one-step separation is exact. For `q=2`, the majority threshold is `(7+5sqrt(5))/2`, between 9 and 10.
 
-The same global bound immediately gives a sharp universal bracket:
+**Status: CLOSED.**
 
-- for `q=1`, the half-mass threshold equals `T_k=2^k-1`;
-- for `q>=2`, `T_k < theta_1/2 < 2 T_k`.
-
-The lower inequality follows because the adjacent term alone equals one at `theta=T_k` and additional lower layers contribute positive mass. The upper inequality follows from
-
-`A_s <= T_k^s`
-
-and
-
-`sum_{s=1}^q (1/2)^s < 1`.
-
-This would let the paper distinguish two biologically interpretable transitions:
-
-1. **mode threshold** — full gain becomes the largest gain class;
-2. **majority threshold** — full gain contains at least half of stationary mass.
-
-The mode theorem remains the exact closed-form centerpiece; majority becomes a natural occupancy corollary rather than a competing theory.
-
-## Major concern 2 — theorem-level novelty is a composition, not difficult isolated mathematics
+## Remaining major concern 1 — theorem-level novelty is a composition, not difficult isolated mathematics
 
 Each isolated ingredient is elementary or established:
 
 - difference-of-powers layer counts are elementary;
 - the nested-chain inequality has a short proof;
 - origin-fixation stationary weighting is prior art;
-- selection versus multiplicity is prior art.
+- selection versus multiplicity is prior art;
+- a monotone half-mass root is not a novel object by itself.
 
-The defensible contribution is their exact composition for the declared finite routing representation.
+The defensible contribution is the exact **composition** for the declared finite routing representation:
 
-### Consequence
+`routing representation -> exact multiplicity hierarchy -> one adjacent obstruction -> paired mode/majority occupancy thresholds -> explicit representation/mutation-measure claim ceiling`.
 
-The paper must earn importance through **interpretation and boundary control**, not by implying pure-mathematical depth. Figure 2 and the Discussion should emphasize that one adjacent-layer obstruction controls the complete lower-layer hierarchy and that the threshold changes under alternative representations.
+### Reviewer criterion
 
-## Major concern 3 — biological interpretation remains conditional
+If a direct prior source already contains this same finite-class composition or an algebraically identical theorem under a different name, the paper must be reframed. If only the components are prior art, the current conditional theorem story remains defensible.
 
-No empirical system currently qualifies the branch-product genotype-policy map, local mutation coordinates, and neutral measure strongly enough to present `2^k-1` as a measured biological threshold.
+## Remaining major concern 2 — biological interpretation is conditional
 
-### Consequence
-
-This is acceptable for a theory paper, but it limits how high the journal target can be without either:
-
-- a persuasive biological case study that independently qualifies the representation; or
-- a broader class theorem showing the routing result captures a meaningful family rather than one chosen encoding.
-
-The present manuscript should not fake the former or add the latter merely for breadth.
-
-## Major concern 4 — representation counterexample is essential, not optional
-
-Without the compressed-chain contrast, the main theorem can be read as a property of weakest-link fitness itself. The exact `q=2,theta=2` contradiction makes clear that the result is about **representation-induced multiplicity**.
+No empirical system currently qualifies the branch-product genotype-policy map, local mutation coordinates, and neutral measure strongly enough to present either threshold as a measured biological law.
 
 ### Consequence
 
-Keep representation dependence in the main text and Figure 3 even though generic representation dependence is prior art.
+This is acceptable for a compact theory paper, but the manuscript must maintain the explicit conditional language:
 
-## Minor concern 1 — “dominant” is ambiguous
+> for this finite routing representation
 
-Use precise terms:
+rather than
 
-- “aggregate-modal gain layer” for the largest single gain class;
-- “stationary majority” for mass at least `1/2`;
-- “per-genotype mode” only when explicitly discussing individual states.
+> biological routing systems require...
 
-Avoid “dominant” without qualification.
+The representation counterexample and mutation-measure counterexample must remain in the main text because they are part of the claim, not boilerplate limitations.
 
-## Minor concern 2 — title may overpromise a generic principle
+## Remaining major concern 3 — journal scope depends on what is claimed as the contribution
 
-Current working title:
+The paper should not be pitched as:
 
-**Finite routing representations create sharp selection–multiplicity thresholds**
+- a new mutation-selection framework;
+- a new weakest-link epistasis theory;
+- a universal entropy threshold;
+- a broad empirical eco-evolutionary result.
 
-is usable, but “selection–multiplicity thresholds” could sound more general than the theorem.
+It should be pitched as a compact mathematical-biology result on how an explicit finite genotype-policy representation converts phenotype-level selection into two exact stationary occupancy transitions.
 
-Safer alternatives after majority analysis:
+Without empirical representation qualification, the natural target class is a strong theoretical/mathematical biology journal rather than a top general ecology journal.
 
-- **Exact occupancy thresholds in finite routing representations**
-- **Finite routing architecture sets exact thresholds for stationary gain occupancy**
-- **Representation-induced multiplicity sets sharp stationary thresholds in finite routing models**
+## Essential scope controls
 
-Do not freeze title yet.
+### Representation contrast
 
-## Minor concern 3 — prior art should include explicit multiplicity-selection equilibrium work
+Keep the compressed-chain contrast in the main paper. It demonstrates that the thresholds are not identified by gain values and fitness schedule alone.
 
-Riedel et al. (2015) use multiplicity parameters based on the number of sequence variants representing states and combine them with selection in low-mutation equilibrium statistics.
+### Neutral mutation measure
 
-This is stronger prior art than citing only generic neutral networks or survival of the flattest.
+Keep the fixed-support mutation-bias construction in the main paper or concise main-text proposition. It demonstrates that raw genotype multiplicity is only the relevant abundance measure under the symmetric neutral measure.
 
-### Consequence
+Removing either control would make the threshold look more universal than it is.
 
-Add Riedel et al. explicitly in the Introduction’s prior-art paragraph in the next prose pass.
+## Terminology rules
 
-## Recommended next action
+Use:
 
-**Do one mathematical repair only: stationary-majority threshold characterization.**
+- “per-genotype mode” for the most probable individual genotype;
+- “aggregate-modal gain layer” for the largest gain class;
+- “stationary majority” for full-gain mass `>=1/2`.
 
-Do not reopen coupon-collector, mesoscopic, rate-scale, or downstream-process theory.
+Avoid unqualified “dominant,” “takes over,” or “wins.”
 
-After majority is frozen:
+## Title guidance
 
-1. revise Abstract/Introduction to distinguish mode and majority;
-2. update Figure 2 to show both thresholds;
-3. rerun novelty audit;
-4. then choose journal target.
+Preferred current title:
+
+**Exact occupancy thresholds in finite routing representations**
+
+This is safer than a generic “selection–multiplicity threshold” title because it tells the reader that the result is conditional on a representation and that more than one occupancy threshold is studied.
+
+## Next action gate
+
+Do **not** add another theorem.
+
+The next work should be:
+
+1. synchronize all manuscript files with the majority theorem;
+2. verify the manuscript branch differs from the majority freeze only under `routing_paper/`;
+3. pass clean three-version CI;
+4. perform one deeper scholarly collision search on the exact four objects in `NOVELTY_AUDIT_V0.md`;
+5. assess journal fit using the completed manuscript, not the earlier mode-only version;
+6. only then decide whether figures and submission formatting are worth building.
 
 ## Current impact assessment
 
-Without the majority repair or empirical representation qualification, the paper is mathematically clean but risks being judged as an elegant note around an elementary count plus standard stationary weighting.
+The mode-only version risked reading as an elegant note built around a conveniently selected statistic. The mode-plus-majority version is substantially stronger: the same representation-specific combinatorics now explains two distinct stationary occupancy transitions, and the canonical family gives an exact separation between becoming the largest class and becoming most of the stationary distribution.
 
-With mode + majority occupancy transitions, representation counterexample, and mutation-measure claim ceiling all in one compact story, it becomes a substantially more complete theoretical result while remaining disciplined.
+This is now a coherent theorem paper. Its remaining risk is **priority/scope**, not an internal mathematical gap.
