@@ -1,6 +1,6 @@
 # Higher-tier publication route v1
 
-Status: **promotion lane for review; current Theoretical Ecology package remains an intact fallback.**
+Status: **Evolution Letters candidate manuscript materialized; current Theoretical Ecology package remains an intact fallback.**
 
 ## Scientific reason to reopen routing
 
@@ -13,7 +13,7 @@ required local dynamical regime
 -> exact/Pareto-minimal finite sensing architecture
 ```
 
-The new nonlinear no-go theorem removes the main routing objection that this biological conclusion depends on exact linearity of `G=a Delta g`.
+The nonlinear no-go theorem removes the main routing objection that this biological conclusion depends on exact linearity of `G=a Delta g`.
 
 For a nondecreasing sensing-to-selection map with marginal effect bounded above by `L`, and positive feedback-per-selection scale `B=-beta e`, every admissible lift obeys
 
@@ -37,14 +37,24 @@ The linear acquisition-cost model remains a microfounded special case, not the s
 
 ### 1. Evolution Letters — Letter
 
-**Decision: credible high-risk first shot after the nonlinear bridge is integrated into the main manuscript.**
+**Decision: credible high-risk first shot. A dedicated Letter surface now exists at `manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V1.md`.**
 
-Current official scope checked 2026-09-13:
+Current official scope and format were checked on 2026-09-13 and recorded in `EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md`:
 
 - https://academic.oup.com/evlett/pages/about
 - https://academic.oup.com/evlett/pages/author-guidelines
 
-The journal explicitly welcomes theoretical evolutionary studies and new analytical or methodological frameworks with broad potential influence. A typical Letter is approximately 5,000 words.
+The journal explicitly welcomes theoretical evolutionary studies and new analytical or methodological frameworks with broad potential influence. A typical Letter is approximately 5,000 words, with a 300-word abstract and optional 150-word teaser.
+
+### Recent journal-side precedent
+
+Recent *Evolution Letters* content shows that mathematical work on sensing, behavioral flexibility and evolutionary decision mechanisms is within the journal's active editorial space:
+
+- Frank (2024), **A biological circuit to anticipate trend** — a compact theoretical treatment of anticipating stochastic environmental trends;
+- Han et al. (2025), **The evolution of reversible plasticity in stable environments** — mathematical theory of reversible specialization;
+- Kuijper et al. (2026), **Evolution of behavioral flexibility and the forming and breaking of habits** — evolutionary modelling of limited mental resources, attention and flexible information use.
+
+These are journal-fit precedents, not priority claims. The adaptive-gain paper differs by owning a finite-architecture necessity/no-go result rather than a forward model of one sensing or learning strategy.
 
 ### Required framing
 
@@ -57,7 +67,9 @@ The paper should not be presented as four coequal theorems. Use this hierarchy:
 1. principal reverse reachability/no-go theorem;
 2. nonlinear robustness of the sensing-to-selection bridge;
 3. ecological recurrence as the temporal filter of structural reward;
-4. oscillation/stasis results as diagnostics and interpretation.
+4. local oscillation diagnostics as interpretation rather than a second flagship claim.
+
+The old cancellation-versus-restoration stasis proposition should not be a main headline in the Letter version.
 
 ### Main desk-reject risk
 
@@ -65,7 +77,7 @@ The editor may judge the result too abstract unless the finite architecture is b
 
 ### Compression rule
 
-Continuation quotients, proof DAGs, exhaustive finite enumeration, LP certificates, and most bounded-arity construction details belong in Supplement. The Letter must remain about evolutionary reachability, not algorithmic machinery.
+Continuation quotients, proof DAGs, exhaustive finite enumeration, LP certificates, most bounded-arity construction details, and extended stasis algebra belong in Supplement. The Letter must remain about evolutionary reachability, not algorithmic machinery.
 
 ---
 
@@ -120,15 +132,24 @@ The current submission package remains scientifically valid and should not be di
 
 ## Promotion gates before first higher-tier submission
 
-All must be true:
+Current machine state:
 
-1. nonlinear monotone-Lipschitz no-go theorem is tested and integrated;
-2. linear lift is presented as a biological acquisition-cost special case, not an unexplained equality;
-3. `architecture too simple -> requested regime impossible` appears in title/abstract/first main result;
-4. one principal theorem dominates the manuscript hierarchy;
-5. main text is reduced to an evolution-first narrative with mathematical machinery moved to Supplement;
-6. prior-art wording remains conservative about information-fitness bounds, decision trees and adaptivity gaps;
-7. current Theoretical Ecology submission bundle remains archived as fallback rather than overwritten.
+1. nonlinear monotone-Lipschitz no-go theorem tested and merged — **CLOSED**;
+2. linear lift presented as acquisition-cost special case — **CLOSED in theorem note and Letter candidate**;
+3. `architecture too simple -> requested regime impossible` in title/abstract/first result — **CLOSED**;
+4. one principal theorem dominates the Letter hierarchy — **CLOSED**;
+5. Evolution Letters main-text candidate and three-figure plan materialized — **CLOSED pending surface CI**;
+6. prior-art wording remains conservative about information-fitness bounds, decision trees and adaptivity gaps — **CLOSED**;
+7. current Theoretical Ecology submission bundle remains preserved rather than overwritten — **CLOSED**.
+
+Remaining before actual submission:
+
+- final surface/word-limit CI;
+- build the three Evolution Letters main figures from the frozen figure plan;
+- final author metadata and declarations;
+- permanent archive DOI if available;
+- dispatch-time live journal-policy check;
+- final author approval.
 
 ## Stop rule
 
