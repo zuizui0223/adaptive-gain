@@ -63,8 +63,8 @@ def test_state_gap_and_between_state_contrast_are_not_collapsed():
     assert "g_i=C_F(i)-C_A(i)" in text
     assert "Delta g=g_2-g_1" in text
     assert "Delta g=C_F-C_A" not in text
-    assert "Because every state gap is nonnegative" in text
-    assert "at least one ecological state must support `g_i>=q`" in text
+    assert "Since `g_1>=0`" in text
+    assert "at least one state-specific sensing task capable of structural gap at least `q`" in text
 
 
 def test_no_go_claim_ceiling_is_explicit():
