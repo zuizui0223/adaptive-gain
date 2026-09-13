@@ -1,0 +1,51 @@
+{
+  "schema": "adaptive-gain-evolution-letters-readiness-v1",
+  "date": "2026-09-13",
+  "target": "Evolution Letters",
+  "article_type": "Letter",
+  "status": "scientific_surface_built_machine_validation_pending",
+  "primary_claim": "finite sensing architecture can exclude local eco-evolutionary feedback regimes",
+  "scientific_assets": {
+    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V1.md",
+    "nonlinear_theorem": "theory/NONLINEAR_LIFT_NO_GO_V1.md",
+    "format_receipt": "manuscript/EVOLUTION_LETTERS_FORMAT_RECEIPT_20260913.md",
+    "route": "manuscript/HIGHER_TIER_ROUTE_V1.md",
+    "integration_map": "manuscript/HIGHER_TIER_INTEGRATION_MAP_V1.md",
+    "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V1.md",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V1.md",
+    "figures": [
+      "manuscript/figures/figure_el1_no_go.svg",
+      "manuscript/figures/figure_el2_architecture.svg",
+      "manuscript/figures/figure_el3_recurrence.svg"
+    ]
+  },
+  "machine_claims": {
+    "nonlinear_no_go_implemented": true,
+    "linear_lift_demoted_to_constructive_special_case": true,
+    "necessary_not_sufficient_firewall": true,
+    "theoretical_ecology_fallback_preserved": true,
+    "letter_surface_exists": true,
+    "three_letter_figures_exist": true,
+    "format_surface_test_exists": true,
+    "figure_surface_test_exists": true
+  },
+  "submission_order": [
+    "Evolution Letters",
+    "The American Naturalist",
+    "Theoretical Ecology"
+  ],
+  "conditional_route": "Ecology Letters only if ecological recurrence is made unmistakably load-bearing in the final narrative",
+  "human_blockers": [
+    "final author list and order",
+    "affiliations and corresponding-author metadata",
+    "author contributions",
+    "funding declaration",
+    "conflict-of-interest declaration",
+    "acknowledgements if any",
+    "permanent archive DOI if available",
+    "final visual review of all three figures",
+    "dispatch-time live Evolution Letters policy check",
+    "all-author approval"
+  ],
+  "stop_rule": "Do not add new theorem families to increase journal status. Repair only demonstrated claim, clarity, format, or validation defects."
+}
