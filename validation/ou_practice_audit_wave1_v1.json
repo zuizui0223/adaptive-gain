@@ -1,0 +1,54 @@
+{
+  "receipt": "ou_practice_audit_wave1_v1",
+  "date": "2026-09-13",
+  "protocol": "theory/OU_PRACTICE_AUDIT_PROTOCOL_V1.md",
+  "status": "WAVE1_COMPLETE_NOT_EXHAUSTIVE",
+  "search_queries": [
+    "evoTS moving optimum evolution",
+    "evoTS evolving optimum evolution",
+    "opt.joint.OUBM",
+    "logL.joint.OU.BM",
+    "evoTS half-life fossil",
+    "rate of adaptation evoTS",
+    "opt.joint.OUBM -CRAN -rdrr -github",
+    "OUBM evoTS empirical fossil",
+    "moving optimum evoTS fossil diatom",
+    "evolving optimum evoTS fossil",
+    "loglik.surface.OUBM -CRAN -github -rdrr",
+    "evoTS randomly moving optimum"
+  ],
+  "direct_targets": [
+    {
+      "citation": "Voje KL, Saito-Kato M, Spanbauer TL. 2024. Evolution in fossil time series reconciles observations in micro- and macroevolution. Journal of Evolutionary Biology 37:1551-1562.",
+      "doi": "10.1093/jeb/voae087",
+      "system": "Cyclostephanos andinus fossil trait time series",
+      "software_model": "evoTS univariate OUBM / moving optimum",
+      "classification": "DIRECT",
+      "claim_code": "D3_BOTH",
+      "mechanistic_reading": "Reports a 12-year adaptation half-life and interprets the fit as rapid trait adaptation tracking a quickly and randomly moving optimum.",
+      "public_data_code": true,
+      "published_fit_witness": true,
+      "independent_refit": false
+    }
+  ],
+  "adjacent_not_direct": [
+    {
+      "citation": "Voje et al. 2026. Modeling within-lineage evolution as a consequence of changes in the adaptive landscape across short and long timescales. Evolution 80(9):2082-...",
+      "classification": "ADJACENT_UNPROVEN",
+      "reason": "Uses multivariate evoTS OU models with observed environmental variables and a different observation/causal design; the present univariate hidden-optimum congruence theorem does not automatically apply."
+    },
+    {
+      "citation": "Voje 2023. Fitting and evaluating univariate and multivariate models of within-lineage evolution. Paleobiology.",
+      "classification": "METHODS_CONTEXT",
+      "reason": "Defines and documents OUBM and half-life practice but is not a qualifying empirical direct-target result for the primary denominator."
+    }
+  ],
+  "counts": {
+    "direct_empirical_targets_discovered": 1,
+    "direct_D1_D2_or_D3": 1,
+    "direct_with_public_data_code": 1,
+    "direct_independently_refit": 0
+  },
+  "interpretation": "Wave 1 establishes one definite direct empirical target but does not establish prevalence. Search-engine retrieval is not a systematic-review denominator, and further bibliographic/forward-citation waves are required before any field-wide frequency claim.",
+  "hard_stop": "Do not count phylogenetic OU or multivariate observed-environment evoTS papers as directly affected by the current theorem."
+}

@@ -1,0 +1,65 @@
+{
+  "receipt": "ou_second_paper_gate_v1",
+  "date": "2026-09-13",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "scope": "Second-paper causal-identifiability line only; no modification of the frozen Theoretical Ecology submission.",
+  "gates": {
+    "exact_evots_observation_law": {
+      "status": "PASS",
+      "note": "Exact mean/covariance and reciprocal realization derived against evoTS logL.joint.OU.BM."
+    },
+    "half_life_identified_set": {
+      "status": "PASS",
+      "note": "H_direct = H_OU/q for 0<q<1 in the exact reciprocal congruence family."
+    },
+    "causal_assumption_gate": {
+      "status": "PASS",
+      "note": "Shared innovations permit the reciprocal gauge; the declared no-common-shock restriction collapses the two-state zero-mode ambiguity."
+    },
+    "common_shock_sensitivity_replacement": {
+      "status": "PASS",
+      "note": "An external bound |Q12| <= C gives H_OU <= H_direct <= H_OU(1+C/v_trait)."
+    },
+    "published_empirical_fit_anchor": {
+      "status": "PASS_PUBLISHED_SUMMARY",
+      "target": "Voje, Saito-Kato & Spanbauer 2024, C. andinus",
+      "note": "Published n, K, AICc and 12-year half-life are frozen as a real inference target; reciprocal witnesses attach exactly to the fitted observation law. This is not an independent raw-data optimization."
+    },
+    "independent_raw_data_refit": {
+      "status": "OPEN",
+      "blocker": "The Dryad archive is public, but file download is not available anonymously through the current API path in this execution environment.",
+      "required": [
+        "obtain andinus.txt and main_analyses_andinus_biwa.R",
+        "reproduce preprocessing and unit-time scaling",
+        "match OUBM AICc and parameterization",
+        "reproduce 12-year half-life and 0.015 stationary-variance transformations",
+        "verify reciprocal witnesses numerically on empirical observation times"
+      ]
+    },
+    "table2_time_scaling_consistency": {
+      "status": "OPEN",
+      "note": "Do not infer a published numerical error from scraped Table 2 values; resolve units and transformations from the archived source script first."
+    },
+    "prior_art_exact_gauge": {
+      "status": "PARTIAL",
+      "note": "Generic partially observed OU/SDE non-identifiability is conceded, including Jensen 2014 and Browning et al. arXiv:2503.19241. Exact evoTS reciprocal-gauge predecessor search remains open."
+    },
+    "practice_audit_protocol": {
+      "status": "FROZEN",
+      "note": "Direct-theorem inclusion/exclusion and D0-D4 interpretation coding fixed before systematic expansion."
+    },
+    "systematic_practice_audit_execution": {
+      "status": "WAVE1_COMPLETE_NOT_EXHAUSTIVE",
+      "receipt": "validation/ou_practice_audit_wave1_v1.json",
+      "note": "Literal evoTS/OUBM search wave found one definite direct empirical target (Voje et al. 2024). No prevalence claim is licensed; bibliographic and forward-citation waves remain open."
+    },
+    "phylogenetic_tree_extension": {
+      "status": "NOT_CLAIMED",
+      "note": "Tree OU examples remain broad-practice context until a separate likelihood-congruence theorem exists."
+    },
+    "nature_ecology_evolution_scope": {
+      "status": "NOT_YET_QUALIFIED",
+      "promotion_rule": "Require recurrent direct-target practice, empirical reproductions, and a useful replacement/sensitivity analysis before reassessment."
+    }
+  }
+}
