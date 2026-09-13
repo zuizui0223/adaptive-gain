@@ -1,0 +1,75 @@
+{
+  "receipt": "ou_empirical_reproduction_gate_v2",
+  "date": "2026-09-13",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "direct_systems": [
+    {
+      "id": "voje_2024_andinus",
+      "stratum": "MOVING_OPTIMUM",
+      "status": "PUBLISHED_SUMMARY_ANCHORED_RAW_REFIT_OPEN",
+      "archive_doi": "10.5061/dryad.bk3j9kdmj",
+      "required_to_close": [
+        "obtain and execute archived andinus data/script workflow",
+        "match preprocessing and time scale",
+        "match OUBM fit and parameter transformations",
+        "attach reciprocal witness on empirical observation times"
+      ]
+    },
+    {
+      "id": "hunt_2008_stickleback_dorsal_spines",
+      "stratum": "FIXED_OPTIMUM",
+      "status": "INDEPENDENT_NUMERICAL_REFIT_PASS_WITH_SOURCE_VERSION_CAVEAT",
+      "source": "cran/paleoTS@6fbc4f6fa35ef2c7de73e11b9f6dda8ba73e7bc6",
+      "paper_matched_n": 57,
+      "reproduced_half_life_generations": 844.9939159290783,
+      "published_half_life_generations": 853,
+      "relative_difference": 0.009385796097211843,
+      "reciprocal_q_half": {
+        "direct_half_life_generations": 1689.9878318581566,
+        "max_abs_mean_difference": 2.220446049250313e-16,
+        "max_abs_covariance_difference": 3.469446951953614e-18,
+        "status": "PASS"
+      },
+      "receipt": "validation/hunt_2008_fixed_ou_refit_v1.json"
+    },
+    {
+      "id": "lo_cascio_saetre_2017_malta",
+      "stratum": "FIXED_OPTIMUM",
+      "status": "DATA_PROVENANCE_RESOLVED_RAW_REFIT_OPEN",
+      "note": "Original PaleoTS fit remains to be reproduced; an independent broader linear-SDE reanalysis selects a linear-trend OU and is retained only as model-specification caution."
+    },
+    {
+      "id": "voje_2020_yellowstone_diatom",
+      "stratum": "FIXED_OPTIMUM",
+      "status": "DIRECT_PRACTICE_ANCHOR_RAW_REFIT_OPEN",
+      "note": "Published fixed OU optimum-tracking interpretation and half-life approximately 1740 years; adequacy caution is explicitly retained."
+    }
+  ],
+  "counts": {
+    "confirmed_direct_empirical_anchors": 4,
+    "independent_fixed_numerical_refits": 1,
+    "independent_moving_numerical_refits": 0,
+    "empirical_time_reciprocal_witnesses_after_refit": 1
+  },
+  "broad_model_class_context": {
+    "saved_successful_comparisons": 630,
+    "fixed_OU_best": 56,
+    "moving_OUBM_best": 69,
+    "any_OU_best": 125,
+    "boundary": "model-class prevalence, not mechanistic-interpretation prevalence"
+  },
+  "reproduction_definition": [
+    "empirical values obtained",
+    "observation schedule and sampling-error treatment reconstructed",
+    "relevant fitted law numerically reproduced under a declared source/version contract",
+    "fitted parameters and likelihood receipt stored",
+    "reciprocal witness evaluated on the same empirical schedule"
+  ],
+  "dominant_next_gate": "close the Voje et al. 2024 moving-optimum OUBM raw-data refit",
+  "hard_stops": [
+    "do not call a published table or summary an independent refit",
+    "do not treat the 0.94 percent Hunt residual difference as a published error",
+    "do not infer mechanistic interpretation prevalence from 125/630 OU-best prevalence",
+    "do not claim fixed-OU observed relaxation half-life is numerically unidentified"
+  ]
+}

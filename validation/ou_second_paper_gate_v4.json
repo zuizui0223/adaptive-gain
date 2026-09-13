@@ -1,0 +1,86 @@
+{
+  "receipt": "ou_second_paper_gate_v4",
+  "date": "2026-09-13",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "scope": "Trait-only evolutionary OU causal-identifiability follow-on; frozen Theoretical Ecology submission remains untouched.",
+  "theory": {
+    "moving_optimum_evots_exact_observation_law": "PASS",
+    "moving_exogenous_vs_reciprocal_congruence": "PASS",
+    "moving_direct_half_life_identified_set": "PASS",
+    "common_shock_sensitivity_replacement": "PASS",
+    "fixed_paleots_implementation_match": "PASS",
+    "fixed_reciprocal_boundary_corollary": "PASS",
+    "fixed_observed_relaxation_half_life": "RETAINED_MODEL_CONDITIONAL",
+    "whole_fixed_alpha_as_one_way_direct_selection_attraction": "NONUNIQUE_FROM_TRAIT_LIKELIHOOD_ALONE"
+  },
+  "empirical_practice": {
+    "confirmed_direct_anchors": 4,
+    "moving_direct_anchor": "Voje et al. 2024",
+    "fixed_confirmed_examples": [
+      "Hunt et al. 2008",
+      "Lo Cascio Saetre et al. 2017",
+      "Voje 2020"
+    ],
+    "interpretation_audit_status": "MULTIPLE_DIRECT_EXAMPLES_ESTABLISHED_NOT_DENOMINATOR_COMPLETE"
+  },
+  "broad_model_class_denominator": {
+    "status": "PASS_SAVED_OBJECT_AUDIT",
+    "source": "Bruhn Kinneberg et al. 2026 PETS/evoTS public saved model_test object",
+    "saved_successful_comparisons": 630,
+    "fixed_OU_best": 56,
+    "moving_OUBM_best": 69,
+    "any_OU_best": 125,
+    "any_OU_best_percent": 19.8412698413,
+    "boundary": "model-class prevalence only; not causal-interpretation prevalence"
+  },
+  "empirical_reproduction": {
+    "fixed": {
+      "status": "PASS_ONE_SYSTEM",
+      "system": "Hunt et al. 2008 dorsal spines",
+      "reproduced_half_life_generations": 844.9939159290783,
+      "published_half_life_generations": 853,
+      "relative_difference": 0.009385796097211843,
+      "empirical_schedule_reciprocal_witness": "PASS_MACHINE_PRECISION",
+      "receipt": "validation/hunt_2008_fixed_ou_refit_v1.json"
+    },
+    "moving": {
+      "status": "OPEN_DOMINANT_GATE",
+      "independent_numerical_refits": 0,
+      "priority_target": "Voje et al. 2024 Cyclostephanos andinus OUBM"
+    }
+  },
+  "prior_art": {
+    "status": "TIGHTENED_NOT_EXHAUSTIVE",
+    "conceded": [
+      "partially observed OU/SDE identifiability",
+      "state-space realization nonuniqueness",
+      "reciprocal multivariate OU adaptation",
+      "Granger/causal OU-SDE analysis",
+      "general OU law equivalence",
+      "generic warning against equating OU alpha with stabilizing selection"
+    ],
+    "candidate_increment": "implementation-matched evolutionary time-series likelihood congruence plus exact separation of observable relaxation from direct causal coupling, empirical-schedule witnesses, and a quantitative hidden-common-shock sensitivity replacement"
+  },
+  "venue_assessment": {
+    "specialist_concept_methods": "QUALIFIED",
+    "broad_evolution_ecology": "PLAUSIBLE_AND_MATERIALLY_STRENGTHENED_BY_FIXED_EMPIRICAL_REFIT",
+    "nature_ecology_evolution": "NOT_YET_QUALIFIED",
+    "reason": "The project now has exact theorems, a nontrivial 125/630 OU model-class denominator, multiple direct practice anchors, and one independently reproduced fixed-OU empirical fit with machine-precision reciprocal witness. The moving-optimum raw refit and denominator-defensible mechanistic-interpretation audit remain open."
+  },
+  "next_priority": [
+    "independently reproduce Voje et al. 2024 moving-optimum OUBM from Dryad data and scripts",
+    "execute denominator-defensible mechanistic-interpretation coding among direct OU applications",
+    "turn the common-shock sensitivity theorem into a practitioner-facing reporting workflow",
+    "do not add new theorem classes until these empirical gates close"
+  ],
+  "hard_stops": [
+    "do not use 643 as denominator for the 125/630 saved-object model counts",
+    "do not infer mechanistic interpretation prevalence from OU-best model prevalence",
+    "do not claim fixed-OU observed half-life is numerically unidentified",
+    "do not treat the small Hunt refit discrepancy as a published error",
+    "do not claim generic OU nonidentifiability as new",
+    "do not count phylogenetic OU as directly covered",
+    "do not describe adaptive conclusions as falsified when they also rely on independent biological evidence",
+    "do not merge this line into the frozen Theoretical Ecology submission"
+  ]
+}
