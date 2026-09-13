@@ -4,7 +4,7 @@ Date: 2026-09-13
 
 ## Scope
 
-This audit is intentionally narrow. It does not ask whether selection, genotype multiplicity, weakest-link epistasis, neutral networks, reversible mutation-selection balance, or majority thresholds of generic finite distributions are novel. They are not.
+This audit is intentionally narrow. It does not ask whether selection, genotype multiplicity, weakest-link epistasis, neutral networks, reversible mutation-selection balance, representation-dependent thresholds, or phenotype-level error thresholds are novel. They are not.
 
 It asks whether the current search located a direct prior result matching the **composition** of the candidate-new objects in the routing paper:
 
@@ -49,6 +49,14 @@ Wilke et al. and broader neutral-network/error-threshold literature establish th
 
 **Consequence:** “selection must overcome degeneracy” is interpretation, not novelty.
 
+### 5. Genotype–phenotype redundancy can move evolutionary thresholds
+
+Quasispecies literature explicitly treats error thresholds as dependent on neutral-network breadth and genotype-to-phenotype redundancy. Wilke's *Quasispecies Made Simple* describes error thresholds shifting as lower-fitness neutral networks broaden, and phenotype-level error-threshold work coarse-grains many genotypes into a phenotype before analyzing its persistence. Reviews of viral evolution likewise distinguish sequence-level from phenotype-level thresholds and note that degeneracy of the genotype–phenotype map changes the threshold.
+
+This literature is dynamically different from the present weak-mutation origin-fixation model, but it closes another broad novelty route.
+
+**Consequence:** do not claim that this paper newly shows “representation changes an evolutionary threshold” or “phenotypic redundancy can preserve or displace a fitter state.” The candidate contribution must remain the exact finite routing-specific threshold composition.
+
 ## Exact-object searches run
 
 Targeted searches included combinations of:
@@ -58,7 +66,9 @@ Targeted searches included combinations of:
 - nested subsets with genotype multiplicity, selection, weakest link;
 - branch-product routing genotype with minimum fitness;
 - majority / half-mass thresholds for finite phenotype-degeneracy classes;
-- quasispecies and neutral-network thresholds with exact finite class multiplicities.
+- quasispecies and neutral-network thresholds with exact finite class multiplicities;
+- phenotype-level error thresholds and genotype–phenotype redundancy;
+- forward differences of powers and nested multichains.
 
 The searches recovered the prior-art classes above but did not locate a direct source stating the routing-paper composition:
 
@@ -94,7 +104,7 @@ The strongest candidate contribution is the **exact composition**:
 
 1. a declared finite routing genotype-policy representation generates this specific layer hierarchy;
 2. the adjacent layer controls every lower layer;
-3. standard selection weighting therefore yields a necessary-and-sufficient aggregate-mode transition with an exact equality structure;
+3. standard weak-mutation selection weighting therefore yields a necessary-and-sufficient aggregate-mode transition with an exact equality structure;
 4. the same global bound places the stronger stationary-majority transition in the strict factor-two window `T_k<theta_1/2<2T_k` for `q>=2`;
 5. in the canonical `a=2` family these become two adjacent but distinct population-size thresholds, `q+2` and `q+3`;
 6. representation and neutral-measure counterexamples delimit precisely when these transitions can and cannot be exported.
@@ -122,6 +132,7 @@ The canonical `a=2` one-step population-size gap is a useful corollary, but shou
 - weakest-link/minimum fitness maps;
 - robustness/abundance opposing fitness;
 - representation dependence and mutation bias in general;
+- genotype–phenotype redundancy shifting evolutionary/error thresholds;
 - generic notions of modal versus majority occupancy.
 
 ### Moderate confidence as candidate-new composition
@@ -132,7 +143,7 @@ The canonical `a=2` one-step population-size gap is a useful corollary, but shou
 - the linked majority bracket `T_k<theta_1/2<2T_k` and canonical mode/majority population-size separation;
 - the combination of those results with explicit representation and mutation-measure claim ceilings.
 
-The confidence remains **moderate**, not high, until one deeper scholarly pass covers discrete order statistics, forward-difference inequalities, finite degeneracy-class mutation-selection models, and quasispecies threshold results.
+The confidence remains **moderate**, not high. The deeper search materially strengthened the prior-art boundary but still did not expose an algebraically identical theorem.
 
 ## Manuscript consequence
 
@@ -152,16 +163,12 @@ Avoid:
 
 > We show for the first time that suboptimal genotype abundance can overwhelm selection...
 
+> We show for the first time that genotype–phenotype redundancy changes an evolutionary threshold...
+
 > `2^k-1` is the threshold for majority occupancy...
 
 ## Next novelty gate
 
-Before submission, perform one dedicated scholarly pass over:
-
-1. mathematical inequalities for forward differences of powers and nested multichains;
-2. discrete order-statistic / minimum-coordinate occupancy models;
-3. mutation-selection models with phenotype degeneracy classes and exact modal or majority thresholds;
-4. quasispecies / neutral-network threshold results that might produce algebraically identical finite-class transitions;
-5. exact finite-class majority boundaries whose roots are controlled by an adjacent-state multiplicity.
+Before submission, the only remaining literature task is a source-level check of the most relevant discrete/quasispecies papers uncovered here, looking specifically for an algebraically identical finite-class theorem rather than another conceptual analogue.
 
 A direct collision with the exact threshold composition should trigger reframing before priority wording is frozen.
