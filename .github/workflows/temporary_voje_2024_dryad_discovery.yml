@@ -10,31 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Resolve Dryad file IDs and test public routes
+      - name: Test public routes for Dryad supplemental file 4460290
         shell: bash
         run: |
-          set -uo pipefail
-          VERSION=407621
-          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/versions/${VERSION}/files?per_page=100" -o /tmp/files.json
-          python - <<'PY'
-          import json
-          x=json.load(open('/tmp/files.json'))
-          print('FILES_JSON=' + json.dumps(x, sort_keys=True)[:20000])
-          entries=x.get('_embedded',{}).get('stash:files',[])
-          for f in entries:
-              print('FILE_ENTRY id=%s path=%s size=%s mime=%s links=%s' % (
-                  f.get('id'),f.get('path'),f.get('size'),f.get('mimeType'),f.get('_links')))
-          PY
-          FILE_ID=$(python - <<'PY'
-          import json
-          x=json.load(open('/tmp/files.json'))
-          es=x.get('_embedded',{}).get('stash:files',[])
-          hit=[f for f in es if f.get('path')=='Supplemental_files.zip']
-          print(hit[0]['id'] if hit else '')
-          PY
-          )
+          set -u
+          FILE_ID=4460290
           echo "SUPPLEMENTAL_FILE_ID=$FILE_ID"
-          test -n "$FILE_ID" || exit 2
           for URL in \
             "https://datadryad.org/api/v2/files/${FILE_ID}/download" \
             "https://datadryad.org/stash/downloads/file_stream/${FILE_ID}" \
@@ -46,7 +27,6 @@ jobs:
             if [ -f /tmp/candidate ]; then
               file /tmp/candidate || true
               ls -lh /tmp/candidate || true
-              head -c 120 /tmp/candidate | od -An -tx1 || true
               if unzip -t /tmp/candidate >/tmp/unzip_test 2>&1; then
                 echo "ZIP_ROUTE_PASS=$URL"
                 mkdir -p /tmp/u
@@ -58,9 +38,9 @@ jobs:
                 echo "DATA_PATH=$DATA"
                 if [ -n "$SCRIPT" ]; then
                   echo '---SCRIPT_HEAD---'
-                  sed -n '1,320p' "$SCRIPT"
+                  sed -n '1,360p' "$SCRIPT"
                   echo '---SCRIPT_RELEVANT_LINES---'
-                  grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint|pool.var|paleoTS|evoTS' "$SCRIPT" | head -300 || true
+                  grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint|pool.var|paleoTS|evoTS' "$SCRIPT" | head -350 || true
                 fi
                 if [ -n "$DATA" ]; then
                   echo '---ANDINUS_HEAD---'
@@ -68,6 +48,10 @@ jobs:
                   echo "ANDINUS_LINES=$(wc -l < "$DATA")"
                 fi
                 exit 0
+              else
+                echo 'CANDIDATE_NOT_ZIP'
+                head -c 300 /tmp/candidate || true
+                echo
               fi
             fi
           done
