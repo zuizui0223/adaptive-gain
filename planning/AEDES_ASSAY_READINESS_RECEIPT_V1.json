@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "scientific_freeze_ref": "freeze/aedes-pre-data-admission-v1",
+  "execution_planning_freeze_ref": "freeze/aedes-execution-planning-v1",
+  "execution_readiness_freeze_ref": "freeze/aedes-execution-readiness-v1",
+  "scope": "assay_readiness_only",
+  "phase1": {
+    "assay": "miniport_host_seeking",
+    "protocol_defined": true,
+    "apparatus_built": false,
+    "vehicle_only_qualification_complete": false,
+    "stable_host_seeking_baseline": false,
+    "position_bias_control_pass": false,
+    "general_performance_control_defined": true,
+    "general_performance_control_physically_validated": false,
+    "meal_intake_control_defined": true,
+    "locked_compounds": ["TDI-014188", "TDI-014186"],
+    "confirmatory_ready": false
+  },
+  "phase2": {
+    "assay": "wet_vs_dry_oviposition_site_finding",
+    "protocol_defined": true,
+    "apparatus_built": false,
+    "wild_type_qualification_complete": false,
+    "wet_preference_baseline_stable": false,
+    "position_bias_control_pass": false,
+    "direct_placement_competence_protocol_defined": true,
+    "direct_placement_competence_physically_validated": false,
+    "locked_genotypes": ["parental_LVP", "Ir68a^EYFP", "Ir68a^RFP"],
+    "confirmatory_ready": false
+  },
+  "current_decision": "PROTOCOLS_DEFINED_NOT_PHYSICALLY_QUALIFIED",
+  "start_phase1_permitted": false,
+  "hard_stops": [
+    "protocol_defined_is_not_physical_validation",
+    "do_not_tick_assay_gate_before_vehicle_or_wild_type_qualification",
+    "do_not_change_apparatus_after_treatment_or_genotype_outcomes_are_opened",
+    "do_not_substitute_compounds_or_ir68a_alleles_post_hoc",
+    "do_not_infer_empirical_adaptive_gain_from_assay_readiness"
+  ]
+}
