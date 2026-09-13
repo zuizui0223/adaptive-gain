@@ -10,49 +10,66 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Resolve and inspect Dryad archive
+      - name: Resolve Dryad file IDs and test public routes
         shell: bash
         run: |
-          set -euxo pipefail
-          DOI='doi%3A10.5061%2Fdryad.bk3j9kdmj'
-          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/datasets/${DOI}" -o /tmp/dataset.json
+          set -uo pipefail
+          VERSION=407621
+          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/versions/${VERSION}/files?per_page=100" -o /tmp/files.json
           python - <<'PY'
           import json
-          x=json.load(open('/tmp/dataset.json'))
-          print('DATASET_KEYS=' + ','.join(sorted(x.keys())))
-          for k in ['id','identifier','versionNumber','publicationDate','lastModificationDate','_links']:
-              if k in x: print(f'{k.upper()}={x[k]}')
-          print('DATASET_JSON=' + json.dumps(x, sort_keys=True)[:12000])
+          x=json.load(open('/tmp/files.json'))
+          print('FILES_JSON=' + json.dumps(x, sort_keys=True)[:20000])
+          entries=x.get('_embedded',{}).get('stash:files',[])
+          for f in entries:
+              print('FILE_ENTRY id=%s path=%s size=%s mime=%s links=%s' % (
+                  f.get('id'),f.get('path'),f.get('size'),f.get('mimeType'),f.get('_links')))
           PY
-          curl -fsSL -H 'Accept: application/json' "https://datadryad.org/api/v2/datasets/${DOI}/versions" -o /tmp/versions.json
-          python - <<'PY'
+          FILE_ID=$(python - <<'PY'
           import json
-          x=json.load(open('/tmp/versions.json'))
-          print('VERSIONS_JSON=' + json.dumps(x, sort_keys=True)[:12000])
+          x=json.load(open('/tmp/files.json'))
+          es=x.get('_embedded',{}).get('stash:files',[])
+          hit=[f for f in es if f.get('path')=='Supplemental_files.zip']
+          print(hit[0]['id'] if hit else '')
           PY
-          # Prefer the documented whole-dataset download endpoint.
-          curl -fL --retry 3 "https://datadryad.org/api/v2/datasets/${DOI}/download" -o /tmp/dryad_download
-          file /tmp/dryad_download
-          ls -lh /tmp/dryad_download
-          python - <<'PY'
-          import pathlib
-          p=pathlib.Path('/tmp/dryad_download')
-          print('DOWNLOAD_HEAD_HEX=' + p.read_bytes()[:32].hex())
-          PY
-          mkdir -p /tmp/dryad_unzip
-          unzip -o /tmp/dryad_download -d /tmp/dryad_unzip || true
-          find /tmp/dryad_unzip -maxdepth 4 -type f -printf '%p\t%s bytes\n' | sort || true
-          find /tmp/dryad_unzip -type f -iname '*andinus*' -o -iname '*main*analys*' | sort || true
-          if find /tmp/dryad_unzip -type f -name 'main_analyses_andinus_biwa.R' | grep -q .; then
-            SCRIPT=$(find /tmp/dryad_unzip -type f -name 'main_analyses_andinus_biwa.R' | head -1)
-            echo '---SCRIPT_HEAD---'
-            sed -n '1,260p' "$SCRIPT"
-            echo '---SCRIPT_OUBM_LINES---'
-            grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint' "$SCRIPT" | head -250 || true
-          fi
-          if find /tmp/dryad_unzip -type f -name 'andinus.txt' | grep -q .; then
-            DATA=$(find /tmp/dryad_unzip -type f -name 'andinus.txt' | head -1)
-            echo '---ANDINUS_HEAD---'
-            sed -n '1,12p' "$DATA"
-            echo "ANDINUS_LINES=$(wc -l < "$DATA")"
-          fi
+          )
+          echo "SUPPLEMENTAL_FILE_ID=$FILE_ID"
+          test -n "$FILE_ID" || exit 2
+          for URL in \
+            "https://datadryad.org/api/v2/files/${FILE_ID}/download" \
+            "https://datadryad.org/stash/downloads/file_stream/${FILE_ID}" \
+            "https://datadryad.org/downloads/file_stream/${FILE_ID}"; do
+            echo "---TRY $URL---"
+            rm -f /tmp/candidate
+            code=$(curl -L -sS -o /tmp/candidate -w '%{http_code}' "$URL" || true)
+            echo "HTTP_CODE=$code"
+            if [ -f /tmp/candidate ]; then
+              file /tmp/candidate || true
+              ls -lh /tmp/candidate || true
+              head -c 120 /tmp/candidate | od -An -tx1 || true
+              if unzip -t /tmp/candidate >/tmp/unzip_test 2>&1; then
+                echo "ZIP_ROUTE_PASS=$URL"
+                mkdir -p /tmp/u
+                unzip -o /tmp/candidate -d /tmp/u
+                find /tmp/u -maxdepth 4 -type f -printf '%p\t%s bytes\n' | sort
+                SCRIPT=$(find /tmp/u -type f -name 'main_analyses_andinus_biwa.R' | head -1)
+                DATA=$(find /tmp/u -type f -name 'andinus.txt' | head -1)
+                echo "SCRIPT_PATH=$SCRIPT"
+                echo "DATA_PATH=$DATA"
+                if [ -n "$SCRIPT" ]; then
+                  echo '---SCRIPT_HEAD---'
+                  sed -n '1,320p' "$SCRIPT"
+                  echo '---SCRIPT_RELEVANT_LINES---'
+                  grep -n -E 'andinus|OUBM|OU.BM|half|alpha|stationary|fit.all|opt.joint|pool.var|paleoTS|evoTS' "$SCRIPT" | head -300 || true
+                fi
+                if [ -n "$DATA" ]; then
+                  echo '---ANDINUS_HEAD---'
+                  sed -n '1,12p' "$DATA"
+                  echo "ANDINUS_LINES=$(wc -l < "$DATA")"
+                fi
+                exit 0
+              fi
+            fi
+          done
+          echo 'NO_PUBLIC_BINARY_ROUTE_FOUND'
+          exit 0
