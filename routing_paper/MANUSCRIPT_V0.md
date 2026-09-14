@@ -423,12 +423,12 @@ Several extensions are deliberately excluded. Neutral-plateau acquisition times,
 
 The practical modeling lesson is narrow but useful. Phenotype-level selection coefficients do not by themselves determine stationary phenotype occupancy. Once a genotype-policy representation is declared, its multiplicity structure can sometimes be analyzed exactly; in the present routing model, one adjacent-layer obstruction controls both the point at which full gain becomes the largest class and a tight interval containing the point at which it becomes a majority. Equally important, explicit counterexamples show where that conclusion stops. Exactness here comes from specifying representation, not from discovering a representation-free law.
 
-## Working references
+## References
 
 - Labourel FJF, Bansept F, McCandlish DM. 2026. *Weakest link epistasis and the geometry of genetic load*. bioRxiv v2. DOI `10.64898/2025.12.08.693057`.
 - Riedel N, Khatri BS, Lässig M, Berg J. 2015. Multiple-Line Inference of Selection on Quantitative Traits. *Genetics* 201:305–322. DOI `10.1534/genetics.115.178988`.
-- Sella G, Hirsh AE. 2005. The application of statistical physics to evolutionary biology. *PNAS*.
+- Sella G, Hirsh AE. 2005. The application of statistical physics to evolutionary biology. *Proceedings of the National Academy of Sciences USA* 102(27):9541–9546. DOI `10.1073/pnas.0501865102`.
 - Takeuchi N, Poorthuis PH, Hogeweg P. 2005. Phenotypic error threshold; additivity and epistasis in RNA evolution. *BMC Evolutionary Biology* 5:9. DOI `10.1186/1471-2148-5-9`.
-- Wilke CO. 2005. Quasispecies Made Simple. *PLoS Computational Biology*. DOI `10.1371/journal.pcbi.0010061`.
+- Bull JJ, Meyers LA, Lachmann M. 2005. Quasispecies Made Simple. *PLoS Computational Biology* 1(6):e61. DOI `10.1371/journal.pcbi.0010061`.
 
 Reference list remains working rather than submission-final; exact bibliographic completion and citation placement belong to the final source-level review.
