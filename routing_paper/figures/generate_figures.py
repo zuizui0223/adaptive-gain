@@ -89,8 +89,10 @@ def _axis(parts, x0, y0, x1, y1, xlabel=None, ylabel=None):
         parts.append(text(x0 - 38, (y0 + y1) / 2, ylabel, 17, anchor="middle"))
 
 
-def _majority_root_q2_k3():
-    return (7.0 + 5.0 * math.sqrt(5.0)) / 2.0
+def _majority_root_q2(branch_count: int):
+    a1 = distance_layer_degeneracy(branch_count, 1)
+    a2 = distance_layer_degeneracy(branch_count, 2)
+    return (float(a1) + math.sqrt(float(a1 * a1 + 4 * a2))) / 2.0
 
 
 def figure1(out_dir=OUT):
@@ -128,7 +130,7 @@ def figure2(out_dir=OUT):
     q, k = 2, 3
     T = aggregate_modal_tilt_threshold(k)
     assert T == 7
-    root = _majority_root_q2_k3()
+    root = _majority_root_q2(k)
     p = base(
         "One layer hierarchy generates two stationary occupancy transitions",
         "Aggregate mode and stationary majority are distinct estimands",
@@ -170,7 +172,9 @@ def figure2(out_dir=OUT):
     mass_pts = []
     for i in range(121):
         th = 1.0 + 12.0 * i / 120.0
-        d0, d1, d2 = counts = (19.0, 7.0, 1.0)
+        d0, d1, d2 = (
+            float(weakest_branch_layer_degeneracy(q, k, r)) for r in range(3)
+        )
         mass = d2 * th * th / (d0 + d1 * th + d2 * th * th)
         mass_pts.append((mx(th), my(mass)))
     p += [polyline(mass_pts, BLACK, 4), line(mx0, my(0.5), mx1, my(0.5), MID, 2, "6 5"), text(mx1 - 5, my(0.5) - 10, "1/2", 15, anchor="end", fill=MID), line(mx(T), my0, mx(T), my1, MID, 2, "5 5"), line(mx(root), my0, mx(root), my1, BLACK, 2, "6 4"), text(mx(T), my1 - 10, "7", 15, "bold", "middle"), text(mx(root), my1 - 10, "θ₁/₂≈9.09", 15, "bold", "middle"), text(465, 785, "P_full(7)=49/117≈0.419", 17, "bold", "middle")]
