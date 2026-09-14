@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect x="0" y="0" width="1600" height="900" fill="#ffffff"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#111111"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif}</style>
+<text x="50" y="55" font-size="34" font-weight="bold" text-anchor="start" fill="#111111">The exact thresholds are conditional on representation and neutral mutation measure</text>
+<text x="50" y="88" font-size="19" font-weight="normal" text-anchor="start" fill="#61666c">Same phenotype-level fitness does not identify stationary occupancy</text>
+<text x="45" y="145" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">A</text>
+<text x="85" y="145" font-size="24" font-weight="bold" text-anchor="start" fill="#111111">Representation contrast at q=2, θ=2</text>
+<rect x="85" y="205" width="610" height="250" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="390" y="245" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">Compressed gain chain</text>
+<text x="390" y="285" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">one genotype per gain</text>
+<text x="390" y="335" font-size="22" font-weight="normal" text-anchor="middle" fill="#111111">weights = (1, 2, 4)</text>
+<text x="390" y="375" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">P(full) = 4/7</text>
+<text x="390" y="415" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">full gain: unique mode + majority</text>
+<rect x="785" y="205" width="730" height="250" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="1150" y="245" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">Branch-product routing</text>
+<text x="1150" y="285" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">multiplicity = (19, 7, 1)</text>
+<text x="1150" y="335" font-size="22" font-weight="normal" text-anchor="middle" fill="#111111">weights = (19, 14, 4)</text>
+<text x="1150" y="375" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">P(full) = 4/37</text>
+<text x="1150" y="415" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">full gain: nonmodal + minority</text>
+<line x1="695" y1="330" x2="785" y2="330" stroke="#61666c" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="740" y="312" font-size="15" font-weight="normal" text-anchor="middle" fill="#61666c">same gains</text>
+<text x="740" y="350" font-size="15" font-weight="normal" text-anchor="middle" fill="#61666c">same θ</text>
+<text x="45" y="555" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">B</text>
+<text x="85" y="555" font-size="24" font-weight="bold" text-anchor="start" fill="#111111">Fixed support still does not identify occupancy</text>
+<text x="255" y="625" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111">gain path</text>
+<circle cx="120" cy="690" r="34" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="120" y="698" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111">0</text>
+<circle cx="255" cy="690" r="34" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="255" y="698" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111">1</text>
+<circle cx="390" cy="690" r="34" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="390" y="698" font-size="18" font-weight="bold" text-anchor="middle" fill="#111111">2</text>
+<line x1="154" y1="690" x2="221" y2="690" stroke="#61666c" stroke-width="3"/>
+<line x1="289" y1="690" x2="356" y2="690" stroke="#61666c" stroke-width="3"/>
+<text x="255" y="765" font-size="17" font-weight="normal" text-anchor="middle" fill="#61666c">same support, same θ=2</text>
+<rect x="520" y="605" width="440" height="215" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="740" y="645" font-size="21" font-weight="bold" text-anchor="middle" fill="#111111">Neutral measure A</text>
+<text x="740" y="690" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">selected occupancy</text>
+<text x="740" y="735" font-size="23" font-weight="bold" text-anchor="middle" fill="#111111">(1/10, 1/10, 4/5)</text>
+<text x="740" y="780" font-size="20" font-weight="normal" text-anchor="middle" fill="#111111">full gain = 80%</text>
+<rect x="1040" y="605" width="440" height="215" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="1260" y="645" font-size="21" font-weight="bold" text-anchor="middle" fill="#111111">Neutral measure B</text>
+<text x="1260" y="690" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">selected occupancy</text>
+<text x="1260" y="735" font-size="23" font-weight="bold" text-anchor="middle" fill="#111111">(9/20, 9/20, 1/10)</text>
+<text x="1260" y="780" font-size="20" font-weight="normal" text-anchor="middle" fill="#111111">full gain = 10%</text>
+<rect x="310" y="840" width="980" height="45" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="800" y="870" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">representation + neutral mutation measure + selection tilt → stationary gain occupancy</text>
+</svg>

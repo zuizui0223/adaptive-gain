@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect x="0" y="0" width="1600" height="900" fill="#ffffff"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#111111"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif}</style>
+<text x="50" y="55" font-size="34" font-weight="bold" text-anchor="start" fill="#111111">Finite routing representation creates an exact gain-layer multiplicity profile</text>
+<text x="50" y="88" font-size="19" font-weight="normal" text-anchor="start" fill="#61666c">Running example: q = 2 gain steps, k = 3 routing branches</text>
+<text x="45" y="145" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">A</text>
+<text x="85" y="145" font-size="25" font-weight="bold" text-anchor="start" fill="#111111">Weakest-branch routing map</text>
+<rect x="160" y="240" width="120" height="90" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="220" y="275" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">x1</text>
+<text x="220" y="308" font-size="20" font-weight="normal" text-anchor="middle" fill="#111111">0,1,2</text>
+<rect x="330" y="240" width="120" height="90" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="390" y="275" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">x2</text>
+<text x="390" y="308" font-size="20" font-weight="normal" text-anchor="middle" fill="#111111">0,1,2</text>
+<rect x="500" y="240" width="120" height="90" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="560" y="275" font-size="19" font-weight="bold" text-anchor="middle" fill="#111111">x3</text>
+<text x="560" y="308" font-size="20" font-weight="normal" text-anchor="middle" fill="#111111">0,1,2</text>
+<line x1="620" y1="285" x2="735" y2="285" stroke="#111111" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="755" y="235" width="310" height="100" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="910" y="272" font-size="21" font-weight="bold" text-anchor="middle" fill="#111111">g(x) = min(x1,x2,x3)</text>
+<text x="910" y="307" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">gain is set by the weakest branch</text>
+<text x="45" y="420" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">B</text>
+<text x="85" y="420" font-size="25" font-weight="bold" text-anchor="start" fill="#111111">Exact genotype counts by gain</text>
+<line x1="130" y1="740" x2="890" y2="740" stroke="#111111" stroke-width="2"/>
+<line x1="130" y1="740" x2="130" y2="490" stroke="#111111" stroke-width="2"/>
+<text x="510.0" y="788" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111">gain r</text>
+<text x="92" y="615.0" font-size="17" font-weight="normal" text-anchor="middle" fill="#111111">genotype count</text>
+<rect x="185.0" y="490.0" width="130" height="250.0" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="250" y="472.0" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">19</text>
+<text x="250" y="770" font-size="18" font-weight="normal" text-anchor="middle" fill="#111111">0</text>
+<rect x="435.0" y="647.8947368421052" width="130" height="92.10526315789474" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="500" y="629.8947368421052" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">7</text>
+<text x="500" y="770" font-size="18" font-weight="normal" text-anchor="middle" fill="#111111">1</text>
+<rect x="685.0" y="726.8421052631579" width="130" height="13.157894736842104" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="750" y="708.8421052631579" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">1</text>
+<text x="750" y="770" font-size="18" font-weight="normal" text-anchor="middle" fill="#111111">2</text>
+<rect x="980" y="445" width="510" height="270" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+<text x="1235" y="485" font-size="23" font-weight="bold" text-anchor="middle" fill="#111111">General layer formula</text>
+<text x="1235" y="535" font-size="23" font-weight="normal" text-anchor="middle" fill="#111111">D_r = (q-r+1)^k - (q-r)^k</text>
+<text x="1235" y="585" font-size="23" font-weight="normal" text-anchor="middle" fill="#111111">A_s = (s+1)^k - s^k</text>
+<text x="1235" y="625" font-size="18" font-weight="normal" text-anchor="middle" fill="#61666c">s = q-r</text>
+<text x="1235" y="675" font-size="21" font-weight="bold" text-anchor="middle" fill="#111111">Adjacent layer: A_1 = 2^k - 1</text>
+<rect x="980" y="750" width="510" height="85" rx="10" fill="#f2f3f4" stroke="#111111" stroke-width="2"/>
+<text x="1235" y="785" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111">Unique full-gain genotype: D_q = 1</text>
+<text x="1235" y="816" font-size="19" font-weight="normal" text-anchor="middle" fill="#61666c">but D_(q-1) = 2^k - 1</text>
+</svg>
