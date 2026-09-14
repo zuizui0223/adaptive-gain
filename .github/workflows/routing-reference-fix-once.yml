@@ -1,0 +1,40 @@
+name: routing-reference-fix-once
+on:
+  push:
+    branches:
+      - figures/routing-paper-v2-self-contained
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: figures/routing-paper-v2-self-contained
+      - name: Patch submission references
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('routing_paper/MANUSCRIPT_V0.md')
+          s = p.read_text()
+          s = s.replace('## Working references', '## References')
+          s = s.replace('- Sella G, Hirsh AE. 2005. The application of statistical physics to evolutionary biology. *PNAS*.', '- Sella G, Hirsh AE. 2005. The application of statistical physics to evolutionary biology. *Proceedings of the National Academy of Sciences USA* 102(27):9541–9546. DOI `10.1073/pnas.0501865102`.')
+          s = s.replace('- Wilke CO. 2005. Quasispecies Made Simple. *PLoS Computational Biology*. DOI `10.1371/journal.pcbi.0010061`.', '- Bull JJ, Meyers LA, Lachmann M. 2005. Quasispecies Made Simple. *PLoS Computational Biology* 1(6):e61. DOI `10.1371/journal.pcbi.0010061`.')
+          s = s.replace("\nReference list remains working rather than submission-final; exact bibliographic completion and citation placement belong to the final source-level review.\n", "\n")
+          p.write_text(s)
+      - name: Verify corrected references
+        run: |
+          grep -F 'Bull JJ, Meyers LA, Lachmann M.' routing_paper/MANUSCRIPT_V0.md
+          grep -F '10.1073/pnas.0501865102' routing_paper/MANUSCRIPT_V0.md
+          ! grep -F 'Wilke CO. 2005. Quasispecies Made Simple' routing_paper/MANUSCRIPT_V0.md
+      - name: Commit reference correction
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add routing_paper/MANUSCRIPT_V0.md
+          git diff --cached --quiet && exit 0
+          git commit -m '[routing-paper] Correct and complete core references'
+          git push origin HEAD:figures/routing-paper-v2-self-contained
