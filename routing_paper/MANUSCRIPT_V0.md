@@ -431,4 +431,3 @@ The practical modeling lesson is narrow but useful. Phenotype-level selection co
 - Takeuchi N, Poorthuis PH, Hogeweg P. 2005. Phenotypic error threshold; additivity and epistasis in RNA evolution. *BMC Evolutionary Biology* 5:9. DOI `10.1186/1471-2148-5-9`.
 - Bull JJ, Meyers LA, Lachmann M. 2005. Quasispecies Made Simple. *PLoS Computational Biology* 1(6):e61. DOI `10.1371/journal.pcbi.0010061`.
 
-Reference list remains working rather than submission-final; exact bibliographic completion and citation placement belong to the final source-level review.
