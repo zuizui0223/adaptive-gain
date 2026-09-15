@@ -10,7 +10,7 @@
 <rect x="805" y="130" width="275" height="92" rx="14" class="box"/>
 <rect x="1175" y="130" width="340" height="92" rx="14" class="box"/>
 <text x="202" y="167" font-size="21" font-weight="700" text-anchor="middle">requested regime</text>
-<text x="202" y="198" font-size="18" class="sub" text-anchor="middle">G &gt; Gₒₛc</text>
+<text x="202" y="198" font-size="18" class="sub" text-anchor="middle">G &gt; G_osc</text>
 <text x="572" y="167" font-size="21" font-weight="700" text-anchor="middle">required contrast</text>
 <text x="572" y="198" font-size="18" class="sub" text-anchor="middle">Δg ≥ q</text>
 <text x="942" y="167" font-size="21" font-weight="700" text-anchor="middle">high-gap state</text>
@@ -21,16 +21,16 @@
 <line x1="710" y1="176" x2="795" y2="176" class="axis" marker-end="url(#a)"/>
 <line x1="1080" y1="176" x2="1165" y2="176" class="axis" marker-end="url(#a)"/>
 
-<text x="55" y="285" font-size="27" font-weight="700">A  Binary sensing has an exact first gap-capable corner</text>
+<text x="55" y="285" font-size="25" font-weight="700">A  Binary sensing has an exact first gap-capable corner</text>
 <rect x="75" y="330" width="595" height="280" rx="16" class="box"/>
 <text x="372" y="378" font-size="24" font-weight="700" text-anchor="middle">required contrast q = 2</text>
-<text x="372" y="414" font-size="18" class="sub" text-anchor="middle">⇒ at least one state needs gᵢ ≥ 2</text>
+<text x="372" y="414" font-size="18" class="sub" text-anchor="middle">so at least one state needs gᵢ ≥ 2</text>
 <text x="372" y="458" font-size="22" text-anchor="middle">h₂*(2) = 3</text>
 <text x="372" y="508" font-size="28" font-weight="700" text-anchor="middle">(n*, m*, E*) = (6, 5, 5)</text>
 <text x="372" y="548" font-size="18" class="sub" text-anchor="middle">represented alternatives  •  cue resources  •  irreducible obligations</text>
 <text x="372" y="585" font-size="17" class="sub" text-anchor="middle">exact componentwise first corner for the required high-gap state</text>
 
-<text x="745" y="285" font-size="27" font-weight="700">B  Smaller binary classes cannot supply enough contrast</text>
+<text x="790" y="285" font-size="25" font-weight="700">B  Smaller binary classes cannot supply enough contrast</text>
 <rect x="770" y="330" width="745" height="280" rx="16" class="box"/>
 <rect x="815" y="385" width="190" height="130" rx="14" fill="#fff" stroke="#111" stroke-width="2"/>
 <rect x="1045" y="385" width="190" height="130" rx="14" fill="#fff" stroke="#111" stroke-width="2"/>

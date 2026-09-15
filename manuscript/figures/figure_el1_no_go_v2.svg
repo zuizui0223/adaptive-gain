@@ -14,10 +14,10 @@
 <line x1="262" y1="340" x2="315" y2="390" class="axis" marker-end="url(#a)"/>
 <text x="150" y="420" font-size="17" text-anchor="middle">branch cue A</text>
 <text x="320" y="420" font-size="17" text-anchor="middle">branch cue B</text>
-<text x="465" y="255" font-size="20" font-weight="700">adaptive cost C<tspan baseline-shift="sub" font-size="14">A</tspan>(i)</text>
-<text x="465" y="302" font-size="20" font-weight="700">fixed cost C<tspan baseline-shift="sub" font-size="14">F</tspan>(i)</text>
+<text x="465" y="255" font-size="20" font-weight="700">adaptive cost C_A(i)</text>
+<text x="465" y="302" font-size="20" font-weight="700">fixed cost C_F(i)</text>
 <rect x="445" y="340" width="250" height="72" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
-<text x="570" y="372" font-size="21" font-weight="700" text-anchor="middle">gᵢ = C<tspan baseline-shift="sub" font-size="14">F</tspan>(i) − C<tspan baseline-shift="sub" font-size="14">A</tspan>(i)</text>
+<text x="570" y="372" font-size="20" font-weight="700" text-anchor="middle">gᵢ = C_F(i) − C_A(i)</text>
 <text x="570" y="398" font-size="16" class="sub" text-anchor="middle">state-specific structural gap</text>
 
 <rect x="800" y="225" width="315" height="145" rx="16" class="box"/>
@@ -45,13 +45,13 @@
 <text x="1200" y="835" font-size="18" text-anchor="middle">available between-state contrast Δg</text>
 <text x="805" y="670" font-size="18" text-anchor="middle" transform="rotate(-90 805 670)">maximum feedback B L Δg</text>
 <line x1="865" y1="650" x2="1535" y2="650" class="muted dash"/>
-<text x="1460" y="637" font-size="18" font-weight="700">G<tspan baseline-shift="sub" font-size="13">osc</tspan></text>
+<text x="1460" y="637" font-size="18" font-weight="700">G_osc</text>
 <line x1="865" y1="790" x2="1485" y2="575" stroke="#111" stroke-width="4"/>
 <polygon points="865,790 865,650 1268,650" fill="#eceeef"/>
 <text x="1030" y="700" font-size="20" font-weight="700" text-anchor="middle">UNREACHABLE</text>
-<text x="1030" y="728" font-size="17" text-anchor="middle" class="sub">B L Δg ≤ G<tspan baseline-shift="sub" font-size="12">osc</tspan></text>
+<text x="1030" y="728" font-size="17" text-anchor="middle" class="sub">B L Δg ≤ G_osc</text>
 <line x1="1268" y1="790" x2="1268" y2="650" stroke="#111" stroke-width="2" stroke-dasharray="6 5"/>
-<text x="1268" y="820" font-size="17" text-anchor="middle">q<tspan baseline-shift="sub" font-size="12">osc</tspan><tspan baseline-shift="super" font-size="12">nec</tspan></text>
+<text x="1268" y="820" font-size="17" text-anchor="middle">q_osc^nec</text>
 <text x="1390" y="700" font-size="19" font-weight="700" text-anchor="middle">not ruled out</text>
 <text x="1390" y="728" font-size="16" text-anchor="middle" class="sub">not guaranteed</text>
 

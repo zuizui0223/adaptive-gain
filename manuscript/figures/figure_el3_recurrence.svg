@@ -5,7 +5,7 @@
 <text x="50" y="58" font-size="34" font-weight="700">Ecology filters structurally generated selection through time</text>
 <text x="50" y="92" font-size="20" class="sub">Sufficient sensing architecture does not by itself determine long-run evolutionary effect.</text>
 
-<text x="55" y="150" font-size="27" font-weight="700">A  One ecological state space carries both reward and recurrence</text>
+<text x="55" y="150" font-size="25" font-weight="700">A  Ecological states carry reward and recurrence</text>
 <rect x="75" y="195" width="675" height="280" rx="16" class="box"/>
 <circle cx="230" cy="330" r="72" fill="#fff" stroke="#111" stroke-width="2"/>
 <text x="230" y="320" font-size="21" font-weight="700" text-anchor="middle">community</text>
@@ -19,7 +19,7 @@
 <text x="565" y="402" font-size="20" font-weight="700" text-anchor="middle">transition operator P</text>
 <text x="565" y="430" font-size="18" class="sub" text-anchor="middle">when the same sᵢ recurs</text>
 
-<text x="825" y="150" font-size="27" font-weight="700">B  Slow ecological modes matter only when rewards align</text>
+<text x="840" y="150" font-size="25" font-weight="700">B  Slow modes matter only when rewards align</text>
 <rect x="840" y="195" width="685" height="280" rx="16" class="box"/>
 <text x="905" y="235" font-size="19" font-weight="700">same slow mode</text>
 <line x1="930" y1="415" x2="930" y2="270" class="axis"/>
@@ -38,9 +38,9 @@
 
 <text x="55" y="555" font-size="27" font-weight="700">C  Spectral filtering separates ecological persistence from evolutionary effect</text>
 <rect x="105" y="610" width="1390" height="170" rx="16" class="box"/>
-<text x="800" y="665" font-size="28" font-weight="700" text-anchor="middle">σ²<tspan baseline-shift="sub" font-size="18">eff</tspan> = Σ<tspan baseline-shift="sub" font-size="18">r</tspan> w<tspan baseline-shift="sub" font-size="18">r</tspan> (1 + r<tspan baseline-shift="sub" font-size="18">r</tspan>) / (1 − r<tspan baseline-shift="sub" font-size="18">r</tspan>)</text>
+<text x="800" y="665" font-size="28" font-weight="700" text-anchor="middle">σ²_eff = Σ_r w_r (1 + r_r) / (1 − r_r)</text>
 <text x="800" y="715" font-size="20" text-anchor="middle">slow mode amplification × reward-mode alignment</text>
-<text x="800" y="752" font-size="18" class="sub" text-anchor="middle">Persistence alone is insufficient: wᵣ must be large on the slow mode.</text>
+<text x="800" y="752" font-size="18" class="sub" text-anchor="middle">Persistence alone is insufficient: w_r must be large on the slow mode.</text>
 
 <rect x="120" y="815" width="1360" height="60" rx="12" fill="#f4f5f6"/>
 <text x="800" y="842" font-size="20" font-weight="700" text-anchor="middle">What organisms can distinguish bounds the available selection contrast;</text>
