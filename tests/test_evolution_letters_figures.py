@@ -58,10 +58,14 @@ def test_no_go_figure_does_not_turn_necessary_condition_into_sufficiency():
     assert "guaranteed oscillation" not in text
 
 
-def test_figure_legends_preserve_scope_boundaries():
+def test_figure_legends_preserve_scope_boundaries_and_alt_text():
     text = LEGENDS.read_text(encoding="utf-8")
     assert "g_i=C_F(i)-C_A(i)" in text
     assert "Delta g=g_2-g_1" in text
     assert "does not guarantee oscillation" in text
     assert "cannot meet a requirement of two" in text
     assert "ecological persistence alone does not determine" in text
+    assert text.count("Alt text:") == 3
+    assert "not ruled out but not guaranteed" in text
+    assert "nondominated points `(7,6,6)` and `(8,5,5)`" in text
+    assert "reward-mode alignment" in text
