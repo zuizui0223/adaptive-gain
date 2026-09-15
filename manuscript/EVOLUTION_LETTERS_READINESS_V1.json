@@ -1,20 +1,48 @@
 {
   "schema": "adaptive-gain-evolution-letters-readiness-v1",
-  "date": "2026-09-13",
+  "date": "2026-09-15",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "scientific_surface_machine_validated_human_metadata_open",
+  "status": "scientific_and_visual_surface_validated_human_metadata_open",
   "primary_claim": "finite sensing architecture can exclude local eco-evolutionary feedback regimes",
   "canonical_letter_version": "V2",
-  "validated_head": "4a58f485d7a5920f0af62b4847ec2e3f3f340d2b",
+  "validated_head": "c72e0da163624e5c6e2cf566f9e4d28657c0decb",
   "validation": {
-    "workflow_run": 34733187357,
+    "workflow_run": 34921130145,
     "python_3_10": "success",
     "python_3_11": "success",
     "python_3_12": "success",
     "full_pytest": "success",
     "witness_audit": "success",
     "certificate_audit": "success"
+  },
+  "visual_review": {
+    "date": "2026-09-15",
+    "status": "passed_after_layout_repair",
+    "repairs": [
+      "removed broken subscript/superscript layout in Figure 1",
+      "removed panel-heading collision and unsupported arrow glyph in Figure 2",
+      "removed panel-heading collision and broken spectral-expression layout in Figure 3"
+    ],
+    "scientific_claims_changed": false
+  },
+  "live_submission_policy_check": {
+    "date": "2026-09-15",
+    "source": "Oxford Academic Evolution Letters author guidelines",
+    "letter_word_guide": 5000,
+    "title_max_words": 30,
+    "abstract_max_words": 300,
+    "keywords_max": 10,
+    "teaser_max_words": 150,
+    "initial_submission": "free format; include line numbers",
+    "accepted_figure_formats": [
+      "jpeg",
+      "jpg",
+      "tiff",
+      "eps",
+      "pdf"
+    ],
+    "svg_source_requires_submission_export": true
   },
   "scientific_assets": {
     "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V2.md",
@@ -44,7 +72,9 @@
     "three_letter_figures_exist": true,
     "format_surface_test_exists": true,
     "figure_surface_test_exists": true,
-    "machine_validation_passed": true
+    "machine_validation_passed": true,
+    "human_visual_review_passed": true,
+    "dispatch_time_policy_checked": true
   },
   "submission_order": [
     "Evolution Letters",
@@ -52,7 +82,7 @@
     "Theoretical Ecology"
   ],
   "conditional_route": "Ecology Letters only if ecological recurrence is made unmistakably load-bearing in the final narrative",
-  "human_blockers": [
+  "remaining_human_blockers": [
     "final author list and order",
     "affiliations and corresponding-author metadata",
     "author contributions",
@@ -60,9 +90,13 @@
     "conflict-of-interest declaration",
     "acknowledgements if any",
     "permanent archive DOI if available",
-    "final visual review of all three figures",
-    "dispatch-time live Evolution Letters policy check",
     "all-author approval"
   ],
+  "submission_export_notes": [
+    "export the three canonical SVG sources to an accepted figure format such as PDF for upload",
+    "ensure the submitted manuscript rendering includes line numbers",
+    "verify converted mathematical symbols in the portal-generated proof"
+  ],
+  "human_metadata_rule": "Do not populate or infer personal author metadata from prior conversations, repository history, or unrelated projects; confirm it directly with the human author(s) at submission time.",
   "stop_rule": "Do not add new theorem families to increase journal status. Repair only demonstrated claim, clarity, format, or validation defects."
 }
