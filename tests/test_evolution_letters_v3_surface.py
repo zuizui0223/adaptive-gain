@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -7,6 +8,33 @@ MANUSCRIPT = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V3.md"
 SUPPLEMENT = ROOT / "manuscript" / "SUPPLEMENT_EVOLUTION_LETTERS_V2.md"
 ATLAS = ROOT / "manuscript" / "MATHEMATICAL_ATLAS_V1.md"
 LEGENDS = ROOT / "manuscript" / "FIGURE_LEGENDS_EVOLUTION_LETTERS_V3.md"
+FIGURES = {
+    ROOT / "manuscript" / "figures" / "figure_el1_math_integration_v3.svg": (
+        "C_A &lt;= C_F",
+        "adaptive only",
+        "B_f L Delta g",
+        "UNREACHABLE",
+        "NOT RULED OUT",
+        "not sufficient",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el2_structure_v3.svg": (
+        "(6,5,5)",
+        "(7,6,6)",
+        "(8,5,5)",
+        "50/50 balanced",
+        "2^d / (d+1)",
+        "-&gt; infinity",
+        "Family-level existence result",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el3_recurrence_v3.svg": (
+        "same slow mode",
+        "reward-mode alignment",
+        "sigma_eff^2",
+        "persistence alone is insufficient",
+        "not a second",
+        "reachability theorem",
+    ),
+}
 
 
 def _text(path: Path) -> str:
@@ -130,6 +158,25 @@ def test_v3_legends_separate_ecological_budget_from_feedback_scale():
     assert "hard ecological budget `B`" in text
     assert "`B_f` is feedback per unit selection" in text
     assert "B_f L Delta g" in text
+
+
+def test_v3_figure_files_are_well_formed_and_preserve_claim_firewalls():
+    for path, required_phrases in FIGURES.items():
+        assert path.exists(), path
+        ET.parse(path)
+        text = _text(path)
+        assert 'width="1600"' in text
+        assert 'height="900"' in text
+        for phrase in required_phrases:
+            assert phrase in text, (path.name, phrase)
+
+
+def test_v3_figures_do_not_promote_forbidden_claims():
+    figure_text = "\n".join(_text(path).lower() for path in FIGURES)
+    assert "guaranteed oscillation" not in figure_text
+    assert "sufficient for oscillation" not in figure_text
+    assert "sharp maximum" not in figure_text
+    assert "single scalar complexity" not in figure_text
 
 
 def test_v3_preserves_v2_surfaces_as_fallback():
