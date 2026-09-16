@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,6 +11,31 @@ ATLAS = ROOT / "manuscript" / "MATHEMATICAL_ATLAS_V1.md"
 def _text(path: Path) -> str:
     assert path.exists(), path
     return path.read_text(encoding="utf-8")
+
+
+def _section(text: str, start: str, end: str) -> str:
+    return text.split(start, 1)[1].split(end, 1)[0]
+
+
+def _prose_word_count(text: str) -> int:
+    # Submission-facing guardrail, not a typesetter-exact Oxford count.
+    # Remove display math and Markdown punctuation, then count word-like prose tokens.
+    text = re.sub(r"\\\[.*?\\\]", " ", text, flags=re.S)
+    text = re.sub(r"`[^`]+`", " ", text)
+    return len(re.findall(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*", text))
+
+
+def test_v3_letter_surface_stays_within_recorded_length_guidance():
+    text = _text(MANUSCRIPT)
+    title = text.splitlines()[0].lstrip("# ")
+    teaser = _section(text, "## Teaser text", "## Abstract")
+    abstract = _section(text, "## Abstract", "**Keywords:**")
+    main = _section(text, "## Introduction", "## Data and code availability")
+
+    assert _prose_word_count(title) <= 30
+    assert _prose_word_count(teaser) <= 150
+    assert _prose_word_count(abstract) <= 300
+    assert _prose_word_count(main) <= 5000
 
 
 def test_v3_contains_exact_adaptive_only_budget_window_and_three_regions():
