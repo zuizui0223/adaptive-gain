@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+  text { font-family: Arial, Helvetica, sans-serif; fill:#111; }
+  .title { font-size:34px; font-weight:700; }
+  .panel { font-size:28px; font-weight:700; }
+  .head { font-size:24px; font-weight:700; }
+  .body { font-size:21px; }
+  .small { font-size:18px; }
+  .tiny { font-size:16px; }
+  .math { font-size:24px; font-family: 'DejaVu Sans Mono', monospace; }
+  .mathsmall { font-size:20px; font-family: 'DejaVu Sans Mono', monospace; }
+  .box { fill:#fff; stroke:#222; stroke-width:2; rx:12; }
+  .soft { fill:#f4f4f4; stroke:#555; stroke-width:1.5; rx:10; }
+  .dark { fill:#dedede; stroke:#333; stroke-width:1.5; rx:10; }
+  .line { stroke:#222; stroke-width:3; fill:none; }
+  .thin { stroke:#444; stroke-width:2; fill:none; }
+  .dash { stroke:#555; stroke-width:2; stroke-dasharray:8 7; fill:none; }
+  .axis { stroke:#111; stroke-width:3; }
+</style>
+<text x="70" y="60" class="title">Finite structure - not marginal cue balance - controls adaptive value</text>
+<line x1="530" y1="100" x2="530" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1060" y1="100" x2="1060" y2="835" stroke="#bbb" stroke-width="2"/>
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Sharp binary requirement</text>
+<rect x="110" y="200" width="120" height="75" class="box"/>
+<text x="150" y="245" class="math">q</text>
+<line x1="230" y1="238" x2="290" y2="238" class="line"/><polygon points="290,238 274,229 274,247" fill="#222"/>
+<rect x="290" y="190" width="180" height="95" class="box"/>
+<text x="320" y="230" class="mathsmall">h_2*(q)</text>
+<text x="305" y="260" class="tiny">min h: 2^h-1-h &gt;= q</text>
+<line x1="380" y1="285" x2="380" y2="345" class="line"/><polygon points="380,345 371,329 389,329" fill="#222"/>
+<rect x="210" y="350" width="300" height="105" class="dark"/>
+<text x="240" y="395" class="mathsmall">(n*,m*,E*)</text>
+<text x="235" y="430" class="mathsmall">= (h*+q+1, h*+q, h*+q)</text>
+<rect x="150" y="520" width="320" height="110" class="soft"/>
+<text x="180" y="565" class="head">q = 2</text>
+<text x="250" y="605" class="math">(6,5,5)</text>
+<text x="120" y="700" class="small">Adaptive routing depth grows ~ log q;</text>
+<text x="120" y="733" class="small">fixed-mandatory burden grows ~ q.</text>
+<text x="565" y="120" class="panel">B</text>
+<text x="610" y="120" class="head">Bounded-arity Pareto tradeoff</text>
+<line x1="650" y1="635" x2="1000" y2="635" class="axis"/>
+<line x1="650" y1="635" x2="650" y2="220" class="axis"/>
+<text x="810" y="685" class="small">represented alternatives n</text>
+<text x="575" y="360" class="small" transform="rotate(-90 575 360)">cue / obligation burden (m=E)</text>
+<circle cx="760" cy="365" r="14" fill="#333"/>
+<circle cx="900" cy="485" r="14" fill="#333"/>
+<text x="690" y="345" class="mathsmall">(7,6,6)</text>
+<text x="910" y="515" class="mathsmall">(8,5,5)</text>
+<path d="M740 350 C810 420 850 450 920 500" class="dash"/>
+<text x="700" y="185" class="head">q = 3, b = 4</text>
+<text x="665" y="715" class="small">Both points are nondominated.</text>
+<text x="665" y="748" class="small">The frontier is Pareto-valued;</text>
+<text x="665" y="778" class="small">there is no single scalar minimum.</text>
+<text x="1095" y="120" class="panel">C</text>
+<text x="1140" y="120" class="head">Balanced-query counterexample</text>
+<text x="1120" y="165" class="small">Every declared binary query is globally 50/50 balanced.</text>
+<circle cx="1320" cy="225" r="24" fill="white" stroke="#222" stroke-width="3"/>
+<text x="1308" y="233" class="small">r1</text>
+<line x1="1300" y1="248" x2="1220" y2="325" class="line"/>
+<line x1="1340" y1="248" x2="1420" y2="325" class="line"/>
+<circle cx="1220" cy="345" r="22" fill="white" stroke="#222" stroke-width="3"/>
+<circle cx="1420" cy="345" r="22" fill="white" stroke="#222" stroke-width="3"/>
+<text x="1207" y="352" class="small">r2</text><text x="1407" y="352" class="small">r2</text>
+<line x1="1205" y1="365" x2="1150" y2="435" class="thin"/><line x1="1235" y1="365" x2="1285" y2="435" class="thin"/>
+<line x1="1405" y1="365" x2="1360" y2="435" class="thin"/><line x1="1435" y1="365" x2="1490" y2="435" class="thin"/>
+<rect x="1110" y="435" width="80" height="60" class="soft"/><rect x="1245" y="435" width="80" height="60" class="soft"/>
+<rect x="1320" y="435" width="80" height="60" class="soft"/><rect x="1450" y="435" width="80" height="60" class="soft"/>
+<text x="1135" y="473" class="small">t1</text><text x="1270" y="473" class="small">t2</text><text x="1345" y="473" class="small">t3</text><text x="1475" y="473" class="small">t4</text>
+<text x="1115" y="545" class="small">Adaptive: route to one branch, then buy one terminal cue.</text>
+<text x="1115" y="580" class="small">Fixed: provision all branch-specific terminal resources.</text>
+<rect x="1130" y="630" width="405" height="105" class="dark"/>
+<text x="1160" y="675" class="mathsmall">C_F / C_A &gt;= 2^d / (d+1)</text>
+<text x="1240" y="710" class="mathsmall">-&gt; infinity</text>
+<text x="1125" y="785" class="small">Family-level existence result;</text>
+<text x="1125" y="815" class="small">not a fixed-(n,m) sharp maximum.</text>
+</svg>
