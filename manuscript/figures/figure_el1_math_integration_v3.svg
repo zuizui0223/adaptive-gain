@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+  text { font-family: Arial, Helvetica, sans-serif; fill:#111; }
+  .title { font-size:34px; font-weight:700; }
+  .panel { font-size:28px; font-weight:700; }
+  .head { font-size:24px; font-weight:700; }
+  .body { font-size:21px; }
+  .small { font-size:18px; }
+  .tiny { font-size:16px; }
+  .math { font-size:24px; font-family: 'DejaVu Sans Mono', monospace; }
+  .mathsmall { font-size:20px; font-family: 'DejaVu Sans Mono', monospace; }
+  .box { fill:#fff; stroke:#222; stroke-width:2; rx:12; }
+  .soft { fill:#f4f4f4; stroke:#555; stroke-width:1.5; rx:10; }
+  .dark { fill:#dedede; stroke:#333; stroke-width:1.5; rx:10; }
+  .line { stroke:#222; stroke-width:3; fill:none; }
+  .thin { stroke:#444; stroke-width:2; fill:none; }
+  .dash { stroke:#555; stroke-width:2; stroke-dasharray:8 7; fill:none; }
+  .axis { stroke:#111; stroke-width:3; }
+</style>
+<text x="70" y="60" class="title">Finite decision geometry constrains selection and feedback</text>
+<line x1="530" y1="100" x2="530" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1060" y1="100" x2="1060" y2="835" stroke="#bbb" stroke-width="2"/>
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Exact ecological budget window</text>
+<text x="115" y="160" class="mathsmall">C_A &lt;= C_F</text>
+<line x1="105" y1="275" x2="480" y2="275" class="axis"/>
+<line x1="220" y1="250" x2="220" y2="300" class="axis"/>
+<line x1="365" y1="250" x2="365" y2="300" class="axis"/>
+<text x="190" y="235" class="mathsmall">C_A</text>
+<text x="335" y="235" class="mathsmall">C_F</text>
+<text x="95" y="330" class="tiny">B &lt; C_A</text>
+<text x="235" y="330" class="tiny">C_A &lt;= B &lt; C_F</text>
+<text x="405" y="330" class="tiny">B &gt;= C_F</text>
+<rect x="90" y="355" width="120" height="92" class="soft"/>
+<rect x="220" y="355" width="145" height="92" class="dark"/>
+<rect x="375" y="355" width="120" height="92" class="soft"/>
+<text x="112" y="392" class="body">both</text><text x="105" y="421" class="body">fail</text>
+<text x="239" y="390" class="body">adaptive only</text><text x="250" y="420" class="body">succeeds</text>
+<text x="397" y="392" class="body">both</text><text x="390" y="421" class="body">succeed</text>
+<text x="100" y="505" class="small">B = hard time / energy / exposure / opportunity ceiling</text>
+<text x="565" y="120" class="panel">B</text>
+<text x="610" y="120" class="head">Threshold evolutionary lift</text>
+<line x1="610" y1="435" x2="1000" y2="435" class="axis"/>
+<line x1="640" y1="195" x2="640" y2="455" class="axis"/>
+<line x1="720" y1="410" x2="720" y2="455" class="thin"/>
+<line x1="875" y1="410" x2="875" y2="455" class="thin"/>
+<text x="690" y="480" class="mathsmall">C_A</text>
+<text x="845" y="480" class="mathsmall">C_F</text>
+<line x1="650" y1="365" x2="720" y2="365" class="line"/>
+<line x1="720" y1="255" x2="875" y2="255" class="line"/>
+<line x1="875" y1="365" x2="985" y2="365" class="line"/>
+<line x1="720" y1="365" x2="720" y2="255" class="dash"/>
+<line x1="875" y1="255" x2="875" y2="365" class="dash"/>
+<text x="660" y="350" class="mathsmall">-kappa</text>
+<text x="740" y="235" class="mathsmall">log[(w0+v)/w0] - kappa</text>
+<text x="625" y="535" class="small">Conditional on a biologically justified</text>
+<text x="625" y="565" class="small">hard deadline / resource ceiling.</text>
+<text x="625" y="610" class="small">Selection is concentrated on the</text>
+<text x="625" y="640" class="small">exact adaptive-only window.</text>
+<text x="1095" y="120" class="panel">C</text>
+<text x="1140" y="120" class="head">State contrast and nonlinear no-go</text>
+<rect x="1110" y="180" width="190" height="105" class="box"/>
+<rect x="1360" y="180" width="190" height="105" class="box"/>
+<text x="1140" y="220" class="body">state 1</text><text x="1128" y="255" class="tiny">g_1 = C_F(1)-C_A(1)</text>
+<text x="1390" y="220" class="body">state 2</text><text x="1378" y="255" class="tiny">g_2 = C_F(2)-C_A(2)</text>
+<line x1="1300" y1="232" x2="1360" y2="232" class="line"/>
+<polygon points="1360,232 1344,223 1344,241" fill="#222"/>
+<text x="1190" y="340" class="math">Delta g = g_2 - g_1</text>
+<text x="1195" y="390" class="math">G &lt;= B_f L Delta g</text>
+<line x1="1115" y1="455" x2="1545" y2="455" class="axis"/>
+<line x1="1285" y1="435" x2="1285" y2="475" class="axis"/>
+<text x="1125" y="505" class="small">feedback ceiling: B_f L Delta g_max</text>
+<text x="1258" y="425" class="mathsmall">G_osc</text>
+<rect x="1115" y="535" width="170" height="95" class="dark"/>
+<rect x="1285" y="535" width="260" height="95" class="soft"/>
+<text x="1140" y="575" class="head">UNREACHABLE</text>
+<text x="1140" y="605" class="small">if ceiling &lt;= G_osc</text>
+<text x="1340" y="575" class="head">NOT RULED OUT</text>
+<text x="1320" y="600" class="small">crossing is necessary,</text>
+<text x="1350" y="625" class="small">not sufficient</text>
+<text x="1130" y="700" class="small">B_f = feedback per unit selection (not ecological budget B)</text>
+<text x="1130" y="740" class="small">No empirical parameter values are claimed.</text>
+</svg>
