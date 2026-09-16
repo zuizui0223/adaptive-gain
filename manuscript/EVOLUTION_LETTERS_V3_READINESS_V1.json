@@ -1,0 +1,56 @@
+{
+  "schema": "adaptive-gain-evolution-letters-v3-readiness-v1",
+  "date": "2026-09-16",
+  "target": "Evolution Letters",
+  "article_type": "Letter",
+  "status": "expanded_candidate_awaiting_ci_and_length_validation",
+  "headline": "finite sensing architecture defines a constrained eco-evolutionary possibility space",
+  "frozen_v2_fallback": {
+    "readiness_ledger": "manuscript/EVOLUTION_LETTERS_READINESS_V1.json",
+    "submission_freeze_commit": "453b144cc402409c9864d5eead4a2b3b0737de2e",
+    "preserved": true
+  },
+  "v3_assets": {
+    "design": "docs/superpowers/specs/2026-09-16-evolution-letters-math-integration-design.md",
+    "plan": "docs/superpowers/plans/2026-09-16-evolution-letters-math-integration.md",
+    "mathematical_atlas": "manuscript/MATHEMATICAL_ATLAS_V1.md",
+    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V3.md",
+    "supplement": "manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V2.md",
+    "surface_test": "tests/test_evolution_letters_v3_surface.py"
+  },
+  "mathematical_roles_promoted": [
+    "exact containment C_A<=C_F",
+    "exact adaptive-only ecological budget window C_A<=B<C_F",
+    "target-relevant world/query coarse graining",
+    "sharp binary structural corner",
+    "bounded-arity Pareto frontier",
+    "exactly-balanced binary unbounded adaptive-gain construction",
+    "hard-budget evolutionary selection",
+    "monotone-Lipschitz nonlinear no-go theorem",
+    "structural-spectral recurrence envelope",
+    "feedback-existence identifiability boundary"
+  ],
+  "new_theorem_families_added": false,
+  "claim_firewalls": {
+    "no_go_is_necessary_not_sufficient": true,
+    "finite_architecture_not_shannon_information": true,
+    "balanced_unbounded_is_existence_not_fixed_scope_maximum": true,
+    "budget_selection_requires_hard_ecological_ceiling": true,
+    "kernel_scope_is_deterministic_exact_worst_path": true,
+    "slow_mode_requires_reward_alignment": true,
+    "oscillation_does_not_identify_feedback_magnitude": true
+  },
+  "validation": {
+    "candidate_head": null,
+    "workflow_run": null,
+    "python_3_10": "pending",
+    "python_3_11": "pending",
+    "python_3_12": "pending",
+    "full_pytest": "pending",
+    "witness_audit": "pending",
+    "certificate_audit": "pending",
+    "letter_length_check": "pending"
+  },
+  "promotion_rule": "V3 replaces V2 as preferred submission surface only if all CI/audit checks pass and the expanded narrative remains within Letter guidance without diluting the single biological headline.",
+  "stop_rule": "Do not add new theorem families. Repair only demonstrated claim, scope, clarity, format, length or validation defects."
+}
