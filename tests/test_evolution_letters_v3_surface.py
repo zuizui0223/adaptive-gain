@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V3.md"
 SUPPLEMENT = ROOT / "manuscript" / "SUPPLEMENT_EVOLUTION_LETTERS_V2.md"
 ATLAS = ROOT / "manuscript" / "MATHEMATICAL_ATLAS_V1.md"
+LEGENDS = ROOT / "manuscript" / "FIGURE_LEGENDS_EVOLUTION_LETTERS_V3.md"
 
 
 def _text(path: Path) -> str:
@@ -110,6 +111,25 @@ def test_v3_supplement_and_atlas_cover_all_five_roles():
         "Temporal filtering and dynamical interpretation",
     ):
         assert phrase in atlas
+
+
+def test_v3_legends_have_alt_text_and_claim_firewalls():
+    text = _text(LEGENDS)
+    assert text.count("**Alt text:**") == 3
+    assert "C_A<=C_F" in text
+    assert "C_A<=B<C_F" in text
+    assert "does not guarantee oscillation" in text
+    assert "exactly 50/50 balanced" in text
+    assert "existence result, not a sharp maximum for fixed `(n,m)`" in text
+    assert "Ecological persistence alone does not determine" in text
+    assert "No figure claims empirical values" in text
+
+
+def test_v3_legends_separate_ecological_budget_from_feedback_scale():
+    text = _text(LEGENDS)
+    assert "hard ecological budget `B`" in text
+    assert "`B_f` is feedback per unit selection" in text
+    assert "B_f L Delta g" in text
 
 
 def test_v3_preserves_v2_surfaces_as_fallback():
