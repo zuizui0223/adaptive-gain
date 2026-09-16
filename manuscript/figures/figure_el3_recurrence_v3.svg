@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+  text { font-family: Arial, Helvetica, sans-serif; fill:#111; }
+  .title { font-size:34px; font-weight:700; }
+  .panel { font-size:28px; font-weight:700; }
+  .head { font-size:24px; font-weight:700; }
+  .body { font-size:21px; }
+  .small { font-size:18px; }
+  .tiny { font-size:16px; }
+  .math { font-size:24px; font-family: 'DejaVu Sans Mono', monospace; }
+  .mathsmall { font-size:20px; font-family: 'DejaVu Sans Mono', monospace; }
+  .box { fill:#fff; stroke:#222; stroke-width:2; rx:12; }
+  .soft { fill:#f4f4f4; stroke:#555; stroke-width:1.5; rx:10; }
+  .dark { fill:#dedede; stroke:#333; stroke-width:1.5; rx:10; }
+  .line { stroke:#222; stroke-width:3; fill:none; }
+  .thin { stroke:#444; stroke-width:2; fill:none; }
+  .dash { stroke:#555; stroke-width:2; stroke-dasharray:8 7; fill:none; }
+  .axis { stroke:#111; stroke-width:3; }
+</style>
+<text x="70" y="60" class="title">Ecology filters structurally generated selection through time</text>
+<line x1="530" y1="100" x2="530" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1060" y1="100" x2="1060" y2="835" stroke="#bbb" stroke-width="2"/>
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Recurrent states carry sensing tasks</text>
+<circle cx="285" cy="290" r="85" fill="#f7f7f7" stroke="#222" stroke-width="3"/>
+<circle cx="165" cy="500" r="85" fill="#f7f7f7" stroke="#222" stroke-width="3"/>
+<circle cx="405" cy="500" r="85" fill="#f7f7f7" stroke="#222" stroke-width="3"/>
+<path d="M220 350 C165 380 145 410 145 420" class="line"/><polygon points="145,420 136,404 154,404" fill="#222"/>
+<path d="M235 515 C285 555 330 555 355 520" class="line"/><polygon points="355,520 337,524 347,539" fill="#222"/>
+<path d="M420 415 C405 370 360 340 340 332" class="line"/><polygon points="340,332 355,343 357,326" fill="#222"/>
+<text x="245" y="270" class="head">state 1</text><text x="230" y="310" class="mathsmall">task -&gt; s_1</text>
+<text x="125" y="485" class="head">state 2</text><text x="110" y="525" class="mathsmall">task -&gt; s_2</text>
+<text x="365" y="485" class="head">state 3</text><text x="350" y="525" class="mathsmall">task -&gt; s_3</text>
+<text x="90" y="655" class="small">Decision-relevant state count can be smaller</text>
+<text x="90" y="685" class="small">than raw natural-history distinctions.</text>
+<text x="90" y="730" class="small">Exact quotienting removes only</text>
+<text x="90" y="760" class="small">target-irrelevant redundancy.</text>
+<text x="565" y="120" class="panel">B</text>
+<text x="620" y="120" class="head">Same persistence, different alignment</text>
+<text x="625" y="190" class="head">System X</text>
+<line x1="640" y1="330" x2="900" y2="330" class="axis"/>
+<line x1="770" y1="330" x2="770" y2="205" class="line"/><polygon points="770,205 761,221 779,221" fill="#222"/>
+<line x1="770" y1="330" x2="865" y2="235" class="line"/><polygon points="865,235 847,240 860,253" fill="#222"/>
+<text x="785" y="215" class="small">slow mode</text>
+<text x="865" y="225" class="small">reward</text>
+<text x="655" y="380" class="small">strong alignment - larger long-run contribution</text>
+<text x="625" y="500" class="head">System Y</text>
+<line x1="640" y1="640" x2="900" y2="640" class="axis"/>
+<line x1="770" y1="640" x2="770" y2="515" class="line"/><polygon points="770,515 761,531 779,531" fill="#222"/>
+<line x1="770" y1="640" x2="885" y2="640" class="line"/><polygon points="885,640 869,631 869,649" fill="#222"/>
+<text x="785" y="525" class="small">same slow mode</text>
+<text x="845" y="625" class="small">reward</text>
+<text x="655" y="690" class="small">weak alignment - persistence alone is insufficient</text>
+<text x="1095" y="120" class="panel">C</text>
+<text x="1140" y="120" class="head">Spectral filter</text>
+<rect x="1110" y="210" width="435" height="145" class="dark"/>
+<text x="1140" y="270" class="mathsmall">sigma_eff^2 = sum_r w_r</text>
+<text x="1185" y="315" class="mathsmall">(1+r_r)/(1-r_r)</text>
+<rect x="1120" y="430" width="190" height="110" class="soft"/>
+<rect x="1340" y="430" width="190" height="110" class="soft"/>
+<text x="1150" y="470" class="head">r_r</text>
+<text x="1138" y="510" class="small">ecological persistence</text>
+<text x="1370" y="470" class="head">w_r</text>
+<text x="1355" y="510" class="small">reward-mode alignment</text>
+<text x="1130" y="620" class="head">Persistence x alignment</text>
+<text x="1130" y="660" class="small">Slow states amplify only the reward component</text>
+<text x="1130" y="690" class="small">that loads onto them.</text>
+<text x="1130" y="745" class="small">Temporal filter, not a second</text>
+<text x="1130" y="775" class="small">reachability theorem.</text>
+</svg>
