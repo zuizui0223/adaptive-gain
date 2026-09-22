@@ -73,6 +73,6 @@
 <rect x="1130" y="630" width="405" height="105" class="dark"/>
 <text x="1160" y="675" class="mathsmall">C_F / C_A &gt;= 2^d / (d+1)</text>
 <text x="1240" y="710" class="mathsmall">-&gt; infinity</text>
-<text x="1125" y="785" class="small">Family-level existence result;</text>
-<text x="1125" y="815" class="small">Family-level existence result only.</text>
+<text x="1125" y="785" class="small">Family-level existence result only.</text>
+<text x="1125" y="815" class="small">Fixed-size optimum not claimed.</text>
 </svg>
