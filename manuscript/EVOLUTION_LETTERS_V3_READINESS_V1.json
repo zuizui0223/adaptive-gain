@@ -3,7 +3,7 @@
   "date": "2026-09-22",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "v3_repository_surface_validated_submission_bundle_freeze_pending",
+  "status": "v3_machine_submission_bundle_frozen_human_metadata_pending",
   "headline": "finite sensing architecture defines a constrained eco-evolutionary possibility space",
   "frozen_v2_fallback": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_READINESS_V1.json",
@@ -62,17 +62,19 @@
     "current_repository_validated_head": "bdfd96cc7c7464ce62345e2ca5de04d09898134d",
     "current_repository_workflow_run": 35672401004,
     "figure_claim_gate": "success",
-    "figure_visual_qc": "success"
+    "figure_visual_qc": "success",
+    "repository_surface_green_head": "619fbc7bb160568453a8afbbc479e0436efb4d0c",
+    "repository_surface_green_workflow_run": 35684522472
   },
   "promotion_decision": {
     "v3_conceptual_candidate": "preferred",
     "v3_repository_surface": "validated",
-    "v2_submission_package": "retained as frozen upload-ready fallback",
-    "reason": "The V3 mathematical integration, figure claim firewalls, full test suite, witness audit and certificate audit all pass on bdfd96cc7c7464ce62345e2ca5de04d09898134d. The September 22 repair removes the forbidden substring from Figure 2 without weakening the test. A final checksum-frozen V3 submission bundle remains separate machine-side work."
+    "v3_machine_submission_bundle": "frozen",
+    "v2_submission_package": "retained as frozen fallback",
+    "reason": "The repository surface is green and the V3 submission files have been assembled into a checksum-verified machine-frozen bundle. Submission remains blocked only on author-controlled metadata/approvals and any archive DOI the authors choose to add."
   },
   "remaining_v3_machine_work": [
-    "freeze the final V3 submission DOCX/PDF, Supplement PDF and three figure PDFs into one checksum-verified staging bundle",
-    "record the final staging checksum and, if used, archive DOI"
+    "add permanent archive DOI to submission materials if one is minted before submission"
   ],
   "remaining_human_work": [
     "final author list and order",
@@ -85,6 +87,28 @@
     "all-author approval",
     "confirmation that the manuscript is not under consideration elsewhere"
   ],
-  "promotion_rule": "The V3 repository surface is scientifically and visually validated. Treat the final V3 upload bundle as frozen only after its exported files are checksum-verified; until then the V2 upload-ready bundle remains the fallback.",
-  "stop_rule": "Do not add new theorem families. Repair only demonstrated claim, scope, clarity, format, length, figure or validation defects."
+  "promotion_rule": "Use the frozen V3 bundle only after author-controlled metadata and approvals are explicitly verified. Do not infer those fields from repository history, prior chats, or unrelated projects.",
+  "stop_rule": "Do not add new theorem families. Repair only demonstrated claim, scope, clarity, format, length, figure or validation defects.",
+  "submission_bundle": {
+    "name": "EVOLUTION_LETTERS_V3_FINAL_STAGING_V1.zip",
+    "source_repository_commit": "619fbc7bb160568453a8afbbc479e0436efb4d0c",
+    "sha256": "43ca043c4e41530c622ffea1a6ba6975f3dc431ed990bf92d191903e7bc945d6",
+    "contents": [
+      "01_Main_Manuscript_V3.docx",
+      "02_Main_Manuscript_V3_Preview.pdf",
+      "03_Supplementary_Information_V3.pdf",
+      "04_Figure1_V3.pdf",
+      "05_Figure2_V3.pdf",
+      "06_Figure3_V3.pdf",
+      "07_Cover_Letter_V3_DRAFT.md",
+      "MANIFEST.json",
+      "README_BEFORE_SUBMIT.txt"
+    ],
+    "machine_qc": [
+      "main manuscript DOCX/PDF: 20 pages, visual QC passed, PDF preflight passed",
+      "Supplementary Information PDF: 8 pages, visual QC passed, PDF preflight passed",
+      "three figure PDFs regenerated from source_repository_commit SVGs, rendered and visually inspected",
+      "DOCX creator metadata blank"
+    ]
+  }
 }
