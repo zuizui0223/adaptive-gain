@@ -1,9 +1,9 @@
 {
   "schema": "adaptive-gain-evolution-letters-v3-readiness-v1",
-  "date": "2026-09-16",
+  "date": "2026-09-22",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "expanded_scientific_text_validated_v3_figures_and_export_pending",
+  "status": "v3_repository_surface_validated_submission_bundle_freeze_pending",
   "headline": "finite sensing architecture defines a constrained eco-evolutionary possibility space",
   "frozen_v2_fallback": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_READINESS_V1.json",
@@ -58,19 +58,21 @@
     "title_max_30_gate": "success",
     "teaser_max_150_gate": "success",
     "abstract_max_300_gate": "success",
-    "main_text_max_5000_gate": "success"
+    "main_text_max_5000_gate": "success",
+    "current_repository_validated_head": "bdfd96cc7c7464ce62345e2ca5de04d09898134d",
+    "current_repository_workflow_run": 35672401004,
+    "figure_claim_gate": "success",
+    "figure_visual_qc": "success"
   },
   "promotion_decision": {
     "v3_conceptual_candidate": "preferred",
-    "v2_submission_package": "retained as current upload-ready fallback",
-    "reason": "The V3 mathematical integration passes claim, full-suite, audit and Letter-length gates, but its new integrated figures have not yet been rendered and visually validated and its V3 submission DOCX/PDF bundle has not yet been exported."
+    "v3_repository_surface": "validated",
+    "v2_submission_package": "retained as frozen upload-ready fallback",
+    "reason": "The V3 mathematical integration, figure claim firewalls, full test suite, witness audit and certificate audit all pass on bdfd96cc7c7464ce62345e2ca5de04d09898134d. The September 22 repair removes the forbidden substring from Figure 2 without weakening the test. A final checksum-frozen V3 submission bundle remains separate machine-side work."
   },
   "remaining_v3_machine_work": [
-    "render and visually validate the three integrated V3 figures",
-    "add V3 figure legends and alt text with claim firewalls",
-    "export and visually inspect a line-numbered V3 submission DOCX/PDF",
-    "export and visually inspect the V3 Supplement PDF",
-    "assemble a checksum-verified V3 staging bundle"
+    "freeze the final V3 submission DOCX/PDF, Supplement PDF and three figure PDFs into one checksum-verified staging bundle",
+    "record the final staging checksum and, if used, archive DOI"
   ],
   "remaining_human_work": [
     "final author list and order",
@@ -83,6 +85,6 @@
     "all-author approval",
     "confirmation that the manuscript is not under consideration elsewhere"
   ],
-  "promotion_rule": "V3 becomes the upload-ready submission surface only after its new figures and export bundle pass visual/format validation. Until then V2 remains the frozen upload-ready fallback.",
+  "promotion_rule": "The V3 repository surface is scientifically and visually validated. Treat the final V3 upload bundle as frozen only after its exported files are checksum-verified; until then the V2 upload-ready bundle remains the fallback.",
   "stop_rule": "Do not add new theorem families. Repair only demonstrated claim, scope, clarity, format, length, figure or validation defects."
 }
