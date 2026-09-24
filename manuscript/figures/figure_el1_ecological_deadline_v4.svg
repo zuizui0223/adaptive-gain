@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.math{font-size:23px;font-family:'DejaVu Sans Mono',monospace}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f4f4f4;stroke:#555;stroke-width:1.5}.dark{fill:#dedede;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#555;stroke-width:2;fill:none}.dash{stroke:#555;stroke-width:2;stroke-dasharray:8 7;fill:none}.axis{stroke:#111;stroke-width:3}
+</style>
+<text x="70" y="58" class="title">Ecological deadlines expose the value of contingent sensing</text>
+<line x1="530" y1="98" x2="530" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1060" y1="98" x2="1060" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">One natural-history decision episode</text>
+<rect x="120" y="185" width="280" height="72" rx="12" class="soft"/>
+<text x="165" y="230" class="body">resource / host / predator encounter</text>
+<line x1="260" y1="257" x2="260" y2="325" class="line"/><polygon points="260,325 251,309 269,309" fill="#222"/>
+<rect x="170" y="325" width="180" height="70" rx="12" class="box"/>
+<text x="215" y="368" class="head">early cue</text>
+<line x1="190" y1="395" x2="105" y2="470" class="line"/><polygon points="105,470 111,452 124,465" fill="#222"/>
+<line x1="330" y1="395" x2="415" y2="470" class="line"/><polygon points="415,470 396,465 409,452" fill="#222"/>
+<rect x="65" y="470" width="170" height="80" rx="12" class="soft"/>
+<text x="105" y="505" class="head">act / stop</text>
+<text x="82" y="535" class="small">no further cue needed</text>
+<rect x="330" y="470" width="175" height="80" rx="12" class="box"/>
+<text x="345" y="505" class="head">branch-specific cue</text>
+<text x="360" y="535" class="small">sample only here</text>
+<line x1="418" y1="550" x2="418" y2="615" class="line"/><polygon points="418,615 409,599 427,599" fill="#222"/>
+<rect x="345" y="615" width="145" height="65" rx="12" class="soft"/>
+<text x="390" y="655" class="head">act</text>
+<text x="90" y="745" class="small">The value of the early cue can be routing:</text>
+<text x="90" y="775" class="small">it determines which later information is worth paying for.</text>
+
+<text x="565" y="120" class="panel">B</text>
+<text x="610" y="120" class="head">Three ecological budget regions</text>
+<line x1="620" y1="300" x2="1005" y2="300" class="axis"/>
+<line x1="745" y1="275" x2="745" y2="325" class="axis"/>
+<line x1="885" y1="275" x2="885" y2="325" class="axis"/>
+<text x="715" y="255" class="math">C_A</text>
+<text x="855" y="255" class="math">C_F</text>
+<rect x="605" y="350" width="130" height="120" rx="12" class="soft"/>
+<rect x="745" y="350" width="140" height="120" rx="12" class="dark"/>
+<rect x="895" y="350" width="125" height="120" rx="12" class="soft"/>
+<text x="632" y="392" class="head">severe</text><text x="628" y="422" class="body">neither</text><text x="635" y="450" class="body">succeeds</text>
+<text x="765" y="392" class="head">intermediate</text><text x="758" y="422" class="body">contingent</text><text x="768" y="450" class="body">only</text>
+<text x="925" y="392" class="head">weak</text><text x="922" y="422" class="body">both</text><text x="912" y="450" class="body">succeed</text>
+<text x="620" y="540" class="small">B can be time, energy, exposure or opportunity.</text>
+<text x="620" y="585" class="small">Middle region = unique performance opportunity.</text>
+<text x="620" y="615" class="small">Selection follows if resolution benefit exceeds maintenance cost.</text>
+
+<text x="1095" y="120" class="panel">C</text>
+<text x="1140" y="120" class="head">Non-monotonic ecological prediction</text>
+<line x1="1140" y1="650" x2="1530" y2="650" class="axis"/>
+<line x1="1140" y1="650" x2="1140" y2="235" class="axis"/>
+<text x="1270" y="700" class="small">available ecological budget B</text>
+<text x="1095" y="490" class="small" transform="rotate(-90 1095 490)">unique contingent advantage</text>
+<line x1="1160" y1="620" x2="1245" y2="620" class="line"/>
+<line x1="1245" y1="620" x2="1245" y2="360" class="dash"/>
+<line x1="1245" y1="360" x2="1400" y2="360" class="line"/>
+<line x1="1400" y1="360" x2="1400" y2="620" class="dash"/>
+<line x1="1400" y1="620" x2="1510" y2="620" class="line"/>
+<text x="1215" y="680" class="math">C_A</text>
+<text x="1370" y="680" class="math">C_F</text>
+<text x="1265" y="320" class="head">contingent-only window</text>
+<text x="1160" y="770" class="small">Not “the harsher the environment, the better.”</text>
+<text x="1160" y="800" class="small">The advantage is exposed by intermediate constraint.</text>
+</svg>
