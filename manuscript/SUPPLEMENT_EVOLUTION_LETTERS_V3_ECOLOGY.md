@@ -112,7 +112,7 @@ Across ecological states,
 
 is the contrast relevant to the feedback model.
 
-Environmental variables are therefore indirect predictors. A habitat difference matters only if it changes the decision target, cue-transition structure, cue costs or position of the budget relative to \([C_A,C_F)\).
+Environmental variables are therefore indirect predictors. A habitat difference matters only if it changes the decision target, cue-transition structure, cue costs, or whether the ecological budget satisfies \(C_A\le B\) and \(B<C_F\).
 
 ### S2.4 Persistence × payoff alignment
 
@@ -222,7 +222,7 @@ Predicted response:
 0
 \]
 
-as the budget moves from below \(C_A\), through \([C_A,C_F)\), to above \(C_F\).
+as the budget moves from below \(C_A\), through the region where \(C_A\le B\) and \(B<C_F\), to above \(C_F\).
 
 ### S4.5 Compare ecological states
 
@@ -257,14 +257,7 @@ C_F
 For unresolved represented-world set \(S\) and remaining cues \(R\), the adaptive Bellman value is
 
 \[
-C_A(S,R)
-=
-\min_{q\in R}
-\left[
-c(q)+
-\max_y
-C_A(S_{q,y},R\setminus\{q\})
-\right],
+C_A(S,R)=\min_{q\in R}\{c(q)+\max_y C_A(S_{q,y},R\setminus\{q\})\}.
 \]
 
 where the maximum is over reachable outcomes \(y\), and \(C_A=0\) once the target is constant on the active state.
@@ -336,7 +329,7 @@ Ecological interpretation: descriptive differences are not automatically distinc
 If a state-specific task must support integer structural gap \(q\ge1\), define
 
 \[
-h_2^*(q)
+h_2^{\ast}(q)
 =
 \min\{h\ge1:2^h-1-h\ge q\}.
 \]
@@ -345,11 +338,11 @@ The first componentwise binary unit-cost corner capable of gap \(q\) is
 
 \[
 \boxed{
-(n^*,m^*,E^*)
+(n^{\ast},m^{\ast},E^{\ast})
 =
-(h_2^*+q+1,\;
-h_2^*+q,\;
-h_2^*+q).
+(h_2^{\ast}+q+1,\;
+h_2^{\ast}+q,\;
+h_2^{\ast}+q).
 }
 \]
 
@@ -360,7 +353,7 @@ These exact finite counts are proof support for the ecological statement that in
 For maximum cue arity \(b\ge2\),
 
 \[
-h_b^*(q)
+h_b^{\ast}(q)
 =
 \min
 \left\{
@@ -440,29 +433,14 @@ s_B(X)
 
 The three budget regions are:
 
-\[
-B<C_A:
-\qquad
-s_B=-\kappa,
-\]
+- if \(B<C_A\), both architectures fail to guarantee resolution and \(s_B=-\kappa\);
+- if \(C_A\le B\) and \(B<C_F\), only contingent sensing guarantees resolution and
+  \[
+  s_B=\log\frac{w_0+v}{w_0}-\kappa;
+  \]
+- if \(B\ge C_F\), both architectures guarantee resolution and \(s_B=-\kappa\).
 
-\[
-C_A\le B<C_F:
-\qquad
-\boxed{
-s_B=
-\log\frac{w_0+v}{w_0}
--\kappa,
-}
-\]
-
-\[
-B\ge C_F:
-\qquad
-s_B=-\kappa.
-\]
-
-Thus contingent architecture is favored in the adaptive-only interval when
+Thus contingent architecture is favored in the adaptive-only region when
 
 \[
 \kappa
