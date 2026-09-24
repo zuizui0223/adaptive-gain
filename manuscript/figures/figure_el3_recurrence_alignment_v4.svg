@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.math{font-size:22px;font-family:'DejaVu Sans Mono',monospace}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f4f4f4;stroke:#555;stroke-width:1.5}.dark{fill:#dedede;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#555;stroke-width:2;fill:none}.dash{stroke:#555;stroke-width:2;stroke-dasharray:8 7;fill:none}.axis{stroke:#111;stroke-width:3}
+</style>
+<text x="70" y="58" class="title">Environmental persistence matters only when sensing selection aligns with it</text>
+<line x1="535" y1="98" x2="535" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1065" y1="98" x2="1065" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Recurring ecological states carry different sensing payoffs</text>
+<circle cx="285" cy="285" r="85" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
+<circle cx="165" cy="500" r="85" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
+<circle cx="405" cy="500" r="85" fill="#dedede" stroke="#222" stroke-width="3"/>
+<path d="M220 345 C170 380 150 405 150 420" class="line"/><polygon points="150,420 141,404 159,404" fill="#222"/>
+<path d="M235 515 C285 555 330 555 355 520" class="line"/><polygon points="355,520 337,524 347,539" fill="#222"/>
+<path d="M420 415 C405 370 360 340 340 332" class="line"/><polygon points="340,332 355,343 357,326" fill="#222"/>
+<text x="240" y="265" class="head">season A</text><text x="225" y="305" class="small">low sensing payoff</text>
+<text x="115" y="480" class="head">habitat B</text><text x="105" y="520" class="small">low sensing payoff</text>
+<text x="355" y="480" class="head">community C</text><text x="335" y="520" class="small">high sensing payoff</text>
+<text x="95" y="665" class="small">Environmental state matters through the decision problem</text>
+<text x="95" y="695" class="small">and its contingent-sensing payoff—not by label alone.</text>
+
+<text x="570" y="120" class="panel">B</text>
+<text x="615" y="120" class="head">Same persistence, different payoff alignment</text>
+<text x="625" y="190" class="head">Aligned system</text>
+<line x1="655" y1="350" x2="930" y2="350" class="axis"/>
+<line x1="790" y1="350" x2="790" y2="215" class="line"/><polygon points="790,215 781,231 799,231" fill="#222"/>
+<line x1="790" y1="350" x2="875" y2="245" class="line"/><polygon points="875,245 857,251 870,264" fill="#222"/>
+<text x="805" y="220" class="small">slow ecological mode</text>
+<text x="875" y="238" class="small">selection contrast</text>
+<text x="650" y="405" class="small">high projection → strong long-run amplification</text>
+
+<text x="625" y="510" class="head">Unaligned system</text>
+<line x1="655" y1="665" x2="930" y2="665" class="axis"/>
+<line x1="790" y1="665" x2="790" y2="530" class="line"/><polygon points="790,530 781,546 799,546" fill="#222"/>
+<line x1="790" y1="665" x2="920" y2="665" class="line"/><polygon points="920,665 904,656 904,674" fill="#222"/>
+<text x="805" y="540" class="small">same slow mode</text>
+<text x="875" y="650" class="small">selection contrast</text>
+<text x="650" y="720" class="small">weak projection → persistence alone is insufficient</text>
+
+<text x="1100" y="120" class="panel">C</text>
+<text x="1145" y="120" class="head">Long-run evolutionary consequence</text>
+<rect x="1130" y="210" width="410" height="140" rx="12" class="dark"/>
+<text x="1160" y="265" class="math">sigma_eff^2 = sum_r w_r</text>
+<text x="1200" y="310" class="math">(1+r_r)/(1-r_r)</text>
+<rect x="1135" y="420" width="175" height="110" rx="10" class="soft"/>
+<rect x="1350" y="420" width="175" height="110" rx="10" class="soft"/>
+<text x="1195" y="465" class="head">r_r</text>
+<text x="1150" y="500" class="small">ecological persistence</text>
+<text x="1410" y="465" class="head">w_r</text>
+<text x="1365" y="500" class="small">payoff-mode alignment</text>
+<text x="1150" y="610" class="head">Prediction:</text>
+<text x="1150" y="650" class="body">autocorrelation should matter most when</text>
+<text x="1150" y="680" class="body">persistent states differ strongly in</text>
+<text x="1150" y="710" class="body">contingent-sensing selection.</text>
+<text x="1150" y="790" class="small">Same persistence can produce different evolutionary memory.</text>
+</svg>
