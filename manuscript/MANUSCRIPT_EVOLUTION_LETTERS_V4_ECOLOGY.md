@@ -38,13 +38,7 @@ A fixed sensing strategy chooses a resolving cue set in advance. Let \(C_F\) be 
 C_A\le C_F.
 \]
 
-The structural advantage of contingent sensing in ecological state \(i\) is
-
-\[
-g_i=C_F(i)-C_A(i)\ge0.
-\]
-
-Exact optimization, target-relevant state reduction and sharp finite structural bounds are given in the Supplement.
+We denote the state-specific structural advantage by \(g_i=C_F(i)-C_A(i)\ge0\). Exact optimization, target-relevant state reduction and sharp finite structural bounds are given in the Supplement.
 
 ### Ecological deadlines expose contingent sensing
 
@@ -66,58 +60,21 @@ To separate this structural effect from simple marginal cue statistics, we use a
 
 ### Ecological heterogeneity and selection contrast
 
-Ecological states such as seasons, habitats or community contexts may differ in their decision structure. For two states with \(g_2\ge g_1\), define
-
-\[
-\Delta g=g_2-g_1.
-\]
-
-We allow the selection effect of structural advantage to be nonlinear. Let state-specific selection satisfy \(s_i=f(g_i)-\kappa\), where \(f\) is nondecreasing and its marginal effect over the relevant domain is bounded by \(L\):
-
-\[
-0\le f(g_2)-f(g_1)\le L\Delta g.
-\]
-
-This includes linear, saturating, diminishing-return and piecewise-linear relationships.
+Ecological states such as seasons, habitats or community contexts may differ in their decision structure. For two ordered states, let \(\Delta g=g_2-g_1\) denote their contrast in contingent-sensing advantage. We allow the selection effect of that advantage to be nonlinear: selection may increase linearly, saturate or show diminishing returns. The only requirement used in the main exclusion result is that the relationship is nondecreasing and has a finite upper marginal effect \(L\) over the relevant domain; the formal definition is given in the Supplement.
 
 ### Local eco-evolutionary feedback
 
-To ask when sensing-generated selection can alter local eco-evolutionary dynamics, we use a two-coordinate local response with evolutionary persistence \(\alpha\), ecological persistence \(\phi\), and net restoring feedback \(G\). The ecological coordinate can represent a locally changing resource, encounter or interaction state that is itself affected by evolved behavior and then feeds back onto selection on sensing. Let \(B_f>0\) convert a selection contrast into maximum feedback strength. Then
+To ask when sensing-generated selection can alter local eco-evolutionary dynamics, we use a two-coordinate local response with evolutionary persistence \(\alpha\), ecological persistence \(\phi\), and net restoring feedback \(G\). The ecological coordinate can represent a locally changing resource, encounter or interaction state that is itself affected by evolved behavior and then feeds back onto selection on sensing. If \(B_f>0\) converts selection contrast into maximum feedback strength, the declared model implies the necessary condition
 
 \[
-0\le G\le B_fL\Delta g.
+\Delta g>\frac{G_{\rm osc}}{B_fL}
 \]
 
-For the declared local model, the transition from monotone to oscillatory return requires
-
-\[
-G>G_{\rm osc}
-=
-\frac{(\alpha-\phi)^2}{4(1-\phi)}.
-\]
-
-Hence a necessary condition for oscillatory return is
-
-\[
-\Delta g>
-\frac{G_{\rm osc}}{B_fL}.
-\]
-
-Crossing this threshold is not sufficient for oscillation; it only removes a structural impossibility.
+for oscillatory return, where \(G_{\rm osc}\) is the model-specific feedback threshold. Its explicit expression and derivation are given in the Supplement. Crossing this threshold is not sufficient for oscillation; it only removes a structural impossibility.
 
 ### Recurring ecological states
 
-Finally, ecological states may recur through time rather than alternate independently. Let them form a finite ergodic reversible Markov chain. Centered state-specific selection can be decomposed across ecological modes. Its long-run variance rate is
-
-\[
-\sigma_{\rm eff}^2
-=
-\sum_r
-w_r
-\frac{1+r_r}{1-r_r},
-\]
-
-where \(r_r\) measures persistence of ecological mode \(r\) and \(w_r\) measures how strongly sensing-generated selection loads onto that mode. This separates ecological persistence from alignment between persistence and selection.
+Finally, ecological states may recur through time rather than alternate independently. Let them form a finite ergodic reversible Markov chain. Centered state-specific selection can be decomposed across ecological modes. Each mode contributes according to two separable quantities: its ecological persistence and the loading of sensing-generated selection onto that mode. The exact spectral expression is given in the Supplement.
 
 ## Results
 
@@ -137,16 +94,7 @@ The same logic applies when a fixed organismal budget is compared across ecologi
 
 ### Conditional cue dependence, not cue balance, generates the largest advantages
 
-The balanced binary construction shows that global cue frequency is a poor proxy for contingent value. Every cue in the construction is equally common in its two outcomes, yet
-
-\[
-\frac{C_F}{C_A}
-\ge
-\frac{2^d}{d+1}
-\longrightarrow\infty
-\]
-
-as routing depth \(d\) increases.
+The balanced binary construction shows that global cue frequency is a poor proxy for contingent value. Every cue in the construction is equally common in its two outcomes, yet the fixed-to-contingent cost ratio grows without bound as the number of branch-specific terminal requirements increases (exact construction in Supplement).
 
 The ecological reason is branch exclusivity (Fig. 2). An early cue need not directly settle the final action to be valuable. Its value can come from determining which later cue is worth acquiring. Fixed sensing must provision all terminal cues because it cannot condition resource use on the early observation; contingent sensing pays for routing and then only the terminal information relevant to the realized branch.
 
@@ -162,13 +110,7 @@ This distinction also clarifies why sensory focusing and specialization can redu
 
 ### Small state differences cannot generate arbitrarily strong feedback
 
-Because sensing-generated feedback is bounded by \(B_fL\Delta g\), ecological states that differ only weakly in contingent-sensing advantage cannot generate arbitrarily strong local feedback through this mechanism. If
-
-\[
-B_fL\Delta g_{\max}\le G_{\rm osc},
-\]
-
-then the requested oscillatory return is impossible for every sensing-to-selection relationship in the declared nondecreasing bounded-marginal class.
+Ecological states that differ only weakly in contingent-sensing advantage cannot generate arbitrarily strong local feedback through this mechanism. If the largest structurally permitted contrast remains below the necessary threshold \(G_{\rm osc}/(B_fL)\), then the requested oscillatory return is impossible for every sensing-to-selection relationship in the declared nondecreasing bounded-marginal class.
 
 The biological interpretation is an exclusion principle. Observing strong or oscillatory eco-evolutionary feedback would rule out any explanation in which the available ecological states produce too little contrast in contingent-sensing advantage, unless additional mechanisms outside the model are invoked. Conversely, satisfying the structural threshold does not establish sensing as the cause; it only shows that the architecture is large enough not to be excluded.
 
