@@ -8,7 +8,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <line x1="1065" y1="98" x2="1065" y2="835" stroke="#bbb" stroke-width="2"/>
 
 <text x="70" y="120" class="panel">A</text>
-<text x="115" y="120" class="head">Recurring ecological states carry different sensing payoffs</text>
+<text x="115" y="120" class="head">Recurring states carry different sensing payoffs</text>
 <circle cx="285" cy="285" r="85" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
 <circle cx="165" cy="500" r="85" fill="#f4f4f4" stroke="#222" stroke-width="3"/>
 <circle cx="405" cy="500" r="85" fill="#dedede" stroke="#222" stroke-width="3"/>
@@ -22,7 +22,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="95" y="695" class="small">and its contingent-sensing payoff—not by label alone.</text>
 
 <text x="570" y="120" class="panel">B</text>
-<text x="615" y="120" class="head">Same persistence, different payoff alignment</text>
+<text x="615" y="120" class="head">Same persistence, different alignment</text>
 <text x="625" y="190" class="head">Aligned system</text>
 <line x1="655" y1="350" x2="930" y2="350" class="axis"/>
 <line x1="790" y1="350" x2="790" y2="215" class="line"/><polygon points="790,215 781,231 799,231" fill="#222"/>
@@ -40,7 +40,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="650" y="720" class="small">weak projection → persistence alone is insufficient</text>
 
 <text x="1100" y="120" class="panel">C</text>
-<text x="1145" y="120" class="head">Long-run evolutionary consequence</text>
+<text x="1145" y="120" class="head">Long-run consequence</text>
 <rect x="1130" y="210" width="410" height="140" rx="12" class="dark"/>
 <text x="1160" y="265" class="math">sigma_eff^2 = sum_r w_r</text>
 <text x="1200" y="310" class="math">(1+r_r)/(1-r_r)</text>
@@ -54,5 +54,5 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="1150" y="650" class="body">autocorrelation should matter most when</text>
 <text x="1150" y="680" class="body">persistent states differ strongly in</text>
 <text x="1150" y="710" class="body">contingent-sensing selection.</text>
-<text x="1150" y="790" class="small">Same persistence can produce different evolutionary memory.</text>
+<text x="1150" y="790" class="small">Same persistence ≠ same evolutionary memory.</text>
 </svg>
