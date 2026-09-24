@@ -254,13 +254,13 @@ C_F
 \sum_{q\in F}c(q).
 \]
 
-For unresolved represented-world set \(S\) and remaining cues \(R\), the adaptive Bellman value is
+For unresolved represented-world set \(S\) and remaining cues \(R\), write \(R-q\) for the remaining cue set after cue \(q\) has been used. The adaptive Bellman value is
 
 \[
-C_A(S,R)=\min_{q\in R}(c(q)+\max_y C_A(S_{q,y},R\setminus\{q\})).
+C_A(S,R)=\min_q(c(q)+\max_y C_A(S_{q,y},R-q)),
 \]
 
-where the maximum is over reachable outcomes \(y\), and \(C_A=0\) once the target is constant on the active state.
+where the minimum is over \(q\in R\), the maximum is over reachable outcomes \(y\), and \(C_A=0\) once the target is constant on the active state.
 
 Every fixed resolver is a feasible contingent policy that ignores intermediate outcomes, therefore
 
@@ -329,7 +329,7 @@ Ecological interpretation: descriptive differences are not automatically distinc
 If a state-specific task must support integer structural gap \(q\ge1\), define
 
 \[
-h_2^{\ast}(q)
+h_{2,\mathrm{thr}}(q)
 =
 \min\{h\ge1:2^h-1-h\ge q\}.
 \]
@@ -338,11 +338,11 @@ The first componentwise binary unit-cost corner capable of gap \(q\) is
 
 \[
 \boxed{
-(n^{\ast},m^{\ast},E^{\ast})
+(n_{\mathrm{min}},m_{\mathrm{min}},E_{\mathrm{min}})
 =
-(h_2^{\ast}+q+1,\;
-h_2^{\ast}+q,\;
-h_2^{\ast}+q).
+(h_{2,\mathrm{thr}}(q)+q+1,\;
+h_{2,\mathrm{thr}}(q)+q,\;
+h_{2,\mathrm{thr}}(q)+q).
 }
 \]
 
@@ -353,7 +353,7 @@ These exact finite counts are proof support for the ecological statement that in
 For maximum cue arity \(b\ge2\),
 
 \[
-h_b^{\ast}(q)
+h_{b,\mathrm{thr}}(q)
 =
 \min
 \left\{
