@@ -1,4 +1,4 @@
-# Supplementary Information — ecological interpretation and mathematical support for V4
+# Supplementary Information — ecological interpretation and mathematical support
 
 ## Purpose
 
@@ -373,7 +373,7 @@ The exact joint requirement is generally Pareto-valued for \(b>2\); there is not
 
 ### S7.3 Globally balanced cues can still produce unbounded gain
 
-For routing depth \(d\), the repository constructs finite deterministic binary unit-cost tasks in which every cue is exactly 50/50 balanced over represented worlds, while
+For routing depth \(d\), we construct finite deterministic binary unit-cost tasks in which every cue is exactly 50/50 balanced over represented worlds, while
 
 \[
 C_F\ge2^d,
@@ -611,7 +611,7 @@ This can diagnose feedback existence within the model but does not identify:
 - separate ecological and evolutionary persistence;
 - the fraction of feedback caused by sensing architecture.
 
-The V4 main text does not require this diagnostic as a headline result; it is retained as an interpretive boundary.
+The main text does not require this diagnostic as a headline result; it is retained here as an interpretive boundary.
 
 **Sources:**
 
@@ -639,14 +639,14 @@ The exact finite results assume deterministic cue outcomes, positive additive cu
 
 ### Reproducibility
 
-Code and theorem documents are organized in the public \`zuizui0223/adaptive-gain\` repository. The V3 machine-frozen submission surface remains preserved. V4 is an ecological reframing candidate and should not replace the V3 freeze until its own claim, length, figure and export gates pass.
+Code and theorem documents are organized in the public \`zuizui0223/adaptive-gain\` repository. The Supplement retains the exact finite results, validation boundaries and reproducibility pointers supporting the ecological claims in the main text.
 
-### Empirical claim firewall
+### Empirical interpretation boundary
 
 Natural-history examples in S3 are illustrative. They show how to instantiate the model, not that contingent \(C_A/C_F\) gaps have already been measured in those systems.
 
 
-## S13. Ecological references added for V4 interpretation
+## S13. Ecological references for interpretation
 
 - Silva, R. & Clarke, A. R. 2020. The “sequential cues hypothesis”: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. https://doi.org/10.1111/1744-7917.12719.
 - Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. https://doi.org/10.3758/CABN.8.4.475.
