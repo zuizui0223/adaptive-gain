@@ -173,3 +173,7 @@ def test_v4_legends_keep_ecological_claim_boundaries():
     assert "not a universal scalar measure of ecological complexity" in text
     assert "environmental autocorrelation alone is insufficient" in text
     assert "generic illustrations rather than fitted empirical examples" in text
+    assert "`C_A<=B<C_F`" in text
+    assert "`B>=C_F`" in text
+    assert "C_Ale" not in text
+    assert "Bge" not in text
