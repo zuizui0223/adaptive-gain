@@ -257,7 +257,7 @@ C_F
 For unresolved represented-world set \(S\) and remaining cues \(R\), the adaptive Bellman value is
 
 \[
-C_A(S,R)=\min_{q\in R}\{c(q)+\max_y C_A(S_{q,y},R\setminus\{q\})\}.
+C_A(S,R)=\min_{q\in R}(c(q)+\max_y C_A(S_{q,y},R\setminus\{q\})).
 \]
 
 where the maximum is over reachable outcomes \(y\), and \(C_A=0\) once the target is constant on the active state.
@@ -434,10 +434,7 @@ s_B(X)
 The three budget regions are:
 
 - if \(B<C_A\), both architectures fail to guarantee resolution and \(s_B=-\kappa\);
-- if \(C_A\le B\) and \(B<C_F\), only contingent sensing guarantees resolution and
-  \[
-  s_B=\log\frac{w_0+v}{w_0}-\kappa;
-  \]
+- if \(C_A\le B\) and \(B<C_F\), only contingent sensing guarantees resolution and \(s_B=\log[(w_0+v)/w_0]-\kappa\);
 - if \(B\ge C_F\), both architectures guarantee resolution and \(s_B=-\kappa\).
 
 Thus contingent architecture is favored in the adaptive-only region when
