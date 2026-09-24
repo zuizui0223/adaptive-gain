@@ -138,6 +138,12 @@ The present mechanism is complementary to two established ways of thinking about
 
 Our additional question is whether **the identity of the next useful cue depends on what has already been observed**. When every extra sample has the same role, contingent routing offers little beyond an ordinary stopping problem. When early observations make different later cues relevant on different branches, however, the organism can avoid paying for information that belongs to unrealized branches. The ecological novelty is therefore conditional acquisition of heterogeneous cues, not a new claim that information has costs or that animals trade speed against accuracy.
 
+### Relation to sequential decision ecology
+
+Sequential organization itself is not the novelty of the present theory. Behavioral ecology already treats many foraging problems as hierarchical sequences rather than isolated binary choices (Stephens 2008), and the sequential-cues hypothesis explicitly proposes that generalist herbivores move from broadly shared host cues to more specific host-ranking cues (Silva & Clarke 2020). These frameworks establish that ecological decisions can unfold in stages.
+
+Our contribution is to identify when that staging becomes an **exclusive ecological advantage of contingent acquisition**. The crucial comparison is not sequential versus non-sequential behavior in the abstract, but whether earlier observations allow an organism to avoid paying for later information associated with unrealized branches. Combined with a finite ecological deadline, this yields a specific prediction that prior sequential-cue frameworks do not supply: the unique performance opportunity for contingent sensing appears only in the intermediate region where a routed sequence still completes the decision but a precommitted resolving cue set does not. The same branch structure then determines how strongly ecological states can differ in sensing-mediated selection.
+
 ### What evolves: cue order, stopping and conditional deployment
 
 The evolving trait in this framework need not be the presence or absence of a sensory organ. It can be a behavioral or regulatory rule that changes **when** a cue is sampled, whether sampling stops after an early outcome, or which sensory channel is deployed next. Limited attention, learned sampling sequences and conditional behavioral control are therefore natural empirical counterparts of contingent architecture (Dukas 2004; Eliassen et al. 2016).
