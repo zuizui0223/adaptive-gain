@@ -22,7 +22,7 @@ FIGURES = {
         "branch exclusivity",
     ),
     ROOT / "manuscript" / "figures" / "figure_el3_recurrence_alignment_v4.svg": (
-        "Recurring states carry different sensing payoffs",
+        "Recurring states differ in sensing payoff",
         "Same persistence, different alignment",
         "payoff-mode alignment",
         "autocorrelation should matter",
