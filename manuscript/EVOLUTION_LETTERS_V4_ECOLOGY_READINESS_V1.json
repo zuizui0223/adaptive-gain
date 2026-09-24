@@ -3,7 +3,7 @@
   "date": "2026-09-24",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "ecology_first_candidate_awaiting_ci_and_figure_redesign",
+  "status": "ecology_first_text_and_figures_validated_export_pending",
   "headline": "ecological structure and deadlines govern the evolutionary value of contingent sensing",
   "preserved_v3_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V3_READINESS_V1.json",
@@ -16,7 +16,9 @@
     "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md",
     "supplement": "manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md",
     "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V4_ECOLOGY.md",
-    "surface_test": "tests/test_evolution_letters_v4_ecology_surface.py"
+    "surface_test": "tests/test_evolution_letters_v4_ecology_surface.py",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md",
+    "cover_letter": "manuscript/COVER_LETTER_EVOLUTION_LETTERS_V3_ECOLOGY.md"
   },
   "narrative_shift": {
     "opening_problem": "organisms must act before sampling every potentially useful cue",
@@ -29,15 +31,16 @@
     "retained": [
       "C_A<=C_F",
       "adaptive-only budget window C_A<=B<C_F",
-      "balanced-family statement that marginal cue balance does not bound contingent value",
-      "nonlinear feedback no-go inequality",
-      "recurrence/alignment spectral expression"
+      "balanced-family ecological statement that marginal cue balance does not bound contingent value",
+      "nonlinear feedback no-go necessary condition"
     ],
     "demoted_to_supplement": [
       "Bellman recursion details",
       "target-relevant kernel proofs",
       "exact binary corner formula",
       "bounded-arity Pareto coordinates",
+      "balanced-family divergence formula",
+      "recurrence/alignment spectral expression",
       "certificate machinery and exhaustive enumerations"
     ]
   },
@@ -50,23 +53,29 @@
     ]
   },
   "validation": {
-    "candidate_head": "a46bf062d317dfa1cb7f05a2d199a339f7360f8c",
-    "workflow_run": null,
-    "python_3_10": "pending",
-    "python_3_11": "pending",
-    "python_3_12": "pending",
-    "full_pytest": "pending",
-    "witness_audit": "pending",
-    "certificate_audit": "pending",
-    "v4_length_gate": "pending",
-    "ecology_surface_gate": "pending"
+    "candidate_head": "ef6de30a48cd714262984d26e78ea7c94d5bc126",
+    "workflow_run": 35989539411,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "full_pytest": "success",
+    "witness_audit": "success",
+    "certificate_audit": "success",
+    "v4_length_gate": "success",
+    "ecology_surface_gate": "success",
+    "figure_claim_gate": "success",
+    "figure_visual_qc": "success",
+    "title_words": 11,
+    "abstract_words": 260,
+    "main_text_words": 4545
   },
   "remaining_machine_work": [
-    "complete V4 CI and claim/length gates",
-    "redesign and render ecology-first Figures 1-3",
-    "write ecology-first cover letter",
-    "export and visually validate V4 DOCX/PDF and Supplement PDF",
-    "assemble a checksum-verified V4 staging bundle only if V4 is preferred over frozen V3"
+    "export and visually validate V4 line-numbered Main DOCX/PDF",
+    "export and visually validate V4 Supplement PDF",
+    "regenerate the three V4 figure PDFs from the validated SVGs",
+    "assemble a checksum-verified V4 staging bundle",
+    "record final bundle checksum without altering the frozen source files"
   ],
-  "stop_rule": "Do not add theorem families. Further work should improve ecological framing, empirical interpretability, claim scope, figures, or submission quality."
+  "stop_rule": "Do not add theorem families. Further work should improve ecological framing, empirical interpretability, claim scope, figures, or submission quality.",
+  "promotion_rule": "V4 can replace the preserved V3 fallback only after its submission DOCX/PDF, Supplement PDF and three figure PDFs pass visual/preflight QA and are checksum-frozen. Human-controlled authorship, affiliation, funding, conflict, acknowledgement, approval and submission-status metadata remain unresolved."
 }
