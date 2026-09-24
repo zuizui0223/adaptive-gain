@@ -1,0 +1,51 @@
+name: v4-submission-source-bundle
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/v4-submission-source-bundle.yml"
+      - "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md"
+      - "manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md"
+      - "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md"
+      - "manuscript/COVER_LETTER_EVOLUTION_LETTERS_V3_ECOLOGY.md"
+      - "manuscript/figures/figure_el1_ecological_deadline_v4.svg"
+      - "manuscript/figures/figure_el2_conditional_cues_v4.svg"
+      - "manuscript/figures/figure_el3_recurrence_alignment_v4.svg"
+  workflow_dispatch:
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record source commit
+        run: |
+          mkdir -p submission_source_v4/manuscript/figures
+          git rev-parse HEAD > submission_source_v4/SOURCE_COMMIT.txt
+      - name: Copy submission sources
+        run: |
+          cp manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md submission_source_v4/manuscript/
+          cp manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md submission_source_v4/manuscript/
+          cp manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md submission_source_v4/manuscript/
+          cp manuscript/COVER_LETTER_EVOLUTION_LETTERS_V3_ECOLOGY.md submission_source_v4/manuscript/
+          cp manuscript/figures/figure_el1_ecological_deadline_v4.svg submission_source_v4/manuscript/figures/
+          cp manuscript/figures/figure_el2_conditional_cues_v4.svg submission_source_v4/manuscript/figures/
+          cp manuscript/figures/figure_el3_recurrence_alignment_v4.svg submission_source_v4/manuscript/figures/
+      - name: Record source checksums
+        run: |
+          cd submission_source_v4
+          sha256sum manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md \
+                    manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md \
+                    manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md \
+                    manuscript/COVER_LETTER_EVOLUTION_LETTERS_V3_ECOLOGY.md \
+                    manuscript/figures/figure_el1_ecological_deadline_v4.svg \
+                    manuscript/figures/figure_el2_conditional_cues_v4.svg \
+                    manuscript/figures/figure_el3_recurrence_alignment_v4.svg \
+                    > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evolution-letters-v4-submission-source
+          path: submission_source_v4
+          if-no-files-found: error
+          retention-days: 30
