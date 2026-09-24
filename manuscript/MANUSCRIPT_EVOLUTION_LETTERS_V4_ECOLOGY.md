@@ -174,6 +174,12 @@ This gives a concrete reason why broad environmental variance may be a weak pred
 
 The target-relevant reduction results in the Supplement formalize the same point from another direction. Ecologically descriptive differences need not be distinct decision states if they lead to identical future discrimination requirements for the focal action. This is not a claim that those differences are biologically unimportant in general; it is a statement that ecological complexity is task-dependent.
 
+### From decision ecology to eco-evolutionary feedback
+
+Contingent sensing can matter beyond the focal decision when evolved information use changes the ecological states that future individuals encounter. In a host-choice system, for example, changes in cue order or stopping rules can redistribute attacks or oviposition among host plants, altering host abundance, quality or encounter frequencies and therefore the future value of the same cues. In a pollination system, altered flower discrimination can change visitation and reward depletion and, over longer periods, plant reproductive success and floral composition. These examples are illustrative, but they make the feedback path explicit: sensing architecture changes action; action changes the ecological distribution of future decision states; those states then change selection on sensing.
+
+The local feedback result in this paper should be read at that level. It does not assert that every sensing trait generates a measurable eco-evolutionary cycle. Instead, it asks whether the ecological contrasts produced by a proposed natural-history feedback are large enough for sensing-mediated selection to contribute the requested local dynamics at all. This turns the no-go condition into an empirical diagnostic: a proposed feedback mechanism must first generate sufficiently different decision problems across the ecological states it claims to connect.
+
 ### Temporal ecology determines whether sensing-generated selection accumulates
 
 The recurrence result connects individual decision ecology to longer evolutionary time scales. Environmental persistence is often invoked as a condition for adaptation to variable environments, but persistence alone is insufficient here. The states that persist must also differ in the selection they impose on contingent sensing.
