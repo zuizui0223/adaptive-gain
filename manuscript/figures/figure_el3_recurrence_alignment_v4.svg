@@ -42,13 +42,13 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="1100" y="120" class="panel">C</text>
 <text x="1145" y="120" class="head">Long-run consequence</text>
 <rect x="1130" y="210" width="410" height="140" rx="12" class="dark"/>
-<text x="1160" y="265" class="math">sigma_eff^2 = sum_r w_r</text>
-<text x="1200" y="310" class="math">(1+r_r)/(1-r_r)</text>
+<text x="1160" y="265" class="head">long-run evolutionary effect</text>
+<text x="1160" y="310" class="body">persistence × payoff-mode alignment</text>
 <rect x="1135" y="420" width="175" height="110" rx="10" class="soft"/>
 <rect x="1350" y="420" width="175" height="110" rx="10" class="soft"/>
-<text x="1195" y="465" class="head">r_r</text>
-<text x="1150" y="500" class="small">ecological persistence</text>
-<text x="1410" y="465" class="head">w_r</text>
+<text x="1155" y="465" class="head">persistence</text>
+<text x="1150" y="500" class="small">ecological recurrence</text>
+<text x="1365" y="465" class="head">alignment</text>
 <text x="1365" y="500" class="small">payoff-mode alignment</text>
 <text x="1150" y="610" class="head">Prediction:</text>
 <text x="1150" y="650" class="body">autocorrelation should matter most when</text>
