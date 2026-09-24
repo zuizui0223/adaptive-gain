@@ -65,7 +65,7 @@ def test_v4_opens_with_ecological_problem_not_theorem_catalogue():
     assert "Predator attacks" in text
     assert "speed–accuracy trade-offs" in intro
     assert "branch-specific cue requirements" in intro
-    assert "When the organization of information acquisition becomes a target of selection" in intro
+    assert "When does the organization of information acquisition become a target of selection?" in intro
 
 
 def test_v4_main_promotes_ecological_predictions():
