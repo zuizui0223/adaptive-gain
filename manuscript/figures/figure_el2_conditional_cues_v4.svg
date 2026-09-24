@@ -8,7 +8,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <line x1="1080" y1="98" x2="1080" y2="835" stroke="#bbb" stroke-width="2"/>
 
 <text x="70" y="120" class="panel">A</text>
-<text x="115" y="120" class="head">Same marginal cue statistics, different structure</text>
+<text x="115" y="120" class="head">Same marginals, different structure</text>
 <text x="105" y="185" class="head">Shared system</text>
 <circle cx="260" cy="250" r="25" fill="white" stroke="#222" stroke-width="3"/>
 <text x="248" y="258" class="body">q1</text>
@@ -23,14 +23,14 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <line x1="245" y1="619" x2="180" y2="685" class="line"/><line x1="275" y1="619" x2="340" y2="685" class="line"/>
 <rect x="115" y="685" width="130" height="70" rx="10" class="dark"/><rect x="275" y="685" width="130" height="70" rx="10" class="dark"/>
 <text x="155" y="728" class="head">q2</text><text x="315" y="728" class="head">q3</text>
-<text x="110" y="800" class="small">Same cue frequencies; terminal relevance is branch-specific.</text>
+<text x="110" y="800" class="small">Same cue frequencies; different terminal relevance.</text>
 
 <text x="575" y="120" class="panel">B</text>
-<text x="620" y="120" class="head">Provisioning cost differs only in the routed system</text>
+<text x="620" y="120" class="head">Fixed vs contingent provisioning</text>
 <text x="620" y="190" class="head">Fixed benchmark</text>
 <rect x="630" y="230" width="365" height="120" rx="12" class="soft"/>
-<text x="655" y="270" class="body">must provision every potentially relevant</text>
-<text x="655" y="300" class="body">terminal cue before branch identity is known</text>
+<text x="655" y="270" class="body">provision every potentially relevant terminal cue</text>
+<text x="655" y="300" class="body">before branch identity is known</text>
 <text x="720" y="335" class="math">q1 + q2 + q3 + ...</text>
 
 <text x="620" y="430" class="head">Contingent sensing</text>
@@ -44,7 +44,7 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="630" y="785" class="small">arbitrarily large fixed-to-contingent cost ratios.</text>
 
 <text x="1115" y="120" class="panel">C</text>
-<text x="1160" y="120" class="head">What should field studies measure?</text>
+<text x="1160" y="120" class="head">Field predictors</text>
 <rect x="1135" y="200" width="395" height="110" rx="12" class="soft"/>
 <text x="1160" y="245" class="head">Raw cue count</text>
 <text x="1160" y="280" class="body">weak proxy for contingent value</text>
