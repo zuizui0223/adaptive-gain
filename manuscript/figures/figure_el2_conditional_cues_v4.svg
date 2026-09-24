@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.math{font-size:22px;font-family:'DejaVu Sans Mono',monospace}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f4f4f4;stroke:#555;stroke-width:1.5}.dark{fill:#dedede;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#555;stroke-width:2;fill:none}.dash{stroke:#555;stroke-width:2;stroke-dasharray:8 7;fill:none}
+</style>
+<text x="70" y="58" class="title">Conditional cue dependence—not cue prevalence—creates contingent value</text>
+<line x1="540" y1="98" x2="540" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1080" y1="98" x2="1080" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Same marginal cue statistics, different structure</text>
+<text x="105" y="185" class="head">Shared system</text>
+<circle cx="260" cy="250" r="25" fill="white" stroke="#222" stroke-width="3"/>
+<text x="248" y="258" class="body">q1</text>
+<line x1="245" y1="274" x2="180" y2="340" class="line"/><line x1="275" y1="274" x2="340" y2="340" class="line"/>
+<rect x="105" y="340" width="150" height="75" rx="10" class="soft"/><rect x="270" y="340" width="150" height="75" rx="10" class="soft"/>
+<text x="130" y="375" class="body">q2 + q3 needed</text><text x="295" y="375" class="body">q2 + q3 needed</text>
+<text x="115" y="450" class="small">Later cues remain useful across branches.</text>
+
+<text x="105" y="535" class="head">Routed system</text>
+<circle cx="260" cy="595" r="25" fill="white" stroke="#222" stroke-width="3"/>
+<text x="248" y="603" class="body">q1</text>
+<line x1="245" y1="619" x2="180" y2="685" class="line"/><line x1="275" y1="619" x2="340" y2="685" class="line"/>
+<rect x="115" y="685" width="130" height="70" rx="10" class="dark"/><rect x="275" y="685" width="130" height="70" rx="10" class="dark"/>
+<text x="155" y="728" class="head">q2</text><text x="315" y="728" class="head">q3</text>
+<text x="110" y="800" class="small">Same cue frequencies; terminal relevance is branch-specific.</text>
+
+<text x="575" y="120" class="panel">B</text>
+<text x="620" y="120" class="head">Provisioning cost differs only in the routed system</text>
+<text x="620" y="190" class="head">Fixed benchmark</text>
+<rect x="630" y="230" width="365" height="120" rx="12" class="soft"/>
+<text x="655" y="270" class="body">must provision every potentially relevant</text>
+<text x="655" y="300" class="body">terminal cue before branch identity is known</text>
+<text x="720" y="335" class="math">q1 + q2 + q3 + ...</text>
+
+<text x="620" y="430" class="head">Contingent sensing</text>
+<rect x="630" y="470" width="365" height="120" rx="12" class="dark"/>
+<text x="655" y="510" class="body">sample a routing cue, then only the</text>
+<text x="655" y="540" class="body">terminal cue for the realized branch</text>
+<text x="755" y="575" class="math">q1 → one terminal</text>
+<text x="630" y="665" class="small">Early cues can have high routing value even when they</text>
+<text x="630" y="695" class="small">do not directly determine the final action.</text>
+<text x="630" y="755" class="small">Exactly balanced binary families can still show</text>
+<text x="630" y="785" class="small">arbitrarily large fixed-to-contingent cost ratios.</text>
+
+<text x="1115" y="120" class="panel">C</text>
+<text x="1160" y="120" class="head">What should field studies measure?</text>
+<rect x="1135" y="200" width="395" height="110" rx="12" class="soft"/>
+<text x="1160" y="245" class="head">Raw cue count</text>
+<text x="1160" y="280" class="body">weak proxy for contingent value</text>
+<rect x="1135" y="355" width="395" height="110" rx="12" class="soft"/>
+<text x="1160" y="400" class="head">Marginal cue balance</text>
+<text x="1160" y="435" class="body">insufficient on its own</text>
+<rect x="1135" y="510" width="395" height="130" rx="12" class="dark"/>
+<text x="1160" y="555" class="head">Conditional cue dependence</text>
+<text x="1160" y="590" class="body">which cue becomes useful after</text>
+<text x="1160" y="620" class="body">which earlier observation</text>
+<text x="1150" y="720" class="head">Mechanistic predictor:</text>
+<text x="1150" y="755" class="body">branch exclusivity + acquisition cost</text>
+<text x="1150" y="800" class="small">Natural-history complexity is task-dependent.</text>
+</svg>
