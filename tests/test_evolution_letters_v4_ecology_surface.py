@@ -16,14 +16,14 @@ FIGURES = {
         "unique contingent advantage",
     ),
     ROOT / "manuscript" / "figures" / "figure_el2_conditional_cues_v4.svg": (
-        "Same marginal cue statistics",
+        "Same marginals, different structure",
         "Routed system",
         "Conditional cue dependence",
         "branch exclusivity",
     ),
     ROOT / "manuscript" / "figures" / "figure_el3_recurrence_alignment_v4.svg": (
-        "Recurring ecological states",
-        "Same persistence, different payoff alignment",
+        "Recurring states carry different sensing payoffs",
+        "Same persistence, different alignment",
         "payoff-mode alignment",
         "autocorrelation should matter",
     ),
