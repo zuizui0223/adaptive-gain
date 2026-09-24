@@ -9,8 +9,8 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 
 <text x="70" y="120" class="panel">A</text>
 <text x="115" y="120" class="head">One natural-history decision episode</text>
-<rect x="120" y="185" width="280" height="72" rx="12" class="soft"/>
-<text x="165" y="230" class="body">resource / host / predator encounter</text>
+<rect x="85" y="185" width="350" height="72" rx="12" class="soft"/>
+<text x="125" y="230" class="body">resource / host / predator encounter</text>
 <line x1="260" y1="257" x2="260" y2="325" class="line"/><polygon points="260,325 251,309 269,309" fill="#222"/>
 <rect x="170" y="325" width="180" height="70" rx="12" class="box"/>
 <text x="215" y="368" class="head">early cue</text>
