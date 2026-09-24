@@ -142,7 +142,7 @@ Our additional question is whether **the identity of the next useful cue depends
 
 Active-sensing theory asks how an organism should direct sensory actions to obtain task-relevant information, and sequential-sampling models ask when further sampling is no longer worth its opportunity cost (Yang et al. 2016). Those frameworks already make sensing policy and stopping behavior part of the decision problem. The present theory addresses a narrower ecological structure: later samples are not interchangeable increments of evidence, because an early observation can make one sensory action relevant and another unnecessary.
 
-That distinction creates a different counterfactual. An organism is not only deciding whether to sample longer or where to look next; it can avoid the cost of entire cue classes that belong to unrealized ecological branches. The quantity \(C_F-C_A\) isolates that branch-contingent saving, and the ecological budget asks when it changes whether the focal action can be completed at all. V4 therefore complements active-sensing and optimal-stopping theory by converting conditional sensor allocation into an exact natural-history threshold for exclusive performance advantage.
+That distinction creates a different counterfactual. An organism is not only deciding whether to sample longer or where to look next; it can avoid the cost of entire cue classes that belong to unrealized ecological branches. The quantity \(C_F-C_A\) isolates that branch-contingent saving, and the ecological budget asks when it changes whether the focal action can be completed at all. The present framework therefore complements active-sensing and optimal-stopping theory by converting conditional sensor allocation into an exact natural-history threshold for exclusive performance advantage.
 
 ### Relation to sequential decision ecology
 
@@ -210,7 +210,7 @@ Contingent sensing should evolve not simply where organisms face more informatio
 
 ## Data and code availability
 
-No empirical datasets were generated or analyzed for this theoretical study. Source code implementing the finite decision model, exact adaptive and fixed resolution, threshold selection, structural bounds, feedback reachability and ecological recurrence results is publicly available in the \`zuizui0223/adaptive-gain\` repository. A permanent archival DOI should be added at submission if one has been minted by then.
+No empirical datasets were generated or analyzed for this theoretical study. Source code implementing the finite decision model, exact adaptive and fixed resolution, threshold selection, structural bounds, feedback reachability and ecological recurrence results is publicly available in the \`zuizui0223/adaptive-gain\` repository. A permanent archival DOI will be added when available.
 
 ## Author contributions
 
