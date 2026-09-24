@@ -6,6 +6,28 @@ MAIN = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md"
 SUPP = ROOT / "manuscript" / "SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md"
 FRAMING = ROOT / "manuscript" / "ECOLOGICAL_FRAMING_V1.md"
 FIGPLAN = ROOT / "manuscript" / "FIGURE_PLAN_EVOLUTION_LETTERS_V4_ECOLOGY.md"
+LEGENDS = ROOT / "manuscript" / "FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md"
+FIGURES = {
+    ROOT / "manuscript" / "figures" / "figure_el1_ecological_deadline_v4.svg": (
+        "branch-specific cue",
+        "C_A",
+        "C_F",
+        "intermediate",
+        "unique contingent advantage",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el2_conditional_cues_v4.svg": (
+        "Same marginal cue statistics",
+        "Routed system",
+        "Conditional cue dependence",
+        "branch exclusivity",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el3_recurrence_alignment_v4.svg": (
+        "Recurring ecological states",
+        "Same persistence, different payoff alignment",
+        "payoff-mode alignment",
+        "autocorrelation should matter",
+    ),
+}
 
 
 def _text(path: Path) -> str:
@@ -113,3 +135,41 @@ def test_v4_preserves_machine_frozen_v3():
     assert (ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V3.md").exists()
     assert (ROOT / "manuscript" / "SUPPLEMENT_EVOLUTION_LETTERS_V2.md").exists()
     assert (ROOT / "manuscript" / "EVOLUTION_LETTERS_V3_READINESS_V1.json").exists()
+
+
+def test_v4_figure_files_are_ecology_first_and_well_formed():
+    import xml.etree.ElementTree as ET
+
+    for path, required in FIGURES.items():
+        assert path.exists(), path
+        ET.parse(path)
+        text = _text(path)
+        assert 'width="1600"' in text
+        assert 'height="900"' in text
+        for phrase in required:
+            assert phrase in text, (path.name, phrase)
+
+
+def test_v4_figures_do_not_reintroduce_theorem_catalogue():
+    text = "\n".join(_text(path) for path in FIGURES)
+    forbidden = (
+        "h_2*",
+        "h_b*",
+        "(7,6,6)",
+        "(8,5,5)",
+        "Pareto",
+        "sharp maximum",
+        "certificate",
+    )
+    for phrase in forbidden:
+        assert phrase not in text
+
+
+def test_v4_legends_keep_ecological_claim_boundaries():
+    text = _text(LEGENDS)
+    assert text.count("**Alt text:**") == 3
+    assert "counterfactual non-contingent benchmark" in text
+    assert "positive selection additionally requires" in text
+    assert "not a universal scalar measure of ecological complexity" in text
+    assert "environmental autocorrelation alone is insufficient" in text
+    assert "generic illustrations rather than fitted empirical examples" in text
