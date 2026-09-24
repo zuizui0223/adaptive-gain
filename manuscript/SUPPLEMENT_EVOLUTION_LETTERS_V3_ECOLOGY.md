@@ -163,7 +163,7 @@ This is a conditional mechanism linking natural-history breadth to decision arch
 
 **Budget:** handling time, enemy exposure, movement of the host, or opportunity cost.
 
-This mapping is motivated by longstanding work linking host breadth and sensory/information-processing complexity to decision time and exposure risk. It remains an empirical hypothesis until cue sequences and costs are measured in a focal species.
+This mapping is motivated by longstanding work linking host breadth and sensory/information-processing complexity to decision time and exposure risk. It is also directly compatible with the sequential-cues hypothesis for polyphagous herbivores, in which broadly shared host cues first place the insect in host habitat and more specific cues then guide continued search and ranking (Silva & Clarke 2020). A focal empirical test should therefore score not only which cues are used, but whether common cues terminate some decisions while specific cues are sampled only after particular early outcomes. The finite model becomes informative only after those conditional transitions and their costs are measured.
 
 ### S3.3 Pollinator flower choice
 
@@ -644,3 +644,9 @@ Code and theorem documents are organized in the public \`zuizui0223/adaptive-gai
 ### Empirical claim firewall
 
 Natural-history examples in S3 are illustrative. They show how to instantiate the model, not that contingent \(C_A/C_F\) gaps have already been measured in those systems.
+
+
+## S13. Ecological references added for V4 interpretation
+
+- Silva, R. & Clarke, A. R. 2020. The “sequential cues hypothesis”: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. https://doi.org/10.1111/1744-7917.12719.
+- Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. https://doi.org/10.3758/CABN.8.4.475.
