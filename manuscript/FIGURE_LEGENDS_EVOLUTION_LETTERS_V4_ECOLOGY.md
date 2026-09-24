@@ -1,6 +1,4 @@
-# Evolution Letters figure legends V4 — ecology-first
-
-Status: canonical legend and alt-text specification for the ecology-first V4 candidate. The machine-frozen V3 figures remain preserved separately.
+# Figure legends and alt text
 
 ## Figure 1. Ecological deadlines expose the value of contingent sensing
 
@@ -10,7 +8,7 @@ Status: canonical legend and alt-text specification for the ecology-first V4 can
 
 ## Figure 2. Conditional cue dependence—not cue prevalence—creates contingent value
 
-**A**, two decision systems can have similar one-cue statistics yet different conditional structure. In the shared system, later cues remain useful across branches. In the routed system, an early cue directs the organism toward one branch-specific terminal cue. **B**, a non-contingent fixed benchmark must provision every potentially relevant terminal cue before branch identity is known, whereas a contingent strategy pays for routing and then only the terminal cue needed on the realized branch. The repository contains an exactly balanced binary family in which this branch-exclusive structure produces an unbounded fixed-to-contingent cost ratio as problem size grows; the figure uses only the ecological mechanism, not the full extremal construction. **C**, raw cue count and marginal cue balance are therefore weak or insufficient proxies for contingent value. The mechanistic predictor within the declared finite model is conditional cue dependence together with acquisition cost: which cue becomes useful after which earlier observation.
+**A**, two decision systems can have similar one-cue statistics yet different conditional structure. In the shared system, later cues remain useful across branches. In the routed system, an early cue directs the organism toward one branch-specific terminal cue. **B**, a non-contingent fixed benchmark must provision every potentially relevant terminal cue before branch identity is known, whereas a contingent strategy pays for routing and then only the terminal cue needed on the realized branch. An exactly balanced binary family shows that this branch-exclusive structure can produce an unbounded fixed-to-contingent cost ratio as problem size grows; the figure uses only the ecological mechanism, not the full extremal construction. **C**, raw cue count and marginal cue balance are therefore weak or insufficient proxies for contingent value. The mechanistic predictor within the declared finite model is conditional cue dependence together with acquisition cost: which cue becomes useful after which earlier observation.
 
 **Alt text:** Three-panel schematic comparing cue structures. Panel A contrasts a system in which the same later cues are useful in both branches with a routed system in which different terminal cues are needed after different early outcomes, despite similar marginal cue statistics. Panel B contrasts fixed provisioning of all potentially relevant terminal cues with contingent routing followed by only one branch-specific terminal cue. Panel C ranks raw cue count and marginal cue balance as poor proxies and highlights conditional cue dependence and acquisition cost as the mechanistic predictors. The figure does not claim a universal scalar measure of ecological complexity.
 
@@ -20,7 +18,7 @@ Status: canonical legend and alt-text specification for the ecology-first V4 can
 
 **Alt text:** Three-panel schematic of temporal ecology. Panel A shows recurrent season, habitat and community states with different contingent-sensing payoffs. Panel B compares two systems with the same slow ecological mode but different alignment between that mode and the state-specific selection contrast, producing strong versus weak long-run amplification. Panel C summarizes the long-run effect as the joint action of ecological persistence and payoff-mode alignment, with the formal spectral expression left to the Supplement. The figure emphasizes that environmental autocorrelation alone is insufficient.
 
-## Figure-level claim firewall
+## Figure interpretation boundaries
 
 - Natural-history systems in the figures are generic illustrations rather than fitted empirical examples.
 - `C_F` is a counterfactual non-contingent benchmark and does not imply simultaneous sampling by real organisms.
