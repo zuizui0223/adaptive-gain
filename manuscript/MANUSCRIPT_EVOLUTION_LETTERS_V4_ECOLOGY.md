@@ -188,6 +188,12 @@ This shifts emphasis away from treating environmental information as a scalar re
 
 The exact budget window makes this ecological dependence especially clear. Contingent sensing is not predicted to be most valuable under the harshest possible constraints. Its unique value is maximal in a middle regime: the environment is restrictive enough that acquiring every potentially useful cue is infeasible, but permissive enough that a routed sequence still succeeds. This is closely aligned with empirical work on speed–accuracy trade-offs, where organisms adjust information sampling according to the cost of time and errors (Chittka et al. 2003, 2009).
 
+### Relation to speed–accuracy and value-of-information theory
+
+The present mechanism is complementary to two established ways of thinking about information. Speed–accuracy theory asks how additional sampling time changes decision quality, and value-of-information approaches ask whether reducing uncertainty improves the expected outcome of an action (Chittka et al. 2009; Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011). Both make clear that more information is not automatically worth acquiring.
+
+Our additional question is whether **the identity of the next useful cue depends on what has already been observed**. When every extra sample has the same role, contingent routing offers little beyond an ordinary stopping problem. When early observations make different later cues relevant on different branches, however, the organism can avoid paying for information that belongs to unrealized branches. The ecological novelty is therefore conditional acquisition of heterogeneous cues, not a new claim that information has costs or that animals trade speed against accuracy.
+
 ### What evolves: cue order, stopping and conditional deployment
 
 The evolving trait in this framework need not be the presence or absence of a sensory organ. It can be a behavioral or regulatory rule that changes **when** a cue is sampled, whether sampling stops after an early outcome, or which sensory channel is deployed next. Limited attention, learned sampling sequences and conditional behavioral control are therefore natural empirical counterparts of contingent architecture (Dukas 2004; Eliassen et al. 2016).
