@@ -20,7 +20,7 @@ This motivates a distinction that is ecological rather than purely informational
 
 The central question is therefore not simply whether information is valuable. **When does the organization of information acquisition become a target of selection?** Three ingredients should matter. First, the natural history must contain branch-specific cue requirements: later cues are useful in some contexts but unnecessary in others. Second, ecological constraints must be strong enough that sampling every potentially relevant cue is costly, but not so strong that even contingent sensing fails. Third, if ecological states recur through time, they must differ in the payoff to contingent sensing for fluctuating selection to accumulate into longer-term evolutionary effects.
 
-We formalize these ideas with a finite decision model. The mathematics yields four ecological conclusions. First, contingent sensing has an exact intermediate budget window in which it alone can guarantee the focal decision. Second, its advantage depends on conditional cue structure rather than marginal cue balance. Third, ecological variation matters for eco-evolutionary feedback only when it changes state-specific decision structure enough to generate a sufficient selection contrast. Fourth, environmental persistence matters only when the sensing-generated contrast aligns with the persistent ecological mode. Together, these results turn a theory of finite decision architecture into a set of testable predictions about ecological deadlines, heterogeneous cue environments and the evolution of contingent information use.
+We formalize these ideas with a finite decision model. The mathematics yields four ecological conclusions. First, contingent sensing has an exact intermediate budget window in which it alone can guarantee the focal decision. Second, its advantage depends on conditional cue structure rather than marginal cue balance. Third, ecological variation matters for eco-evolutionary feedback only when it changes state-specific decision structure enough to generate a sufficient selection contrast. Fourth, environmental persistence matters only when the sensing-generated contrast aligns with the persistent ecological mode. Together, these results turn a theory of finite decision architecture into a set of testable predictions about ecological deadlines, heterogeneous cue environments and the evolution of contingent information use (Figs. 1–3).
 
 ## Methods
 
@@ -127,7 +127,7 @@ The inequality \(C_A\le C_F\) divides ecological budgets into three qualitativel
 C_A\le B<C_F
 \]
 
-does contingent sensing create a unique performance benefit.
+does contingent sensing create a unique performance benefit (Fig. 1).
 
 Under the threshold fitness model, this produces a non-monotonic prediction. Tightening an ecological deadline from a very relaxed state can first expose a selective advantage of contingent sensing, because exhaustive cue acquisition no longer fits inside the opportunity window. Tightening the deadline still further eventually removes that advantage when even the contingent sequence becomes too slow or costly. Selection for contingent sensing therefore need not increase monotonically with time pressure, predation risk or opportunity cost.
 
@@ -146,7 +146,7 @@ The balanced binary construction shows that global cue frequency is a poor proxy
 
 as routing depth \(d\) increases.
 
-The ecological reason is branch exclusivity. An early cue need not directly settle the final action to be valuable. Its value can come from determining which later cue is worth acquiring. Fixed sensing must provision all terminal cues because it cannot condition resource use on the early observation; contingent sensing pays for routing and then only the terminal information relevant to the realized branch.
+The ecological reason is branch exclusivity (Fig. 2). An early cue need not directly settle the final action to be valuable. Its value can come from determining which later cue is worth acquiring. Fixed sensing must provision all terminal cues because it cannot condition resource use on the early observation; contingent sensing pays for routing and then only the terminal information relevant to the realized branch.
 
 This result predicts that the evolutionary value of contingent sensing should be associated with **conditional cue dependence**—which cues become relevant after which observations—rather than with cue number, cue entropy or global cue balance alone.
 
@@ -176,7 +176,7 @@ Slow ecological change alone does not guarantee persistent evolutionary conseque
 
 Two systems can therefore have the same environmental autocorrelation yet very different evolutionary consequences. In one, the slowly recurring states may be exactly those in which contingent sensing is strongly favored or disfavored. In the other, the same slow mode may connect states with nearly identical sensing payoffs. The first produces strong long-run amplification; the second does not.
 
-The prediction is an interaction between ecological persistence and state-specific decision structure, rather than a main effect of persistence alone.
+The prediction is an interaction between ecological persistence and state-specific decision structure, rather than a main effect of persistence alone (Fig. 3).
 
 ## Discussion
 
