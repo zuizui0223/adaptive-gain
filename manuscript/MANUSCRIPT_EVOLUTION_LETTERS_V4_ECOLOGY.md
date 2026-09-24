@@ -188,6 +188,12 @@ This shifts emphasis away from treating environmental information as a scalar re
 
 The exact budget window makes this ecological dependence especially clear. Contingent sensing is not predicted to be most valuable under the harshest possible constraints. Its unique value is maximal in a middle regime: the environment is restrictive enough that acquiring every potentially useful cue is infeasible, but permissive enough that a routed sequence still succeeds. This is closely aligned with empirical work on speed–accuracy trade-offs, where organisms adjust information sampling according to the cost of time and errors (Chittka et al. 2003, 2009).
 
+### What evolves: cue order, stopping and conditional deployment
+
+The evolving trait in this framework need not be the presence or absence of a sensory organ. It can be a behavioral or regulatory rule that changes **when** a cue is sampled, whether sampling stops after an early outcome, or which sensory channel is deployed next. Limited attention, learned sampling sequences and conditional behavioral control are therefore natural empirical counterparts of contingent architecture (Dukas 2004; Eliassen et al. 2016).
+
+This also clarifies the fixed comparison. \(C_F\) is a counterfactual benchmark for a strategy that cannot use earlier outcomes to avoid later acquisition costs; it is not a claim that real organisms literally inspect every cue simultaneously. Selection on contingent sensing could act through faster stopping, conditional attention, sequential motor routines, or developmental/regulatory allocation of sensory effort. The model groups these proximate routes by the ecological consequence they share: branch identity changes which later information must be paid for.
+
 ### Branch structure gives a natural-history meaning to “complexity”
 
 The balanced-cue result shows why counting cues is insufficient. What matters is whether cue relevance is shared across all situations or segregated among ecological branches. A cheap early observation can have little direct relationship with the final action yet have high decision value because it tells the organism which expensive cue to ignore.
