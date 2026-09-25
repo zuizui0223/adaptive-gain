@@ -1,7 +1,17 @@
-"""Build a deterministic scientific submission bundle for Theoretical Ecology.
+"""Build the legacy deterministic V1 scientific bundle for Theoretical Ecology.
 
-The bundle contains only scientific upload material that is already frozen:
-assembled manuscript body, supplement, four SVG figures, and a generated manifest.
+IMPORTANT: this builder is intentionally V1-only. It assembles MANUSCRIPT_V1.md,
+FIGURE_LEGENDS_V1.md, SUPPLEMENT_V1.md, and the four V1 SVG figures into
+dist/theoretical-ecology-scientific-bundle-v1.zip. It must not be used to build,
+validate, or reproduce the Evolution Letters V4 submission bundle.
+
+For Evolution Letters V4, the repository reproducibly freezes the scientific
+source surface through .github/workflows/v4-submission-source-bundle.yml. The
+final line-numbered DOCX, rendered PDFs, and checksum-frozen staging ZIP are
+machine-side validated export artifacts recorded in
+manuscript/EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json; byte-for-byte
+reconstruction of those exported binaries from this repository is not claimed.
+
 Author-controlled title-page metadata and declarations are intentionally excluded.
 """
 from __future__ import annotations
