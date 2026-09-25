@@ -17,10 +17,10 @@ FIGURES = {
         "Raw richness and interaction-relevant richness can diverge",
         "same decision class",
         "new branch",
-        "Routeable generalism",
+        "Routeable resource environment",
     ),
     ROOT / "manuscript" / "figures" / "figure_el3_accessible_network_v5.svg": (
-        "Same potential interaction network",
+        "Same compatibility-permitted network",
         "Different behaviorally accessible subnetworks",
         "Decision-relevant recurrence",
         "Decision-equivalent recurrence",
@@ -71,12 +71,12 @@ def test_v5_main_promotes_ecological_conclusions():
     required = (
         "Ecological diversity and effective complexity can be decoupled",
         "Species richness need not increase decision complexity",
-        "Routeable heterogeneity can support broad niche use",
-        "Routeability separates potential from behaviorally realizable interactions",
+        "Routeability changes the information cost of broad niche use",
+        "Routeability filters otherwise permitted interactions",
         "Ecological constraints expose the cost of non-routeable heterogeneity",
         "Temporal heterogeneity matters when it changes decision-relevant structure",
         "Biodiversity need not imply information burden",
-        "Routeability provides a missing constraint in adaptive-foraging ecology",
+        "Routeability adds an information filter to adaptive-foraging ecology",
     )
     for phrase in required:
         assert phrase in text
@@ -96,6 +96,8 @@ def test_v5_main_keeps_claim_boundaries():
     assert "routeability is not an intrinsic scalar property" in lower
     assert "this does not imply that routeability alone causes generalism" in lower
     assert "not a claim that sensing alone determines food-web structure" in lower
+    assert "compatibility-permitted network" in lower
+    assert "otherwise permitted" in lower
     assert "not empirical demonstrations" in lower
     assert "not a separate theorem" in lower
     assert "environmental variability alone" not in lower
@@ -123,7 +125,7 @@ def test_v5_supplement_starts_with_ecological_structure():
     assert "Raw heterogeneity versus decision-relevant heterogeneity" in text
     assert "Decision-equivalence classes" in text
     assert "Ecological consequences" in text
-    assert "Potential versus behaviorally accessible interactions" in text
+    assert "Compatibility-permitted versus behaviorally accessible interactions" in text
     assert "Natural-history mappings and empirical use" in text
 
 
@@ -154,7 +156,7 @@ def test_v5_figure_plan_is_environment_and_community_centered():
     assert "Can biodiversity increase without increasing decision complexity?" in text
     assert "Can information structure filter realized community interactions and temporal effects?" in text
     assert "Diversity is not complexity." in text
-    assert "potential interaction network" in text
+    assert "compatibility-permitted network" in text
     assert "behaviorally accessible" in text
 
 
@@ -201,5 +203,22 @@ def test_v5_legends_keep_ecological_claim_boundaries():
     assert "not a universal scalar property of a community" in text
     assert "does not imply routeability alone causes generalism" in text
     assert "Behaviorally accessible interactions are not automatically realized interactions" in text
+    assert "compatibility-permitted" in text
     assert "not autocorrelation alone" in text
     assert "rather than fitted empirical demonstrations" in text
+
+
+def test_v5_does_not_collapse_network_filters():
+    text = _text(MAIN).lower()
+    assert "forbidden links" in text
+    assert "after those compatibility constraints" in text
+    assert "routeability acts only on this last transition" in text
+    assert "routeability determines realized connectance" not in text
+
+
+def test_v5_keeps_environment_as_subject():
+    text = _text(MAIN)
+    assert "The central ecological conclusion is that heterogeneity and effective complexity are different properties." in text
+    assert "diversity is not complexity" in text.lower()
+    assert "routeable resource environment" not in text  # figure wording only; main remains conceptual
+    assert "## Empirical tests" not in text
