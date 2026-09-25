@@ -43,3 +43,25 @@ def test_frozen_v5_is_not_overwritten_by_extension():
     assert (ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V5_ROUTEABILITY.md").exists()
     readiness = (ROOT / "manuscript" / "EVOLUTION_LETTERS_V5_ROUTEABILITY_READINESS_V1.json").read_text(encoding="utf-8")
     assert "v5_machine_submission_bundle_frozen_human_metadata_pending" in readiness
+
+
+def test_decision_structural_turnover_extension():
+    text = _text()
+    for phrase in (
+        "Decision-structural turnover",
+        "within-class turnover",
+        "branch-changing turnover",
+        "step-like rather than proportional",
+        "taxonomic turnover",
+        "functional turnover",
+        "decision-structural turnover",
+        "Consequence for biotic homogenization",
+    ):
+        assert phrase in text
+
+
+def test_decision_structural_turnover_keeps_scope_boundary():
+    text = _text().lower()
+    assert "not proposed as a universal beta-diversity metric" in text
+    assert "does not imply that decision structure determines ecosystem functioning or resilience" in text
+    assert "decision-equivalence classes are gained, lost or merged" in text
