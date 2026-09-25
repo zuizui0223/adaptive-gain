@@ -137,7 +137,19 @@
       "reason_to_hold": "The extension is theorem-backed and connects routeability to turnover and homogenization, but the initial V5 submission remains cleaner with environmental routeability as the single headline concept.",
       "secondary_inference": "effective decision complexity can remain invariant across substantial within-class turnover and change disproportionately when turnover crosses a decision-equivalence boundary",
       "tertiary_inference": "multiple states within one decision-equivalence class can buffer the focal decision structure against some turnover until the final class representative is lost",
-      "claim_boundary": "This is interaction-specific structural buffering, not ecosystem resilience, functional redundancy, or biodiversity insurance."
+      "claim_boundary": "This is interaction-specific structural buffering, not ecosystem resilience, functional redundancy, or biodiversity insurance.",
+      "validation": {
+        "extension_source_commit": "fa023bc2b3c71ae16a00edda2ecfe0fd5a25cf69",
+        "regression_test_commit": "e9f3c7cf5d23e514aeda8b37210ed6042a9a6600",
+        "readiness_record_head": "ec4dd7e7f93dbe120d884a4c377edaaa7dcc3aef",
+        "workflow_run": 36116641341,
+        "python_3_10": "success",
+        "python_3_11": "success",
+        "python_3_12": "success",
+        "full_pytest": "success",
+        "witness_audit": "success",
+        "certificate_audit": "success"
+      }
     }
   ]
 }
