@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.math{font-size:22px;font-family:'DejaVu Sans Mono',monospace}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f3f3f3;stroke:#555;stroke-width:1.5}.dark{fill:#dcdcdc;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#777;stroke-width:2;fill:none}.dash{stroke:#777;stroke-width:2;stroke-dasharray:8 7;fill:none}.axis{stroke:#111;stroke-width:3}
+</style>
+<text x="70" y="58" class="title">Same ecological diversity can have different effective complexity</text>
+<line x1="535" y1="98" x2="535" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1065" y1="98" x2="1065" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Routeable community</text>
+<text x="115" y="155" class="small">8 resources; early structure removes irrelevant branches</text>
+<rect x="185" y="195" width="230" height="62" rx="10" class="dark"/>
+<text x="230" y="233" class="head">early group cue</text>
+<line x1="260" y1="257" x2="175" y2="325" class="line"/><line x1="340" y1="257" x2="425" y2="325" class="line"/>
+<rect x="90" y="325" width="180" height="58" rx="10" class="soft"/><rect x="330" y="325" width="180" height="58" rx="10" class="soft"/>
+<text x="135" y="360" class="body">group A</text><text x="375" y="360" class="body">group B</text>
+<line x1="180" y1="383" x2="180" y2="455" class="line"/><line x1="420" y1="383" x2="420" y2="455" class="line"/>
+<text x="110" y="440" class="small">one branch-specific cue</text><text x="350" y="440" class="small">one branch-specific cue</text>
+<g>
+<rect x="65" y="485" width="90" height="52" rx="8" class="box"/><text x="91" y="518" class="body">R1</text>
+<rect x="165" y="485" width="90" height="52" rx="8" class="box"/><text x="191" y="518" class="body">R2</text>
+<rect x="65" y="550" width="90" height="52" rx="8" class="box"/><text x="91" y="583" class="body">R3</text>
+<rect x="165" y="550" width="90" height="52" rx="8" class="box"/><text x="191" y="583" class="body">R4</text>
+<rect x="345" y="485" width="90" height="52" rx="8" class="box"/><text x="371" y="518" class="body">R5</text>
+<rect x="445" y="485" width="90" height="52" rx="8" class="box"/><text x="471" y="518" class="body">R6</text>
+<rect x="345" y="550" width="90" height="52" rx="8" class="box"/><text x="371" y="583" class="body">R7</text>
+<rect x="445" y="550" width="90" height="52" rx="8" class="box"/><text x="471" y="583" class="body">R8</text>
+</g>
+<text x="110" y="680" class="small">Only the realized branch creates later information cost.</text>
+<text x="110" y="715" class="head">High routeability</text>
+
+<text x="570" y="120" class="panel">B</text>
+<text x="615" y="120" class="head">Non-routeable community</text>
+<text x="615" y="155" class="small">Same 8 resources; many terminal distinctions remain jointly relevant</text>
+<rect x="665" y="200" width="300" height="60" rx="10" class="soft"/>
+<text x="700" y="237" class="head">all resource cues remain relevant</text>
+<g>
+<line x1="815" y1="260" x2="650" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="735" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="820" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="905" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="990" y2="420" class="thin"/>
+</g>
+<rect x="600" y="420" width="80" height="50" rx="7" class="box"/><text x="623" y="451" class="body">R1</text>
+<rect x="690" y="420" width="80" height="50" rx="7" class="box"/><text x="713" y="451" class="body">R2</text>
+<rect x="780" y="420" width="80" height="50" rx="7" class="box"/><text x="803" y="451" class="body">R3</text>
+<rect x="870" y="420" width="80" height="50" rx="7" class="box"/><text x="893" y="451" class="body">R4</text>
+<rect x="960" y="420" width="80" height="50" rx="7" class="box"/><text x="983" y="451" class="body">R5+</text>
+<text x="620" y="555" class="small">Richness is unchanged, but more distinctions must stay available together.</text>
+<text x="620" y="600" class="head">Low routeability</text>
+
+<text x="1100" y="120" class="panel">C</text>
+<text x="1145" y="120" class="head">Effective complexity is task-specific</text>
+<text x="1140" y="205" class="body">Routeable</text><text x="1140" y="370" class="body">Non-routeable</text>
+<line x1="1265" y1="190" x2="1265" y2="500" class="axis"/>
+<text x="1250" y="535" class="small">cost</text>
+<rect x="1300" y="245" width="80" height="70" class="dark"/><text x="1325" y="337" class="small">C_A</text>
+<rect x="1405" y="180" width="80" height="135" class="soft"/><text x="1430" y="337" class="small">C_F</text>
+<rect x="1300" y="405" width="80" height="95" class="dark"/><text x="1325" y="522" class="small">C_A</text>
+<rect x="1405" y="390" width="80" height="110" class="soft"/><text x="1430" y="522" class="small">C_F</text>
+<text x="1130" y="635" class="head">Diversity is not complexity.</text>
+<text x="1130" y="680" class="body">The ecological cost of heterogeneity depends on</text>
+<text x="1130" y="710" class="body">whether alternatives can be partitioned into</text>
+<text x="1130" y="740" class="body">conditionally relevant branches.</text>
+<text x="1130" y="800" class="small">The pair (C_A, C_F) is task-specific, not a universal community score.</text>
+</svg>
