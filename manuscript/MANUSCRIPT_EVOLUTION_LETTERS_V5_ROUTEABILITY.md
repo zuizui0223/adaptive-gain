@@ -126,7 +126,7 @@ This yields a community-level prediction:
 
 > **among otherwise permitted interactions, the behaviorally accessible fraction should depend on the routeability of the resource environment.**
 
-The prediction concerns a constraint on adaptive interaction, not a claim that sensing alone determines food-web structure (Fig. 3). Competition, morphology, energetics and spatial co-occurrence remain necessary determinants of realized interactions. Routeability specifies when the information burden of a diverse community does or does not become an additional limiting factor.
+The prediction concerns a constraint on adaptive interaction, not a claim that sensing alone determines food-web structure (Fig. 3). Morphology, phenology and encounter opportunity define upstream compatibility, while competition, demography and local abundance still determine which behaviorally accessible links are ultimately realized. Routeability specifies when information burden becomes an additional filter between those stages.
 
 ### Ecological constraints expose the cost of non-routeable heterogeneity
 
@@ -206,7 +206,7 @@ This provides a sharper interpretation of temporal and spatial heterogeneity. Th
 
 The routeability perspective produces a hierarchy of ecological consequences from the same structural result.
 
-At the resource level, it determines whether many alternatives can be navigated cheaply. At the niche level, it modifies the information cost of broad resource use. At the community level, it constrains which potential interactions can be behaviorally realized. Across time, it determines whether recurrent environmental change repeatedly alters those accessible alternatives. In eco-evolutionary settings, only sufficiently large contrasts in routeability can contribute strong state-dependent feedback through this mechanism.
+At the resource level, it determines whether many alternatives can be navigated cheaply. At the niche level, it modifies the information cost of broad resource use. At the community level, it filters which compatibility-permitted interactions remain behaviorally accessible. Across time, it determines whether recurrent environmental change repeatedly alters those accessible alternatives. In eco-evolutionary settings, only sufficiently large contrasts in routeability can contribute strong state-dependent feedback through this mechanism.
 
 The mathematics therefore does not primarily say that organisms should "measure more" or "sense better." It says that **the ecological organization of alternatives determines how much of environmental diversity must be processed at once.**
 
