@@ -36,19 +36,25 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <rect x="665" y="200" width="300" height="60" rx="10" class="soft"/>
 <text x="700" y="237" class="head">all resource cues remain relevant</text>
 <g>
-<line x1="815" y1="260" x2="650" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="625" y2="420" class="thin"/>
 <line x1="815" y1="260" x2="735" y2="420" class="thin"/>
-<line x1="815" y1="260" x2="820" y2="420" class="thin"/>
-<line x1="815" y1="260" x2="905" y2="420" class="thin"/>
-<line x1="815" y1="260" x2="990" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="845" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="955" y2="420" class="thin"/>
+<line x1="815" y1="260" x2="625" y2="500" class="thin"/>
+<line x1="815" y1="260" x2="735" y2="500" class="thin"/>
+<line x1="815" y1="260" x2="845" y2="500" class="thin"/>
+<line x1="815" y1="260" x2="955" y2="500" class="thin"/>
 </g>
-<rect x="600" y="420" width="80" height="50" rx="7" class="box"/><text x="623" y="451" class="body">R1</text>
-<rect x="690" y="420" width="80" height="50" rx="7" class="box"/><text x="713" y="451" class="body">R2</text>
-<rect x="780" y="420" width="80" height="50" rx="7" class="box"/><text x="803" y="451" class="body">R3</text>
-<rect x="870" y="420" width="80" height="50" rx="7" class="box"/><text x="893" y="451" class="body">R4</text>
-<rect x="960" y="420" width="80" height="50" rx="7" class="box"/><text x="983" y="451" class="body">R5+</text>
-<text x="620" y="555" class="small">Richness is unchanged, but more distinctions must stay available together.</text>
-<text x="620" y="600" class="head">Low routeability</text>
+<rect x="585" y="420" width="80" height="50" rx="7" class="box"/><text x="608" y="451" class="body">R1</text>
+<rect x="695" y="420" width="80" height="50" rx="7" class="box"/><text x="718" y="451" class="body">R2</text>
+<rect x="805" y="420" width="80" height="50" rx="7" class="box"/><text x="828" y="451" class="body">R3</text>
+<rect x="915" y="420" width="80" height="50" rx="7" class="box"/><text x="938" y="451" class="body">R4</text>
+<rect x="585" y="500" width="80" height="50" rx="7" class="box"/><text x="608" y="531" class="body">R5</text>
+<rect x="695" y="500" width="80" height="50" rx="7" class="box"/><text x="718" y="531" class="body">R6</text>
+<rect x="805" y="500" width="80" height="50" rx="7" class="box"/><text x="828" y="531" class="body">R7</text>
+<rect x="915" y="500" width="80" height="50" rx="7" class="box"/><text x="938" y="531" class="body">R8</text>
+<text x="620" y="620" class="small">Richness is unchanged, but more distinctions must stay available together.</text>
+<text x="620" y="665" class="head">Low routeability</text>
 
 <text x="1100" y="120" class="panel">C</text>
 <text x="1145" y="120" class="head">Effective complexity is task-specific</text>
