@@ -38,8 +38,8 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="620" y="770" class="body">need not move together.</text>
 
 <text x="1100" y="120" class="panel">C</text>
-<text x="1145" y="120" class="head">Implication for broad niche use</text>
-<text x="1140" y="195" class="head">Routeable generalism</text>
+<text x="1145" y="120" class="head">Information cost of broad niche use</text>
+<text x="1140" y="195" class="head">Routeable resource environment</text>
 <g>
 <rect x="1140" y="235" width="70" height="42" class="box"/><text x="1157" y="262" class="small">R1</text>
 <rect x="1220" y="235" width="70" height="42" class="box"/><text x="1237" y="262" class="small">R2</text>
@@ -48,9 +48,9 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 </g>
 <line x1="1295" y1="277" x2="1295" y2="350" class="line"/>
 <rect x="1180" y="350" width="230" height="65" rx="10" class="dark"/><text x="1210" y="389" class="head">few decision classes</text>
-<text x="1140" y="465" class="small">Many resources can remain information-feasible.</text>
+<text x="1140" y="465" class="small">Broad niche use can remain information-feasible.</text>
 
-<text x="1140" y="555" class="head">Non-routeable generalism</text>
+<text x="1140" y="555" class="head">Non-routeable resource environment</text>
 <g>
 <rect x="1140" y="595" width="70" height="42" class="box"/><text x="1157" y="622" class="small">R1</text>
 <rect x="1220" y="595" width="70" height="42" class="box"/><text x="1237" y="622" class="small">R2</text>
@@ -60,6 +60,6 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <line x1="1175" y1="637" x2="1175" y2="705" class="thin"/><line x1="1255" y1="637" x2="1255" y2="705" class="thin"/><line x1="1335" y1="637" x2="1335" y2="705" class="thin"/><line x1="1415" y1="637" x2="1415" y2="705" class="thin"/>
 <text x="1135" y="745" class="small">More independent terminal distinctions</text>
 <text x="1135" y="775" class="small">increase information burden.</text>
-<text x="1135" y="815" class="small">Routeability modifies this cost;</text>
+<text x="1135" y="815" class="small">Environmental routeability modifies this cost;</text>
 <text x="1135" y="845" class="small">it does not determine niche breadth alone.</text>
 </svg>
