@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f3f3f3;stroke:#555;stroke-width:1.5}.dark{fill:#dcdcdc;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#777;stroke-width:2;fill:none}.dash{stroke:#999;stroke-width:2;stroke-dasharray:8 7;fill:none}
+</style>
+<text x="70" y="58" class="title">Routeability filters realized interactions and temporal ecological effects</text>
+<line x1="535" y1="98" x2="535" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1065" y1="98" x2="1065" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Same potential interaction network</text>
+<circle cx="190" cy="380" r="55" fill="#dcdcdc" stroke="#222" stroke-width="3"/>
+<text x="145" y="388" class="head">consumer</text>
+<g>
+<circle cx="400" cy="210" r="42" fill="white" stroke="#222" stroke-width="2"/><text x="376" y="216" class="small">R1</text>
+<circle cx="450" cy="330" r="42" fill="white" stroke="#222" stroke-width="2"/><text x="426" y="336" class="small">R2</text>
+<circle cx="450" cy="470" r="42" fill="white" stroke="#222" stroke-width="2"/><text x="426" y="476" class="small">R3</text>
+<circle cx="400" cy="590" r="42" fill="white" stroke="#222" stroke-width="2"/><text x="376" y="596" class="small">R4</text>
+</g>
+<line x1="240" y1="350" x2="362" y2="230" class="dash"/><line x1="245" y1="375" x2="410" y2="340" class="dash"/>
+<line x1="245" y1="405" x2="410" y2="460" class="dash"/><line x1="235" y1="425" x2="362" y2="575" class="dash"/>
+<text x="105" y="700" class="small">Morphology, encounter and energetics permit all four links.</text>
+<text x="105" y="735" class="small">Information structure has not yet been applied.</text>
+
+<text x="570" y="120" class="panel">B</text>
+<text x="615" y="120" class="head">Different behaviorally accessible subnetworks</text>
+<text x="625" y="190" class="head">Routeable</text>
+<circle cx="700" cy="360" r="45" fill="#dcdcdc" stroke="#222" stroke-width="3"/><text x="667" y="367" class="small">consumer</text>
+<circle cx="885" cy="250" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="866" y="256" class="small">R1</text>
+<circle cx="940" cy="350" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="921" y="356" class="small">R2</text>
+<circle cx="940" cy="470" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="921" y="476" class="small">R3</text>
+<line x1="742" y1="340" x2="855" y2="268" class="line"/><line x1="745" y1="360" x2="907" y2="350" class="line"/><line x1="742" y1="380" x2="908" y2="460" class="line"/>
+<text x="620" y="530" class="small">More potential links fit within the same ecological budget.</text>
+
+<text x="625" y="620" class="head">Non-routeable</text>
+<circle cx="700" cy="735" r="45" fill="#dcdcdc" stroke="#222" stroke-width="3"/><text x="667" y="742" class="small">consumer</text>
+<circle cx="900" cy="685" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="881" y="691" class="small">R1</text>
+<circle cx="900" cy="785" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="881" y="791" class="small">R2+</text>
+<line x1="743" y1="725" x2="867" y2="692" class="line"/>
+<line x1="743" y1="745" x2="867" y2="778" class="dash"/>
+<text x="805" y="845" class="small">Potential does not guarantee behavioral accessibility.</text>
+
+<text x="1100" y="120" class="panel">C</text>
+<text x="1145" y="120" class="head">Persistence is filtered by decision relevance</text>
+<text x="1140" y="205" class="head">Same physical persistence</text>
+<circle cx="1200" cy="310" r="48" fill="#f3f3f3" stroke="#222" stroke-width="2"/><text x="1178" y="317" class="body">E1</text>
+<circle cx="1430" cy="310" r="48" fill="#f3f3f3" stroke="#222" stroke-width="2"/><text x="1408" y="317" class="body">E2</text>
+<path d="M1250 300 C1320 260 1370 260 1380 300" class="line"/><path d="M1380 320 C1320 360 1270 360 1250 320" class="line"/>
+<text x="1140" y="410" class="head">Decision-relevant recurrence</text>
+<text x="1140" y="445" class="body">E1 and E2 differ in routeability / payoff</text>
+<text x="1140" y="480" class="small">→ persistent mode amplifies long-run effect</text>
+
+<text x="1140" y="575" class="head">Decision-equivalent recurrence</text>
+<text x="1140" y="610" class="body">E1 and E2 differ physically but share the focal</text>
+<text x="1140" y="640" class="body">decision structure</text>
+<text x="1140" y="675" class="small">→ persistence contributes little through this mechanism</text>
+<text x="1140" y="775" class="head">Ecological conclusion:</text>
+<text x="1140" y="812" class="body">autocorrelation matters when persistent states</text>
+<text x="1140" y="842" class="body">differ in interaction-relevant structure.</text>
+</svg>
