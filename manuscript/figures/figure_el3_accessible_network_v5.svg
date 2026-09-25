@@ -23,7 +23,8 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="105" y="735" class="small">Information structure has not yet been applied.</text>
 
 <text x="570" y="120" class="panel">B</text>
-<text x="615" y="120" class="head">Behaviorally accessible</text>\n<text x="615" y="152" class="head">subnetworks differ</text>
+<text x="615" y="120" class="head">Behaviorally accessible</text>
+<text x="615" y="152" class="head">subnetworks differ</text>
 <text x="625" y="190" class="head">Routeable</text>
 <circle cx="700" cy="360" r="45" fill="#dcdcdc" stroke="#222" stroke-width="3"/><text x="667" y="367" class="small">consumer</text>
 <circle cx="885" cy="250" r="34" fill="white" stroke="#222" stroke-width="2"/><text x="866" y="256" class="small">R1</text>
@@ -41,7 +42,8 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="620" y="845" class="small">Potential links can remain behaviorally inaccessible.</text>
 
 <text x="1100" y="120" class="panel">C</text>
-<text x="1145" y="120" class="head">Persistence is filtered by</text>\n<text x="1145" y="152" class="head">decision relevance</text>
+<text x="1145" y="120" class="head">Persistence is filtered by</text>
+<text x="1145" y="152" class="head">decision relevance</text>
 <text x="1140" y="205" class="head">Same physical persistence</text>
 <circle cx="1200" cy="310" r="48" fill="#f3f3f3" stroke="#222" stroke-width="2"/><text x="1178" y="317" class="body">E1</text>
 <circle cx="1430" cy="310" r="48" fill="#f3f3f3" stroke="#222" stroke-width="2"/><text x="1408" y="317" class="body">E2</text>
