@@ -160,7 +160,7 @@ Let the potential interaction network contain links allowed by spatial encounter
 
 A link can still fail to be behaviorally accessible if the information required to identify, rank or handle the partner cannot be acquired within the ecological budget.
 
-This is different from a **forbidden link** in ecological-network terminology. A forbidden link is prevented by a biological incompatibility such as morphology, phenology or other life-history constraints. A behaviorally inaccessible link in the present sense can remain morphologically and energetically possible but fail because the required ecological discrimination cannot be completed within the available information budget.
+This is different from a **forbidden link** in ecological-network terminology. Forbidden links can arise through phenological, morphological or accessibility mismatches even when species co-occur (Olesen et al. 2011; Maruyama et al. 2014). A behaviorally inaccessible link in the present sense is considered only after those compatibility constraints: it can remain morphologically, phenologically and energetically permitted but fail because the required ecological discrimination cannot be completed within the available information budget.
 
 Routeability can expand the accessible subset because early observations remove irrelevant alternatives.
 
@@ -637,11 +637,13 @@ Natural-history examples in S3 are illustrative. They show how to instantiate th
 
 ## S13. Ecological references for interpretation
 
-- Beckerman, A. P., Petchey, O. L. & Warren, P. H. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–4.
+- Beckerman, A. P., Petchey, O. L. & Morin, P. J. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–6. https://doi.org/10.1111/j.1365-2435.2009.01673.x.
 - Biggs, C. R. et al. 2020. Does functional redundancy affect ecological stability and resilience? A review and meta-analysis. *Ecosphere* 11:e03184. https://doi.org/10.1002/ecs2.3184.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. https://doi.org/10.1046/j.1420-9101.2002.00377.x.
 - Jordano, P. 2016. Sampling networks of ecological interactions. *Functional Ecology* 30:1883–1893. https://doi.org/10.1111/1365-2435.12763.
 - Loeuille, N. 2010. Consequences of adaptive foraging in diverse communities. *Functional Ecology* 24:18–27. https://doi.org/10.1111/j.1365-2435.2009.01617.x.
+- Maruyama, P. K., Vizentin-Bugoni, J., Oliveira, G. M., Oliveira, P. E. & Dalsgaard, B. 2014. Morphological and spatio-temporal mismatches shape a neotropical savanna plant–hummingbird network. *Biotropica* 46:740–747.
+- Olesen, J. M., Bascompte, J., Dupont, Y. L., Elberling, H., Rasmussen, C. & Jordano, P. 2011. Missing and forbidden links in mutualistic networks. *Proceedings of the Royal Society B* 278:725–732. https://doi.org/10.1098/rspb.2010.1371.
 - Poisot, T., Stouffer, D. B. & Gravel, D. 2015. Beyond species: why ecological interaction networks vary through space and time. *Oikos* 124:243–251. https://doi.org/10.1111/oik.01719.
 - Ricotta, C. & Pavoine, S. 2025. What do functional diversity, redundancy, rarity, and originality actually measure? A theoretical guide for ecologists and conservationists. *Ecological Complexity* 61:101116. https://doi.org/10.1016/j.ecocom.2025.101116.
 - Silva, R. & Clarke, A. R. 2020. The “sequential cues hypothesis”: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. https://doi.org/10.1111/1744-7917.12719.
