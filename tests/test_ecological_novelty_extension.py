@@ -65,3 +65,14 @@ def test_decision_structural_turnover_keeps_scope_boundary():
     assert "not proposed as a universal beta-diversity metric" in text
     assert "does not imply that decision structure determines ecosystem functioning or resilience" in text
     assert "decision-equivalence classes are gained, lost or merged" in text
+
+
+def test_interaction_specific_buffering_boundary():
+    text = _text()
+    for phrase in (
+        "Interaction-specific buffering under biodiversity loss",
+        "loss of the final representative",
+        "until turnover crosses an equivalence-class boundary",
+        "not call this ecosystem resilience or biodiversity insurance",
+    ):
+        assert phrase in text
