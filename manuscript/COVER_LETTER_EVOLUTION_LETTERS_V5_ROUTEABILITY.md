@@ -1,6 +1,4 @@
-# Cover letter draft — Evolution Letters V5 environmental routeability candidate
-
-Status: environment-centered draft; author-controlled metadata unresolved; do not send without final approval.
+# Cover letter draft — Evolution Letters
 
 Dear Editors,
 
