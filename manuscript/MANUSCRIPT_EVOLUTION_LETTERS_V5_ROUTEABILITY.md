@@ -2,7 +2,7 @@
 
 ## Teaser text
 
-Ecological diversity does not necessarily create ecological complexity. We show that the same number of resources, habitats or interaction states can impose radically different information costs depending on whether early cues partition the environment into branches that make later information conditionally relevant. This environmental **routeability** separates raw heterogeneity from the complexity actually experienced in ecological interactions, with consequences for niche breadth, realized interaction networks and the evolutionary effects of environmental change.
+Ecological diversity does not necessarily create ecological complexity. We show that the same number of resources, habitats or interaction states can impose radically different information costs depending on whether early cues partition the environment into branches that make later information conditionally relevant. This environmental **routeability** separates raw heterogeneity from the complexity actually experienced in ecological interactions, with consequences for niche breadth, behaviorally accessible interaction structure and the evolutionary effects of environmental change.
 
 ## Abstract
 
@@ -220,7 +220,7 @@ Finally, the niche-breadth and food-web consequences developed here are ecologic
 
 ## Conclusion
 
-Environmental heterogeneity has ecological consequences only through the distinctions it forces interacting organisms to resolve. When those distinctions are hierarchically routeable, high diversity can remain low in effective decision complexity; when they are not, modest diversity can impose large information burdens. The same principle separates taxonomic richness from interaction-relevant richness, refines when heterogeneous environments can support broad niches, constrains the subset of potential interactions that can be behaviorally realized, and filters which forms of temporal variation matter evolutionarily.
+Environmental heterogeneity has ecological consequences only through the distinctions it forces interacting organisms to resolve. When those distinctions are hierarchically routeable, high diversity can remain low in effective decision complexity; when they are not, modest diversity can impose large information burdens. The same principle separates taxonomic richness from interaction-relevant richness, refines when heterogeneous environments can support broad niches, filters which compatibility-permitted interactions remain behaviorally accessible, and determines which forms of temporal variation matter through this mechanism.
 
 The resulting ecological claim is simple:
 
