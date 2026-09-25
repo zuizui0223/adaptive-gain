@@ -124,17 +124,7 @@ Functional redundancy groups species by similarity in ecological functions or co
 
 Two species can be functionally distinct at the ecosystem level yet decision-equivalent for one focal consumer if they require the same action and the same remaining discrimination structure. Conversely, functionally similar species can be decision-distinct if the focal interaction requires different cues or responses.
 
-Thus:
-
-[
-	ext{taxonomic identity}
-
-eq
-	ext{functional identity}
-
-eq
-	ext{decision equivalence}.
-]
+Thus taxonomic identity, functional identity and decision equivalence are distinct classifications; none should be treated as a substitute for the others.
 
 The distinction matters because routeability concerns the information structure of a focal interaction rather than functional redundancy of the community as a whole.
 
