@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "environment_centered_candidate_awaiting_ci_figures_and_export",
+  "status": "environment_centered_text_and_figures_validated_export_pending",
   "headline": "environmental routeability determines the ecological cost of heterogeneity",
   "preserved_v4_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json",
@@ -15,13 +15,15 @@
     "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V5_ROUTEABILITY.md",
     "supplement": "manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V5_ROUTEABILITY.md",
     "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V5_ROUTEABILITY.md",
-    "surface_test": "tests/test_evolution_letters_v5_routeability_surface.py"
+    "surface_test": "tests/test_evolution_letters_v5_routeability_surface.py",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V5_ROUTEABILITY.md",
+    "cover_letter": "manuscript/COVER_LETTER_EVOLUTION_LETTERS_V5_ROUTEABILITY.md"
   },
   "ecological_claims": {
     "primary": "raw environmental heterogeneity and effective ecological complexity can be decoupled by routeability",
     "richness": "species or state richness can increase without increasing task-specific decision complexity when additions remain within existing decision-equivalence classes",
     "niche_breadth": "routeable heterogeneity can reduce the information cost of broad niche use, but does not determine niche breadth by itself",
-    "community": "routeability can constrain the gap between potential and behaviorally accessible interaction networks",
+    "community": "routeability can further filter compatibility-permitted interactions into the behaviorally accessible subset; it does not replace morphology, phenology, encounter or downstream demographic filters",
     "temporal": "environmental persistence matters through persistence of decision-relevant heterogeneity rather than autocorrelation alone"
   },
   "terminology": {
@@ -42,19 +44,32 @@
     "stop_rule": "Do not add new theorem families. Further work may only improve ecological interpretation, claim scope, figures, literature positioning, or submission quality."
   },
   "validation": {
-    "candidate_head": "b3a829fedfb738c00c53b0ea5625a6aeaf81e1a2",
-    "workflow_run": null,
-    "length_gate": "pending",
-    "environment_surface_gate": "pending",
-    "claim_firewall": "pending",
-    "supplement_surface_gate": "pending",
-    "figure_surface_gate": "pending"
+    "scientific_source_head": "bee3e43c4b0f95315e44246480b07da653e5f8b7",
+    "gate_head": "1453296248cebdd62a944db4d5df7d50782efbe5",
+    "workflow_run": 36090931411,
+    "source_bundle_run": 36090912215,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "full_pytest": "success",
+    "witness_audit": "success",
+    "certificate_audit": "success",
+    "length_gate": "success",
+    "environment_surface_gate": "success",
+    "claim_firewall": "success",
+    "supplement_surface_gate": "success",
+    "figure_surface_gate": "success",
+    "figure_visual_qc": "success_3_of_3",
+    "title_words": 8,
+    "teaser_words": 71,
+    "abstract_words": 271,
+    "main_text_words": 3347
   },
   "remaining_machine_work": [
-    "complete V5 CI",
-    "implement and visually validate three environment/community-centered figures",
-    "write V5 figure legends and cover letter",
-    "export and visually validate V5 Main DOCX/PDF and Supplement PDF",
-    "freeze a V5 checksum bundle only if V5 is preferred over frozen V4"
-  ]
+    "export and visually validate V5 line-numbered Main DOCX/PDF",
+    "export and visually validate V5 Supplement PDF",
+    "regenerate V5 Figure 1-3 PDFs from validated SVGs",
+    "assemble and checksum-freeze a V5 staging bundle if export QC passes"
+  ],
+  "promotion_rule": "V5 may supersede the frozen V4 bundle only after its environment-centered Main/Supplement/figure export surface passes visual and PDF preflight QA and is checksum-frozen. V4 remains a preserved fallback."
 }
