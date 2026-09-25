@@ -21,7 +21,8 @@ FIGURES = {
     ),
     ROOT / "manuscript" / "figures" / "figure_el3_accessible_network_v5.svg": (
         "Same compatibility-permitted network",
-        "Different behaviorally accessible subnetworks",
+        "Behaviorally accessible",
+        "subnetworks differ",
         "Decision-relevant recurrence",
         "Decision-equivalent recurrence",
     ),
@@ -154,7 +155,7 @@ def test_v5_figure_plan_is_environment_and_community_centered():
     text = _text(FIGPLAN)
     assert "Can equally diverse environments differ in effective complexity?" in text
     assert "Can biodiversity increase without increasing decision complexity?" in text
-    assert "Can information structure filter realized community interactions and temporal effects?" in text
+    assert "Can information structure filter compatibility-permitted interactions and temporal ecological effects?" in text
     assert "Diversity is not complexity." in text
     assert "compatibility-permitted network" in text
     assert "behaviorally accessible" in text
