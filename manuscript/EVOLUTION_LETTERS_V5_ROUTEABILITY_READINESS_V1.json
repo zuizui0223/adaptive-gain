@@ -3,7 +3,7 @@
   "date": "2026-09-25",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "environment_centered_text_and_figures_validated_export_pending",
+  "status": "v5_machine_submission_bundle_frozen_human_metadata_pending",
   "headline": "environmental routeability determines the ecological cost of heterogeneity",
   "preserved_v4_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json",
@@ -44,11 +44,11 @@
     "stop_rule": "Do not add new theorem families. Further work may only improve ecological interpretation, claim scope, figures, literature positioning, or submission quality."
   },
   "validation": {
-    "repository_surface_head": "b14bee9844577477eda56c4fdd766d744f19d50d",
-    "main_scientific_head": "0a8d6d8bdc8b9b756b19444ead8616bd06bb1b70",
+    "scientific_source_commit": "0a8d6d8bdc8b9b756b19444ead8616bd06bb1b70",
     "gate_head": "b14bee9844577477eda56c4fdd766d744f19d50d",
-    "workflow_run": 36096341061,
-    "source_bundle_run": 36096329722,
+    "cover_source_bundle_head": "373ae67275ae6965e3793a690d567fe27a5792ad",
+    "gate_workflow_run": 36096341061,
+    "source_bundle_workflow_run": 36107544400,
     "python_3_10": "success",
     "python_3_11": "success",
     "python_3_12": "success",
@@ -60,17 +60,61 @@
     "claim_firewall": "success",
     "supplement_surface_gate": "success",
     "figure_surface_gate": "success",
+    "main_visual_qc": "success_22_of_22_pages",
+    "supplement_visual_qc": "success_11_of_11_pages",
     "figure_visual_qc": "success_3_of_3",
+    "pdf_preflight": "success_5_of_5",
+    "main_docx_creator_metadata": "blank",
+    "continuous_line_numbering": "present",
+    "source_sha256_verification": "success_8_of_8",
     "title_words": 8,
     "teaser_words": 71,
     "abstract_words": 271,
     "main_text_words": 3347
   },
   "remaining_machine_work": [
-    "export and visually validate V5 line-numbered Main DOCX/PDF",
-    "export and visually validate V5 Supplement PDF",
-    "regenerate V5 Figure 1-3 PDFs from validated SVGs",
-    "assemble and checksum-freeze a V5 staging bundle if export QC passes"
+    "add a permanent archive DOI if one is minted before submission"
   ],
-  "promotion_rule": "V5 is the preferred environment-centered candidate only after its Main/Supplement/figure export surface passes visual and PDF preflight QA and is checksum-frozen. V4 remains a preserved fallback until that point."
+  "promotion_rule": "V5 is the preferred environment-centered submission candidate. Its machine submission bundle is frozen and checksum-verified. V4 remains preserved as fallback. Submission remains blocked only on author-controlled metadata, approvals, simultaneous-submission confirmation, and any archive DOI.",
+  "submission_bundle": {
+    "name": "EVOLUTION_LETTERS_V5_FINAL_STAGING_V1.zip",
+    "scientific_source_commit": "0a8d6d8bdc8b9b756b19444ead8616bd06bb1b70",
+    "cover_source_bundle_head": "373ae67275ae6965e3793a690d567fe27a5792ad",
+    "sha256": "1778304db4db1ff55081b965606d0d1c7955bce437886363095be34fb6def8e9",
+    "main_pages": 22,
+    "supplement_pages": 11,
+    "figures": 3,
+    "contents": [
+      "01_Main_Manuscript_V5.docx",
+      "02_Main_Manuscript_V5_Preview.pdf",
+      "03_Supplementary_Information_V5.pdf",
+      "04_Figure1_V5.pdf",
+      "05_Figure2_V5.pdf",
+      "06_Figure3_V5.pdf",
+      "07_Cover_Letter_DRAFT.md",
+      "MANIFEST.json",
+      "README_BEFORE_SUBMIT.txt",
+      "SOURCE_PROVENANCE.txt"
+    ]
+  },
+  "reproducibility": {
+    "repo_reproducible_source_surface": true,
+    "source_bundle_workflow": ".github/workflows/v5-routeability-source-bundle.yml",
+    "source_bundle_artifact_name": "evolution-letters-v5-routeability-source",
+    "final_binary_bundle_byte_reproducible_from_repo": false,
+    "final_binary_bundle_status": "machine-side validated export artifact",
+    "note": "The repository reproducibly freezes the V5 Markdown/SVG source surface. The line-numbered DOCX, rendered PDFs and checksum-frozen staging ZIP are machine-side validated export artifacts; byte-for-byte reconstruction of those exported binaries from the repository alone is not claimed."
+  },
+  "remaining_human_work": [
+    "final author list and order",
+    "affiliations",
+    "corresponding-author metadata",
+    "CRediT author contributions",
+    "funding declaration",
+    "conflict-of-interest declaration",
+    "acknowledgements if applicable",
+    "all-author approval",
+    "confirmation that the manuscript is not under consideration elsewhere",
+    "permanent archive DOI if available"
+  ]
 }
