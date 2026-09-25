@@ -87,6 +87,43 @@ Alternatively, a small range shift introducing one interaction partner with a no
 
 This extends the V5 conclusion that environmental change matters when it changes ecological distinctions, not merely when it produces large compositional distance.
 
+## Decision-structural turnover
+
+The same quotient result implies a stronger statement about community turnover.
+
+Taxonomic turnover and decision-structural turnover need not vary proportionally. A community can undergo extensive species replacement while preserving the same decision-equivalence classes for a focal interaction. In that case, taxonomic beta diversity can be high while the contingent decision problem remains invariant.
+
+Conversely, a single replacement can introduce a new branch-specific discrimination requirement and alter routeability even when compositional distance is small.
+
+This yields two qualitatively different kinds of turnover:
+
+- **within-class turnover:** species identities change but replacements remain inside corresponding decision-equivalence classes; the focal contingent-resolution problem can remain unchanged;
+- **branch-changing turnover:** at least one replacement creates, removes or reorganizes a decision-relevant branch; effective complexity can change disproportionately to taxonomic turnover.
+
+Thus the relationship between compositional change and effective complexity can be **step-like rather than proportional**: large stretches of taxonomic turnover may be decision-silent, followed by a change in complexity when turnover crosses a decision-equivalence boundary.
+
+This is analogous in spirit, but not equivalent, to the known decoupling between taxonomic and functional turnover. Empirical studies have shown that taxonomic homogenization need not be accompanied by functional homogenization, and can even coincide with functional differentiation when replacing species are functionally redundant or novel in different ways (White et al. 2018; Campbell & Mandrak 2020). Decision-structural turnover adds a third, focal-interaction-specific layer:
+
+\[
+\text{taxonomic turnover}
+\;\not\equiv\;
+\text{functional turnover}
+\;\not\equiv\;
+\text{decision-structural turnover}.
+\]
+
+The third quantity is not proposed as a universal beta-diversity metric. It asks only whether community change alters the distinctions that must be resolved for a declared ecological interaction.
+
+### Consequence for biotic homogenization
+
+Biotic homogenization is conventionally defined through declining compositional dissimilarity among assemblages, with taxonomic, functional and phylogenetic forms potentially changing in different directions. The routeability framework predicts another possible mismatch:
+
+> Communities can become taxonomically more similar while remaining decision-distinct for a focal interaction, or become taxonomically different while remaining decision-equivalent.
+
+Therefore, whether homogenization changes the information burden of an interaction depends on **which decision-equivalence classes are gained, lost or merged**, not simply on the magnitude or direction of taxonomic beta-diversity change.
+
+This does not imply that decision structure determines ecosystem functioning or resilience. It identifies one mechanism by which the ecological consequences of compositional turnover can be weak, strong or threshold-like despite similar taxonomic change.
+
 ## Relation to functional redundancy
 
 Decision equivalence should not be renamed functional redundancy.
@@ -130,4 +167,7 @@ It also sharpens the V5 headline:
 ## References
 
 - Kerr, M. R., Svenning, J.-C., Riede, F., Buitenwerf, R., Abraham, A. J., Marjakangas, E.-L., Sykut, M. & Ordonez, A. 2026. The making of novel ecosystems: a process-based framework for measurement, analysis and application. *Methods in Ecology and Evolution* 17:683–704. https://doi.org/10.1111/2041-210x.70255.
+- Campbell, S. E. & Mandrak, N. E. 2020. Functional differentiation accompanies taxonomic homogenization in freshwater fish communities. *Ecology* 101:e03188. https://doi.org/10.1002/ecy.3188.
+- Rolls, R. J., Heino, J., Ryder, D. S., Chessman, B. C., Growns, I. O., Thompson, R. M. & Gido, K. B. 2023. Biotic homogenisation and differentiation as directional change in beta diversity: synthesising driver–response relationships to develop conceptual models across ecosystems. *Biological Reviews* 98:1388–1421. https://doi.org/10.1111/brv.12958.
 - Saul, W.-C. & Jeschke, J. M. 2015. Eco-evolutionary experience in novel species interactions. *Ecology Letters* 18:236–245. https://doi.org/10.1111/ele.12408.
+- White, H. J., Montgomery, W. I., Storchová, L., Hořák, D. & Lennon, J. J. 2018. Does functional homogenization accompany taxonomic homogenization of British birds and how do biotic factors and climate affect these processes? *Ecology and Evolution* 8:7365–7377. https://doi.org/10.1002/ece3.4267.
