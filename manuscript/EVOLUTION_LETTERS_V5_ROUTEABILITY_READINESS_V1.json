@@ -120,7 +120,7 @@
   "post_freeze_extensions": [
     {
       "path": "manuscript/ECOLOGICAL_NOVELTY_EXTENSION_V1.md",
-      "status": "exploratory_interpretive_extension_not_in_frozen_submission_bundle",
+      "status": "revision_reserve_not_in_initial_submission",
       "central_inference": "compositional novelty is not necessarily decision novelty",
       "formal_basis": "existing target-relevant world quotient / decision-equivalence result",
       "new_theorem_family": false,
@@ -131,7 +131,9 @@
         "climate-driven community change",
         "functional redundancy"
       ],
-      "regression_test": "tests/test_ecological_novelty_extension.py"
+      "regression_test": "tests/test_ecological_novelty_extension.py",
+      "promotion_rule": "Promote only if revision needs an invasion, turnover, biodiversity-loss, or ecological-novelty bridge; prefer replacing existing discussion text rather than adding a fourth headline concept.",
+      "reason_to_hold": "The inference is strong and theorem-backed, but the initial V5 submission is cleaner if environmental routeability remains the single coined headline concept."
     }
   ]
 }
