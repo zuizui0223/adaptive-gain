@@ -137,6 +137,25 @@ A pair of species can be:
 
 The exact quotient therefore provides an interaction-specific complement to functional redundancy rather than a replacement for it.
 
+## Interaction-specific buffering under biodiversity loss
+
+Decision-equivalence multiplicity creates a limited form of buffering against compositional loss.
+
+If several species occupy the same decision-equivalence class for a focal interaction, losing one member need not change the contingent decision problem as long as at least one equivalent state remains represented. By contrast, loss of the last representative of that class can remove an entire decision branch.
+
+This creates a threshold-like asymmetry:
+
+- early losses within a multiply represented class can be decision-silent;
+- loss of the final representative can be decision-structuring even if richness changes by only one.
+
+The logic resembles ecological insurance and functional redundancy only at a very abstract level. Insurance theory concerns buffering of aggregate ecosystem properties through compensatory responses among species, while functional redundancy concerns overlap in ecological functions. The present result concerns invariance of one declared interaction-specific decision problem under replacement or loss.
+
+Therefore we should not call this ecosystem resilience or biodiversity insurance. A safer ecological interpretation is:
+
+> **Decision-equivalence can buffer the information structure of a focal interaction against some species turnover, but only until turnover crosses an equivalence-class boundary.**
+
+This distinction is important because biodiversity–ecosystem-functioning research has repeatedly cautioned that apparent redundancy for one function or condition does not imply ecological dispensability, and response-diversity theory emphasizes that similarly functioning species can differ in their responses to environmental change (Mori et al. 2013; Biggs et al. 2020; Loreau et al. 2021; Eisenhauer et al. 2023).
+
 ## Candidate V5 insertion
 
 A concise Results/Discussion addition could read:
@@ -167,7 +186,11 @@ It also sharpens the V5 headline:
 ## References
 
 - Kerr, M. R., Svenning, J.-C., Riede, F., Buitenwerf, R., Abraham, A. J., Marjakangas, E.-L., Sykut, M. & Ordonez, A. 2026. The making of novel ecosystems: a process-based framework for measurement, analysis and application. *Methods in Ecology and Evolution* 17:683–704. https://doi.org/10.1111/2041-210x.70255.
+- Biggs, C. R. et al. 2020. Does functional redundancy affect ecological stability and resilience? A review and meta-analysis. *Ecosphere* 11:e03184. https://doi.org/10.1002/ecs2.3184.
 - Campbell, S. E. & Mandrak, N. E. 2020. Functional differentiation accompanies taxonomic homogenization in freshwater fish communities. *Ecology* 101:e03188. https://doi.org/10.1002/ecy.3188.
+- Eisenhauer, N. et al. 2023. Reconsidering functional redundancy in biodiversity research. *npj Biodiversity* 2:9. https://doi.org/10.1038/s44185-023-00015-5.
+- Loreau, M., Barbier, M., Filotas, E., Gravel, D., Isbell, F., Miller, S. J., Montoya, J. M., Wang, S., Aussenac, R., Germain, R., Thompson, P. L., Gonzalez, A. & Dee, L. E. 2021. Biodiversity as insurance: from concept to measurement and application. *Biological Reviews* 96:2333–2354. https://doi.org/10.1111/brv.12756.
+- Mori, A. S., Furukawa, T. & Sasaki, T. 2013. Response diversity determines the resilience of ecosystems to environmental change. *Biological Reviews* 88:349–364. https://doi.org/10.1111/brv.12004.
 - Rolls, R. J., Heino, J., Ryder, D. S., Chessman, B. C., Growns, I. O., Thompson, R. M. & Gido, K. B. 2023. Biotic homogenisation and differentiation as directional change in beta diversity: synthesising driver–response relationships to develop conceptual models across ecosystems. *Biological Reviews* 98:1388–1421. https://doi.org/10.1111/brv.12958.
 - Saul, W.-C. & Jeschke, J. M. 2015. Eco-evolutionary experience in novel species interactions. *Ecology Letters* 18:236–245. https://doi.org/10.1111/ele.12408.
 - White, H. J., Montgomery, W. I., Storchová, L., Hořák, D. & Lennon, J. J. 2018. Does functional homogenization accompany taxonomic homogenization of British birds and how do biotic factors and climate affect these processes? *Ecology and Evolution* 8:7365–7377. https://doi.org/10.1002/ece3.4267.
