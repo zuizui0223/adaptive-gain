@@ -135,7 +135,7 @@ def test_v5_supplement_demotes_measurement_to_optional_application():
     s1 = _section(text, "## S1.", "## S2.")
     assert "empirical workflow" not in s1.lower()
     assert "Optional empirical reconstruction" in text
-    assert "not a premise required for the theoretical conclusions" in text
+    assert "not a premise required for the theoretical conclusions" in text\n    assert "taxonomic identity, functional identity and decision equivalence are distinct classifications" in text\n    assert "\\text{taxonomic identity}" not in text
 
 
 def test_v5_supplement_retains_exact_support():
