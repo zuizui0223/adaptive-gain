@@ -116,5 +116,22 @@
     "all-author approval",
     "confirmation that the manuscript is not under consideration elsewhere",
     "permanent archive DOI if available"
+  ],
+  "post_freeze_extensions": [
+    {
+      "path": "manuscript/ECOLOGICAL_NOVELTY_EXTENSION_V1.md",
+      "status": "exploratory_interpretive_extension_not_in_frozen_submission_bundle",
+      "central_inference": "compositional novelty is not necessarily decision novelty",
+      "formal_basis": "existing target-relevant world quotient / decision-equivalence result",
+      "new_theorem_family": false,
+      "domains": [
+        "biological invasions",
+        "local extinction",
+        "community turnover",
+        "climate-driven community change",
+        "functional redundancy"
+      ],
+      "regression_test": "tests/test_ecological_novelty_extension.py"
+    }
   ]
 }
