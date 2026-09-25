@@ -121,19 +121,21 @@
     {
       "path": "manuscript/ECOLOGICAL_NOVELTY_EXTENSION_V1.md",
       "status": "revision_reserve_not_in_initial_submission",
-      "central_inference": "compositional novelty is not necessarily decision novelty",
+      "central_inference": "compositional novelty is not necessarily decision novelty; taxonomic turnover can be decision-silent or branch-changing",
       "formal_basis": "existing target-relevant world quotient / decision-equivalence result",
       "new_theorem_family": false,
       "domains": [
         "biological invasions",
         "local extinction",
         "community turnover",
+        "biotic homogenization",
         "climate-driven community change",
         "functional redundancy"
       ],
       "regression_test": "tests/test_ecological_novelty_extension.py",
       "promotion_rule": "Promote only if revision needs an invasion, turnover, biodiversity-loss, or ecological-novelty bridge; prefer replacing existing discussion text rather than adding a fourth headline concept.",
-      "reason_to_hold": "The inference is strong and theorem-backed, but the initial V5 submission is cleaner if environmental routeability remains the single coined headline concept."
+      "reason_to_hold": "The extension is theorem-backed and connects routeability to turnover and homogenization, but the initial V5 submission remains cleaner with environmental routeability as the single headline concept.",
+      "secondary_inference": "effective decision complexity can remain invariant across substantial within-class turnover and change disproportionately when turnover crosses a decision-equivalence boundary"
     }
   ]
 }
