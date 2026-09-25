@@ -166,7 +166,9 @@ If additional species are decision-equivalent for a focal consumer, pollinator, 
 
 This perspective suggests a distinction between **taxonomic richness** and **interaction-relevant richness**. The two will coincide only when each added ecological state creates a new distinction that must be resolved. Otherwise, biodiversity can be compressed into fewer functional decision classes.
 
-That conclusion connects naturally to community ecology, where species identity, functional role and realized interaction are already known not to be interchangeable. The present theory adds an information-based reason for the mismatch: multiple species can occupy the same decision-equivalence class even when they remain ecologically distinct in other respects.
+This distinction is related to, but not identical with, ecological functional redundancy. Functional-redundancy theory already separates the number of species from the number or distribution of functions represented in a community and shows that richness itself need not predict the ecological consequences of redundancy (Biggs et al. 2020; Ricotta & Pavoine 2025). Decision equivalence is narrower and explicitly relational: two species can be functionally distinct in the ecosystem yet equivalent for one focal action if they impose the same target and future discrimination requirements.
+
+The present theory therefore adds an information-based reason why species identity, ecological function and interaction-relevant richness need not coincide. Multiple species can occupy the same decision-equivalence class even when they remain ecologically distinct in other respects.
 
 ### Routeability refines the heterogeneity–niche breadth hypothesis
 
@@ -186,9 +188,9 @@ Adaptive foraging links individual behavior to community structure because consu
 
 Environmental routeability operates one step earlier. It determines whether the information needed to discriminate among those alternatives can be acquired within the ecological opportunity window.
 
-This creates a distinction between a **potential interaction network** and a **behaviorally accessible network**. Energetic or morphological compatibility may place an interaction in the potential network, while information costs can still prevent reliable realization. Routeability can relax that constraint by allowing information to be acquired conditionally.
+This creates a distinction between a **potential interaction network** and a **behaviorally accessible network**. Network ecology already distinguishes potential pairings from forbidden links caused by biological incompatibilities, and emphasizes that interaction structure varies through space and time (Poisot et al. 2015; Jordano 2016). Routeability adds a different filter: a link can be morphologically and energetically possible yet remain behaviorally inaccessible when the information needed to resolve that interaction exceeds the ecological opportunity window.
 
-The framework therefore predicts that two communities with similar species richness and potential connectance can differ in realized connectance because one community's interactions are more hierarchically navigable. This is a community-level consequence of the same finite decision structure, not a separate theorem.
+The framework therefore predicts that two communities with similar species richness and potential connectance can differ in realized connectance because one community's interactions are more hierarchically navigable. This is a community-level consequence of the same finite decision structure, not a separate theorem. It is also distinct from a forbidden link: the interaction is biologically possible, but its reliable realization is constrained by decision-relevant information cost.
 
 ### Environmental change matters when it changes ecological distinctions
 
@@ -246,12 +248,12 @@ Add only if applicable after final author review.
 
 ## References
 
-- Beckerman, A. P., Petchey, O. L. & Warren, P. H. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–4.
+- Beckerman, A. P., Petchey, O. L. & Warren, P. H. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–4.\n- Biggs, C. R. et al. 2020. Does functional redundancy affect ecological stability and resilience? A review and meta-analysis. *Ecosphere* 11:e03184. https://doi.org/10.1002/ecs2.3184.
 - Bernays, E. A. & Wcislo, W. T. 1994. Sensory capabilities, information processing, and resource specialization. *The Quarterly Review of Biology* 69:187–204. https://doi.org/10.1086/418539.
 - Bernays, E. A. 2001. Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation. *Annual Review of Entomology* 46:703–727. https://doi.org/10.1146/annurev.ento.46.1.703.
 - Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens, D. W. 2005. Information and its use by animals in evolutionary ecology. *Trends in Ecology & Evolution* 20:187–193. https://doi.org/10.1016/j.tree.2005.01.010.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. https://doi.org/10.1046/j.1420-9101.2002.00377.x.
-- Loeuille, N. 2010. Consequences of adaptive foraging in diverse communities. *Functional Ecology* 24:18–27. https://doi.org/10.1111/j.1365-2435.2009.01617.x.
+- Jordano, P. 2016. Sampling networks of ecological interactions. *Functional Ecology* 30:1883–1893. https://doi.org/10.1111/1365-2435.12763.\n- Loeuille, N. 2010. Consequences of adaptive foraging in diverse communities. *Functional Ecology* 24:18–27. https://doi.org/10.1111/j.1365-2435.2009.01617.x.\n- Poisot, T., Stouffer, D. B. & Gravel, D. 2015. Beyond species: why ecological interaction networks vary through space and time. *Oikos* 124:243–251. https://doi.org/10.1111/oik.01719.\n- Ricotta, C. & Pavoine, S. 2025. What do functional diversity, redundancy, rarity, and originality actually measure? A theoretical guide for ecologists and conservationists. *Ecological Complexity* 61:101116. https://doi.org/10.1016/j.ecocom.2025.101116.
 - Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos* 119:304–316. https://doi.org/10.1111/j.1600-0706.2009.17573.x.
 - Silva, R. & Clarke, A. R. 2020. The “sequential cues hypothesis”: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. https://doi.org/10.1111/1744-7917.12719.
 - Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. https://doi.org/10.3758/CABN.8.4.475.
