@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="white"/>
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font-weight:700}.panel{font-size:28px;font-weight:700}.head{font-size:23px;font-weight:700}.body{font-size:20px}.small{font-size:17px}.tiny{font-size:15px}.box{fill:#fff;stroke:#222;stroke-width:2}.soft{fill:#f3f3f3;stroke:#555;stroke-width:1.5}.dark{fill:#dcdcdc;stroke:#333;stroke-width:1.5}.line{stroke:#222;stroke-width:3;fill:none}.thin{stroke:#777;stroke-width:2;fill:none}.dash{stroke:#777;stroke-width:2;stroke-dasharray:8 7;fill:none}.axis{stroke:#111;stroke-width:3}
+</style>
+<text x="70" y="58" class="title">Raw richness and interaction-relevant richness can diverge</text>
+<line x1="535" y1="98" x2="535" y2="835" stroke="#bbb" stroke-width="2"/>
+<line x1="1065" y1="98" x2="1065" y2="835" stroke="#bbb" stroke-width="2"/>
+
+<text x="70" y="120" class="panel">A</text>
+<text x="115" y="120" class="head">Adding states within one decision-equivalence class</text>
+<rect x="105" y="210" width="120" height="58" rx="10" class="box"/><text x="142" y="246" class="body">sp. 1</text>
+<rect x="245" y="210" width="120" height="58" rx="10" class="box"/><text x="282" y="246" class="body">sp. 2</text>
+<rect x="385" y="210" width="120" height="58" rx="10" class="box"/><text x="422" y="246" class="body">sp. 3</text>
+<line x1="165" y1="268" x2="305" y2="355" class="thin"/><line x1="305" y1="268" x2="305" y2="355" class="thin"/><line x1="445" y1="268" x2="305" y2="355" class="thin"/>
+<rect x="190" y="355" width="230" height="70" rx="10" class="dark"/><text x="215" y="398" class="head">same decision class</text>
+<text x="115" y="490" class="small">Add three more taxonomically distinct states:</text>
+<rect x="105" y="530" width="90" height="48" rx="8" class="soft"/><text x="130" y="560" class="small">sp. 4</text>
+<rect x="210" y="530" width="90" height="48" rx="8" class="soft"/><text x="235" y="560" class="small">sp. 5</text>
+<rect x="315" y="530" width="90" height="48" rx="8" class="soft"/><text x="340" y="560" class="small">sp. 6</text>
+<text x="115" y="645" class="head">Raw richness ↑</text>
+<text x="115" y="685" class="head">Decision complexity unchanged</text>
+<text x="115" y="745" class="small">New states do not matter if they create no new focal distinction.</text>
+
+<text x="570" y="120" class="panel">B</text>
+<text x="615" y="120" class="head">One new state can create a new branch</text>
+<rect x="650" y="215" width="125" height="58" rx="10" class="box"/><text x="685" y="251" class="body">existing</text>
+<rect x="825" y="215" width="125" height="58" rx="10" class="dark"/><text x="857" y="251" class="body">new state</text>
+<line x1="712" y1="273" x2="712" y2="365" class="line"/><line x1="887" y1="273" x2="887" y2="365" class="line"/>
+<rect x="620" y="365" width="185" height="70" rx="10" class="soft"/><text x="650" y="405" class="body">old decision class</text>
+<rect x="825" y="365" width="185" height="70" rx="10" class="dark"/><text x="857" y="405" class="body">new branch</text>
+<text x="620" y="520" class="head">Raw richness +1</text>
+<text x="620" y="565" class="head">Interaction-relevant richness +1</text>
+<text x="620" y="625" class="small">A small compositional change can be large if it creates</text>
+<text x="620" y="655" class="small">a new distinction that must be resolved.</text>
+<text x="620" y="740" class="body">Species number and decision burden need not move together.</text>
+
+<text x="1100" y="120" class="panel">C</text>
+<text x="1145" y="120" class="head">Implication for broad niche use</text>
+<text x="1140" y="195" class="head">Routeable generalism</text>
+<g>
+<rect x="1140" y="235" width="70" height="42" class="box"/><text x="1157" y="262" class="small">R1</text>
+<rect x="1220" y="235" width="70" height="42" class="box"/><text x="1237" y="262" class="small">R2</text>
+<rect x="1300" y="235" width="70" height="42" class="box"/><text x="1317" y="262" class="small">R3</text>
+<rect x="1380" y="235" width="70" height="42" class="box"/><text x="1397" y="262" class="small">R4</text>
+</g>
+<line x1="1295" y1="277" x2="1295" y2="350" class="line"/>
+<rect x="1180" y="350" width="230" height="65" rx="10" class="dark"/><text x="1210" y="389" class="head">few decision classes</text>
+<text x="1140" y="465" class="small">Many resources can remain information-feasible.</text>
+
+<text x="1140" y="555" class="head">Non-routeable generalism</text>
+<g>
+<rect x="1140" y="595" width="70" height="42" class="box"/><text x="1157" y="622" class="small">R1</text>
+<rect x="1220" y="595" width="70" height="42" class="box"/><text x="1237" y="622" class="small">R2</text>
+<rect x="1300" y="595" width="70" height="42" class="box"/><text x="1317" y="622" class="small">R3</text>
+<rect x="1380" y="595" width="70" height="42" class="box"/><text x="1397" y="622" class="small">R4</text>
+</g>
+<line x1="1175" y1="637" x2="1175" y2="705" class="thin"/><line x1="1255" y1="637" x2="1255" y2="705" class="thin"/><line x1="1335" y1="637" x2="1335" y2="705" class="thin"/><line x1="1415" y1="637" x2="1415" y2="705" class="thin"/>
+<text x="1135" y="745" class="small">More independent terminal distinctions increase information burden.</text>
+<text x="1135" y="800" class="small">Routeability modifies this cost; it does not determine niche breadth alone.</text>
+</svg>
