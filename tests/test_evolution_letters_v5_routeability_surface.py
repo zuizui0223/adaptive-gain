@@ -5,6 +5,27 @@ ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V5_ROUTEABILITY.md"
 SUPP = ROOT / "manuscript" / "SUPPLEMENT_EVOLUTION_LETTERS_V5_ROUTEABILITY.md"
 FIGPLAN = ROOT / "manuscript" / "FIGURE_PLAN_EVOLUTION_LETTERS_V5_ROUTEABILITY.md"
+LEGENDS = ROOT / "manuscript" / "FIGURE_LEGENDS_EVOLUTION_LETTERS_V5_ROUTEABILITY.md"
+FIGURES = {
+    ROOT / "manuscript" / "figures" / "figure_el1_routeability_v5.svg": (
+        "Same ecological diversity can have different effective complexity",
+        "Routeable community",
+        "Non-routeable community",
+        "Diversity is not complexity.",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el2_equivalence_niche_v5.svg": (
+        "Raw richness and interaction-relevant richness can diverge",
+        "same decision class",
+        "new branch",
+        "Routeable generalism",
+    ),
+    ROOT / "manuscript" / "figures" / "figure_el3_accessible_network_v5.svg": (
+        "Same potential interaction network",
+        "Different behaviorally accessible subnetworks",
+        "Decision-relevant recurrence",
+        "Decision-equivalent recurrence",
+    ),
+}
 
 
 def _text(path: Path) -> str:
@@ -142,3 +163,43 @@ def test_v5_preserves_frozen_v4():
     assert (ROOT / "manuscript" / "EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json").exists()
     readiness = _text(ROOT / "manuscript" / "EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json")
     assert "v4_machine_submission_bundle_frozen_human_metadata_pending" in readiness
+
+
+def test_v5_figures_are_environment_and_community_centered():
+    import xml.etree.ElementTree as ET
+
+    for path, required in FIGURES.items():
+        assert path.exists(), path
+        ET.parse(path)
+        text = _text(path)
+        assert 'width="1600"' in text
+        assert 'height="900"' in text
+        for phrase in required:
+            assert phrase in text, (path.name, phrase)
+
+
+def test_v5_figures_do_not_restore_individual_theorem_catalogue():
+    text = "\n".join(_text(path) for path in FIGURES)
+    forbidden = (
+        "Bellman",
+        "Pareto",
+        "certificate",
+        "h_2",
+        "h_b",
+        "(7,6,6)",
+        "(8,5,5)",
+        "sharp maximum",
+        "guaranteed oscillation",
+    )
+    for phrase in forbidden:
+        assert phrase not in text
+
+
+def test_v5_legends_keep_ecological_claim_boundaries():
+    text = _text(LEGENDS)
+    assert text.count("**Alt text:**") == 3
+    assert "not a universal scalar property of a community" in text
+    assert "does not imply routeability alone causes generalism" in text
+    assert "Behaviorally accessible interactions are not automatically realized interactions" in text
+    assert "not autocorrelation alone" in text
+    assert "rather than fitted empirical demonstrations" in text
