@@ -69,5 +69,6 @@ text{font-family:Arial,Helvetica,sans-serif;fill:#111}.title{font-size:34px;font
 <text x="1130" y="680" class="body">The ecological cost of heterogeneity depends on</text>
 <text x="1130" y="710" class="body">whether alternatives can be partitioned into</text>
 <text x="1130" y="740" class="body">conditionally relevant branches.</text>
-<text x="1130" y="800" class="small">The pair (C_A, C_F) is task-specific,</text>\n<text x="1130" y="830" class="small">not a universal community score.</text>
+<text x="1130" y="800" class="small">The pair (C_A, C_F) is task-specific,</text>
+<text x="1130" y="830" class="small">not a universal community score.</text>
 </svg>
