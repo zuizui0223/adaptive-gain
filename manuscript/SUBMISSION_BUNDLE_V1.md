@@ -1,5 +1,7 @@
 # Deterministic scientific submission bundle v1
 
+> **Legacy V1 only.** This document and `manuscript/build_submission_bundle.py` describe the frozen *Theoretical Ecology* V1 bundle. They do **not** build, validate, or reproduce the Evolution Letters V4 submission package.
+
 This bundle freezes the scientific upload material for the *Theoretical Ecology* submission without inventing author-controlled metadata.
 
 ## Build
@@ -54,3 +56,5 @@ Those are controlled in `SUBMISSION_DECLARATIONS_V1.md` and `SUBMISSION_METADATA
 - archive entries must use the fixed timestamp `1980-01-01 00:00:00` and contain no extra files.
 
 The scientific source baseline is `release/theoretical-ecology-submission-finalization-v1`.
+
+For Evolution Letters V4, repository-level reproducibility applies to the source surface through `.github/workflows/v4-submission-source-bundle.yml`. The final line-numbered DOCX, rendered PDFs, and staging ZIP are machine-side validated export artifacts whose checksums are recorded in `EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json`; byte-for-byte regeneration of those exported binaries from this V1 builder is explicitly not claimed.
