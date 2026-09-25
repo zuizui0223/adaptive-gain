@@ -85,12 +85,12 @@ Show:
 
 Contrast:
 
-**Routeable generalism**
+**Routeable resource environment**
 - many resources;
 - few decision classes per encounter;
 - broad niche remains information-feasible.
 
-**Non-routeable generalism**
+**Non-routeable resource environment**
 - similar resource richness;
 - many independent terminal distinctions;
 - stronger information burden.
@@ -101,25 +101,25 @@ Claim ceiling:
 
 ---
 
-## Figure 3. Routeability filters realized ecological interactions
+## Figure 3. Routeability filters compatibility-permitted ecological interactions
 
-### Panel A — same potential network
+### Panel A — same compatibility-permitted network
 
-Show one consumer connected by pale/dashed potential links to multiple resources.
+Show one consumer connected to multiple resources after morphology, phenology and encounter constraints have already been satisfied.
 
-Use the same potential network for both comparison systems.
+Use the same compatibility-permitted network for both comparison systems.
 
 ### Panel B — different behaviorally accessible networks
 
 **Routeable environment**
-- more potential links fit within the ecological budget;
+- more compatibility-permitted links fit within the ecological budget;
 - larger behaviorally accessible subnetwork.
 
 **Non-routeable environment**
-- fewer links can be reliably resolved within the same budget;
+- fewer compatibility-permitted links can be reliably resolved within the same budget;
 - smaller accessible subnetwork.
 
-Do not equate behaviorally accessible with realized: competition, demography, morphology and spatial co-occurrence can still remove links.
+Do not equate behaviorally accessible with realized. Morphology and phenology are treated upstream as compatibility filters; competition, demography and local abundance can still remove links downstream.
 
 ### Panel C — temporal filter
 
