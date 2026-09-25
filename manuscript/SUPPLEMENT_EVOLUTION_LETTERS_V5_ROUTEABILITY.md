@@ -118,6 +118,26 @@ For example:
 
 Decision-equivalence classes therefore do not replace taxonomic or functional diversity. They describe the subset of diversity that is relevant to a declared ecological action.
 
+### S2.4 Relation to functional redundancy
+
+Functional redundancy groups species by similarity in ecological functions or contributions. Decision equivalence is different.
+
+Two species can be functionally distinct at the ecosystem level yet decision-equivalent for one focal consumer if they require the same action and the same remaining discrimination structure. Conversely, functionally similar species can be decision-distinct if the focal interaction requires different cues or responses.
+
+Thus:
+
+[
+	ext{taxonomic identity}
+
+eq
+	ext{functional identity}
+
+eq
+	ext{decision equivalence}.
+]
+
+The distinction matters because routeability concerns the information structure of a focal interaction rather than functional redundancy of the community as a whole.
+
 ---
 
 ## S3. Ecological consequences
@@ -139,6 +159,8 @@ The prediction is not that routeability alone determines niche breadth. It is th
 Let the potential interaction network contain links allowed by spatial encounter, morphology, physiology and energetic compatibility.
 
 A link can still fail to be behaviorally accessible if the information required to identify, rank or handle the partner cannot be acquired within the ecological budget.
+
+This is different from a **forbidden link** in ecological-network terminology. A forbidden link is prevented by a biological incompatibility such as morphology, phenology or other life-history constraints. A behaviorally inaccessible link in the present sense can remain morphologically and energetically possible but fail because the required ecological discrimination cannot be completed within the available information budget.
 
 Routeability can expand the accessible subset because early observations remove irrelevant alternatives.
 
@@ -616,7 +638,11 @@ Natural-history examples in S3 are illustrative. They show how to instantiate th
 ## S13. Ecological references for interpretation
 
 - Beckerman, A. P., Petchey, O. L. & Warren, P. H. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–4.
+- Biggs, C. R. et al. 2020. Does functional redundancy affect ecological stability and resilience? A review and meta-analysis. *Ecosphere* 11:e03184. https://doi.org/10.1002/ecs2.3184.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. https://doi.org/10.1046/j.1420-9101.2002.00377.x.
+- Jordano, P. 2016. Sampling networks of ecological interactions. *Functional Ecology* 30:1883–1893. https://doi.org/10.1111/1365-2435.12763.
 - Loeuille, N. 2010. Consequences of adaptive foraging in diverse communities. *Functional Ecology* 24:18–27. https://doi.org/10.1111/j.1365-2435.2009.01617.x.
+- Poisot, T., Stouffer, D. B. & Gravel, D. 2015. Beyond species: why ecological interaction networks vary through space and time. *Oikos* 124:243–251. https://doi.org/10.1111/oik.01719.
+- Ricotta, C. & Pavoine, S. 2025. What do functional diversity, redundancy, rarity, and originality actually measure? A theoretical guide for ecologists and conservationists. *Ecological Complexity* 61:101116. https://doi.org/10.1016/j.ecocom.2025.101116.
 - Silva, R. & Clarke, A. R. 2020. The “sequential cues hypothesis”: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. https://doi.org/10.1111/1744-7917.12719.
 - Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. https://doi.org/10.3758/CABN.8.4.475.
