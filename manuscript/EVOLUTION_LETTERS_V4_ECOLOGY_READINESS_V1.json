@@ -1,9 +1,9 @@
 {
   "schema": "adaptive-gain-evolution-letters-v4-ecology-readiness-v1",
-  "date": "2026-09-24",
+  "date": "2026-09-25",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "ecology_first_text_and_figures_validated_export_pending",
+  "status": "v4_machine_submission_bundle_frozen_human_metadata_pending",
   "headline": "ecological structure and deadlines govern the evolutionary value of contingent sensing",
   "preserved_v3_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V3_READINESS_V1.json",
@@ -53,8 +53,8 @@
     ]
   },
   "validation": {
-    "candidate_head": "ef6de30a48cd714262984d26e78ea7c94d5bc126",
-    "workflow_run": 35989539411,
+    "source_commit": "c1e8943fef52067f422cbd81c4e9a72b8ffd5710",
+    "workflow_run": 36072005461,
     "python_3_10": "success",
     "python_3_11": "success",
     "python_3_12": "success",
@@ -64,18 +64,51 @@
     "v4_length_gate": "success",
     "ecology_surface_gate": "success",
     "figure_claim_gate": "success",
-    "figure_visual_qc": "success",
+    "main_visual_qc": "success_25_of_25_pages",
+    "supplement_visual_qc": "success_11_of_11_pages",
+    "figure_visual_qc": "success_3_of_3",
+    "pdf_preflight": "success_5_of_5",
+    "main_docx_creator_metadata": "blank",
+    "continuous_line_numbering": "present",
     "title_words": 11,
-    "abstract_words": 260,
-    "main_text_words": 4545
+    "abstract_words": 253,
+    "main_text_words": 4547
   },
   "remaining_machine_work": [
-    "export and visually validate V4 line-numbered Main DOCX/PDF",
-    "export and visually validate V4 Supplement PDF",
-    "regenerate the three V4 figure PDFs from the validated SVGs",
-    "assemble a checksum-verified V4 staging bundle",
-    "record final bundle checksum without altering the frozen source files"
+    "add a permanent archive DOI if one is minted before submission"
   ],
   "stop_rule": "Do not add theorem families. Further work should improve ecological framing, empirical interpretability, claim scope, figures, or submission quality.",
-  "promotion_rule": "V4 can replace the preserved V3 fallback only after its submission DOCX/PDF, Supplement PDF and three figure PDFs pass visual/preflight QA and are checksum-frozen. Human-controlled authorship, affiliation, funding, conflict, acknowledgement, approval and submission-status metadata remain unresolved."
+  "promotion_rule": "The ecology-first V4 submission bundle is machine-frozen and supersedes V3 as the preferred submission candidate. The V3 frozen bundle remains preserved as fallback. Submission remains blocked only on author-controlled metadata, approvals, simultaneous-submission confirmation, and any archive DOI.",
+  "submission_bundle": {
+    "name": "EVOLUTION_LETTERS_V4_FINAL_STAGING_V1.zip",
+    "source_commit": "c1e8943fef52067f422cbd81c4e9a72b8ffd5710",
+    "sha256": "9aa57344905fa691b3d1e693f6cef411219ad6ab95bcf53858fecb85eb5becc9",
+    "main_pages": 25,
+    "supplement_pages": 11,
+    "figures": 3,
+    "contents": [
+      "01_Main_Manuscript_V4.docx",
+      "02_Main_Manuscript_V4_Preview.pdf",
+      "03_Supplementary_Information_V4.pdf",
+      "04_Figure1_V4.pdf",
+      "05_Figure2_V4.pdf",
+      "06_Figure3_V4.pdf",
+      "07_Cover_Letter_DRAFT.md",
+      "MANIFEST.json",
+      "README_BEFORE_SUBMIT.txt",
+      "SOURCE_PROVENANCE.txt"
+    ]
+  },
+  "remaining_human_work": [
+    "final author list and order",
+    "affiliations",
+    "corresponding-author metadata",
+    "CRediT author contributions",
+    "funding declaration",
+    "conflict-of-interest declaration",
+    "acknowledgements if applicable",
+    "all-author approval",
+    "confirmation that the manuscript is not under consideration elsewhere",
+    "permanent archive DOI if available"
+  ]
 }
