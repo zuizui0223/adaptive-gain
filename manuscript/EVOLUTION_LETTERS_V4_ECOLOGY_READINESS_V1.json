@@ -111,5 +111,24 @@
     "all-author approval",
     "confirmation that the manuscript is not under consideration elsewhere",
     "permanent archive DOI if available"
-  ]
+  ],
+  "reproducibility": {
+    "repo_reproducible_source_surface": true,
+    "source_bundle_workflow": ".github/workflows/v4-submission-source-bundle.yml",
+    "source_bundle_artifact_name": "evolution-letters-v4-submission-source",
+    "source_bundle_contents": [
+      "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V4_ECOLOGY.md",
+      "manuscript/SUPPLEMENT_EVOLUTION_LETTERS_V3_ECOLOGY.md",
+      "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V4_ECOLOGY.md",
+      "manuscript/COVER_LETTER_EVOLUTION_LETTERS_V3_ECOLOGY.md",
+      "manuscript/figures/figure_el1_ecological_deadline_v4.svg",
+      "manuscript/figures/figure_el2_conditional_cues_v4.svg",
+      "manuscript/figures/figure_el3_recurrence_alignment_v4.svg"
+    ],
+    "legacy_v1_builder": "manuscript/build_submission_bundle.py",
+    "legacy_v1_builder_scope": "Theoretical Ecology V1 only; not used for Evolution Letters V4",
+    "final_binary_bundle_byte_reproducible_from_repo": false,
+    "final_binary_bundle_status": "machine-side validated export artifact",
+    "note": "The repository deterministically records the V4 scientific source surface and its checksums. The final line-numbered DOCX, LibreOffice-rendered PDFs and staging ZIP are validated machine-side export artifacts; byte-for-byte reconstruction of those binaries from the repository alone is not claimed."
+  }
 }
