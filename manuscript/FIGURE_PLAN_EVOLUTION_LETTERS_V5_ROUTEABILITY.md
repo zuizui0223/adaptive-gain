@@ -10,7 +10,7 @@ The three figures should read as:
 
 1. **Can equally diverse environments differ in effective complexity?**
 2. **Can biodiversity increase without increasing decision complexity?**
-3. **Can information structure filter realized community interactions and temporal effects?**
+3. **Can information structure filter compatibility-permitted interactions and temporal ecological effects?**
 
 Individual sensing architecture appears only as the mechanism connecting environmental structure to these ecological outcomes.
 
@@ -161,6 +161,6 @@ Retain binary/bounded-arity finite limits and the nonlinear feedback no-go.
 - Same richness does not imply same effective complexity.
 - Decision-equivalence is defined only for the declared focal action.
 - Routeability can modify the information cost of broad niche use; it does not imply routeability alone causes generalism.
-- Behaviorally accessible interactions are a subset of potential interactions, but are not automatically realized.
+- Behaviorally accessible interactions are a subset of compatibility-permitted interactions, and are not automatically realized.
 - Environmental persistence matters through alignment with decision-relevant structure, not autocorrelation alone.
 - No main figure should display Bellman recursions, exact Pareto corners, certificate machinery or proof-internal notation.
