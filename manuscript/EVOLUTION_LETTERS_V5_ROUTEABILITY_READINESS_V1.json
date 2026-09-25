@@ -135,7 +135,9 @@
       "regression_test": "tests/test_ecological_novelty_extension.py",
       "promotion_rule": "Promote only if revision needs an invasion, turnover, biodiversity-loss, or ecological-novelty bridge; prefer replacing existing discussion text rather than adding a fourth headline concept.",
       "reason_to_hold": "The extension is theorem-backed and connects routeability to turnover and homogenization, but the initial V5 submission remains cleaner with environmental routeability as the single headline concept.",
-      "secondary_inference": "effective decision complexity can remain invariant across substantial within-class turnover and change disproportionately when turnover crosses a decision-equivalence boundary"
+      "secondary_inference": "effective decision complexity can remain invariant across substantial within-class turnover and change disproportionately when turnover crosses a decision-equivalence boundary",
+      "tertiary_inference": "multiple states within one decision-equivalence class can buffer the focal decision structure against some turnover until the final class representative is lost",
+      "claim_boundary": "This is interaction-specific structural buffering, not ecosystem resilience, functional redundancy, or biodiversity insurance."
     }
   ]
 }
