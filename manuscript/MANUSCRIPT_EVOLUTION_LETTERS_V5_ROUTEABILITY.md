@@ -118,13 +118,13 @@ The opposite case also matters. In non-routeable environments, increasing resour
 
 ### Routeability separates potential from behaviorally realizable interactions
 
-Community ecology distinguishes the set of interactions that are physically or physiologically possible from the interactions actually realized under local conditions. Adaptive foraging is already known to alter food-web topology, interaction strengths and community stability (Loeuille 2010; Beckerman et al. 2010). The present framework adds an information-structural constraint to that process.
+Community ecology already distinguishes potential from realized interactions. In mutualistic networks, phenological mismatch, morphological mismatch and accessibility can create forbidden links even when two species co-occur (Olesen et al. 2011; Maruyama et al. 2014). Adaptive foraging can further alter food-web topology, interaction strengths and community stability (Loeuille 2010; Beckerman et al. 2010). The present framework adds a different filter after those compatibility constraints: among interactions that are otherwise ecologically permitted, information needed to identify, rank or handle an alternative may still be too costly to acquire within the opportunity window.
 
-Consider a consumer with many potential resources. A potential trophic link can be realized reliably only if the information needed to identify, rank or handle that resource can be acquired within the ecological budget. In a routeable community, early cues can eliminate irrelevant resource branches, allowing a larger potential interaction set to remain behaviorally accessible. In a non-routeable community, the same nominal resource richness can exceed the information budget, so some potential links cannot be reliably resolved before the opportunity closes.
+Consider a consumer with many resources that are already compatible in morphology, phenology and encounter opportunity. A permitted link can still be behaviorally inaccessible if the information needed to identify, rank or handle that resource cannot be acquired within the ecological budget. In a routeable community, early cues can eliminate irrelevant resource branches, allowing more of the otherwise permitted interaction set to remain behaviorally accessible. In a non-routeable community, the same nominal resource richness can exceed the information budget, so some permitted links cannot be reliably resolved before the opportunity closes.
 
 This yields a community-level prediction:
 
-> **realized connectance should depend not only on encounter opportunity and energetic profitability, but also on the routeability of the resource environment.**
+> **among otherwise permitted interactions, the behaviorally accessible fraction should depend on the routeability of the resource environment.**
 
 The prediction concerns a constraint on adaptive interaction, not a claim that sensing alone determines food-web structure (Fig. 3). Competition, morphology, energetics and spatial co-occurrence remain necessary determinants of realized interactions. Routeability specifies when the information burden of a diverse community does or does not become an additional limiting factor.
 
@@ -190,7 +190,7 @@ Environmental routeability operates one step earlier. It determines whether the 
 
 This creates a distinction between a **potential interaction network** and a **behaviorally accessible network**. Network ecology already distinguishes potential pairings from forbidden links caused by biological incompatibilities, and emphasizes that interaction structure varies through space and time (Poisot et al. 2015; Jordano 2016). Routeability adds a different filter: a link can be morphologically and energetically possible yet remain behaviorally inaccessible when the information needed to resolve that interaction exceeds the ecological opportunity window.
 
-The framework therefore predicts that two communities with similar species richness and potential connectance can differ in realized connectance because one community's interactions are more hierarchically navigable. This is a community-level consequence of the same finite decision structure, not a separate theorem. It is also distinct from a forbidden link: the interaction is biologically possible, but its reliable realization is constrained by decision-relevant information cost.
+The framework therefore predicts that two communities with similar richness and similar compatibility-constrained interaction sets can differ in the fraction of those links that is behaviorally accessible because one community is more hierarchically navigable. This is a community-level prediction derived from the finite decision structure, not a separate theorem or an empirical demonstration. It is also distinct from a forbidden link: the interaction is biologically possible, but its reliable realization is constrained by decision-relevant information cost.
 
 ### Environmental change matters when it changes ecological distinctions
 
@@ -248,7 +248,7 @@ Add only if applicable after final author review.
 
 ## References
 
-- Beckerman, A. P., Petchey, O. L. & Warren, P. H. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–4.
+- Beckerman, A. P., Petchey, O. L. & Morin, P. J. 2010. Adaptive foragers and community ecology: linking individuals to communities and ecosystems. *Functional Ecology* 24:1–6. https://doi.org/10.1111/j.1365-2435.2009.01673.x.
 - Biggs, C. R. et al. 2020. Does functional redundancy affect ecological stability and resilience? A review and meta-analysis. *Ecosphere* 11:e03184. https://doi.org/10.1002/ecs2.3184.
 - Bernays, E. A. & Wcislo, W. T. 1994. Sensory capabilities, information processing, and resource specialization. *The Quarterly Review of Biology* 69:187–204. https://doi.org/10.1086/418539.
 - Bernays, E. A. 2001. Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation. *Annual Review of Entomology* 46:703–727. https://doi.org/10.1146/annurev.ento.46.1.703.
@@ -256,6 +256,8 @@ Add only if applicable after final author review.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. https://doi.org/10.1046/j.1420-9101.2002.00377.x.
 - Jordano, P. 2016. Sampling networks of ecological interactions. *Functional Ecology* 30:1883–1893. https://doi.org/10.1111/1365-2435.12763.
 - Loeuille, N. 2010. Consequences of adaptive foraging in diverse communities. *Functional Ecology* 24:18–27. https://doi.org/10.1111/j.1365-2435.2009.01617.x.
+- Maruyama, P. K., Vizentin-Bugoni, J., Oliveira, G. M., Oliveira, P. E. & Dalsgaard, B. 2014. Morphological and spatio-temporal mismatches shape a neotropical savanna plant–hummingbird network. *Biotropica* 46:740–747.
+- Olesen, J. M., Bascompte, J., Dupont, Y. L., Elberling, H., Rasmussen, C. & Jordano, P. 2011. Missing and forbidden links in mutualistic networks. *Proceedings of the Royal Society B* 278:725–732. https://doi.org/10.1098/rspb.2010.1371.
 - Poisot, T., Stouffer, D. B. & Gravel, D. 2015. Beyond species: why ecological interaction networks vary through space and time. *Oikos* 124:243–251. https://doi.org/10.1111/oik.01719.
 - Ricotta, C. & Pavoine, S. 2025. What do functional diversity, redundancy, rarity, and originality actually measure? A theoretical guide for ecologists and conservationists. *Ecological Complexity* 61:101116. https://doi.org/10.1016/j.ecocom.2025.101116.
 - Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of information: an overview on the ecological significance of making informed decisions. *Oikos* 119:304–316. https://doi.org/10.1111/j.1600-0706.2009.17573.x.
