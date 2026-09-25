@@ -154,27 +154,29 @@ Routeability provides a structural modifier.
 
 The prediction is not that routeability alone determines niche breadth. It is that information acquisition should constrain broad resource use less strongly in routeable resource environments than in equally heterogeneous but non-routeable environments.
 
-### S3.2 Potential versus behaviorally accessible interactions
+### S3.2 Compatibility-permitted versus behaviorally accessible interactions
 
-Let the potential interaction network contain links allowed by spatial encounter, morphology, physiology and energetic compatibility.
+Network ecology already separates possible species pairs from links excluded by morphology, phenology, spatial mismatch or accessibility. We therefore apply routeability only after those established compatibility filters. Let the **compatibility-permitted network** contain links that remain possible given encounter opportunity, morphology, phenology, physiology and other non-informational constraints.
 
-A link can still fail to be behaviorally accessible if the information required to identify, rank or handle the partner cannot be acquired within the ecological budget.
+A compatibility-permitted link can still fail to be behaviorally accessible if the information required to identify, rank or handle the partner cannot be acquired within the ecological budget.
 
-This is different from a **forbidden link** in ecological-network terminology. Forbidden links can arise through phenological, morphological or accessibility mismatches even when species co-occur (Olesen et al. 2011; Maruyama et al. 2014). A behaviorally inaccessible link in the present sense is considered only after those compatibility constraints: it can remain morphologically, phenologically and energetically permitted but fail because the required ecological discrimination cannot be completed within the available information budget.
+This is different from a **forbidden link** in ecological-network terminology. Forbidden links can arise through phenological, morphological or accessibility mismatches even when species co-occur (Olesen et al. 2011; Maruyama et al. 2014). A behaviorally inaccessible link in the present sense is considered only after those compatibility constraints: it remains otherwise permitted but fails because the required ecological discrimination cannot be completed within the available information budget.
 
 Routeability can expand the accessible subset because early observations remove irrelevant alternatives.
 
 This yields a distinction:
 
 \[
-\text{potential interactions}
+\text{possible species pairs}
 \supseteq
-\text{behaviorally accessible interactions}
+\text{compatibility-permitted links}
+\supseteq
+\text{behaviorally accessible links}
 \supseteq
 \text{realized interactions}.
 \]
 
-The second inclusion can be strict because of information costs. The third can be strict because competition, demography, spatial structure and other ecological processes remain important.
+The transition from compatibility-permitted to behaviorally accessible links can be strict because of information costs. The final transition can be strict because competition, demography, local abundance and other ecological processes remain important.
 
 ### S3.3 Intermediate ecological constraint
 
