@@ -217,12 +217,14 @@ def test_v5_does_not_collapse_network_filters():
     assert "after those compatibility constraints" in text
     assert "routeability acts only on this last transition" in text
     assert "routeability determines realized connectance" not in text
+    assert "potential interactions can be behaviorally realized" not in text
 
 
 def test_v5_keeps_environment_as_subject():
     text = _text(MAIN)
     assert "The central ecological conclusion is that heterogeneity and effective complexity are different properties." in text
     assert "diversity is not complexity" in text.lower()
+    assert "filters which compatibility-permitted interactions remain behaviorally accessible" in text
     assert "filters which compatibility-permitted interactions remain behaviorally accessible" in text
     assert "routeable resource environment" not in text  # figure wording only; main remains conceptual
     assert "## Empirical tests" not in text
