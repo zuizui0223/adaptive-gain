@@ -58,9 +58,9 @@ def test_resolve_manifest_paginates_and_normalizes_file_ids(monkeypatch):
         calls.append(url)
         if "/datasets/" in url:
             return dataset
-        if "page=1" in url:
+        if url.endswith("&page=1"):
             return page1
-        if "page=2" in url:
+        if url.endswith("&page=2"):
             return page2
         raise AssertionError(url)
 
@@ -78,6 +78,6 @@ def test_script_source_never_embeds_credentials_or_downloads_bytes():
     text = SCRIPT.read_text(encoding="utf-8")
     lower = text.lower()
     assert "authorization" not in lower
-    assert "bearer" not in lower
+    assert "dryad_token" not in lower
     assert "bytes_downloaded" in text
     assert "False" in text
