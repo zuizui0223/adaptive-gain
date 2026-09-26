@@ -33,7 +33,7 @@ def test_stage1_gate_forbids_decision_class_proxying():
 
 def test_source_manifest_keeps_unmaterialized_checksums_null():
     data = json.loads(SOURCES.read_text(encoding="utf-8"))
-    assert data["status"] == "source_metadata_verified_raw_bytes_not_frozen"
+    assert data["status"] == "anonymous_metadata_frozen_bytes_not_materialized"
     assert len(data["sources"]) == 2
     assert all(source["raw_sha256"] is None for source in data["sources"])
 
@@ -44,3 +44,18 @@ def test_source_manifest_records_18_network_response_surface():
     assert response["doi"] == "10.5061/dryad.j6q573n9j"
     assert response["declared_network_count"] == 18
     assert "three subseasons per year" in response["declared_temporal_grain"]
+
+
+def test_source_manifest_freezes_published_file_identity():
+    data = json.loads(SOURCES.read_text(encoding="utf-8"))
+    response, traits = data["sources"]
+
+    assert response["dryad_version_id"] == 57785
+    assert response["target_file"]["file_id"] == 268444
+    assert response["target_file"]["digest_type"] == "sha-256"
+    assert len(response["target_file"]["published_digest"]) == 64
+
+    assert traits["dryad_version_id"] == 87009
+    assert traits["target_file"]["file_id"] == 449108
+    assert traits["target_file"]["digest_type"] == "sha-256"
+    assert len(traits["target_file"]["published_digest"]) == 64
