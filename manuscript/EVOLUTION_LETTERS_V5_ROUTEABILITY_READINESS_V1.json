@@ -180,6 +180,38 @@
       "promotion_rule": "Promote only for reviewer-requested testability, an identified empirical network with independently measurable decision structure, or a dedicated rewiring follow-up; keep the initial V5 headline unchanged.",
       "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect.",
       "formal_empirical_boundary": "exact result: non-final within-class loss can leave the declared contingent decision problem invariant; empirical hypothesis: final-representative loss is more likely to alter rewiring opportunity, not guaranteed to change observed rewiring"
+    },
+    {
+      "path": "manuscript/REWIRING_EMPIRICAL_DATASET_SCREEN_V1.md",
+      "status": "feasibility_screen_not_empirical_confirmation",
+      "central_result": "no Tier A public dataset identified; Villavicencio six-year plant-pollinator data are the strongest current Tier B pilot because repeated networks, morphology, phenology and abundance are jointly available",
+      "strongest_candidate": {
+        "dataset": "Chacoff, Vazquez & Lomascolo / Peralta et al. Villavicencio plant-pollinator network",
+        "doi": "10.5061/dryad.8cz8w9gm1",
+        "admission": "Tier B strong pilot",
+        "reason_not_tier_a": "independent contingent cue/decision structure is not supplied; morphology and phenology are compatibility filters, not exact decision-equivalence classes"
+      },
+      "other_candidates": [
+        {
+          "dataset": "Colom et al. 2026 Catalan butterfly-plant network",
+          "doi": "10.5281/zenodo.18668204",
+          "admission": "Tier B-minus; long-term rewiring response but current public surface lacks independent decision-cue exposure"
+        },
+        {
+          "dataset": "CaraDonna et al. 2017 RMBL weekly turnover",
+          "doi": "10.5061/dryad.s91p4",
+          "admission": "Tier C for present test; public surface is aggregate turnover/simulation output"
+        },
+        {
+          "dataset": "Lazaro & Gomez-Martinez habitat-loss rewiring",
+          "doi": "10.5061/dryad.1ns1rn8x3",
+          "admission": "Tier B-minus reserve pending independent decision-cue surface"
+        }
+      ],
+      "next_gate": "Stage 1 feasibility reanalysis on Villavicencio before collecting or importing an independent decision-structure layer",
+      "anti_proxy_rule": "do not label morphology or trait clusters as decision equivalence merely because they predict rewiring",
+      "regression_test": "tests/test_rewiring_empirical_dataset_screen.py",
+      "promotion_rule": "public-data work remains feasibility analysis until either a Tier A observational dataset is identified or an independent experimental decision-structure layer is added to a Tier B network response"
     }
   ]
 }
