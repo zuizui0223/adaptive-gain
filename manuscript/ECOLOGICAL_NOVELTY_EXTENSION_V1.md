@@ -124,6 +124,75 @@ Therefore, whether homogenization changes the information burden of an interacti
 
 This does not imply that decision structure determines ecosystem functioning or resilience. It identifies one mechanism by which the ecological consequences of compositional turnover can be weak, strong or threshold-like despite similar taxonomic change.
 
+## Decision-structural turnover versus network rewiring
+
+Ecological-network beta diversity already separates two observable sources of interaction turnover:
+
+1. **species turnover** — links change because one or both interaction partners are absent; and
+2. **rewiring** — links change among species that are present in both networks.
+
+This partition is well established in temporal and spatial network ecology and has been used in plant–pollinator, host–parasite and other interaction networks (CaraDonna et al. 2017; Fründ 2021; Colom et al. 2026; Ward et al. 2026).
+
+Decision-structural turnover is **not a third additive component of interaction beta diversity**. It refers to a different level of description: whether the information structure governing which otherwise permitted links are behaviorally accessible has changed.
+
+This gives a useful distinction among three forms of change:
+
+\[
+\text{species turnover}
+\neq
+\text{interaction rewiring}
+\neq
+\text{decision-structural turnover}.
+\]
+
+The first two are properties of observed network composition. The third is a property of the decision problem that can help explain why rewiring is easy, difficult or threshold-like under otherwise similar compositional change.
+
+### Four ecological regimes
+
+The distinction creates a simple 2 × 2 conceptual map.
+
+| Taxonomic turnover | Decision-structural turnover | Ecological interpretation |
+| --- | --- | --- |
+| low | low | community composition and interaction-accessibility structure are both approximately conserved |
+| high | low | species replacement occurs largely within corresponding decision-equivalence classes; composition changes while the focal accessibility architecture can remain similar |
+| low | high | the same or nearly the same species set faces a changed branch structure, cue relevance or ecological budget; accessibility can change without much compositional turnover |
+| high | high | community replacement and focal decision structure change together |
+
+The second regime is the strongest expression of the V5 quotient result: large taxonomic turnover need not create large decision novelty.
+
+The third regime is equally important because it shows the converse. Interaction structure can become decision-novel even without substantial species replacement. Environmental change can alter cue reliability, encounter context, resource state or the effective budget while the same species remain present. In that case, the set of behaviorally accessible links can change and **rewiring may follow**, even though species turnover is low.
+
+The last statement is a mechanistic prediction, not an exact theorem about observed network turnover.
+
+### Relation to rewiring under global change
+
+Recent network syntheses emphasize that rewiring is driven by changes in species behaviour, physiology, morphology and composition under environmental variation (Ward et al. 2026). Long-term butterfly–plant data likewise show that interaction turnover can shift from rewiring-dominated to species-turnover-dominated as species loss reduces the pool of shared partners available for rewiring (Colom et al. 2026).
+
+The routeability framework suggests an additional structural interpretation:
+
+> **Rewiring requires not only available partners, but an information structure in which alternative permitted partners remain behaviorally accessible.**
+
+This does not imply that routeability determines rewiring. Abundance, phenology, energetic profitability, morphology, learning and competition remain major drivers. The claim is narrower: decision structure can constrain the subset of shared partners among which behavioural rewiring is feasible.
+
+### Decision-equivalence and rewiring capacity
+
+Decision-equivalence multiplicity may therefore buffer the **accessibility structure** of an interaction network under some species turnover. If one species disappears but another state remains in the same decision-equivalence class, the focal routing problem can remain unchanged even though species identity and observed links change.
+
+Conversely, loss of the final representative of a decision class can alter the routing problem abruptly. This creates a possible threshold in rewiring opportunity: the number of available partners may decline gradually, while the information structure supporting alternative partner choice changes only when turnover crosses a decision-equivalence boundary.
+
+This is intentionally weaker than an ecosystem-stability claim. It concerns the structure of behaviorally accessible alternatives for one focal interaction.
+
+### Claim boundary
+
+Decision-structural turnover should not be presented as:
+
+- a replacement for species or interaction beta diversity;
+- a third additive term in \(\beta_{WN}=\beta_{ST}+\beta_{OS}\);
+- a direct predictor of observed rewiring magnitude;
+- a universal network-resilience metric.
+
+Its role is mechanistic: it distinguishes compositional change that preserves the focal accessibility architecture from change that creates, removes or reorganizes the distinctions required for interaction.
+
 ## Relation to functional redundancy
 
 Decision equivalence should not be renamed functional redundancy.
@@ -192,5 +261,9 @@ It also sharpens the V5 headline:
 - Loreau, M., Barbier, M., Filotas, E., Gravel, D., Isbell, F., Miller, S. J., Montoya, J. M., Wang, S., Aussenac, R., Germain, R., Thompson, P. L., Gonzalez, A. & Dee, L. E. 2021. Biodiversity as insurance: from concept to measurement and application. *Biological Reviews* 96:2333–2354. https://doi.org/10.1111/brv.12756.
 - Mori, A. S., Furukawa, T. & Sasaki, T. 2013. Response diversity determines the resilience of ecosystems to environmental change. *Biological Reviews* 88:349–364. https://doi.org/10.1111/brv.12004.
 - Rolls, R. J., Heino, J., Ryder, D. S., Chessman, B. C., Growns, I. O., Thompson, R. M. & Gido, K. B. 2023. Biotic homogenisation and differentiation as directional change in beta diversity: synthesising driver–response relationships to develop conceptual models across ecosystems. *Biological Reviews* 98:1388–1421. https://doi.org/10.1111/brv.12958.
+- CaraDonna, P. J. et al. 2017. Interaction rewiring and the rapid turnover of plant–pollinator networks. *Ecology Letters* 20:385–394. https://doi.org/10.1111/ele.12740.
+- Colom, P. et al. 2026. Three decades of butterfly–plant interaction turnover explained by climate and species loss. *Ecology Letters*. https://doi.org/10.1111/ele.70361.
+- Fründ, J. 2021. Dissimilarity of species interaction networks: how to partition rewiring and species turnover components. *Ecosphere* 12:e03653. https://doi.org/10.1002/ecs2.3653.
 - Saul, W.-C. & Jeschke, J. M. 2015. Eco-evolutionary experience in novel species interactions. *Ecology Letters* 18:236–245. https://doi.org/10.1111/ele.12408.
+- Ward, C. A. et al. 2026. The rewiring of ecological networks in a variable world. *Nature Reviews Biodiversity* 2:355–369. https://doi.org/10.1038/s44358-026-00159-9.
 - White, H. J., Montgomery, W. I., Storchová, L., Hořák, D. & Lennon, J. J. 2018. Does functional homogenization accompany taxonomic homogenization of British birds and how do biotic factors and climate affect these processes? *Ecology and Evolution* 8:7365–7377. https://doi.org/10.1002/ece3.4267.
