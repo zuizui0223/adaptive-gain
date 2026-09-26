@@ -1,0 +1,103 @@
+# Aedes terminal-cue candidate audit v1
+
+## Question
+
+For the prospective q=1 four-world task, which biological information source should instantiate branch-B, the oviposition-site terminal cue?
+
+The mathematical fixture now uses the generic name `oviposition_site_cue`. This note ranks biological candidates without changing the finite-task structure.
+
+## Admission criterion
+
+The strongest B candidate should satisfy as many of the following as possible:
+
+1. carries an environmental distinction relevant to locating/evaluating an oviposition site;
+2. has a causal sensory receptor/cell handle;
+3. has a loss-of-function phenotype that specifically affects site finding rather than egg production or general locomotion;
+4. can be assayed quantitatively in both pre-blood and gravid females;
+5. has an interpretable acquisition-cost proxy;
+6. is not defined only by a broad co-receptor whose perturbation destroys many unrelated channels;
+7. does not require assuming that behavioral state switching equals peripheral sensory gating.
+
+## Candidate 1 — Ir68a-dependent humidity / water-vapor sensing
+
+**Current rank: primary.**
+
+Strengths:
+
+- Ir68a is required for Moist Cell humidity responses.
+- Gravid Ir68a mutants are profoundly impaired in finding water-filled containers in an oviposition-site-search assay.
+- When placed immediately adjacent to water, Ir68a mutants lay eggs normally, separating failure to locate the site from failure to produce or deposit eggs.
+- Ir40a mutants do not share the oviposition-search deficit, making the Moist Cell requirement more specific than a generic loss of hygrosensation.
+- Gravid females show strong state-dependent humidity/water-seeking behavior during the oviposition-search phase.
+- The environmental variable is directly manipulable as a humidity/water-vapor gradient and is naturally tied to water-containing containers.
+
+Limitations:
+
+- Ir68a-dependent Moist Cells also contribute redundantly to blood feeding together with Ir40a-dependent Dry Cells.
+- Therefore Ir68a cannot be treated as an anatomically exclusive gravid-only sensor.
+- The prospective finite-task claim should be that humidity information is **required for the declared gravid-branch site-finding distinction**, not that the cue is absent from the host branch.
+
+This distinction is compatible with the finite-task framework: branch-specific usefulness/obligation does not require branch-exclusive receptor expression.
+
+## Candidate 2 — geosmin / Orco-dependent olfaction
+
+**Current rank: secondary.**
+
+Strengths:
+
+- geosmin is an ecologically interpretable oviposition-associated chemical cue;
+- gravid females show geosmin-dependent oviposition preference;
+- Orco mutants lose the reported preference, giving a genetic sensory handle.
+
+Limitations:
+
+- Orco is a broad olfactory co-receptor, so its loss is not a branch-local perturbation;
+- current evidence does not establish that the geosmin channel is selectively acquired or strongly up-regulated only during the gravid branch;
+- some oviposition-attractant-sensitive peripheral neurons have similar sensitivity in gravid and nongravid females, showing that gonotrophic behavioral reprogramming can occur without peripheral sensory gating.
+
+Geosmin is therefore valuable as a replication/alternative cue but is weaker for the specific claim that branch-B represents context-contingent sensory use.
+
+## Candidate 3 — broader aquatic VOC blends
+
+**Current rank: exploratory.**
+
+Gravid females distinguish aquatic environments using density-, larval-stage- and habitat-dependent volatile blends. These may improve ecological realism but are currently harder to map to one causal sensory channel and one stable outcome alphabet. They are poor first choices for an exact finite deterministic task unless the relevant channel and guaranteed-resolution rule are simplified prospectively.
+
+## Important negative result: behavioral switch is not enough
+
+The gonotrophic cycle clearly changes behavioral priorities. That alone does not prove selective cue acquisition.
+
+Existing physiology shows two useful facts in opposite directions:
+
+- host-associated lactic-acid sensory sensitivity can decrease reversibly after a blood meal, supporting true peripheral state modulation on branch A;
+- some oviposition-odor-sensitive neurons can retain similar peripheral sensitivity in nongravid and gravid females, showing that downstream behavioral gating can change while sensory acquisition remains available.
+
+Therefore G2 remains `strong/partial`, not `strong`.
+
+## Recommended frozen B definition
+
+For the first prospective task, define B generically as:
+
+> `oviposition_site_cue`: a prospectively thresholded water-vapor/humidity distinction measured through an assay whose causal validation uses Ir68a-dependent Moist Cells.
+
+The exact stimulus should be frozen before the full outcome matrix is opened, for example a predeclared low-versus-high humidity gradient generated by dry versus water-filled target chambers.
+
+The finite-task outcome `B=1` should mean that the declared site-information threshold is met, not simply that Ir68a is expressed.
+
+## Cross-branch measurement requirement
+
+Because Moist Cells also contribute to host-related behavior, the experiment must measure the same B stimulus in both gonotrophic branches.
+
+A positive adaptive-gain admission does not require B to be physiologically silent in H0/H1. It requires the **frozen four-world outcome/target task** to pass the declared separation and cost semantics without recoding. If natural cross-branch responses violate the frozen matrix, the task is rejected or redesigned only in a new preregistered attempt.
+
+## Genetics boundary
+
+Ir68a knockout is a causal validation tool for the B channel, not automatically a local mutation edge in the downstream genotype-policy graph. Because Ir68a also participates in blood-feeding hygrosensation, its perturbation must be treated as potentially coupled across branches until the full cross-context phenotype matrix is measured.
+
+## Verdict
+
+Promote Ir68a-dependent humidity/water-vapor sensing to the primary branch-B candidate.
+
+Keep geosmin/Orco as a secondary cue and useful replication route, not the canonical fixture.
+
+This improves biological grounding without claiming that state-dependent peripheral routing has already been fully demonstrated.
