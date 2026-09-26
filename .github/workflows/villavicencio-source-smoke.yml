@@ -32,53 +32,73 @@ jobs:
           set -euo pipefail
           mkdir -p source/response source/traits artifact/raw artifact/export
 
-          curl -fL --retry 3 --retry-delay 2 \
+          if curl -fL --retry 2 --retry-delay 2 \
             -A "Mozilla/5.0" \
             -e "https://datadryad.org/dataset/doi:10.5061/dryad.j6q573n9j" \
             "https://datadryad.org/downloads/file_stream/268444" \
             -o source/response/miele-JAE.RData
+          then
+            echo "dryad_response_bytes=available" > artifact/response_download_status.txt
+          else
+            rm -f source/response/miele-JAE.RData
+            echo "dryad_response_bytes=blocked_without_bearer_token" > artifact/response_download_status.txt
+          fi
 
-          if ! curl -fL --retry 3 --retry-delay 2 \
+          if curl -fL --retry 3 --retry-delay 2 \
+            -A "Mozilla/5.0" \
+            "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?isAllowed=y&sequence=2" \
+            -o source/traits/plant_pollinator_data.xlsx
+          then
+            echo "trait_source=conicet_mirror" > artifact/trait_download_status.txt
+          elif curl -fL --retry 2 --retry-delay 2 \
             -A "Mozilla/5.0" \
             -e "https://datadryad.org/dataset/doi:10.5061/dryad.8cz8w9gm1" \
             "https://datadryad.org/downloads/file_stream/449108" \
             -o source/traits/plant_pollinator_data.xlsx
           then
-            curl -fL --retry 3 --retry-delay 2 \
-              -A "Mozilla/5.0" \
-              "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?isAllowed=y&sequence=2" \
-              -o source/traits/plant_pollinator_data.xlsx
+            echo "trait_source=dryad_file_stream" > artifact/trait_download_status.txt
+          else
+            rm -f source/traits/plant_pollinator_data.xlsx
+            echo "trait_source=unavailable" > artifact/trait_download_status.txt
+            exit 1
           fi
 
-          test -s source/response/miele-JAE.RData
           test -s source/traits/plant_pollinator_data.xlsx
-          file source/response/miele-JAE.RData
           file source/traits/plant_pollinator_data.xlsx
+          if test -s source/response/miele-JAE.RData; then
+            file source/response/miele-JAE.RData
+          fi
 
       - name: Freeze raw checksums and locate source files
         shell: bash
         run: |
           set -euo pipefail
-          RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit)"
           XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit)"
-          test -n "$RDATA"
           test -n "$XLSX"
 
-          sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
           sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
-          cp "$RDATA" artifact/raw/miele-JAE.RData
           cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
-
-          printf '%s\n' "$RDATA" > artifact/response_path.txt
           printf '%s\n' "$XLSX" > artifact/traits_path.txt
 
-      - name: Export 18-network response surface
+          RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit || true)"
+          if test -n "$RDATA"; then
+            sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
+            cp "$RDATA" artifact/raw/miele-JAE.RData
+            printf '%s\n' "$RDATA" > artifact/response_path.txt
+          fi
+
+      - name: Export 18-network response surface when bytes are available
         shell: bash
         run: |
           set -euo pipefail
-          RDATA="$(cat artifact/response_path.txt)"
-          Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
-          test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
+          if test -f artifact/response_path.txt; then
+            RDATA="$(cat artifact/response_path.txt)"
+            Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
+            test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
+          else
+            echo "18-network export skipped: Dryad response bytes require bearer authentication" \
+              > artifact/export/README_SKIPPED.txt
+          fi
 
       - name: Inventory trait workbook without fitting models
         shell: bash
@@ -127,7 +147,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
+          if test -f artifact/export/period_index.csv; then
+            python - <<'PY'
           import csv
           import json
           from collections import Counter
@@ -174,6 +195,7 @@ jobs:
               encoding="utf-8",
           )
           PY
+          fi
 
       - name: Upload source inventory
         uses: actions/upload-artifact@v4
