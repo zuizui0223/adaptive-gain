@@ -1,0 +1,174 @@
+name: Villavicencio source smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/villavicencio-source-smoke.yml"
+      - "examples/export_villavicencio_subseasons.R"
+      - "examples/villavicencio_stage1_from_csv.py"
+      - "examples/build_villavicencio_transition_pairs.py"
+      - "adaptive_gain/empirical_rewiring.py"
+      - "validation/villavicencio_source_manifest_v1.json"
+      - "validation/villavicencio_stage1_predata_gate_v1.json"
+
+jobs:
+  source-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Download published Dryad datasets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/response source/traits artifact/raw artifact/export
+
+          curl -fL --retry 3 --retry-delay 2 \
+            "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.j6q573n9j/download" \
+            -o source/response.zip
+          curl -fL --retry 3 --retry-delay 2 \
+            "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.8cz8w9gm1/download" \
+            -o source/traits.zip
+
+          unzip -q source/response.zip -d source/response
+          unzip -q source/traits.zip -d source/traits
+
+          find source/response -maxdepth 2 -type f -print
+          find source/traits -maxdepth 2 -type f -print
+
+      - name: Freeze raw checksums and locate source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit)"
+          XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit)"
+          test -n "$RDATA"
+          test -n "$XLSX"
+
+          sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
+          sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
+          cp "$RDATA" artifact/raw/miele-JAE.RData
+          cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
+
+          printf '%s\n' "$RDATA" > artifact/response_path.txt
+          printf '%s\n' "$XLSX" > artifact/traits_path.txt
+
+      - name: Export 18-network response surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          RDATA="$(cat artifact/response_path.txt)"
+          Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
+          test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
+
+      - name: Inventory trait workbook without fitting models
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install openpyxl
+          XLSX="$(cat artifact/traits_path.txt)"
+          python - "$XLSX" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          from openpyxl import load_workbook
+
+          path = Path(sys.argv[1])
+          wb = load_workbook(path, read_only=True, data_only=False)
+
+          sheets = []
+          for ws in wb.worksheets:
+              first_rows = []
+              for row in ws.iter_rows(min_row=1, max_row=min(ws.max_row, 5), values_only=True):
+                  first_rows.append([None if value is None else str(value) for value in row])
+              sheets.append(
+                  {
+                      "title": ws.title,
+                      "max_row": ws.max_row,
+                      "max_column": ws.max_column,
+                      "first_rows": first_rows,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-workbook-inventory-v1",
+              "workbook": path.name,
+              "sheet_count": len(sheets),
+              "sheets": sheets,
+              "model_fitted": False,
+          }
+          Path("artifact/workbook_inventory.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Summarize exported periods before response analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          period_index = list(
+              csv.DictReader(
+                  Path("artifact/export/period_index.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          interactions = list(
+              csv.DictReader(
+                  Path("artifact/export/subseason_interactions_long.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          counts = Counter(row["period"] for row in interactions)
+          weights = Counter()
+          for row in interactions:
+              weights[row["period"]] += float(row["weight"])
+
+          summary = {
+              "schema": "adaptive-gain-villavicencio-period-inventory-v1",
+              "period_count": len(period_index),
+              "periods": [
+                  {
+                      "source_index": int(row["source_index"]),
+                      "period": row["period"],
+                      "positive_link_rows": counts[row["period"]],
+                      "total_weight": weights[row["period"]],
+                  }
+                  for row in period_index
+              ],
+              "transition_mapping_verified": False,
+              "response_model_fitted": False,
+          }
+          Path("artifact/period_inventory.json").write_text(
+              json.dumps(summary, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Upload source inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: villavicencio-source-inventory
+          path: artifact
+          if-no-files-found: error
+          retention-days: 14
