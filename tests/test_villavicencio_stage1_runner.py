@@ -1,3 +1,4 @@
+import csv
 import json
 import subprocess
 import sys
@@ -16,6 +17,7 @@ def test_stage1_runner_emits_machine_readable_receipt(tmp_path):
     interactions = tmp_path / "interactions.csv"
     transitions = tmp_path / "transitions.csv"
     output = tmp_path / "result.json"
+    dyads = tmp_path / "dyads.csv"
 
     _write(
         interactions,
@@ -39,6 +41,8 @@ def test_stage1_runner_emits_machine_readable_receipt(tmp_path):
             str(transitions),
             "--output",
             str(output),
+            "--dyad-output",
+            str(dyads),
         ],
         cwd=ROOT,
         check=False,
@@ -55,6 +59,11 @@ def test_stage1_runner_emits_machine_readable_receipt(tmp_path):
     assert receipt["shared_species_rewiring_count"] == 4
     assert receipt["species_turnover_link_count"] == 0
     assert receipt["exact_partition"] is True
+
+    with dyads.open(newline="", encoding="utf-8") as handle:
+        dyad_rows = list(csv.DictReader(handle))
+    assert len(dyad_rows) == 4
+    assert {row["direction"] for row in dyad_rows} == {"gain", "loss"}
 
 
 def test_stage1_runner_rejects_unverified_presence_by_default(tmp_path):
