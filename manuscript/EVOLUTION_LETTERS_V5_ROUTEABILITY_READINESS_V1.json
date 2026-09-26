@@ -160,7 +160,7 @@
       "primary_predictions": [
         "low taxonomic turnover plus decision-boundary crossing predicts more rewiring among shared species than matched no-crossing transitions",
         "within-class turnover is a structural negative control against taxonomic distance alone",
-        "loss of a final decision-class representative produces a larger accessibility discontinuity than comparable non-final loss",
+        "loss of a final decision-class representative is predicted to be more likely to alter accessibility structure than comparable non-final loss; this direction is empirical, not guaranteed by the quotient theorem",
         "decision-structural change can accompany rewiring even with little species turnover"
       ],
       "anti_circularity_rule": "freeze decision-equivalence classes independently of the observed rewiring response",
@@ -178,7 +178,8 @@
       ],
       "regression_test": "tests/test_decision_rewiring_prospective_test.py",
       "promotion_rule": "Promote only for reviewer-requested testability, an identified empirical network with independently measurable decision structure, or a dedicated rewiring follow-up; keep the initial V5 headline unchanged.",
-      "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect."
+      "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect.",
+      "formal_empirical_boundary": "exact result: non-final within-class loss can leave the declared contingent decision problem invariant; empirical hypothesis: final-representative loss is more likely to alter rewiring opportunity, not guaranteed to change observed rewiring"
     }
   ]
 }
