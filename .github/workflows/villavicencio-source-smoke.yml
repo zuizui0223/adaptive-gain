@@ -198,11 +198,15 @@ jobs:
               digest_match = None
               if materialized:
                   observed = hashlib.sha256(source_path.read_bytes()).hexdigest()
-                  if str(published.get("digestType", "")).lower() == "sha256":
-                      digest_match = observed.lower() == str(
-                          published.get("digest", "")
-                      ).lower()
-                      mismatch = mismatch or not digest_match
+                  digest_type = str(published.get("digestType", "")).lower().replace("-", "")
+                  if digest_type != "sha256":
+                      raise SystemExit(
+                          f"{role}: unsupported published digest type {published.get('digestType')!r}"
+                      )
+                  digest_match = observed.lower() == str(
+                      published.get("digest", "")
+                  ).lower()
+                  mismatch = mismatch or not digest_match
 
               rows.append(
                   {
