@@ -219,6 +219,96 @@ def _resolve_presence(
     )
 
 
+@dataclass(frozen=True)
+class DyadTransitionRow:
+    plant: Species
+    pollinator: Species
+    previous_weight: float
+    current_weight: float
+    previous_link: bool
+    current_link: bool
+    changed: bool
+    direction: str
+    permitted: bool | None
+
+
+def transition_dyad_rows(
+    previous: Mapping[Dyad, float],
+    current: Mapping[Dyad, float],
+    *,
+    permitted_dyads: Iterable[Dyad] | None = None,
+    previous_plants: Iterable[Species] | None = None,
+    previous_pollinators: Iterable[Species] | None = None,
+    current_plants: Iterable[Species] | None = None,
+    current_pollinators: Iterable[Species] | None = None,
+) -> tuple[DyadTransitionRow, ...]:
+    """Return one row for every dyad whose endpoints persist across periods.
+
+    The table is intentionally response-complete: stable absent dyads are kept,
+    so later compatibility or trait joins cannot condition on observed links.
+    """
+
+    prev = _clean_network(previous)
+    curr = _clean_network(current)
+    prev_links = set(prev)
+    curr_links = set(curr)
+
+    (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        _,
+    ) = _resolve_presence(
+        prev_links,
+        curr_links,
+        previous_plants=previous_plants,
+        previous_pollinators=previous_pollinators,
+        current_plants=current_plants,
+        current_pollinators=current_pollinators,
+    )
+
+    shared_dyads = {
+        (plant, pollinator)
+        for plant in prev_plants & curr_plants
+        for pollinator in prev_pollinators & curr_pollinators
+    }
+    permitted = None if permitted_dyads is None else set(permitted_dyads)
+
+    rows = []
+    for plant, pollinator in sorted(
+        shared_dyads,
+        key=lambda dyad: (repr(dyad[0]), repr(dyad[1])),
+    ):
+        dyad = (plant, pollinator)
+        previous_weight = prev.get(dyad, 0.0)
+        current_weight = curr.get(dyad, 0.0)
+        previous_link = previous_weight > 0
+        current_link = current_weight > 0
+        if previous_link and current_link:
+            direction = "stable_present"
+        elif previous_link:
+            direction = "loss"
+        elif current_link:
+            direction = "gain"
+        else:
+            direction = "stable_absent"
+        rows.append(
+            DyadTransitionRow(
+                plant=plant,
+                pollinator=pollinator,
+                previous_weight=previous_weight,
+                current_weight=current_weight,
+                previous_link=previous_link,
+                current_link=current_link,
+                changed=previous_link != current_link,
+                direction=direction,
+                permitted=None if permitted is None else dyad in permitted,
+            )
+        )
+    return tuple(rows)
+
+
 def transition_rewiring_receipt(
     previous: Mapping[Dyad, float],
     current: Mapping[Dyad, float],
