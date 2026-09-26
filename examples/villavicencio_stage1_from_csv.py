@@ -15,6 +15,7 @@ from pathlib import Path
 
 from adaptive_gain.empirical_rewiring import (
     networks_by_period_from_rows,
+    rewiring_estimability_audit,
     transition_dyad_rows,
     transition_rewiring_receipt,
 )
@@ -154,6 +155,7 @@ def main() -> None:
 
     output_rows = []
     dyad_output_rows = []
+    primary_dyad_rows = {}
     for previous_period, current_period, role in transitions:
         if previous_period not in networks or current_period not in networks:
             raise ValueError(
@@ -194,13 +196,17 @@ def main() -> None:
             }
         )
 
+        transition_rows = transition_dyad_rows(
+            networks[previous_period],
+            networks[current_period],
+            permitted_dyads=permitted,
+            **kwargs,
+        )
+        if role == "primary":
+            primary_dyad_rows[f"{previous_period}->{current_period}"] = transition_rows
+
         if args.dyad_output is not None:
-            for dyad in transition_dyad_rows(
-                networks[previous_period],
-                networks[current_period],
-                permitted_dyads=permitted,
-                **kwargs,
-            ):
+            for dyad in transition_rows:
                 dyad_output_rows.append(
                     {
                         "previous_period": previous_period,
@@ -211,6 +217,15 @@ def main() -> None:
                 )
 
     primary = [row for row in output_rows if row["role"] == "primary"]
+    estimability = rewiring_estimability_audit(primary_dyad_rows)
+    estimability_dict = asdict(estimability)
+    estimability_dict.update(
+        {
+            "changed_fraction": estimability.changed_fraction,
+            "global_outcome_nondegenerate": estimability.global_outcome_nondegenerate,
+            "has_within_transition_contrast": estimability.has_within_transition_contrast,
+        }
+    )
     result = {
         "schema": "adaptive-gain-villavicencio-stage1-rewiring-v1",
         "interactions_file": str(args.interactions),
@@ -229,6 +244,7 @@ def main() -> None:
         "primary_estimable_permitted_rate_count": sum(
             row["receipt"]["rewiring_opportunity_rate"] is not None for row in primary
         ),
+        "primary_estimability": estimability_dict,
         "transitions": output_rows,
     }
 
