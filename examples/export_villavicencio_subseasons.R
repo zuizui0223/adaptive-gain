@@ -69,14 +69,14 @@ for (i in seq_along(nets)) {
   plant_codes <- id_codes(plant_id, nrow(mat), "plant_")
   pollinator_codes <- id_codes(pollinator_id, ncol(mat), "pollinator_")
 
-  if (nrow(mat) == length(pollinator_frame) && ncol(mat) == length(plant_frame) &&
-      !(nrow(mat) == length(plant_frame) && ncol(mat) == length(pollinator_frame))) {
+  if (nrow(mat) == nrow(pollinator_frame) && ncol(mat) == nrow(plant_frame) &&
+      !(nrow(mat) == nrow(plant_frame) && ncol(mat) == nrow(pollinator_frame))) {
     mat <- t(mat)
     plant_codes <- id_codes(plant_id, nrow(mat), "plant_")
     pollinator_codes <- id_codes(pollinator_id, ncol(mat), "pollinator_")
   }
 
-  if (nrow(mat) != length(plant_frame) || ncol(mat) != length(pollinator_frame)) {
+  if (nrow(mat) != nrow(plant_frame) || ncol(mat) != nrow(pollinator_frame)) {
     stop(
       paste(
         "network", i,
