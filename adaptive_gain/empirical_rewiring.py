@@ -478,3 +478,93 @@ def adjacent_transition_series(
             )
         )
     return tuple(out)
+
+@dataclass(frozen=True)
+class RewiringEstimabilityReceipt:
+    transition_count: int
+    dyad_row_count: int
+    eligible_dyad_row_count: int
+    changed_count: int
+    unchanged_count: int
+    gain_count: int
+    loss_count: int
+    stable_present_count: int
+    stable_absent_count: int
+    transitions_with_eligible_rows: int
+    transitions_with_any_change: int
+    transitions_with_both_outcomes: int
+
+    @property
+    def changed_fraction(self) -> float | None:
+        if self.eligible_dyad_row_count == 0:
+            return None
+        return self.changed_count / self.eligible_dyad_row_count
+
+    @property
+    def global_outcome_nondegenerate(self) -> bool:
+        return self.changed_count > 0 and self.unchanged_count > 0
+
+    @property
+    def has_within_transition_contrast(self) -> bool:
+        return self.transitions_with_both_outcomes > 0
+
+
+def rewiring_estimability_audit(
+    transitions: Mapping[Hashable, Sequence[DyadTransitionRow]],
+) -> RewiringEstimabilityReceipt:
+    """Summarize whether a shared-dyad link-change response is non-degenerate.
+
+    Rows explicitly marked permitted=False are excluded from the eligible
+    opportunity set. Rows with permitted=None remain eligible because no
+    compatibility mask has yet been supplied.
+
+    The receipt is descriptive only. It deliberately does not encode a power
+    threshold or claim that a model is adequately identified.
+    """
+
+    all_rows = []
+    eligible_rows = []
+    transitions_with_eligible_rows = 0
+    transitions_with_any_change = 0
+    transitions_with_both_outcomes = 0
+
+    for _, rows in transitions.items():
+        rows = tuple(rows)
+        all_rows.extend(rows)
+        eligible = tuple(row for row in rows if row.permitted is not False)
+        eligible_rows.extend(eligible)
+        if eligible:
+            transitions_with_eligible_rows += 1
+        changed = sum(row.changed for row in eligible)
+        unchanged = len(eligible) - changed
+        if changed > 0:
+            transitions_with_any_change += 1
+        if changed > 0 and unchanged > 0:
+            transitions_with_both_outcomes += 1
+
+    direction_counts = {
+        "gain": 0,
+        "loss": 0,
+        "stable_present": 0,
+        "stable_absent": 0,
+    }
+    for row in eligible_rows:
+        if row.direction not in direction_counts:
+            raise ValueError(f"unexpected dyad direction: {row.direction!r}")
+        direction_counts[row.direction] += 1
+
+    changed_count = sum(row.changed for row in eligible_rows)
+    return RewiringEstimabilityReceipt(
+        transition_count=len(transitions),
+        dyad_row_count=len(all_rows),
+        eligible_dyad_row_count=len(eligible_rows),
+        changed_count=changed_count,
+        unchanged_count=len(eligible_rows) - changed_count,
+        gain_count=direction_counts["gain"],
+        loss_count=direction_counts["loss"],
+        stable_present_count=direction_counts["stable_present"],
+        stable_absent_count=direction_counts["stable_absent"],
+        transitions_with_eligible_rows=transitions_with_eligible_rows,
+        transitions_with_any_change=transitions_with_any_change,
+        transitions_with_both_outcomes=transitions_with_both_outcomes,
+    )
