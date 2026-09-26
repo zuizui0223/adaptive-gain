@@ -150,6 +150,35 @@
         "witness_audit": "success",
         "certificate_audit": "success"
       }
+    },
+    {
+      "path": "manuscript/DECISION_REWIRING_PROSPECTIVE_TEST_V1.md",
+      "status": "prospective_empirical_revision_reserve_not_in_initial_submission",
+      "central_question": "among network transitions with similar species turnover and rewiring opportunity, does crossing a decision-equivalence boundary predict more rewiring than within-class turnover?",
+      "formal_basis": "existing target-relevant quotient / decision-equivalence result",
+      "new_theorem_family": false,
+      "primary_predictions": [
+        "low taxonomic turnover plus decision-boundary crossing predicts more rewiring among shared species than matched no-crossing transitions",
+        "within-class turnover is a structural negative control against taxonomic distance alone",
+        "loss of a final decision-class representative produces a larger accessibility discontinuity than comparable non-final loss",
+        "decision-structural change can accompany rewiring even with little species turnover"
+      ],
+      "anti_circularity_rule": "freeze decision-equivalence classes independently of the observed rewiring response",
+      "negative_controls": [
+        "taxonomic-only",
+        "functional-trait-only",
+        "environment-only",
+        "class-label permutation preserving class-size distribution"
+      ],
+      "evidence_ladder": [
+        "descriptive compatibility",
+        "independent frozen decision classes",
+        "decision-structure perturbation",
+        "final-versus-non-final representative threshold perturbation"
+      ],
+      "regression_test": "tests/test_decision_rewiring_prospective_test.py",
+      "promotion_rule": "Promote only for reviewer-requested testability, an identified empirical network with independently measurable decision structure, or a dedicated rewiring follow-up; keep the initial V5 headline unchanged.",
+      "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect."
     }
   ]
 }
