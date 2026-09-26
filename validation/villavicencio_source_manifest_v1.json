@@ -45,5 +45,17 @@
   ],
   "freeze_rule": "Do not record a raw-file checksum until the exact downloaded bytes have been materialized and inspected.",
   "join_rule": "Freeze plant and pollinator crosswalks before inspecting the focal rewiring contrasts.",
-  "analysis_rule": "The 18-network source supplies the preferred response surface; the trait workbook supplies conventional filters. Neither source alone supplies independent decision-equivalence classes."
+  "analysis_rule": "The 18-network source supplies the preferred response surface; the trait workbook supplies conventional filters. Neither source alone supplies independent decision-equivalence classes.",
+  "acquisition_policy": {
+    "anonymous_metadata": "required and sufficient for source discovery, file IDs, declared sizes and published digests",
+    "published_bytes": "materialize only through an authenticated Dryad download route or a verified public institutional mirror",
+    "dryad_token_secret": "optional repository secret DRYAD_TOKEN; absence must not fail metadata smoke",
+    "no_credential_fallback": "record metadata_only_bytes_unavailable and retain source manifests",
+    "analysis_gate": "no response modelling until exact source bytes are materialized and checksummed"
+  },
+  "implementation": {
+    "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
+    "smoke_workflow": ".github/workflows/villavicencio-source-smoke.yml",
+    "workflow_behavior": "metadata-first; token-aware; uploads inventory even when bytes are unavailable"
+  }
 }
