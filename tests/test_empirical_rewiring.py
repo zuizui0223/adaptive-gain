@@ -4,6 +4,7 @@ from adaptive_gain.empirical_rewiring import (
     adjacent_transition_series,
     network_from_rows,
     networks_by_period_from_rows,
+    transition_dyad_rows,
     transition_rewiring_receipt,
 )
 
@@ -197,3 +198,40 @@ def test_adjacent_series_accepts_period_specific_external_presence():
     assert len(series) == 1
     assert series[0].receipt.shared_species_rewiring_count == 2
     assert series[0].receipt.presence_basis == "externally_supplied_presence"
+
+
+def test_dyad_table_keeps_stable_absent_shared_opportunities():
+    previous = {("p1", "q1"): 2}
+    current = {("p1", "q2"): 3}
+    presence = {
+        "previous_plants": {"p1", "p2"},
+        "previous_pollinators": {"q1", "q2"},
+        "current_plants": {"p1", "p2"},
+        "current_pollinators": {"q1", "q2"},
+    }
+
+    rows = transition_dyad_rows(previous, current, **presence)
+
+    assert len(rows) == 4
+    by_dyad = {(row.plant, row.pollinator): row for row in rows}
+    assert by_dyad[("p1", "q1")].direction == "loss"
+    assert by_dyad[("p1", "q2")].direction == "gain"
+    assert by_dyad[("p2", "q1")].direction == "stable_absent"
+    assert by_dyad[("p2", "q2")].direction == "stable_absent"
+
+
+def test_dyad_table_marks_compatibility_without_filtering_rows():
+    previous = {("p1", "q1"): 1, ("p2", "q2"): 1}
+    current = {("p1", "q2"): 1, ("p2", "q1"): 1}
+    permitted = {("p1", "q1"), ("p1", "q2")}
+
+    rows = transition_dyad_rows(
+        previous,
+        current,
+        permitted_dyads=permitted,
+    )
+
+    assert len(rows) == 4
+    assert sum(row.permitted is True for row in rows) == 2
+    assert sum(row.permitted is False for row in rows) == 2
+    assert sum(row.changed for row in rows) == 4
