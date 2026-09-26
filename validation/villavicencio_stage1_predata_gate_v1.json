@@ -103,5 +103,31 @@
       "workbook sheet inventory"
     ],
     "response_model_fit_during_source_smoke": false
+  },
+  "response_estimability_gate": {
+    "implementation": "adaptive_gain.empirical_rewiring.rewiring_estimability_audit",
+    "runner_field": "primary_estimability",
+    "descriptive_quantities": [
+      "eligible shared-dyad row count",
+      "changed versus unchanged dyads",
+      "gain and loss counts",
+      "stable-present and stable-absent counts",
+      "transitions with any change",
+      "transitions with both changed and unchanged eligible dyads"
+    ],
+    "nondegeneracy_checks": [
+      "global outcome contains both changed and unchanged eligible dyads",
+      "at least one transition has a within-transition changed-versus-unchanged contrast"
+    ],
+    "no_power_threshold_yet": true,
+    "reason": "power and model-identification thresholds must be frozen only after the source grain and covariate joins are verified, without inspecting decision-structure effects"
+  },
+  "source_acquisition_gate": {
+    "anonymous_dryad_manifest_required": true,
+    "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
+    "published_digest_verification_required_for_materialized_bytes": true,
+    "bytes_without_token_may_be_unavailable": true,
+    "metadata_only_run_is_not_analysis_failure": true,
+    "response_analysis_requires_materialized_verified_bytes": true
   }
 }
