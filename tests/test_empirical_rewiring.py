@@ -135,3 +135,65 @@ def test_adjacent_series_rejects_duplicate_or_missing_periods():
         adjacent_transition_series(networks, period_order=(2006, 2006))
     with pytest.raises(ValueError):
         adjacent_transition_series(networks, period_order=(2006, 2008))
+
+
+def test_external_presence_prevents_zero_degree_from_becoming_false_turnover():
+    previous = {("p1", "q1"): 1}
+    current = {("p1", "q2"): 1}
+
+    fallback = transition_rewiring_receipt(previous, current)
+    assert fallback.shared_species_rewiring_count == 0
+    assert fallback.species_turnover_link_count == 2
+    assert fallback.presence_basis == "observed_positive_links"
+
+    external = transition_rewiring_receipt(
+        previous,
+        current,
+        previous_plants={"p1"},
+        previous_pollinators={"q1", "q2"},
+        current_plants={"p1"},
+        current_pollinators={"q1", "q2"},
+    )
+    assert external.shared_species_rewiring_count == 2
+    assert external.species_turnover_link_count == 0
+    assert external.presence_basis == "externally_supplied_presence"
+
+
+def test_partial_or_inconsistent_external_presence_is_rejected():
+    with pytest.raises(ValueError):
+        transition_rewiring_receipt(
+            {("p1", "q1"): 1},
+            {("p1", "q1"): 1},
+            previous_plants={"p1"},
+        )
+
+    with pytest.raises(ValueError):
+        transition_rewiring_receipt(
+            {("p1", "q1"): 1},
+            {("p1", "q1"): 1},
+            previous_plants=set(),
+            previous_pollinators={"q1"},
+            current_plants={"p1"},
+            current_pollinators={"q1"},
+        )
+
+
+def test_adjacent_series_accepts_period_specific_external_presence():
+    networks = {
+        "early": {("p1", "q1"): 1},
+        "late": {("p1", "q2"): 1},
+    }
+    presence = {
+        "early": ({"p1"}, {"q1", "q2"}),
+        "late": ({"p1"}, {"q1", "q2"}),
+    }
+
+    series = adjacent_transition_series(
+        networks,
+        period_order=("early", "late"),
+        species_presence=presence,
+    )
+
+    assert len(series) == 1
+    assert series[0].receipt.shared_species_rewiring_count == 2
+    assert series[0].receipt.presence_basis == "externally_supplied_presence"
