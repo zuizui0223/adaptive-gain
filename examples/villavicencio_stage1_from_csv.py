@@ -15,6 +15,7 @@ from pathlib import Path
 
 from adaptive_gain.empirical_rewiring import (
     networks_by_period_from_rows,
+    transition_dyad_rows,
     transition_rewiring_receipt,
 )
 
@@ -140,6 +141,7 @@ def main() -> None:
     parser.add_argument("--permitted", type=Path)
     parser.add_argument("--allow-unverified-presence", action="store_true")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--dyad-output", type=Path)
     args = parser.parse_args()
 
     networks = _read_interactions(args.interactions)
@@ -151,6 +153,7 @@ def main() -> None:
     permitted = _read_permitted(args.permitted)
 
     output_rows = []
+    dyad_output_rows = []
     for previous_period, current_period, role in transitions:
         if previous_period not in networks or current_period not in networks:
             raise ValueError(
@@ -191,6 +194,22 @@ def main() -> None:
             }
         )
 
+        if args.dyad_output is not None:
+            for dyad in transition_dyad_rows(
+                networks[previous_period],
+                networks[current_period],
+                permitted_dyads=permitted,
+                **kwargs,
+            ):
+                dyad_output_rows.append(
+                    {
+                        "previous_period": previous_period,
+                        "current_period": current_period,
+                        "role": role,
+                        **asdict(dyad),
+                    }
+                )
+
     primary = [row for row in output_rows if row["role"] == "primary"]
     result = {
         "schema": "adaptive-gain-villavicencio-stage1-rewiring-v1",
@@ -218,6 +237,26 @@ def main() -> None:
         print(rendered)
     else:
         args.output.write_text(rendered + "\n", encoding="utf-8")
+
+    if args.dyad_output is not None:
+        fields = [
+            "previous_period",
+            "current_period",
+            "role",
+            "plant",
+            "pollinator",
+            "previous_weight",
+            "current_weight",
+            "previous_link",
+            "current_link",
+            "changed",
+            "direction",
+            "permitted",
+        ]
+        with args.dyad_output.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fields)
+            writer.writeheader()
+            writer.writerows(dyad_output_rows)
 
 
 if __name__ == "__main__":
