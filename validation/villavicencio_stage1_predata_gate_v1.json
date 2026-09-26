@@ -129,5 +129,23 @@
     "bytes_without_token_may_be_unavailable": true,
     "metadata_only_run_is_not_analysis_failure": true,
     "response_analysis_requires_materialized_verified_bytes": true
+  },
+  "sampling_detection_policy": {
+    "problem": "apparent link gain/loss can reflect unequal observation effort or imperfect detection rather than biological rewiring",
+    "required_inventory_before_ecological_interpretation": [
+      "period-specific observation effort if recoverable from source data or methods",
+      "whether sampling sites or observation effort changed among years/subseasons",
+      "distribution of interaction weights for links classified as gains or losses"
+    ],
+    "primary_stage1_status": "detection-sensitive feasibility outcome until effort semantics are verified",
+    "prespecified_sensitivities_if_bytes_allow": [
+      "repeat link-change audit after excluding the lowest-frequency observed links using a threshold frozen before decision-structure analysis",
+      "report weighted interaction change alongside binary link change",
+      "stratify or offset by sampling effort when a defensible effort measure exists"
+    ],
+    "forbidden": [
+      "interpreting every zero interaction as a true forbidden or absent link",
+      "choosing a frequency threshold after inspecting decision-structure effects"
+    ]
   }
 }
