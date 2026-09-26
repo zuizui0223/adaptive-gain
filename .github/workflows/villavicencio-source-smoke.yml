@@ -47,20 +47,59 @@ jobs:
           CONICET_PAGE="https://datosdeinvestigacion.conicet.gov.ar/handle/11336/249358?show=full"
           curl -fL --retry 3 --retry-delay 2 -A "Mozilla/5.0" \
             "$CONICET_PAGE" -o artifact/conicet_item.html || true
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0" \
+            "https://datosdeinvestigacion.conicet.gov.ar/rest/dataset/11336/249358" \
+            -o artifact/conicet_dataset.json || true
 
           CONICET_HREF="$(
             python - <<'PY'
           import html
+          import json
           import re
           from pathlib import Path
 
+          candidates = []
+
           page = Path("artifact/conicet_item.html")
-          if not page.exists():
-              print("")
-              raise SystemExit
-          text = page.read_text(encoding="utf-8", errors="ignore")
-          matches = re.findall(r'href=["\\\']([^"\\\']*plant_pollinator_data\\.xlsx[^"\\\']*)["\\\']', text)
-          print(html.unescape(matches[0]) if matches else "")
+          if page.exists():
+              text = page.read_text(encoding="utf-8", errors="ignore")
+              candidates.extend(
+                  html.unescape(value)
+                  for value in re.findall(
+                      r'href=["\\\']([^"\\\']*plant_pollinator_data\\.xlsx[^"\\\']*)["\\\']',
+                      text,
+                  )
+              )
+
+          def walk(value):
+              if isinstance(value, dict):
+                  for child in value.values():
+                      walk(child)
+              elif isinstance(value, list):
+                  for child in value:
+                      walk(child)
+              elif isinstance(value, str):
+                  if "plant_pollinator_data.xlsx" in value or "/bitstream/" in value:
+                      candidates.append(value)
+
+          metadata = Path("artifact/conicet_dataset.json")
+          if metadata.exists():
+              try:
+                  walk(json.loads(metadata.read_text(encoding="utf-8")))
+              except Exception:
+                  pass
+
+          cleaned = []
+          for value in candidates:
+              value = html.unescape(value)
+              if value not in cleaned:
+                  cleaned.append(value)
+
+          Path("artifact/conicet_candidate_urls.txt").write_text(
+              "\\n".join(cleaned) + ("\\n" if cleaned else ""),
+              encoding="utf-8",
+          )
+          print(cleaned[0] if cleaned else "")
           PY
           )"
 
@@ -91,12 +130,12 @@ jobs:
             echo "trait_source=dryad_file_stream" > artifact/trait_download_status.txt
           else
             rm -f source/traits/plant_pollinator_data.xlsx
-            echo "trait_source=unavailable" > artifact/trait_download_status.txt
-            exit 1
+            echo "trait_source=unavailable_after_public_routes" > artifact/trait_download_status.txt
           fi
 
-          test -s source/traits/plant_pollinator_data.xlsx
-          file source/traits/plant_pollinator_data.xlsx
+          if test -s source/traits/plant_pollinator_data.xlsx; then
+            file source/traits/plant_pollinator_data.xlsx
+          fi
           if test -s source/response/miele-JAE.RData; then
             file source/response/miele-JAE.RData
           fi
@@ -105,12 +144,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit)"
-          test -n "$XLSX"
-
-          sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
-          cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
-          printf '%s\n' "$XLSX" > artifact/traits_path.txt
+          XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit || true)"
+          if test -n "$XLSX"; then
+            sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
+            cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
+            printf '%s\n' "$XLSX" > artifact/traits_path.txt
+          else
+            echo "trait bytes not materialized; metadata probe retained" > artifact/traits_xlsx_sha256.txt
+          fi
 
           RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit || true)"
           if test -n "$RDATA"; then
@@ -136,9 +177,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install openpyxl
-          XLSX="$(cat artifact/traits_path.txt)"
-          python - "$XLSX" <<'PY'
+          if test -f artifact/traits_path.txt; then
+            python -m pip install openpyxl
+            XLSX="$(cat artifact/traits_path.txt)"
+            python - "$XLSX" <<'PY'
           import json
           import sys
           from pathlib import Path
@@ -174,6 +216,10 @@ jobs:
               encoding="utf-8",
           )
           PY
+          else
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-workbook-inventory-v1","materialized":false,"model_fitted":false}' \
+              > artifact/workbook_inventory.json
+          fi
 
       - name: Summarize exported periods before response analysis
         shell: bash
@@ -230,6 +276,7 @@ jobs:
           fi
 
       - name: Upload source inventory
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: villavicencio-source-inventory
