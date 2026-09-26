@@ -4,6 +4,7 @@ from adaptive_gain.empirical_rewiring import (
     adjacent_transition_series,
     network_from_rows,
     networks_by_period_from_rows,
+    rewiring_estimability_audit,
     transition_dyad_rows,
     transition_rewiring_receipt,
 )
@@ -235,3 +236,47 @@ def test_dyad_table_marks_compatibility_without_filtering_rows():
     assert sum(row.permitted is True for row in rows) == 2
     assert sum(row.permitted is False for row in rows) == 2
     assert sum(row.changed for row in rows) == 4
+
+def test_rewiring_estimability_audit_keeps_changed_and_unchanged_rows():
+    rows_a = transition_dyad_rows(
+        {("p1", "q1"): 1},
+        {("p1", "q2"): 1},
+        previous_plants={"p1"},
+        previous_pollinators={"q1", "q2"},
+        current_plants={"p1"},
+        current_pollinators={"q1", "q2"},
+    )
+    rows_b = transition_dyad_rows(
+        {("p1", "q1"): 1},
+        {("p1", "q1"): 1},
+        previous_plants={"p1"},
+        previous_pollinators={"q1", "q2"},
+        current_plants={"p1"},
+        current_pollinators={"q1", "q2"},
+    )
+
+    receipt = rewiring_estimability_audit({"a": rows_a, "b": rows_b})
+
+    assert receipt.transition_count == 2
+    assert receipt.eligible_dyad_row_count == 4
+    assert receipt.changed_count == 2
+    assert receipt.unchanged_count == 2
+    assert receipt.changed_fraction == pytest.approx(0.5)
+    assert receipt.global_outcome_nondegenerate
+    assert receipt.has_within_transition_contrast is False
+    assert receipt.transitions_with_any_change == 1
+
+
+def test_rewiring_estimability_audit_respects_prespecified_permitted_mask():
+    rows = transition_dyad_rows(
+        {("p1", "q1"): 1, ("p2", "q2"): 1},
+        {("p1", "q2"): 1, ("p2", "q1"): 1},
+        permitted_dyads={("p1", "q1"), ("p1", "q2"), ("p2", "q2")},
+    )
+    receipt = rewiring_estimability_audit({"transition": rows})
+
+    assert receipt.dyad_row_count == 4
+    assert receipt.eligible_dyad_row_count == 3
+    assert receipt.changed_count == 3
+    assert receipt.unchanged_count == 0
+    assert receipt.global_outcome_nondegenerate is False
