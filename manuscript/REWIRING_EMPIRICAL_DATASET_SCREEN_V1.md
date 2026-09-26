@@ -63,6 +63,45 @@ Use the dataset to answer a narrower feasibility question:
 
 Do **not** call a morphology clustering result an exact empirical decision-equivalence test.
 
+
+## Candidate 1b — Villavicencio 18-subseason response surface
+
+**Source:** Vázquez & Chacoff Dryad dataset, `10.5061/dryad.j6q573n9j`.
+
+This is a second public release from the same Villavicencio plant–pollinator system. It contains:
+
+- 18 bipartite interaction matrices;
+- three subseasons per year across 2006–2011;
+- 18 directed dependence matrices;
+- plant and pollinator identification codes;
+- the original 59 plant species, 196 flower-visiting insect species, 28,015 visits and 1,050 interacting pairs.
+
+### Screening decision
+
+**Preferred Stage-1 response source, conditional on a clean ID join to Candidate 1 traits.**
+
+The higher temporal resolution improves the feasibility test substantially. Rather than relying only on five year-to-year transitions, the primary Stage-1 contrast should use the 12 within-year adjacent transitions:
+
+[
+6\;\text{years}\times(\text{early}\to\text{mid},\;\text{mid}\to\text{late})=12.
+]
+
+Year-end to next-year early transitions should be sensitivity analyses rather than part of the primary series because they span a qualitatively different seasonal gap.
+
+The trait/phenology workbook from Candidate 1 remains the preferred conventional-filter source. The 18-network response should be restricted **before response inspection** to species with a verified crosswalk into that trait surface.
+
+### Join gate
+
+Before any ecological model is fit:
+
+1. recover the plant and pollinator ID tables from the RData object;
+2. crosswalk those IDs to the names/codes used in the trait workbook;
+3. report exact matched/unmatched counts separately for plants and pollinators;
+4. freeze the analysis subset;
+5. preserve zero-degree but independently present species when the source object permits it.
+
+If zero observed degree is used as a proxy for absence, the resulting turnover partition must be labelled a detection-sensitive fallback rather than true species turnover.
+
 ## Candidate 2 — Catalan butterfly–plant long-term network
 
 **Source:** Colom et al. 2026, *Ecology Letters*, “Three Decades of Butterfly–Plant Interaction Turnover Explained by Climate and Species Loss.”
@@ -162,14 +201,19 @@ This is precisely why the prospective reserve forbids deriving decision classes 
 
 Goal: determine whether the network response has enough structure to justify collecting or importing independent decision data.
 
+Preferred response surface: the 18-subseason network release `10.5061/dryad.j6q573n9j`, joined to the trait/phenology workbook `10.5061/dryad.8cz8w9gm1`.
+
 Freeze before analysis:
 
-- annual interaction matrices;
+- the 12 within-year adjacent transitions as the primary temporal series;
+- year-boundary transitions as sensitivity analyses only;
 - shared species / shared partner sets;
+- independent species-presence information where available;
 - abundance;
 - phenological overlap;
 - morphology compatibility;
-- one prespecified rewiring outcome.
+- one prespecified rewiring outcome;
+- the species crosswalk and trait-available analysis subset before inspecting rewiring contrasts.
 
 Outputs:
 
