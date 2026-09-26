@@ -56,6 +56,15 @@ period_names <- names(nets)
 if (is.null(period_names) || any(period_names == "")) {
   period_names <- sprintf("period_%02d", seq_along(nets))
 }
+write.csv(
+  data.frame(
+    source_index = seq_along(nets),
+    period = period_names,
+    stringsAsFactors = FALSE
+  ),
+  file.path(output_dir, "period_index.csv"),
+  row.names = FALSE
+)
 
 interaction_rows <- list()
 axis_rows <- list()
