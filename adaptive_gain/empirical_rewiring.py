@@ -1,0 +1,570 @@
+"""Stage-1 empirical diagnostics for repeated bipartite interaction networks.
+
+These utilities intentionally stop before decision-equivalence inference. They
+partition observed link turnover into changes among species shared by adjacent
+networks and changes involving species turnover, while exposing the size of the
+shared dyad opportunity set.
+
+The shared-species component is an operational feasibility diagnostic for the
+post-freeze rewiring program. It is not advertised as a new additive
+network-beta-diversity metric.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from math import isfinite
+from typing import Hashable, Iterable, Mapping, Sequence
+
+Species = Hashable
+Dyad = tuple[Species, Species]
+Presence = tuple[Iterable[Species], Iterable[Species]]
+
+
+def _clean_network(network: Mapping[Dyad, float]) -> dict[Dyad, float]:
+    out: dict[Dyad, float] = {}
+    for dyad, weight in network.items():
+        if not isinstance(dyad, tuple) or len(dyad) != 2:
+            raise ValueError("network keys must be (plant, pollinator) dyads")
+        plant, pollinator = dyad
+        if plant is None or pollinator is None:
+            raise ValueError("species labels cannot be None")
+        value = float(weight)
+        if not isfinite(value) or value < 0:
+            raise ValueError("interaction weights must be finite and non-negative")
+        if value > 0:
+            out[(plant, pollinator)] = value
+    return out
+
+
+def network_from_rows(
+    rows: Iterable[Sequence[object]],
+) -> dict[Dyad, float]:
+    """Build one weighted network from (plant, pollinator, weight) rows.
+
+    Duplicate dyads are summed. Zero-weight rows are accepted and ignored.
+    """
+
+    out: dict[Dyad, float] = {}
+    for row in rows:
+        if len(row) != 3:
+            raise ValueError("each row must contain plant, pollinator, weight")
+        plant, pollinator, weight = row
+        if plant is None or pollinator is None:
+            raise ValueError("species labels cannot be None")
+        value = float(weight)
+        if not isfinite(value) or value < 0:
+            raise ValueError("interaction weights must be finite and non-negative")
+        if value == 0:
+            continue
+        dyad = (plant, pollinator)
+        out[dyad] = out.get(dyad, 0.0) + value
+    return out
+
+
+def networks_by_period_from_rows(
+    rows: Iterable[Sequence[object]],
+) -> dict[Hashable, dict[Dyad, float]]:
+    """Build weighted networks from (period, plant, pollinator, weight) rows."""
+
+    out: dict[Hashable, dict[Dyad, float]] = {}
+    for row in rows:
+        if len(row) != 4:
+            raise ValueError("each row must contain period, plant, pollinator, weight")
+        period, plant, pollinator, weight = row
+        bucket = out.setdefault(period, {})
+        value = float(weight)
+        if not isfinite(value) or value < 0:
+            raise ValueError("interaction weights must be finite and non-negative")
+        if plant is None or pollinator is None:
+            raise ValueError("species labels cannot be None")
+        if value == 0:
+            continue
+        dyad = (plant, pollinator)
+        bucket[dyad] = bucket.get(dyad, 0.0) + value
+    return out
+
+
+@dataclass(frozen=True)
+class RewiringTransitionReceipt:
+    previous_link_count: int
+    current_link_count: int
+    union_link_count: int
+    previous_plant_count: int
+    current_plant_count: int
+    previous_pollinator_count: int
+    current_pollinator_count: int
+    shared_plant_count: int
+    shared_pollinator_count: int
+    shared_species_dyad_count: int
+    permitted_shared_dyad_count: int
+    stable_shared_link_count: int
+    shared_species_gain_count: int
+    shared_species_loss_count: int
+    species_turnover_gain_count: int
+    species_turnover_loss_count: int
+    changed_shared_outside_permitted_count: int
+    total_link_turnover_count: int
+    presence_basis: str
+
+    @property
+    def shared_species_rewiring_count(self) -> int:
+        return self.shared_species_gain_count + self.shared_species_loss_count
+
+    @property
+    def species_turnover_link_count(self) -> int:
+        return self.species_turnover_gain_count + self.species_turnover_loss_count
+
+    @property
+    def exact_partition(self) -> bool:
+        return (
+            self.total_link_turnover_count
+            == self.shared_species_rewiring_count + self.species_turnover_link_count
+        )
+
+    @property
+    def link_jaccard_dissimilarity(self) -> float:
+        if self.union_link_count == 0:
+            return 0.0
+        return self.total_link_turnover_count / self.union_link_count
+
+    @property
+    def shared_species_rewiring_fraction_of_union(self) -> float:
+        if self.union_link_count == 0:
+            return 0.0
+        return self.shared_species_rewiring_count / self.union_link_count
+
+    @property
+    def species_turnover_fraction_of_union(self) -> float:
+        if self.union_link_count == 0:
+            return 0.0
+        return self.species_turnover_link_count / self.union_link_count
+
+    @property
+    def rewiring_opportunity_rate(self) -> float | None:
+        """Changed shared-species links per permitted shared dyad.
+
+        None means that no shared permitted dyad exists, so a rewiring rate
+        is not estimable for that transition.
+        """
+
+        if self.permitted_shared_dyad_count == 0:
+            return None
+        permitted_changed = (
+            self.shared_species_rewiring_count
+            - self.changed_shared_outside_permitted_count
+        )
+        return permitted_changed / self.permitted_shared_dyad_count
+
+
+def _resolve_presence(
+    prev_links: set[Dyad],
+    curr_links: set[Dyad],
+    *,
+    previous_plants: Iterable[Species] | None,
+    previous_pollinators: Iterable[Species] | None,
+    current_plants: Iterable[Species] | None,
+    current_pollinators: Iterable[Species] | None,
+) -> tuple[set[Species], set[Species], set[Species], set[Species], str]:
+    supplied = (
+        previous_plants,
+        previous_pollinators,
+        current_plants,
+        current_pollinators,
+    )
+    any_supplied = any(value is not None for value in supplied)
+    all_supplied = all(value is not None for value in supplied)
+    if any_supplied and not all_supplied:
+        raise ValueError(
+            "supply all four plant/pollinator presence sets or none of them"
+        )
+
+    observed_prev_plants = {p for p, _ in prev_links}
+    observed_curr_plants = {p for p, _ in curr_links}
+    observed_prev_pollinators = {q for _, q in prev_links}
+    observed_curr_pollinators = {q for _, q in curr_links}
+
+    if not all_supplied:
+        return (
+            observed_prev_plants,
+            observed_prev_pollinators,
+            observed_curr_plants,
+            observed_curr_pollinators,
+            "observed_positive_links",
+        )
+
+    prev_plants = set(previous_plants or ())
+    prev_pollinators = set(previous_pollinators or ())
+    curr_plants = set(current_plants or ())
+    curr_pollinators = set(current_pollinators or ())
+
+    for label, observed, declared in (
+        ("previous plants", observed_prev_plants, prev_plants),
+        ("previous pollinators", observed_prev_pollinators, prev_pollinators),
+        ("current plants", observed_curr_plants, curr_plants),
+        ("current pollinators", observed_curr_pollinators, curr_pollinators),
+    ):
+        if not observed <= declared:
+            missing = observed - declared
+            raise ValueError(
+                f"{label} presence omits species with positive links: {missing!r}"
+            )
+
+    return (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        "externally_supplied_presence",
+    )
+
+
+@dataclass(frozen=True)
+class DyadTransitionRow:
+    plant: Species
+    pollinator: Species
+    previous_weight: float
+    current_weight: float
+    previous_link: bool
+    current_link: bool
+    changed: bool
+    direction: str
+    permitted: bool | None
+
+
+def transition_dyad_rows(
+    previous: Mapping[Dyad, float],
+    current: Mapping[Dyad, float],
+    *,
+    permitted_dyads: Iterable[Dyad] | None = None,
+    previous_plants: Iterable[Species] | None = None,
+    previous_pollinators: Iterable[Species] | None = None,
+    current_plants: Iterable[Species] | None = None,
+    current_pollinators: Iterable[Species] | None = None,
+) -> tuple[DyadTransitionRow, ...]:
+    """Return one row for every dyad whose endpoints persist across periods.
+
+    The table is intentionally response-complete: stable absent dyads are kept,
+    so later compatibility or trait joins cannot condition on observed links.
+    """
+
+    prev = _clean_network(previous)
+    curr = _clean_network(current)
+    prev_links = set(prev)
+    curr_links = set(curr)
+
+    (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        _,
+    ) = _resolve_presence(
+        prev_links,
+        curr_links,
+        previous_plants=previous_plants,
+        previous_pollinators=previous_pollinators,
+        current_plants=current_plants,
+        current_pollinators=current_pollinators,
+    )
+
+    shared_dyads = {
+        (plant, pollinator)
+        for plant in prev_plants & curr_plants
+        for pollinator in prev_pollinators & curr_pollinators
+    }
+    permitted = None if permitted_dyads is None else set(permitted_dyads)
+
+    rows = []
+    for plant, pollinator in sorted(
+        shared_dyads,
+        key=lambda dyad: (repr(dyad[0]), repr(dyad[1])),
+    ):
+        dyad = (plant, pollinator)
+        previous_weight = prev.get(dyad, 0.0)
+        current_weight = curr.get(dyad, 0.0)
+        previous_link = previous_weight > 0
+        current_link = current_weight > 0
+        if previous_link and current_link:
+            direction = "stable_present"
+        elif previous_link:
+            direction = "loss"
+        elif current_link:
+            direction = "gain"
+        else:
+            direction = "stable_absent"
+        rows.append(
+            DyadTransitionRow(
+                plant=plant,
+                pollinator=pollinator,
+                previous_weight=previous_weight,
+                current_weight=current_weight,
+                previous_link=previous_link,
+                current_link=current_link,
+                changed=previous_link != current_link,
+                direction=direction,
+                permitted=None if permitted is None else dyad in permitted,
+            )
+        )
+    return tuple(rows)
+
+
+def transition_rewiring_receipt(
+    previous: Mapping[Dyad, float],
+    current: Mapping[Dyad, float],
+    *,
+    permitted_dyads: Iterable[Dyad] | None = None,
+    previous_plants: Iterable[Species] | None = None,
+    previous_pollinators: Iterable[Species] | None = None,
+    current_plants: Iterable[Species] | None = None,
+    current_pollinators: Iterable[Species] | None = None,
+) -> RewiringTransitionReceipt:
+    """Partition adjacent-network link turnover by species persistence.
+
+    A changed link is counted as shared-species rewiring when both endpoint
+    species are present in both adjacent networks. Otherwise the changed link
+    is assigned to the species-turnover component.
+
+    Independent presence data should be supplied whenever possible. If they
+    are omitted, positive observed links define species presence. That fallback
+    is convenient for feasibility work but can confound non-detection with
+    true species turnover.
+
+    permitted_dyads is an optional independently defined compatibility set.
+    It affects only the opportunity denominator and QC count; it never erases
+    observed links. This prevents a compatibility model from silently
+    manufacturing a cleaner rewiring response.
+    """
+
+    prev = _clean_network(previous)
+    curr = _clean_network(current)
+    prev_links = set(prev)
+    curr_links = set(curr)
+
+    (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        presence_basis,
+    ) = _resolve_presence(
+        prev_links,
+        curr_links,
+        previous_plants=previous_plants,
+        previous_pollinators=previous_pollinators,
+        current_plants=current_plants,
+        current_pollinators=current_pollinators,
+    )
+
+    shared_plants = prev_plants & curr_plants
+    shared_pollinators = prev_pollinators & curr_pollinators
+    shared_dyads = {
+        (plant, pollinator)
+        for plant in shared_plants
+        for pollinator in shared_pollinators
+    }
+
+    gains = curr_links - prev_links
+    losses = prev_links - curr_links
+    shared_gains = gains & shared_dyads
+    shared_losses = losses & shared_dyads
+    turnover_gains = gains - shared_dyads
+    turnover_losses = losses - shared_dyads
+
+    if permitted_dyads is None:
+        permitted_shared = shared_dyads
+        outside = set()
+    else:
+        permitted = set(permitted_dyads)
+        for dyad in permitted:
+            if not isinstance(dyad, tuple) or len(dyad) != 2:
+                raise ValueError("permitted_dyads must contain dyad tuples")
+        permitted_shared = shared_dyads & permitted
+        outside = (shared_gains | shared_losses) - permitted_shared
+
+    receipt = RewiringTransitionReceipt(
+        previous_link_count=len(prev_links),
+        current_link_count=len(curr_links),
+        union_link_count=len(prev_links | curr_links),
+        previous_plant_count=len(prev_plants),
+        current_plant_count=len(curr_plants),
+        previous_pollinator_count=len(prev_pollinators),
+        current_pollinator_count=len(curr_pollinators),
+        shared_plant_count=len(shared_plants),
+        shared_pollinator_count=len(shared_pollinators),
+        shared_species_dyad_count=len(shared_dyads),
+        permitted_shared_dyad_count=len(permitted_shared),
+        stable_shared_link_count=len(prev_links & curr_links & shared_dyads),
+        shared_species_gain_count=len(shared_gains),
+        shared_species_loss_count=len(shared_losses),
+        species_turnover_gain_count=len(turnover_gains),
+        species_turnover_loss_count=len(turnover_losses),
+        changed_shared_outside_permitted_count=len(outside),
+        total_link_turnover_count=len(prev_links ^ curr_links),
+        presence_basis=presence_basis,
+    )
+    if not receipt.exact_partition:
+        raise AssertionError("internal turnover partition failed")
+    return receipt
+
+
+@dataclass(frozen=True)
+class PeriodTransition:
+    previous_period: Hashable
+    current_period: Hashable
+    receipt: RewiringTransitionReceipt
+
+
+def adjacent_transition_series(
+    networks: Mapping[Hashable, Mapping[Dyad, float]],
+    *,
+    period_order: Sequence[Hashable] | None = None,
+    permitted_dyads: Iterable[Dyad] | None = None,
+    species_presence: Mapping[Hashable, Presence] | None = None,
+) -> tuple[PeriodTransition, ...]:
+    """Return receipts for adjacent periods in an explicitly frozen order.
+
+    species_presence maps each period to (plant_species, pollinator_species).
+    Supplying it is preferred because it prevents zero observed degree from
+    being automatically interpreted as species absence.
+    """
+
+    if period_order is None:
+        try:
+            order = tuple(sorted(networks))
+        except TypeError as exc:
+            raise ValueError(
+                "period_order is required when period labels are not mutually sortable"
+            ) from exc
+    else:
+        order = tuple(period_order)
+
+    if len(set(order)) != len(order):
+        raise ValueError("period_order contains duplicates")
+    missing = [period for period in order if period not in networks]
+    if missing:
+        raise ValueError(f"period_order contains missing periods: {missing!r}")
+
+    if species_presence is not None:
+        missing_presence = [period for period in order if period not in species_presence]
+        if missing_presence:
+            raise ValueError(
+                f"species_presence missing periods: {missing_presence!r}"
+            )
+
+    permitted = None if permitted_dyads is None else tuple(permitted_dyads)
+    out = []
+    for previous_period, current_period in zip(order, order[1:]):
+        kwargs = {}
+        if species_presence is not None:
+            prev_plants, prev_pollinators = species_presence[previous_period]
+            curr_plants, curr_pollinators = species_presence[current_period]
+            kwargs = {
+                "previous_plants": prev_plants,
+                "previous_pollinators": prev_pollinators,
+                "current_plants": curr_plants,
+                "current_pollinators": curr_pollinators,
+            }
+        out.append(
+            PeriodTransition(
+                previous_period=previous_period,
+                current_period=current_period,
+                receipt=transition_rewiring_receipt(
+                    networks[previous_period],
+                    networks[current_period],
+                    permitted_dyads=permitted,
+                    **kwargs,
+                ),
+            )
+        )
+    return tuple(out)
+
+@dataclass(frozen=True)
+class RewiringEstimabilityReceipt:
+    transition_count: int
+    dyad_row_count: int
+    eligible_dyad_row_count: int
+    changed_count: int
+    unchanged_count: int
+    gain_count: int
+    loss_count: int
+    stable_present_count: int
+    stable_absent_count: int
+    transitions_with_eligible_rows: int
+    transitions_with_any_change: int
+    transitions_with_both_outcomes: int
+
+    @property
+    def changed_fraction(self) -> float | None:
+        if self.eligible_dyad_row_count == 0:
+            return None
+        return self.changed_count / self.eligible_dyad_row_count
+
+    @property
+    def global_outcome_nondegenerate(self) -> bool:
+        return self.changed_count > 0 and self.unchanged_count > 0
+
+    @property
+    def has_within_transition_contrast(self) -> bool:
+        return self.transitions_with_both_outcomes > 0
+
+
+def rewiring_estimability_audit(
+    transitions: Mapping[Hashable, Sequence[DyadTransitionRow]],
+) -> RewiringEstimabilityReceipt:
+    """Summarize whether a shared-dyad link-change response is non-degenerate.
+
+    Rows explicitly marked permitted=False are excluded from the eligible
+    opportunity set. Rows with permitted=None remain eligible because no
+    compatibility mask has yet been supplied.
+
+    The receipt is descriptive only. It deliberately does not encode a power
+    threshold or claim that a model is adequately identified.
+    """
+
+    all_rows = []
+    eligible_rows = []
+    transitions_with_eligible_rows = 0
+    transitions_with_any_change = 0
+    transitions_with_both_outcomes = 0
+
+    for _, rows in transitions.items():
+        rows = tuple(rows)
+        all_rows.extend(rows)
+        eligible = tuple(row for row in rows if row.permitted is not False)
+        eligible_rows.extend(eligible)
+        if eligible:
+            transitions_with_eligible_rows += 1
+        changed = sum(row.changed for row in eligible)
+        unchanged = len(eligible) - changed
+        if changed > 0:
+            transitions_with_any_change += 1
+        if changed > 0 and unchanged > 0:
+            transitions_with_both_outcomes += 1
+
+    direction_counts = {
+        "gain": 0,
+        "loss": 0,
+        "stable_present": 0,
+        "stable_absent": 0,
+    }
+    for row in eligible_rows:
+        if row.direction not in direction_counts:
+            raise ValueError(f"unexpected dyad direction: {row.direction!r}")
+        direction_counts[row.direction] += 1
+
+    changed_count = sum(row.changed for row in eligible_rows)
+    return RewiringEstimabilityReceipt(
+        transition_count=len(transitions),
+        dyad_row_count=len(all_rows),
+        eligible_dyad_row_count=len(eligible_rows),
+        changed_count=changed_count,
+        unchanged_count=len(eligible_rows) - changed_count,
+        gain_count=direction_counts["gain"],
+        loss_count=direction_counts["loss"],
+        stable_present_count=direction_counts["stable_present"],
+        stable_absent_count=direction_counts["stable_absent"],
+        transitions_with_eligible_rows=transitions_with_eligible_rows,
+        transitions_with_any_change=transitions_with_any_change,
+        transitions_with_both_outcomes=transitions_with_both_outcomes,
+    )

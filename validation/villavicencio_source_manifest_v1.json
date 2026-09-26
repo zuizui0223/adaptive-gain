@@ -1,0 +1,98 @@
+{
+  "schema": "adaptive-gain-villavicencio-source-manifest-v1",
+  "date": "2026-09-26",
+  "status": "anonymous_metadata_frozen_bytes_not_materialized",
+  "sources": [
+    {
+      "role": "high-temporal-resolution interaction response",
+      "doi": "10.5061/dryad.j6q573n9j",
+      "title": "Plant-pollinator networks for three subseasons and six years from Villavicencio Nature Reserve",
+      "declared_files": [
+        "miele-JAE.R",
+        "miele-JAE.RData"
+      ],
+      "declared_total_size_kb": 63.68,
+      "declared_objects": [
+        "bipartite.networks",
+        "directed.networks",
+        "plant.id",
+        "pollinator.id"
+      ],
+      "declared_network_count": 18,
+      "declared_temporal_grain": "three subseasons per year for six years",
+      "raw_sha256": null,
+      "dryad_version_id": 57785,
+      "dryad_version_number": 3,
+      "target_file": {
+        "path": "miele-JAE.RData",
+        "file_id": 268444,
+        "size_bytes": 62453,
+        "digest_type": "sha-256",
+        "published_digest": "2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b"
+      },
+      "code_file": {
+        "path": "miele-JAE.R",
+        "file_id": 268443,
+        "size_bytes": 1232,
+        "digest_type": "sha-256",
+        "published_digest": "4bd03522eba91d631014c05d71dae501efe513b6b9a4e94e8dfe68feb7de38f3"
+      }
+    },
+    {
+      "role": "traits phenology abundance and annual interaction covariates",
+      "doi": "10.5061/dryad.8cz8w9gm1",
+      "title": "Trait matching and phenological overlap increase the spatio-temporal stability and functionality of plant-pollinator interactions",
+      "declared_files": [
+        "plant_pollinator_data.xlsx"
+      ],
+      "declared_total_size_kb": 230.65,
+      "declared_trait_subset": {
+        "plants": 45,
+        "flower_visitors": 135
+      },
+      "declared_original_interaction_surface": {
+        "plants": 59,
+        "flower_visitors": 196,
+        "visits": 28015,
+        "interacting_pairs": 1050
+      },
+      "raw_sha256": null,
+      "dryad_version_id": 87009,
+      "dryad_version_number": 5,
+      "target_file": {
+        "path": "plant_pollinator_data.xlsx",
+        "file_id": 449108,
+        "size_bytes": 230652,
+        "digest_type": "sha-256",
+        "published_digest": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459"
+      }
+    }
+  ],
+  "freeze_rule": "Do not record a raw-file checksum until the exact downloaded bytes have been materialized and inspected.",
+  "join_rule": "Freeze plant and pollinator crosswalks before inspecting the focal rewiring contrasts.",
+  "analysis_rule": "The 18-network source supplies the preferred response surface; the trait workbook supplies conventional filters. Neither source alone supplies independent decision-equivalence classes.",
+  "acquisition_policy": {
+    "anonymous_metadata": "required and sufficient for source discovery, file IDs, declared sizes and published digests",
+    "published_bytes": "materialize only through an authenticated Dryad download route or a verified public institutional mirror",
+    "dryad_token_secret": "optional repository secret DRYAD_TOKEN; absence must not fail metadata smoke",
+    "no_credential_fallback": "record metadata_only_bytes_unavailable and retain source manifests",
+    "analysis_gate": "no response modelling until exact source bytes are materialized and checksummed"
+  },
+  "implementation": {
+    "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
+    "smoke_workflow": ".github/workflows/villavicencio-source-smoke.yml",
+    "workflow_behavior": "metadata-first; token-aware; uploads inventory even when bytes are unavailable"
+  },
+  "latest_source_smoke": {
+    "workflow_run": 36241484325,
+    "run_number": 17,
+    "conclusion": "success",
+    "artifact_id": 10906101022,
+    "artifact_digest": "sha256:28ea95a8d3257e9fedce8a82351e6f212a20dd5648884473ae33996aa76e1fca",
+    "response_bytes": "metadata_only_no_bearer_token",
+    "trait_bytes": "metadata_only_bytes_unavailable",
+    "response_model_fitted": false,
+    "transition_mapping_verified": false
+  },
+  "next_materialization_gate": "Provide an authenticated Dryad byte route or an exact verified mirror; then require local SHA-256 to match the published Dryad digest before any response analysis."
+}

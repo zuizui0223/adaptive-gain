@@ -1,0 +1,389 @@
+name: Villavicencio source smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/villavicencio-source-smoke.yml"
+      - "examples/fetch_dryad_source_manifest.py"
+      - "examples/export_villavicencio_subseasons.R"
+      - "examples/villavicencio_stage1_from_csv.py"
+      - "examples/build_villavicencio_transition_pairs.py"
+      - "adaptive_gain/empirical_rewiring.py"
+      - "validation/villavicencio_source_manifest_v1.json"
+      - "validation/villavicencio_stage1_predata_gate_v1.json"
+
+jobs:
+  source-smoke:
+    runs-on: ubuntu-latest
+    env:
+      DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Resolve anonymous Dryad source manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/response source/traits artifact/raw artifact/export artifact/manifests
+
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.j6q573n9j"             artifact/manifests/response_dryad_manifest.json             --target-name "miele-JAE.RData"             --target-id-output artifact/response_file_id.txt
+
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.8cz8w9gm1"             artifact/manifests/traits_dryad_manifest.json             --target-name "plant_pollinator_data.xlsx"             --target-id-output artifact/traits_file_id.txt
+
+      - name: Download published source bytes when authorized or mirrored
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RESPONSE_ID="$(cat artifact/response_file_id.txt)"
+          TRAITS_ID="$(cat artifact/traits_file_id.txt)"
+
+          if test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$RESPONSE_ID/download"               -o source/response/miele-JAE.RData
+            then
+              echo "dryad_response_bytes=available_via_bearer_token"                 > artifact/response_download_status.txt
+            else
+              rm -f source/response/miele-JAE.RData
+              echo "dryad_response_bytes=token_download_failed"                 > artifact/response_download_status.txt
+            fi
+          else
+            echo "dryad_response_bytes=metadata_only_no_bearer_token"               > artifact/response_download_status.txt
+          fi
+
+          CONICET_PAGE="https://datosdeinvestigacion.conicet.gov.ar/handle/11336/249358?show=full"
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "$CONICET_PAGE" -o artifact/conicet_item.html || true
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "https://datosdeinvestigacion.conicet.gov.ar/rest/dataset/11336/249358"             -o artifact/conicet_dataset.json || true
+
+          CONICET_HREF="$(
+            python - <<'PY'
+          import html
+          import json
+          import re
+          from pathlib import Path
+
+          candidates = []
+
+          page = Path("artifact/conicet_item.html")
+          if page.exists():
+              text = page.read_text(encoding="utf-8", errors="ignore")
+              candidates.extend(
+                  html.unescape(value)
+                  for value in re.findall(
+                      r'href=["\x27]([^"\x27]*plant_pollinator_data\.xlsx[^"\x27]*)["\x27]',
+                      text,
+                  )
+              )
+
+          def walk(value):
+              if isinstance(value, dict):
+                  for child in value.values():
+                      walk(child)
+              elif isinstance(value, list):
+                  for child in value:
+                      walk(child)
+              elif isinstance(value, str):
+                  if "plant_pollinator_data.xlsx" in value or "/bitstream/" in value:
+                      candidates.append(value)
+
+          metadata = Path("artifact/conicet_dataset.json")
+          if metadata.exists():
+              try:
+                  walk(json.loads(metadata.read_text(encoding="utf-8")))
+              except Exception:
+                  pass
+
+          cleaned = []
+          for value in candidates:
+              value = html.unescape(value)
+              if value not in cleaned:
+                  cleaned.append(value)
+
+          Path("artifact/conicet_candidate_urls.txt").write_text(
+              "\n".join(cleaned) + ("\n" if cleaned else ""),
+              encoding="utf-8",
+          )
+          print(cleaned[0] if cleaned else "")
+          PY
+          )"
+
+          if test -n "$CONICET_HREF"; then
+            case "$CONICET_HREF" in
+              http*) CONICET_FILE="$CONICET_HREF" ;;
+              /*) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar$CONICET_HREF" ;;
+              *) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar/$CONICET_HREF" ;;
+            esac
+          else
+            CONICET_FILE=""
+          fi
+          printf '%s\n' "$CONICET_FILE" > artifact/conicet_resolved_file_url.txt
+
+          TRAIT_DONE=0
+          if test -n "$CONICET_FILE" && curl -fL --retry 2 --retry-delay 2             -A "Mozilla/5.0"             -e "$CONICET_PAGE"             "$CONICET_FILE"             -o source/traits/plant_pollinator_data.xlsx
+          then
+            echo "trait_source=conicet_mirror_resolved_from_metadata"               > artifact/trait_download_status.txt
+            TRAIT_DONE=1
+          else
+            rm -f source/traits/plant_pollinator_data.xlsx
+          fi
+
+          if test "$TRAIT_DONE" -eq 0 && test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$TRAITS_ID/download"               -o source/traits/plant_pollinator_data.xlsx
+            then
+              echo "trait_source=dryad_bearer_token"                 > artifact/trait_download_status.txt
+              TRAIT_DONE=1
+            else
+              rm -f source/traits/plant_pollinator_data.xlsx
+            fi
+          fi
+
+          if test "$TRAIT_DONE" -eq 0; then
+            echo "trait_source=metadata_only_bytes_unavailable"               > artifact/trait_download_status.txt
+          fi
+
+          if test -s source/traits/plant_pollinator_data.xlsx; then
+            file source/traits/plant_pollinator_data.xlsx
+          fi
+          if test -s source/response/miele-JAE.RData; then
+            file source/response/miele-JAE.RData
+          fi
+
+      - name: Verify materialized bytes against published Dryad digests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          checks = [
+              (
+                  "response",
+                  Path("artifact/manifests/response_dryad_manifest.json"),
+                  "miele-JAE.RData",
+                  Path("source/response/miele-JAE.RData"),
+              ),
+              (
+                  "traits",
+                  Path("artifact/manifests/traits_dryad_manifest.json"),
+                  "plant_pollinator_data.xlsx",
+                  Path("source/traits/plant_pollinator_data.xlsx"),
+              ),
+          ]
+
+          rows = []
+          mismatch = False
+          for role, manifest_path, source_name, source_path in checks:
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              matches = [
+                  row for row in manifest["files"]
+                  if row["path"] == source_name
+              ]
+              if len(matches) != 1:
+                  raise SystemExit(
+                      f"{role}: expected one manifest row for {source_name!r}"
+                  )
+              published = matches[0]
+              materialized = source_path.exists()
+              observed = None
+              digest_match = None
+              if materialized:
+                  observed = hashlib.sha256(source_path.read_bytes()).hexdigest()
+                  digest_type = str(published.get("digestType", "")).lower().replace("-", "")
+                  if digest_type != "sha256":
+                      raise SystemExit(
+                          f"{role}: unsupported published digest type {published.get('digestType')!r}"
+                      )
+                  digest_match = observed.lower() == str(
+                      published.get("digest", "")
+                  ).lower()
+                  mismatch = mismatch or not digest_match
+
+              rows.append(
+                  {
+                      "role": role,
+                      "source_name": source_name,
+                      "materialized": materialized,
+                      "published_digest_type": published.get("digestType"),
+                      "published_digest": published.get("digest"),
+                      "observed_sha256": observed,
+                      "digest_match": digest_match,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-source-digest-verification-v1",
+              "checks": rows,
+              "all_materialized_sources_match_published_digest": not mismatch,
+          }
+          Path("artifact/source_digest_verification.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          if mismatch:
+              raise SystemExit("materialized source bytes disagree with published Dryad digest")
+          PY
+
+      - name: Freeze raw checksums and locate available source files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit || true)"
+          if test -n "$XLSX"; then
+            sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
+            cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
+            printf '%s\n' "$XLSX" > artifact/traits_path.txt
+          else
+            echo "trait bytes not materialized; anonymous Dryad manifest retained"               > artifact/traits_xlsx_sha256.txt
+          fi
+
+          RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit || true)"
+          if test -n "$RDATA"; then
+            sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
+            cp "$RDATA" artifact/raw/miele-JAE.RData
+            printf '%s\n' "$RDATA" > artifact/response_path.txt
+          else
+            echo "response bytes not materialized; anonymous Dryad manifest retained"               > artifact/response_rdata_sha256.txt
+          fi
+
+      - name: Export 18-network response surface when bytes are available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f artifact/response_path.txt; then
+            RDATA="$(cat artifact/response_path.txt)"
+            Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
+            test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
+          else
+            echo "18-network export skipped: published bytes not authorized in this run"               > artifact/export/README_SKIPPED.txt
+          fi
+
+      - name: Inventory trait workbook when bytes are available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-workbook-inventory-v1","materialized":false,"model_fitted":false}'               > artifact/workbook_inventory.json
+            exit 0
+          fi
+
+          python -m pip install openpyxl
+          XLSX="$(cat artifact/traits_path.txt)"
+          python - "$XLSX" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          from openpyxl import load_workbook
+
+          path = Path(sys.argv[1])
+          wb = load_workbook(path, read_only=True, data_only=False)
+
+          sheets = []
+          for ws in wb.worksheets:
+              first_rows = []
+              for row in ws.iter_rows(
+                  min_row=1,
+                  max_row=min(ws.max_row, 5),
+                  values_only=True,
+              ):
+                  first_rows.append(
+                      [None if value is None else str(value) for value in row]
+                  )
+              sheets.append(
+                  {
+                      "title": ws.title,
+                      "max_row": ws.max_row,
+                      "max_column": ws.max_column,
+                      "first_rows": first_rows,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-workbook-inventory-v1",
+              "materialized": True,
+              "workbook": path.name,
+              "sheet_count": len(sheets),
+              "sheets": sheets,
+              "model_fitted": False,
+          }
+          Path("artifact/workbook_inventory.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Summarize exported periods before response analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f artifact/export/period_index.csv; then
+            python - <<'PY'
+          import csv
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          period_index = list(
+              csv.DictReader(
+                  Path("artifact/export/period_index.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          interactions = list(
+              csv.DictReader(
+                  Path("artifact/export/subseason_interactions_long.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          counts = Counter(row["period"] for row in interactions)
+          weights = Counter()
+          for row in interactions:
+              weights[row["period"]] += float(row["weight"])
+
+          summary = {
+              "schema": "adaptive-gain-villavicencio-period-inventory-v1",
+              "period_count": len(period_index),
+              "periods": [
+                  {
+                      "source_index": int(row["source_index"]),
+                      "period": row["period"],
+                      "positive_link_rows": counts[row["period"]],
+                      "total_weight": weights[row["period"]],
+                  }
+                  for row in period_index
+              ],
+              "transition_mapping_verified": False,
+              "response_model_fitted": False,
+          }
+          Path("artifact/period_inventory.json").write_text(
+              json.dumps(summary, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          else
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-period-inventory-v1","materialized":false,"transition_mapping_verified":false,"response_model_fitted":false}'               > artifact/period_inventory.json
+          fi
+
+      - name: Upload source inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: villavicencio-source-inventory
+          path: artifact
+          if-no-files-found: error
+          retention-days: 14
