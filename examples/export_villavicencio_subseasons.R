@@ -66,31 +66,45 @@ for (i in seq_along(nets)) {
     stop(paste("network", i, "is not a matrix"))
   }
 
-  plant_codes <- id_codes(plant_id, nrow(mat), "plant_")
-  pollinator_codes <- id_codes(pollinator_id, ncol(mat), "pollinator_")
+  has_row_names <- !is.null(rownames(mat)) && all(rownames(mat) != "")
+  has_col_names <- !is.null(colnames(mat)) && all(colnames(mat) != "")
 
-  if (nrow(mat) == nrow(pollinator_frame) && ncol(mat) == nrow(plant_frame) &&
-      !(nrow(mat) == nrow(plant_frame) && ncol(mat) == nrow(pollinator_frame))) {
+  full_normal <- nrow(mat) == nrow(plant_frame) && ncol(mat) == nrow(pollinator_frame)
+  full_reversed <- nrow(mat) == nrow(pollinator_frame) && ncol(mat) == nrow(plant_frame)
+
+  if (full_reversed && !full_normal) {
     mat <- t(mat)
-    plant_codes <- id_codes(plant_id, nrow(mat), "plant_")
-    pollinator_codes <- id_codes(pollinator_id, ncol(mat), "pollinator_")
+    has_row_names <- !is.null(rownames(mat)) && all(rownames(mat) != "")
+    has_col_names <- !is.null(colnames(mat)) && all(colnames(mat) != "")
+    full_normal <- TRUE
   }
 
-  if (nrow(mat) != nrow(plant_frame) || ncol(mat) != nrow(pollinator_frame)) {
+  if (has_row_names) {
+    plant_codes <- rownames(mat)
+  } else if (full_normal) {
+    plant_codes <- id_codes(plant_id, nrow(mat), "plant_")
+  } else {
     stop(
       paste(
         "network", i,
-        "dimensions do not match plant.id/pollinator.id:",
-        paste(dim(mat), collapse = "x")
+        "has no row names and row count cannot be mapped to plant.id:",
+        nrow(mat)
       )
     )
   }
 
-  if (!is.null(rownames(mat)) && all(rownames(mat) != "")) {
-    plant_codes <- rownames(mat)
-  }
-  if (!is.null(colnames(mat)) && all(colnames(mat) != "")) {
+  if (has_col_names) {
     pollinator_codes <- colnames(mat)
+  } else if (full_normal) {
+    pollinator_codes <- id_codes(pollinator_id, ncol(mat), "pollinator_")
+  } else {
+    stop(
+      paste(
+        "network", i,
+        "has no column names and column count cannot be mapped to pollinator.id:",
+        ncol(mat)
+      )
+    )
   }
 
   idx <- which(mat > 0, arr.ind = TRUE)
