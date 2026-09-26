@@ -1,0 +1,94 @@
+{
+  "schema": "adaptive-gain-villavicencio-stage1-predata-gate-v1",
+  "date": "2026-09-26",
+  "status": "code_ready_data_not_materialized",
+  "purpose": "test whether the repeated Villavicencio network response is estimable after conventional opportunity and compatibility filters, without inferring decision-equivalence classes",
+  "sources": {
+    "response": {
+      "doi": "10.5061/dryad.j6q573n9j",
+      "object": "bipartite.networks",
+      "declared_network_count": 18,
+      "grain": "three subseasons per year across 2006-2011"
+    },
+    "traits_and_covariates": {
+      "doi": "10.5061/dryad.8cz8w9gm1",
+      "file": "plant_pollinator_data.xlsx",
+      "declared_years": "2006-2011",
+      "trait_subset": "45 plant species and 135 flower-visiting species with morphological data"
+    }
+  },
+  "primary_temporal_design": {
+    "unit": "adjacent subseason transition within a year",
+    "transitions_per_year": [
+      "early_to_mid",
+      "mid_to_late"
+    ],
+    "year_count": 6,
+    "expected_primary_transition_count": 12,
+    "year_boundary_transitions": "sensitivity_only",
+    "exact_source_period_name_mapping": "must_be_frozen_after_object_inventory_before_response_analysis"
+  },
+  "response_definition": {
+    "primary_stage1_quantity": "changed links among species independently present in both adjacent networks",
+    "species_turnover_component": "changed links for which at least one endpoint species is not present in both adjacent networks",
+    "exact_partition_required": true,
+    "network_metric_claim": "operational feasibility partition, not a new additive beta-diversity metric"
+  },
+  "presence_policy": {
+    "preferred": "independent species presence or abundance information",
+    "fallback": "positive observed links",
+    "fallback_label": "detection_sensitive",
+    "forbidden": "silently equating zero observed degree with true absence"
+  },
+  "compatibility_policy": {
+    "allowed_inputs": [
+      "phenological overlap",
+      "floral abundance or other opportunity covariates",
+      "corolla length and aperture",
+      "pollinator body and proboscis dimensions"
+    ],
+    "use": "opportunity and compatibility controls only",
+    "forbidden": "renaming trait clusters as decision-equivalence classes"
+  },
+  "decision_structure_policy": {
+    "stage1_decision_equivalence_inference": false,
+    "promotion_gate": "only an independently measured cue-choice or decision layer may define decision-equivalence classes for Stage 2"
+  },
+  "join_gate": {
+    "required_objects": [
+      "plant.id",
+      "pollinator.id"
+    ],
+    "required_report": [
+      "matched plant count",
+      "unmatched plant count",
+      "matched pollinator count",
+      "unmatched pollinator count",
+      "frozen trait-available analysis subset"
+    ],
+    "response_inspection_before_crosswalk_freeze": false
+  },
+  "implementation": {
+    "rdata_exporter": "examples/export_villavicencio_subseasons.R",
+    "rewiring_module": "adaptive_gain/empirical_rewiring.py",
+    "stage1_runner": "examples/villavicencio_stage1_from_csv.py",
+    "unit_tests": [
+      "tests/test_empirical_rewiring.py",
+      "tests/test_villavicencio_stage1_runner.py"
+    ]
+  },
+  "stage1_success_gate": [
+    "the 12 primary within-year transitions can be reconstructed reproducibly",
+    "shared-species opportunity is nonzero in enough primary transitions to estimate link change",
+    "species presence semantics are documented rather than inferred silently",
+    "trait and phenology covariates join without response-dependent filtering",
+    "a prespecified rewiring outcome retains estimable variation after conventional controls"
+  ],
+  "stage1_failure_gate": [
+    "the network and trait species identifiers cannot be crosswalked reproducibly",
+    "too few shared species remain after the trait-available subset is frozen",
+    "most apparent species turnover is inseparable from non-detection",
+    "no usable rewiring variation remains after conventional opportunity filters"
+  ],
+  "claim_ceiling": "Stage 1 can establish response feasibility only. It cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer."
+}
