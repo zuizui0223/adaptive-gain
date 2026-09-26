@@ -82,18 +82,18 @@ A null result here does not invalidate the theorem. It rejects the proposed ecol
 
 ## Confirmatory prediction P3 — final-representative threshold
 
-Decision-equivalence multiplicity implies a sharper event-level test.
+Decision-equivalence multiplicity motivates a sharper event-level empirical test. The exact quotient guarantees invariance for non-final within-class loss at the declared decision level; it does not guarantee that final-representative loss must change observed rewiring.
 
 For a class with multiple represented partners, distinguish:
 
 - loss of a **non-final representative**, after which the class remains represented;
 - loss of the **final representative**, after which an entire decision branch disappears.
 
-> **P3.** Loss of the final representative will produce a larger discontinuity in the focal rewiring opportunity structure than loss of a non-final representative, after conditioning on the same one-species richness decrement.
+> **P3.** Loss of the final representative is predicted to be more likely to alter the focal rewiring opportunity structure than loss of a non-final representative, after conditioning on the same one-species richness decrement.
 
 This is the strongest threshold-like prediction in the extension.
 
-It is explicitly a prediction about the **accessibility architecture**, not ecosystem stability.
+This direction is an ecological hypothesis layered on the exact non-final-loss invariance result. It is explicitly a prediction about the **accessibility architecture**, not ecosystem stability.
 
 ## Confirmatory prediction P4 — same species, changed decision structure
 
