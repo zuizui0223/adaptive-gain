@@ -74,8 +74,11 @@
     "stage1_runner": "examples/villavicencio_stage1_from_csv.py",
     "unit_tests": [
       "tests/test_empirical_rewiring.py",
-      "tests/test_villavicencio_stage1_runner.py"
-    ]
+      "tests/test_villavicencio_stage1_runner.py",
+      "tests/test_villavicencio_transition_builder.py"
+    ],
+    "transition_builder": "examples/build_villavicencio_transition_pairs.py",
+    "source_smoke_workflow": ".github/workflows/villavicencio-source-smoke.yml"
   },
   "stage1_success_gate": [
     "the 12 primary within-year transitions can be reconstructed reproducibly",
@@ -90,5 +93,15 @@
     "most apparent species turnover is inseparable from non-detection",
     "no usable rewiring variation remains after conventional opportunity filters"
   ],
-  "claim_ceiling": "Stage 1 can establish response feasibility only. It cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer."
+  "claim_ceiling": "Stage 1 can establish response feasibility only. It cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer.",
+  "source_materialization_gate": {
+    "workflow_artifact": "villavicencio-source-inventory",
+    "required_before_period_mapping": [
+      "raw response RData SHA256",
+      "raw trait workbook SHA256",
+      "18-row period index",
+      "workbook sheet inventory"
+    ],
+    "response_model_fit_during_source_smoke": false
+  }
 }
