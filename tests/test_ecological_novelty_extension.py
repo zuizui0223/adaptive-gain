@@ -76,3 +76,26 @@ def test_interaction_specific_buffering_boundary():
         "not call this ecosystem resilience or biodiversity insurance",
     ):
         assert phrase in text
+
+
+def test_decision_structural_turnover_rewiring_bridge():
+    text = _text()
+    for phrase in (
+        "Decision-structural turnover versus network rewiring",
+        "species turnover",
+        "interaction rewiring",
+        "Four ecological regimes",
+        "high taxonomic turnover need not create large decision novelty",
+        "Rewiring requires not only available partners",
+        "decision-equivalence boundary",
+    ):
+        assert phrase in text
+
+
+def test_rewiring_bridge_keeps_metric_boundary():
+    text = _text().lower()
+    assert "not a third additive component of interaction beta diversity" in text
+    assert "not an exact theorem about observed network turnover" in text
+    assert "a third additive term" in text
+    assert "a direct predictor of observed rewiring magnitude" in text
+    assert "a universal network-resilience metric" in text
