@@ -44,12 +44,44 @@ jobs:
             echo "dryad_response_bytes=blocked_without_bearer_token" > artifact/response_download_status.txt
           fi
 
-          if curl -fL --retry 3 --retry-delay 2 \
+          CONICET_PAGE="https://datosdeinvestigacion.conicet.gov.ar/handle/11336/249358?show=full"
+          curl -fL --retry 3 --retry-delay 2 -A "Mozilla/5.0" \
+            "$CONICET_PAGE" -o artifact/conicet_item.html || true
+
+          CONICET_HREF="$(
+            python - <<'PY'
+          import html
+          import re
+          from pathlib import Path
+
+          page = Path("artifact/conicet_item.html")
+          if not page.exists():
+              print("")
+              raise SystemExit
+          text = page.read_text(encoding="utf-8", errors="ignore")
+          matches = re.findall(r'href=["\\\']([^"\\\']*plant_pollinator_data\\.xlsx[^"\\\']*)["\\\']', text)
+          print(html.unescape(matches[0]) if matches else "")
+          PY
+          )"
+
+          if test -n "$CONICET_HREF"; then
+            case "$CONICET_HREF" in
+              http*) CONICET_FILE="$CONICET_HREF" ;;
+              /*) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar$CONICET_HREF" ;;
+              *) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar/$CONICET_HREF" ;;
+            esac
+          else
+            CONICET_FILE=""
+          fi
+          printf '%s\n' "$CONICET_FILE" > artifact/conicet_resolved_file_url.txt
+
+          if test -n "$CONICET_FILE" && curl -fL --retry 3 --retry-delay 2 \
             -A "Mozilla/5.0" \
-            "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?isAllowed=y&sequence=2" \
+            -e "$CONICET_PAGE" \
+            "$CONICET_FILE" \
             -o source/traits/plant_pollinator_data.xlsx
           then
-            echo "trait_source=conicet_mirror" > artifact/trait_download_status.txt
+            echo "trait_source=conicet_mirror_resolved_from_item_page" > artifact/trait_download_status.txt
           elif curl -fL --retry 2 --retry-delay 2 \
             -A "Mozilla/5.0" \
             -e "https://datadryad.org/dataset/doi:10.5061/dryad.8cz8w9gm1" \
