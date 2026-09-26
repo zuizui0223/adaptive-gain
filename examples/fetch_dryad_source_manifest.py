@@ -1,1 +1,130 @@
-"""Resolve a published Dryad DOI to a frozen anonymous file manifest.\n\nThis script intentionally downloads metadata only. Published file bytes are handled\nseparately because current Dryad download routes may require a bearer token.\n"""\n\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport urllib.parse\nimport urllib.request\nfrom pathlib import Path\n\nAPI = "https://datadryad.org/api/v2"\n\n\ndef _get_json(url: str) -> dict:\n    request = urllib.request.Request(url, headers={"User-Agent": "adaptive-gain-source-audit/1"})\n    with urllib.request.urlopen(request, timeout=60) as response:\n        return json.load(response)\n\n\ndef resolve_manifest(doi: str) -> dict:\n    encoded = urllib.parse.quote(doi, safe="")\n    dataset_url = f"{API}/datasets/{encoded}"\n    dataset = _get_json(dataset_url)\n\n    version_href = dataset["_links"]["stash:version"]["href"]\n    if version_href.startswith("http"):\n        version_url = version_href\n    else:\n        version_url = "https://datadryad.org" + version_href\n    files_url = version_url.rstrip("/") + "/files?per_page=100&page=1"\n    first = _get_json(files_url)\n    files = list(first.get("_embedded", {}).get("stash:files", []))\n    total = int(first.get("total", len(files)))\n    page = 1\n    while len(files) < total:\n        page += 1\n        page_url = version_url.rstrip("/") + f"/files?per_page=100&page={page}"\n        page_data = _get_json(page_url)\n        files.extend(page_data.get("_embedded", {}).get("stash:files", []))\n    if len(files) != total:\n        raise RuntimeError(f"Dryad manifest pagination mismatch: {len(files)} != {total}")\n\n    normalized = []\n    for item in files:\n        self_href = item.get("_links", {}).get("self", {}).get("href", "")\n        file_id = self_href.rstrip("/").rsplit("/", 1)[-1] if self_href else None\n        normalized.append(\n            {\n                "path": item.get("path"),\n                "size": item.get("size"),\n                "mimeType": item.get("mimeType"),\n                "digestType": item.get("digestType"),\n                "digest": item.get("digest"),\n                "file_id": file_id,\n                "download_url": None if file_id is None else f"{API}/files/{file_id}/download",\n            }\n        )\n\n    return {\n        "schema": "adaptive-gain-dryad-anonymous-manifest-v1",\n        "doi": doi,\n        "dataset_url": dataset_url,\n        "version_url": version_url,\n        "publicationDate": dataset.get("publicationDate"),\n        "versionNumber": dataset.get("versionNumber"),\n        "storageSize": dataset.get("storageSize"),\n        "file_count": total,\n        "files": normalized,\n        "bytes_downloaded": False,\n    }\n\n\ndef main() -> None:\n    parser = argparse.ArgumentParser()\n    parser.add_argument("doi")\n    parser.add_argument("output", type=Path)\n    parser.add_argument("--target-name")\n    parser.add_argument("--target-id-output", type=Path)\n    args = parser.parse_args()\n\n    manifest = resolve_manifest(args.doi)\n    args.output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")\n\n    if args.target_name is not None:\n        matches = [item for item in manifest["files"] if item["path"] == args.target_name]\n        if len(matches) != 1:\n            raise SystemExit(\n                f"expected exactly one Dryad file named {args.target_name!r}; found {len(matches)}"\n            )\n        file_id = matches[0]["file_id"]\n        if not file_id:\n            raise SystemExit(f"Dryad file {args.target_name!r} has no file id")\n        if args.target_id_output is not None:\n            args.target_id_output.write_text(str(file_id) + "\n", encoding="utf-8")\n        else:\n            print(file_id)\n\n\nif __name__ == "__main__":\n    main()\n
+"""Resolve a published Dryad DOI to a frozen anonymous file manifest.
+
+This script intentionally downloads metadata only. Published file bytes are handled
+separately because current Dryad download routes may require a bearer token.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+API = "https://datadryad.org/api/v2"
+
+
+def _get_json(url: str) -> dict:
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": "adaptive-gain-source-audit/1"},
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return json.load(response)
+
+
+def resolve_manifest(doi: str) -> dict:
+    encoded = urllib.parse.quote(doi, safe="")
+    dataset_url = f"{API}/datasets/{encoded}"
+    dataset = _get_json(dataset_url)
+
+    version_href = dataset["_links"]["stash:version"]["href"]
+    version_url = (
+        version_href
+        if version_href.startswith("http")
+        else "https://datadryad.org" + version_href
+    )
+
+    files = []
+    page = 1
+    total = None
+    while total is None or len(files) < total:
+        page_url = version_url.rstrip("/") + f"/files?per_page=100&page={page}"
+        page_data = _get_json(page_url)
+        batch = page_data.get("_embedded", {}).get("stash:files", [])
+        files.extend(batch)
+        total = int(page_data.get("total", len(files)))
+        if not batch and len(files) < total:
+            raise RuntimeError("Dryad manifest pagination stopped before total")
+        page += 1
+
+    if len(files) != total:
+        raise RuntimeError(f"Dryad manifest pagination mismatch: {len(files)} != {total}")
+
+    normalized = []
+    for item in files:
+        self_href = item.get("_links", {}).get("self", {}).get("href", "")
+        file_id = (
+            self_href.rstrip("/").rsplit("/", 1)[-1]
+            if self_href
+            else None
+        )
+        normalized.append(
+            {
+                "path": item.get("path"),
+                "size": item.get("size"),
+                "mimeType": item.get("mimeType"),
+                "digestType": item.get("digestType"),
+                "digest": item.get("digest"),
+                "file_id": file_id,
+                "download_url": (
+                    None
+                    if file_id is None
+                    else f"{API}/files/{file_id}/download"
+                ),
+            }
+        )
+
+    return {
+        "schema": "adaptive-gain-dryad-anonymous-manifest-v1",
+        "doi": doi,
+        "dataset_url": dataset_url,
+        "version_url": version_url,
+        "publicationDate": dataset.get("publicationDate"),
+        "versionNumber": dataset.get("versionNumber"),
+        "storageSize": dataset.get("storageSize"),
+        "file_count": total,
+        "files": normalized,
+        "bytes_downloaded": False,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("doi")
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--target-name")
+    parser.add_argument("--target-id-output", type=Path)
+    args = parser.parse_args()
+
+    manifest = resolve_manifest(args.doi)
+    args.output.write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    if args.target_name is not None:
+        matches = [
+            item for item in manifest["files"]
+            if item["path"] == args.target_name
+        ]
+        if len(matches) != 1:
+            raise SystemExit(
+                f"expected exactly one Dryad file named {args.target_name!r}; "
+                f"found {len(matches)}"
+            )
+        file_id = matches[0]["file_id"]
+        if not file_id:
+            raise SystemExit(f"Dryad file {args.target_name!r} has no file id")
+        if args.target_id_output is not None:
+            args.target_id_output.write_text(
+                str(file_id) + "\n",
+                encoding="utf-8",
+            )
+        else:
+            print(file_id)
+
+
+if __name__ == "__main__":
+    main()
