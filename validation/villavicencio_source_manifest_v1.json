@@ -1,0 +1,49 @@
+{
+  "schema": "adaptive-gain-villavicencio-source-manifest-v1",
+  "date": "2026-09-26",
+  "status": "source_metadata_verified_raw_bytes_not_frozen",
+  "sources": [
+    {
+      "role": "high-temporal-resolution interaction response",
+      "doi": "10.5061/dryad.j6q573n9j",
+      "title": "Plant-pollinator networks for three subseasons and six years from Villavicencio Nature Reserve",
+      "declared_files": [
+        "miele-JAE.R",
+        "miele-JAE.RData"
+      ],
+      "declared_total_size_kb": 63.68,
+      "declared_objects": [
+        "bipartite.networks",
+        "directed.networks",
+        "plant.id",
+        "pollinator.id"
+      ],
+      "declared_network_count": 18,
+      "declared_temporal_grain": "three subseasons per year for six years",
+      "raw_sha256": null
+    },
+    {
+      "role": "traits phenology abundance and annual interaction covariates",
+      "doi": "10.5061/dryad.8cz8w9gm1",
+      "title": "Trait matching and phenological overlap increase the spatio-temporal stability and functionality of plant-pollinator interactions",
+      "declared_files": [
+        "plant_pollinator_data.xlsx"
+      ],
+      "declared_total_size_kb": 230.65,
+      "declared_trait_subset": {
+        "plants": 45,
+        "flower_visitors": 135
+      },
+      "declared_original_interaction_surface": {
+        "plants": 59,
+        "flower_visitors": 196,
+        "visits": 28015,
+        "interacting_pairs": 1050
+      },
+      "raw_sha256": null
+    }
+  ],
+  "freeze_rule": "Do not record a raw-file checksum until the exact downloaded bytes have been materialized and inspected.",
+  "join_rule": "Freeze plant and pollinator crosswalks before inspecting the focal rewiring contrasts.",
+  "analysis_rule": "The 18-network source supplies the preferred response surface; the trait workbook supplies conventional filters. Neither source alone supplies independent decision-equivalence classes."
+}
