@@ -39,8 +39,9 @@ def test_prospective_rewiring_test_has_threshold_prediction():
         "Confirmatory prediction P3",
         "loss of a **non-final representative**",
         "loss of the **final representative**",
-        "larger discontinuity",
+        "more likely to alter the focal rewiring opportunity structure",
         "same one-species richness decrement",
+        "does not guarantee that final-representative loss must change observed rewiring",
     ):
         assert phrase in text
 
