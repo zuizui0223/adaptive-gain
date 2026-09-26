@@ -64,3 +64,16 @@ def test_screen_has_experimental_fallback_and_stop_rules():
         "Until then, the public-data work is feasibility analysis, not empirical confirmation",
     ):
         assert phrase in text
+
+
+def test_screen_prioritizes_subseason_response_without_overclaiming():
+    text = _text()
+    for phrase in (
+        "Villavicencio 18-subseason response surface",
+        "10.5061/dryad.j6q573n9j",
+        "12 within-year adjacent transitions",
+        "Year-end to next-year early transitions should be sensitivity analyses",
+        "verified crosswalk",
+        "detection-sensitive fallback rather than true species turnover",
+    ):
+        assert phrase in text
