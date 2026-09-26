@@ -26,24 +26,34 @@ jobs:
         with:
           r-version: "release"
 
-      - name: Download published Dryad datasets
+      - name: Download published source files
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p source/response source/traits artifact/raw artifact/export
 
           curl -fL --retry 3 --retry-delay 2 \
-            "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.j6q573n9j/download" \
-            -o source/response.zip
-          curl -fL --retry 3 --retry-delay 2 \
-            "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.8cz8w9gm1/download" \
-            -o source/traits.zip
+            -A "Mozilla/5.0" \
+            -e "https://datadryad.org/dataset/doi:10.5061/dryad.j6q573n9j" \
+            "https://datadryad.org/downloads/file_stream/268444" \
+            -o source/response/miele-JAE.RData
 
-          unzip -q source/response.zip -d source/response
-          unzip -q source/traits.zip -d source/traits
+          if ! curl -fL --retry 3 --retry-delay 2 \
+            -A "Mozilla/5.0" \
+            -e "https://datadryad.org/dataset/doi:10.5061/dryad.8cz8w9gm1" \
+            "https://datadryad.org/downloads/file_stream/449108" \
+            -o source/traits/plant_pollinator_data.xlsx
+          then
+            curl -fL --retry 3 --retry-delay 2 \
+              -A "Mozilla/5.0" \
+              "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?isAllowed=y&sequence=2" \
+              -o source/traits/plant_pollinator_data.xlsx
+          fi
 
-          find source/response -maxdepth 2 -type f -print
-          find source/traits -maxdepth 2 -type f -print
+          test -s source/response/miele-JAE.RData
+          test -s source/traits/plant_pollinator_data.xlsx
+          file source/response/miele-JAE.RData
+          file source/traits/plant_pollinator_data.xlsx
 
       - name: Freeze raw checksums and locate source files
         shell: bash
