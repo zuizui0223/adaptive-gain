@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/villavicencio-source-smoke.yml"
+      - "examples/fetch_dryad_source_manifest.py"
       - "examples/export_villavicencio_subseasons.R"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/build_villavicencio_transition_pairs.py"
@@ -15,6 +16,8 @@ on:
 jobs:
   source-smoke:
     runs-on: ubuntu-latest
+    env:
+      DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,30 +29,39 @@ jobs:
         with:
           r-version: "release"
 
-      - name: Download published source files
+      - name: Resolve anonymous Dryad source manifests
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p source/response source/traits artifact/raw artifact/export
+          mkdir -p source/response source/traits artifact/raw artifact/export artifact/manifests
 
-          if curl -fL --retry 2 --retry-delay 2 \
-            -A "Mozilla/5.0" \
-            -e "https://datadryad.org/dataset/doi:10.5061/dryad.j6q573n9j" \
-            "https://datadryad.org/downloads/file_stream/268444" \
-            -o source/response/miele-JAE.RData
-          then
-            echo "dryad_response_bytes=available" > artifact/response_download_status.txt
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.j6q573n9j"             artifact/manifests/response_dryad_manifest.json             --target-name "miele-JAE.RData"             --target-id-output artifact/response_file_id.txt
+
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.8cz8w9gm1"             artifact/manifests/traits_dryad_manifest.json             --target-name "plant_pollinator_data.xlsx"             --target-id-output artifact/traits_file_id.txt
+
+      - name: Download published source bytes when authorized or mirrored
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RESPONSE_ID="$(cat artifact/response_file_id.txt)"
+          TRAITS_ID="$(cat artifact/traits_file_id.txt)"
+
+          if test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$RESPONSE_ID/download"               -o source/response/miele-JAE.RData
+            then
+              echo "dryad_response_bytes=available_via_bearer_token"                 > artifact/response_download_status.txt
+            else
+              rm -f source/response/miele-JAE.RData
+              echo "dryad_response_bytes=token_download_failed"                 > artifact/response_download_status.txt
+            fi
           else
-            rm -f source/response/miele-JAE.RData
-            echo "dryad_response_bytes=blocked_without_bearer_token" > artifact/response_download_status.txt
+            echo "dryad_response_bytes=metadata_only_no_bearer_token"               > artifact/response_download_status.txt
           fi
 
           CONICET_PAGE="https://datosdeinvestigacion.conicet.gov.ar/handle/11336/249358?show=full"
-          curl -fL --retry 3 --retry-delay 2 -A "Mozilla/5.0" \
-            "$CONICET_PAGE" -o artifact/conicet_item.html || true
-          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0" \
-            "https://datosdeinvestigacion.conicet.gov.ar/rest/dataset/11336/249358" \
-            -o artifact/conicet_dataset.json || true
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "$CONICET_PAGE" -o artifact/conicet_item.html || true
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "https://datosdeinvestigacion.conicet.gov.ar/rest/dataset/11336/249358"             -o artifact/conicet_dataset.json || true
 
           CONICET_HREF="$(
             python - <<'PY'
@@ -66,7 +78,7 @@ jobs:
               candidates.extend(
                   html.unescape(value)
                   for value in re.findall(
-                      r'href=["\\\']([^"\\\']*plant_pollinator_data\\.xlsx[^"\\\']*)["\\\']',
+                      r'href=["\x27]([^"\x27]*plant_pollinator_data\.xlsx[^"\x27]*)["\x27]',
                       text,
                   )
               )
@@ -96,7 +108,7 @@ jobs:
                   cleaned.append(value)
 
           Path("artifact/conicet_candidate_urls.txt").write_text(
-              "\\n".join(cleaned) + ("\\n" if cleaned else ""),
+              "\n".join(cleaned) + ("\n" if cleaned else ""),
               encoding="utf-8",
           )
           print(cleaned[0] if cleaned else "")
@@ -114,23 +126,27 @@ jobs:
           fi
           printf '%s\n' "$CONICET_FILE" > artifact/conicet_resolved_file_url.txt
 
-          if test -n "$CONICET_FILE" && curl -fL --retry 3 --retry-delay 2 \
-            -A "Mozilla/5.0" \
-            -e "$CONICET_PAGE" \
-            "$CONICET_FILE" \
-            -o source/traits/plant_pollinator_data.xlsx
+          TRAIT_DONE=0
+          if test -n "$CONICET_FILE" && curl -fL --retry 2 --retry-delay 2             -A "Mozilla/5.0"             -e "$CONICET_PAGE"             "$CONICET_FILE"             -o source/traits/plant_pollinator_data.xlsx
           then
-            echo "trait_source=conicet_mirror_resolved_from_item_page" > artifact/trait_download_status.txt
-          elif curl -fL --retry 2 --retry-delay 2 \
-            -A "Mozilla/5.0" \
-            -e "https://datadryad.org/dataset/doi:10.5061/dryad.8cz8w9gm1" \
-            "https://datadryad.org/downloads/file_stream/449108" \
-            -o source/traits/plant_pollinator_data.xlsx
-          then
-            echo "trait_source=dryad_file_stream" > artifact/trait_download_status.txt
+            echo "trait_source=conicet_mirror_resolved_from_metadata"               > artifact/trait_download_status.txt
+            TRAIT_DONE=1
           else
             rm -f source/traits/plant_pollinator_data.xlsx
-            echo "trait_source=unavailable_after_public_routes" > artifact/trait_download_status.txt
+          fi
+
+          if test "$TRAIT_DONE" -eq 0 && test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$TRAITS_ID/download"               -o source/traits/plant_pollinator_data.xlsx
+            then
+              echo "trait_source=dryad_bearer_token"                 > artifact/trait_download_status.txt
+              TRAIT_DONE=1
+            else
+              rm -f source/traits/plant_pollinator_data.xlsx
+            fi
+          fi
+
+          if test "$TRAIT_DONE" -eq 0; then
+            echo "trait_source=metadata_only_bytes_unavailable"               > artifact/trait_download_status.txt
           fi
 
           if test -s source/traits/plant_pollinator_data.xlsx; then
@@ -140,17 +156,18 @@ jobs:
             file source/response/miele-JAE.RData
           fi
 
-      - name: Freeze raw checksums and locate source files
+      - name: Freeze raw checksums and locate available source files
         shell: bash
         run: |
           set -euo pipefail
+
           XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit || true)"
           if test -n "$XLSX"; then
             sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
             cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
             printf '%s\n' "$XLSX" > artifact/traits_path.txt
           else
-            echo "trait bytes not materialized; metadata probe retained" > artifact/traits_xlsx_sha256.txt
+            echo "trait bytes not materialized; anonymous Dryad manifest retained"               > artifact/traits_xlsx_sha256.txt
           fi
 
           RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit || true)"
@@ -158,6 +175,8 @@ jobs:
             sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
             cp "$RDATA" artifact/raw/miele-JAE.RData
             printf '%s\n' "$RDATA" > artifact/response_path.txt
+          else
+            echo "response bytes not materialized; anonymous Dryad manifest retained"               > artifact/response_rdata_sha256.txt
           fi
 
       - name: Export 18-network response surface when bytes are available
@@ -169,18 +188,21 @@ jobs:
             Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
             test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
           else
-            echo "18-network export skipped: Dryad response bytes require bearer authentication" \
-              > artifact/export/README_SKIPPED.txt
+            echo "18-network export skipped: published bytes not authorized in this run"               > artifact/export/README_SKIPPED.txt
           fi
 
-      - name: Inventory trait workbook without fitting models
+      - name: Inventory trait workbook when bytes are available
         shell: bash
         run: |
           set -euo pipefail
-          if test -f artifact/traits_path.txt; then
-            python -m pip install openpyxl
-            XLSX="$(cat artifact/traits_path.txt)"
-            python - "$XLSX" <<'PY'
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-workbook-inventory-v1","materialized":false,"model_fitted":false}'               > artifact/workbook_inventory.json
+            exit 0
+          fi
+
+          python -m pip install openpyxl
+          XLSX="$(cat artifact/traits_path.txt)"
+          python - "$XLSX" <<'PY'
           import json
           import sys
           from pathlib import Path
@@ -193,8 +215,14 @@ jobs:
           sheets = []
           for ws in wb.worksheets:
               first_rows = []
-              for row in ws.iter_rows(min_row=1, max_row=min(ws.max_row, 5), values_only=True):
-                  first_rows.append([None if value is None else str(value) for value in row])
+              for row in ws.iter_rows(
+                  min_row=1,
+                  max_row=min(ws.max_row, 5),
+                  values_only=True,
+              ):
+                  first_rows.append(
+                      [None if value is None else str(value) for value in row]
+                  )
               sheets.append(
                   {
                       "title": ws.title,
@@ -206,6 +234,7 @@ jobs:
 
           out = {
               "schema": "adaptive-gain-villavicencio-workbook-inventory-v1",
+              "materialized": True,
               "workbook": path.name,
               "sheet_count": len(sheets),
               "sheets": sheets,
@@ -216,10 +245,6 @@ jobs:
               encoding="utf-8",
           )
           PY
-          else
-            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-workbook-inventory-v1","materialized":false,"model_fitted":false}' \
-              > artifact/workbook_inventory.json
-          fi
 
       - name: Summarize exported periods before response analysis
         shell: bash
@@ -273,6 +298,8 @@ jobs:
               encoding="utf-8",
           )
           PY
+          else
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-period-inventory-v1","materialized":false,"transition_mapping_verified":false,"response_model_fitted":false}'               > artifact/period_inventory.json
           fi
 
       - name: Upload source inventory
