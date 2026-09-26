@@ -18,6 +18,7 @@ from typing import Hashable, Iterable, Mapping, Sequence
 
 Species = Hashable
 Dyad = tuple[Species, Species]
+Presence = tuple[Iterable[Species], Iterable[Species]]
 
 
 def _clean_network(network: Mapping[Dyad, float]) -> dict[Dyad, float]:
@@ -89,6 +90,10 @@ class RewiringTransitionReceipt:
     previous_link_count: int
     current_link_count: int
     union_link_count: int
+    previous_plant_count: int
+    current_plant_count: int
+    previous_pollinator_count: int
+    current_pollinator_count: int
     shared_plant_count: int
     shared_pollinator_count: int
     shared_species_dyad_count: int
@@ -100,6 +105,7 @@ class RewiringTransitionReceipt:
     species_turnover_loss_count: int
     changed_shared_outside_permitted_count: int
     total_link_turnover_count: int
+    presence_basis: str
 
     @property
     def shared_species_rewiring_count(self) -> int:
@@ -151,17 +157,88 @@ class RewiringTransitionReceipt:
         return permitted_changed / self.permitted_shared_dyad_count
 
 
+def _resolve_presence(
+    prev_links: set[Dyad],
+    curr_links: set[Dyad],
+    *,
+    previous_plants: Iterable[Species] | None,
+    previous_pollinators: Iterable[Species] | None,
+    current_plants: Iterable[Species] | None,
+    current_pollinators: Iterable[Species] | None,
+) -> tuple[set[Species], set[Species], set[Species], set[Species], str]:
+    supplied = (
+        previous_plants,
+        previous_pollinators,
+        current_plants,
+        current_pollinators,
+    )
+    any_supplied = any(value is not None for value in supplied)
+    all_supplied = all(value is not None for value in supplied)
+    if any_supplied and not all_supplied:
+        raise ValueError(
+            "supply all four plant/pollinator presence sets or none of them"
+        )
+
+    observed_prev_plants = {p for p, _ in prev_links}
+    observed_curr_plants = {p for p, _ in curr_links}
+    observed_prev_pollinators = {q for _, q in prev_links}
+    observed_curr_pollinators = {q for _, q in curr_links}
+
+    if not all_supplied:
+        return (
+            observed_prev_plants,
+            observed_prev_pollinators,
+            observed_curr_plants,
+            observed_curr_pollinators,
+            "observed_positive_links",
+        )
+
+    prev_plants = set(previous_plants or ())
+    prev_pollinators = set(previous_pollinators or ())
+    curr_plants = set(current_plants or ())
+    curr_pollinators = set(current_pollinators or ())
+
+    for label, observed, declared in (
+        ("previous plants", observed_prev_plants, prev_plants),
+        ("previous pollinators", observed_prev_pollinators, prev_pollinators),
+        ("current plants", observed_curr_plants, curr_plants),
+        ("current pollinators", observed_curr_pollinators, curr_pollinators),
+    ):
+        if not observed <= declared:
+            missing = observed - declared
+            raise ValueError(
+                f"{label} presence omits species with positive links: {missing!r}"
+            )
+
+    return (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        "externally_supplied_presence",
+    )
+
+
 def transition_rewiring_receipt(
     previous: Mapping[Dyad, float],
     current: Mapping[Dyad, float],
     *,
     permitted_dyads: Iterable[Dyad] | None = None,
+    previous_plants: Iterable[Species] | None = None,
+    previous_pollinators: Iterable[Species] | None = None,
+    current_plants: Iterable[Species] | None = None,
+    current_pollinators: Iterable[Species] | None = None,
 ) -> RewiringTransitionReceipt:
     """Partition adjacent-network link turnover by species persistence.
 
     A changed link is counted as shared-species rewiring when both endpoint
-    species occur in both adjacent networks. Otherwise the changed link is
-    assigned to the species-turnover component.
+    species are present in both adjacent networks. Otherwise the changed link
+    is assigned to the species-turnover component.
+
+    Independent presence data should be supplied whenever possible. If they
+    are omitted, positive observed links define species presence. That fallback
+    is convenient for feasibility work but can confound non-detection with
+    true species turnover.
 
     permitted_dyads is an optional independently defined compatibility set.
     It affects only the opportunity denominator and QC count; it never erases
@@ -174,10 +251,20 @@ def transition_rewiring_receipt(
     prev_links = set(prev)
     curr_links = set(curr)
 
-    prev_plants = {p for p, _ in prev_links}
-    curr_plants = {p for p, _ in curr_links}
-    prev_pollinators = {q for _, q in prev_links}
-    curr_pollinators = {q for _, q in curr_links}
+    (
+        prev_plants,
+        prev_pollinators,
+        curr_plants,
+        curr_pollinators,
+        presence_basis,
+    ) = _resolve_presence(
+        prev_links,
+        curr_links,
+        previous_plants=previous_plants,
+        previous_pollinators=previous_pollinators,
+        current_plants=current_plants,
+        current_pollinators=current_pollinators,
+    )
 
     shared_plants = prev_plants & curr_plants
     shared_pollinators = prev_pollinators & curr_pollinators
@@ -209,6 +296,10 @@ def transition_rewiring_receipt(
         previous_link_count=len(prev_links),
         current_link_count=len(curr_links),
         union_link_count=len(prev_links | curr_links),
+        previous_plant_count=len(prev_plants),
+        current_plant_count=len(curr_plants),
+        previous_pollinator_count=len(prev_pollinators),
+        current_pollinator_count=len(curr_pollinators),
         shared_plant_count=len(shared_plants),
         shared_pollinator_count=len(shared_pollinators),
         shared_species_dyad_count=len(shared_dyads),
@@ -220,6 +311,7 @@ def transition_rewiring_receipt(
         species_turnover_loss_count=len(turnover_losses),
         changed_shared_outside_permitted_count=len(outside),
         total_link_turnover_count=len(prev_links ^ curr_links),
+        presence_basis=presence_basis,
     )
     if not receipt.exact_partition:
         raise AssertionError("internal turnover partition failed")
@@ -238,8 +330,14 @@ def adjacent_transition_series(
     *,
     period_order: Sequence[Hashable] | None = None,
     permitted_dyads: Iterable[Dyad] | None = None,
+    species_presence: Mapping[Hashable, Presence] | None = None,
 ) -> tuple[PeriodTransition, ...]:
-    """Return receipts for adjacent periods in an explicitly frozen order."""
+    """Return receipts for adjacent periods in an explicitly frozen order.
+
+    species_presence maps each period to (plant_species, pollinator_species).
+    Supplying it is preferred because it prevents zero observed degree from
+    being automatically interpreted as species absence.
+    """
 
     if period_order is None:
         try:
@@ -257,9 +355,26 @@ def adjacent_transition_series(
     if missing:
         raise ValueError(f"period_order contains missing periods: {missing!r}")
 
+    if species_presence is not None:
+        missing_presence = [period for period in order if period not in species_presence]
+        if missing_presence:
+            raise ValueError(
+                f"species_presence missing periods: {missing_presence!r}"
+            )
+
     permitted = None if permitted_dyads is None else tuple(permitted_dyads)
     out = []
     for previous_period, current_period in zip(order, order[1:]):
+        kwargs = {}
+        if species_presence is not None:
+            prev_plants, prev_pollinators = species_presence[previous_period]
+            curr_plants, curr_pollinators = species_presence[current_period]
+            kwargs = {
+                "previous_plants": prev_plants,
+                "previous_pollinators": prev_pollinators,
+                "current_plants": curr_plants,
+                "current_pollinators": curr_pollinators,
+            }
         out.append(
             PeriodTransition(
                 previous_period=previous_period,
@@ -268,6 +383,7 @@ def adjacent_transition_series(
                     networks[previous_period],
                     networks[current_period],
                     permitted_dyads=permitted,
+                    **kwargs,
                 ),
             )
         )
