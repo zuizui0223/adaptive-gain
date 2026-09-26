@@ -156,6 +156,79 @@ jobs:
             file source/response/miele-JAE.RData
           fi
 
+      - name: Verify materialized bytes against published Dryad digests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          checks = [
+              (
+                  "response",
+                  Path("artifact/manifests/response_dryad_manifest.json"),
+                  "miele-JAE.RData",
+                  Path("source/response/miele-JAE.RData"),
+              ),
+              (
+                  "traits",
+                  Path("artifact/manifests/traits_dryad_manifest.json"),
+                  "plant_pollinator_data.xlsx",
+                  Path("source/traits/plant_pollinator_data.xlsx"),
+              ),
+          ]
+
+          rows = []
+          mismatch = False
+          for role, manifest_path, source_name, source_path in checks:
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              matches = [
+                  row for row in manifest["files"]
+                  if row["path"] == source_name
+              ]
+              if len(matches) != 1:
+                  raise SystemExit(
+                      f"{role}: expected one manifest row for {source_name!r}"
+                  )
+              published = matches[0]
+              materialized = source_path.exists()
+              observed = None
+              digest_match = None
+              if materialized:
+                  observed = hashlib.sha256(source_path.read_bytes()).hexdigest()
+                  if str(published.get("digestType", "")).lower() == "sha256":
+                      digest_match = observed.lower() == str(
+                          published.get("digest", "")
+                      ).lower()
+                      mismatch = mismatch or not digest_match
+
+              rows.append(
+                  {
+                      "role": role,
+                      "source_name": source_name,
+                      "materialized": materialized,
+                      "published_digest_type": published.get("digestType"),
+                      "published_digest": published.get("digest"),
+                      "observed_sha256": observed,
+                      "digest_match": digest_match,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-source-digest-verification-v1",
+              "checks": rows,
+              "all_materialized_sources_match_published_digest": not mismatch,
+          }
+          Path("artifact/source_digest_verification.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          if mismatch:
+              raise SystemExit("materialized source bytes disagree with published Dryad digest")
+          PY
+
       - name: Freeze raw checksums and locate available source files
         shell: bash
         run: |
