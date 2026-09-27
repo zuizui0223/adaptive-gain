@@ -281,12 +281,26 @@
           "interaction": 0.25
         }
       },
-      "budget_ladder": "B=1 below adaptive cost; B=2 routeability-sensitive window; B=3 above fixed cost",
+      "budget_ladder": {
+        "B1": {
+          "interaction": 0,
+          "interpretation": "below adaptive cost; adaptive-policy prefix q_route versus one-terminal fixed prefix"
+        },
+        "B2": {
+          "interaction": 0.25,
+          "interpretation": "routeability-sensitive window"
+        },
+        "B3": {
+          "interaction": 0,
+          "interpretation": "all cues available; above fixed cost"
+        }
+      },
       "independent_unit": "individual forager, not trial",
       "gate": "validation/routeability_experiment_gate_v1.json",
       "formal_module": "adaptive_gain/ecological_routeability_experiment.py",
       "promotion_rule": "preferred first direct empirical test because branch structure is manipulated independently of species composition and observed network response",
-      "claim_boundary": "a positive controlled experiment would establish behavioral consequences of matched cue architecture, not natural-network rewiring or ecosystem-level effects"
+      "claim_boundary": "a positive controlled experiment would establish behavioral consequences of matched cue architecture, not natural-network rewiring or ecosystem-level effects",
+      "behavioral_feasibility": "present route cue before the terminal cue but keep context visible during terminal presentation; match timing/persistence and pretest cue discriminability"
     }
   ]
 }
