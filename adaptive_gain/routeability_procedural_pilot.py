@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 from math import isfinite
-from statistics import mean, pvariance
+from statistics import mean
 from typing import Hashable, Iterable, Sequence
 
 
@@ -70,8 +70,50 @@ def _sample_variance(values: Sequence[float]) -> float | None:
     return sum((value - mu) ** 2 for value in values) / (len(values) - 1)
 
 
+
+def _balanced_binary_repeatability(
+    by_individual: dict[Hashable, list[FullInformationPilotTrial]],
+) -> tuple[bool, int | None, float | None]:
+    """Method-of-moments repeated-trial ICC for a balanced binary pilot.
+
+    For equal m trials per individual,
+    Var(individual mean) = p(1-p) * [1/m + rho*(1-1/m)].
+    The moment estimate is truncated to [0,1]. Unequal trial counts return
+    no ICC rather than applying a balanced formula silently.
+    """
+
+    counts = {len(group) for group in by_individual.values()}
+    if len(counts) != 1 or not counts:
+        return False, None, None
+    m = next(iter(counts))
+    if m < 2 or len(by_individual) < 2:
+        return True, m, None
+
+    individual_means = [
+        mean(float(row.correct_within_window) for row in group)
+        for group in by_individual.values()
+    ]
+    p = mean(
+        float(row.correct_within_window)
+        for group in by_individual.values()
+        for row in group
+    )
+    binary_variance = p * (1.0 - p)
+    if binary_variance == 0:
+        return True, m, None
+
+    between = _sample_variance(individual_means)
+    if between is None:
+        return True, m, None
+    rho = (
+        between / binary_variance - 1.0 / m
+    ) / (1.0 - 1.0 / m)
+    return True, m, max(0.0, min(1.0, rho))
+
 def pooled_full_information_nuisance_receipt(
     trials: Iterable[FullInformationPilotTrial],
+    *,
+    randomized_individual_ids: Iterable[Hashable] | None = None,
 ) -> dict[str, object]:
     """Summarize pooled B=3 pilot data without focal treatment labels."""
 
@@ -116,6 +158,31 @@ def pooled_full_information_nuisance_receipt(
             "timeout_fraction": mean(float(row.timeout) for row in group),
         }
 
+    balanced, trials_per_individual, trial_icc = _balanced_binary_repeatability(
+        by_individual
+    )
+
+    randomized_ids = (
+        None
+        if randomized_individual_ids is None
+        else set(randomized_individual_ids)
+    )
+    if randomized_ids is not None:
+        observed_ids = set(by_individual)
+        if not observed_ids <= randomized_ids:
+            raise ValueError(
+                "pilot trials contain individuals absent from randomized_individual_ids"
+            )
+        randomized_count = len(randomized_ids)
+        dropout_fraction = (
+            None
+            if randomized_count == 0
+            else (randomized_count - len(observed_ids)) / randomized_count
+        )
+    else:
+        randomized_count = None
+        dropout_fraction = None
+
     return {
         "schema": "adaptive-gain-routeability-procedural-pilot-receipt-v1",
         "focal_architecture_contrast_opened": False,
@@ -126,6 +193,11 @@ def pooled_full_information_nuisance_receipt(
             float(row.correct_within_window) for row in rows
         ),
         "pooled_timeout_fraction": mean(float(row.timeout) for row in rows),
+        "equal_trials_per_individual": balanced,
+        "trials_per_individual": trials_per_individual,
+        "trial_icc_moment": trial_icc,
+        "randomized_individual_count": randomized_count,
+        "randomized_individual_dropout_fraction": dropout_fraction,
         "individual_success_fraction_mean": mean(individual_success),
         "individual_success_fraction_variance": _sample_variance(individual_success),
         "individual_timeout_fraction_mean": mean(individual_timeout),
