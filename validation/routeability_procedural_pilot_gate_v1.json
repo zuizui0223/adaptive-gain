@@ -52,10 +52,26 @@
   "claim_ceiling": "The pilot can establish operational measurability and nuisance calibration only; it is not an empirical routeability test.",
   "machine_surface": {
     "module": "adaptive_gain/routeability_procedural_pilot.py",
-    "tests": "tests/test_routeability_procedural_pilot.py",
+    "exporter": "examples/build_routeability_procedural_pilot_receipt.py",
+    "regression_tests": [
+      "tests/test_routeability_procedural_pilot.py",
+      "tests/test_routeability_procedural_pilot_exporter.py"
+    ],
     "outputs": [
-      "deterministic response-window selection from a predeclared candidate grid",
-      "pooled B=3 nuisance receipt with architecture/access contrasts absent from the output"
+      "frozen response-window selection from prespecified candidate grid",
+      "pooled B3 success and timeout fractions",
+      "balanced repeated-trial ICC moment when estimable",
+      "randomized-individual dropout fraction when randomized IDs are supplied"
     ]
+  },
+  "power_bridge": {
+    "downstream_module": "adaptive_gain/routeability_experiment_power.py",
+    "required_fields": [
+      "trial_icc_moment",
+      "randomized_individual_dropout_fraction",
+      "pooled_success_fraction",
+      "pooled_timeout_fraction"
+    ],
+    "focal_contrast_opened_must_be_false": true
   }
 }
