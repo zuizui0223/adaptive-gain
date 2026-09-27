@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-stage1-predata-gate-v1",
   "date": "2026-09-26",
-  "status": "annual_fallback_response_estimable_primary_subseason_blocked",
+  "status": "annual_conventional_baseline_green_primary_subseason_blocked",
   "purpose": "test whether the repeated Villavicencio network response is estimable after conventional opportunity and compatibility filters, without inferring decision-equivalence classes",
   "sources": {
     "response": {
@@ -166,7 +166,21 @@
   "stage1_success_gate_status": {
     "annual_fallback_response_estimability": "PASS",
     "primary_12_transition_reconstruction": "BLOCKED_response_RData_not_materialized",
-    "conventional_filter_join": "NEXT",
-    "sampling_effort_semantics": "UNRESOLVED"
+    "conventional_filter_join": "PASS",
+    "sampling_effort_semantics": "UNRESOLVED",
+    "conventional_filter_temporal_cv": "PASS",
+    "next": "INDEPENDENT_DECISION_STRUCTURE_LAYER"
+  },
+  "conventional_filter_baseline": {
+    "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
+    "result": "validation/villavicencio_conventional_filter_cv_result_v1.json",
+    "primary_scope": "strict_core_2008_2011",
+    "gain_relative_log_loss_reduction": 0.22565486302276372,
+    "gain_roc_auc": 0.8652316968130922,
+    "loss_relative_log_loss_reduction": 0.05632856707517978,
+    "loss_roc_auc": 0.6504668780831572,
+    "gain_gate": "PASS",
+    "loss_gate": "PASS",
+    "interpretation": "conventional filters predict held-out annual link dynamics, especially gains; any routeability test must now demonstrate incremental value beyond this frozen baseline"
   }
 }
