@@ -222,6 +222,8 @@ def test_preregistration_template_is_explicitly_blocked():
     assert "{{randomization_receipt_sha256}}" in text
     assert "{{final_assignment_sha256}}" in text
     assert "{{final_schedule_receipt_sha256}}" in text
+    assert "{{final_n_rule_sha256}}" in text
+    assert "{{final_n_receipt_sha256}}" in text
 
 
 def test_preregistration_gate_requires_pilot_power_and_human_inputs():
@@ -359,7 +361,7 @@ def test_finalizer_rejects_schedule_assignment_fidelity_break(tmp_path):
     assert "final schedule assignment mismatch" in completed.stderr
 
 
-def test_finalizer_rejects_power_surface_without_matching_final_n_sesoi(tmp_path):
+def test_finalizer_rejects_power_surface_changed_after_final_n_selection(tmp_path):
     payload = _prepare_artifacts(tmp_path)
     power = tmp_path / payload["power_surface_reference"]
     text = power.read_text(encoding="utf-8")
@@ -369,7 +371,7 @@ def test_finalizer_rejects_power_surface_without_matching_final_n_sesoi(tmp_path
 
     completed, _ = _run_finalizer(tmp_path, payload)
     assert completed.returncode != 0
-    assert "no scenario matching" in completed.stderr
+    assert "final-N receipt power-surface hash mismatch" in completed.stderr
 
 
 def test_finalizer_rejects_rehashed_but_wrong_logical_stimulus_mapping(tmp_path):
@@ -387,3 +389,36 @@ def test_finalizer_rejects_rehashed_but_wrong_logical_stimulus_mapping(tmp_path)
     completed, _ = _run_finalizer(tmp_path, payload)
     assert completed.returncode != 0
     assert "does not match the exact frozen" in completed.stderr
+
+
+def test_finalizer_independently_recomputes_selected_final_n(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    receipt_path = tmp_path / payload["final_n_receipt_reference"]
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["selected_individuals_per_cell"] = 8
+    receipt["total_randomized_individuals"] = 96
+    receipt_path.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    payload["final_n_receipt_sha256"] = _sha(receipt_path)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "selected N disagrees with independent selector recomputation" in completed.stderr
+
+
+def test_finalizer_rejects_changed_final_n_rule_after_selection(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    rule_path = tmp_path / payload["final_n_rule_reference"]
+    rule = json.loads(rule_path.read_text(encoding="utf-8"))
+    rule["minimum_h2_hierarchical_pass_fraction"] = 0.90
+    rule_path.write_text(
+        json.dumps(rule, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    payload["final_n_rule_sha256"] = _sha(rule_path)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "final-N receipt rule hash mismatch" in completed.stderr
