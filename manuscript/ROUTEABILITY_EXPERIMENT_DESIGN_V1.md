@@ -57,6 +57,28 @@ The same context-contingent two-cue schedule can resolve this task, but it is no
 
 Therefore the control matches cue number, state number, target balance and cue marginals while removing the strict adaptive gain.
 
+### Stronger match: pairwise information is also identical
+
+The executable contrast has a stronger property than marginal matching.
+
+For each of the six named variable pairs among
+
+`{target, terminal A, context, terminal B}`,
+
+the routeable and bypass-control tasks have the same canonical binary 2 x 2 contingency-count profile after ignoring arbitrary 0/1 symbol labels. Consequently they have the same **pairwise mutual information** for every target-cue and cue-cue pair.
+
+This means that neither single-cue informativeness nor any pairwise mutual-information matrix can distinguish the two architectures.
+
+Yet the exact resolution costs differ:
+
+- routeable: `C_A=2, C_F=3`;
+- bypass control: `C_A=C_F=2`.
+
+The contrast therefore isolates a genuinely **higher-order conditional organization** of ecological information. Routeability is not reducible to how informative individual cues are, nor to the strengths of pairwise associations among cues and target.
+
+This statement is deliberately about pairwise information quantities that are invariant to relabeling binary cue symbols. Fixed semantic 0/1 labels are not claimed to have identical signed contingency tables in every target-cue pair.
+
+
 Executable source:
 
 - `adaptive_gain/ecological_routeability_experiment.py`
