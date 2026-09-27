@@ -308,7 +308,18 @@
         "result": "routeable and bypass-control tasks have identical named pairwise information signatures across target and all three cues, but C_F differs 3 versus 2 while C_A=2 in both",
         "consequence": "strict adaptive gain is not identifiable from the pairwise mutual-information surface alone",
         "novelty_boundary": "generic higher-order synergy and XOR-style pairwise insufficiency are prior art; the contribution is the exact minimal routeability-versus-bypass construction",
-        "experiment_value": "the symbolic control matches pairwise information strength, so the architecture-by-access contrast isolates higher-order conditional organization more tightly than cue-marginal matching alone"
+        "experiment_value": "the symbolic control matches pairwise information strength, so the architecture-by-access contrast isolates higher-order conditional organization more tightly than cue-marginal matching alone",
+        "higher_order_localization": {
+          "terminal_pair_target_information_bits": {
+            "routeable": 0.5,
+            "bypass_control": 1
+          },
+          "context_given_terminals_information_bits": {
+            "routeable": 0.5,
+            "bypass_control": 0
+          },
+          "interpretation": "the strict-gain route cue carries target information that is absent from the fixed terminal pair; the bypass control has no such residual conditional information"
+        }
       }
     }
   ]
