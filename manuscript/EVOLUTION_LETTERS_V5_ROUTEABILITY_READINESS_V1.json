@@ -330,6 +330,14 @@
         "fixed_order_balance": "within individual and state-independent",
         "cue_symbol_counterbalance": "four orthogonal profiles within each cell",
         "sample_size_boundary": "multiple of four per cell is a counterbalance requirement only, not the powered N"
+      },
+      "analysis_gate": {
+        "path": "validation/routeability_experiment_analysis_gate_v1.json",
+        "H1": "B2 architecture-by-access interaction",
+        "H2": "B2 interaction minus mean B1/B3 interaction",
+        "multiplicity": "hierarchical H1 then H2",
+        "model": "binomial logistic mixed model; individual and colony grouping explicit",
+        "sample_size_status": "not frozen; must use nuisance-parameter calibration rather than theoretical 0.25 ceiling"
       }
     }
   ]
