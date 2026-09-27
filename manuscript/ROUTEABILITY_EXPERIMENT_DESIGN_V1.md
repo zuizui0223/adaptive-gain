@@ -159,7 +159,7 @@ The three cue channels must be independently controllable.
 
 Recommended implementation:
 
-- **context:** a coarse outer collar / patch cue visible before the terminal information;
+- **context:** a coarse outer collar / patch cue that becomes available before the terminal information and remains visible while the terminal cue is presented;
 - **terminal A:** one local cue window;
 - **terminal B:** a second local cue window.
 
@@ -173,11 +173,25 @@ A clean implementation uses shutters, cards or other non-flickering displays so 
 
 For the primary B=2 contrast:
 
-- contingent treatment shows context, then the context-selected terminal cue;
-- fixed treatment shows terminal A and terminal B;
-- total cue-exposure count and nominal exposure duration are matched.
+- contingent treatment reveals context first and then the context-selected terminal cue **while the context remains visible**;
+- fixed treatment reveals terminal A and terminal B without an informative route cue;
+- total number of informative cue channels and nominal cue-exposure duration are matched.
+
+The persistent-context rule is deliberate. Bumblebees can use contextual cues to choose opposite colour targets, but purely sequential priming that disappears before the target can be much harder to learn unless supported by additional spatial structure. The primary implementation therefore tests contingent information without making success depend on fragile delayed-context memory.
 
 The response is recorded only after the allowed cue observations have been presented.
+
+
+## Behavioral feasibility precedent
+
+The physical implementation is constrained by prior bee-learning work rather than invented from the formal task alone.
+
+- Dale et al. (2005) showed that bumblebees can learn context-dependent colour choices. Concurrent or spatially supported context cues were effective, whereas a weak sequential priming cue presented several seconds before the targets was difficult to use reliably. This motivates the persistent-context implementation above.
+- Fauria et al. (2002) showed contextual isolation of opposing visual associations in bumblebees, supporting the feasibility of learning different stimulus-response mappings under different contexts.
+- Graver et al. (2026) showed that *Bombus impatiens* changes colour-versus-odor cue weighting with the spatiotemporal scale of cue presentation. Cue timing and persistence must therefore be matched and reported as part of the manipulation, not treated as incidental apparatus details.
+- Spaethe et al. (2026) showed that *Bombus terrestris* flexibly changes which visual features it learns as cue discriminability changes. Physical cue symbols should therefore be pretested for discriminability and counterbalanced across context/A/B roles.
+
+These studies establish feasibility of contextual and multicue learning. None tests the matched routeable-versus-bypass architecture defined here.
 
 ## Primary endpoint
 
@@ -334,3 +348,11 @@ A positive experiment would establish that **matched ecological alternatives can
 It would not by itself establish that routeability explains natural plant-pollinator network rewiring, niche breadth or community stability.
 
 Those remain separate ecological bridges.
+
+
+## Experimental feasibility references
+
+- Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
+- Fauria, K., Dale, K., Colborn, M. & Collett, T. S. 2002. Learning speed and contextual isolation in bumblebees. *Journal of Experimental Biology* 205:1009–1018. DOI: 10.1242/jeb.205.7.1009.
+- Graver, K., Sommer, J., Rao, V., Tafuri, G. & Sprayberry, J. D. H. 2026. Timing impacts responses to color and odor in a model insect, the bumblebee *Bombus impatiens*. *Journal of Experimental Biology* 229:jeb251126. DOI: 10.1242/jeb.251126.
+- Spaethe, J., Hutzenthaler, S., Dietz, A., Gehrig, K., Foster, J. & Stöckl, A. 2026. Bees flexibly adjust decision strategies to information content in a foraging task.
