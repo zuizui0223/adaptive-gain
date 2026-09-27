@@ -12,10 +12,11 @@ def _text() -> str:
 def test_screen_admits_kent_as_independent_cognition_not_exact_routeability():
     text = _text()
     for phrase in (
-        "A-cognition — strongest current independent decision-layer candidate.",
+        "A-cognition source — strongest current independent decision-layer candidate, but not confirmatory-ready.",
         "It is **not A-exact**",
         "independent colour-learning experiment",
         "not the full ecological cue hierarchy",
+        "pseudoreplication",
     ):
         assert phrase in text
 
@@ -46,5 +47,6 @@ def test_screen_keeps_exact_claim_firewall():
         "do not call perceptual colour classes exact decision-equivalence classes",
         "do not claim that colour learning alone determines realized interactions",
         "restricted-channel or cognition-layer tests rather than exact routeability confirmation",
+        "NO-GO for a standalone confirmatory routeability claim",
     ):
         assert phrase in text
