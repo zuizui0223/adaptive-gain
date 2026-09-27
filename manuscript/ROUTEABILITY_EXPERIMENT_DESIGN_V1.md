@@ -69,6 +69,13 @@ the routeable and bypass-control tasks have the same canonical binary 2 x 2 cont
 
 This means that neither single-cue informativeness nor any pairwise mutual-information matrix can distinguish the two architectures.
 
+The match is stronger still: the **full three-cue joint distribution** is identical. In both architectures the four cue vectors occur once each under uniform states:
+
+`000, 001, 011, 111`.
+
+Thus the environment-side distribution of cue combinations is exactly matched. What differs is how the same cue-combination surface maps onto the focal target/action structure.
+
+
 Yet the exact resolution costs differ:
 
 - routeable: `C_A=2, C_F=3`;
