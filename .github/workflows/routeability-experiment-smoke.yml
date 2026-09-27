@@ -110,6 +110,7 @@ jobs:
                   "individuals_per_cell": 16,
                   "trials_per_individual": 8,
                   "colony_count": 4,
+                  "colony_block_counts": [4, 4, 4, 4],
                   "individual_sd_logit": 0.30,
                   "colony_sd_logit": 0.10,
                   "dropout_fraction": 0.00,
