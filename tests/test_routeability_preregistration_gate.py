@@ -12,6 +12,7 @@ FINALIZER = ROOT / "examples" / "finalize_routeability_preregistration.py"
 STIMULUS_BUILDER = ROOT / "examples" / "build_routeability_experiment_stimuli.py"
 RANDOMIZER = ROOT / "examples" / "randomize_routeability_roster.py"
 SCHEDULE_COMPILER = ROOT / "examples" / "compile_routeability_final_schedule.py"
+FINAL_N_SELECTOR = ROOT / "examples" / "select_routeability_final_n.py"
 
 
 def _sha(path: Path) -> str:
@@ -48,6 +49,8 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
     schedule_receipt = tmp_path / "schedule_receipt.json"
     pilot = tmp_path / "pilot.json"
     power = tmp_path / "final_power_surface.csv"
+    final_n_rule = tmp_path / "final_n_rule.json"
+    final_n_receipt = tmp_path / "final_n_receipt.json"
     stimuli = tmp_path / "final_stimuli.csv"
 
     with roster.open("w", newline="", encoding="utf-8") as handle:
@@ -113,12 +116,42 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "timeout_fraction,sesoi_provenance,fit_success_fraction,"
         "h1_directional_rejection_fraction,h2_hierarchical_pass_fraction,"
         "expected_h1_delta_b2,expected_h2_localization\n"
-        "final_n_robust_a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,"
+        "n4_robust_a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,"
         "practical_decision_threshold,0.99,0.82,0.80,0.12,0.10\n"
-        "sensitivity_n8,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,"
-        "practical_decision_threshold,0.98,0.90,0.87,0.12,0.10\n",
+        "n4_robust_b,1000,4,8,4,1;1;1;1,0.7,0.3,0.12,0.06,"
+        "practical_decision_threshold,0.97,0.83,0.81,0.12,0.10\n"
+        "n8_robust_a,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,"
+        "practical_decision_threshold,0.98,0.90,0.87,0.12,0.10\n"
+        "n8_robust_b,1000,8,8,4,2;2;2;2,1.0,0.4,0.18,0.09,"
+        "practical_decision_threshold,0.96,0.88,0.85,0.12,0.10\n",
         encoding="utf-8",
     )
+    final_n_rule.write_text(
+        json.dumps(
+            {
+                "minimum_fit_success_fraction": 0.95,
+                "minimum_h1_directional_rejection_fraction": 0.80,
+                "minimum_h2_hierarchical_pass_fraction": 0.80,
+                "minimum_scenarios_per_n": 2,
+                "counterbalance_multiple": 4,
+            }
+        ),
+        encoding="utf-8",
+    )
+    selected_n = subprocess.run(
+        [
+            sys.executable,
+            str(FINAL_N_SELECTOR),
+            str(power),
+            str(final_n_rule),
+            str(final_n_receipt),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert selected_n.returncode == 0, selected_n.stderr
 
     stimulus_receipt = tmp_path / "stimulus_receipt.json"
     built_stimuli = subprocess.run(
@@ -146,6 +179,10 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "trials_per_individual": 8,
         "power_surface_reference": power.name,
         "power_surface_sha256": _sha(power),
+        "final_n_rule_reference": final_n_rule.name,
+        "final_n_rule_sha256": _sha(final_n_rule),
+        "final_n_receipt_reference": final_n_receipt.name,
+        "final_n_receipt_sha256": _sha(final_n_receipt),
         "h1_sesoi": 0.12,
         "h2_sesoi": 0.10,
         "sesoi_provenance": "practical_decision_threshold",
