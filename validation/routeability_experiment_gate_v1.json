@@ -236,8 +236,9 @@
     "simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
     "smoke_workflow": ".github/workflows/routeability-experiment-smoke.yml",
     "model": "frozen binomial GLMM with architecture x access x categorical budget and individual/colony random intercepts",
-    "contrast_engine": "probability-scale Delta_B2 and localization contrast with delta-method standard errors",
+    "contrast_engine": "population-average Delta_B2 and localization contrast obtained by integrating fitted random-intercept distributions, with delta-method fixed-effect uncertainty conditional on fitted variance components",
     "fit_failure_policy": "fit failures remain failures in the operating-characteristic denominator",
-    "final_N_status": "not frozen; requires real pilot nuisance receipt, external SESOI, colony allocation and robustness grid"
+    "final_N_status": "not frozen; requires real pilot nuisance receipt, external SESOI, colony allocation and robustness grid",
+    "cell_probability_semantics": "population-average primary-success probability under the prespecified timeout and random-intercept distribution"
   }
 }
