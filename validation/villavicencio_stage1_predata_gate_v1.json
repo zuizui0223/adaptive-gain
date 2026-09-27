@@ -169,7 +169,8 @@
     "conventional_filter_join": "PASS",
     "sampling_effort_semantics": "UNRESOLVED",
     "conventional_filter_temporal_cv": "PASS",
-    "next": "INDEPENDENT_DECISION_STRUCTURE_LAYER"
+    "next": "FREEZE_INDEPENDENT_COGNITION_DECISION_EXPOSURE",
+    "filter_block_ablation": "PASS_phenology_reproducible_both_endpoints"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
@@ -182,5 +183,20 @@
     "gain_gate": "PASS",
     "loss_gate": "PASS",
     "interpretation": "conventional filters predict held-out annual link dynamics, especially gains; any routeability test must now demonstrate incremental value beyond this frozen baseline"
+  },
+  "filter_block_ablation": {
+    "gate": "validation/villavicencio_filter_block_ablation_gate_v1.json",
+    "result": "validation/villavicencio_filter_block_ablation_result_v1.json",
+    "primary_scope": "strict_core_2008_2011",
+    "phenology_gain": "reproducible_incremental_information_3_of_3",
+    "phenology_loss": "reproducible_incremental_information_3_of_3",
+    "abundance_gain": "positive_but_fold_unstable_2_of_3",
+    "abundance_loss": "positive_but_fold_unstable_2_of_3",
+    "plant_morphology_gain": "no_reproducible_incremental_information",
+    "plant_morphology_loss": "positive_but_fold_unstable_2_of_3",
+    "pollinator_morphology_gain": "no_reproducible_incremental_information",
+    "pollinator_morphology_loss": "no_reproducible_incremental_information",
+    "ecological_read": "phenological overlap is the only frozen conventional-filter block with reproducible incremental held-out information for both gain and loss across every primary fold; the classification persists in broader temporal sensitivities",
+    "claim_ceiling": "predictive block attribution only; no causal primacy or routeability inference"
   }
 }
