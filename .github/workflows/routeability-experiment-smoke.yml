@@ -55,16 +55,9 @@ jobs:
       - name: Run focused routeability tests
         run: |
           python -m pytest -q \
+            tests/test_routeability*.py \
             tests/test_ecological_routeability_experiment.py \
-            tests/test_pairwise_information_routeability_nonidentifiability.py \
-            tests/test_routeability_experiment_schedule.py \
-            tests/test_routeability_trial_validation.py \
-            tests/test_routeability_procedural_pilot.py \
-            tests/test_routeability_procedural_pilot_exporter.py \
-            tests/test_routeability_experiment_power.py \
-            tests/test_routeability_experiment_pilot_power_gate.py \
-            tests/test_routeability_operating_characteristics.py \
-            tests/test_routeability_glmm_operating_characteristic_gate.py
+            tests/test_pairwise_information_routeability_nonidentifiability.py
 
       - name: Parse final GLMM simulator
         run: |
