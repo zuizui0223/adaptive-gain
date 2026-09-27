@@ -116,9 +116,12 @@ The main experiment should include or preregister a budget manipulation.
 
 ### B = 1 — below adaptive cost
 
-One cue observation is insufficient to guarantee the target in either architecture.
+Freeze the one-cue policy prefixes:
 
-Prediction: no condition has exact guaranteed resolution.
+- adaptive-policy prefix: context (`q_route`) only;
+- fixed-policy prefix: one terminal cue (`q_left`; `q_right` is accuracy-equivalent under the uniform state design).
+
+One cue observation is insufficient to guarantee the target in either architecture. The exact uniform-state ceilings are 0.50 for the adaptive-policy prefix and 0.75 for the fixed-policy prefix in **both** architectures. Therefore the architecture × access interaction is exactly 0 at B=1.
 
 ### B = 2 — routeability-sensitive window
 
@@ -132,11 +135,19 @@ For the bypass control, (C_A=C_F=2), so contingent access has no exact advantage
 
 ### B = 3 — above fixed cost
 
-All three cues are available.
+All three cues are available to both access arms.
 
-Prediction: both access classes can resolve the routeable target and the unique routeability advantage disappears.
+Prediction: all four architecture × access cells have exact information ceiling 1.00, so the architecture × access interaction is exactly 0 at B=3.
 
-This budget ladder is the strongest experimental connection to V5 because it tests the predicted **window**, not merely whether animals can learn a contextual rule.
+Thus the exact architecture × access information interaction across the ladder is:
+
+| budget | interaction |
+| ---: | ---: |
+| B=1 | 0.00 |
+| B=2 | 0.25 |
+| B=3 | 0.00 |
+
+This budget ladder is the strongest experimental connection to V5 because it localizes the structural advantage to the predicted **window**, rather than merely asking whether animals can learn a contextual rule.
 
 ## Biological implementation
 
@@ -298,9 +309,11 @@ Use an individual-level repeated-measures model if each animal contributes multi
 
 The confirmatory term is the architecture × access interaction.
 
-### Confirmatory H2 — budget-window interaction
+### Confirmatory H2 — budget-window localization
 
-When B=1,2,3 are implemented, test whether the architecture × access difference is concentrated at B=2 rather than being a monotonic treatment difference across all budgets.
+When B=1,2,3 are implemented, test the preregistered localization contrast: the architecture × access difference should be larger at B=2 than at the two boundary controls B=1 and B=3.
+
+The exact information-level pattern is 0, 0.25, 0 across B=1,2,3. As with the B=2 ceiling, these are structural information predictions rather than required behavioral accuracies.
 
 ### Secondary — latency
 
