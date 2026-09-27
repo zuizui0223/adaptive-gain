@@ -256,13 +256,17 @@ The exact contrast supports two implementation levels.
 
 ### Phase 1 — guided contingent presentation
 
-The apparatus reads the context outcome and reveals the correct branch-specific terminal cue.
+**This is the frozen primary confirmatory implementation for H1 and H2.**
 
-Purpose: isolate the information-architecture contrast with minimal motor or exploration demands.
+The apparatus reads the context outcome and reveals the correct branch-specific terminal cue. In the contingent arm the animal does not choose which terminal channel to inspect during the confirmatory experiment.
+
+Purpose: isolate the information-architecture contrast with minimal motor or exploration demands, so the primary architecture × access test is not confounded with learning the routing policy or making an additional terminal-window action choice.
 
 This phase tests whether the matched architectures differ when the theoretically sufficient contingent information is actually delivered. It does not by itself show that an animal learns to choose which cue to inspect.
 
 ### Phase 2 — autonomous routing
+
+This is a **separate mechanistic follow-up**, not part of the frozen guided H1/H2 dataset unless independently preregistered as a new confirmatory experiment. Autonomous-routing trials must not be pooled with the guided primary analysis.
 
 After the context cue is visible, the animal is given two terminal inspection ports or cue windows but can acquire only one within the two-cue budget.
 
