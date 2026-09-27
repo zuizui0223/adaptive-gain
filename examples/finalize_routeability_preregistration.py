@@ -15,6 +15,10 @@ from adaptive_gain.ecological_routeability_experiment import (
 )
 from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 from adaptive_gain.routeability_experiment_power import RouteabilitySESoi
+from adaptive_gain.routeability_final_n_selection import (
+    FinalNRule,
+    select_final_individuals_per_cell,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
@@ -30,6 +34,10 @@ REQUIRED_FIELDS = (
     "trials_per_individual",
     "power_surface_reference",
     "power_surface_sha256",
+    "final_n_rule_reference",
+    "final_n_rule_sha256",
+    "final_n_receipt_reference",
+    "final_n_receipt_sha256",
     "h1_sesoi",
     "h2_sesoi",
     "sesoi_provenance",
@@ -473,6 +481,8 @@ def validate_finalization_payload(
         "ethics_approval",
         "planned_start_date",
         "power_surface_reference",
+        "final_n_rule_reference",
+        "final_n_receipt_reference",
         "apparatus_description",
         "cue_alphabet_description",
         "pilot_receipt_reference",
@@ -500,6 +510,8 @@ def validate_finalization_payload(
     hash_fields = (
         "pilot_receipt_sha256",
         "power_surface_sha256",
+        "final_n_rule_sha256",
+        "final_n_receipt_sha256",
         "randomization_receipt_sha256",
         "final_assignment_sha256",
         "final_schedule_receipt_sha256",
@@ -514,6 +526,8 @@ def validate_finalization_payload(
     artifact_pairs = (
         ("pilot_receipt_reference", "pilot_receipt_sha256"),
         ("power_surface_reference", "power_surface_sha256"),
+        ("final_n_rule_reference", "final_n_rule_sha256"),
+        ("final_n_receipt_reference", "final_n_receipt_sha256"),
         ("randomization_receipt_reference", "randomization_receipt_sha256"),
         ("final_assignment_reference", "final_assignment_sha256"),
         ("final_schedule_receipt_reference", "final_schedule_receipt_sha256"),
@@ -538,6 +552,65 @@ def validate_finalization_payload(
         h2_sesoi=sesoi.h2_probability_localization,
         sesoi_provenance=sesoi.provenance,
     )
+    final_n_rule_payload = _read_json(
+        verified["final_n_rule_reference"],
+        "final_n_rule_reference",
+    )
+    final_n_rule = FinalNRule(
+        minimum_fit_success_fraction=float(
+            final_n_rule_payload["minimum_fit_success_fraction"]
+        ),
+        minimum_h1_directional_rejection_fraction=float(
+            final_n_rule_payload[
+                "minimum_h1_directional_rejection_fraction"
+            ]
+        ),
+        minimum_h2_hierarchical_pass_fraction=float(
+            final_n_rule_payload[
+                "minimum_h2_hierarchical_pass_fraction"
+            ]
+        ),
+        minimum_scenarios_per_n=int(
+            final_n_rule_payload.get("minimum_scenarios_per_n", 2)
+        ),
+        counterbalance_multiple=int(
+            final_n_rule_payload.get("counterbalance_multiple", 4)
+        ),
+    ).validated()
+    recomputed_final_n = select_final_individuals_per_cell(
+        verified["power_surface_reference"],
+        final_n_rule,
+    )
+
+    final_n_receipt = _read_json(
+        verified["final_n_receipt_reference"],
+        "final_n_receipt_reference",
+    )
+    if final_n_receipt.get("schema") != (
+        "adaptive-gain-routeability-final-n-selection-v1"
+    ):
+        raise ValueError("unexpected final-N receipt schema")
+    if final_n_receipt.get("power_surface_sha256") != hashes[
+        "power_surface_sha256"
+    ]:
+        raise ValueError("final-N receipt power-surface hash mismatch")
+    if final_n_receipt.get("rule_sha256") != hashes["final_n_rule_sha256"]:
+        raise ValueError("final-N receipt rule hash mismatch")
+    if int(final_n_receipt.get("selected_individuals_per_cell")) != (
+        recomputed_final_n.selected_individuals_per_cell
+    ):
+        raise ValueError(
+            "final-N receipt selected N disagrees with independent selector recomputation"
+        )
+    if individuals_per_cell != recomputed_final_n.selected_individuals_per_cell:
+        raise ValueError(
+            "individuals_per_cell does not equal the mechanically selected final N"
+        )
+    if int(final_n_receipt.get("total_randomized_individuals")) != (
+        12 * individuals_per_cell
+    ):
+        raise ValueError("final-N receipt total randomized N mismatch")
+
     _validate_stimulus_csv(
         verified["final_stimulus_reference"],
     )
