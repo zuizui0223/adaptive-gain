@@ -18,6 +18,10 @@ def test_experimental_contrast_is_exact_and_marginally_matched():
     assert receipt.same_query_outcome_multiplicities
     assert receipt.routeable_strict_gain
     assert not receipt.control_strict_gain
+    assert receipt.routeable_fixed_terminal_accuracy == 0.75
+    assert receipt.control_fixed_terminal_accuracy == 1.0
+    assert receipt.routeable_adaptive_accuracy == 1.0
+    assert receipt.control_adaptive_accuracy == 1.0
     assert receipt.exact_minimal_contrast
 
 
