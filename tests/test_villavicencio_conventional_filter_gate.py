@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 GATE = ROOT / "validation" / "villavicencio_conventional_filter_gate_v1.json"
 RESULT = ROOT / "validation" / "villavicencio_annual_stage1_fallback_result_v1.json"
+FILTER_RESULT = ROOT / "validation" / "villavicencio_conventional_filter_cv_result_v1.json"
 
 
 def test_conventional_filter_gate_is_effect_blind():
@@ -105,3 +106,20 @@ def test_conventional_filter_gate_blocks_interaction_derived_matching_leakage():
     assert "independently measured raw morphology" in policy["policy"]
     assert "do not import interaction-derived trait-matching scores" in policy["policy"]
     assert "circular" in policy["reason"]
+
+
+def test_green_conventional_filter_result_is_frozen():
+    data = json.loads(FILTER_RESULT.read_text(encoding="utf-8"))
+    assert data["status"] == "green_conventional_filter_predictive_baseline"
+    primary = data["primary_scope"]
+    assert primary["name"] == "strict_core_2008_2011"
+    assert primary["promotion_gate"] == "PASS"
+    assert primary["gain"]["endpoint_gate"] == "PASS"
+    assert primary["loss"]["endpoint_gate"] == "PASS"
+    assert primary["gain"]["all_folds_converged"] is True
+    assert primary["loss"]["all_folds_converged"] is True
+    assert primary["gain"]["relative_log_loss_reduction"] > 0.22
+    assert primary["loss"]["relative_log_loss_reduction"] > 0.05
+    assert primary["gain"]["roc_auc"] > 0.86
+    assert primary["loss"]["roc_auc"] > 0.65
+    assert data["analysis_surface"]["decision_equivalence_inferred"] is False
