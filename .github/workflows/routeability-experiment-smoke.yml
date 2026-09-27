@@ -30,6 +30,8 @@ on:
       - "validation/routeability_roster_randomization_gate_v1.json"
       - "validation/routeability_final_schedule_gate_v1.json"
       - "validation/routeability_preregistration_gate_v1.json"
+      - "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
+      - "examples/finalize_routeability_preregistration.py"
       - "tests/test_routeability*.py"
       - "tests/test_ecological_routeability_experiment.py"
       - "tests/test_pairwise_information_routeability_nonidentifiability.py"
