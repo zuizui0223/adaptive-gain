@@ -1,0 +1,74 @@
+{
+  "schema": "adaptive-gain-routeability-glmm-operating-characteristic-gate-v1",
+  "date": "2026-09-27",
+  "status": "simulator_code_ready_pilot_inputs_pending",
+  "purpose": "simulate the frozen confirmatory binomial mixed model over a prespecified planning surface after nuisance parameters and external SESOI are frozen",
+  "inputs": {
+    "sesoi": {
+      "required": [
+        "H1 probability-scale Delta_B2",
+        "H2 probability-scale localization contrast",
+        "allowed external provenance"
+      ],
+      "forbidden": [
+        "theoretical 0.25 information ceiling as behavioral effect size",
+        "opened focal pilot H1/H2 estimate",
+        "post-hoc confirmatory effect"
+      ]
+    },
+    "baseline_surface": {
+      "required": [
+        "bypass-control fixed primary-success probability at B1/B2/B3",
+        "ordinary contingent-minus-fixed access effect at B1/B2/B3",
+        "ordinary routeable-minus-bypass fixed-access effect at B1/B2/B3"
+      ],
+      "rule": "planning assumptions must be declared independently of focal confirmatory outcomes; the 12-cell surface is then constructed to realize frozen H1/H2 SESOI exactly"
+    },
+    "nuisance": {
+      "required": [
+        "individual random-intercept SD on logit scale",
+        "colony random-intercept SD on logit scale when multiple colonies are used",
+        "randomized-individual dropout fraction",
+        "timeout fraction",
+        "trials per individual",
+        "actual/planned colony count"
+      ],
+      "preferred_source": "frozen procedural-pilot nuisance receipt plus actual husbandry allocation"
+    }
+  },
+  "simulation": {
+    "scenario_builder": "adaptive_gain/routeability_operating_characteristics.py",
+    "scenario_exporter": "examples/build_routeability_glmm_simulation_scenarios.py",
+    "glmm_simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
+    "model": "success ~ architecture * access_mode * categorical_budget + (1|individual) + (1|colony) when colony_count>1",
+    "timeout_process": "timeout is generated first and scores primary success 0; cell primary-success probabilities are realized at zero random effects by conditional correctness p/(1-timeout)",
+    "dropout_process": "randomized individuals drop before trial generation; simulations losing an entire treatment cell are fit failures",
+    "fit_failure_policy": "fit failures count as H1/H2 failures in the operating-characteristic denominator and are reported separately",
+    "singular_fit_policy": "singularity is reported; a numerically completed singular fit is not silently discarded from the replicate ledger",
+    "contrast_estimation": "probability-scale H1/H2 from fixed-effect cell predictions with delta-method standard errors",
+    "multiplicity": "H1 directional interpretation after two-sided alpha; H2 hierarchical pass requires H1 pass and H2 directional two-sided rejection"
+  },
+  "outputs": [
+    "replicate-level fit success, convergence, singularity, H1/H2 estimates, SEs, p-values and hierarchical pass flags",
+    "scenario-level fit-success fraction",
+    "H1 directional rejection fraction",
+    "H2 raw directional rejection fraction",
+    "H2 hierarchical pass fraction",
+    "mean H1/H2 estimates among successful fits",
+    "retained-individual, trial and timeout diagnostics"
+  ],
+  "final_N_promotion_rule": {
+    "required": [
+      "procedural pilot nuisance receipt frozen without focal contrast opening",
+      "external H1/H2 SESOI provenance frozen",
+      "baseline planning surface frozen",
+      "actual colony allocation constraints frozen",
+      "operating-characteristic grid includes multiple plausible nuisance/baseline scenarios rather than one favorable point",
+      "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface"
+    ],
+    "final_N_status": "not frozen",
+    "forbidden": "do not select N from the most favorable scenario or rerun the grid after viewing confirmatory outcomes"
+  },
+  "software_fixture_boundary": "CI may use arbitrary synthetic nuisance/effect values solely to verify code execution. Fixture outputs are never scientific planning results and must not enter the readiness ledger as power evidence.",
+  "claim_ceiling": "The simulator can freeze and audit final sample-size operating characteristics once real nuisance and external-effect inputs exist. Code readiness alone does not justify a biological N."
+}
