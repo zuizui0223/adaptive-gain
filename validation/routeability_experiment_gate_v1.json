@@ -192,5 +192,11 @@
     "rule": "architecture-neutral familiarization before assignment; fixed-dose architecture-specific training after assignment; no architecture-specific accuracy gate for randomized primary test entry",
     "training_performance": "record as outcome/diagnostic rather than exclusion criterion",
     "unavoidable_hard_criterion": "criterion-reacher test analysis becomes per-protocol and cannot replace the randomized primary interpretation"
+  },
+  "primary_endpoint_firewall": {
+    "endpoint": "correct accept/reject decision within frozen response window",
+    "timeout": "score 0 and retain in primary denominator",
+    "response_window": "freeze from architecture-neutral pilot timing",
+    "conditional_accuracy": "secondary only"
   }
 }
