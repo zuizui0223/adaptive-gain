@@ -1,0 +1,82 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-gate-v1",
+  "date": "2026-09-27",
+  "status": "prospective_direct_experiment_design_frozen",
+  "formal_source": {
+    "module": "adaptive_gain/ecological_routeability_experiment.py",
+    "routeable_task": "minimal_strict_gain_standard_task",
+    "control_task": "bypass_matched_control_task"
+  },
+  "matched_surface": {
+    "world_count": 4,
+    "target_multiplicities": [
+      2,
+      2
+    ],
+    "query_count": 3,
+    "query_costs": [
+      1,
+      1,
+      1
+    ],
+    "query_outcome_multiplicities": [
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "same_between_architectures": true
+  },
+  "exact_costs": {
+    "routeable": {
+      "adaptive": 2,
+      "fixed": 3
+    },
+    "bypass_control": {
+      "adaptive": 2,
+      "fixed": 2
+    }
+  },
+  "primary_budget": 2,
+  "uniform_information_ceiling": {
+    "routeable_contingent": 1.0,
+    "routeable_fixed_terminal_pair": 0.75,
+    "control_contingent": 1.0,
+    "control_fixed_terminal_pair": 1.0,
+    "architecture_by_access_interaction": 0.25,
+    "interpretation": "information-level ceiling contrast, not a required behavioral effect size"
+  },
+  "budget_ladder": {
+    "B1": "below adaptive cost; no exact guaranteed resolution",
+    "B2": "routeability-sensitive window for the strict-gain task",
+    "B3": "all three cues available; fixed routeable task becomes exactly resolvable"
+  },
+  "primary_endpoint": "correct accept/reject response",
+  "confirmatory_terms": [
+    "task architecture x information access at B=2",
+    "budget concentration of that interaction when B=1,2,3 are tested"
+  ],
+  "independent_unit": "individual forager",
+  "repeated_unit": "trial",
+  "pilot_policy": "estimate nuisance parameters under procedural/full-information conditions; do not power from the theoretical 1.00 versus 0.75 ceiling or from the focal confirmatory interaction",
+  "claim_firewall": [
+    "do not require observed behavioral accuracy to equal theoretical information ceilings",
+    "do not count trials as independent animals",
+    "do not infer natural-network rewiring from a positive artificial-flower task",
+    "do not interpret a failed behavioral bridge as falsifying the exact finite theorem"
+  ],
+  "manuscript": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
+  "tests": [
+    "tests/test_ecological_routeability_experiment.py",
+    "tests/test_routeability_experiment_design.py"
+  ],
+  "promotion_rule": "This is the preferred first direct empirical test because branch structure is manipulated independently of species composition, conventional compatibility filters, and observed network response."
+}
