@@ -52,7 +52,9 @@
     "final-N receipt artifact exists and its SHA-256 matches the payload",
     "finalizer independently recomputes the smallest passing N from the frozen power surface and frozen rule",
     "preregistered individuals-per-cell must equal the independently recomputed selected N",
-    "final-N receipt power-surface/rule hashes and selected total randomized N must match the artifact chain"
+    "final-N receipt power-surface/rule hashes and selected total randomized N must match the artifact chain",
+    "every candidate N is evaluated on the exact same robustness_id set before final-N selection",
+    "all final power-surface rows use the same frozen H1/H2 SESOI values and provenance"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -89,7 +91,8 @@
       "receipt schemas and internal hash links",
       "power robustness surface has multiple scenarios and contains the frozen final N/SESOI point",
       "logical stimulus artifact exactly matches the eight frozen architecture/state rows",
-      "final-N selection is independently recomputed from the frozen power surface and threshold rule"
+      "final-N selection is independently recomputed from the frozen power surface and threshold rule",
+      "candidate-N robustness_id sets are identical and effect definition does not drift across the final power surface"
     ]
   },
   "final_n_selection_gate": "validation/routeability_final_n_selection_gate_v1.json"
