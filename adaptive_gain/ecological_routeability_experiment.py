@@ -15,7 +15,8 @@ stimulus-design target when ecological cues can be acquired separately.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping
+from itertools import combinations, product
+from typing import Mapping, Sequence
 
 from .core import FiniteTask, Query, World, adaptive_gain_receipt
 from .minimal_normal_form import minimal_strict_gain_standard_task
@@ -36,6 +37,7 @@ class ExperimentalRouteabilityContrast:
     control_fixed_terminal_accuracy: float
     routeable_adaptive_accuracy: float
     control_adaptive_accuracy: float
+    same_pairwise_information_signatures: bool
 
     @property
     def exact_minimal_contrast(self) -> bool:
@@ -53,6 +55,7 @@ class ExperimentalRouteabilityContrast:
             and self.control_fixed_terminal_accuracy == 1.0
             and self.routeable_adaptive_accuracy == 1.0
             and self.control_adaptive_accuracy == 1.0
+            and self.same_pairwise_information_signatures
         )
 
 
@@ -166,6 +169,70 @@ def uniform_target_accuracy_for_context_policy(
     correct = sum(max(counts.values()) for counts in pattern_targets.values())
     return correct / len(task.worlds)
 
+def _binary_unlabeled_pair_signature(
+    left: Sequence[object],
+    right: Sequence[object],
+) -> tuple[int, int, int, int]:
+    """Canonical 2x2 contingency counts up to independent binary relabeling.
+
+    Equal signatures imply equal pairwise mutual information and equal
+    binary association strength for any statistic invariant to independent
+    relabeling of the two binary outcomes.
+    """
+
+    if len(left) != len(right):
+        raise ValueError("paired variables must have the same length")
+    if set(left) - {0, 1} or set(right) - {0, 1}:
+        raise ValueError("pairwise information signature requires binary 0/1 values")
+
+    candidates: list[tuple[int, int, int, int]] = []
+    for flip_left, flip_right in product((False, True), repeat=2):
+        counts = {(a, b): 0 for a in (0, 1) for b in (0, 1)}
+        for raw_left, raw_right in zip(left, right):
+            a = 1 - raw_left if flip_left else raw_left
+            b = 1 - raw_right if flip_right else raw_right
+            counts[(a, b)] += 1
+        candidates.append(
+            (
+                counts[(0, 0)],
+                counts[(0, 1)],
+                counts[(1, 0)],
+                counts[(1, 1)],
+            )
+        )
+    return min(candidates)
+
+
+def pairwise_information_signature(
+    task: FiniteTask,
+) -> tuple[tuple[str, str, tuple[int, int, int, int]], ...]:
+    """Return the named pairwise binary-information surface of a task.
+
+    Target and cue values are reduced pair-by-pair to canonical unlabeled
+    2x2 contingency counts. This is stronger than comparing pairwise mutual
+    information numerically while treating arbitrary binary cue symbols as
+    labels rather than ecological content.
+    """
+
+    variables: list[tuple[str, tuple[object, ...]]] = [
+        ("target", tuple(world.target for world in task.worlds))
+    ]
+    variables.extend(
+        (query.name, tuple(query.outcomes))
+        for query in task.queries
+    )
+
+    rows = []
+    for (left_name, left), (right_name, right) in combinations(variables, 2):
+        rows.append(
+            (
+                left_name,
+                right_name,
+                _binary_unlabeled_pair_signature(left, right),
+            )
+        )
+    return tuple(rows)
+
 def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityContrast:
     routeable = minimal_strict_gain_standard_task()
     control = bypass_matched_control_task()
@@ -183,6 +250,10 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
     )
     control_adaptive_accuracy = uniform_target_accuracy_for_context_policy(
         control
+    )
+    same_pairwise_information_signatures = (
+        pairwise_information_signature(routeable)
+        == pairwise_information_signature(control)
     )
 
     return ExperimentalRouteabilityContrast(
@@ -204,6 +275,7 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         control_fixed_terminal_accuracy=control_fixed_terminal_accuracy,
         routeable_adaptive_accuracy=routeable_adaptive_accuracy,
         control_adaptive_accuracy=control_adaptive_accuracy,
+        same_pairwise_information_signatures=same_pairwise_information_signatures,
     )
 
 
