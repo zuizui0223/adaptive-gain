@@ -66,6 +66,8 @@ def test_scenario_exporter_emits_validated_flattened_cells(tmp_path):
                 "scenarios": [
                     {
                         "scenario_id": "pilot_grid_1",
+        "robustness_id": "core",
+                        "robustness_id": "core",
                         "sesoi": {
                             "h1_probability_interaction": 0.12,
                             "h2_probability_localization": 0.10,
@@ -127,6 +129,8 @@ def test_scenario_exporter_rejects_theory_ceiling_as_effect_provenance(tmp_path)
                 "scenarios": [
                     {
                         "scenario_id": "bad",
+        "robustness_id": "core",
+                        "robustness_id": "core",
                         "sesoi": {
                             "h1_probability_interaction": 0.25,
                             "h2_probability_localization": 0.25,
@@ -169,6 +173,7 @@ def test_scenario_exporter_rejects_theory_ceiling_as_effect_provenance(tmp_path)
 def test_scenario_exporter_accepts_unequal_colony_blocks_but_requires_exact_sum(tmp_path):
     base = {
         "scenario_id": "unequal_blocks",
+        "robustness_id": "core",
         "sesoi": {
             "h1_probability_interaction": 0.12,
             "h2_probability_localization": 0.10,
