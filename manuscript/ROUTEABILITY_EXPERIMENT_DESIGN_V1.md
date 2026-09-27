@@ -412,7 +412,25 @@ Report all exclusions and their randomized treatment cells. Differential trainin
 
 ## Manipulation checks
 
-Required:
+Observed trial logs are validated against the machine-frozen schedule before biological scoring.
+
+The validator checks:
+
+- exact individual/trial key match;
+- revealed cue sequence;
+- cue-exposure duration tolerance;
+- persistent context during terminal presentation when required;
+- apparatus-error flags;
+- response latency and terminal-decision coding.
+
+Crucially, it separates **protocol invalidity** from **biological failure**. An incorrect decision or timeout on a correctly presented trial is a valid biological outcome scored 0. A cue-presentation mismatch or apparatus error is protocol-invalid and is reported separately rather than silently converted into a behavioral failure.
+
+Executable surface:
+
+- `adaptive_gain/routeability_trial_validation.py`;
+- `tests/test_routeability_trial_validation.py`.
+
+Required manipulation checks:
 
 1. cue-exposure durations do not systematically differ between routeable and bypass tasks within access mode;
 2. no individual cue alone predicts target above the structure implied by the frozen stimulus table;
