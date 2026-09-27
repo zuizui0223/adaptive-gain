@@ -1,0 +1,62 @@
+{
+  "schema": "adaptive-gain-villavicencio-filter-block-ablation-gate-v1",
+  "date": "2026-09-27",
+  "status": "effect_blind_block_ablation_specification_frozen",
+  "scope": "annual detection-sensitive fallback only; attribution within the already-green conventional-filter baseline",
+  "source_baseline": {
+    "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
+    "result": "validation/villavicencio_conventional_filter_cv_result_v1.json",
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459"
+  },
+  "primary_scope": "strict_core_2008_2011",
+  "risk_sets": [
+    "gain",
+    "loss"
+  ],
+  "blocks": {
+    "phenology": [
+      "phenological_overlap"
+    ],
+    "abundance": [
+      "flower_abundance"
+    ],
+    "plant_morphology": [
+      "corolla_length",
+      "corolla_aperture",
+      "height_mean"
+    ],
+    "pollinator_morphology": [
+      "body_length",
+      "proboscis_length",
+      "proboscis_width",
+      "body_width",
+      "body_thickness"
+    ]
+  },
+  "analysis": {
+    "design": "leave-one-block-out from the frozen full conventional model",
+    "cross_validation": "same leave-one-transition-out folds and sampling-effort scopes as the frozen baseline",
+    "preprocessing": "same fold-local transforms and scaling as the frozen baseline",
+    "primary_metric": "delta held-out log-loss = drop-block log-loss minus full-model log-loss",
+    "secondary_metric": "delta held-out Brier score = drop-block Brier minus full-model Brier",
+    "coefficient_inference": false,
+    "statistical_significance_testing": false
+  },
+  "classification_rule": {
+    "reproducible_incremental_information": "pooled primary held-out log-loss worsens when the block is removed and delta log-loss is positive in every primary held-out transition",
+    "positive_but_fold_unstable": "pooled primary held-out log-loss worsens when the block is removed but at least one primary held-out transition has non-positive delta",
+    "no_reproducible_incremental_information": "pooled primary held-out log-loss does not worsen when the block is removed"
+  },
+  "interpretation": {
+    "allowed": "identify which prespecified conventional-filter blocks carry reproducible predictive information for annual link gains or losses",
+    "forbidden": [
+      "causal interpretation of a block",
+      "ranking blocks as ecological importance scores",
+      "post-hoc regrouping of predictors",
+      "tuning block definitions after seeing ablation results",
+      "calling any block decision structure or routeability"
+    ]
+  },
+  "promotion_rule": "A block may be described as carrying reproducible incremental predictive information only under the frozen all-primary-fold sign rule; all other blocks must retain their frozen classification.",
+  "claim_ceiling": "This analysis can identify predictive asymmetry among independently measured conventional filters. It cannot validate environmental routeability or decision-structural turnover."
+}
