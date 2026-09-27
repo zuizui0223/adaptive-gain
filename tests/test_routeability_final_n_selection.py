@@ -20,6 +20,7 @@ FIELDS = [
     "scenario_id",
     "robustness_id",
     "individuals_per_cell",
+    "trials_per_individual",
     "fit_success_fraction",
     "h1_directional_rejection_fraction",
     "h2_hierarchical_pass_fraction",
@@ -42,6 +43,7 @@ def _rows():
             "scenario_id": "n8_a",
             "robustness_id": "a",
             "individuals_per_cell": 8,
+            "trials_per_individual": 8,
             "fit_success_fraction": 0.99,
             "h1_directional_rejection_fraction": 0.82,
             "h2_hierarchical_pass_fraction": 0.70,
@@ -53,6 +55,7 @@ def _rows():
             "scenario_id": "n8_b",
             "robustness_id": "b",
             "individuals_per_cell": 8,
+            "trials_per_individual": 8,
             "fit_success_fraction": 0.98,
             "h1_directional_rejection_fraction": 0.81,
             "h2_hierarchical_pass_fraction": 0.79,
@@ -64,6 +67,7 @@ def _rows():
             "scenario_id": "n12_a",
             "robustness_id": "a",
             "individuals_per_cell": 12,
+            "trials_per_individual": 8,
             "fit_success_fraction": 0.99,
             "h1_directional_rejection_fraction": 0.86,
             "h2_hierarchical_pass_fraction": 0.84,
@@ -75,6 +79,7 @@ def _rows():
             "scenario_id": "n12_b",
             "robustness_id": "b",
             "individuals_per_cell": 12,
+            "trials_per_individual": 8,
             "fit_success_fraction": 0.97,
             "h1_directional_rejection_fraction": 0.83,
             "h2_hierarchical_pass_fraction": 0.81,
@@ -86,6 +91,7 @@ def _rows():
             "scenario_id": "n16_a",
             "robustness_id": "a",
             "individuals_per_cell": 16,
+            "trials_per_individual": 8,
             "fit_success_fraction": 1.00,
             "h1_directional_rejection_fraction": 0.92,
             "h2_hierarchical_pass_fraction": 0.90,
@@ -97,6 +103,7 @@ def _rows():
             "scenario_id": "n16_b",
             "robustness_id": "b",
             "individuals_per_cell": 16,
+            "trials_per_individual": 8,
             "fit_success_fraction": 1.00,
             "h1_directional_rejection_fraction": 0.91,
             "h2_hierarchical_pass_fraction": 0.88,
@@ -236,4 +243,26 @@ def test_final_n_selector_rejects_effect_drift_across_robustness_surface(tmp_pat
     _write_surface(surface, rows)
 
     with pytest.raises(ValueError, match="same frozen H1/H2 SESOI"):
+        select_final_individuals_per_cell(surface, _rule())
+
+
+def test_final_n_selector_rejects_mixed_sesoi_provenance_or_trial_design(tmp_path):
+    surface = tmp_path / "surface.csv"
+
+    mixed_h1 = _rows()
+    mixed_h1[-1]["expected_h1_delta_b2"] = 0.20
+    _write_surface(surface, mixed_h1)
+    with pytest.raises(ValueError, match="mixes H1/H2 SESOI"):
+        select_final_individuals_per_cell(surface, _rule())
+
+    mixed_provenance = _rows()
+    mixed_provenance[-1]["sesoi_provenance"] = "independent_prior_study"
+    _write_surface(surface, mixed_provenance)
+    with pytest.raises(ValueError, match="mixes or omits SESOI provenance"):
+        select_final_individuals_per_cell(surface, _rule())
+
+    mixed_trials = _rows()
+    mixed_trials[-1]["trials_per_individual"] = 12
+    _write_surface(surface, mixed_trials)
+    with pytest.raises(ValueError, match="one frozen positive trials_per_individual"):
         select_final_individuals_per_cell(surface, _rule())
