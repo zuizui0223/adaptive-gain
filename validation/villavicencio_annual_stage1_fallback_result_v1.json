@@ -1,0 +1,147 @@
+{
+  "schema": "adaptive-gain-villavicencio-annual-stage1-fallback-result-v1",
+  "date": "2026-09-27",
+  "status": "green_detection_sensitive_response_estimability",
+  "role": "annual fallback feasibility analysis; does not replace the frozen 18-subseason primary design",
+  "source": {
+    "doi": "10.5061/dryad.8cz8w9gm1",
+    "file": "plant_pollinator_data.xlsx",
+    "source_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "published_dryad_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "digest_match": true,
+    "materialization_route": "CONICET institutional mirror resolved from item metadata",
+    "materialization_url": "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?sequence=2&isAllowed=y"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36286304896,
+    "run_number": 28,
+    "conclusion": "success",
+    "artifact_id": 10920493516,
+    "artifact_digest": "sha256:1f3ae680203b0922e31e6f7f8c009772f33be1cf4dbfa6141bbccb35f447a38c",
+    "branch_head": "26560a13a59a1e802fb0acc31b8093e4f70393a3"
+  },
+  "design": {
+    "years": [
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011
+    ],
+    "transition_count": 5,
+    "transitions": [
+      "2006->2007",
+      "2007->2008",
+      "2008->2009",
+      "2009->2010",
+      "2010->2011"
+    ],
+    "presence_basis": "observed_positive_links",
+    "detection_sensitive": true,
+    "primary_18_subseason_design_replaced": false,
+    "decision_equivalence_inferred": false
+  },
+  "source_surface": {
+    "annual_link_counts": {
+      "2006": 150,
+      "2007": 206,
+      "2008": 342,
+      "2009": 300,
+      "2010": 215,
+      "2011": 440
+    },
+    "observed_plant_code_count": 45,
+    "observed_pollinator_code_count": 135,
+    "plant_name_table_count": 45,
+    "pollinator_name_table_count": 135,
+    "unmatched_observed_plant_count": 0,
+    "unmatched_observed_pollinator_count": 0,
+    "context_sheets_present": [
+      "Flower_abundance",
+      "phenological_overlap",
+      "plant_traits",
+      "pollinator_traits"
+    ]
+  },
+  "estimability": {
+    "shared_dyad_rows": 7620,
+    "changed_count": 1134,
+    "unchanged_count": 6486,
+    "changed_fraction": 0.14881889763779527,
+    "gain_count": 648,
+    "loss_count": 486,
+    "stable_present_count": 502,
+    "stable_absent_count": 5984,
+    "transitions_with_any_change": 5,
+    "transitions_with_both_outcomes": 5,
+    "global_outcome_nondegenerate": true,
+    "has_within_transition_contrast": true
+  },
+  "transition_receipts": [
+    {
+      "transition": "2006->2007",
+      "shared_plants": 17,
+      "shared_pollinators": 36,
+      "shared_dyads": 612,
+      "rewiring_count": 131,
+      "species_turnover_link_count": 111,
+      "rewiring_opportunity_rate": 0.21405228758169934,
+      "link_jaccard_dissimilarity": 0.8093645484949833
+    },
+    {
+      "transition": "2007->2008",
+      "shared_plants": 29,
+      "shared_pollinators": 54,
+      "shared_dyads": 1566,
+      "rewiring_count": 217,
+      "species_turnover_link_count": 139,
+      "rewiring_opportunity_rate": 0.13856960408684546,
+      "link_jaccard_dissimilarity": 0.7876106194690266
+    },
+    {
+      "transition": "2008->2009",
+      "shared_plants": 34,
+      "shared_pollinators": 70,
+      "shared_dyads": 2380,
+      "rewiring_count": 283,
+      "species_turnover_link_count": 87,
+      "rewiring_opportunity_rate": 0.11890756302521008,
+      "link_jaccard_dissimilarity": 0.7312252964426877
+    },
+    {
+      "transition": "2009->2010",
+      "shared_plants": 29,
+      "shared_pollinators": 50,
+      "shared_dyads": 1450,
+      "rewiring_count": 211,
+      "species_turnover_link_count": 106,
+      "rewiring_opportunity_rate": 0.14551724137931035,
+      "link_jaccard_dissimilarity": 0.7620192307692307
+    },
+    {
+      "transition": "2010->2011",
+      "shared_plants": 31,
+      "shared_pollinators": 52,
+      "shared_dyads": 1612,
+      "rewiring_count": 292,
+      "species_turnover_link_count": 135,
+      "rewiring_opportunity_rate": 0.18114143920595532,
+      "link_jaccard_dissimilarity": 0.789279112754159
+    }
+  ],
+  "interpretation": {
+    "gate": "PASS for response estimability",
+    "reason": "all five annual transitions contain both changed and unchanged shared dyads, all observed species codes join exactly to the source name tables, and the link-change response is non-degenerate",
+    "not_established": [
+      "true species presence/absence",
+      "sampling-effort-corrected rewiring",
+      "environmental routeability",
+      "decision-structural turnover",
+      "decision-equivalence classes"
+    ]
+  },
+  "next_gate": "construct a frozen conventional-filter dyad table from phenological overlap, flower abundance, plant morphology and pollinator morphology, then test how much annual link-change variation remains before any decision-structure exposure is introduced",
+  "claim_ceiling": "This annual fallback establishes only that the response surface is estimable. It cannot validate routeability or true species turnover because presence is based on positive observed links and no independent decision-structure layer is used."
+}
