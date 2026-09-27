@@ -101,15 +101,19 @@
     "workflow_behavior": "metadata-first; token-aware; uploads inventory even when bytes are unavailable"
   },
   "latest_source_smoke": {
-    "workflow_run": 36286304896,
-    "run_number": 28,
+    "workflow_run": 36286958936,
+    "run_number": 42,
     "conclusion": "success",
-    "artifact_id": 10920493516,
-    "artifact_digest": "sha256:1f3ae680203b0922e31e6f7f8c009772f33be1cf4dbfa6141bbccb35f447a38c",
+    "head_sha": "42dafed46a67ce87ea7e71f13a0d8a40f9dee6ae",
+    "artifact_id": 10921105110,
+    "artifact_digest": "sha256:18e1754da7962f1bd23c38a0c9508160e796324e5cbe803b72e861461cd407b3",
     "response_bytes": "metadata_only_no_bearer_token",
     "trait_bytes": "materialized_and_matches_published_dryad_sha256",
     "annual_fallback": "response_estimability_pass",
-    "response_model_fitted": false,
+    "conventional_filter_table": "complete_case_7186_of_7620",
+    "conventional_filter_cv": "green_primary_and_sensitivities",
+    "response_model_fitted": true,
+    "decision_structure_model_fitted": false,
     "transition_mapping_verified": false
   },
   "next_materialization_gate": "The annual trait/network workbook is verified and usable for detection-sensitive fallback analysis. The 18-subseason response RData remains blocked until an authenticated Dryad route or exact verified mirror is available."
