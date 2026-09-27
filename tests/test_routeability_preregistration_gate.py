@@ -224,6 +224,8 @@ def test_preregistration_template_is_explicitly_blocked():
     assert "{{final_schedule_receipt_sha256}}" in text
     assert "{{final_n_rule_sha256}}" in text
     assert "{{final_n_receipt_sha256}}" in text
+    assert "primary confirmatory H1/H2 experiment uses guided contingent presentation" in text
+    assert "Autonomous terminal-window routing is a separate mechanistic follow-up" in text
 
 
 def test_preregistration_gate_requires_pilot_power_and_human_inputs():
