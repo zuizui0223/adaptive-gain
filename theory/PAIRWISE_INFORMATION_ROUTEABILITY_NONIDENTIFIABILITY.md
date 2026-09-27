@@ -60,6 +60,37 @@ Thus every pairwise mutual-information value is identical between the two archit
 
 The cue-only match is even stronger. The complete three-cue vector has the same exact distribution in both tasks: the four vectors `000, 001, 011, 111` each occur once. Therefore any statistic computed from the cue distribution alone—even one using the full three-cue joint distribution—cannot distinguish the two architectures. The difference enters through the higher-order relation between that matched cue surface and the target.
 
+## Relationality witness — same physical environment, different focal action map
+
+The two tasks can use the **same four physical cue combinations**.
+
+Their cue-to-target maps are:
+
+| cue vector | routeable target | bypass target |
+| --- | ---: | ---: |
+| `000` | 0 | 1 |
+| `001` | 1 | 0 |
+| `011` | 0 | 0 |
+| `111` | 1 | 1 |
+
+Only two cue vectors change target assignment.
+
+Thus the environmental cue surface itself can be held fixed while routeability changes. What changes is the mapping from environmental states to the focal ecological action.
+
+This gives an exact minimal witness for the V5 claim that routeability is **relational**, not an intrinsic scalar property of an environment:
+
+[
+	ext{same environmental cue distribution}
+
+otRightarrow
+	ext{same decision complexity}.
+]
+
+The relevant object is the environment together with the focal action map.
+
+Experimental consequence: the same physical artificial-flower cue combinations can be reused in both architecture groups. The routeability manipulation can therefore be implemented by changing only the learned reward / accept–reject mapping for `000` and `001`, while keeping the physical stimulus alphabet and frequencies matched.
+
+
 
 ## Where the hidden information appears
 
