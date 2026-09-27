@@ -1,0 +1,62 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-pilot-power-gate-v1",
+  "date": "2026-09-27",
+  "status": "nuisance_input_contract_and_conservative_screening_calculator_frozen",
+  "purpose": "freeze what pilot data may inform sample-size planning without leaking the focal architecture-by-access effect",
+  "pilot": {
+    "allowed_nuisance_inputs": [
+      "within-individual binary-response ICC or equivalent repeated-trial correlation from architecture-neutral/procedural or full-information pilot conditions",
+      "randomized-individual dropout / non-completion fraction",
+      "full-information B3 success rate as a procedural learnability diagnostic",
+      "timeout / abandonment fraction for response-window calibration",
+      "colony heterogeneity for later final GLMM simulation"
+    ],
+    "forbidden_inputs": [
+      "observed routeable-versus-bypass difference at B2",
+      "observed contingent-versus-fixed difference at B2",
+      "observed H1 architecture-by-access interaction",
+      "observed H2 budget-localization contrast",
+      "the exact theoretical 0.25 information-ceiling interaction used as a behavioral effect size"
+    ],
+    "unblinding_rule": "pilot nuisance values used for final planning must be frozen before the focal architecture-by-access contrast is opened"
+  },
+  "sesoi": {
+    "required": true,
+    "meaning": "smallest probability-scale H1/H2 interaction worth detecting in the behavioral experiment",
+    "allowed_provenance": [
+      "external_biological_criterion",
+      "independent_prior_study",
+      "practical_decision_threshold"
+    ],
+    "forbidden_provenance": [
+      "theoretical_information_ceiling",
+      "focal_confirmatory_pilot",
+      "posthoc_observed_interaction"
+    ],
+    "freeze_before_final_power_simulation": true
+  },
+  "conservative_screening": {
+    "module": "adaptive_gain/routeability_experiment_power.py",
+    "function": "conservative_routeability_planning_receipt",
+    "variance_bound": "Bernoulli p(1-p) <= 1/4",
+    "repeated_trial_design_effect": "1 + (m-1)*trial_icc",
+    "H1_variance_multiplier": 1,
+    "H2_variance_multiplier": 1.5,
+    "alpha_two_sided": 0.05,
+    "default_target_power": 0.8,
+    "cell_balance": "equal individuals in all 12 architecture x access x budget cells",
+    "counterbalance_rounding": "randomized individuals per cell rounded up to a multiple of four",
+    "status": "screening_only"
+  },
+  "final_sample_size_gate": {
+    "required_before_collection": "replace screening approximation with simulation of the frozen binomial mixed model using pilot nuisance parameters, colony allocation, response-window timeout process and externally frozen SESOI",
+    "cannot_be_finalized_without": [
+      "pilot repeated-trial correlation / individual heterogeneity",
+      "pilot dropout and timeout estimates",
+      "actual colony allocation constraints",
+      "external SESOI for H1 and H2"
+    ],
+    "no_final_N_in_this_gate": true
+  },
+  "claim_boundary": "The calculator can expose implausibly small or large designs and enforce provenance/firewalls. It does not constitute the final powered sample-size justification."
+}
