@@ -70,3 +70,37 @@ def test_response_window_grid_must_be_frozen_ordered_and_within_bound():
             candidate_windows=(1.0, 3.0),
             upper_bound=2.0,
         )
+
+
+def test_pooled_full_information_receipt_exports_balanced_icc_and_dropout():
+    rows = [
+        FullInformationPilotTrial("i1", "c1", True, False, 1),
+        FullInformationPilotTrial("i1", "c1", True, False, 2),
+        FullInformationPilotTrial("i2", "c1", False, False, 1),
+        FullInformationPilotTrial("i2", "c1", False, False, 2),
+        FullInformationPilotTrial("i3", "c2", True, False, 1),
+        FullInformationPilotTrial("i3", "c2", False, False, 2),
+    ]
+    receipt = pooled_full_information_nuisance_receipt(
+        rows,
+        randomized_individual_ids={"i1", "i2", "i3", "i4"},
+    )
+
+    assert receipt["equal_trials_per_individual"] is True
+    assert receipt["trials_per_individual"] == 2
+    assert receipt["trial_icc_moment"] is not None
+    assert 0.0 <= receipt["trial_icc_moment"] <= 1.0
+    assert receipt["randomized_individual_count"] == 4
+    assert receipt["randomized_individual_dropout_fraction"] == 0.25
+
+
+def test_pooled_full_information_receipt_refuses_inconsistent_randomized_ids():
+    rows = [
+        FullInformationPilotTrial("i1", "c1", True, False, 1),
+        FullInformationPilotTrial("i2", "c1", True, False, 1),
+    ]
+    with pytest.raises(ValueError, match="absent from randomized_individual_ids"):
+        pooled_full_information_nuisance_receipt(
+            rows,
+            randomized_individual_ids={"i1"},
+        )
