@@ -144,6 +144,7 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
                 "minimum_h1_directional_rejection_fraction": 0.80,
                 "minimum_h2_hierarchical_pass_fraction": 0.80,
                 "minimum_scenarios_per_n": 2,
+                "minimum_simulations_per_scenario": 1000,
                 "counterbalance_multiple": 4,
             }
         ),
