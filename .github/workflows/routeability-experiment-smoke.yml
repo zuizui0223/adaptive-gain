@@ -1,0 +1,184 @@
+name: Routeability experiment smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/routeability-experiment-smoke.yml"
+      - "adaptive_gain/ecological_routeability_experiment.py"
+      - "adaptive_gain/routeability_experiment_schedule.py"
+      - "adaptive_gain/routeability_trial_validation.py"
+      - "adaptive_gain/routeability_procedural_pilot.py"
+      - "adaptive_gain/routeability_experiment_power.py"
+      - "adaptive_gain/routeability_operating_characteristics.py"
+      - "examples/build_routeability_experiment_stimuli.py"
+      - "examples/build_routeability_experiment_schedule.py"
+      - "examples/build_routeability_procedural_pilot_receipt.py"
+      - "examples/plan_routeability_experiment.py"
+      - "examples/build_routeability_glmm_simulation_scenarios.py"
+      - "examples/simulate_routeability_glmm_operating_characteristics.R"
+      - "validation/routeability_experiment_gate_v1.json"
+      - "validation/routeability_experiment_schedule_gate_v1.json"
+      - "validation/routeability_experiment_analysis_gate_v1.json"
+      - "validation/routeability_procedural_pilot_gate_v1.json"
+      - "validation/routeability_experiment_pilot_power_gate_v1.json"
+      - "validation/routeability_glmm_operating_characteristic_gate_v1.json"
+      - "tests/test_routeability*.py"
+      - "tests/test_ecological_routeability_experiment.py"
+      - "tests/test_pairwise_information_routeability_nonidentifiability.py"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::lme4
+          needs: check
+
+      - name: Install Python package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+
+      - name: Run focused routeability tests
+        run: |
+          python -m pytest -q \
+            tests/test_ecological_routeability_experiment.py \
+            tests/test_pairwise_information_routeability_nonidentifiability.py \
+            tests/test_routeability_experiment_schedule.py \
+            tests/test_routeability_trial_validation.py \
+            tests/test_routeability_procedural_pilot.py \
+            tests/test_routeability_procedural_pilot_exporter.py \
+            tests/test_routeability_experiment_power.py \
+            tests/test_routeability_experiment_pilot_power_gate.py \
+            tests/test_routeability_operating_characteristics.py \
+            tests/test_routeability_glmm_operating_characteristic_gate.py
+
+      - name: Parse final GLMM simulator
+        run: |
+          Rscript -e "parse(file='examples/simulate_routeability_glmm_operating_characteristics.R')"
+
+      - name: Run software-only GLMM fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+
+          cat > artifact/software_fixture_config.json <<'JSON'
+          {
+            "scenarios": [
+              {
+                "scenario_id": "software_fixture_only",
+                "sesoi": {
+                  "h1_probability_interaction": 0.12,
+                  "h2_probability_localization": 0.10,
+                  "provenance": "practical_decision_threshold"
+                },
+                "baseline": {
+                  "bypass_fixed_by_budget": {
+                    "1": 0.50,
+                    "2": 0.60,
+                    "3": 0.70
+                  },
+                  "bypass_access_effect_by_budget": {
+                    "1": 0.01,
+                    "2": 0.02,
+                    "3": 0.01
+                  },
+                  "routeable_fixed_effect_by_budget": {
+                    "1": 0.00,
+                    "2": -0.02,
+                    "3": 0.00
+                  }
+                },
+                "simulation": {
+                  "simulations": 2,
+                  "individuals_per_cell": 16,
+                  "trials_per_individual": 8,
+                  "colony_count": 4,
+                  "individual_sd_logit": 0.30,
+                  "colony_sd_logit": 0.10,
+                  "dropout_fraction": 0.00,
+                  "timeout_fraction": 0.02,
+                  "alpha_two_sided": 0.05,
+                  "seed": 20260927
+                }
+              }
+            ]
+          }
+          JSON
+
+          python examples/build_routeability_glmm_simulation_scenarios.py \
+            artifact/software_fixture_config.json \
+            artifact/software_fixture_scenarios.csv
+
+          Rscript examples/simulate_routeability_glmm_operating_characteristics.R \
+            artifact/software_fixture_scenarios.csv \
+            artifact/software_fixture_summary.csv \
+            artifact/software_fixture_replicates.csv
+
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          summary = list(
+              csv.DictReader(
+                  Path("artifact/software_fixture_summary.csv").open(
+                      newline="",
+                      encoding="utf-8",
+                  )
+              )
+          )
+          replicates = list(
+              csv.DictReader(
+                  Path("artifact/software_fixture_replicates.csv").open(
+                      newline="",
+                      encoding="utf-8",
+                  )
+              )
+          )
+
+          if len(summary) != 1:
+              raise SystemExit("software fixture summary must contain exactly one scenario")
+          if len(replicates) != 2:
+              raise SystemExit("software fixture replicate ledger must contain exactly two simulations")
+          if summary[0]["scenario_id"] != "software_fixture_only":
+              raise SystemExit("software fixture scenario ID changed")
+          if float(summary[0]["fit_success_fraction"]) <= 0:
+              raise SystemExit("software fixture did not complete any GLMM fit")
+          if not all(row["scenario_id"] == "software_fixture_only" for row in replicates):
+              raise SystemExit("software fixture replicate scenario IDs changed")
+
+          print(
+              {
+                  "software_fixture_only": True,
+                  "fit_success_fraction": summary[0]["fit_success_fraction"],
+                  "h1_directional_rejection_fraction": summary[0][
+                      "h1_directional_rejection_fraction"
+                  ],
+                  "h2_hierarchical_pass_fraction": summary[0][
+                      "h2_hierarchical_pass_fraction"
+                  ],
+              }
+          )
+          PY
+
+      - name: Upload software-only fixture
+        uses: actions/upload-artifact@v4
+        with:
+          name: routeability-glmm-software-fixture
+          path: artifact
+          if-no-files-found: error
+          retention-days: 7
