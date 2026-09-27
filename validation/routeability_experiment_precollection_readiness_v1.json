@@ -145,8 +145,15 @@
     },
     {
       "item": "confirmatory preregistration package",
-      "status": "NOT_YET_ASSEMBLED",
-      "blocker": "freeze final N, response window, apparatus details and operational exclusion rules after procedural pilot"
+      "status": "TEMPLATE_READY_FINALIZATION_BLOCKED",
+      "blocker": "final response window, pilot nuisance receipt, final GLMM robustness surface/N, apparatus/cue details, colony allocation, ethics approval, final schedule/stimulus artifacts and pre-collection commit are not yet frozen",
+      "evidence": [
+        "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+        "examples/finalize_routeability_preregistration.py",
+        "validation/routeability_preregistration_gate_v1.json",
+        "tests/test_routeability_preregistration_gate.py"
+      ],
+      "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
   "next_machine_action": "after procedural pilot, ingest the nuisance receipt, freeze external SESOI and robustness grid, run the already-implemented GLMM operating-characteristic simulator, then generate the preregistration package",
