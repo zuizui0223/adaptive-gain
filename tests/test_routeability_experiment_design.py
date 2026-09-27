@@ -51,3 +51,15 @@ def test_experiment_design_keeps_claim_ceiling():
         "would not by itself establish that routeability explains natural plant-pollinator network rewiring",
     ):
         assert phrase in text
+
+
+def test_experiment_design_uses_persistent_context_and_timing_controls():
+    text = _text()
+    for phrase in (
+        "while the context remains visible",
+        "persistent-context rule",
+        "fragile delayed-context memory",
+        "Cue timing and persistence must therefore be matched",
+        "pretested for discriminability",
+    ):
+        assert phrase in text
