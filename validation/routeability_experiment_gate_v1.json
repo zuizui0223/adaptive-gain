@@ -176,5 +176,16 @@
     "between_individual": "four orthogonal cue-symbol flip profiles within every treatment cell",
     "b3_control": "both access arms receive the same complete information surface",
     "sample_size_status": "pending; minimum multiple-of-four cell size is counterbalance mechanics, not powered N"
+  },
+  "analysis_gate": {
+    "path": "validation/routeability_experiment_analysis_gate_v1.json",
+    "primary_model": "binomial logistic mixed model with architecture x access x categorical budget",
+    "H1": "Delta_B2 > 0",
+    "H2": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3) > 0",
+    "multiplicity": "hierarchical H1 then H2",
+    "independent_unit": "individual forager",
+    "repeated_unit": "trial",
+    "colony": "random intercept where applicable",
+    "sample_size_status": "pending nuisance-parameter calibration"
   }
 }
