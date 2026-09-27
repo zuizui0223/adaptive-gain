@@ -59,3 +59,14 @@ def test_source_manifest_freezes_published_file_identity():
     assert traits["target_file"]["file_id"] == 449108
     assert traits["target_file"]["digest_type"] == "sha-256"
     assert len(traits["target_file"]["published_digest"]) == 64
+
+
+def test_source_manifest_pins_trait_mirror_without_trusting_name_alone():
+    data = json.loads(SOURCES.read_text(encoding="utf-8"))
+    traits = data["sources"][1]
+    mirror = traits["public_mirror_candidate"]
+    assert mirror["repository"] == "Ecological-Complexity-Lab/emln_package"
+    assert len(mirror["commit"]) == 40
+    assert mirror["size_bytes"] == traits["target_file"]["size_bytes"]
+    assert mirror["status"] == "pinned_pending_dryad_sha256_verification"
+    assert "published Dryad digest" in mirror["admission_rule"]
