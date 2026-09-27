@@ -264,6 +264,29 @@
       "next_gate": "freeze an independent cognition/decision exposure without redefining the conventional baseline",
       "claim_boundary": "predictive filter attribution only; no causal primacy, decision-equivalence, or routeability inference",
       "regression_test": "tests/test_villavicencio_filter_block_ablation_result.py"
+    },
+    {
+      "path": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
+      "status": "preferred_direct_empirical_test_frozen_not_in_initial_submission",
+      "central_test": "matched four-state cue architectures crossed with contingent versus fixed information access under a two-cue budget",
+      "exact_contrast": {
+        "routeable_costs": "C_A=2,C_F=3",
+        "bypass_control_costs": "C_A=C_F=2",
+        "matched": "four states, 2+2 targets, three unit-cost binary cues, identical per-cue outcome multiplicities",
+        "uniform_information_ceiling": {
+          "routeable_contingent": 1,
+          "routeable_fixed_terminal_pair": 0.75,
+          "control_contingent": 1,
+          "control_fixed_terminal_pair": 1,
+          "interaction": 0.25
+        }
+      },
+      "budget_ladder": "B=1 below adaptive cost; B=2 routeability-sensitive window; B=3 above fixed cost",
+      "independent_unit": "individual forager, not trial",
+      "gate": "validation/routeability_experiment_gate_v1.json",
+      "formal_module": "adaptive_gain/ecological_routeability_experiment.py",
+      "promotion_rule": "preferred first direct empirical test because branch structure is manipulated independently of species composition and observed network response",
+      "claim_boundary": "a positive controlled experiment would establish behavioral consequences of matched cue architecture, not natural-network rewiring or ecosystem-level effects"
     }
   ]
 }
