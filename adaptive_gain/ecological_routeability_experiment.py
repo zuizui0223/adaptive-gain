@@ -41,6 +41,8 @@ class ExperimentalRouteabilityContrast:
     control_adaptive_accuracy: float
     same_pairwise_information_signatures: bool
     same_full_cue_joint_distribution: bool
+    same_physical_cue_vectors: bool
+    target_relabelled_cue_vector_count: int
     routeable_terminal_pair_target_information_bits: float
     control_terminal_pair_target_information_bits: float
     routeable_context_given_terminals_information_bits: float
@@ -64,6 +66,8 @@ class ExperimentalRouteabilityContrast:
             and self.control_adaptive_accuracy == 1.0
             and self.same_pairwise_information_signatures
             and self.same_full_cue_joint_distribution
+            and self.same_physical_cue_vectors
+            and self.target_relabelled_cue_vector_count == 2
             and self.routeable_terminal_pair_target_information_bits == 0.5
             and self.control_terminal_pair_target_information_bits == 1.0
             and self.routeable_context_given_terminals_information_bits == 0.5
@@ -279,6 +283,29 @@ def _binary_unlabeled_pair_signature(
 
 
 
+
+def cue_target_mapping(
+    task: FiniteTask,
+    query_names: tuple[str, ...] = ("q_left", "q_route", "q_right"),
+) -> tuple[tuple[tuple[object, ...], object], ...]:
+    """Return the physical cue-vector to focal-target mapping.
+
+    The cue vector is the apparatus-visible environmental state. Comparing
+    mappings across tasks therefore separates a shared physical stimulus
+    surface from the task-specific target/reward assignment.
+    """
+
+    lookup = {query.name: query for query in task.queries}
+    missing = [name for name in query_names if name not in lookup]
+    if missing:
+        raise ValueError(f"unknown query names: {missing!r}")
+
+    rows = []
+    for i, world in enumerate(task.worlds):
+        vector = tuple(lookup[name].outcomes[i] for name in query_names)
+        rows.append((vector, world.target))
+    return tuple(sorted(rows, key=lambda item: repr(item[0])))
+
 def cue_joint_distribution(
     task: FiniteTask,
     query_names: tuple[str, ...] = ("q_left", "q_route", "q_right"),
@@ -351,6 +378,17 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         cue_joint_distribution(routeable)
         == cue_joint_distribution(control)
     )
+    routeable_cue_target_mapping = cue_target_mapping(routeable)
+    control_cue_target_mapping = cue_target_mapping(control)
+    routeable_vectors = tuple(vector for vector, _ in routeable_cue_target_mapping)
+    control_vectors = tuple(vector for vector, _ in control_cue_target_mapping)
+    same_physical_cue_vectors = routeable_vectors == control_vectors
+    target_relabelled_cue_vector_count = sum(
+        route_target != control_target
+        for (route_vector, route_target), (control_vector, control_target)
+        in zip(routeable_cue_target_mapping, control_cue_target_mapping)
+        if route_vector == control_vector
+    )
     routeable_terminal_pair_target_information_bits = (
         uniform_target_information_for_query_bundle(
             routeable, ("q_left", "q_right")
@@ -397,6 +435,8 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         control_adaptive_accuracy=control_adaptive_accuracy,
         same_pairwise_information_signatures=same_pairwise_information_signatures,
         same_full_cue_joint_distribution=same_full_cue_joint_distribution,
+        same_physical_cue_vectors=same_physical_cue_vectors,
+        target_relabelled_cue_vector_count=target_relabelled_cue_vector_count,
         routeable_terminal_pair_target_information_bits=(
             routeable_terminal_pair_target_information_bits
         ),
