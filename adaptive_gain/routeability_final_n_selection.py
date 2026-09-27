@@ -47,6 +47,7 @@ class FinalNRule:
 class CandidateNReceipt:
     individuals_per_cell: int
     scenario_count: int
+    robustness_ids: tuple[str, ...]
     worst_fit_success_fraction: float
     worst_h1_directional_rejection_fraction: float
     worst_h2_hierarchical_pass_fraction: float
@@ -65,6 +66,7 @@ class FinalNSelectionReceipt:
 
 REQUIRED_COLUMNS = {
     "scenario_id",
+    "robustness_id",
     "individuals_per_cell",
     "fit_success_fraction",
     "h1_directional_rejection_fraction",
@@ -102,6 +104,20 @@ def select_final_individuals_per_cell(
     rule.validated()
     rows = _read_rows(power_surface_csv)
 
+    effect_signatures = {
+        (
+            float(row["expected_h1_delta_b2"]),
+            float(row["expected_h2_localization"]),
+            row["sesoi_provenance"].strip(),
+        )
+        for row in rows
+    }
+    if len(effect_signatures) != 1:
+        raise ValueError(
+            "all operating-characteristic rows must use the same frozen "
+            "H1/H2 SESOI values and SESOI provenance"
+        )
+
     grouped: dict[int, list[dict[str, str]]] = {}
     for row in rows:
         n = int(row["individuals_per_cell"])
@@ -113,6 +129,26 @@ def select_final_individuals_per_cell(
                 f"{rule.counterbalance_multiple}"
             )
         grouped.setdefault(n, []).append(row)
+
+    robustness_sets: dict[int, set[str]] = {}
+    for n, group in grouped.items():
+        ids = [row["robustness_id"].strip() for row in group]
+        if any(not value for value in ids):
+            raise ValueError("robustness_id values must be non-empty")
+        if len(ids) != len(set(ids)):
+            raise ValueError(
+                f"N={n} contains duplicate robustness_id values"
+            )
+        robustness_sets[n] = set(ids)
+
+    reference_n = min(robustness_sets)
+    reference_robustness = robustness_sets[reference_n]
+    for n, values in robustness_sets.items():
+        if values != reference_robustness:
+            raise ValueError(
+                "every candidate N must be evaluated on the exact same "
+                "robustness_id set"
+            )
 
     receipts = []
     for n in sorted(grouped):
@@ -142,6 +178,7 @@ def select_final_individuals_per_cell(
             CandidateNReceipt(
                 individuals_per_cell=n,
                 scenario_count=len(group),
+                robustness_ids=tuple(sorted(robustness_sets[n])),
                 worst_fit_success_fraction=worst_fit,
                 worst_h1_directional_rejection_fraction=worst_h1,
                 worst_h2_hierarchical_pass_fraction=worst_h2,
