@@ -64,10 +64,13 @@ def main() -> None:
     rows = []
     seen_ids = set()
     for item in scenarios:
-        scenario_id = str(item["scenario_id"])
+        scenario_id = str(item["scenario_id"]).strip()
         if not scenario_id or scenario_id in seen_ids:
             raise ValueError("scenario_id values must be non-empty and unique")
         seen_ids.add(scenario_id)
+        robustness_id = str(item["robustness_id"]).strip()
+        if not robustness_id:
+            raise ValueError("robustness_id must be non-empty")
 
         sesoi = RouteabilitySESoi(
             h1_probability_interaction=float(item["sesoi"]["h1_probability_interaction"]),
@@ -131,6 +134,7 @@ def main() -> None:
 
         row = {
             "scenario_id": scenario_id,
+            "robustness_id": robustness_id,
             "simulations": simulations,
             "individuals_per_cell": individuals_per_cell,
             "trials_per_individual": trials_per_individual,
