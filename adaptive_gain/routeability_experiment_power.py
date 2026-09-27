@@ -17,6 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from math import ceil
 from statistics import NormalDist
+from typing import Mapping
 
 
 ALLOWED_SESOI_PROVENANCE = {
@@ -79,6 +80,54 @@ class RouteabilityPilotNuisance:
             )
         return self
 
+
+
+def pilot_nuisance_from_procedural_receipt(
+    receipt: Mapping[str, object],
+    *,
+    source: str = "frozen_procedural_pilot_receipt",
+) -> RouteabilityPilotNuisance:
+    """Convert a pooled procedural-pilot receipt into power nuisance inputs.
+
+    The conversion requires a balanced repeated-trial ICC estimate and an
+    explicit randomized-individual dropout fraction. It rejects receipts that
+    indicate the focal architecture contrast was opened.
+    """
+
+    if receipt.get("focal_architecture_contrast_opened") is not False:
+        raise ValueError(
+            "procedural pilot receipt must certify that the focal architecture contrast was not opened"
+        )
+
+    trial_icc = receipt.get("trial_icc_moment")
+    dropout = receipt.get("randomized_individual_dropout_fraction")
+    success = receipt.get("pooled_success_fraction")
+    timeout = receipt.get("pooled_timeout_fraction")
+
+    missing = [
+        name
+        for name, value in (
+            ("trial_icc_moment", trial_icc),
+            ("randomized_individual_dropout_fraction", dropout),
+            ("pooled_success_fraction", success),
+            ("pooled_timeout_fraction", timeout),
+        )
+        if value is None
+    ]
+    if missing:
+        raise ValueError(
+            "procedural pilot receipt is missing frozen nuisance inputs: "
+            + ", ".join(missing)
+        )
+
+    return RouteabilityPilotNuisance(
+        trial_icc=float(trial_icc),
+        randomized_individual_dropout=float(dropout),
+        full_information_success=float(success),
+        timeout_fraction=float(timeout),
+        source=source,
+        focal_architecture_access_contrast_opened=False,
+    ).validated()
 
 @dataclass(frozen=True)
 class RouteabilitySESoi:
