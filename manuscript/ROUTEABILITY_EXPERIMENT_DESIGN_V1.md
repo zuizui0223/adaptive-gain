@@ -75,6 +75,18 @@ The match is stronger still: the **full three-cue joint distribution** is identi
 
 Thus the environment-side distribution of cue combinations is exactly matched. What differs is how the same cue-combination surface maps onto the focal target/action structure.
 
+The physical implementation can therefore reuse the same four cue combinations in both architecture groups:
+
+| cue vector | routeable target | bypass target |
+| --- | ---: | ---: |
+| `000` | 0 | 1 |
+| `001` | 1 | 0 |
+| `011` | 0 | 0 |
+| `111` | 1 | 1 |
+
+Only `000` and `001` change reward / accept–reject assignment. The cue symbols, cue combinations and their frequencies need not change between architecture groups.
+
+This is the cleanest experimental expression of the relational claim: routeability changes while the physical environmental cue surface is held fixed because the focal action map changes.
 
 Yet the exact resolution costs differ:
 
