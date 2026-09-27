@@ -49,5 +49,13 @@
     "schedule feasible under available colony/individual supply",
     "sample-size operating-characteristic analysis frozen before confirmatory allocation"
   ],
-  "claim_ceiling": "The pilot can establish operational measurability and nuisance calibration only; it is not an empirical routeability test."
+  "claim_ceiling": "The pilot can establish operational measurability and nuisance calibration only; it is not an empirical routeability test.",
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_procedural_pilot.py",
+    "tests": "tests/test_routeability_procedural_pilot.py",
+    "outputs": [
+      "deterministic response-window selection from a predeclared candidate grid",
+      "pooled B=3 nuisance receipt with architecture/access contrasts absent from the output"
+    ]
+  }
 }
