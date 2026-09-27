@@ -425,7 +425,7 @@ def test_finalizer_rejects_changed_final_n_rule_after_selection(tmp_path):
     payload = _prepare_artifacts(tmp_path)
     rule_path = tmp_path / payload["final_n_rule_reference"]
     rule = json.loads(rule_path.read_text(encoding="utf-8"))
-    rule["minimum_h2_hierarchical_pass_fraction"] = 0.90
+    rule["minimum_h2_hierarchical_pass_fraction"] = 0.79
     rule_path.write_text(
         json.dumps(rule, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
