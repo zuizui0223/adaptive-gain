@@ -118,20 +118,6 @@ def select_final_individuals_per_cell(
     rule.validated()
     rows = _read_rows(power_surface_csv)
 
-    effect_signatures = {
-        (
-            float(row["expected_h1_delta_b2"]),
-            float(row["expected_h2_localization"]),
-            row["sesoi_provenance"].strip(),
-        )
-        for row in rows
-    }
-    if len(effect_signatures) != 1:
-        raise ValueError(
-            "all operating-characteristic rows must use the same frozen "
-            "H1/H2 SESOI values and SESOI provenance"
-        )
-
     h1_values = {float(row["expected_h1_delta_b2"]) for row in rows}
     h2_values = {float(row["expected_h2_localization"]) for row in rows}
     provenance_values = {row["sesoi_provenance"].strip() for row in rows}
