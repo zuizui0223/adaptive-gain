@@ -232,9 +232,13 @@ Procedural pilot nuisance receipt:
 
 {{pilot_receipt_reference}}
 
+SHA-256: `{{pilot_receipt_sha256}}`
+
 Final operating-characteristic output:
 
 {{power_surface_reference}}
+
+SHA-256: `{{power_surface_sha256}}`
 
 Final N decision rule:
 
@@ -250,7 +254,11 @@ Frozen pre-collection commit: {{frozen_precollection_commit}}
 
 Final schedule artifact: {{final_schedule_reference}}
 
+SHA-256: `{{final_schedule_sha256}}`
+
 Final stimulus artifact: {{final_stimulus_reference}}
+
+SHA-256: `{{final_stimulus_sha256}}`
 
 Any deviations from this preregistration are documented before opening the confirmatory treatment contrasts whenever possible.
 
