@@ -165,5 +165,16 @@
       "control_context_given_terminals_information_bits": 0,
       "interpretation": "in the routeable task half a target bit remains outside the fixed terminal pair and is supplied by context; in the bypass control the terminal pair already contains the full target bit"
     }
+  },
+  "schedule": {
+    "gate": "validation/routeability_experiment_schedule_gate_v1.json",
+    "module": "adaptive_gain/routeability_experiment_schedule.py",
+    "exporter": "examples/build_routeability_experiment_schedule.py",
+    "design": "2 architecture x 2 access x 3 budget between-subject factorial",
+    "treatment_cells": 12,
+    "within_individual": "four-state blocks, terminal-side balance, state-independent fixed-order balance",
+    "between_individual": "four orthogonal cue-symbol flip profiles within every treatment cell",
+    "b3_control": "both access arms receive the same complete information surface",
+    "sample_size_status": "pending; minimum multiple-of-four cell size is counterbalance mechanics, not powered N"
   }
 }
