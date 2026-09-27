@@ -78,6 +78,9 @@ The contrast therefore isolates a genuinely **higher-order conditional organizat
 
 This statement is deliberately about pairwise information quantities that are invariant to relabeling binary cue symbols. Fixed semantic 0/1 labels are not claimed to have identical signed contingency tables in every target-cue pair.
 
+The higher-order difference is also explicit. Under uniform states, the fixed terminal pair carries `0.5 bit` about the target in the routeable task but `1.0 bit` in the bypass control. Conditional on that terminal pair, the context cue contributes `0.5 bit` in the routeable task and `0 bit` in the control. The route cue is therefore non-bypassable only in the strict-gain architecture.
+
+
 
 Executable source:
 
