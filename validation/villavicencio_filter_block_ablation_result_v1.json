@@ -1,0 +1,103 @@
+{
+  "schema": "adaptive-gain-villavicencio-filter-block-ablation-result-v1",
+  "date": "2026-09-27",
+  "status": "green_phenology_reproducible_both_endpoints",
+  "scope": "annual detection-sensitive fallback",
+  "source": {
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "gate": "validation/villavicencio_filter_block_ablation_gate_v1.json",
+    "baseline_result": "validation/villavicencio_conventional_filter_cv_result_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36306969046,
+    "run_number": 54,
+    "conclusion": "success",
+    "head_sha": "5550ff177a994bf275d6ec0e262b5e418b3c587d",
+    "artifact_id": 10927109831,
+    "artifact_digest": "sha256:ee1af78351833b75916a90e482f274f4ca922d16917bab1d53061146f78256d5"
+  },
+  "frozen_rule": {
+    "reproducible_incremental_information": "drop-block pooled held-out log-loss is worse than full model and delta log-loss is positive in every primary held-out transition",
+    "primary_scope": "strict_core_2008_2011"
+  },
+  "primary": {
+    "gain": {
+      "n": 4480,
+      "full_model_log_loss": 0.25467260634127686,
+      "blocks": {
+        "phenology": {
+          "classification": "reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": 0.07671189331237421,
+          "positive_folds": "3/3"
+        },
+        "abundance": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.0027007949176909296,
+          "positive_folds": "2/3"
+        },
+        "plant_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.003739021741072046,
+          "positive_folds": "1/3"
+        },
+        "pollinator_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.0021120399049682215,
+          "positive_folds": "2/3"
+        }
+      }
+    },
+    "loss": {
+      "n": 674,
+      "full_model_log_loss": 0.6600786511109732,
+      "blocks": {
+        "phenology": {
+          "classification": "reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": 0.030255186941361423,
+          "positive_folds": "3/3"
+        },
+        "abundance": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.0008048037345169679,
+          "positive_folds": "2/3"
+        },
+        "plant_morphology": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.009795563104293192,
+          "positive_folds": "2/3"
+        },
+        "pollinator_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.009491946419249886,
+          "positive_folds": "1/3"
+        }
+      }
+    }
+  },
+  "sensitivity_consistency": {
+    "near_core_2007_2011": {
+      "phenology_gain": "reproducible_incremental_information_4_of_4",
+      "phenology_loss": "reproducible_incremental_information_4_of_4"
+    },
+    "all_annual_2006_2011": {
+      "phenology_gain": "reproducible_incremental_information_5_of_5",
+      "phenology_loss": "reproducible_incremental_information_5_of_5"
+    }
+  },
+  "ecological_interpretation": {
+    "supported": "phenological overlap is the only prespecified conventional-filter block that carries reproducible incremental held-out information for both annual link gains and losses under the frozen primary rule, and the same classification persists in both broader sampling sensitivities",
+    "gain_loss_asymmetry": "the absolute held-out log-loss penalty from removing phenology is larger for gains than losses in the primary scope",
+    "morphology": "raw plant and pollinator morphology blocks do not meet the frozen all-primary-fold reproducibility rule for either endpoint; plant morphology is fold-unstable for losses",
+    "abundance": "flower abundance has positive pooled information but is fold-unstable for both endpoints"
+  },
+  "not_established": [
+    "causal primacy of phenology",
+    "absence of morphological effects under other model structures",
+    "true species turnover",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "next_gate": "freeze and test an independent cognition/decision exposure against this phenology-dominated conventional baseline without redefining conventional filters",
+  "claim_ceiling": "The result identifies a reproducible predictive filter pattern for annual link dynamics. It is not a causal decomposition and does not validate routeability."
+}
