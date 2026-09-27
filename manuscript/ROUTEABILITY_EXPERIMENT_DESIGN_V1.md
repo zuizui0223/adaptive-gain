@@ -334,6 +334,31 @@ Freeze before data collection:
 - access-mode assignment;
 - colony balancing where applicable.
 
+### Machine-generated schedule
+
+The repository now contains a deterministic schedule builder for a clean between-subject implementation:
+
+- architecture is between subjects;
+- access mode is between subjects;
+- budget is between subjects;
+- the full factorial therefore has 12 treatment cells.
+
+Within every individual, each four-trial block contains all four ecological states exactly once. Terminal cue positions are swapped on half of trials, and fixed terminal order is balanced independently of state. At (B=1), fixed access uses terminal A and terminal B equally often across trials rather than permanently privileging one terminal cue. At (B=3), both access arms receive the same complete three-cue surface.
+
+Binary cue symbols are counterbalanced across individuals with four orthogonal flip profiles:
+
+`000, 011, 101, 110`.
+
+Within every treatment cell this balances each cue's symbol mapping and all pairwise combinations of cue-symbol flips.
+
+Executable surface:
+
+- `adaptive_gain/routeability_experiment_schedule.py`;
+- `examples/build_routeability_experiment_schedule.py`;
+- `validation/routeability_experiment_schedule_gate_v1.json`.
+
+The schedule builder requires the number of individuals per cell to be a multiple of four for exact symbol counterbalancing. Its minimum of four individuals per cell is a **software balance requirement only**. It is not the final powered biological sample size.
+
 ## Exclusion rules
 
 Define before data collection.
