@@ -61,7 +61,33 @@
         "q_right": 1,
         "count": 1
       }
-    ]
+    ],
+    "same_physical_cue_vectors": true,
+    "physical_cue_vectors": [
+      "000",
+      "001",
+      "011",
+      "111"
+    ],
+    "target_mapping": {
+      "routeable": {
+        "111": 1,
+        "000": 0,
+        "001": 1,
+        "011": 0
+      },
+      "bypass_control": {
+        "111": 1,
+        "000": 1,
+        "001": 0,
+        "011": 0
+      }
+    },
+    "target_relabelled_vectors": [
+      "000",
+      "001"
+    ],
+    "relational_interpretation": "the physical cue environment is identical; routeability changes because the focal target/reward mapping changes"
   },
   "exact_costs": {
     "routeable": {
@@ -148,7 +174,9 @@
       "Fauria et al. 2002, DOI 10.1242/jeb.205.7.1009",
       "Graver et al. 2026, DOI 10.1242/jeb.251126",
       "Spaethe et al. 2026, Bees flexibly adjust decision strategies to information content in a foraging task"
-    ]
+    ],
+    "fixed_access_timing": "two sequential stages matched to contingent access: first terminal cue remains visible while the second terminal cue is presented; A-to-B versus B-to-A order is state-independent and counterbalanced",
+    "access_difference_ceiling": "do not implement fixed access as simultaneous two-cue exposure; both arms are sequentially staged and differ only in whether the second cue identity depends on the first cue outcome"
   },
   "routing_phases": {
     "guided": {
