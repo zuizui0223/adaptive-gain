@@ -65,6 +65,15 @@
         "size_bytes": 230652,
         "digest_type": "sha-256",
         "published_digest": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459"
+      },
+      "public_mirror_candidate": {
+        "repository": "Ecological-Complexity-Lab/emln_package",
+        "commit": "07797e23510cec0a68257ba405d763b60b8e6968",
+        "path": "data/emln_db_datasets/65_Temporal_Chacoff_2020/plant_pollinator_data.xlsx",
+        "github_blob_sha": "99eef735b001751b4407f8fae67d271c2c63a1f3",
+        "size_bytes": 230652,
+        "status": "pinned_pending_dryad_sha256_verification",
+        "admission_rule": "admit only if materialized SHA-256 equals the published Dryad digest"
       }
     }
   ],
@@ -76,7 +85,8 @@
     "published_bytes": "materialize only through an authenticated Dryad download route or a verified public institutional mirror",
     "dryad_token_secret": "optional repository secret DRYAD_TOKEN; absence must not fail metadata smoke",
     "no_credential_fallback": "record metadata_only_bytes_unavailable and retain source manifests",
-    "analysis_gate": "no response modelling until exact source bytes are materialized and checksummed"
+    "analysis_gate": "no response modelling until exact source bytes are materialized and checksummed",
+    "verified_public_mirror": "allowed only when the mirror is commit-pinned and its materialized bytes match the published Dryad digest"
   },
   "implementation": {
     "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
@@ -94,5 +104,5 @@
     "response_model_fitted": false,
     "transition_mapping_verified": false
   },
-  "next_materialization_gate": "Provide an authenticated Dryad byte route or an exact verified mirror; then require local SHA-256 to match the published Dryad digest before any response analysis."
+  "next_materialization_gate": "Trait workbook: verify the pinned EMLN GitHub mirror against the published Dryad SHA-256. Response RData: still requires an authenticated Dryad byte route or another exact verified mirror."
 }
