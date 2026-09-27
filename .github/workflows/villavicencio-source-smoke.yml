@@ -359,6 +359,7 @@ jobs:
           fi
 
           XLSX="$(cat artifact/traits_path.txt)"
+          python -m pip install -e .
           python examples/villavicencio_annual_stage1_from_xlsx.py \
             "$XLSX" \
             --output artifact/annual_stage1_detection_sensitive.json \
