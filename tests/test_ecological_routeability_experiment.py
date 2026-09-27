@@ -1,6 +1,7 @@
 from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
     cue_joint_distribution,
+    cue_target_mapping,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
     pairwise_information_signature,
@@ -30,6 +31,8 @@ def test_experimental_contrast_is_exact_and_marginally_matched():
     assert receipt.control_adaptive_accuracy == 1.0
     assert receipt.same_pairwise_information_signatures
     assert receipt.same_full_cue_joint_distribution
+    assert receipt.same_physical_cue_vectors
+    assert receipt.target_relabelled_cue_vector_count == 2
     assert receipt.routeable_terminal_pair_target_information_bits == 0.5
     assert receipt.control_terminal_pair_target_information_bits == 1.0
     assert receipt.routeable_context_given_terminals_information_bits == 0.5
@@ -190,3 +193,33 @@ def test_routeable_and_control_have_identical_full_cue_joint_distribution():
         ((0, 1, 1), 1),
         ((1, 1, 1), 1),
     )
+
+
+def test_same_physical_cue_vectors_receive_different_target_mapping():
+    routeable = dict(cue_target_mapping(minimal_strict_gain_standard_task()))
+    control = dict(cue_target_mapping(bypass_matched_control_task()))
+
+    assert set(routeable) == set(control) == {
+        (0, 0, 0),
+        (0, 0, 1),
+        (0, 1, 1),
+        (1, 1, 1),
+    }
+    assert routeable == {
+        (0, 0, 0): 0,
+        (0, 0, 1): 1,
+        (0, 1, 1): 0,
+        (1, 1, 1): 1,
+    }
+    assert control == {
+        (0, 0, 0): 1,
+        (0, 0, 1): 0,
+        (0, 1, 1): 0,
+        (1, 1, 1): 1,
+    }
+    changed = {
+        vector
+        for vector in routeable
+        if routeable[vector] != control[vector]
+    }
+    assert changed == {(0, 0, 0), (0, 0, 1)}
