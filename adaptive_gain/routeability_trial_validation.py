@@ -93,6 +93,11 @@ def validate_routeability_trial_log(
         if not isfinite(latency) or latency < 0:
             errors.append("invalid_response_latency")
 
+    if observed.terminal_decision is not None and observed.response_latency_seconds is None:
+        errors.append("missing_response_latency_for_terminal_decision")
+    if observed.terminal_decision is None and observed.response_latency_seconds is not None:
+        errors.append("response_latency_without_terminal_decision")
+
     if observed.apparatus_error:
         errors.append("apparatus_error")
 
