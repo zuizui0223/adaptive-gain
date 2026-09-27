@@ -23,6 +23,7 @@ required_columns <- c(
   "individuals_per_cell",
   "trials_per_individual",
   "colony_count",
+  "colony_block_counts",
   "individual_sd_logit",
   "colony_sd_logit",
   "dropout_fraction",
@@ -248,6 +249,19 @@ simulate_one <- function(row, simulation_index) {
   individuals_per_cell <- as.integer(row$individuals_per_cell)
   trials_per_individual <- as.integer(row$trials_per_individual)
   colony_count <- as.integer(row$colony_count)
+  colony_block_counts <- as.integer(
+    strsplit(as.character(row$colony_block_counts), ";", fixed = TRUE)[[1]]
+  )
+  if (
+    length(colony_block_counts) != colony_count ||
+      any(!is.finite(colony_block_counts)) ||
+      any(colony_block_counts < 1) ||
+      sum(colony_block_counts) != individuals_per_cell
+  ) {
+    stop(
+      "colony_block_counts must contain one positive block count per colony and sum to individuals_per_cell"
+    )
+  }
   individual_sd <- as.numeric(row$individual_sd_logit)
   colony_sd <- as.numeric(row$colony_sd_logit)
   dropout_fraction <- as.numeric(row$dropout_fraction)
@@ -302,53 +316,60 @@ simulate_one <- function(row, simulation_index) {
           random_sd = population_random_sd
         )
 
-        for (individual_index in seq_len(individuals_per_cell)) {
-          randomized_individual_count <- randomized_individual_count + 1L
-          individual_id <- paste(
-            row$scenario_id,
-            paste0("B", budget),
-            architecture,
-            access_mode,
-            paste0("i", individual_index),
-            sep = "__"
-          )
-          colony_index <- ((individual_index - 1L) %% colony_count) + 1L
+        individual_index <- 0L
+        for (colony_index in seq_len(colony_count)) {
           colony_id <- paste0("c", colony_index)
-
-          if (runif(1) < dropout_fraction) {
-            next
-          }
-          retained_individual_count <- retained_individual_count + 1L
-          individual_effect <- rnorm(1, mean = 0, sd = individual_sd)
-          conditional_correct <- inv_logit(
-            base_logit + individual_effect + colony_effect[colony_index]
-          )
-
-          for (trial_index in seq_len(trials_per_individual)) {
-            timeout <- rbinom(1, size = 1, prob = timeout_fraction)
-            if (timeout == 1) {
-              success <- 0L
-              timeout_count <- timeout_count + 1L
-            } else {
-              success <- rbinom(
-                1,
-                size = 1,
-                prob = conditional_correct
-              )
-            }
-
-            rows[[row_index]] <- data.frame(
-              success = success,
-              timeout = timeout,
-              architecture = architecture,
-              access_mode = access_mode,
-              budget = paste0("B", budget),
-              individual = individual_id,
-              colony = colony_id,
-              stringsAsFactors = FALSE
+          for (within_colony_index in seq_len(colony_block_counts[colony_index])) {
+            individual_index <- individual_index + 1L
+            randomized_individual_count <- randomized_individual_count + 1L
+            individual_id <- paste(
+              row$scenario_id,
+              paste0("B", budget),
+              architecture,
+              access_mode,
+              colony_id,
+              paste0("i", within_colony_index),
+              sep = "__"
             )
-            row_index <- row_index + 1L
+
+            if (runif(1) < dropout_fraction) {
+              next
+            }
+            retained_individual_count <- retained_individual_count + 1L
+            individual_effect <- rnorm(1, mean = 0, sd = individual_sd)
+            conditional_correct <- inv_logit(
+              base_logit + individual_effect + colony_effect[colony_index]
+            )
+
+            for (trial_index in seq_len(trials_per_individual)) {
+              timeout <- rbinom(1, size = 1, prob = timeout_fraction)
+              if (timeout == 1) {
+                success <- 0L
+                timeout_count <- timeout_count + 1L
+              } else {
+                success <- rbinom(
+                  1,
+                  size = 1,
+                  prob = conditional_correct
+                )
+              }
+
+              rows[[row_index]] <- data.frame(
+                success = success,
+                timeout = timeout,
+                architecture = architecture,
+                access_mode = access_mode,
+                budget = paste0("B", budget),
+                individual = individual_id,
+                colony = colony_id,
+                stringsAsFactors = FALSE
+              )
+              row_index <- row_index + 1L
+            }
           }
+        }
+        if (individual_index != individuals_per_cell) {
+          stop("colony block allocation did not generate individuals_per_cell")
         }
       }
     }
@@ -627,6 +648,7 @@ for (scenario_index in seq_len(nrow(scenarios))) {
     individuals_per_cell = as.integer(row$individuals_per_cell),
     trials_per_individual = as.integer(row$trials_per_individual),
     colony_count = as.integer(row$colony_count),
+    colony_block_counts = row$colony_block_counts,
     individual_sd_logit = as.numeric(row$individual_sd_logit),
     colony_sd_logit = as.numeric(row$colony_sd_logit),
     dropout_fraction = as.numeric(row$dropout_fraction),
