@@ -37,6 +37,13 @@ def test_routeability_stimulus_builder_exports_exact_frozen_surface(tmp_path):
     assert receipt["primary_budget"] == 2
     assert receipt["stimulus_row_count"] == 8
     assert receipt["primary_information_interaction"] == 0.25
+    ladder = {
+        row["budget"]: row
+        for row in receipt["budget_information_ceilings"]
+    }
+    assert ladder[1]["architecture_by_access_interaction"] == 0.0
+    assert ladder[2]["architecture_by_access_interaction"] == 0.25
+    assert ladder[3]["architecture_by_access_interaction"] == 0.0
     contrast = receipt["contrast"]
     assert contrast["routeable_adaptive_cost"] == 2
     assert contrast["routeable_fixed_cost"] == 3
