@@ -66,3 +66,15 @@ def test_experiment_design_uses_persistent_context_and_timing_controls():
         "pretested for discriminability",
     ):
         assert phrase in text
+
+
+def test_experiment_design_separates_guided_and_autonomous_routing():
+    text = _text()
+    for phrase in (
+        "Phase 1 — guided contingent presentation",
+        "Phase 2 — autonomous routing",
+        "context = 0 → inspect terminal B",
+        "context = 1 → inspect terminal A",
+        "policy-learning or action-selection bottleneck",
+    ):
+        assert phrase in text
