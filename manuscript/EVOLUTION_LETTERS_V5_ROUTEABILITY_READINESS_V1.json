@@ -344,6 +344,13 @@
         "rule": "no architecture-specific accuracy exclusion after random assignment; use fixed-dose architecture-specific training",
         "diagnostic": "report training acquisition/completion by randomized cell",
         "hard_criterion_boundary": "criterion-reacher analysis is per-protocol if operationally unavoidable"
+      },
+      "primary_endpoint_firewall": {
+        "status": "frozen",
+        "endpoint": "correct decision within response window",
+        "timeout": "retained and scored as primary failure",
+        "conditional_accuracy": "secondary",
+        "response_window": "pilot-calibrated before confirmatory contrast"
       }
     }
   ]
