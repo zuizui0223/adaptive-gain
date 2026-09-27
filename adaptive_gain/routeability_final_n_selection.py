@@ -19,6 +19,7 @@ class FinalNRule:
     minimum_h1_directional_rejection_fraction: float
     minimum_h2_hierarchical_pass_fraction: float
     minimum_scenarios_per_n: int = 2
+    minimum_simulations_per_scenario: int = 1000
     counterbalance_multiple: int = 4
 
     def validated(self) -> "FinalNRule":
@@ -38,6 +39,13 @@ class FinalNRule:
                 raise ValueError(f"{name} must be in (0,1]")
         if type(self.minimum_scenarios_per_n) is not int or self.minimum_scenarios_per_n < 2:
             raise ValueError("minimum_scenarios_per_n must be an integer >= 2")
+        if (
+            type(self.minimum_simulations_per_scenario) is not int
+            or self.minimum_simulations_per_scenario < 1
+        ):
+            raise ValueError(
+                "minimum_simulations_per_scenario must be a positive integer"
+            )
         if type(self.counterbalance_multiple) is not int or self.counterbalance_multiple < 1:
             raise ValueError("counterbalance_multiple must be a positive integer")
         return self
@@ -81,6 +89,7 @@ REQUIRED_COLUMNS = {
     "scenario_id",
     "robustness_id",
     "individuals_per_cell",
+    "simulations",
     "trials_per_individual",
     "colony_count",
     *ROBUSTNESS_MATCH_FLOAT_COLUMNS,
@@ -122,6 +131,7 @@ def select_final_individuals_per_cell(
     h2_values = {float(row["expected_h2_localization"]) for row in rows}
     provenance_values = {row["sesoi_provenance"].strip() for row in rows}
     trial_values = {int(row["trials_per_individual"]) for row in rows}
+    simulation_values = {int(row["simulations"]) for row in rows}
 
     if len(h1_values) != 1 or len(h2_values) != 1:
         raise ValueError(
@@ -134,6 +144,16 @@ def select_final_individuals_per_cell(
     if len(trial_values) != 1 or next(iter(trial_values)) < 1:
         raise ValueError(
             "operating-characteristic surface must use one frozen positive trials_per_individual value across all scenarios"
+        )
+    if len(simulation_values) != 1:
+        raise ValueError(
+            "operating-characteristic surface must use one frozen simulation count across all scenarios and candidate N values"
+        )
+    simulations = next(iter(simulation_values))
+    if simulations < rule.minimum_simulations_per_scenario:
+        raise ValueError(
+            f"operating-characteristic surface uses only {simulations} simulations per scenario; "
+            f"frozen minimum is {rule.minimum_simulations_per_scenario}"
         )
 
     grouped: dict[int, list[dict[str, str]]] = {}
