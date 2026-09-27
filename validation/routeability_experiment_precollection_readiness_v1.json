@@ -39,14 +39,36 @@
       ]
     },
     {
-      "item": "randomization and counterbalance schedule",
+      "item": "generic randomization/counterbalance schedule mechanics",
       "status": "PASS",
       "evidence": [
         "adaptive_gain/routeability_experiment_schedule.py",
         "validation/routeability_experiment_schedule_gate_v1.json",
         "tests/test_routeability_experiment_schedule.py"
       ],
-      "note": "12 between-subject factorial cells; within-individual state/side/order balance; four-profile cue-symbol counterbalance"
+      "note": "anonymous 12-cell schedule mechanics are frozen; actual eligible-roster assignment is handled by separate roster/final-schedule gates"
+    },
+    {
+      "item": "eligible-roster treatment randomization",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_roster_randomization.py",
+        "examples/randomize_routeability_roster.py",
+        "validation/routeability_roster_randomization_gate_v1.json",
+        "tests/test_routeability_roster_randomization.py"
+      ],
+      "note": "complete 12-cell blocks within colony; assignment and unassigned artifacts are SHA-256 frozen; actual eligible roster and final N pending"
+    },
+    {
+      "item": "roster-to-final trial schedule linkage",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_final_schedule.py",
+        "examples/compile_routeability_final_schedule.py",
+        "validation/routeability_final_schedule_gate_v1.json",
+        "tests/test_routeability_final_schedule.py"
+      ],
+      "note": "final trial schedule is a deterministic row-order-invariant descendant of the hash-matching randomized assignment; actual roster/final N pending"
     },
     {
       "item": "confirmatory estimands and multiplicity",
@@ -146,7 +168,7 @@
     {
       "item": "confirmatory preregistration package",
       "status": "TEMPLATE_READY_FINALIZATION_BLOCKED",
-      "blocker": "final response window, pilot nuisance receipt, final GLMM robustness surface/N, apparatus/cue details, colony allocation, ethics approval, final schedule/stimulus artifacts and pre-collection commit are not yet frozen",
+      "blocker": "final response window, pilot nuisance receipt, final GLMM robustness surface/N, apparatus/cue details, ethics approval, actual eligible roster, hash-locked randomization assignment, compiled final schedule/stimulus artifacts and pre-collection commit are not yet frozen",
       "evidence": [
         "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
         "examples/finalize_routeability_preregistration.py",
@@ -156,7 +178,7 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after procedural pilot, ingest the nuisance receipt, freeze external SESOI and robustness grid, run the already-implemented GLMM operating-characteristic simulator, then generate the preregistration package",
+  "next_machine_action": "after procedural pilot, freeze external SESOI and robustness grid, run the GLMM operating-characteristic simulator, freeze final N, randomize the architecture-neutral eligible roster, compile the hash-locked final trial schedule, then finalize the preregistration package",
   "next_biological_action": "run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the experimental logic, stimuli, allocation and analysis are frozen. It does not mean animal work, power, ethics or apparatus validation are complete."
 }
