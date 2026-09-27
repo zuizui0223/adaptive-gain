@@ -17,6 +17,7 @@ from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
+    routeability_budget_information_ceilings,
 )
 from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 
@@ -64,6 +65,15 @@ def main() -> None:
                 - contrast.control_fixed_terminal_accuracy
             )
         ),
+        "budget_information_ceilings": [
+            {
+                **asdict(row),
+                "architecture_by_access_interaction": (
+                    row.architecture_by_access_interaction
+                ),
+            }
+            for row in routeability_budget_information_ceilings()
+        ],
         "claim_ceiling": (
             "Accuracy values are information ceilings under uniform states, "
             "not required behavioral effect sizes."
