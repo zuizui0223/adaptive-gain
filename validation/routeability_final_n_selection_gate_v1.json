@@ -1,0 +1,37 @@
+{
+  "schema": "adaptive-gain-routeability-final-n-selection-gate-v1",
+  "date": "2026-09-27",
+  "status": "algorithm_frozen_real_power_surface_pending",
+  "purpose": "choose definitive individuals per cell mechanically from the frozen GLMM operating-characteristic robustness surface",
+  "inputs": {
+    "power_surface": "final scenario-level GLMM operating-characteristic CSV",
+    "rule": "separately frozen threshold JSON",
+    "required_metrics": [
+      "fit_success_fraction",
+      "h1_directional_rejection_fraction",
+      "h2_hierarchical_pass_fraction"
+    ]
+  },
+  "rule": {
+    "selection": "smallest individuals_per_cell whose worst scenario meets every frozen threshold",
+    "all_scenarios_required": true,
+    "minimum_scenarios_per_n": ">=2 and frozen before selection",
+    "counterbalance": "every evaluated N must be a multiple of four",
+    "forbidden": [
+      "averaging a failing robustness scenario away",
+      "selecting a larger or smaller N after viewing confirmatory outcomes",
+      "changing H1/H2 thresholds after viewing the final power surface",
+      "selecting N from the best-case scenario",
+      "using a power surface with only one scenario at a candidate N"
+    ]
+  },
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_final_n_selection.py",
+    "exporter": "examples/select_routeability_final_n.py",
+    "regression_test": "tests/test_routeability_final_n_selection.py",
+    "output": "JSON receipt containing selected N, total randomized N, all candidate worst-case metrics, frozen rule, and SHA-256 of power surface and rule"
+  },
+  "preregistration_link": "the preregistration finalizer must verify that individuals_per_cell equals the selected N in the hash-matching final-N receipt",
+  "current_status": "no real final-N receipt exists because procedural pilot and final robustness power surface are not yet available",
+  "claim_ceiling": "The selector removes analyst discretion from choosing N once the robustness surface and thresholds are frozen. It does not determine the scientific SESOI or threshold values themselves."
+}
