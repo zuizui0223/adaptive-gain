@@ -127,3 +127,25 @@ def test_experiment_design_separates_pilot_nuisance_from_focal_power_target():
         "The focal architecture × access effect never feeds backward into its own sample-size target.",
     ):
         assert phrase in text
+
+
+def test_experiment_design_reuses_identical_physical_cue_surface():
+    text = _text()
+    for phrase in (
+        "same four cue combinations in both architecture groups",
+        "Only `000` and `001` change reward / accept–reject assignment.",
+        "physical environmental cue surface is held fixed",
+        "focal action map changes",
+    ):
+        assert phrase in text
+
+
+def test_experiment_design_matches_sequential_timing_across_access_arms():
+    text = _text()
+    for phrase in (
+        "The first terminal cue remains visible while the second is presented",
+        "not sequential versus simultaneous presentation",
+        "Both arms receive two sequentially staged observations",
+        "stage durations and cue-persistence rules are matched",
+    ):
+        assert phrase in text
