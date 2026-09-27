@@ -115,3 +115,15 @@ def test_experiment_design_keeps_timeout_trials_in_primary_endpoint():
         "conditional choice accuracy among trials with a terminal response",
     ):
         assert phrase in text
+
+
+def test_experiment_design_separates_pilot_nuisance_from_focal_power_target():
+    text = _text()
+    for phrase in (
+        "ROUTEABILITY_PROCEDURAL_PILOT_V1.md",
+        "The pilot is not permitted to estimate H1, H2",
+        "externally justified probability-scale SESOI",
+        "not labelled the final powered N",
+        "The focal architecture × access effect never feeds backward into its own sample-size target.",
+    ):
+        assert phrase in text
