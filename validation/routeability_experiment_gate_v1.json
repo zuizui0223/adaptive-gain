@@ -121,5 +121,25 @@
       "Graver et al. 2026, DOI 10.1242/jeb.251126",
       "Spaethe et al. 2026, Bees flexibly adjust decision strategies to information content in a foraging task"
     ]
+  },
+  "routing_phases": {
+    "guided": {
+      "implementation": "apparatus reveals the context-selected terminal cue",
+      "purpose": "structural calibration isolating information architecture"
+    },
+    "autonomous": {
+      "implementation": "animal sees context then selects exactly one of two terminal cue windows within the two-cue budget",
+      "frozen_policy": "context=0 -> q_right; context=1 -> q_left",
+      "exact_policy_accuracy": {
+        "routeable": 1,
+        "bypass_control": 1
+      },
+      "outcomes": [
+        "context-conditioned terminal choice",
+        "final accept/reject accuracy",
+        "routing latency"
+      ]
+    },
+    "diagnostic": "guided success plus autonomous failure indicates a policy-learning/action-selection bottleneck rather than failure of the formal information contrast"
   }
 }
