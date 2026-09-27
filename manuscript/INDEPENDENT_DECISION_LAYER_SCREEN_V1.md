@@ -43,11 +43,11 @@ The learning assay was performed independently of the field interaction response
 
 ### Admission
 
-**A-cognition — strongest current independent decision-layer candidate.**
+**A-cognition source — strongest current independent decision-layer candidate, but not confirmatory-ready.**
 
 This dataset closes a major gap left by Villavicencio: it measures a real decision process directly rather than replacing cognition with morphology.
 
-It is **not A-exact** because the assay measures one colour-learning discrimination task, not the full ecological cue hierarchy required to define exact decision-equivalence classes for field partner choice.
+It is **not A-exact** because the assay measures one colour-learning discrimination task, not the full ecological cue hierarchy required to define exact decision-equivalence classes for field partner choice. It is also not confirmatory-ready for a species-level cognition-by-network test: the direct learning layer spans only six pollinator species, so treating the many network records as independent replication of a species-level learning effect would be pseudoreplication.
 
 ### Allowed bridge
 
@@ -140,7 +140,7 @@ Role:
 - phenology;
 - independent cognition-to-network bridge.
 
-Current status: **A-cognition candidate; requires a new question that does not duplicate Jones et al. 2025.**
+Current status: **A-cognition source / confirmatory NO-GO at the current independent-unit count; useful for mechanistic calibration or a future externally replicated design.**
 
 ### System X — controlled decision-cost experiment
 
@@ -157,10 +157,11 @@ Current status: **B-experiment calibration; not a network confirmation.**
 ## Preferred next empirical sequence
 
 1. Finish the Villavicencio conventional-filter block ablation.
-2. Freeze a Kent Island **restricted colour-channel** analysis that uses only externally measured reflectance / perceptual structure and independent learning performance.
-3. Require the Kent analysis to preserve the original-paper novelty boundary: no replication of specialization-versus-learning as the headline.
-4. Use the Austin experiment only as an external behavioral calibration unless a genuinely routeability-specific contrast can be defined before outcome inspection.
-5. Keep the exact V5 claim separate from all restricted-channel empirical bridges.
+2. Treat Kent Island as an independent cognition calibration and source-design template, not as a confirmatory species-level test unless an external replication supplies more independent pollinator units.
+3. Preserve the original-paper novelty boundary: no replication of specialization-versus-learning as the headline and no dyad-level pseudoreplication of a six-species cognition exposure.
+4. Prioritize a controlled routeability experiment for the first direct empirical test because branch structure can be manipulated independently of species composition and network response.
+5. Use the Austin experiment as behavioral calibration unless a genuinely routeability-specific contrast can be frozen before outcome inspection.
+6. Keep the exact V5 claim separate from all restricted-channel empirical bridges.
 
 ## Candidate Kent question
 
@@ -196,3 +197,45 @@ The empirical program is no longer blocked by the absence of any independent dec
 **Kent Island supplies a real independent cognition layer.**
 
 What remains missing is an exact natural-history dataset in which the full contingent cue hierarchy itself is measured independently of the network response. Until such a dataset is found or experimentally created, V5's empirical extensions should be described as restricted-channel or cognition-layer tests rather than exact routeability confirmation.
+
+
+## Independent-unit gate for Kent Island
+
+The public learning experiment contains many individual insects, but the network-facing cognition contrast is species-level because field partner use is summarized by pollinator species. Only six species received the direct learning assay.
+
+Therefore:
+
+- individual learning trials can estimate each species' learning performance;
+- plant visits and dyads can characterize each species' ecological use;
+- but the effective independent sample size for a cross-species cognition-to-network slope remains approximately six species, not the number of visits or dyads.
+
+### Confirmatory decision
+
+**NO-GO for a standalone confirmatory routeability claim from the current Kent dataset.**
+
+Allowed uses:
+
+1. independent mechanistic calibration showing that direct cognition can be measured alongside a real network;
+2. preregistration template for a larger multi-species or multi-community replication;
+3. restricted descriptive analysis that clearly reports six independent pollinator species;
+4. source for choosing experimentally realistic colour distances and learning tasks.
+
+Forbidden:
+
+- treating dyads, visits or individual choice trials as independent replicates of a species-level network effect;
+- presenting a six-species cross-sectional association as confirmation of V5 routeability;
+- using the original published specialization-learning association as new evidence for the present framework.
+
+## Direct experimental route now preferred
+
+The cleanest next test is no longer to search indefinitely for a perfect observational dataset.
+
+A controlled plant-pollinator decision experiment can manipulate the missing object directly:
+
+- hold flower identities, reward values and total richness fixed;
+- manipulate whether an early cue partitions flowers into branches;
+- keep marginal cue frequencies matched across routeable and non-routeable treatments;
+- measure decision latency, cue acquisition / inspection sequence, errors and realized visitation links;
+- cross the treatment with an ecological time or exposure budget so that the formal window \(C_A \le B < C_F\) is experimentally represented.
+
+This design directly tests the environmental architecture rather than using morphology or colour distance as a surrogate.
