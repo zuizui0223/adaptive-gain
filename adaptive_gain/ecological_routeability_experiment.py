@@ -40,6 +40,7 @@ class ExperimentalRouteabilityContrast:
     routeable_adaptive_accuracy: float
     control_adaptive_accuracy: float
     same_pairwise_information_signatures: bool
+    same_full_cue_joint_distribution: bool
     routeable_terminal_pair_target_information_bits: float
     control_terminal_pair_target_information_bits: float
     routeable_context_given_terminals_information_bits: float
@@ -62,6 +63,7 @@ class ExperimentalRouteabilityContrast:
             and self.routeable_adaptive_accuracy == 1.0
             and self.control_adaptive_accuracy == 1.0
             and self.same_pairwise_information_signatures
+            and self.same_full_cue_joint_distribution
             and self.routeable_terminal_pair_target_information_bits == 0.5
             and self.control_terminal_pair_target_information_bits == 1.0
             and self.routeable_context_given_terminals_information_bits == 0.5
@@ -276,6 +278,23 @@ def _binary_unlabeled_pair_signature(
     return min(candidates)
 
 
+
+def cue_joint_distribution(
+    task: FiniteTask,
+    query_names: tuple[str, ...] = ("q_left", "q_route", "q_right"),
+) -> tuple[tuple[tuple[object, ...], int], ...]:
+    """Exact joint distribution of named cue outcomes under uniform states."""
+
+    lookup = {query.name: query for query in task.queries}
+    missing = [name for name in query_names if name not in lookup]
+    if missing:
+        raise ValueError(f"unknown query names: {missing!r}")
+    counts = Counter(
+        tuple(lookup[name].outcomes[i] for name in query_names)
+        for i in range(len(task.worlds))
+    )
+    return tuple(sorted(counts.items(), key=lambda item: repr(item[0])))
+
 def pairwise_information_signature(
     task: FiniteTask,
 ) -> tuple[tuple[str, str, tuple[int, int, int, int]], ...]:
@@ -328,6 +347,10 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         pairwise_information_signature(routeable)
         == pairwise_information_signature(control)
     )
+    same_full_cue_joint_distribution = (
+        cue_joint_distribution(routeable)
+        == cue_joint_distribution(control)
+    )
     routeable_terminal_pair_target_information_bits = (
         uniform_target_information_for_query_bundle(
             routeable, ("q_left", "q_right")
@@ -373,6 +396,7 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         routeable_adaptive_accuracy=routeable_adaptive_accuracy,
         control_adaptive_accuracy=control_adaptive_accuracy,
         same_pairwise_information_signatures=same_pairwise_information_signatures,
+        same_full_cue_joint_distribution=same_full_cue_joint_distribution,
         routeable_terminal_pair_target_information_bits=(
             routeable_terminal_pair_target_information_bits
         ),
