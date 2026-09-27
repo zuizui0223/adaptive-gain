@@ -55,14 +55,35 @@
     "interpretation": "information-level ceiling contrast, not a required behavioral effect size"
   },
   "budget_ladder": {
-    "B1": "below adaptive cost; no exact guaranteed resolution",
-    "B2": "routeability-sensitive window for the strict-gain task",
-    "B3": "all three cues available; fixed routeable task becomes exactly resolvable"
+    "B1": {
+      "adaptive_policy_prefix": "q_route only",
+      "fixed_policy_prefix": "one terminal cue; q_left and q_right are accuracy-equivalent under uniform states",
+      "routeable_adaptive": 0.5,
+      "routeable_fixed": 0.75,
+      "control_adaptive": 0.5,
+      "control_fixed": 0.75,
+      "architecture_by_access_interaction": 0
+    },
+    "B2": {
+      "routeable_adaptive": 1,
+      "routeable_fixed": 0.75,
+      "control_adaptive": 1,
+      "control_fixed": 1,
+      "architecture_by_access_interaction": 0.25
+    },
+    "B3": {
+      "routeable_adaptive": 1,
+      "routeable_fixed": 1,
+      "control_adaptive": 1,
+      "control_fixed": 1,
+      "architecture_by_access_interaction": 0
+    },
+    "confirmatory_pattern": "architecture-by-access interaction localized to B=2: 0, 0.25, 0 at the exact information level"
   },
   "primary_endpoint": "correct accept/reject response",
   "confirmatory_terms": [
     "task architecture x information access at B=2",
-    "budget concentration of that interaction when B=1,2,3 are tested"
+    "budget localization: architecture x access contrast larger at B=2 than at B=1 and B=3 boundary controls"
   ],
   "independent_unit": "individual forager",
   "repeated_unit": "trial",
