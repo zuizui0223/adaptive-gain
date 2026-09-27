@@ -7,9 +7,10 @@
     "independent_unit": "individual forager",
     "repeated_unit": "trial",
     "higher_level_group": "colony where applicable",
-    "inclusion": "all valid test trials from individuals satisfying predeclared training and minimum-initiation criteria",
+    "inclusion": "all valid test trials from randomized individuals who complete architecture-neutral familiarization and initiate testing after the fixed architecture-specific training dose",
     "forbidden": [
       "counting trials as independent biological replicates",
+      "excluding randomized individuals because architecture-specific training accuracy is low",
       "excluding individuals because test accuracy is low",
       "dropping slow or incorrect trials to improve the primary endpoint"
     ]
@@ -73,5 +74,15 @@
     "learning slope across test trials"
   ],
   "sample_size_boundary": "sample size remains unfrozen until nuisance-parameter calibration; do not power from the exact 0.25 information ceiling or the focal confirmatory interaction observed in a pilot",
-  "claim_ceiling": "A positive H1 plus localized H2 supports a behavioral consequence of contingent information architecture in the controlled task. It does not establish natural-network rewiring, niche breadth, or ecosystem-level effects."
+  "claim_ceiling": "A positive H1 plus localized H2 supports a behavioral consequence of contingent information architecture in the controlled task. It does not establish natural-network rewiring, niche breadth, or ecosystem-level effects.",
+  "training_selection_firewall": {
+    "preferred": "architecture-neutral familiarization before assignment; fixed-dose architecture-specific training after assignment; no treatment-specific accuracy gate for primary test entry",
+    "training_outcomes": [
+      "training accuracy by block",
+      "time or trials to descriptive criterion",
+      "training completion",
+      "non-response or disengagement"
+    ],
+    "unavoidable_criterion_rule": "if a hard architecture-specific criterion is operationally unavoidable, criterion attainment is a treatment-dependent outcome and the test-phase criterion-reacher analysis is labelled per-protocol rather than the sole randomized primary analysis"
+  }
 }
