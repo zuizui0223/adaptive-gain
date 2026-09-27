@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import re
@@ -137,6 +138,139 @@ def _read_json(path: Path, name: str) -> dict:
     return value
 
 
+
+def _read_csv(path: Path, name: str) -> list[dict[str, str]]:
+    try:
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            return list(csv.DictReader(handle))
+    except Exception as exc:
+        raise ValueError(f"{name} is not valid UTF-8 CSV") from exc
+
+
+def _validate_assignment_csv(
+    path: Path,
+    *,
+    individuals_per_cell: int,
+) -> dict[str, dict[str, str]]:
+    rows = _read_csv(path, "final_assignment_reference")
+    required = {
+        "individual_id",
+        "colony_id",
+        "complete_block_id",
+        "architecture",
+        "access_mode",
+        "budget",
+        "treatment_cell",
+        "counterbalance_profile",
+    }
+    if not rows or not required <= set(rows[0]):
+        raise ValueError(
+            "final assignment CSV is empty or missing required columns"
+        )
+
+    by_id: dict[str, dict[str, str]] = {}
+    cell_counts: dict[str, int] = {}
+    profile_counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        individual = row["individual_id"].strip()
+        if not individual or individual in by_id:
+            raise ValueError(
+                "final assignment CSV contains empty or duplicate individual_id"
+            )
+        by_id[individual] = row
+
+        expected_cell = (
+            f"{row['architecture']}__{row['access_mode']}__B{int(row['budget'])}"
+        )
+        if row["treatment_cell"] != expected_cell:
+            raise ValueError(
+                f"final assignment treatment_cell mismatch for {individual!r}"
+            )
+        cell_counts[expected_cell] = cell_counts.get(expected_cell, 0) + 1
+        profiles = profile_counts.setdefault(expected_cell, {})
+        profile = row["counterbalance_profile"]
+        profiles[profile] = profiles.get(profile, 0) + 1
+
+    if len(cell_counts) != 12 or set(cell_counts.values()) != {
+        individuals_per_cell
+    }:
+        raise ValueError(
+            "final assignment CSV does not contain 12 exactly balanced treatment cells"
+        )
+
+    expected_profiles = {"cb0", "cb1", "cb2", "cb3"}
+    for cell, counts in profile_counts.items():
+        if set(counts) != expected_profiles or len(set(counts.values())) != 1:
+            raise ValueError(
+                f"final assignment counterbalance profiles are not balanced in {cell}"
+            )
+
+    if len(by_id) != 12 * individuals_per_cell:
+        raise ValueError(
+            "final assignment individual count disagrees with 12-cell final N"
+        )
+    return by_id
+
+
+def _validate_schedule_csv(
+    path: Path,
+    assignments: dict[str, dict[str, str]],
+    *,
+    trials_per_individual: int,
+) -> None:
+    rows = _read_csv(path, "final_schedule_reference")
+    required = {
+        "individual_id",
+        "colony_id",
+        "complete_block_id",
+        "treatment_cell",
+        "architecture",
+        "access_mode",
+        "budget",
+        "counterbalance_profile",
+        "trial_index",
+        "state",
+        "revealed_cues",
+    }
+    if not rows or not required <= set(rows[0]):
+        raise ValueError(
+            "final schedule CSV is empty or missing required columns"
+        )
+
+    counts = {individual: 0 for individual in assignments}
+    seen_trial_keys = set()
+    for row in rows:
+        individual = row["individual_id"]
+        assignment = assignments.get(individual)
+        if assignment is None:
+            raise ValueError(
+                f"final schedule contains unassigned individual {individual!r}"
+            )
+        key = (individual, row["trial_index"])
+        if key in seen_trial_keys:
+            raise ValueError("final schedule contains duplicate individual/trial key")
+        seen_trial_keys.add(key)
+        counts[individual] += 1
+
+        for field in (
+            "colony_id",
+            "complete_block_id",
+            "treatment_cell",
+            "architecture",
+            "access_mode",
+            "budget",
+            "counterbalance_profile",
+        ):
+            if str(row[field]) != str(assignment[field]):
+                raise ValueError(
+                    f"final schedule assignment mismatch for {individual!r}: {field}"
+                )
+
+    if set(counts.values()) != {trials_per_individual}:
+        raise ValueError(
+            "final schedule does not contain exactly trials_per_individual for every randomized individual"
+        )
+
 def validate_finalization_payload(
     payload: dict,
     *,
@@ -265,6 +399,16 @@ def validate_finalization_payload(
         raise ValueError("pilot receipt does not certify focal contrast blindness")
     if float(pilot.get("response_window_seconds")) != response_window:
         raise ValueError("response_window_seconds disagrees with pilot receipt")
+
+    assignments = _validate_assignment_csv(
+        verified["final_assignment_reference"],
+        individuals_per_cell=individuals_per_cell,
+    )
+    _validate_schedule_csv(
+        verified["final_schedule_reference"],
+        assignments,
+        trials_per_individual=trials_per_individual,
+    )
 
     randomization = _read_json(
         verified["randomization_receipt_reference"],
