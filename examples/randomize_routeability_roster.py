@@ -123,6 +123,12 @@ def main() -> None:
         "roster_sha256": hashlib.sha256(
             args.roster_csv.read_bytes()
         ).hexdigest(),
+        "assignments_sha256": hashlib.sha256(
+            args.assignments_csv.read_bytes()
+        ).hexdigest(),
+        "unassigned_sha256": hashlib.sha256(
+            args.unassigned_csv.read_bytes()
+        ).hexdigest(),
         "eligibility_rule": eligibility_rule,
         "randomization_seed": args.seed,
         "receipt": asdict(receipt),
