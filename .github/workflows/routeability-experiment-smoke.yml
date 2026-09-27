@@ -86,6 +86,7 @@ jobs:
             "scenarios": [
               {
                 "scenario_id": "software_fixture_only",
+                "robustness_id": "software_fixture_only",
                 "sesoi": {
                   "h1_probability_interaction": 0.12,
                   "h2_probability_localization": 0.10,
