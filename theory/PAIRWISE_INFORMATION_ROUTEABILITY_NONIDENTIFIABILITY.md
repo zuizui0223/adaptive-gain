@@ -79,12 +79,7 @@ Thus the environmental cue surface itself can be held fixed while routeability c
 
 This gives an exact minimal witness for the V5 claim that routeability is **relational**, not an intrinsic scalar property of an environment:
 
-[
-	ext{same environmental cue distribution}
-
-otRightarrow
-	ext{same decision complexity}.
-]
+> same environmental cue distribution ⇏ same decision complexity.
 
 The relevant object is the environment together with the focal action map.
 
