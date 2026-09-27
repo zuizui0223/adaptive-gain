@@ -2,6 +2,9 @@ name: Villavicencio source smoke
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "validation/routeability-precollection-v1"
   pull_request:
     paths:
       - ".github/workflows/villavicencio-source-smoke.yml"
