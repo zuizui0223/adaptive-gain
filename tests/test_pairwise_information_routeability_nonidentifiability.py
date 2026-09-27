@@ -44,3 +44,15 @@ def test_pairwise_information_nonidentifiability_document_does_not_overclaim():
         "symbolic information matching automatically matches animal perceptual salience",
     ):
         assert phrase in text
+
+
+def test_relational_witness_holds_physical_cue_surface_fixed():
+    text = DOC.read_text(encoding="utf-8")
+    for phrase in (
+        "Relationality witness — same physical environment, different focal action map",
+        "same four physical cue combinations",
+        "Only two cue vectors change target assignment.",
+        "same environmental cue distribution",
+        "The relevant object is the environment together with the focal action map.",
+    ):
+        assert phrase in text
