@@ -268,5 +268,13 @@
     "fit_failure_policy": "fit failures remain failures in the operating-characteristic denominator",
     "final_N_status": "not frozen; requires real pilot nuisance receipt, external SESOI, colony allocation and robustness grid",
     "cell_probability_semantics": "population-average primary-success probability under the prespecified timeout and random-intercept distribution"
+  },
+  "preregistration": {
+    "status": "template_ready_finalization_blocked",
+    "template": "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+    "finalizer": "examples/finalize_routeability_preregistration.py",
+    "gate": "validation/routeability_preregistration_gate_v1.json",
+    "final_output_status": "none; unresolved pilot/power/operational/human fields remain",
+    "rule": "do not externally register the template or any document containing unresolved placeholders"
   }
 }
