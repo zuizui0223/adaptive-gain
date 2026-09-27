@@ -174,6 +174,7 @@ def _validate_power_surface_csv(
     rows = _read_csv(path, "power_surface_reference")
     required = {
         "scenario_id",
+        "robustness_id",
         "simulations",
         "individuals_per_cell",
         "trials_per_individual",
