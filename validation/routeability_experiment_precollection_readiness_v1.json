@@ -150,10 +150,21 @@
       ]
     },
     {
+      "item": "mechanical final-N selection",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_final_n_selection.py",
+        "examples/select_routeability_final_n.py",
+        "validation/routeability_final_n_selection_gate_v1.json",
+        "tests/test_routeability_final_n_selection.py"
+      ],
+      "note": "selects the smallest multiple-of-four individuals-per-cell value whose worst robustness scenario passes the frozen fit-success, H1 and hierarchical-H2 thresholds; real final power surface/rule pending"
+    },
+    {
       "item": "definitive biological sample size",
       "status": "BLOCKED",
-      "blocker": "real pilot inputs and final GLMM operating-characteristic surface are not yet frozen",
-      "forbidden_shortcut": "do not use the exact 0.25 information ceiling or focal pilot interaction as the effect size"
+      "blocker": "real pilot inputs, frozen final GLMM robustness surface and hash-addressed final-N threshold rule are not yet available for mechanical selection",
+      "forbidden_shortcut": "do not hand-select N, use the exact 0.25 information ceiling, or use a focal pilot interaction as the effect-size/power target"
     },
     {
       "item": "species/husbandry/apparatus implementation",
@@ -178,7 +189,7 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after procedural pilot, freeze external SESOI and robustness grid, run the GLMM operating-characteristic simulator, freeze final N, randomize the architecture-neutral eligible roster, compile the hash-locked final trial schedule, then finalize the preregistration package",
+  "next_machine_action": "after procedural pilot, freeze external SESOI and robustness grid, run the GLMM operating-characteristic simulator, run the frozen final-N selector, randomize the architecture-neutral eligible roster at the selected N, compile the hash-locked final trial schedule, then finalize the preregistration package",
   "next_biological_action": "run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the experimental logic, stimuli, allocation and analysis are frozen. It does not mean animal work, power, ethics or apparatus validation are complete."
 }
