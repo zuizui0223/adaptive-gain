@@ -60,3 +60,13 @@ def test_routeability_analysis_gate_keeps_timeout_trials_in_primary_denominator(
     assert timeout["timeout_score"] == 0
     assert "dropping timeout/abandonment trials" in timeout["forbidden"]
     assert "dropping timeout trials from the primary denominator" in data["reporting"]["forbidden"]
+
+
+def test_routeability_analysis_gate_freezes_guided_primary_phase():
+    data = _gate()
+    phase = data["confirmatory_phase"]
+    assert phase["primary"] == "Phase 1 guided contingent presentation"
+    assert "apparatus reveals q_route first" in phase["contingent_arm"]
+    assert "separate mechanistic follow-up" in phase["autonomous_phase"]
+    assert "must not be pooled" in phase["autonomous_phase"]
+    assert "pooling autonomous-routing trials" in data["reporting"]["forbidden"]
