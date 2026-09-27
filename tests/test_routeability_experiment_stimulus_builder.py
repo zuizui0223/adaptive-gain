@@ -31,12 +31,36 @@ def test_routeability_stimulus_builder_exports_exact_frozen_surface(tmp_path):
     assert len(rows) == 8
     assert sum(row["architecture"] == "routeable" for row in rows) == 4
     assert sum(row["architecture"] == "bypass_control" for row in rows) == 4
+    by_architecture = {
+        architecture: {
+            row["cue_vector"]
+            for row in rows
+            if row["architecture"] == architecture
+        }
+        for architecture in ("routeable", "bypass_control")
+    }
+    assert by_architecture["routeable"] == by_architecture["bypass_control"] == {
+        "000", "001", "011", "111"
+    }
 
     receipt = json.loads(json_path.read_text(encoding="utf-8"))
     assert receipt["exact_minimal_contrast"] is True
     assert receipt["primary_budget"] == 2
     assert receipt["stimulus_row_count"] == 8
     assert receipt["primary_information_interaction"] == 0.25
+    assert receipt["shared_physical_cue_vectors"] == ["000", "001", "011", "111"]
+    assert receipt["target_mapping_differences"] == [
+        {
+            "cue_vector": "000",
+            "routeable_target": 0,
+            "bypass_control_target": 1,
+        },
+        {
+            "cue_vector": "001",
+            "routeable_target": 1,
+            "bypass_control_target": 0,
+        },
+    ]
     ladder = {
         row["budget"]: row
         for row in receipt["budget_information_ceilings"]
@@ -51,3 +75,5 @@ def test_routeability_stimulus_builder_exports_exact_frozen_surface(tmp_path):
     assert contrast["control_fixed_cost"] == 2
     assert contrast["routeable_fixed_terminal_accuracy"] == 0.75
     assert contrast["control_fixed_terminal_accuracy"] == 1.0
+    assert contrast["same_physical_cue_vectors"] is True
+    assert contrast["target_relabelled_cue_vector_count"] == 2
