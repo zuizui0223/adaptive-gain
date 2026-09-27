@@ -320,6 +320,16 @@
           },
           "interpretation": "the strict-gain route cue carries target information that is absent from the fixed terminal pair; the bypass control has no such residual conditional information"
         }
+      },
+      "schedule": {
+        "gate": "validation/routeability_experiment_schedule_gate_v1.json",
+        "status": "randomization_counterbalance_mechanics_frozen_sample_size_pending",
+        "design": "architecture x access x budget all between subjects; 12 cells",
+        "state_balance": "each four-trial block contains all four states once",
+        "terminal_position_balance": "within individual",
+        "fixed_order_balance": "within individual and state-independent",
+        "cue_symbol_counterbalance": "four orthogonal profiles within each cell",
+        "sample_size_boundary": "multiple of four per cell is a counterbalance requirement only, not the powered N"
       }
     }
   ]
