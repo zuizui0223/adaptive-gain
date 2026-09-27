@@ -97,3 +97,11 @@ def test_sampling_effort_audit_controls_annual_scope():
     ]
     assert "two additional" in data["documented_sampling"]["extra_sites_2006"]
     assert data["freeze_boundary"]["formal_cv_result_seen_before_scope_freeze"] is False
+
+
+def test_conventional_filter_gate_blocks_interaction_derived_matching_leakage():
+    data = json.loads(GATE.read_text(encoding="utf-8"))
+    policy = data["anti_leakage"]
+    assert "independently measured raw morphology" in policy["policy"]
+    assert "do not import interaction-derived trait-matching scores" in policy["policy"]
+    assert "circular" in policy["reason"]
