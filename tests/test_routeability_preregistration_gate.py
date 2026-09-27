@@ -109,13 +109,13 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
     )
     power.write_text(
         "scenario_id,simulations,individuals_per_cell,trials_per_individual,"
-        "colony_count,individual_sd_logit,colony_sd_logit,dropout_fraction,"
+        "colony_count,colony_block_counts,individual_sd_logit,colony_sd_logit,dropout_fraction,"
         "timeout_fraction,sesoi_provenance,fit_success_fraction,"
         "h1_directional_rejection_fraction,h2_hierarchical_pass_fraction,"
         "expected_h1_delta_b2,expected_h2_localization\n"
-        "final_n_robust_a,1000,4,8,4,0.5,0.2,0.10,0.05,"
+        "final_n_robust_a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,"
         "practical_decision_threshold,0.99,0.82,0.80,0.12,0.10\n"
-        "sensitivity_n8,1000,8,8,4,0.8,0.3,0.15,0.08,"
+        "sensitivity_n8,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,"
         "practical_decision_threshold,0.98,0.90,0.87,0.12,0.10\n",
         encoding="utf-8",
     )
