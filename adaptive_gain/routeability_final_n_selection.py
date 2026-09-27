@@ -118,6 +118,24 @@ def select_final_individuals_per_cell(
             "H1/H2 SESOI values and SESOI provenance"
         )
 
+    h1_values = {float(row["expected_h1_delta_b2"]) for row in rows}
+    h2_values = {float(row["expected_h2_localization"]) for row in rows}
+    provenance_values = {row["sesoi_provenance"].strip() for row in rows}
+    trial_values = {int(row["trials_per_individual"]) for row in rows}
+
+    if len(h1_values) != 1 or len(h2_values) != 1:
+        raise ValueError(
+            "operating-characteristic surface mixes H1/H2 SESOI values; final-N selection requires one frozen effect target across the full robustness surface"
+        )
+    if len(provenance_values) != 1 or "" in provenance_values:
+        raise ValueError(
+            "operating-characteristic surface mixes or omits SESOI provenance"
+        )
+    if len(trial_values) != 1 or next(iter(trial_values)) < 1:
+        raise ValueError(
+            "operating-characteristic surface must use one frozen positive trials_per_individual value across all scenarios"
+        )
+
     grouped: dict[int, list[dict[str, str]]] = {}
     for row in rows:
         n = int(row["individuals_per_cell"])
