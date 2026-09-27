@@ -50,3 +50,13 @@ def test_routeability_analysis_gate_blocks_treatment_dependent_training_exclusio
     firewall = data["training_selection_firewall"]
     assert "fixed-dose architecture-specific training" in firewall["preferred"]
     assert "per-protocol" in firewall["unavoidable_criterion_rule"]
+
+
+def test_routeability_analysis_gate_keeps_timeout_trials_in_primary_denominator():
+    data = _gate()
+    assert "timeouts are both scored 0" in data["primary_endpoint"]
+    timeout = data["timeout_policy"]
+    assert timeout["primary_denominator"] == "all initiated test trials"
+    assert timeout["timeout_score"] == 0
+    assert "dropping timeout/abandonment trials" in timeout["forbidden"]
+    assert "dropping timeout trials from the primary denominator" in data["reporting"]["forbidden"]
