@@ -9,6 +9,11 @@ import json
 import re
 from pathlib import Path
 
+from adaptive_gain.ecological_routeability_experiment import (
+    bypass_matched_control_task,
+    experimental_stimulus_table,
+)
+from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 from adaptive_gain.routeability_experiment_power import RouteabilitySESoi
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -146,6 +151,115 @@ def _read_csv(path: Path, name: str) -> list[dict[str, str]]:
     except Exception as exc:
         raise ValueError(f"{name} is not valid UTF-8 CSV") from exc
 
+
+
+def _validate_power_surface_csv(
+    path: Path,
+    *,
+    individuals_per_cell: int,
+    h1_sesoi: float,
+    h2_sesoi: float,
+) -> None:
+    rows = _read_csv(path, "power_surface_reference")
+    required = {
+        "scenario_id",
+        "simulations",
+        "individuals_per_cell",
+        "trials_per_individual",
+        "colony_count",
+        "individual_sd_logit",
+        "colony_sd_logit",
+        "dropout_fraction",
+        "timeout_fraction",
+        "sesoi_provenance",
+        "fit_success_fraction",
+        "h1_directional_rejection_fraction",
+        "h2_hierarchical_pass_fraction",
+        "expected_h1_delta_b2",
+        "expected_h2_localization",
+    }
+    if len(rows) < 2 or not required <= set(rows[0]):
+        raise ValueError(
+            "final power surface must contain at least two scenario rows and all frozen design/operating-characteristic columns"
+        )
+    ids = [row["scenario_id"] for row in rows]
+    if any(not value.strip() for value in ids) or len(ids) != len(set(ids)):
+        raise ValueError("final power surface scenario_id values must be unique and non-empty")
+
+    matching_final_n = False
+    for row in rows:
+        n = int(row["individuals_per_cell"])
+        if n < 4 or n % 4 != 0:
+            raise ValueError(
+                "final power surface contains individuals_per_cell incompatible with four-profile counterbalancing"
+            )
+        for field in (
+            "fit_success_fraction",
+            "h1_directional_rejection_fraction",
+            "h2_hierarchical_pass_fraction",
+        ):
+            value = float(row[field])
+            if not 0.0 <= value <= 1.0:
+                raise ValueError(
+                    f"final power surface {field} must lie in [0,1]"
+                )
+        if (
+            n == individuals_per_cell
+            and abs(float(row["expected_h1_delta_b2"]) - h1_sesoi) <= 1e-12
+            and abs(float(row["expected_h2_localization"]) - h2_sesoi) <= 1e-12
+        ):
+            matching_final_n = True
+
+    if not matching_final_n:
+        raise ValueError(
+            "final power surface contains no scenario matching the preregistered final N and H1/H2 SESOI"
+        )
+
+
+def _validate_stimulus_csv(path: Path) -> None:
+    rows = _read_csv(path, "final_stimulus_reference")
+    required = {
+        "architecture",
+        "state",
+        "target",
+        "q_left",
+        "q_route",
+        "q_right",
+    }
+    if len(rows) != 8 or not required <= set(rows[0]):
+        raise ValueError(
+            "final stimulus artifact must contain exactly the frozen 8-row logical stimulus surface"
+        )
+
+    observed = {}
+    for row in rows:
+        key = (row["architecture"], row["state"])
+        if key in observed:
+            raise ValueError("final stimulus artifact contains duplicate architecture/state rows")
+        observed[key] = (
+            int(row["target"]),
+            int(row["q_left"]),
+            int(row["q_route"]),
+            int(row["q_right"]),
+        )
+
+    expected = {}
+    for architecture, task in (
+        ("routeable", minimal_strict_gain_standard_task()),
+        ("bypass_control", bypass_matched_control_task()),
+    ):
+        for row in experimental_stimulus_table(task):
+            expected[(architecture, str(row["state"]))] = (
+                int(row["target"]),
+                int(row["q_left"]),
+                int(row["q_route"]),
+                int(row["q_right"]),
+            )
+
+    if observed != expected:
+        raise ValueError(
+            "final stimulus artifact does not match the exact frozen routeable/bypass logical stimulus mapping"
+        )
 
 def _validate_assignment_csv(
     path: Path,
@@ -388,6 +502,16 @@ def validate_finalization_payload(
             artifact_root=artifact_root,
             name=ref_field,
         )
+
+    _validate_power_surface_csv(
+        verified["power_surface_reference"],
+        individuals_per_cell=individuals_per_cell,
+        h1_sesoi=sesoi.h1_probability_interaction,
+        h2_sesoi=sesoi.h2_probability_localization,
+    )
+    _validate_stimulus_csv(
+        verified["final_stimulus_reference"],
+    )
 
     pilot = _read_json(
         verified["pilot_receipt_reference"],
