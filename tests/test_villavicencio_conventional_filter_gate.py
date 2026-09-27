@@ -44,6 +44,15 @@ def test_conventional_filter_gate_freezes_predictors_and_temporal_cv():
     model = data["model_family"]
     assert model["type"] == "separate binomial logistic models for gain and loss"
     assert "leave-one-transition-out" in model["transition_handling"]
+    assert model["primary_scope"] == "strict_core_2008_2011"
+    scopes = model["transition_scopes"]
+    assert scopes["strict_core_2008_2011"]["transitions"] == [
+        "2008->2009",
+        "2009->2010",
+        "2010->2011",
+    ]
+    assert scopes["near_core_2007_2011"]["role"] == "sampling-effort sensitivity"
+    assert scopes["all_annual_2006_2011"]["role"] == "broad sensitivity"
     assert model["null_model"] == "training-fold event prevalence"
     assert model["primary_comparison"] == "conventional-filter model versus null on held-out transitions"
 
@@ -73,3 +82,18 @@ def test_conventional_filter_claim_firewall():
     assert "do not tune predictor definitions" in firewall
     assert "do not promote annual fallback" in firewall
     assert "do not interpret predictive improvement as a causal effect" in firewall
+
+
+def test_sampling_effort_audit_controls_annual_scope():
+    path = ROOT / "validation" / "villavicencio_sampling_effort_audit_v1.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    consequence = data["consequence"]
+    assert data["status"] == "external_methods_frozen_before_formal_filter_cv_result"
+    assert consequence["primary_filter_cv_scope"]["name"] == "strict_core_2008_2011"
+    assert consequence["primary_filter_cv_scope"]["transitions"] == [
+        "2008->2009",
+        "2009->2010",
+        "2010->2011",
+    ]
+    assert "two additional" in data["documented_sampling"]["extra_sites_2006"]
+    assert data["freeze_boundary"]["formal_cv_result_seen_before_scope_freeze"] is False
