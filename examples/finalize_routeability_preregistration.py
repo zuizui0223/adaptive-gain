@@ -574,6 +574,11 @@ def validate_finalization_payload(
         minimum_scenarios_per_n=int(
             final_n_rule_payload.get("minimum_scenarios_per_n", 2)
         ),
+        minimum_simulations_per_scenario=int(
+            final_n_rule_payload.get(
+                "minimum_simulations_per_scenario", 1000
+            )
+        ),
         counterbalance_multiple=int(
             final_n_rule_payload.get("counterbalance_multiple", 4)
         ),
