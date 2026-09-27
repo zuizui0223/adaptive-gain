@@ -3,6 +3,7 @@ from adaptive_gain.ecological_routeability_experiment import (
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
     routeability_budget_information_ceilings,
+    uniform_target_accuracy_for_context_policy,
 )
 from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 
@@ -94,3 +95,21 @@ def test_budget_ladder_localizes_architecture_by_access_interaction_to_b2():
     assert b3.control_adaptive_policy == 1.0
     assert b3.control_fixed_policy == 1.0
     assert b3.architecture_by_access_interaction == 0.0
+
+
+def test_same_context_routing_policy_solves_both_architectures():
+    routeable = minimal_strict_gain_standard_task()
+    control = bypass_matched_control_task()
+
+    assert uniform_target_accuracy_for_context_policy(routeable) == 1.0
+    assert uniform_target_accuracy_for_context_policy(control) == 1.0
+
+    reverse_policy = {0: "q_left", 1: "q_right"}
+    assert uniform_target_accuracy_for_context_policy(
+        routeable,
+        branch_queries=reverse_policy,
+    ) < 1.0
+    assert uniform_target_accuracy_for_context_policy(
+        control,
+        branch_queries=reverse_policy,
+    ) < 1.0
