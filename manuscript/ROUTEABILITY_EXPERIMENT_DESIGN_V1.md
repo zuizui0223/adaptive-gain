@@ -492,19 +492,14 @@ When B=1,2,3 are implemented, test the preregistered localization contrast: the 
 
 The exact information-level pattern is 0, 0.25, 0 across B=1,2,3. As with the B=2 ceiling, these are structural information predictions rather than required behavioral accuracies.
 
-The confirmatory contrasts are frozen explicitly as
+The confirmatory contrasts are frozen explicitly as:
 
-[
-\Delta_B=
-[p_{R,C,B}-p_{R,F,B}]
--
-[p_{K,C,B}-p_{K,F,B}],
-]
+`Δ_B = [p(R,C,B) - p(R,F,B)] - [p(K,C,B) - p(K,F,B)]`,
 
-where (R) is routeable architecture, (K) is bypass control, (C) is contingent access and (F) is fixed access.
+where R is routeable architecture, K is bypass control, C is contingent access and F is fixed access.
 
-- **H1:** (Delta_{B=2}>0).
-- **H2:** (Delta_{B=2}-\tfrac12(Delta_{B=1}+Delta_{B=3})>0).
+- **H1:** `Δ_B2 > 0`.
+- **H2:** `Δ_B2 - 0.5 × (Δ_B1 + Δ_B3) > 0`.
 
 Use hierarchical gatekeeping: H1 is primary; H2 retains confirmatory status only if H1 passes the frozen inferential gate. Otherwise H2 is reported descriptively.
 
