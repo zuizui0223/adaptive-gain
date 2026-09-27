@@ -10,6 +10,8 @@
     "external H1/H2 SESOI frozen with allowed provenance",
     "final GLMM operating-characteristic robustness surface completed",
     "individuals per cell chosen by the frozen final-N rule",
+    "final-N threshold rule frozen as a hash-addressed machine-readable artifact",
+    "final-N selection receipt generated mechanically from the hash-matching final power surface and rule",
     "actual colony allocation rule and complete-block allocation constraints frozen",
     "apparatus and physical cue alphabet frozen",
     "cue-stage duration and tolerance frozen",
@@ -45,7 +47,12 @@
     "final power surface contains at least two unique robustness scenarios and preserves N, nuisance, SESOI and H1/H2 operating-characteristic columns",
     "final power surface contains a scenario matching the preregistered final individuals-per-cell and H1/H2 SESOI",
     "final stimulus CSV is independently rechecked against the exact frozen 8-row routeable/bypass logical stimulus mapping",
-    "every power-surface colony_block_counts vector has one positive block count per colony and sums to individuals per cell"
+    "every power-surface colony_block_counts vector has one positive block count per colony and sums to individuals per cell",
+    "final-N rule artifact exists and its SHA-256 matches the payload",
+    "final-N receipt artifact exists and its SHA-256 matches the payload",
+    "finalizer independently recomputes the smallest passing N from the frozen power surface and frozen rule",
+    "preregistered individuals-per-cell must equal the independently recomputed selected N",
+    "final-N receipt power-surface/rule hashes and selected total randomized N must match the artifact chain"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -61,7 +68,10 @@
     "rehashing a modified receipt whose internal assignment/schedule chain no longer matches",
     "using a final schedule whose individual/colony/treatment/profile fields differ from the frozen assignment artifact",
     "rehashing a power CSV that no longer contains a scenario matching the frozen final N and H1/H2 SESOI",
-    "rehashing a modified stimulus CSV whose logical target/cue mapping differs from the exact frozen task"
+    "rehashing a modified stimulus CSV whose logical target/cue mapping differs from the exact frozen task",
+    "hand-selecting individuals-per-cell from the final power surface without the frozen final-N selector",
+    "changing final-N thresholds after the power surface is visible",
+    "supplying a final-N receipt whose selected N differs from independent recomputation"
   ],
   "output_status": "FINALIZED PRE-COLLECTION PREREGISTRATION CANDIDATE",
   "current_output_status": "no final preregistration generated",
@@ -78,7 +88,9 @@
       "schedule row counts and trials-per-individual",
       "receipt schemas and internal hash links",
       "power robustness surface has multiple scenarios and contains the frozen final N/SESOI point",
-      "logical stimulus artifact exactly matches the eight frozen architecture/state rows"
+      "logical stimulus artifact exactly matches the eight frozen architecture/state rows",
+      "final-N selection is independently recomputed from the frozen power surface and threshold rule"
     ]
-  }
+  },
+  "final_n_selection_gate": "validation/routeability_final_n_selection_gate_v1.json"
 }
