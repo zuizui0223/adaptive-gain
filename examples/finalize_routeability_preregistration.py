@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -40,6 +41,12 @@ REQUIRED_FIELDS = (
     "exclusion_rules",
     "final_n_decision_rule",
     "frozen_precollection_commit",
+    "randomization_receipt_reference",
+    "randomization_receipt_sha256",
+    "final_assignment_reference",
+    "final_assignment_sha256",
+    "final_schedule_receipt_reference",
+    "final_schedule_receipt_sha256",
     "final_schedule_reference",
     "final_schedule_sha256",
     "final_stimulus_reference",
@@ -72,10 +79,7 @@ def _positive_int(value, name: str) -> int:
 
 def _positive_float(value, name: str, *, allow_zero: bool = False) -> float:
     out = float(value)
-    if allow_zero:
-        valid = out >= 0
-    else:
-        valid = out > 0
+    valid = out >= 0 if allow_zero else out > 0
     if not valid:
         relation = "non-negative" if allow_zero else "positive"
         raise ValueError(f"{name} must be {relation}")
@@ -90,14 +94,54 @@ def _reject_pending_marker(value, name: str) -> str:
     return text
 
 
-
 def _sha256(value, name: str) -> str:
     text = _nonempty(value, name).lower()
     if re.fullmatch(r"[0-9a-f]{64}", text) is None:
         raise ValueError(f"{name} must be a 64-character SHA-256 hex digest")
     return text
 
-def validate_finalization_payload(payload: dict) -> dict[str, str]:
+
+def _artifact_path(
+    reference: str,
+    expected_sha256: str,
+    *,
+    artifact_root: Path,
+    name: str,
+) -> Path:
+    rel = Path(reference)
+    if rel.is_absolute() or ".." in rel.parts:
+        raise ValueError(f"{name} must be a relative path within artifact-root")
+
+    root = artifact_root.resolve()
+    path = (root / rel).resolve()
+    if path != root and root not in path.parents:
+        raise ValueError(f"{name} escapes artifact-root")
+    if not path.is_file():
+        raise ValueError(f"{name} does not exist: {reference}")
+
+    observed = hashlib.sha256(path.read_bytes()).hexdigest()
+    if observed != expected_sha256:
+        raise ValueError(
+            f"{name} SHA-256 mismatch: observed {observed}, expected {expected_sha256}"
+        )
+    return path
+
+
+def _read_json(path: Path, name: str) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ValueError(f"{name} is not valid UTF-8 JSON") from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"{name} must contain a JSON object")
+    return value
+
+
+def validate_finalization_payload(
+    payload: dict,
+    *,
+    artifact_root: Path = ROOT,
+) -> dict[str, str]:
     missing = [name for name in REQUIRED_FIELDS if name not in payload]
     if missing:
         raise ValueError(
@@ -163,6 +207,9 @@ def validate_finalization_payload(payload: dict) -> dict[str, str]:
         "colony_allocation_rule",
         "exclusion_rules",
         "final_n_decision_rule",
+        "randomization_receipt_reference",
+        "final_assignment_reference",
+        "final_schedule_receipt_reference",
         "final_schedule_reference",
         "final_stimulus_reference",
     )
@@ -176,20 +223,123 @@ def validate_finalization_payload(payload: dict) -> dict[str, str]:
             "power_surface_reference cannot point to a software fixture"
         )
 
+    hash_fields = (
+        "pilot_receipt_sha256",
+        "power_surface_sha256",
+        "randomization_receipt_sha256",
+        "final_assignment_sha256",
+        "final_schedule_receipt_sha256",
+        "final_schedule_sha256",
+        "final_stimulus_sha256",
+    )
     hashes = {
-        "pilot_receipt_sha256": _sha256(
-            payload["pilot_receipt_sha256"], "pilot_receipt_sha256"
-        ),
-        "power_surface_sha256": _sha256(
-            payload["power_surface_sha256"], "power_surface_sha256"
-        ),
-        "final_schedule_sha256": _sha256(
-            payload["final_schedule_sha256"], "final_schedule_sha256"
-        ),
-        "final_stimulus_sha256": _sha256(
-            payload["final_stimulus_sha256"], "final_stimulus_sha256"
-        ),
+        name: _sha256(payload[name], name)
+        for name in hash_fields
     }
+
+    artifact_pairs = (
+        ("pilot_receipt_reference", "pilot_receipt_sha256"),
+        ("power_surface_reference", "power_surface_sha256"),
+        ("randomization_receipt_reference", "randomization_receipt_sha256"),
+        ("final_assignment_reference", "final_assignment_sha256"),
+        ("final_schedule_receipt_reference", "final_schedule_receipt_sha256"),
+        ("final_schedule_reference", "final_schedule_sha256"),
+        ("final_stimulus_reference", "final_stimulus_sha256"),
+    )
+    verified = {}
+    for ref_field, hash_field in artifact_pairs:
+        verified[ref_field] = _artifact_path(
+            clean[ref_field],
+            hashes[hash_field],
+            artifact_root=artifact_root,
+            name=ref_field,
+        )
+
+    pilot = _read_json(
+        verified["pilot_receipt_reference"],
+        "pilot_receipt_reference",
+    )
+    if pilot.get("schema") != "adaptive-gain-routeability-procedural-pilot-bundle-v1":
+        raise ValueError("unexpected pilot receipt schema")
+    if pilot.get("focal_architecture_access_contrast_opened") is not False:
+        raise ValueError("pilot receipt does not certify focal contrast blindness")
+    if float(pilot.get("response_window_seconds")) != response_window:
+        raise ValueError("response_window_seconds disagrees with pilot receipt")
+
+    randomization = _read_json(
+        verified["randomization_receipt_reference"],
+        "randomization_receipt_reference",
+    )
+    if randomization.get("schema") != "adaptive-gain-routeability-roster-randomization-v1":
+        raise ValueError("unexpected randomization receipt schema")
+    if randomization.get("assignments_sha256") != hashes["final_assignment_sha256"]:
+        raise ValueError(
+            "randomization receipt assignment hash disagrees with final_assignment_sha256"
+        )
+    if int(randomization.get("randomization_seed")) != randomization_seed:
+        raise ValueError("randomization_seed disagrees with randomization receipt")
+
+    randomization_core = randomization.get("receipt")
+    if not isinstance(randomization_core, dict):
+        raise ValueError("randomization receipt missing nested receipt")
+    if int(randomization_core.get("individuals_per_cell")) != individuals_per_cell:
+        raise ValueError(
+            "individuals_per_cell disagrees with randomization receipt"
+        )
+    if int(randomization_core.get("assigned_individual_count")) != (
+        12 * individuals_per_cell
+    ):
+        raise ValueError(
+            "randomization assigned-individual count disagrees with 12-cell final N"
+        )
+    if not randomization_core.get("complete_blocks_valid"):
+        raise ValueError("randomization receipt does not certify complete colony blocks")
+    if not randomization_core.get("counterbalance_profiles_valid"):
+        raise ValueError("randomization receipt does not certify counterbalance profiles")
+
+    schedule_receipt = _read_json(
+        verified["final_schedule_receipt_reference"],
+        "final_schedule_receipt_reference",
+    )
+    if schedule_receipt.get("schema") != (
+        "adaptive-gain-routeability-final-trial-schedule-v1"
+    ):
+        raise ValueError("unexpected final schedule receipt schema")
+    if schedule_receipt.get("assignments_sha256") != hashes["final_assignment_sha256"]:
+        raise ValueError("final schedule receipt assignment hash mismatch")
+    if schedule_receipt.get("randomization_receipt_sha256") != hashes[
+        "randomization_receipt_sha256"
+    ]:
+        raise ValueError("final schedule receipt randomization-receipt hash mismatch")
+    if schedule_receipt.get("schedule_sha256") != hashes["final_schedule_sha256"]:
+        raise ValueError("final schedule receipt schedule hash mismatch")
+    if int(schedule_receipt.get("blocks_per_individual")) * 4 != trials_per_individual:
+        raise ValueError(
+            "trials_per_individual disagrees with final schedule receipt"
+        )
+
+    audit = schedule_receipt.get("audit")
+    if not isinstance(audit, dict):
+        raise ValueError("final schedule receipt missing audit")
+    for field in (
+        "individual_identity_match",
+        "assignment_fidelity",
+        "individual_state_balance",
+        "individual_terminal_position_balance",
+        "individual_order_balance",
+    ):
+        if audit.get(field) is not True:
+            raise ValueError(f"final schedule audit failed: {field}")
+    if int(audit.get("scheduled_individual_count")) != 12 * individuals_per_cell:
+        raise ValueError(
+            "final schedule individual count disagrees with randomized final N"
+        )
+    if int(audit.get("trial_count")) != (
+        12 * individuals_per_cell * trials_per_individual
+    ):
+        raise ValueError(
+            "final schedule trial count disagrees with N x trials_per_individual"
+        )
 
     replacements = {
         **hashes,
@@ -210,8 +360,15 @@ def validate_finalization_payload(payload: dict) -> dict[str, str]:
     return replacements
 
 
-def finalize_preregistration(payload: dict) -> str:
-    replacements = validate_finalization_payload(payload)
+def finalize_preregistration(
+    payload: dict,
+    *,
+    artifact_root: Path = ROOT,
+) -> str:
+    replacements = validate_finalization_payload(
+        payload,
+        artifact_root=artifact_root,
+    )
     text = TEMPLATE.read_text(encoding="utf-8")
     for name, value in replacements.items():
         text = text.replace("{{" + name + "}}", value)
@@ -235,10 +392,19 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("input_json", type=Path)
     parser.add_argument("output_md", type=Path)
+    parser.add_argument(
+        "--artifact-root",
+        type=Path,
+        default=ROOT,
+        help="Root directory containing all hash-frozen preregistration artifacts.",
+    )
     args = parser.parse_args()
 
     payload = json.loads(args.input_json.read_text(encoding="utf-8"))
-    finalized = finalize_preregistration(payload)
+    finalized = finalize_preregistration(
+        payload,
+        artifact_root=args.artifact_root,
+    )
     args.output_md.write_text(finalized, encoding="utf-8")
 
 
