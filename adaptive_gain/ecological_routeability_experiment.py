@@ -15,6 +15,7 @@ stimulus-design target when ecological cues can be acquired separately.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Mapping
 
 from .core import FiniteTask, Query, World, adaptive_gain_receipt
 from .minimal_normal_form import minimal_strict_gain_standard_task
@@ -122,6 +123,49 @@ def uniform_target_accuracy_for_query_bundle(
     correct = sum(max(counts.values()) for counts in pattern_targets.values())
     return correct / len(task.worlds)
 
+
+def uniform_target_accuracy_for_context_policy(
+    task: FiniteTask,
+    *,
+    context_query: str = "q_route",
+    branch_queries: Mapping[object, str] | None = None,
+) -> float:
+    """Bayes-optimal accuracy after one context cue and one routed terminal cue.
+
+    The default policy is q_route=0 -> q_right and q_route=1 -> q_left.
+    The same physical policy is used for both experimental architectures.
+    """
+
+    if branch_queries is None:
+        branch_queries = {0: "q_right", 1: "q_left"}
+
+    lookup = {query.name: query for query in task.queries}
+    if context_query not in lookup:
+        raise ValueError(f"unknown context query: {context_query!r}")
+    missing = [
+        query_name
+        for query_name in branch_queries.values()
+        if query_name not in lookup
+    ]
+    if missing:
+        raise ValueError(f"unknown branch query names: {missing!r}")
+
+    context = lookup[context_query]
+    pattern_targets: dict[tuple[object, object], dict[object, int]] = {}
+    for i, world in enumerate(task.worlds):
+        context_outcome = context.outcomes[i]
+        if context_outcome not in branch_queries:
+            raise ValueError(
+                f"no branch query frozen for context outcome {context_outcome!r}"
+            )
+        terminal = lookup[branch_queries[context_outcome]]
+        pattern = (context_outcome, terminal.outcomes[i])
+        counts = pattern_targets.setdefault(pattern, {})
+        counts[world.target] = counts.get(world.target, 0) + 1
+
+    correct = sum(max(counts.values()) for counts in pattern_targets.values())
+    return correct / len(task.worlds)
+
 def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityContrast:
     routeable = minimal_strict_gain_standard_task()
     control = bypass_matched_control_task()
@@ -133,6 +177,12 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
     )
     control_fixed_terminal_accuracy = uniform_target_accuracy_for_query_bundle(
         control, ("q_left", "q_right")
+    )
+    routeable_adaptive_accuracy = uniform_target_accuracy_for_context_policy(
+        routeable
+    )
+    control_adaptive_accuracy = uniform_target_accuracy_for_context_policy(
+        control
     )
 
     return ExperimentalRouteabilityContrast(
@@ -152,8 +202,8 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         control_strict_gain=control_receipt.strict_adaptive_gain,
         routeable_fixed_terminal_accuracy=routeable_fixed_terminal_accuracy,
         control_fixed_terminal_accuracy=control_fixed_terminal_accuracy,
-        routeable_adaptive_accuracy=1.0 if routeable_receipt.adaptive_cost == 2 else 0.0,
-        control_adaptive_accuracy=1.0 if control_receipt.adaptive_cost <= 2 else 0.0,
+        routeable_adaptive_accuracy=routeable_adaptive_accuracy,
+        control_adaptive_accuracy=control_adaptive_accuracy,
     )
 
 
