@@ -469,15 +469,52 @@ Do not report trial count as the biological sample size.
 
 Do not power the definitive experiment from the theoretical 1.00 versus 0.75 information ceiling.
 
-First run a procedural pilot to estimate:
+The procedural pilot is frozen separately in:
 
-- baseline perceptual error under B=3;
-- within-animal correlation;
-- learning / fatigue across trials;
+- `manuscript/ROUTEABILITY_PROCEDURAL_PILOT_V1.md`;
+- `validation/routeability_procedural_pilot_gate_v1.json`.
+
+It has two roles only.
+
+**Pilot A** uses an architecture-neutral calibration task to freeze the response window and quantify timeout, side bias and apparatus failure.
+
+**Pilot B** uses pooled full-information `B=3` trials to estimate nuisance parameters such as:
+
+- baseline full-information success;
+- within-animal repeated-trial correlation;
+- learning / fatigue across calibration trials;
 - colony heterogeneity;
 - dropout and non-response rates.
 
-Freeze the final sample-size simulation from those nuisance parameters without using the focal architecture × access interaction estimate from the confirmatory test.
+The pilot is not permitted to estimate H1, H2, a routeable-minus-bypass contrast, or any `B=2` architecture × access effect for power planning.
+
+### Three-stage sample-size freeze
+
+Sample-size planning is separated into three explicit stages.
+
+1. **Nuisance receipt.** Freeze Pilot A/B nuisance quantities before opening the focal contrast.
+2. **Conservative screening.** Use `adaptive_gain/routeability_experiment_power.py` and `examples/plan_routeability_experiment.py` to obtain a balanced-cell screening calculation. The effect input must be an externally justified probability-scale SESOI, not the theoretical 0.25 information ceiling and not a focal pilot effect.
+3. **Final simulation.** Before confirmatory collection, replace the screening approximation with simulation of the frozen binomial mixed model using the actual colony allocation, response-window process, nuisance estimates and externally frozen H1/H2 SESOI.
+
+The machine-readable firewall is:
+
+- `validation/routeability_experiment_pilot_power_gate_v1.json`.
+
+The screening calculator uses a conservative Bernoulli variance bound and repeated-trial design effect, then rounds randomized individuals per cell upward to the four-profile counterbalance multiple. It is intentionally not labelled the final powered N.
+
+Thus the only legitimate path to the definitive N is:
+
+[
+	ext{architecture-neutral / pooled nuisance pilot}
+ightarrow
+	ext{externally frozen SESOI}
+ightarrow
+	ext{screening surface}
+ightarrow
+	ext{final GLMM simulation}.
+]
+
+The focal architecture × access effect never feeds backward into its own sample-size target.
 
 ## What would falsify the empirical bridge?
 
