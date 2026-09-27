@@ -20,6 +20,7 @@ def _payload():
         "colony_count": 4,
         "trials_per_individual": 12,
         "power_surface_reference": "validation/final_power_surface.csv",
+        "power_surface_sha256": "a" * 64,
         "h1_sesoi": 0.12,
         "h2_sesoi": 0.10,
         "sesoi_provenance": "practical_decision_threshold",
@@ -29,6 +30,7 @@ def _payload():
         "cue_duration_tolerance_seconds": 0.1,
         "response_window_seconds": 3.0,
         "pilot_receipt_reference": "validation/pilot_receipt.json",
+        "pilot_receipt_sha256": "b" * 64,
         "familiarization_protocol": "Architecture-neutral familiarization",
         "training_dose": "4 full-information blocks",
         "randomization_seed": 20260927,
@@ -37,7 +39,9 @@ def _payload():
         "final_n_decision_rule": "Smallest robust-grid N meeting frozen H1/H2 criterion",
         "frozen_precollection_commit": "1" * 40,
         "final_schedule_reference": "validation/final_schedule.csv",
+        "final_schedule_sha256": "c" * 64,
         "final_stimulus_reference": "validation/final_stimuli.csv",
+        "final_stimulus_sha256": "d" * 64,
     }
 
 
@@ -82,6 +86,8 @@ def test_finalizer_generates_complete_candidate_from_full_payload(tmp_path):
     assert "total randomized individuals: 240" in text
     assert "H1 probability-scale SESOI: 0.12" in text
     assert "TEST-APPROVAL-001" in text
+    assert "`" + "a" * 64 + "`" in text
+    assert "`" + "b" * 64 + "`" in text
 
 
 def test_finalizer_rejects_missing_or_pending_human_fields(tmp_path):
@@ -142,3 +148,33 @@ def test_finalizer_rejects_theory_ceiling_and_unbalanced_cell_n(tmp_path):
     )
     assert completed.returncode != 0
     assert "multiple of four" in completed.stderr
+
+
+def test_finalizer_rejects_unhashed_or_fixture_power_inputs(tmp_path):
+    bad = _payload()
+    bad["power_surface_sha256"] = "not-a-hash"
+    input_json = tmp_path / "bad.json"
+    output_md = tmp_path / "final.md"
+    input_json.write_text(json.dumps(bad), encoding="utf-8")
+    completed = subprocess.run(
+        [sys.executable, str(FINALIZER), str(input_json), str(output_md)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "64-character SHA-256" in completed.stderr
+
+    bad = _payload()
+    bad["power_surface_reference"] = "artifact/software_fixture_summary.csv"
+    input_json.write_text(json.dumps(bad), encoding="utf-8")
+    completed = subprocess.run(
+        [sys.executable, str(FINALIZER), str(input_json), str(output_md)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "cannot point to a software fixture" in completed.stderr
