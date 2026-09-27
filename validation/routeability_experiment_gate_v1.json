@@ -88,5 +88,17 @@
     ],
     "primary_information_interaction": 0.25,
     "regression_test": "tests/test_routeability_experiment_stimulus_builder.py"
+  },
+  "behavioral_feasibility": {
+    "context_presentation": "route cue appears before the terminal cue and remains visible while the branch-specific terminal cue is presented",
+    "reason": "pure delayed priming can be difficult for bumblebees; persistent/concurrent context has stronger precedent",
+    "timing_control": "match and report cue timing/persistence because bumblebee cue weighting depends on spatiotemporal scale",
+    "discriminability_control": "pretest and counterbalance physical symbols across context and terminal cue roles",
+    "references": [
+      "Dale et al. 2005, DOI 10.1242/jeb.01370",
+      "Fauria et al. 2002, DOI 10.1242/jeb.205.7.1009",
+      "Graver et al. 2026, DOI 10.1242/jeb.251126",
+      "Spaethe et al. 2026, Bees flexibly adjust decision strategies to information content in a foraging task"
+    ]
   }
 }
