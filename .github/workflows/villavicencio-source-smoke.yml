@@ -135,6 +135,30 @@ jobs:
             rm -f source/traits/plant_pollinator_data.xlsx
           fi
 
+          if test "$TRAIT_DONE" -eq 0; then
+            EMLN_COMMIT="07797e23510cec0a68257ba405d763b60b8e6968"
+            EMLN_PATH="data/emln_db_datasets/65_Temporal_Chacoff_2020/plant_pollinator_data.xlsx"
+            EMLN_URL="https://raw.githubusercontent.com/Ecological-Complexity-Lab/emln_package/$EMLN_COMMIT/$EMLN_PATH"
+            if curl -fL --retry 2 --retry-delay 2 \
+              -A "Mozilla/5.0" \
+              "$EMLN_URL" \
+              -o source/traits/plant_pollinator_data.xlsx
+            then
+              echo "trait_source=github_emln_pinned_mirror_pending_digest_verification" \
+                > artifact/trait_download_status.txt
+              {
+                echo "repository=Ecological-Complexity-Lab/emln_package"
+                echo "commit=$EMLN_COMMIT"
+                echo "path=$EMLN_PATH"
+                echo "github_blob_sha=99eef735b001751b4407f8fae67d271c2c63a1f3"
+                echo "declared_size_bytes=230652"
+              } > artifact/trait_mirror_provenance.txt
+              TRAIT_DONE=1
+            else
+              rm -f source/traits/plant_pollinator_data.xlsx
+            fi
+          fi
+
           if test "$TRAIT_DONE" -eq 0 && test -n "${DRYAD_TOKEN:-}"; then
             if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$TRAITS_ID/download"               -o source/traits/plant_pollinator_data.xlsx
             then
