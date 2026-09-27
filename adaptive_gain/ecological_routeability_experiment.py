@@ -14,8 +14,10 @@ stimulus-design target when ecological cues can be acquired separately.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from itertools import combinations, product
+from math import log2
 from typing import Mapping, Sequence
 
 from .core import FiniteTask, Query, World, adaptive_gain_receipt
@@ -38,6 +40,10 @@ class ExperimentalRouteabilityContrast:
     routeable_adaptive_accuracy: float
     control_adaptive_accuracy: float
     same_pairwise_information_signatures: bool
+    routeable_terminal_pair_target_information_bits: float
+    control_terminal_pair_target_information_bits: float
+    routeable_context_given_terminals_information_bits: float
+    control_context_given_terminals_information_bits: float
 
     @property
     def exact_minimal_contrast(self) -> bool:
@@ -56,6 +62,10 @@ class ExperimentalRouteabilityContrast:
             and self.routeable_adaptive_accuracy == 1.0
             and self.control_adaptive_accuracy == 1.0
             and self.same_pairwise_information_signatures
+            and self.routeable_terminal_pair_target_information_bits == 0.5
+            and self.control_terminal_pair_target_information_bits == 1.0
+            and self.routeable_context_given_terminals_information_bits == 0.5
+            and self.control_context_given_terminals_information_bits == 0.0
         )
 
 
@@ -169,6 +179,69 @@ def uniform_target_accuracy_for_context_policy(
     correct = sum(max(counts.values()) for counts in pattern_targets.values())
     return correct / len(task.worlds)
 
+def _uniform_entropy(values: Sequence[object]) -> float:
+    """Shannon entropy in bits under the uniform distribution over rows."""
+
+    if not values:
+        raise ValueError("entropy requires at least one value")
+    counts = Counter(values)
+    n = len(values)
+    return -sum(
+        (count / n) * log2(count / n)
+        for count in counts.values()
+    )
+
+
+def uniform_target_information_for_query_bundle(
+    task: FiniteTask,
+    query_names: tuple[str, ...],
+) -> float:
+    """Mutual information I(target; query bundle) in bits under uniform states."""
+
+    lookup = {query.name: query for query in task.queries}
+    missing = [name for name in query_names if name not in lookup]
+    if missing:
+        raise ValueError(f"unknown query names: {missing!r}")
+
+    target = tuple(world.target for world in task.worlds)
+    bundle = tuple(
+        tuple(lookup[name].outcomes[i] for name in query_names)
+        for i in range(len(task.worlds))
+    )
+    joint = tuple(zip(target, bundle))
+    return _uniform_entropy(target) + _uniform_entropy(bundle) - _uniform_entropy(joint)
+
+
+def uniform_target_conditional_information_for_query(
+    task: FiniteTask,
+    query_name: str,
+    *,
+    given_query_names: tuple[str, ...],
+) -> float:
+    """Conditional mutual information I(target; query | given bundle) in bits."""
+
+    lookup = {query.name: query for query in task.queries}
+    names = (query_name,) + given_query_names
+    missing = [name for name in names if name not in lookup]
+    if missing:
+        raise ValueError(f"unknown query names: {missing!r}")
+
+    target = tuple(world.target for world in task.worlds)
+    query = tuple(lookup[query_name].outcomes)
+    given = tuple(
+        tuple(lookup[name].outcomes[i] for name in given_query_names)
+        for i in range(len(task.worlds))
+    )
+    target_given = tuple(zip(target, given))
+    query_given = tuple(zip(query, given))
+    joint = tuple(zip(target, query, given))
+    return (
+        _uniform_entropy(target_given)
+        + _uniform_entropy(query_given)
+        - _uniform_entropy(given)
+        - _uniform_entropy(joint)
+    )
+
 def _binary_unlabeled_pair_signature(
     left: Sequence[object],
     right: Sequence[object],
@@ -255,6 +328,30 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         pairwise_information_signature(routeable)
         == pairwise_information_signature(control)
     )
+    routeable_terminal_pair_target_information_bits = (
+        uniform_target_information_for_query_bundle(
+            routeable, ("q_left", "q_right")
+        )
+    )
+    control_terminal_pair_target_information_bits = (
+        uniform_target_information_for_query_bundle(
+            control, ("q_left", "q_right")
+        )
+    )
+    routeable_context_given_terminals_information_bits = (
+        uniform_target_conditional_information_for_query(
+            routeable,
+            "q_route",
+            given_query_names=("q_left", "q_right"),
+        )
+    )
+    control_context_given_terminals_information_bits = (
+        uniform_target_conditional_information_for_query(
+            control,
+            "q_route",
+            given_query_names=("q_left", "q_right"),
+        )
+    )
 
     return ExperimentalRouteabilityContrast(
         routeable_adaptive_cost=routeable_receipt.adaptive_cost,
@@ -276,6 +373,18 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         routeable_adaptive_accuracy=routeable_adaptive_accuracy,
         control_adaptive_accuracy=control_adaptive_accuracy,
         same_pairwise_information_signatures=same_pairwise_information_signatures,
+        routeable_terminal_pair_target_information_bits=(
+            routeable_terminal_pair_target_information_bits
+        ),
+        control_terminal_pair_target_information_bits=(
+            control_terminal_pair_target_information_bits
+        ),
+        routeable_context_given_terminals_information_bits=(
+            routeable_context_given_terminals_information_bits
+        ),
+        control_context_given_terminals_information_bits=(
+            control_context_given_terminals_information_bits
+        ),
     )
 
 
