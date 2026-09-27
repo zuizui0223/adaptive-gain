@@ -187,5 +187,10 @@
     "repeated_unit": "trial",
     "colony": "random intercept where applicable",
     "sample_size_status": "pending nuisance-parameter calibration"
+  },
+  "training_selection_firewall": {
+    "rule": "architecture-neutral familiarization before assignment; fixed-dose architecture-specific training after assignment; no architecture-specific accuracy gate for randomized primary test entry",
+    "training_performance": "record as outcome/diagnostic rather than exclusion criterion",
+    "unavoidable_hard_criterion": "criterion-reacher test analysis becomes per-protocol and cannot replace the randomized primary interpretation"
   }
 }
