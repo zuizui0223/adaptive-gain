@@ -467,12 +467,26 @@ jobs:
           )
           if result["decision_equivalence_inferred"] is not False:
               raise SystemExit("CV result inferred decision equivalence")
-          for risk in ("gain", "loss"):
-              endpoint = result["endpoints"][risk]
-              if endpoint["fold_count"] != 5:
-                  raise SystemExit(f"{risk}: expected five held-out transitions")
-              if endpoint["n"] <= 0:
-                  raise SystemExit(f"{risk}: empty held-out prediction surface")
+          gate = json.loads(
+              Path("validation/villavicencio_conventional_filter_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          primary_scope = gate["model_family"]["primary_scope"]
+          if result["primary_scope"] != primary_scope:
+              raise SystemExit("CV primary scope disagrees with frozen gate")
+          for scope, specification in gate["model_family"]["transition_scopes"].items():
+              expected_folds = len(specification["transitions"])
+              for risk in ("gain", "loss"):
+                  endpoint = result["scopes"][scope]["endpoints"][risk]
+                  if endpoint["fold_count"] != expected_folds:
+                      raise SystemExit(
+                          f"{scope}/{risk}: expected {expected_folds} held-out transitions"
+                      )
+                  if endpoint["n"] <= 0:
+                      raise SystemExit(
+                          f"{scope}/{risk}: empty held-out prediction surface"
+                      )
           print(json.dumps(result, indent=2, sort_keys=True))
           PY
 
