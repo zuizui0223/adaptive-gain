@@ -60,7 +60,8 @@
     "H2 hierarchical pass fraction",
     "mean H1/H2 estimates among successful fits",
     "retained-individual, trial and timeout diagnostics",
-    "population-average contrast estimates use fitted random-intercept integration rather than zero-random-effect cell predictions"
+    "population-average contrast estimates use fitted random-intercept integration rather than zero-random-effect cell predictions",
+    "robustness_id identifying the nuisance/baseline scenario replicated across every candidate N"
   ],
   "final_N_promotion_rule": {
     "required": [
@@ -69,10 +70,12 @@
       "baseline planning surface frozen",
       "actual/planned colony complete-block allocation vector frozen or included in the prespecified robustness surface",
       "operating-characteristic grid includes multiple plausible nuisance/baseline scenarios rather than one favorable point",
-      "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface"
+      "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface",
+      "every candidate individuals-per-cell value is evaluated on the exact same frozen robustness_id set",
+      "all rows in the final power surface use the same frozen H1/H2 SESOI values and SESOI provenance"
     ],
     "final_N_status": "not frozen",
-    "forbidden": "do not select N from the most favorable scenario or rerun the grid after viewing confirmatory outcomes"
+    "forbidden": "do not select N from the most favorable scenario or rerun the grid after viewing confirmatory outcomes; do not vary the robustness scenario set or SESOI across candidate N values"
   },
   "software_fixture_boundary": "CI may use arbitrary synthetic nuisance/effect values solely to verify code execution. Fixture outputs are never scientific planning results and must not enter the readiness ledger as power evidence.",
   "claim_ceiling": "The simulator can freeze and audit final sample-size operating characteristics once real nuisance and external-effect inputs exist. Code readiness alone does not justify a biological N."
