@@ -133,9 +133,11 @@ The second cue therefore depends on the first cue's outcome.
 
 ### Fixed access
 
-Observation 1 and 2 are always terminal A and terminal B, independent of state.
+Observation 1 is one terminal cue and observation 2 is the other terminal cue, independent of state.
 
-The order of A and B should be counterbalanced, but the same pair is provisioned on every trial.
+The first terminal cue remains visible while the second is presented, matching the two-stage timing and cue persistence of contingent access. The A→B versus B→A order is counterbalanced independently of state.
+
+Thus the access manipulation is not sequential versus simultaneous presentation. Both arms receive two sequentially staged observations; they differ in whether the identity of observation 2 depends on the outcome of observation 1.
 
 ## Exact information prediction at budget 2
 
@@ -229,8 +231,8 @@ A clean implementation uses shutters, cards or other non-flickering displays so 
 For the primary B=2 contrast:
 
 - contingent treatment reveals context first and then the context-selected terminal cue **while the context remains visible**;
-- fixed treatment reveals terminal A and terminal B without an informative route cue;
-- total number of informative cue channels and nominal cue-exposure duration are matched.
+- fixed treatment reveals one terminal cue first and then the other terminal cue on the same timing schedule, with the first terminal cue remaining visible during the second;
+- total number of informative cue channels, stage durations and cue-persistence rules are matched.
 
 The persistent-context rule is deliberate. Bumblebees can use contextual cues to choose opposite colour targets, but purely sequential priming that disappears before the target can be much harder to learn unless supported by additional spatial structure. The primary implementation therefore tests contingent information without making success depend on fragile delayed-context memory.
 
