@@ -58,6 +58,9 @@ For both tasks the six canonical pair signatures are identical:
 
 Thus every pairwise mutual-information value is identical between the two architectures, while the strict adaptivity gaps are `1` and `0`.
 
+The cue-only match is even stronger. The complete three-cue vector has the same exact distribution in both tasks: the four vectors `000, 001, 011, 111` each occur once. Therefore any statistic computed from the cue distribution alone—even one using the full three-cue joint distribution—cannot distinguish the two architectures. The difference enters through the higher-order relation between that matched cue surface and the target.
+
+
 ## Where the hidden information appears
 
 The higher-order difference can be localized exactly.
