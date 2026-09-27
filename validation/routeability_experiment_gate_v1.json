@@ -33,7 +33,8 @@
         3
       ]
     ],
-    "same_between_architectures": true
+    "same_between_architectures": true,
+    "same_pairwise_information_signatures": true
   },
   "exact_costs": {
     "routeable": {
@@ -141,5 +142,21 @@
       ]
     },
     "diagnostic": "guided success plus autonomous failure indicates a policy-learning/action-selection bottleneck rather than failure of the formal information contrast"
+  },
+  "pairwise_information_match": {
+    "status": "exact_certificate_green",
+    "variables": [
+      "target",
+      "q_left",
+      "q_route",
+      "q_right"
+    ],
+    "named_pair_count": 6,
+    "property": "for every named pair, routeable and bypass-control tasks have the same canonical binary 2x2 contingency-count profile up to independent relabeling of binary outcomes",
+    "consequence": "all pairwise mutual-information values are identical between architectures",
+    "interpretation": "the strict routeability contrast is higher-order and cannot be reduced to single-cue informativeness or the pairwise mutual-information matrix",
+    "executable": "adaptive_gain.ecological_routeability_experiment.pairwise_information_signature",
+    "regression_test": "tests/test_ecological_routeability_experiment.py",
+    "claim_boundary": "fixed semantic 0/1 labels are not claimed to produce identical signed contingency tables for every target-cue pair"
   }
 }
