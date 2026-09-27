@@ -31,11 +31,14 @@ def test_stage1_gate_forbids_decision_class_proxying():
     assert "cannot validate environmental routeability" in data["claim_ceiling"]
 
 
-def test_source_manifest_keeps_unmaterialized_checksums_null():
+def test_source_manifest_records_partial_verified_materialization():
     data = json.loads(SOURCES.read_text(encoding="utf-8"))
-    assert data["status"] == "anonymous_metadata_frozen_bytes_not_materialized"
+    assert data["status"] == "trait_bytes_verified_response_metadata_only"
     assert len(data["sources"]) == 2
-    assert all(source["raw_sha256"] is None for source in data["sources"])
+    response, traits = data["sources"]
+    assert response["raw_sha256"] is None
+    assert traits["raw_sha256"] == traits["target_file"]["published_digest"]
+    assert traits["materialization"]["dryad_digest_match"] is True
 
 
 def test_source_manifest_records_18_network_response_surface():
@@ -70,3 +73,18 @@ def test_source_manifest_pins_trait_mirror_without_trusting_name_alone():
     assert mirror["size_bytes"] == traits["target_file"]["size_bytes"]
     assert mirror["status"] == "pinned_pending_dryad_sha256_verification"
     assert "published Dryad digest" in mirror["admission_rule"]
+
+
+def test_stage1_gate_records_green_annual_response_estimability():
+    data = json.loads(GATE.read_text(encoding="utf-8"))
+    annual = data["annual_detection_sensitive_fallback"]
+    assert data["status"] == "annual_fallback_response_estimable_primary_subseason_blocked"
+    assert annual["transition_count"] == 5
+    assert annual["shared_dyad_rows"] == 7620
+    assert annual["changed_count"] == 1134
+    assert annual["unchanged_count"] == 6486
+    assert annual["transitions_with_both_outcomes"] == 5
+    assert annual["join_unmatched_plants"] == 0
+    assert annual["join_unmatched_pollinators"] == 0
+    assert annual["gate"] == "PASS_response_estimability"
+    assert data["stage1_success_gate_status"]["conventional_filter_join"] == "NEXT"
