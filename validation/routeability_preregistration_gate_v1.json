@@ -41,7 +41,10 @@
     "assignment CSV independently contains 12 exactly balanced treatment cells, unique individuals and balanced cb0/cb1/cb2/cb3 profiles",
     "final schedule CSV independently preserves individual/colony/block/treatment/profile assignments and exact trials per individual",
     "final schedule receipt links the randomization-receipt hash, assignment hash and final schedule hash without mismatch",
-    "pilot receipt certifies focal-contrast blindness and its frozen response window matches the preregistration"
+    "pilot receipt certifies focal-contrast blindness and its frozen response window matches the preregistration",
+    "final power surface contains at least two unique robustness scenarios and preserves N, nuisance, SESOI and H1/H2 operating-characteristic columns",
+    "final power surface contains a scenario matching the preregistered final individuals-per-cell and H1/H2 SESOI",
+    "final stimulus CSV is independently rechecked against the exact frozen 8-row routeable/bypass logical stimulus mapping"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -55,7 +58,9 @@
     "hand-editing the final schedule after roster randomization or hash freeze",
     "supplying fabricated hash strings without matching artifact bytes",
     "rehashing a modified receipt whose internal assignment/schedule chain no longer matches",
-    "using a final schedule whose individual/colony/treatment/profile fields differ from the frozen assignment artifact"
+    "using a final schedule whose individual/colony/treatment/profile fields differ from the frozen assignment artifact",
+    "rehashing a power CSV that no longer contains a scenario matching the frozen final N and H1/H2 SESOI",
+    "rehashing a modified stimulus CSV whose logical target/cue mapping differs from the exact frozen task"
   ],
   "output_status": "FINALIZED PRE-COLLECTION PREREGISTRATION CANDIDATE",
   "current_output_status": "no final preregistration generated",
@@ -70,7 +75,9 @@
       "assignment 12-cell balance and counterbalance",
       "schedule-to-assignment fidelity",
       "schedule row counts and trials-per-individual",
-      "receipt schemas and internal hash links"
+      "receipt schemas and internal hash links",
+      "power robustness surface has multiple scenarios and contains the frozen final N/SESOI point",
+      "logical stimulus artifact exactly matches the eight frozen architecture/state rows"
     ]
   }
 }
