@@ -170,6 +170,7 @@ def _validate_power_surface_csv(
         "individuals_per_cell",
         "trials_per_individual",
         "colony_count",
+        "colony_block_counts",
         "individual_sd_logit",
         "colony_sd_logit",
         "dropout_fraction",
@@ -195,6 +196,25 @@ def _validate_power_surface_csv(
         if n < 4 or n % 4 != 0:
             raise ValueError(
                 "final power surface contains individuals_per_cell incompatible with four-profile counterbalancing"
+            )
+        row_colony_count = int(row["colony_count"])
+        try:
+            block_counts = tuple(
+                int(value)
+                for value in row["colony_block_counts"].split(";")
+                if value != ""
+            )
+        except ValueError as exc:
+            raise ValueError(
+                "final power surface colony_block_counts must be semicolon-separated positive integers"
+            ) from exc
+        if (
+            len(block_counts) != row_colony_count
+            or any(value < 1 for value in block_counts)
+            or sum(block_counts) != n
+        ):
+            raise ValueError(
+                "final power surface colony_block_counts must contain one positive count per colony and sum to individuals_per_cell"
             )
         for field in (
             "fit_success_fraction",
