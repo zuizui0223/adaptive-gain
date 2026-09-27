@@ -10,6 +10,14 @@ from collections import defaultdict
 from pathlib import Path
 
 
+PRIMARY_SCOPE = "strict_core_2008_2011"
+EXPECTED_FOLDS = {
+    "strict_core_2008_2011": 3,
+    "near_core_2007_2011": 4,
+    "all_annual_2006_2011": 5,
+}
+
+
 def _read(path: Path):
     with path.open(newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle))
@@ -26,7 +34,10 @@ def _log_loss(y, p):
 
 
 def _brier(y, p):
-    return sum((probability - outcome) ** 2 for outcome, probability in zip(y, p)) / len(y)
+    return sum(
+        (probability - outcome) ** 2
+        for outcome, probability in zip(y, p)
+    ) / len(y)
 
 
 def _auc(y, p):
@@ -44,27 +55,40 @@ def _auc(y, p):
         while end < len(ordered) and ordered[end][0] == ordered[index][0]:
             end += 1
         average_rank = (rank + (rank + end - index - 1)) / 2
-        rank_sum += average_rank * sum(outcome for _, outcome in ordered[index:end])
+        rank_sum += average_rank * sum(
+            outcome for _, outcome in ordered[index:end]
+        )
         rank += end - index
         index = end
 
-    return (rank_sum - positives * (positives + 1) / 2) / (positives * negatives)
+    return (
+        rank_sum - positives * (positives + 1) / 2
+    ) / (positives * negatives)
 
 
 def _metrics(rows):
     y = [int(row["outcome"]) for row in rows]
     model = [float(row["model_probability"]) for row in rows]
     null = [float(row["null_probability"]) for row in rows]
+    model_log_loss = _log_loss(y, model)
+    null_log_loss = _log_loss(y, null)
+    model_brier = _brier(y, model)
+    null_brier = _brier(y, null)
     return {
         "n": len(rows),
         "events": sum(y),
         "event_fraction": sum(y) / len(y),
-        "model_log_loss": _log_loss(y, model),
-        "null_log_loss": _log_loss(y, null),
-        "heldout_log_loss_improvement": _log_loss(y, null) - _log_loss(y, model),
-        "model_brier": _brier(y, model),
-        "null_brier": _brier(y, null),
-        "heldout_brier_improvement": _brier(y, null) - _brier(y, model),
+        "model_log_loss": model_log_loss,
+        "null_log_loss": null_log_loss,
+        "heldout_log_loss_improvement": null_log_loss - model_log_loss,
+        "relative_log_loss_reduction": (
+            None
+            if null_log_loss == 0
+            else (null_log_loss - model_log_loss) / null_log_loss
+        ),
+        "model_brier": model_brier,
+        "null_brier": null_brier,
+        "heldout_brier_improvement": null_brier - model_brier,
         "model_roc_auc": _auc(y, model),
         "null_roc_auc": _auc(y, null),
     }
@@ -80,72 +104,92 @@ def main() -> None:
     predictions = _read(args.predictions)
     folds = _read(args.folds)
 
-    by_risk = defaultdict(list)
-    by_risk_transition = defaultdict(list)
+    by_scope_risk = defaultdict(list)
+    by_scope_risk_transition = defaultdict(list)
     for row in predictions:
+        scope = row["analysis_scope"]
         risk = row["risk_set"]
         transition = row["transition"]
-        by_risk[risk].append(row)
-        by_risk_transition[(risk, transition)].append(row)
+        by_scope_risk[(scope, risk)].append(row)
+        by_scope_risk_transition[(scope, risk, transition)].append(row)
 
-    fold_by_risk = defaultdict(list)
+    fold_by_scope_risk = defaultdict(list)
     for row in folds:
-        fold_by_risk[row["risk_set"]].append(row)
+        fold_by_scope_risk[(row["analysis_scope"], row["risk_set"])].append(row)
 
-    endpoints = {}
-    for risk in ("gain", "loss"):
-        rows = by_risk[risk]
-        if not rows:
-            raise SystemExit(f"no held-out predictions for {risk}")
-        aggregate = _metrics(rows)
-        risk_folds = fold_by_risk[risk]
-        if len(risk_folds) != 5:
-            raise SystemExit(f"expected five temporal folds for {risk}")
+    scopes = {}
+    for scope, expected_fold_count in EXPECTED_FOLDS.items():
+        endpoints = {}
+        for risk in ("gain", "loss"):
+            rows = by_scope_risk[(scope, risk)]
+            if not rows:
+                raise SystemExit(f"no held-out predictions for {scope}/{risk}")
+            aggregate = _metrics(rows)
+            risk_folds = fold_by_scope_risk[(scope, risk)]
+            if len(risk_folds) != expected_fold_count:
+                raise SystemExit(
+                    f"expected {expected_fold_count} folds for {scope}/{risk}"
+                )
 
-        fold_metrics = {}
-        for transition in sorted(
-            transition for r, transition in by_risk_transition if r == risk
-        ):
-            fold_metrics[transition] = _metrics(
-                by_risk_transition[(risk, transition)]
+            fold_metrics = {}
+            transitions = sorted(
+                transition
+                for s, r, transition in by_scope_risk_transition
+                if s == scope and r == risk
             )
+            for transition in transitions:
+                fold_metrics[transition] = _metrics(
+                    by_scope_risk_transition[(scope, risk, transition)]
+                )
 
-        all_converged = all(
-            row["converged"].strip().lower() == "true"
-            for row in risk_folds
-        )
-        endpoint_pass = (
-            all_converged
-            and aggregate["heldout_log_loss_improvement"] > 0
-            and math.isfinite(aggregate["model_log_loss"])
-        )
-        endpoints[risk] = {
-            **aggregate,
-            "fold_count": len(risk_folds),
-            "all_folds_converged": all_converged,
-            "endpoint_gate": "PASS" if endpoint_pass else "FAIL",
-            "folds": fold_metrics,
+            all_converged = all(
+                row["converged"].strip().lower() == "true"
+                for row in risk_folds
+            )
+            endpoint_pass = (
+                all_converged
+                and aggregate["heldout_log_loss_improvement"] > 0
+                and math.isfinite(aggregate["model_log_loss"])
+            )
+            endpoints[risk] = {
+                **aggregate,
+                "fold_count": len(risk_folds),
+                "all_folds_converged": all_converged,
+                "endpoint_gate": "PASS" if endpoint_pass else "FAIL",
+                "folds": fold_metrics,
+            }
+
+        scopes[scope] = {
+            "role": (
+                "primary"
+                if scope == PRIMARY_SCOPE
+                else "sampling-effort sensitivity"
+            ),
+            "endpoints": endpoints,
         }
 
+    primary = scopes[PRIMARY_SCOPE]["endpoints"]
     promoted = any(
-        endpoints[risk]["endpoint_gate"] == "PASS"
+        primary[risk]["endpoint_gate"] == "PASS"
         for risk in ("gain", "loss")
     )
     result = {
         "schema": "adaptive-gain-villavicencio-conventional-filter-cv-v1",
         "analysis_scope": "annual detection-sensitive fallback",
+        "primary_scope": PRIMARY_SCOPE,
         "decision_equivalence_inferred": False,
         "predictor_tuning_after_outcome": False,
-        "endpoints": endpoints,
+        "scopes": scopes,
         "promotion_gate": (
-            "PASS_at_least_one_endpoint_predictive"
+            "PASS_primary_scope_at_least_one_endpoint_predictive"
             if promoted
-            else "FAIL_no_endpoint_predictive"
+            else "FAIL_primary_scope_no_endpoint_predictive"
         ),
         "interpretation": (
             "A PASS means the frozen conventional filters carry reproducible "
-            "information about annual link dynamics in held-out transitions. "
-            "It does not validate routeability or decision-structural turnover."
+            "information about annual link dynamics in the sampling-consistent "
+            "primary scope. It does not validate routeability or "
+            "decision-structural turnover."
         ),
     }
     args.output.write_text(
