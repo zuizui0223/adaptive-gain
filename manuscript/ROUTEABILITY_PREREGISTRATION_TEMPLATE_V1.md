@@ -261,7 +261,19 @@ Final N decision rule:
 
 {{final_n_decision_rule}}
 
-The final N must be chosen from the preregistered robustness surface, not from the most favorable scenario.
+Frozen machine-readable final-N threshold rule:
+
+{{final_n_rule_reference}}
+
+SHA-256: `{{final_n_rule_sha256}}`
+
+Mechanically selected final-N receipt:
+
+{{final_n_receipt_reference}}
+
+SHA-256: `{{final_n_receipt_sha256}}`
+
+The final N must equal the independently recomputed smallest individuals-per-cell value that passes every frozen threshold in every required robustness scenario. It is not hand-selected from the power surface.
 
 ## 14. Data and code freeze
 
