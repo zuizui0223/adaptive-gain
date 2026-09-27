@@ -387,6 +387,95 @@ jobs:
               raise SystemExit("annual pollinator codes do not fully join to insect_names")
           PY
 
+      - name: Build frozen conventional-filter dyad table
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-conventional-filter-table-v1","materialized":false}' \
+              > artifact/annual_conventional_filter_table_summary.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python examples/villavicencio_annual_filter_table.py \
+            "$XLSX" \
+            artifact/annual_stage1_dyads.csv \
+            --output artifact/annual_conventional_filter_dyads.csv \
+            --summary artifact/annual_conventional_filter_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/annual_conventional_filter_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          expected = json.loads(
+              Path("validation/villavicencio_conventional_filter_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["row_count"] != expected["completeness"]["shared_dyad_rows"]:
+              raise SystemExit("conventional-filter row count changed")
+          if summary["complete_case_count"] != expected["completeness"]["complete_case_rows_all_frozen_predictors"]:
+              raise SystemExit("conventional-filter complete-case count changed")
+          for risk in ("gain", "loss"):
+              observed = summary["risk_sets"][risk]
+              frozen = expected["endpoints"][risk]
+              for key in ("n", "events", "nonevents"):
+                  if observed[key] != frozen[key]:
+                      raise SystemExit(
+                          f"{risk} {key} changed: {observed[key]} != {frozen[key]}"
+                      )
+          if summary["decision_equivalence_inferred"] is not False:
+              raise SystemExit("conventional-filter table inferred decision equivalence")
+          PY
+
+      - name: Fit frozen conventional-filter temporal CV
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-conventional-filter-cv-v1","materialized":false}' \
+              > artifact/annual_conventional_filter_cv.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_conventional_filter_cv.R \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_conventional_filter_cv_folds.csv
+
+          python examples/summarize_villavicencio_conventional_filter_cv.py \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_conventional_filter_cv_folds.csv \
+            artifact/annual_conventional_filter_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_conventional_filter_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("CV result inferred decision equivalence")
+          for risk in ("gain", "loss"):
+              endpoint = result["endpoints"][risk]
+              if endpoint["fold_count"] != 5:
+                  raise SystemExit(f"{risk}: expected five held-out transitions")
+              if endpoint["n"] <= 0:
+                  raise SystemExit(f"{risk}: empty held-out prediction surface")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+
       - name: Summarize exported periods before response analysis
         shell: bash
         run: |
