@@ -34,7 +34,34 @@
       ]
     ],
     "same_between_architectures": true,
-    "same_pairwise_information_signatures": true
+    "same_pairwise_information_signatures": true,
+    "same_full_cue_joint_distribution": true,
+    "full_cue_joint_distribution": [
+      {
+        "q_left": 0,
+        "q_route": 0,
+        "q_right": 0,
+        "count": 1
+      },
+      {
+        "q_left": 0,
+        "q_route": 0,
+        "q_right": 1,
+        "count": 1
+      },
+      {
+        "q_left": 0,
+        "q_route": 1,
+        "q_right": 1,
+        "count": 1
+      },
+      {
+        "q_left": 1,
+        "q_route": 1,
+        "q_right": 1,
+        "count": 1
+      }
+    ]
   },
   "exact_costs": {
     "routeable": {
@@ -164,7 +191,9 @@
       "routeable_context_given_terminals_information_bits": 0.5,
       "control_context_given_terminals_information_bits": 0,
       "interpretation": "in the routeable task half a target bit remains outside the fixed terminal pair and is supplied by context; in the bypass control the terminal pair already contains the full target bit"
-    }
+    },
+    "full_cue_joint_match": "exact; the three-cue joint outcome distribution is identical between routeable and bypass architectures",
+    "stronger_interpretation": "cue ecology alone is distribution-matched; the architectures differ in the higher-order mapping from cue combinations to target/action structure"
   },
   "schedule": {
     "gate": "validation/routeability_experiment_schedule_gate_v1.json",
