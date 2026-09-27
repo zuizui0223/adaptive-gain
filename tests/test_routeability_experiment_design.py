@@ -103,3 +103,15 @@ def test_experiment_design_blocks_post_randomization_training_selection():
     ):
         assert phrase in text
     assert "failure to meet a prespecified training criterion" not in text
+
+
+def test_experiment_design_keeps_timeout_trials_in_primary_endpoint():
+    text = _text()
+    for phrase in (
+        "within a frozen response window",
+        "incorrect decision **or no terminal decision before timeout**",
+        "remain in the primary denominator",
+        "must not condition on having produced a response",
+        "conditional choice accuracy among trials with a terminal response",
+    ):
+        assert phrase in text
