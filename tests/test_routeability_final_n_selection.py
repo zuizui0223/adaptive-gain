@@ -21,6 +21,15 @@ FIELDS = [
     "robustness_id",
     "individuals_per_cell",
     "trials_per_individual",
+    "colony_count",
+    "individual_sd_logit",
+    "colony_sd_logit",
+    "dropout_fraction",
+    "timeout_fraction",
+    "alpha_two_sided",
+    "p_KF_B1", "p_KC_B1", "p_RF_B1", "p_RC_B1",
+    "p_KF_B2", "p_KC_B2", "p_RF_B2", "p_RC_B2",
+    "p_KF_B3", "p_KC_B3", "p_RF_B3", "p_RC_B3",
     "fit_success_fraction",
     "h1_directional_rejection_fraction",
     "h2_hierarchical_pass_fraction",
@@ -38,7 +47,7 @@ def _write_surface(path: Path, rows):
 
 
 def _rows():
-    return [
+    rows = [
         {
             "scenario_id": "n8_a",
             "robustness_id": "a",
@@ -112,6 +121,41 @@ def _rows():
             "sesoi_provenance": "practical_decision_threshold",
         },
     ]
+
+
+    profiles = {
+        "a": {
+            "colony_count": 4,
+            "individual_sd_logit": 0.5,
+            "colony_sd_logit": 0.2,
+            "dropout_fraction": 0.10,
+            "timeout_fraction": 0.05,
+            "alpha_two_sided": 0.05,
+            "p_KF_B1": 0.50, "p_KC_B1": 0.51,
+            "p_RF_B1": 0.50, "p_RC_B1": 0.53,
+            "p_KF_B2": 0.60, "p_KC_B2": 0.62,
+            "p_RF_B2": 0.58, "p_RC_B2": 0.72,
+            "p_KF_B3": 0.70, "p_KC_B3": 0.71,
+            "p_RF_B3": 0.70, "p_RC_B3": 0.73,
+        },
+        "b": {
+            "colony_count": 4,
+            "individual_sd_logit": 0.8,
+            "colony_sd_logit": 0.3,
+            "dropout_fraction": 0.15,
+            "timeout_fraction": 0.08,
+            "alpha_two_sided": 0.05,
+            "p_KF_B1": 0.45, "p_KC_B1": 0.46,
+            "p_RF_B1": 0.45, "p_RC_B1": 0.48,
+            "p_KF_B2": 0.55, "p_KC_B2": 0.57,
+            "p_RF_B2": 0.53, "p_RC_B2": 0.67,
+            "p_KF_B3": 0.65, "p_KC_B3": 0.66,
+            "p_RF_B3": 0.65, "p_RC_B3": 0.68,
+        },
+    }
+    for row in rows:
+        row.update(profiles[row["robustness_id"]])
+    return rows
 
 
 def _rule():
@@ -265,4 +309,14 @@ def test_final_n_selector_rejects_mixed_sesoi_provenance_or_trial_design(tmp_pat
     mixed_trials[-1]["trials_per_individual"] = 12
     _write_surface(surface, mixed_trials)
     with pytest.raises(ValueError, match="one frozen positive trials_per_individual"):
+        select_final_individuals_per_cell(surface, _rule())
+
+
+def test_final_n_selector_rejects_same_label_with_changed_nuisance_surface(tmp_path):
+    surface = tmp_path / "surface.csv"
+    rows = _rows()
+    rows[2]["timeout_fraction"] = 0.20
+    _write_surface(surface, rows)
+
+    with pytest.raises(ValueError, match="changes nuisance, baseline"):
         select_final_individuals_per_cell(surface, _rule())
