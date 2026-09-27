@@ -197,5 +197,10 @@
     "do not promote annual fallback over the 18-subseason primary design",
     "do not interpret predictive improvement as a causal effect"
   ],
-  "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json"
+  "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json",
+  "anti_leakage": {
+    "policy": "use independently measured raw morphology and phenological overlap; do not import interaction-derived trait-matching scores into the link-change predictor set",
+    "reason": "an interaction-derived matching score could reuse the response network and make the conventional-filter benchmark circular",
+    "original_paper_trait_matching": "treated as literature context, not as a frozen predictor in this prospective link-change audit"
+  }
 }
