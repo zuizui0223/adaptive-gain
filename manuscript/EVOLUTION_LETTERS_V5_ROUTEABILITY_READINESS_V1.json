@@ -215,13 +215,13 @@
     },
     {
       "path": "manuscript/INDEPENDENT_DECISION_LAYER_SCREEN_V1.md",
-      "status": "empirical_bridge_screen_not_exact_routeability_confirmation",
-      "central_result": "Kent Island supplies a direct independent colour-learning layer linked to a real plant-pollinator network; it is A-cognition rather than A-exact because the full contingent cue hierarchy is not measured",
+      "status": "empirical_bridge_screen_kent_cognition_source_confirmatory_no_go",
+      "central_result": "Kent Island supplies a direct independent colour-learning layer linked to a real plant-pollinator network, but the network-facing cognition contrast has only six independent pollinator species and is not confirmatory-ready for a species-level routeability claim",
       "strongest_candidate": {
         "system": "Kent Island pollinator cognition network",
         "article_doi": "10.1098/rsbl.2025.0044",
         "data_doi": "10.5061/dryad.9p8cz8wtm",
-        "admission": "A-cognition",
+        "admission": "A-cognition source; confirmatory NO-GO at current independent-unit count",
         "assets": [
           "2019/2022/2023 plant-pollinator network",
           "plant phenology",
@@ -229,15 +229,16 @@
           "hymenopteran colour-space summaries",
           "independent colour-learning experiment in six Hymenoptera species"
         ],
-        "novelty_boundary": "do not repeat the published specialization-versus-learning result as a new headline"
+        "novelty_boundary": "do not repeat the published specialization-versus-learning result as a new headline",
+        "reason_not_confirmatory": "the direct learning assay spans six pollinator species; visits or dyads cannot be treated as independent replication of a species-level cognition exposure"
       },
       "triangulation": {
         "network_response": "Villavicencio repeated link dynamics and frozen conventional-filter baseline",
         "cognition_network": "Kent Island independent colour learning plus field network",
         "decision_cost_experiment": "Austin et al. 2018 floral marketplace factorial experiment"
       },
-      "next_gate": "freeze a restricted colour-channel Kent Island analysis using externally defined perceptual structure and independent learning performance, without deriving exposure from network links",
-      "claim_boundary": "restricted-channel and cognition-layer tests are empirical bridges, not exact confirmation of the full V5 routeability construct",
+      "next_gate": "prioritize a controlled routeability experiment that manipulates branch structure independently of species composition and realized network response; retain Kent as mechanistic calibration/source-design template",
+      "claim_boundary": "Kent can calibrate direct cognition and restricted colour-channel structure but cannot confirm full V5 routeability; no dyad-level pseudoreplication of a six-species cognition exposure",
       "regression_test": "tests/test_independent_decision_layer_screen.py"
     },
     {
