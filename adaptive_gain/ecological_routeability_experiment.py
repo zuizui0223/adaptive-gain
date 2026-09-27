@@ -157,6 +157,78 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
     )
 
 
+
+@dataclass(frozen=True)
+class BudgetInformationCeiling:
+    budget: int
+    routeable_adaptive_policy: float
+    routeable_fixed_policy: float
+    control_adaptive_policy: float
+    control_fixed_policy: float
+
+    @property
+    def architecture_by_access_interaction(self) -> float:
+        return (
+            self.routeable_adaptive_policy
+            - self.routeable_fixed_policy
+            - (
+                self.control_adaptive_policy
+                - self.control_fixed_policy
+            )
+        )
+
+
+def routeability_budget_information_ceilings() -> tuple[BudgetInformationCeiling, ...]:
+    """Exact uniform-state ceilings for the preregistered B=1,2,3 ladder.
+
+    B=1 compares the first observation of the adaptive policy (q_route) with
+    one terminal cue from the fixed policy (q_left; q_right gives the same
+    accuracy in both architectures). B=2 is the focal routeability window.
+    B=3 supplies all three cues to both access arms.
+    """
+
+    routeable = minimal_strict_gain_standard_task()
+    control = bypass_matched_control_task()
+
+    b1_route_adaptive = uniform_target_accuracy_for_query_bundle(
+        routeable, ("q_route",)
+    )
+    b1_route_fixed = uniform_target_accuracy_for_query_bundle(
+        routeable, ("q_left",)
+    )
+    b1_control_adaptive = uniform_target_accuracy_for_query_bundle(
+        control, ("q_route",)
+    )
+    b1_control_fixed = uniform_target_accuracy_for_query_bundle(
+        control, ("q_left",)
+    )
+
+    contrast = ecological_routeability_experiment_contrast()
+
+    return (
+        BudgetInformationCeiling(
+            budget=1,
+            routeable_adaptive_policy=b1_route_adaptive,
+            routeable_fixed_policy=b1_route_fixed,
+            control_adaptive_policy=b1_control_adaptive,
+            control_fixed_policy=b1_control_fixed,
+        ),
+        BudgetInformationCeiling(
+            budget=2,
+            routeable_adaptive_policy=contrast.routeable_adaptive_accuracy,
+            routeable_fixed_policy=contrast.routeable_fixed_terminal_accuracy,
+            control_adaptive_policy=contrast.control_adaptive_accuracy,
+            control_fixed_policy=contrast.control_fixed_terminal_accuracy,
+        ),
+        BudgetInformationCeiling(
+            budget=3,
+            routeable_adaptive_policy=1.0,
+            routeable_fixed_policy=1.0,
+            control_adaptive_policy=1.0,
+            control_fixed_policy=1.0,
+        ),
+    )
+
 def experimental_stimulus_table(task: FiniteTask) -> tuple[dict[str, object], ...]:
     """Return a deterministic table for translating a task into physical stimuli."""
 
