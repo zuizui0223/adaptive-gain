@@ -300,7 +300,16 @@
       "formal_module": "adaptive_gain/ecological_routeability_experiment.py",
       "promotion_rule": "preferred first direct empirical test because branch structure is manipulated independently of species composition and observed network response",
       "claim_boundary": "a positive controlled experiment would establish behavioral consequences of matched cue architecture, not natural-network rewiring or ecosystem-level effects",
-      "behavioral_feasibility": "present route cue before the terminal cue but keep context visible during terminal presentation; match timing/persistence and pretest cue discriminability"
+      "behavioral_feasibility": "present route cue before the terminal cue but keep context visible during terminal presentation; match timing/persistence and pretest cue discriminability",
+      "pairwise_information_nonidentifiability": {
+        "status": "exact_constructive_certificate",
+        "theory": "theory/PAIRWISE_INFORMATION_ROUTEABILITY_NONIDENTIFIABILITY.md",
+        "executable": "adaptive_gain.ecological_routeability_experiment.pairwise_information_signature",
+        "result": "routeable and bypass-control tasks have identical named pairwise information signatures across target and all three cues, but C_F differs 3 versus 2 while C_A=2 in both",
+        "consequence": "strict adaptive gain is not identifiable from the pairwise mutual-information surface alone",
+        "novelty_boundary": "generic higher-order synergy and XOR-style pairwise insufficiency are prior art; the contribution is the exact minimal routeability-versus-bypass construction",
+        "experiment_value": "the symbolic control matches pairwise information strength, so the architecture-by-access contrast isolates higher-order conditional organization more tightly than cue-marginal matching alone"
+      }
     }
   ]
 }
