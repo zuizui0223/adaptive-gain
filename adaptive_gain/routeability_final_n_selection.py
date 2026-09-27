@@ -64,15 +64,29 @@ class FinalNSelectionReceipt:
     selection_rule: str
 
 
+ROBUSTNESS_MATCH_FLOAT_COLUMNS = (
+    "individual_sd_logit",
+    "colony_sd_logit",
+    "dropout_fraction",
+    "timeout_fraction",
+    "alpha_two_sided",
+    "p_KF_B1", "p_KC_B1", "p_RF_B1", "p_RC_B1",
+    "p_KF_B2", "p_KC_B2", "p_RF_B2", "p_RC_B2",
+    "p_KF_B3", "p_KC_B3", "p_RF_B3", "p_RC_B3",
+    "expected_h1_delta_b2",
+    "expected_h2_localization",
+)
+
 REQUIRED_COLUMNS = {
     "scenario_id",
     "robustness_id",
     "individuals_per_cell",
+    "trials_per_individual",
+    "colony_count",
+    *ROBUSTNESS_MATCH_FLOAT_COLUMNS,
     "fit_success_fraction",
     "h1_directional_rejection_fraction",
     "h2_hierarchical_pass_fraction",
-    "expected_h1_delta_b2",
-    "expected_h2_localization",
     "sesoi_provenance",
 }
 
@@ -147,6 +161,28 @@ def select_final_individuals_per_cell(
                 f"{rule.counterbalance_multiple}"
             )
         grouped.setdefault(n, []).append(row)
+
+    robustness_signatures: dict[str, tuple[object, ...]] = {}
+    for row in rows:
+        robustness_id = row["robustness_id"].strip()
+        signature = (
+            int(row["trials_per_individual"]),
+            int(row["colony_count"]),
+            row["sesoi_provenance"].strip(),
+            *(
+                float(row[column])
+                for column in ROBUSTNESS_MATCH_FLOAT_COLUMNS
+            ),
+        )
+        previous = robustness_signatures.setdefault(
+            robustness_id,
+            signature,
+        )
+        if previous != signature:
+            raise ValueError(
+                f"robustness_id={robustness_id!r} changes nuisance, baseline, "
+                "trial, colony, SESOI or alpha assumptions across candidate N"
+            )
 
     robustness_sets: dict[int, set[str]] = {}
     for n, group in grouped.items():
