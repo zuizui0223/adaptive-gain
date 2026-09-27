@@ -21,6 +21,12 @@ predictors <- c(
   "body_thickness"
 )
 
+scopes <- list(
+  strict_core_2008_2011 = c("2008->2009", "2009->2010", "2010->2011"),
+  near_core_2007_2011 = c("2007->2008", "2008->2009", "2009->2010", "2010->2011"),
+  all_annual_2006_2011 = c("2006->2007", "2007->2008", "2008->2009", "2009->2010", "2010->2011")
+)
+
 data <- read.csv(input_path, stringsAsFactors = FALSE, check.names = FALSE)
 required <- c("transition", "risk_set", "outcome", "complete_case", predictors)
 missing <- setdiff(required, names(data))
@@ -63,59 +69,66 @@ fold_rows <- list()
 row_index <- 1
 fold_index <- 1
 
-for (risk in c("gain", "loss")) {
-  risk_data <- data[data$risk_set == risk, , drop = FALSE]
-  transitions <- sort(unique(risk_data$transition))
+for (scope_name in names(scopes)) {
+  scope_transitions <- scopes[[scope_name]]
+  scope_data <- data[data$transition %in% scope_transitions, , drop = FALSE]
 
-  if (length(transitions) < 2) {
-    stop(paste("risk set", risk, "has fewer than two transitions"))
-  }
+  for (risk in c("gain", "loss")) {
+    risk_data <- scope_data[scope_data$risk_set == risk, , drop = FALSE]
+    transitions <- scope_transitions[scope_transitions %in% unique(risk_data$transition)]
 
-  for (held_out in transitions) {
-    train <- risk_data[risk_data$transition != held_out, , drop = FALSE]
-    test <- risk_data[risk_data$transition == held_out, , drop = FALSE]
+    if (length(transitions) < 2) {
+      stop(paste("scope", scope_name, "risk set", risk, "has fewer than two transitions"))
+    }
 
-    prepared <- prepare_fold(train, test)
-    train <- prepared$train
-    test <- prepared$test
+    for (held_out in transitions) {
+      train <- risk_data[risk_data$transition != held_out, , drop = FALSE]
+      test <- risk_data[risk_data$transition == held_out, , drop = FALSE]
 
-    formula <- as.formula(
-      paste("outcome ~", paste(predictors, collapse = " + "))
-    )
+      prepared <- prepare_fold(train, test)
+      train <- prepared$train
+      test <- prepared$test
 
-    fit <- suppressWarnings(
-      glm(formula, data = train, family = binomial())
-    )
-    model_probability <- clip_probability(
-      predict(fit, newdata = test, type = "response")
-    )
-    null_probability <- clip_probability(
-      rep(mean(train$outcome), nrow(test))
-    )
+      formula <- as.formula(
+        paste("outcome ~", paste(predictors, collapse = " + "))
+      )
 
-    prediction_rows[[row_index]] <- data.frame(
-      risk_set = risk,
-      transition = held_out,
-      outcome = as.integer(test$outcome),
-      model_probability = model_probability,
-      null_probability = null_probability,
-      stringsAsFactors = FALSE
-    )
-    row_index <- row_index + 1
+      fit <- suppressWarnings(
+        glm(formula, data = train, family = binomial())
+      )
+      model_probability <- clip_probability(
+        predict(fit, newdata = test, type = "response")
+      )
+      null_probability <- clip_probability(
+        rep(mean(train$outcome), nrow(test))
+      )
 
-    fold_rows[[fold_index]] <- data.frame(
-      risk_set = risk,
-      held_out_transition = held_out,
-      train_n = nrow(train),
-      test_n = nrow(test),
-      train_events = sum(train$outcome == 1),
-      test_events = sum(test$outcome == 1),
-      converged = isTRUE(fit$converged),
-      coefficient_count = length(coef(fit)),
-      finite_coefficient_count = sum(is.finite(coef(fit))),
-      stringsAsFactors = FALSE
-    )
-    fold_index <- fold_index + 1
+      prediction_rows[[row_index]] <- data.frame(
+        analysis_scope = scope_name,
+        risk_set = risk,
+        transition = held_out,
+        outcome = as.integer(test$outcome),
+        model_probability = model_probability,
+        null_probability = null_probability,
+        stringsAsFactors = FALSE
+      )
+      row_index <- row_index + 1
+
+      fold_rows[[fold_index]] <- data.frame(
+        analysis_scope = scope_name,
+        risk_set = risk,
+        held_out_transition = held_out,
+        train_n = nrow(train),
+        test_n = nrow(test),
+        train_events = sum(train$outcome == 1),
+        test_events = sum(test$outcome == 1),
+        converged = isTRUE(fit$converged),
+        coefficient_count = length(coef(fit)),
+        finite_coefficient_count = sum(is.finite(coef(fit))),
+        stringsAsFactors = FALSE
+      )
+      fold_index <- fold_index + 1
+    }
   }
 }
 
