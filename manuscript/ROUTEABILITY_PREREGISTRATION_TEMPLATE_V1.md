@@ -126,12 +126,25 @@ Architecture-specific training performance is recorded as a treatment-dependent 
 
 ## 7. Randomization and counterbalancing
 
-Final schedule seed: {{randomization_seed}}
+Final roster-randomization seed: {{randomization_seed}}
 
-Schedule generator:
+Eligible-roster randomization:
 
-- `adaptive_gain/routeability_experiment_schedule.py`
-- `examples/build_routeability_experiment_schedule.py`
+- `adaptive_gain/routeability_roster_randomization.py`
+- `examples/randomize_routeability_roster.py`
+
+Randomization receipt: {{randomization_receipt_reference}}
+
+Final assignment artifact: {{final_assignment_reference}}
+
+Assignment-locked final schedule compilation:
+
+- `adaptive_gain/routeability_final_schedule.py`
+- `examples/compile_routeability_final_schedule.py`
+
+Final schedule receipt: {{final_schedule_receipt_reference}}
+
+The trial-order seed is deterministically domain-separated from the frozen roster-randomization seed; it is not chosen after assignment.
 
 Within each individual:
 
@@ -251,6 +264,18 @@ The final N must be chosen from the preregistered robustness surface, not from t
 Repository: `zuizui0223/adaptive-gain`
 
 Frozen pre-collection commit: {{frozen_precollection_commit}}
+
+Roster randomization receipt: {{randomization_receipt_reference}}
+
+SHA-256: `{{randomization_receipt_sha256}}`
+
+Final assignment artifact: {{final_assignment_reference}}
+
+SHA-256: `{{final_assignment_sha256}}`
+
+Final schedule receipt: {{final_schedule_receipt_reference}}
+
+SHA-256: `{{final_schedule_receipt_sha256}}`
 
 Final schedule artifact: {{final_schedule_reference}}
 
