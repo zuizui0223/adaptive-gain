@@ -32,9 +32,7 @@ The treatments differ only in how those cue outcomes are assigned across states.
 
 Exact costs:
 
-[
-C_A=2,qquad C_F=3.
-]
+`C_A = 2` and `C_F = 3`.
 
 Optimal contingent rule:
 
@@ -53,11 +51,9 @@ Optimal contingent rule:
 
 Exact costs:
 
-[
-C_A=C_F=2.
-]
+`C_A = C_F = 2`.
 
-The same context-contingent two-cue schedule can resolve this task, but it is not uniquely valuable because the fixed terminal pair ({	ext{A},	ext{B}}) also resolves every target.
+The same context-contingent two-cue schedule can resolve this task, but it is not uniquely valuable because the fixed terminal pair `{A, B}` also resolves every target.
 
 Therefore the control matches cue number, state number, target balance and cue marginals while removing the strict adaptive gain.
 
@@ -108,9 +104,7 @@ Under a uniform distribution of the four states and optimal classification after
 
 Thus the exact information-level interaction is:
 
-[
-(1.00-0.75)-(1.00-1.00)=0.25.
-]
+`(1.00 - 0.75) - (1.00 - 1.00) = 0.25`.
 
 This **25 percentage-point value is an information ceiling contrast**, not a required behavioral effect size. Real animals can make perceptual, learning and motivational errors.
 
@@ -130,11 +124,7 @@ Prediction: no condition has exact guaranteed resolution.
 
 For the routeable task:
 
-[
-C_Ale B<C_F
-quadLongleftrightarrowquad
-2le2<3.
-]
+`C_A <= B < C_F`, i.e. `2 <= 2 < 3`.
 
 Prediction: contingent access has an information advantage over fixed access.
 
@@ -195,9 +185,7 @@ The response is recorded only after the allowed cue observations have been prese
 
 The primary model tests the interaction:
 
-[
-	ext{task architecture}	imes	ext{information access}.
-]
+`task architecture × information access`.
 
 The directional hypothesis is:
 
