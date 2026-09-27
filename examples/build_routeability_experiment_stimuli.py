@@ -15,6 +15,7 @@ from pathlib import Path
 
 from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
+    cue_target_mapping,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
     routeability_budget_information_ceilings,
@@ -34,10 +35,21 @@ def main() -> None:
         ("bypass_control", bypass_matched_control_task()),
     ):
         for row in experimental_stimulus_table(task):
-            rows.append({"architecture": architecture, **row})
+            cue_vector = "".join(
+                str(row[name])
+                for name in ("q_left", "q_route", "q_right")
+            )
+            rows.append(
+                {
+                    "architecture": architecture,
+                    "cue_vector": cue_vector,
+                    **row,
+                }
+            )
 
     fields = [
         "architecture",
+        "cue_vector",
         "state",
         "target",
         "q_left",
@@ -50,11 +62,34 @@ def main() -> None:
         writer.writerows(rows)
 
     contrast = ecological_routeability_experiment_contrast()
+
+    routeable_mapping = dict(
+        cue_target_mapping(minimal_strict_gain_standard_task())
+    )
+    control_mapping = dict(
+        cue_target_mapping(bypass_matched_control_task())
+    )
+    shared_vectors = sorted(routeable_mapping, key=repr)
+    mapping_differences = [
+        {
+            "cue_vector": "".join(str(value) for value in vector),
+            "routeable_target": routeable_mapping[vector],
+            "bypass_control_target": control_mapping[vector],
+        }
+        for vector in shared_vectors
+        if routeable_mapping[vector] != control_mapping[vector]
+    ]
+
     receipt = {
         "schema": "adaptive-gain-routeability-experiment-stimuli-v1",
         "state_frequency_primary": "uniform_1_over_4_within_architecture",
         "primary_budget": 2,
         "stimulus_row_count": len(rows),
+        "shared_physical_cue_vectors": [
+            "".join(str(value) for value in vector)
+            for vector in shared_vectors
+        ],
+        "target_mapping_differences": mapping_differences,
         "contrast": asdict(contrast),
         "exact_minimal_contrast": contrast.exact_minimal_contrast,
         "primary_information_interaction": (
