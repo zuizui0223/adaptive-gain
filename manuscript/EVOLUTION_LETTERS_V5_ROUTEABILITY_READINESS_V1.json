@@ -351,6 +351,17 @@
         "timeout": "retained and scored as primary failure",
         "conditional_accuracy": "secondary",
         "response_window": "pilot-calibrated before confirmatory contrast"
+      },
+      "pilot_and_power": {
+        "procedural_pilot": "manuscript/ROUTEABILITY_PROCEDURAL_PILOT_V1.md",
+        "procedural_gate": "validation/routeability_procedural_pilot_gate_v1.json",
+        "power_gate": "validation/routeability_experiment_pilot_power_gate_v1.json",
+        "screening_module": "adaptive_gain/routeability_experiment_power.py",
+        "screening_exporter": "examples/plan_routeability_experiment.py",
+        "allowed_pilot_information": "response window, pooled B3 success, timeout/dropout, repeated-trial correlation, colony heterogeneity and procedural failure",
+        "forbidden_feedback": "H1/H2 or B2 architecture-by-access effects cannot define the power target; theoretical 0.25 ceiling cannot be used as the behavioral effect size",
+        "sesoi": "must be frozen from an external biological/practical source",
+        "final_N_status": "pending final GLMM simulation after nuisance receipt and real colony allocation are frozen"
       }
     }
   ]
