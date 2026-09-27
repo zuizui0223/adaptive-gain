@@ -38,3 +38,15 @@ def test_routeability_analysis_gate_does_not_power_from_theory_ceiling():
     data = _gate()
     assert "do not power from the exact 0.25 information ceiling" in data["sample_size_boundary"]
     assert "does not establish natural-network rewiring" in data["claim_ceiling"]
+
+
+def test_routeability_analysis_gate_blocks_treatment_dependent_training_exclusion():
+    data = _gate()
+    forbidden = data["analysis_population"]["forbidden"]
+    assert (
+        "excluding randomized individuals because architecture-specific training accuracy is low"
+        in forbidden
+    )
+    firewall = data["training_selection_firewall"]
+    assert "fixed-dose architecture-specific training" in firewall["preferred"]
+    assert "per-protocol" in firewall["unavoidable_criterion_rule"]
