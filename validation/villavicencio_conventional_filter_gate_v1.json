@@ -12,7 +12,8 @@
       "response event counts",
       "shared-dyad opportunity counts",
       "source sheet structure",
-      "covariate missingness"
+      "covariate missingness",
+      "published sampling-effort design used to define temporal scopes"
     ],
     "not_inspected_before_freeze": [
       "covariate coefficients",
@@ -117,7 +118,7 @@
   "model_family": {
     "type": "separate binomial logistic models for gain and loss",
     "formula_policy": "main effects only; no data-driven interactions",
-    "transition_handling": "leave-one-transition-out temporal cross-validation; no transition indicator in the held-out prediction model",
+    "transition_handling": "leave-one-transition-out temporal cross-validation within each frozen sampling-effort scope",
     "null_model": "training-fold event prevalence",
     "metrics": [
       "log_loss",
@@ -125,11 +126,68 @@
       "roc_auc"
     ],
     "primary_comparison": "conventional-filter model versus null on held-out transitions",
-    "coefficient_status": "secondary descriptive; predictive holdout performance is the Stage-1 gate"
+    "coefficient_status": "secondary descriptive; predictive holdout performance is the Stage-1 gate",
+    "primary_scope": "strict_core_2008_2011",
+    "transition_scopes": {
+      "strict_core_2008_2011": {
+        "role": "primary",
+        "transitions": [
+          "2008->2009",
+          "2009->2010",
+          "2010->2011"
+        ],
+        "complete_case_rows": 5154,
+        "complete_case_gain": {
+          "n": 4480,
+          "events": 430
+        },
+        "complete_case_loss": {
+          "n": 674,
+          "events": 330
+        }
+      },
+      "near_core_2007_2011": {
+        "role": "sampling-effort sensitivity",
+        "transitions": [
+          "2007->2008",
+          "2008->2009",
+          "2009->2010",
+          "2010->2011"
+        ],
+        "complete_case_rows": 6610,
+        "complete_case_gain": {
+          "n": 5756,
+          "events": 550
+        },
+        "complete_case_loss": {
+          "n": 854,
+          "events": 417
+        }
+      },
+      "all_annual_2006_2011": {
+        "role": "broad sensitivity",
+        "transitions": [
+          "2006->2007",
+          "2007->2008",
+          "2008->2009",
+          "2009->2010",
+          "2010->2011"
+        ],
+        "complete_case_rows": 7186,
+        "complete_case_gain": {
+          "n": 6229,
+          "events": 628
+        },
+        "complete_case_loss": {
+          "n": 957,
+          "events": 467
+        }
+      }
+    }
   },
   "promotion_gate": {
-    "pass": "at least one of gain/loss conventional models improves held-out log-loss over the null without pathological prediction failure, while the other endpoint remains reportable regardless of sign",
-    "fail": "both endpoints show no reproducible held-out improvement or complete-case loss makes the frozen analysis non-estimable",
+    "pass": "in the strict_core_2008_2011 primary scope, at least one of gain/loss conventional models improves held-out log-loss over the null without pathological prediction failure; both sensitivity scopes are reported regardless of direction",
+    "fail": "neither endpoint improves held-out log-loss in strict_core_2008_2011, or the primary scope is non-estimable",
     "interpretation": "PASS means conventional filters carry reproducible information about annual link dynamics; it does not validate routeability"
   },
   "claim_firewall": [
@@ -138,5 +196,6 @@
     "do not call annual positive-link presence true species presence",
     "do not promote annual fallback over the 18-subseason primary design",
     "do not interpret predictive improvement as a causal effect"
-  ]
+  ],
+  "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json"
 }
