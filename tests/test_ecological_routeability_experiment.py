@@ -2,6 +2,7 @@ from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
+    pairwise_information_signature,
     routeability_budget_information_ceilings,
     uniform_target_accuracy_for_context_policy,
 )
@@ -24,6 +25,7 @@ def test_experimental_contrast_is_exact_and_marginally_matched():
     assert receipt.control_fixed_terminal_accuracy == 1.0
     assert receipt.routeable_adaptive_accuracy == 1.0
     assert receipt.control_adaptive_accuracy == 1.0
+    assert receipt.same_pairwise_information_signatures
     assert receipt.exact_minimal_contrast
 
 
@@ -113,3 +115,31 @@ def test_same_context_routing_policy_solves_both_architectures():
         control,
         branch_queries=reverse_policy,
     ) < 1.0
+
+
+def test_routeable_and_control_match_the_named_pairwise_information_surface():
+    routeable = minimal_strict_gain_standard_task()
+    control = bypass_matched_control_task()
+
+    route_signature = pairwise_information_signature(routeable)
+    control_signature = pairwise_information_signature(control)
+
+    assert route_signature == control_signature
+    assert len(route_signature) == 6
+
+    by_pair = {
+        (left, right): signature
+        for left, right, signature in route_signature
+    }
+    assert by_pair[("target", "q_route")] == (1, 1, 1, 1)
+    assert by_pair[("target", "q_left")] == (0, 2, 1, 1)
+    assert by_pair[("target", "q_right")] == (0, 2, 1, 1)
+
+
+def test_pairwise_information_matching_does_not_imply_equal_routeability():
+    receipt = ecological_routeability_experiment_contrast()
+
+    assert receipt.same_pairwise_information_signatures
+    assert receipt.routeable_adaptive_cost == receipt.control_adaptive_cost == 2
+    assert receipt.routeable_fixed_cost == 3
+    assert receipt.control_fixed_cost == 2
