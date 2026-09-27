@@ -39,6 +39,10 @@ on:
       - "tests/test_ecological_routeability_experiment.py"
       - "tests/test_pairwise_information_routeability_nonidentifiability.py"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
