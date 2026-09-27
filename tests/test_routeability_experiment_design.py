@@ -149,3 +149,14 @@ def test_experiment_design_matches_sequential_timing_across_access_arms():
         "stage durations and cue-persistence rules are matched",
     ):
         assert phrase in text
+
+
+def test_experiment_design_freezes_guided_primary_and_separate_autonomous_followup():
+    text = _text()
+    for phrase in (
+        "This is the frozen primary confirmatory implementation for H1 and H2.",
+        "the animal does not choose which terminal channel to inspect",
+        "separate mechanistic follow-up",
+        "Autonomous-routing trials must not be pooled with the guided primary analysis.",
+    ):
+        assert phrase in text
