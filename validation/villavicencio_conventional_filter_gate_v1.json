@@ -1,0 +1,142 @@
+{
+  "schema": "adaptive-gain-villavicencio-conventional-filter-gate-v1",
+  "date": "2026-09-27",
+  "status": "effect_blind_model_specification_frozen",
+  "scope": "annual detection-sensitive fallback only; conventional filters before any decision-structure exposure",
+  "source": {
+    "result_ledger": "validation/villavicencio_annual_stage1_fallback_result_v1.json",
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459"
+  },
+  "freeze_timing": {
+    "inspected_before_freeze": [
+      "response event counts",
+      "shared-dyad opportunity counts",
+      "source sheet structure",
+      "covariate missingness"
+    ],
+    "not_inspected_before_freeze": [
+      "covariate coefficients",
+      "covariate-response correlations",
+      "model skill",
+      "decision-structure effects"
+    ]
+  },
+  "endpoints": {
+    "loss": {
+      "eligible": "shared dyads with previous_link=true",
+      "n": 988,
+      "event": "current_link=false",
+      "events": 486,
+      "nonevents": 502,
+      "event_fraction": 0.49190283400809715
+    },
+    "gain": {
+      "eligible": "shared dyads with previous_link=false",
+      "n": 6632,
+      "event": "current_link=true",
+      "events": 648,
+      "nonevents": 5984,
+      "event_fraction": 0.097708082026538
+    },
+    "pooled_change": {
+      "status": "descriptive_only",
+      "reason": "pooling gains and losses mixes two distinct risk sets"
+    }
+  },
+  "frozen_predictors": [
+    {
+      "name": "phenological_overlap",
+      "source_sheet": "phenological_overlap",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "flower_abundance",
+      "source_sheet": "Flower_abundance",
+      "transform": "log1p then z-score within training fold"
+    },
+    {
+      "name": "corolla_length",
+      "source_sheet": "plant_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "corolla_aperture",
+      "source_sheet": "plant_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "height_mean",
+      "source_sheet": "plant_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "body_length",
+      "source_sheet": "pollinator_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "proboscis_length",
+      "source_sheet": "pollinator_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "proboscis_width",
+      "source_sheet": "pollinator_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "body_width",
+      "source_sheet": "pollinator_traits",
+      "transform": "z-score within training fold"
+    },
+    {
+      "name": "body_thickness",
+      "source_sheet": "pollinator_traits",
+      "transform": "z-score within training fold"
+    }
+  ],
+  "completeness": {
+    "shared_dyad_rows": 7620,
+    "complete_case_rows_all_frozen_predictors": 7186,
+    "complete_case_fraction": 0.9430446194225722,
+    "field_coverage": {
+      "phenological_overlap": 1,
+      "flower_abundance": 1,
+      "corolla_length": 0.9724409448818898,
+      "corolla_aperture": 0.9866141732283464,
+      "height_mean": 1,
+      "body_length": 0.9961942257217847,
+      "proboscis_length": 0.9834645669291339,
+      "proboscis_width": 0.9917322834645669,
+      "body_width": 1,
+      "body_thickness": 1
+    },
+    "primary_missingness_policy": "complete case on the frozen conventional predictor set",
+    "no_response_dependent_imputation": true
+  },
+  "model_family": {
+    "type": "separate binomial logistic models for gain and loss",
+    "formula_policy": "main effects only; no data-driven interactions",
+    "transition_handling": "leave-one-transition-out temporal cross-validation; no transition indicator in the held-out prediction model",
+    "null_model": "training-fold event prevalence",
+    "metrics": [
+      "log_loss",
+      "brier_score",
+      "roc_auc"
+    ],
+    "primary_comparison": "conventional-filter model versus null on held-out transitions",
+    "coefficient_status": "secondary descriptive; predictive holdout performance is the Stage-1 gate"
+  },
+  "promotion_gate": {
+    "pass": "at least one of gain/loss conventional models improves held-out log-loss over the null without pathological prediction failure, while the other endpoint remains reportable regardless of sign",
+    "fail": "both endpoints show no reproducible held-out improvement or complete-case loss makes the frozen analysis non-estimable",
+    "interpretation": "PASS means conventional filters carry reproducible information about annual link dynamics; it does not validate routeability"
+  },
+  "claim_firewall": [
+    "do not infer decision-equivalence classes",
+    "do not tune predictor definitions after seeing coefficients or skill",
+    "do not call annual positive-link presence true species presence",
+    "do not promote annual fallback over the 18-subseason primary design",
+    "do not interpret predictive improvement as a causal effect"
+  ]
+}
