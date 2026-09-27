@@ -204,6 +204,39 @@ The physical implementation is constrained by prior bee-learning work rather tha
 
 These studies establish feasibility of contextual and multicue learning. None tests the matched routeable-versus-bypass architecture defined here.
 
+## Guided versus autonomous routing
+
+The exact contrast supports two implementation levels.
+
+### Phase 1 — guided contingent presentation
+
+The apparatus reads the context outcome and reveals the correct branch-specific terminal cue.
+
+Purpose: isolate the information-architecture contrast with minimal motor or exploration demands.
+
+This phase tests whether the matched architectures differ when the theoretically sufficient contingent information is actually delivered. It does not by itself show that an animal learns to choose which cue to inspect.
+
+### Phase 2 — autonomous routing
+
+After the context cue is visible, the animal is given two terminal inspection ports or cue windows but can acquire only one within the two-cue budget.
+
+The frozen routing policy is the **same in both architectures**:
+
+- context = 0 → inspect terminal B;
+- context = 1 → inspect terminal A.
+
+The repository verifies that this policy has exact uniform-state target accuracy 1.00 in both the routeable and bypass-control tasks. Reversing the routing rule is insufficient.
+
+Primary autonomous-routing outcomes:
+
+- correct terminal-window choice conditional on context;
+- final accept/reject accuracy;
+- latency from context exposure to terminal choice.
+
+This phase tests whether the organism can exploit the branch structure rather than receiving the routed terminal cue passively.
+
+The guided phase should remain available as a positive structural calibration. If guided contingent presentation succeeds but autonomous routing fails, the result isolates a policy-learning or action-selection bottleneck rather than invalidating the information architecture itself.
+
 ## Primary endpoint
 
 **Correct accept/reject response** under the frozen two-cue budget.
