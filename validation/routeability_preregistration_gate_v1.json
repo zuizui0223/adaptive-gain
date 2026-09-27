@@ -10,7 +10,7 @@
     "external H1/H2 SESOI frozen with allowed provenance",
     "final GLMM operating-characteristic robustness surface completed",
     "individuals per cell chosen by the frozen final-N rule",
-    "actual colony allocation rule frozen",
+    "actual colony allocation rule and complete-block allocation constraints frozen",
     "apparatus and physical cue alphabet frozen",
     "cue-stage duration and tolerance frozen",
     "training dose frozen",
@@ -44,7 +44,8 @@
     "pilot receipt certifies focal-contrast blindness and its frozen response window matches the preregistration",
     "final power surface contains at least two unique robustness scenarios and preserves N, nuisance, SESOI and H1/H2 operating-characteristic columns",
     "final power surface contains a scenario matching the preregistered final individuals-per-cell and H1/H2 SESOI",
-    "final stimulus CSV is independently rechecked against the exact frozen 8-row routeable/bypass logical stimulus mapping"
+    "final stimulus CSV is independently rechecked against the exact frozen 8-row routeable/bypass logical stimulus mapping",
+    "every power-surface colony_block_counts vector has one positive block count per colony and sums to individuals per cell"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
