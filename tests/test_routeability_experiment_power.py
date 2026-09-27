@@ -4,6 +4,7 @@ from adaptive_gain.routeability_experiment_power import (
     RouteabilityPilotNuisance,
     RouteabilitySESoi,
     conservative_routeability_planning_receipt,
+    pilot_nuisance_from_procedural_receipt,
 )
 
 
@@ -135,3 +136,42 @@ def test_smaller_external_sesoi_requires_more_individuals():
         trials_per_individual=12,
     )
     assert small.required_complete_individuals_per_cell > large.required_complete_individuals_per_cell
+
+
+def test_power_nuisance_can_be_built_directly_from_frozen_procedural_receipt():
+    receipt = {
+        "focal_architecture_contrast_opened": False,
+        "trial_icc_moment": 0.2,
+        "randomized_individual_dropout_fraction": 0.1,
+        "pooled_success_fraction": 0.9,
+        "pooled_timeout_fraction": 0.05,
+    }
+    nuisance = pilot_nuisance_from_procedural_receipt(receipt)
+
+    assert nuisance.trial_icc == 0.2
+    assert nuisance.randomized_individual_dropout == 0.1
+    assert nuisance.full_information_success == 0.9
+    assert nuisance.timeout_fraction == 0.05
+    assert nuisance.focal_architecture_access_contrast_opened is False
+
+
+def test_power_nuisance_bridge_rejects_missing_icc_or_opened_focal_contrast():
+    incomplete = {
+        "focal_architecture_contrast_opened": False,
+        "trial_icc_moment": None,
+        "randomized_individual_dropout_fraction": 0.1,
+        "pooled_success_fraction": 0.9,
+        "pooled_timeout_fraction": 0.05,
+    }
+    with pytest.raises(ValueError, match="trial_icc_moment"):
+        pilot_nuisance_from_procedural_receipt(incomplete)
+
+    opened = {
+        "focal_architecture_contrast_opened": True,
+        "trial_icc_moment": 0.2,
+        "randomized_individual_dropout_fraction": 0.1,
+        "pooled_success_fraction": 0.9,
+        "pooled_timeout_fraction": 0.05,
+    }
+    with pytest.raises(ValueError, match="must certify"):
+        pilot_nuisance_from_procedural_receipt(opened)
