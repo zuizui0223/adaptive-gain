@@ -12,10 +12,11 @@
       "counting trials as independent biological replicates",
       "excluding randomized individuals because architecture-specific training accuracy is low",
       "excluding individuals because test accuracy is low",
-      "dropping slow or incorrect trials to improve the primary endpoint"
+      "dropping slow or incorrect trials to improve the primary endpoint",
+      "conditioning the primary correctness endpoint on producing a terminal response"
     ]
   },
-  "primary_endpoint": "binary correct accept/reject response",
+  "primary_endpoint": "binary success: correct accept/reject decision within the frozen response window; incorrect decisions and timeouts are both scored 0",
   "model": {
     "family": "binomial logistic mixed model",
     "fixed_effects": "architecture * access_mode * categorical_budget",
@@ -59,12 +60,14 @@
       "Delta_B1, Delta_B2, Delta_B3 on probability scale",
       "H1 and H2 model-scale contrasts with uncertainty",
       "colony and individual variance estimates",
-      "exclusion flow and reasons"
+      "exclusion flow and reasons",
+      "timeout / abandonment counts and fractions by all 12 randomized cells"
     ],
     "forbidden": [
       "replacing accuracy with latency after seeing H1",
       "claiming the theoretical 0.25 ceiling as the expected behavioral effect",
-      "promoting a B1 or B3 interaction as support for routeability if B2 localization fails"
+      "promoting a B1 or B3 interaction as support for routeability if B2 localization fails",
+      "dropping timeout trials from the primary denominator"
     ]
   },
   "secondary_endpoints": [
@@ -84,5 +87,16 @@
       "non-response or disengagement"
     ],
     "unavoidable_criterion_rule": "if a hard architecture-specific criterion is operationally unavoidable, criterion attainment is a treatment-dependent outcome and the test-phase criterion-reacher analysis is labelled per-protocol rather than the sole randomized primary analysis"
+  },
+  "timeout_policy": {
+    "primary_denominator": "all initiated test trials",
+    "timeout_score": 0,
+    "response_window": "freeze from architecture-neutral pilot timing before opening confirmatory treatment contrasts",
+    "forbidden": "dropping timeout/abandonment trials or making response a prerequisite for inclusion in the primary accuracy analysis",
+    "secondary": [
+      "conditional accuracy among responded trials",
+      "timeout/abandonment probability",
+      "decision latency among valid timed responses"
+    ]
   }
 }
