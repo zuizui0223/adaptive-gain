@@ -310,17 +310,29 @@ Purpose: prevent innate colour, pattern or odor preferences from becoming the tr
 
 ## Training and test separation
 
-Training must not reveal the focal comparison by giving one architecture systematically more experience.
+Training must not reveal the focal comparison by giving one architecture systematically more experience, and it must not create post-randomization selection.
 
-Preferred structure:
+Preferred primary structure:
 
-1. familiarization with apparatus and response port;
-2. balanced training on state-response associations using full information;
-3. criterion check defined before the main test;
-4. main test with the frozen information-access manipulation;
-5. optional B=3 positive-control block.
+1. architecture-neutral familiarization with the apparatus and response port;
+2. an architecture-neutral engagement check, completed **before** factorial treatment assignment where operationally possible;
+3. random assignment to architecture, access mode and budget;
+4. a **fixed amount** of architecture-specific full-information training, identical in dose across randomized cells;
+5. main test with the frozen information-access manipulation;
+6. optional full-information manipulation check.
 
-If the same animal receives multiple architecture or access conditions, use independent cue alphabets and counterbalanced order. A between-subject primary design is cleaner if enough colonies / individuals are available.
+Do not require an architecture-specific accuracy threshold for entry into the primary test. An animal that learns slowly is part of the randomized biological response and should not be silently removed because of low training accuracy.
+
+Record architecture-specific training acquisition explicitly:
+
+- training accuracy by block;
+- trials or time to a prespecified descriptive criterion;
+- non-response / disengagement;
+- whether the individual completes the fixed training dose.
+
+If husbandry makes a hard performance criterion unavoidable, criterion attainment becomes a separate treatment-dependent outcome and the test-phase analysis among criterion-reachers is labelled **per-protocol**, not the sole randomized primary analysis.
+
+The between-subject primary design remains preferred. If the same animal receives multiple architecture or access conditions in a separate pilot, use independent cue alphabets and counterbalanced order and do not substitute that pilot for the primary randomized design.
 
 ## Randomization
 
@@ -361,16 +373,23 @@ The schedule builder requires the number of individuals per cell to be a multipl
 
 ## Exclusion rules
 
-Define before data collection.
+Define before data collection and keep them independent of treatment performance.
 
-Examples:
+Allowed examples:
 
-- failure to meet a prespecified training criterion;
-- failure to initiate a minimum number of test trials;
-- apparatus malfunction or cue presentation error;
-- loss of individual identity.
+- failure to initiate the apparatus during architecture-neutral familiarization;
+- failure to initiate any test trial after the fixed training dose;
+- apparatus malfunction or cue-presentation error;
+- loss of individual identity or unavoidable husbandry loss before test.
 
-Do not exclude an individual because its test accuracy is low.
+Not allowed for the randomized primary analysis:
+
+- architecture-specific training accuracy below a threshold;
+- low test accuracy;
+- slow decisions;
+- an inconvenient treatment-specific learning trajectory.
+
+Report all exclusions and their randomized treatment cells. Differential training completion or non-response across architectures is itself diagnostically relevant and must not be hidden by conditioning.
 
 ## Manipulation checks
 
