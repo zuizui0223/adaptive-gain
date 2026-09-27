@@ -347,6 +347,45 @@ jobs:
           )
           PY
 
+      - name: Run annual detection-sensitive Stage-1 fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-annual-stage1-fallback-v1","materialized":false,"analysis_status":"skipped_no_verified_workbook"}' \
+              > artifact/annual_stage1_detection_sensitive.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python examples/villavicencio_annual_stage1_from_xlsx.py \
+            "$XLSX" \
+            --output artifact/annual_stage1_detection_sensitive.json \
+            --dyad-output artifact/annual_stage1_dyads.csv
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_stage1_detection_sensitive.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["transition_count"] != 5:
+              raise SystemExit("annual fallback did not produce exactly five transitions")
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("annual fallback must not infer decision equivalence")
+          if result["presence_basis"] != "observed_positive_links":
+              raise SystemExit("annual fallback presence basis changed unexpectedly")
+          join = result["join_audit"]
+          if join["unmatched_observed_plant_count"] != 0:
+              raise SystemExit("annual plant codes do not fully join to plant_names")
+          if join["unmatched_observed_pollinator_count"] != 0:
+              raise SystemExit("annual pollinator codes do not fully join to insect_names")
+          PY
+
       - name: Summarize exported periods before response analysis
         shell: bash
         run: |
