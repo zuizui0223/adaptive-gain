@@ -1,0 +1,43 @@
+{
+  "schema": "adaptive-gain-routeability-preregistration-gate-v1",
+  "date": "2026-09-27",
+  "status": "template_ready_finalization_blocked_on_pilot_power_and_operational_inputs",
+  "template": "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+  "finalizer": "examples/finalize_routeability_preregistration.py",
+  "required_before_finalization": [
+    "procedural pilot response window frozen",
+    "pooled B3 nuisance receipt frozen without focal contrast opening",
+    "external H1/H2 SESOI frozen with allowed provenance",
+    "final GLMM operating-characteristic robustness surface completed",
+    "individuals per cell chosen by the frozen final-N rule",
+    "actual colony allocation rule frozen",
+    "apparatus and physical cue alphabet frozen",
+    "cue-stage duration and tolerance frozen",
+    "training dose frozen",
+    "exclusion rules frozen",
+    "ethics/regulatory approval recorded",
+    "final randomization seed chosen before allocation",
+    "final schedule and stimulus artifacts generated",
+    "pre-collection Git commit frozen"
+  ],
+  "machine_checks": [
+    "all required payload fields present",
+    "no pending/TBD/placeholder markers",
+    "individuals per cell is a multiple of four",
+    "external SESOI provenance passes the existing power firewall",
+    "response-window and cue-duration values are positive",
+    "frozen pre-collection commit is a full 40-character Git SHA",
+    "no double-brace placeholders remain in final Markdown"
+  ],
+  "forbidden": [
+    "finalizing the template before pilot and power inputs are frozen",
+    "using the theoretical 0.25 information ceiling as H1/H2 behavioral SESOI",
+    "using confirmatory outcomes to fill sample-size or SESOI fields",
+    "calling the template itself a preregistration",
+    "registering a document that still contains unresolved placeholders"
+  ],
+  "output_status": "FINALIZED PRE-COLLECTION PREREGISTRATION CANDIDATE",
+  "current_output_status": "no final preregistration generated",
+  "promotion_rule": "Only a finalizer-generated document with all machine checks passing and all operational/human approvals resolved may be promoted for external preregistration.",
+  "claim_ceiling": "The template freezes the scientific structure and prevents incomplete promotion. It does not substitute for pilot data, power simulation, ethics approval, apparatus validation or actual preregistration submission."
+}
