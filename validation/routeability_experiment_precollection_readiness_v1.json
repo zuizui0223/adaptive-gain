@@ -1,0 +1,139 @@
+{
+  "schema": "adaptive-gain-routeability-precollection-readiness-v1",
+  "date": "2026-09-27",
+  "status": "design_complete_pilot_and_final_power_pending",
+  "frozen_v5_unchanged": true,
+  "gates": [
+    {
+      "item": "exact routeable versus bypass contrast",
+      "status": "PASS",
+      "evidence": [
+        "adaptive_gain/ecological_routeability_experiment.py",
+        "validation/routeability_experiment_gate_v1.json"
+      ],
+      "note": "C_A/C_F = 2/3 versus 2/2 on matched four-state three-cue tasks"
+    },
+    {
+      "item": "pairwise-information matching",
+      "status": "PASS",
+      "evidence": [
+        "theory/PAIRWISE_INFORMATION_ROUTEABILITY_NONIDENTIFIABILITY.md",
+        "tests/test_pairwise_information_routeability_nonidentifiability.py"
+      ],
+      "note": "all named pairwise information signatures match; difference is higher-order"
+    },
+    {
+      "item": "budget-window prediction",
+      "status": "PASS",
+      "evidence": [
+        "validation/routeability_experiment_gate_v1.json"
+      ],
+      "note": "exact information interaction 0,0.25,0 at B=1,2,3"
+    },
+    {
+      "item": "machine-readable stimulus surface",
+      "status": "PASS",
+      "evidence": [
+        "examples/build_routeability_experiment_stimuli.py",
+        "tests/test_routeability_experiment_stimulus_builder.py"
+      ]
+    },
+    {
+      "item": "randomization and counterbalance schedule",
+      "status": "PASS",
+      "evidence": [
+        "adaptive_gain/routeability_experiment_schedule.py",
+        "validation/routeability_experiment_schedule_gate_v1.json",
+        "tests/test_routeability_experiment_schedule.py"
+      ],
+      "note": "12 between-subject factorial cells; within-individual state/side/order balance; four-profile cue-symbol counterbalance"
+    },
+    {
+      "item": "confirmatory estimands and multiplicity",
+      "status": "PASS",
+      "evidence": [
+        "validation/routeability_experiment_analysis_gate_v1.json",
+        "tests/test_routeability_experiment_analysis_gate.py"
+      ],
+      "note": "H1 Delta_B2; H2 budget localization; hierarchical H1 then H2"
+    },
+    {
+      "item": "training-selection and timeout firewalls",
+      "status": "PASS",
+      "evidence": [
+        "validation/routeability_experiment_analysis_gate_v1.json",
+        "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md"
+      ],
+      "note": "fixed-dose post-randomization training; no treatment-specific accuracy exclusion; timeout remains in primary denominator"
+    },
+    {
+      "item": "procedural pilot protocol",
+      "status": "PASS_PROTOCOL_ONLY",
+      "evidence": [
+        "manuscript/ROUTEABILITY_PROCEDURAL_PILOT_V1.md",
+        "validation/routeability_procedural_pilot_gate_v1.json"
+      ],
+      "note": "Pilot A freezes response window; Pilot B estimates pooled B3 nuisance only"
+    },
+    {
+      "item": "procedural pilot executable receipt",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_procedural_pilot.py",
+        "examples/build_routeability_procedural_pilot_receipt.py",
+        "tests/test_routeability_procedural_pilot.py",
+        "tests/test_routeability_procedural_pilot_exporter.py"
+      ],
+      "note": "raw pilot data not yet collected"
+    },
+    {
+      "item": "pilot-to-power provenance firewall",
+      "status": "PASS",
+      "evidence": [
+        "validation/routeability_experiment_pilot_power_gate_v1.json",
+        "adaptive_gain/routeability_experiment_power.py",
+        "tests/test_routeability_experiment_power.py"
+      ],
+      "note": "focal effect and theoretical 0.25 ceiling forbidden as power targets"
+    },
+    {
+      "item": "conservative balanced-cell power screening",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_experiment_power.py",
+        "examples/plan_routeability_experiment.py"
+      ],
+      "note": "requires frozen pilot nuisance inputs and external SESOI; not final N"
+    },
+    {
+      "item": "final GLMM operating-characteristic simulation",
+      "status": "BLOCKED",
+      "blocker": "requires real pilot repeated-trial/timeout/dropout nuisance values, actual colony allocation, and externally frozen H1/H2 SESOI",
+      "promotion_rule": "must be frozen before confirmatory allocation"
+    },
+    {
+      "item": "definitive biological sample size",
+      "status": "BLOCKED",
+      "blocker": "final GLMM simulation not yet possible",
+      "forbidden_shortcut": "do not use the exact 0.25 information ceiling or focal pilot interaction as the effect size"
+    },
+    {
+      "item": "species/husbandry/apparatus implementation",
+      "status": "BLOCKED_OPERATIONAL",
+      "blocker": "local animal availability, colony supply, ethics/regulatory constraints, apparatus materials and physical cue choices remain site-specific"
+    },
+    {
+      "item": "ethics and regulatory approval",
+      "status": "BLOCKED_HUMAN",
+      "blocker": "requires institution- and organism-specific review before animal work"
+    },
+    {
+      "item": "confirmatory preregistration package",
+      "status": "NOT_YET_ASSEMBLED",
+      "blocker": "freeze final N, response window, apparatus details and operational exclusion rules after procedural pilot"
+    }
+  ],
+  "next_machine_action": "after procedural pilot, ingest nuisance receipt, freeze external SESOI, run final GLMM operating-characteristic simulation, then generate the preregistration package",
+  "next_biological_action": "run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
+  "claim_ceiling": "Pre-collection readiness means the experimental logic, stimuli, allocation and analysis are frozen. It does not mean animal work, power, ethics or apparatus validation are complete."
+}
