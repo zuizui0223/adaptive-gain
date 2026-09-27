@@ -1,0 +1,60 @@
+{
+  "schema": "adaptive-gain-villavicencio-sampling-effort-audit-v1",
+  "date": "2026-09-27",
+  "status": "external_methods_frozen_before_formal_filter_cv_result",
+  "source": {
+    "article": "Peralta et al. 2020, Ecology Letters 23:1107-1116",
+    "doi": "10.1111/ele.13510",
+    "data_doi": "10.5061/dryad.8cz8w9gm1"
+  },
+  "documented_sampling": {
+    "season": "weekly during approximately three months of the flowering season, September-December, 2006-2011",
+    "observation_window": "07:00-14:00",
+    "observation_period": "5 minutes",
+    "core_sites": "two 1-ha sites sampled across years",
+    "extra_sites_2006": "two additional 1-ha sites",
+    "extra_site_2007": "one of the additional sites sampled for one 5-minute observation period",
+    "annual_network_construction": "site data combined into one annual network to improve sampling completeness"
+  },
+  "consequence": {
+    "annual_link_change_status": "detection- and effort-sensitive",
+    "primary_filter_cv_scope": {
+      "name": "strict_core_2008_2011",
+      "transitions": [
+        "2008->2009",
+        "2009->2010",
+        "2010->2011"
+      ],
+      "reason": "these years use the unambiguously consistent two-site core described in the source methods"
+    },
+    "sensitivity_scopes": [
+      {
+        "name": "near_core_2007_2011",
+        "transitions": [
+          "2007->2008",
+          "2008->2009",
+          "2009->2010",
+          "2010->2011"
+        ],
+        "reason": "2007 differs only by one extra 5-minute observation period at an additional site"
+      },
+      {
+        "name": "all_annual_2006_2011",
+        "transitions": [
+          "2006->2007",
+          "2007->2008",
+          "2008->2009",
+          "2009->2010",
+          "2010->2011"
+        ],
+        "reason": "retains the full annual response surface but includes the 2006 site-pool expansion"
+      }
+    ]
+  },
+  "freeze_boundary": {
+    "trigger": "published sampling design, not observed covariate coefficients or predictive skill",
+    "formal_cv_result_seen_before_scope_freeze": false,
+    "decision_structure_effect_seen": false
+  },
+  "claim_ceiling": "Annual analyses remain feasibility/sensitivity analyses. The 18-subseason response is still preferred because it better preserves the intended temporal design once exact source bytes are available."
+}
