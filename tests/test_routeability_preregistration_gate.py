@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
 GATE = ROOT / "validation" / "routeability_preregistration_gate_v1.json"
 FINALIZER = ROOT / "examples" / "finalize_routeability_preregistration.py"
+STIMULUS_BUILDER = ROOT / "examples" / "build_routeability_experiment_stimuli.py"
 RANDOMIZER = ROOT / "examples" / "randomize_routeability_roster.py"
 SCHEDULE_COMPILER = ROOT / "examples" / "compile_routeability_final_schedule.py"
 
@@ -107,15 +108,32 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         encoding="utf-8",
     )
     power.write_text(
-        "scenario_id,h1_power,h2_hierarchical_power\nrobust_grid,0.80,0.80\n",
+        "scenario_id,simulations,individuals_per_cell,trials_per_individual,"
+        "colony_count,individual_sd_logit,colony_sd_logit,dropout_fraction,"
+        "timeout_fraction,sesoi_provenance,fit_success_fraction,"
+        "h1_directional_rejection_fraction,h2_hierarchical_pass_fraction,"
+        "expected_h1_delta_b2,expected_h2_localization\n"
+        "final_n_robust_a,1000,4,8,4,0.5,0.2,0.10,0.05,"
+        "practical_decision_threshold,0.99,0.82,0.80,0.12,0.10\n"
+        "sensitivity_n8,1000,8,8,4,0.8,0.3,0.15,0.08,"
+        "practical_decision_threshold,0.98,0.90,0.87,0.12,0.10\n",
         encoding="utf-8",
     )
-    stimuli.write_text(
-        "architecture,state,q_left,q_route,q_right,target\n"
-        "routeable,w0,0,0,0,0\n"
-        "bypass_control,w0,0,0,1,0\n",
-        encoding="utf-8",
+
+    stimulus_receipt = tmp_path / "stimulus_receipt.json"
+    built_stimuli = subprocess.run(
+        [
+            sys.executable,
+            str(STIMULUS_BUILDER),
+            str(stimuli),
+            str(stimulus_receipt),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
     )
+    assert built_stimuli.returncode == 0, built_stimuli.stderr
 
     return {
         "preregistration_version": "v1-final-test-fixture",
@@ -302,3 +320,33 @@ def test_finalizer_rejects_schedule_assignment_fidelity_break(tmp_path):
     completed, _ = _run_finalizer(tmp_path, payload)
     assert completed.returncode != 0
     assert "final schedule assignment mismatch" in completed.stderr
+
+
+def test_finalizer_rejects_power_surface_without_matching_final_n_sesoi(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    power = tmp_path / payload["power_surface_reference"]
+    text = power.read_text(encoding="utf-8")
+    text = text.replace(",4,8,4,0.5", ",12,8,4,0.5", 1)
+    power.write_text(text, encoding="utf-8")
+    payload["power_surface_sha256"] = _sha(power)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "no scenario matching" in completed.stderr
+
+
+def test_finalizer_rejects_rehashed_but_wrong_logical_stimulus_mapping(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    stimuli = tmp_path / payload["final_stimulus_reference"]
+    rows = list(csv.DictReader(stimuli.open(newline="", encoding="utf-8")))
+    rows[0]["target"] = "1" if rows[0]["target"] == "0" else "0"
+    fields = list(rows[0])
+    with stimuli.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    payload["final_stimulus_sha256"] = _sha(stimuli)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "does not match the exact frozen" in completed.stderr
