@@ -404,6 +404,26 @@ Executable surface:
 
 The schedule builder requires the number of individuals per cell to be a multiple of four for exact symbol counterbalancing. Its minimum of four individuals per cell is a **software balance requirement only**. It is not the final powered biological sample size.
 
+### Colony-blocked biological-unit assignment
+
+Once the definitive individuals per cell is frozen, actual foragers are assigned from an **architecture-neutral eligible roster**.
+
+Eligibility is applied before architecture-specific training. The roster contains individual and colony identity only; treatment assignments, architecture-specific learning performance and focal outcomes are forbidden inputs.
+
+The primary allocation uses complete 12-cell blocks **within colony**. Each complete block contains one individual in every architecture × access × budget cell. This keeps the factorial contrast represented within each contributing colony rather than relying on the mixed model to repair avoidable treatment–colony imbalance after the fact.
+
+Machine surface:
+
+- `adaptive_gain/routeability_roster_randomization.py`;
+- `examples/randomize_routeability_roster.py`;
+- `validation/routeability_roster_randomization_gate_v1.json`.
+
+The exact eligible roster is checksum-frozen before assignment. Excess eligible individuals that are not required for complete blocks are written to a separate unassigned file. They are **not** a treatment-performance-dependent reserve and cannot be added later because one randomized cell learns poorly or produces inconvenient outcomes.
+
+The final randomization seed is frozen before the assignment file is generated. The resulting assignment receipt records colony block capacity, blocks used per colony, treatment-cell counts and cue-symbol counterbalance counts.
+
+Colony remains a biological hierarchical factor in the primary model even under this blocking scheme.
+
 ## Exclusion rules
 
 Define before data collection and keep them independent of treatment performance.
