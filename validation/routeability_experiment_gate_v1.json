@@ -47,10 +47,10 @@
   },
   "primary_budget": 2,
   "uniform_information_ceiling": {
-    "routeable_contingent": 1.0,
+    "routeable_contingent": 1,
     "routeable_fixed_terminal_pair": 0.75,
-    "control_contingent": 1.0,
-    "control_fixed_terminal_pair": 1.0,
+    "control_contingent": 1,
+    "control_fixed_terminal_pair": 1,
     "architecture_by_access_interaction": 0.25,
     "interpretation": "information-level ceiling contrast, not a required behavioral effect size"
   },
@@ -76,7 +76,17 @@
   "manuscript": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
   "tests": [
     "tests/test_ecological_routeability_experiment.py",
-    "tests/test_routeability_experiment_design.py"
+    "tests/test_routeability_experiment_design.py",
+    "tests/test_routeability_experiment_stimulus_builder.py"
   ],
-  "promotion_rule": "This is the preferred first direct empirical test because branch structure is manipulated independently of species composition, conventional compatibility filters, and observed network response."
+  "promotion_rule": "This is the preferred first direct empirical test because branch structure is manipulated independently of species composition, conventional compatibility filters, and observed network response.",
+  "machine_surface": {
+    "builder": "examples/build_routeability_experiment_stimuli.py",
+    "outputs": [
+      "8-row stimulus CSV: four routeable + four bypass-control states",
+      "JSON receipt with exact costs, matching checks and information ceilings"
+    ],
+    "primary_information_interaction": 0.25,
+    "regression_test": "tests/test_routeability_experiment_stimulus_builder.py"
+  }
 }
