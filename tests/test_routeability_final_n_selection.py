@@ -204,7 +204,7 @@ def test_final_n_selector_rejects_sparse_n_or_no_passing_n(tmp_path):
     surface = tmp_path / "surface.csv"
     sparse = [_rows()[0], *_rows()[2:]]
     _write_surface(surface, sparse)
-    with pytest.raises(ValueError, match="robustness scenarios"):
+    with pytest.raises(ValueError, match="exact same robustness_id set"):
         select_final_individuals_per_cell(surface, _rule())
 
     no_pass = _rows()
@@ -286,7 +286,7 @@ def test_final_n_selector_rejects_effect_drift_across_robustness_surface(tmp_pat
     rows[-1]["expected_h1_delta_b2"] = 0.15
     _write_surface(surface, rows)
 
-    with pytest.raises(ValueError, match="same frozen H1/H2 SESOI"):
+    with pytest.raises(ValueError, match="mixes H1/H2 SESOI"):
         select_final_individuals_per_cell(surface, _rule())
 
 
