@@ -157,8 +157,11 @@ def _validate_power_surface_csv(
     path: Path,
     *,
     individuals_per_cell: int,
+    trials_per_individual: int,
+    colony_count: int,
     h1_sesoi: float,
     h2_sesoi: float,
+    sesoi_provenance: str,
 ) -> None:
     rows = _read_csv(path, "power_surface_reference")
     required = {
@@ -205,6 +208,9 @@ def _validate_power_surface_csv(
                 )
         if (
             n == individuals_per_cell
+            and int(row["trials_per_individual"]) == trials_per_individual
+            and int(row["colony_count"]) == colony_count
+            and row["sesoi_provenance"] == sesoi_provenance
             and abs(float(row["expected_h1_delta_b2"]) - h1_sesoi) <= 1e-12
             and abs(float(row["expected_h2_localization"]) - h2_sesoi) <= 1e-12
         ):
@@ -212,7 +218,7 @@ def _validate_power_surface_csv(
 
     if not matching_final_n:
         raise ValueError(
-            "final power surface contains no scenario matching the preregistered final N and H1/H2 SESOI"
+            "final power surface contains no scenario matching the preregistered final N, trials, colony count and H1/H2 SESOI/provenance"
         )
 
 
@@ -506,8 +512,11 @@ def validate_finalization_payload(
     _validate_power_surface_csv(
         verified["power_surface_reference"],
         individuals_per_cell=individuals_per_cell,
+        trials_per_individual=trials_per_individual,
+        colony_count=colony_count,
         h1_sesoi=sesoi.h1_probability_interaction,
         h2_sesoi=sesoi.h2_probability_localization,
+        sesoi_provenance=sesoi.provenance,
     )
     _validate_stimulus_csv(
         verified["final_stimulus_reference"],
@@ -560,6 +569,8 @@ def validate_finalization_payload(
         raise ValueError(
             "randomization assigned-individual count disagrees with 12-cell final N"
         )
+    if int(randomization_core.get("colony_count")) != colony_count:
+        raise ValueError("colony_count disagrees with randomization receipt")
     if not randomization_core.get("complete_blocks_valid"):
         raise ValueError("randomization receipt does not certify complete colony blocks")
     if not randomization_core.get("counterbalance_profiles_valid"):
