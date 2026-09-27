@@ -81,6 +81,7 @@ def test_scenario_exporter_emits_validated_flattened_cells(tmp_path):
                             "individuals_per_cell": 20,
                             "trials_per_individual": 12,
                             "colony_count": 4,
+                            "colony_block_counts": [5, 5, 5, 5],
                             "individual_sd_logit": 0.8,
                             "colony_sd_logit": 0.3,
                             "dropout_fraction": 0.1,
@@ -112,6 +113,7 @@ def test_scenario_exporter_emits_validated_flattened_cells(tmp_path):
     assert float(row["expected_h1_delta_b2"]) == pytest.approx(0.12)
     assert float(row["expected_h2_localization"]) == pytest.approx(0.10)
     assert int(row["individuals_per_cell"]) == 20
+    assert row["colony_block_counts"] == "5;5;5;5"
     for column in ("p_KF_B1", "p_KC_B1", "p_RF_B1", "p_RC_B1", "p_KF_B3", "p_RC_B3"):
         assert 0 < float(row[column]) < 1
 
@@ -140,6 +142,7 @@ def test_scenario_exporter_rejects_theory_ceiling_as_effect_provenance(tmp_path)
                             "individuals_per_cell": 4,
                             "trials_per_individual": 4,
                             "colony_count": 1,
+                            "colony_block_counts": [4],
                             "individual_sd_logit": 0,
                             "colony_sd_logit": 0,
                             "dropout_fraction": 0,
@@ -161,3 +164,60 @@ def test_scenario_exporter_rejects_theory_ceiling_as_effect_provenance(tmp_path)
     )
     assert completed.returncode != 0
     assert "forbidden SESOI provenance" in completed.stderr
+
+
+def test_scenario_exporter_accepts_unequal_colony_blocks_but_requires_exact_sum(tmp_path):
+    base = {
+        "scenario_id": "unequal_blocks",
+        "sesoi": {
+            "h1_probability_interaction": 0.12,
+            "h2_probability_localization": 0.10,
+            "provenance": "practical_decision_threshold",
+        },
+        "baseline": {
+            "bypass_fixed_by_budget": {"1": 0.50, "2": 0.60, "3": 0.70},
+            "bypass_access_effect_by_budget": {"1": 0.01, "2": 0.02, "3": 0.01},
+            "routeable_fixed_effect_by_budget": {"1": 0.00, "2": -0.02, "3": 0.00},
+        },
+        "simulation": {
+            "simulations": 10,
+            "individuals_per_cell": 20,
+            "trials_per_individual": 8,
+            "colony_count": 4,
+            "colony_block_counts": [8, 4, 4, 4],
+            "individual_sd_logit": 0.5,
+            "colony_sd_logit": 0.2,
+            "dropout_fraction": 0.1,
+            "timeout_fraction": 0.05,
+            "seed": 7,
+        },
+    }
+    config = tmp_path / "config.json"
+    output = tmp_path / "scenarios.csv"
+    config.write_text(json.dumps({"scenarios": [base]}), encoding="utf-8")
+
+    completed = subprocess.run(
+        [sys.executable, str(EXPORTER), str(config), str(output)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+    with output.open(newline="", encoding="utf-8") as handle:
+        row = next(csv.DictReader(handle))
+    assert row["colony_block_counts"] == "8;4;4;4"
+    assert row["colony_count"] == "4"
+
+    bad = json.loads(json.dumps(base))
+    bad["simulation"]["colony_block_counts"] = [7, 4, 4, 4]
+    config.write_text(json.dumps({"scenarios": [bad]}), encoding="utf-8")
+    completed = subprocess.run(
+        [sys.executable, str(EXPORTER), str(config), str(output)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "sum exactly to individuals_per_cell" in completed.stderr
