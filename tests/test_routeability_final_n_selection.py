@@ -20,6 +20,7 @@ FIELDS = [
     "scenario_id",
     "robustness_id",
     "individuals_per_cell",
+    "simulations",
     "trials_per_individual",
     "colony_count",
     "individual_sd_logit",
@@ -52,6 +53,7 @@ def _rows():
             "scenario_id": "n8_a",
             "robustness_id": "a",
             "individuals_per_cell": 8,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 0.99,
             "h1_directional_rejection_fraction": 0.82,
@@ -64,6 +66,7 @@ def _rows():
             "scenario_id": "n8_b",
             "robustness_id": "b",
             "individuals_per_cell": 8,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 0.98,
             "h1_directional_rejection_fraction": 0.81,
@@ -76,6 +79,7 @@ def _rows():
             "scenario_id": "n12_a",
             "robustness_id": "a",
             "individuals_per_cell": 12,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 0.99,
             "h1_directional_rejection_fraction": 0.86,
@@ -88,6 +92,7 @@ def _rows():
             "scenario_id": "n12_b",
             "robustness_id": "b",
             "individuals_per_cell": 12,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 0.97,
             "h1_directional_rejection_fraction": 0.83,
@@ -100,6 +105,7 @@ def _rows():
             "scenario_id": "n16_a",
             "robustness_id": "a",
             "individuals_per_cell": 16,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 1.00,
             "h1_directional_rejection_fraction": 0.92,
@@ -112,6 +118,7 @@ def _rows():
             "scenario_id": "n16_b",
             "robustness_id": "b",
             "individuals_per_cell": 16,
+            "simulations": 1000,
             "trials_per_individual": 8,
             "fit_success_fraction": 1.00,
             "h1_directional_rejection_fraction": 0.91,
@@ -164,6 +171,7 @@ def _rule():
         minimum_h1_directional_rejection_fraction=0.80,
         minimum_h2_hierarchical_pass_fraction=0.80,
         minimum_scenarios_per_n=2,
+        minimum_simulations_per_scenario=1000,
         counterbalance_multiple=4,
     )
 
@@ -237,6 +245,7 @@ def test_final_n_exporter_hashes_surface_and_rule(tmp_path):
                 "minimum_h1_directional_rejection_fraction": 0.80,
                 "minimum_h2_hierarchical_pass_fraction": 0.80,
                 "minimum_scenarios_per_n": 2,
+                "minimum_simulations_per_scenario": 1000,
                 "counterbalance_multiple": 4,
             }
         ),
@@ -319,4 +328,21 @@ def test_final_n_selector_rejects_same_label_with_changed_nuisance_surface(tmp_p
     _write_surface(surface, rows)
 
     with pytest.raises(ValueError, match="changes nuisance, baseline"):
+        select_final_individuals_per_cell(surface, _rule())
+
+
+def test_final_n_selector_freezes_monte_carlo_precision(tmp_path):
+    surface = tmp_path / "surface.csv"
+
+    mixed = _rows()
+    mixed[-1]["simulations"] = 2000
+    _write_surface(surface, mixed)
+    with pytest.raises(ValueError, match="one frozen simulation count"):
+        select_final_individuals_per_cell(surface, _rule())
+
+    too_few = _rows()
+    for row in too_few:
+        row["simulations"] = 500
+    _write_surface(surface, too_few)
+    with pytest.raises(ValueError, match="frozen minimum is 1000"):
         select_final_individuals_per_cell(surface, _rule())
