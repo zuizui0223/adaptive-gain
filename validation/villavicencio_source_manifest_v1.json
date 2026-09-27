@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-source-manifest-v1",
   "date": "2026-09-26",
-  "status": "anonymous_metadata_frozen_bytes_not_materialized",
+  "status": "trait_bytes_verified_response_metadata_only",
   "sources": [
     {
       "role": "high-temporal-resolution interaction response",
@@ -56,7 +56,7 @@
         "visits": 28015,
         "interacting_pairs": 1050
       },
-      "raw_sha256": null,
+      "raw_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
       "dryad_version_id": 87009,
       "dryad_version_number": 5,
       "target_file": {
@@ -74,6 +74,13 @@
         "size_bytes": 230652,
         "status": "pinned_pending_dryad_sha256_verification",
         "admission_rule": "admit only if materialized SHA-256 equals the published Dryad digest"
+      },
+      "materialization": {
+        "status": "verified",
+        "route": "CONICET institutional mirror resolved from item metadata",
+        "resolved_url": "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?sequence=2&isAllowed=y",
+        "dryad_digest_match": true,
+        "verified_workflow_run": 36286304896
       }
     }
   ],
@@ -94,15 +101,16 @@
     "workflow_behavior": "metadata-first; token-aware; uploads inventory even when bytes are unavailable"
   },
   "latest_source_smoke": {
-    "workflow_run": 36241484325,
-    "run_number": 17,
+    "workflow_run": 36286304896,
+    "run_number": 28,
     "conclusion": "success",
-    "artifact_id": 10906101022,
-    "artifact_digest": "sha256:28ea95a8d3257e9fedce8a82351e6f212a20dd5648884473ae33996aa76e1fca",
+    "artifact_id": 10920493516,
+    "artifact_digest": "sha256:1f3ae680203b0922e31e6f7f8c009772f33be1cf4dbfa6141bbccb35f447a38c",
     "response_bytes": "metadata_only_no_bearer_token",
-    "trait_bytes": "metadata_only_bytes_unavailable",
+    "trait_bytes": "materialized_and_matches_published_dryad_sha256",
+    "annual_fallback": "response_estimability_pass",
     "response_model_fitted": false,
     "transition_mapping_verified": false
   },
-  "next_materialization_gate": "Trait workbook: verify the pinned EMLN GitHub mirror against the published Dryad SHA-256. Response RData: still requires an authenticated Dryad byte route or another exact verified mirror."
+  "next_materialization_gate": "The annual trait/network workbook is verified and usable for detection-sensitive fallback analysis. The 18-subseason response RData remains blocked until an authenticated Dryad route or exact verified mirror is available."
 }
