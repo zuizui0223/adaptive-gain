@@ -45,8 +45,11 @@
     "dropout_process": "randomized individuals drop before trial generation; simulations losing an entire treatment cell are fit failures",
     "fit_failure_policy": "fit failures count as H1/H2 failures in the operating-characteristic denominator and are reported separately",
     "singular_fit_policy": "singularity is reported; a numerically completed singular fit is not silently discarded from the replicate ledger",
-    "contrast_estimation": "probability-scale H1/H2 from fixed-effect cell predictions with delta-method standard errors",
-    "multiplicity": "H1 directional interpretation after two-sided alpha; H2 hierarchical pass requires H1 pass and H2 directional two-sided rejection"
+    "contrast_estimation": "population-average H1/H2 over the fitted combined random-intercept distribution using deterministic Gaussian quadrature; delta-method fixed-effect uncertainty conditional on fitted variance components",
+    "multiplicity": "H1 directional interpretation after two-sided alpha; H2 hierarchical pass requires H1 pass and H2 directional two-sided rejection",
+    "cell_probability_semantics": "scenario cell probabilities are target population-average primary-success probabilities, not zero-random-effect probabilities",
+    "random_effect_calibration": "for each cell, the simulator solves the latent conditional-correctness logit so that integrating over the prespecified combined individual+colony normal random-intercept distribution and multiplying by 1-timeout reproduces the target population-average primary-success probability",
+    "variance_component_uncertainty": "reported operating characteristics do not add a second delta-method term for uncertainty in fitted random-effect variances; this limitation is fixed and must be retained in interpretation"
   },
   "outputs": [
     "replicate-level fit success, convergence, singularity, H1/H2 estimates, SEs, p-values and hierarchical pass flags",
@@ -55,7 +58,8 @@
     "H2 raw directional rejection fraction",
     "H2 hierarchical pass fraction",
     "mean H1/H2 estimates among successful fits",
-    "retained-individual, trial and timeout diagnostics"
+    "retained-individual, trial and timeout diagnostics",
+    "population-average contrast estimates use fitted random-intercept integration rather than zero-random-effect cell predictions"
   ],
   "final_N_promotion_rule": {
     "required": [
