@@ -31,7 +31,10 @@ def test_experiment_design_targets_budget_window():
         "B = 2 — routeability-sensitive window",
         "B = 3 — above fixed cost",
         "`2 <= 2 < 3`",
-        "budget-window interaction",
+        "budget-window localization",
+        "| B=1 | 0.00 |",
+        "| B=2 | 0.25 |",
+        "| B=3 | 0.00 |",
     ):
         assert phrase in text
 
