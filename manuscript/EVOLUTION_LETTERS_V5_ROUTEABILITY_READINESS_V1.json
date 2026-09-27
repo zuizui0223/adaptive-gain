@@ -338,6 +338,12 @@
         "multiplicity": "hierarchical H1 then H2",
         "model": "binomial logistic mixed model; individual and colony grouping explicit",
         "sample_size_status": "not frozen; must use nuisance-parameter calibration rather than theoretical 0.25 ceiling"
+      },
+      "training_selection_firewall": {
+        "status": "frozen",
+        "rule": "no architecture-specific accuracy exclusion after random assignment; use fixed-dose architecture-specific training",
+        "diagnostic": "report training acquisition/completion by randomized cell",
+        "hard_criterion_boundary": "criterion-reacher analysis is per-protocol if operationally unavoidable"
       }
     }
   ]
