@@ -31,7 +31,7 @@
         "randomized-individual dropout fraction",
         "timeout fraction",
         "trials per individual",
-        "actual/planned colony count"
+        "actual/planned complete treatment-block count contributed by each colony; the vector must sum to individuals per cell"
       ],
       "preferred_source": "frozen procedural-pilot nuisance receipt plus actual husbandry allocation"
     }
@@ -49,7 +49,8 @@
     "multiplicity": "H1 directional interpretation after two-sided alpha; H2 hierarchical pass requires H1 pass and H2 directional two-sided rejection",
     "cell_probability_semantics": "scenario cell probabilities are target population-average primary-success probabilities, not zero-random-effect probabilities",
     "random_effect_calibration": "for each cell, the simulator solves the latent conditional-correctness logit so that integrating over the prespecified combined individual+colony normal random-intercept distribution and multiplying by 1-timeout reproduces the target population-average primary-success probability",
-    "variance_component_uncertainty": "reported operating characteristics do not add a second delta-method term for uncertainty in fitted random-effect variances; this limitation is fixed and must be retained in interpretation"
+    "variance_component_uncertainty": "reported operating characteristics do not add a second delta-method term for uncertainty in fitted random-effect variances; this limitation is fixed and must be retained in interpretation",
+    "colony_allocation": "each treatment cell receives exactly the same prespecified colony_block_counts vector, matching complete within-colony 12-cell randomization blocks"
   },
   "outputs": [
     "replicate-level fit success, convergence, singularity, H1/H2 estimates, SEs, p-values and hierarchical pass flags",
@@ -66,7 +67,7 @@
       "procedural pilot nuisance receipt frozen without focal contrast opening",
       "external H1/H2 SESOI provenance frozen",
       "baseline planning surface frozen",
-      "actual colony allocation constraints frozen",
+      "actual/planned colony complete-block allocation vector frozen or included in the prespecified robustness surface",
       "operating-characteristic grid includes multiple plausible nuisance/baseline scenarios rather than one favorable point",
       "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface"
     ],
