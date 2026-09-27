@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-stage1-predata-gate-v1",
   "date": "2026-09-26",
-  "status": "code_ready_data_not_materialized",
+  "status": "annual_fallback_response_estimable_primary_subseason_blocked",
   "purpose": "test whether the repeated Villavicencio network response is estimable after conventional opportunity and compatibility filters, without inferring decision-equivalence classes",
   "sources": {
     "response": {
@@ -147,5 +147,26 @@
       "interpreting every zero interaction as a true forbidden or absent link",
       "choosing a frequency threshold after inspecting decision-structure effects"
     ]
+  },
+  "annual_detection_sensitive_fallback": {
+    "result_ledger": "validation/villavicencio_annual_stage1_fallback_result_v1.json",
+    "source_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "transition_count": 5,
+    "shared_dyad_rows": 7620,
+    "changed_count": 1134,
+    "unchanged_count": 6486,
+    "changed_fraction": 0.14881889763779527,
+    "transitions_with_both_outcomes": 5,
+    "join_unmatched_plants": 0,
+    "join_unmatched_pollinators": 0,
+    "gate": "PASS_response_estimability",
+    "limitation": "observed-positive-link presence makes species-turnover partition detection-sensitive",
+    "primary_design_status": "still blocked on exact 18-subseason RData bytes"
+  },
+  "stage1_success_gate_status": {
+    "annual_fallback_response_estimability": "PASS",
+    "primary_12_transition_reconstruction": "BLOCKED_response_RData_not_materialized",
+    "conventional_filter_join": "NEXT",
+    "sampling_effort_semantics": "UNRESOLVED"
   }
 }
