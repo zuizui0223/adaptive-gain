@@ -22,6 +22,7 @@ REQUIRED_FIELDS = (
     "colony_count",
     "trials_per_individual",
     "power_surface_reference",
+    "power_surface_sha256",
     "h1_sesoi",
     "h2_sesoi",
     "sesoi_provenance",
@@ -31,6 +32,7 @@ REQUIRED_FIELDS = (
     "cue_duration_tolerance_seconds",
     "response_window_seconds",
     "pilot_receipt_reference",
+    "pilot_receipt_sha256",
     "familiarization_protocol",
     "training_dose",
     "randomization_seed",
@@ -39,7 +41,9 @@ REQUIRED_FIELDS = (
     "final_n_decision_rule",
     "frozen_precollection_commit",
     "final_schedule_reference",
+    "final_schedule_sha256",
     "final_stimulus_reference",
+    "final_stimulus_sha256",
 )
 
 FORBIDDEN_PENDING_MARKERS = (
@@ -85,6 +89,13 @@ def _reject_pending_marker(value, name: str) -> str:
         raise ValueError(f"{name} still contains a pending placeholder")
     return text
 
+
+
+def _sha256(value, name: str) -> str:
+    text = _nonempty(value, name).lower()
+    if re.fullmatch(r"[0-9a-f]{64}", text) is None:
+        raise ValueError(f"{name} must be a 64-character SHA-256 hex digest")
+    return text
 
 def validate_finalization_payload(payload: dict) -> dict[str, str]:
     missing = [name for name in REQUIRED_FIELDS if name not in payload]
@@ -160,7 +171,28 @@ def validate_finalization_payload(payload: dict) -> dict[str, str]:
         for name in text_fields
     }
 
+    if "fixture" in clean["power_surface_reference"].lower():
+        raise ValueError(
+            "power_surface_reference cannot point to a software fixture"
+        )
+
+    hashes = {
+        "pilot_receipt_sha256": _sha256(
+            payload["pilot_receipt_sha256"], "pilot_receipt_sha256"
+        ),
+        "power_surface_sha256": _sha256(
+            payload["power_surface_sha256"], "power_surface_sha256"
+        ),
+        "final_schedule_sha256": _sha256(
+            payload["final_schedule_sha256"], "final_schedule_sha256"
+        ),
+        "final_stimulus_sha256": _sha256(
+            payload["final_stimulus_sha256"], "final_stimulus_sha256"
+        ),
+    }
+
     replacements = {
+        **hashes,
         **clean,
         "individuals_per_cell": str(individuals_per_cell),
         "total_randomized_individuals": str(12 * individuals_per_cell),
