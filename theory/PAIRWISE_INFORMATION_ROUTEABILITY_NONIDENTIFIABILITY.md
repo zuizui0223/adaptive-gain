@@ -58,6 +58,23 @@ For both tasks the six canonical pair signatures are identical:
 
 Thus every pairwise mutual-information value is identical between the two architectures, while the strict adaptivity gaps are `1` and `0`.
 
+## Where the hidden information appears
+
+The higher-order difference can be localized exactly.
+
+For the two terminal cues taken jointly,
+
+- routeable task: `I(target; q_left, q_right) = 0.5 bit`;
+- bypass control: `I(target; q_left, q_right) = 1.0 bit`.
+
+Equivalently, after the terminal pair is known, the routing cue contributes
+
+- routeable task: `I(target; q_route | q_left, q_right) = 0.5 bit`;
+- bypass control: `I(target; q_route | q_left, q_right) = 0 bit`.
+
+So the route cue is genuinely non-bypassable in the strict-gain task: half a bit of target information remains outside the fixed terminal pair. In the control, the terminal pair already contains the full target bit and the route cue is conditionally redundant.
+
+
 ## Why the difference survives
 
 The distinction lies in higher-order conditional organization:
