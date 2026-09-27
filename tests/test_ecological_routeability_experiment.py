@@ -3,6 +3,8 @@ from adaptive_gain.ecological_routeability_experiment import (
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
     pairwise_information_signature,
+    uniform_target_conditional_information_for_query,
+    uniform_target_information_for_query_bundle,
     routeability_budget_information_ceilings,
     uniform_target_accuracy_for_context_policy,
 )
@@ -26,6 +28,10 @@ def test_experimental_contrast_is_exact_and_marginally_matched():
     assert receipt.routeable_adaptive_accuracy == 1.0
     assert receipt.control_adaptive_accuracy == 1.0
     assert receipt.same_pairwise_information_signatures
+    assert receipt.routeable_terminal_pair_target_information_bits == 0.5
+    assert receipt.control_terminal_pair_target_information_bits == 1.0
+    assert receipt.routeable_context_given_terminals_information_bits == 0.5
+    assert receipt.control_context_given_terminals_information_bits == 0.0
     assert receipt.exact_minimal_contrast
 
 
@@ -143,3 +149,26 @@ def test_pairwise_information_matching_does_not_imply_equal_routeability():
     assert receipt.routeable_adaptive_cost == receipt.control_adaptive_cost == 2
     assert receipt.routeable_fixed_cost == 3
     assert receipt.control_fixed_cost == 2
+
+
+def test_higher_order_information_pinpoints_the_bypass_difference():
+    routeable = minimal_strict_gain_standard_task()
+    control = bypass_matched_control_task()
+
+    assert uniform_target_information_for_query_bundle(
+        routeable, ("q_left", "q_right")
+    ) == 0.5
+    assert uniform_target_information_for_query_bundle(
+        control, ("q_left", "q_right")
+    ) == 1.0
+
+    assert uniform_target_conditional_information_for_query(
+        routeable,
+        "q_route",
+        given_query_names=("q_left", "q_right"),
+    ) == 0.5
+    assert uniform_target_conditional_information_for_query(
+        control,
+        "q_route",
+        given_query_names=("q_left", "q_right"),
+    ) == 0.0
