@@ -78,3 +78,15 @@ def test_experiment_design_separates_guided_and_autonomous_routing():
         "policy-learning or action-selection bottleneck",
     ):
         assert phrase in text
+
+
+def test_experiment_design_matches_pairwise_information_not_just_marginals():
+    text = _text()
+    for phrase in (
+        "Stronger match: pairwise information is also identical",
+        "same **pairwise mutual information**",
+        "higher-order conditional organization",
+        "not reducible to how informative individual cues are",
+        "Fixed semantic 0/1 labels are not claimed to have identical signed contingency tables",
+    ):
+        assert phrase in text
