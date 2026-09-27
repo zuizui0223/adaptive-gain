@@ -372,6 +372,27 @@
         "scientific_rule": "final N must be chosen only after real nuisance inputs, external SESOI, colony allocation and a prespecified robustness grid are frozen",
         "fixture_boundary": "CI synthetic fixture is software validation only and is not power evidence",
         "final_N_status": "not frozen"
+      },
+      "relational_witness": {
+        "same_physical_cue_vectors": [
+          "000",
+          "001",
+          "011",
+          "111"
+        ],
+        "target_mapping_differences": [
+          "000",
+          "001"
+        ],
+        "interpretation": "the physical cue environment is identical across architecture groups; routeability changes through the focal target/reward mapping",
+        "apparatus_value": "the same physical stimuli can be reused across architectures"
+      },
+      "preregistration": {
+        "status": "template_ready_finalization_blocked",
+        "template": "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+        "finalizer": "examples/finalize_routeability_preregistration.py",
+        "gate": "validation/routeability_preregistration_gate_v1.json",
+        "external_registration_status": "not ready"
       }
     }
   ]
