@@ -116,14 +116,21 @@
     },
     {
       "item": "final GLMM operating-characteristic simulation",
-      "status": "BLOCKED",
-      "blocker": "requires real pilot repeated-trial/timeout/dropout nuisance values, actual colony allocation, and externally frozen H1/H2 SESOI",
-      "promotion_rule": "must be frozen before confirmatory allocation"
+      "status": "BLOCKED_INPUTS_CODE_READY",
+      "blocker": "real procedural-pilot nuisance receipt, actual colony allocation, externally frozen H1/H2 SESOI and a prespecified robust baseline/nuisance scenario grid are still required",
+      "promotion_rule": "run the frozen GLMM simulator across the required robustness surface before choosing definitive individuals per cell",
+      "evidence": [
+        "adaptive_gain/routeability_operating_characteristics.py",
+        "examples/build_routeability_glmm_simulation_scenarios.py",
+        "examples/simulate_routeability_glmm_operating_characteristics.R",
+        "validation/routeability_glmm_operating_characteristic_gate_v1.json",
+        ".github/workflows/routeability-experiment-smoke.yml"
+      ]
     },
     {
       "item": "definitive biological sample size",
       "status": "BLOCKED",
-      "blocker": "final GLMM simulation not yet possible",
+      "blocker": "real pilot inputs and final GLMM operating-characteristic surface are not yet frozen",
       "forbidden_shortcut": "do not use the exact 0.25 information ceiling or focal pilot interaction as the effect size"
     },
     {
@@ -142,7 +149,7 @@
       "blocker": "freeze final N, response window, apparatus details and operational exclusion rules after procedural pilot"
     }
   ],
-  "next_machine_action": "after procedural pilot, ingest nuisance receipt, freeze external SESOI, run final GLMM operating-characteristic simulation, then generate the preregistration package",
+  "next_machine_action": "after procedural pilot, ingest the nuisance receipt, freeze external SESOI and robustness grid, run the already-implemented GLMM operating-characteristic simulator, then generate the preregistration package",
   "next_biological_action": "run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the experimental logic, stimuli, allocation and analysis are frozen. It does not mean animal work, power, ethics or apparatus validation are complete."
 }
