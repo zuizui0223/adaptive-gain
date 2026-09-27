@@ -67,7 +67,9 @@
       "replacing accuracy with latency after seeing H1",
       "claiming the theoretical 0.25 ceiling as the expected behavioral effect",
       "promoting a B1 or B3 interaction as support for routeability if B2 localization fails",
-      "dropping timeout trials from the primary denominator"
+      "dropping timeout trials from the primary denominator",
+      "pooling autonomous-routing trials into the guided confirmatory H1/H2 dataset",
+      "switching the primary confirmatory phase from guided to autonomous after viewing pilot or test outcomes"
     ]
   },
   "secondary_endpoints": [
@@ -117,5 +119,13 @@
     ],
     "primary_scoring_rule": "protocol-valid timeout or incorrect decision = 0; protocol-invalid apparatus/presentation trial = not scored biologically and must be reported separately",
     "forbidden": "do not relabel biological timeout as apparatus failure or drop it from the primary denominator"
+  },
+  "confirmatory_phase": {
+    "primary": "Phase 1 guided contingent presentation",
+    "contingent_arm": "apparatus reveals q_route first and then the frozen context-selected terminal cue; the animal does not choose which terminal channel to inspect in the confirmatory H1/H2 experiment",
+    "fixed_arm": "apparatus reveals the frozen state-independent terminal cue bundle/prefix for the assigned budget",
+    "reason": "isolates the causal information-architecture contrast from policy-learning, motor-selection and terminal-window-choice failures",
+    "autonomous_phase": "separate mechanistic follow-up; its routing-choice outcomes must not be pooled into the primary H1/H2 analysis and require separate preregistration for confirmatory use",
+    "diagnostic": "guided success plus autonomous failure localizes a policy-learning/action-selection bottleneck rather than erasing the guided information-architecture result"
   }
 }
