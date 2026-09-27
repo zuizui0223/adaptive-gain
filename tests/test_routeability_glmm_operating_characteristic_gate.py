@@ -40,3 +40,15 @@ def test_glmm_oc_gate_separates_ci_fixture_from_scientific_power_result():
     assert "arbitrary synthetic nuisance/effect values" in data["software_fixture_boundary"]
     assert "never scientific planning results" in data["software_fixture_boundary"]
     assert "does not justify a biological N" in data["claim_ceiling"]
+
+
+def test_glmm_oc_gate_uses_population_average_probability_contrasts():
+    data = _gate()
+    sim = data["simulation"]
+    assert "population-average primary-success probabilities" in sim["cell_probability_semantics"]
+    assert "integrating over the prespecified combined individual+colony" in sim[
+        "random_effect_calibration"
+    ]
+    assert "population-average H1/H2" in sim["contrast_estimation"]
+    assert "conditional on fitted variance components" in sim["contrast_estimation"]
+    assert "do not add a second delta-method term" in sim["variance_component_uncertainty"]
