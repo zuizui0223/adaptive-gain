@@ -157,6 +157,13 @@
     "interpretation": "the strict routeability contrast is higher-order and cannot be reduced to single-cue informativeness or the pairwise mutual-information matrix",
     "executable": "adaptive_gain.ecological_routeability_experiment.pairwise_information_signature",
     "regression_test": "tests/test_ecological_routeability_experiment.py",
-    "claim_boundary": "fixed semantic 0/1 labels are not claimed to produce identical signed contingency tables for every target-cue pair"
+    "claim_boundary": "fixed semantic 0/1 labels are not claimed to produce identical signed contingency tables for every target-cue pair",
+    "higher_order_localization": {
+      "routeable_terminal_pair_target_information_bits": 0.5,
+      "control_terminal_pair_target_information_bits": 1,
+      "routeable_context_given_terminals_information_bits": 0.5,
+      "control_context_given_terminals_information_bits": 0,
+      "interpretation": "in the routeable task half a target bit remains outside the fixed terminal pair and is supplied by context; in the bypass control the terminal pair already contains the full target bit"
+    }
   }
 }
