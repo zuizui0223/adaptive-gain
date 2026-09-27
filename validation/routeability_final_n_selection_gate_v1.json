@@ -31,9 +31,13 @@
       "using a power surface with only one scenario at a candidate N",
       "mixing different H1/H2 SESOI values across robustness scenarios",
       "mixing SESOI provenance across robustness scenarios",
-      "mixing different trials-per-individual designs in one final-N selection surface"
+      "mixing different trials-per-individual designs in one final-N selection surface",
+      "using easier robustness scenarios at smaller N and harder scenarios at larger N",
+      "changing H1/H2 SESOI or provenance across candidate N values"
     ],
-    "robustness_boundary": "nuisance/baseline/colony-allocation assumptions may vary across scenarios, but the scientific SESOI target, provenance and trials-per-individual design are frozen across the entire surface"
+    "robustness_boundary": "nuisance/baseline/colony-allocation assumptions may vary across scenarios, but the scientific SESOI target, provenance and trials-per-individual design are frozen across the entire surface",
+    "robustness_matching": "every candidate N must contain exactly the same non-empty robustness_id set, with one row per robustness_id",
+    "effect_surface": "all rows must use identical frozen expected H1 Delta_B2, H2 localization and SESOI provenance"
   },
   "machine_surface": {
     "module": "adaptive_gain/routeability_final_n_selection.py",
