@@ -264,7 +264,16 @@ The guided phase should remain available as a positive structural calibration. I
 
 ## Primary endpoint
 
-**Correct accept/reject response** under the frozen two-cue budget.
+**Correct accept/reject decision within a frozen response window** under the allowed cue budget.
+
+Each initiated test trial is scored:
+
+- 1: correct accept/reject decision within the response window;
+- 0: incorrect decision **or no terminal decision before timeout**.
+
+Timeout / abandonment trials therefore remain in the primary denominator. They must not be deleted and the primary analysis must not condition on having produced a response.
+
+The response-window duration is an apparatus/procedural quantity to be frozen from architecture-neutral pilot timing, before the confirmatory treatment contrast is opened.
 
 The primary model tests the interaction:
 
@@ -272,7 +281,7 @@ The primary model tests the interaction:
 
 The directional hypothesis is:
 
-> the contingent-minus-fixed accuracy contrast is positive in the routeable task and larger than the corresponding contrast in the bypass control.
+> the contingent-minus-fixed success contrast is positive in the routeable task and larger than the corresponding contrast in the bypass control.
 
 Do not require the observed interaction to equal 0.25.
 
@@ -280,13 +289,16 @@ Do not require the observed interaction to equal 0.25.
 
 Allowed secondary outcomes:
 
+- conditional choice accuracy among trials with a terminal response;
+- timeout / abandonment probability;
 - decision latency after the final allowed cue;
 - first inspection / approach error;
 - number of revisits when revisits are possible;
-- abandonment probability;
 - learning slope across trials.
 
-Secondary outcomes cannot replace the primary accuracy interaction after outcomes are inspected.
+The conditional-accuracy analysis is explicitly secondary because conditioning on response can select different subsets of trials across architectures or access modes.
+
+Secondary outcomes cannot replace the primary success interaction after outcomes are inspected.
 
 ## Positive and negative controls
 
