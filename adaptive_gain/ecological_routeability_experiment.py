@@ -31,6 +31,10 @@ class ExperimentalRouteabilityContrast:
     same_query_outcome_multiplicities: bool
     routeable_strict_gain: bool
     control_strict_gain: bool
+    routeable_fixed_terminal_accuracy: float
+    control_fixed_terminal_accuracy: float
+    routeable_adaptive_accuracy: float
+    control_adaptive_accuracy: float
 
     @property
     def exact_minimal_contrast(self) -> bool:
@@ -44,6 +48,10 @@ class ExperimentalRouteabilityContrast:
             and self.same_query_outcome_multiplicities
             and self.routeable_strict_gain
             and not self.control_strict_gain
+            and self.routeable_fixed_terminal_accuracy == 0.75
+            and self.control_fixed_terminal_accuracy == 1.0
+            and self.routeable_adaptive_accuracy == 1.0
+            and self.control_adaptive_accuracy == 1.0
         )
 
 
@@ -89,11 +97,43 @@ def _query_outcome_multiplicities(task: FiniteTask) -> tuple[tuple[int, ...], ..
     return tuple(rows)
 
 
+
+def uniform_target_accuracy_for_query_bundle(
+    task: FiniteTask,
+    query_names: tuple[str, ...],
+) -> float:
+    """Bayes-optimal target accuracy under a uniform distribution of states.
+
+    The observer sees only the named cue outcomes. Within each unresolved
+    outcome pattern, the best possible classifier predicts the majority target.
+    """
+
+    lookup = {query.name: query for query in task.queries}
+    missing = [name for name in query_names if name not in lookup]
+    if missing:
+        raise ValueError(f"unknown query names: {missing!r}")
+
+    pattern_targets: dict[tuple[object, ...], dict[object, int]] = {}
+    for i, world in enumerate(task.worlds):
+        pattern = tuple(lookup[name].outcomes[i] for name in query_names)
+        counts = pattern_targets.setdefault(pattern, {})
+        counts[world.target] = counts.get(world.target, 0) + 1
+
+    correct = sum(max(counts.values()) for counts in pattern_targets.values())
+    return correct / len(task.worlds)
+
 def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityContrast:
     routeable = minimal_strict_gain_standard_task()
     control = bypass_matched_control_task()
     routeable_receipt = adaptive_gain_receipt(routeable)
     control_receipt = adaptive_gain_receipt(control)
+
+    routeable_fixed_terminal_accuracy = uniform_target_accuracy_for_query_bundle(
+        routeable, ("q_left", "q_right")
+    )
+    control_fixed_terminal_accuracy = uniform_target_accuracy_for_query_bundle(
+        control, ("q_left", "q_right")
+    )
 
     return ExperimentalRouteabilityContrast(
         routeable_adaptive_cost=routeable_receipt.adaptive_cost,
@@ -110,6 +150,10 @@ def ecological_routeability_experiment_contrast() -> ExperimentalRouteabilityCon
         ),
         routeable_strict_gain=routeable_receipt.strict_adaptive_gain,
         control_strict_gain=control_receipt.strict_adaptive_gain,
+        routeable_fixed_terminal_accuracy=routeable_fixed_terminal_accuracy,
+        control_fixed_terminal_accuracy=control_fixed_terminal_accuracy,
+        routeable_adaptive_accuracy=1.0 if routeable_receipt.adaptive_cost == 2 else 0.0,
+        control_adaptive_accuracy=1.0 if control_receipt.adaptive_cost <= 2 else 0.0,
     )
 
 
