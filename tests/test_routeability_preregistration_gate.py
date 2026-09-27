@@ -367,7 +367,7 @@ def test_finalizer_rejects_power_surface_changed_after_final_n_selection(tmp_pat
     payload = _prepare_artifacts(tmp_path)
     power = tmp_path / payload["power_surface_reference"]
     text = power.read_text(encoding="utf-8")
-    text = text.replace(",1000,4,8,4,", ",1000,12,8,4,", 1)
+    text = text.replace(",0.99,0.82,0.80,0.12,0.10", ",0.98,0.82,0.80,0.12,0.10", 1)
     power.write_text(text, encoding="utf-8")
     payload["power_surface_sha256"] = _sha(power)
 
