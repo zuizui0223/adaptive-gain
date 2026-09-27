@@ -1,5 +1,6 @@
 from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
+    cue_joint_distribution,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
     pairwise_information_signature,
@@ -28,6 +29,7 @@ def test_experimental_contrast_is_exact_and_marginally_matched():
     assert receipt.routeable_adaptive_accuracy == 1.0
     assert receipt.control_adaptive_accuracy == 1.0
     assert receipt.same_pairwise_information_signatures
+    assert receipt.same_full_cue_joint_distribution
     assert receipt.routeable_terminal_pair_target_information_bits == 0.5
     assert receipt.control_terminal_pair_target_information_bits == 1.0
     assert receipt.routeable_context_given_terminals_information_bits == 0.5
@@ -172,3 +174,19 @@ def test_higher_order_information_pinpoints_the_bypass_difference():
         "q_route",
         given_query_names=("q_left", "q_right"),
     ) == 0.0
+
+
+def test_routeable_and_control_have_identical_full_cue_joint_distribution():
+    routeable = minimal_strict_gain_standard_task()
+    control = bypass_matched_control_task()
+
+    route_joint = cue_joint_distribution(routeable)
+    control_joint = cue_joint_distribution(control)
+
+    assert route_joint == control_joint
+    assert route_joint == (
+        ((0, 0, 0), 1),
+        ((0, 0, 1), 1),
+        ((0, 1, 1), 1),
+        ((1, 1, 1), 1),
+    )
