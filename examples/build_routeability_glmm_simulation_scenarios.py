@@ -36,6 +36,20 @@ def _positive_int(value, name):
     return out
 
 
+
+def _colony_block_counts(value, *, individuals_per_cell):
+    if not isinstance(value, list) or not value:
+        raise ValueError("colony_block_counts must be a non-empty JSON list")
+    counts = tuple(
+        _positive_int(item, f"colony_block_counts[{index}]")
+        for index, item in enumerate(value)
+    )
+    if sum(counts) != individuals_per_cell:
+        raise ValueError(
+            "colony_block_counts must sum exactly to individuals_per_cell because each colony block contributes one individual to every treatment cell"
+        )
+    return counts
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("input_json", type=Path)
@@ -85,7 +99,17 @@ def main() -> None:
         trials_per_individual = _positive_int(
             sim["trials_per_individual"], "trials_per_individual"
         )
-        colony_count = _positive_int(sim["colony_count"], "colony_count")
+        colony_block_counts = _colony_block_counts(
+            sim["colony_block_counts"],
+            individuals_per_cell=individuals_per_cell,
+        )
+        colony_count = len(colony_block_counts)
+        if "colony_count" in sim and _positive_int(
+            sim["colony_count"], "colony_count"
+        ) != colony_count:
+            raise ValueError(
+                "colony_count disagrees with colony_block_counts length"
+            )
         simulations = _positive_int(sim["simulations"], "simulations")
         seed = int(sim["seed"])
         if seed < 0:
@@ -111,6 +135,7 @@ def main() -> None:
             "individuals_per_cell": individuals_per_cell,
             "trials_per_individual": trials_per_individual,
             "colony_count": colony_count,
+            "colony_block_counts": ";".join(str(value) for value in colony_block_counts),
             "individual_sd_logit": individual_sd_logit,
             "colony_sd_logit": colony_sd_logit,
             "dropout_fraction": dropout_fraction,
