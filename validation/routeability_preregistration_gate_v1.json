@@ -34,7 +34,14 @@
     "pilot receipt, power surface, final schedule and final stimulus SHA-256 values are valid 64-character hex digests",
     "power surface reference does not point to the synthetic software fixture",
     "final schedule receipt proves assignment CSV hash matches the roster randomization receipt",
-    "final schedule audit preserves individual, colony, treatment-cell and counterbalance-profile assignments"
+    "final schedule audit preserves individual, colony, treatment-cell and counterbalance-profile assignments",
+    "all referenced pilot/power/randomization/assignment/schedule/stimulus artifacts exist under the frozen artifact root",
+    "SHA-256 is recomputed from each referenced artifact byte stream and must match the payload",
+    "randomization receipt schema, seed, final N, complete-colony blocks and counterbalance audit agree with preregistration fields",
+    "assignment CSV independently contains 12 exactly balanced treatment cells, unique individuals and balanced cb0/cb1/cb2/cb3 profiles",
+    "final schedule CSV independently preserves individual/colony/block/treatment/profile assignments and exact trials per individual",
+    "final schedule receipt links the randomization-receipt hash, assignment hash and final schedule hash without mismatch",
+    "pilot receipt certifies focal-contrast blindness and its frozen response window matches the preregistration"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -45,11 +52,25 @@
     "finalizing with unhashed mutable pilot/power/schedule/stimulus references",
     "using the CI software fixture as the final power surface",
     "using a generic anonymous schedule as the final assigned-individual schedule",
-    "hand-editing the final schedule after roster randomization or hash freeze"
+    "hand-editing the final schedule after roster randomization or hash freeze",
+    "supplying fabricated hash strings without matching artifact bytes",
+    "rehashing a modified receipt whose internal assignment/schedule chain no longer matches",
+    "using a final schedule whose individual/colony/treatment/profile fields differ from the frozen assignment artifact"
   ],
   "output_status": "FINALIZED PRE-COLLECTION PREREGISTRATION CANDIDATE",
   "current_output_status": "no final preregistration generated",
   "promotion_rule": "Only a finalizer-generated document with all machine checks passing and all operational/human approvals resolved may be promoted for external preregistration.",
   "claim_ceiling": "The template freezes the scientific structure and prevents incomplete promotion. It does not substitute for pilot data, power simulation, ethics approval, apparatus validation or actual preregistration submission.",
-  "final_schedule_gate": "validation/routeability_final_schedule_gate_v1.json"
+  "final_schedule_gate": "validation/routeability_final_schedule_gate_v1.json",
+  "artifact_verification": {
+    "finalizer": "examples/finalize_routeability_preregistration.py",
+    "root_policy": "all artifact references are relative paths under an explicit artifact root; absolute paths and path traversal are rejected",
+    "independent_rechecks": [
+      "artifact byte SHA-256",
+      "assignment 12-cell balance and counterbalance",
+      "schedule-to-assignment fidelity",
+      "schedule row counts and trials-per-individual",
+      "receipt schemas and internal hash links"
+    ]
+  }
 }
