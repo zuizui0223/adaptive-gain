@@ -35,6 +35,9 @@ def main() -> None:
         minimum_scenarios_per_n=int(
             rule_payload.get("minimum_scenarios_per_n", 2)
         ),
+        minimum_simulations_per_scenario=int(
+            rule_payload.get("minimum_simulations_per_scenario", 1000)
+        ),
         counterbalance_multiple=int(
             rule_payload.get("counterbalance_multiple", 4)
         ),
