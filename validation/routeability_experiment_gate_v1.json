@@ -227,5 +227,17 @@
     "timeout": "score 0 and retain in primary denominator",
     "response_window": "freeze from architecture-neutral pilot timing",
     "conditional_accuracy": "secondary only"
+  },
+  "operating_characteristics": {
+    "status": "simulator_code_ready_pilot_inputs_pending",
+    "gate": "validation/routeability_glmm_operating_characteristic_gate_v1.json",
+    "scenario_builder": "adaptive_gain/routeability_operating_characteristics.py",
+    "scenario_exporter": "examples/build_routeability_glmm_simulation_scenarios.py",
+    "simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
+    "smoke_workflow": ".github/workflows/routeability-experiment-smoke.yml",
+    "model": "frozen binomial GLMM with architecture x access x categorical budget and individual/colony random intercepts",
+    "contrast_engine": "probability-scale Delta_B2 and localization contrast with delta-method standard errors",
+    "fit_failure_policy": "fit failures remain failures in the operating-characteristic denominator",
+    "final_N_status": "not frozen; requires real pilot nuisance receipt, external SESOI, colony allocation and robustness grid"
   }
 }
