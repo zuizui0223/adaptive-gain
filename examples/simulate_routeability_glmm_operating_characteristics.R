@@ -19,6 +19,7 @@ if (!requireNamespace("lme4", quietly = TRUE)) {
 
 required_columns <- c(
   "scenario_id",
+  "robustness_id",
   "simulations",
   "individuals_per_cell",
   "trials_per_individual",
@@ -644,6 +645,7 @@ for (scenario_index in seq_len(nrow(scenarios))) {
 
   summary_rows[[summary_index]] <- data.frame(
     scenario_id = row$scenario_id,
+    robustness_id = row$robustness_id,
     simulations = nrow(observed),
     individuals_per_cell = as.integer(row$individuals_per_cell),
     trials_per_individual = as.integer(row$trials_per_individual),
