@@ -24,7 +24,7 @@ def test_glmm_oc_gate_counts_fit_failures_against_operating_characteristics():
     sim = data["simulation"]
     assert "fit failures count as H1/H2 failures" in sim["fit_failure_policy"]
     assert "singularity is reported" in sim["singular_fit_policy"]
-    assert "delta-method standard errors" in sim["contrast_estimation"]
+    assert "delta-method fixed-effect uncertainty" in sim["contrast_estimation"]
 
 
 def test_glmm_oc_gate_blocks_theory_ceiling_and_favorable_scenario_selection():
