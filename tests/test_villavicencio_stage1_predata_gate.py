@@ -87,4 +87,5 @@ def test_stage1_gate_records_green_annual_response_estimability():
     assert annual["join_unmatched_plants"] == 0
     assert annual["join_unmatched_pollinators"] == 0
     assert annual["gate"] == "PASS_response_estimability"
-    assert data["stage1_success_gate_status"]["conventional_filter_join"] == "PASS"\n    assert data["stage1_success_gate_status"]["conventional_filter_temporal_cv"] == "PASS"
+    assert data["stage1_success_gate_status"]["conventional_filter_join"] == "PASS"
+    assert data["stage1_success_gate_status"]["conventional_filter_temporal_cv"] == "PASS"
