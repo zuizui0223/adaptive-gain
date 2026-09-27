@@ -239,6 +239,30 @@
       "next_gate": "freeze a restricted colour-channel Kent Island analysis using externally defined perceptual structure and independent learning performance, without deriving exposure from network links",
       "claim_boundary": "restricted-channel and cognition-layer tests are empirical bridges, not exact confirmation of the full V5 routeability construct",
       "regression_test": "tests/test_independent_decision_layer_screen.py"
+    },
+    {
+      "path": "validation/villavicencio_filter_block_ablation_result_v1.json",
+      "status": "green_stage1_filter_attribution_not_routeability",
+      "central_result": "phenological overlap is the only prespecified conventional-filter block with reproducible incremental held-out information for both annual link gains and losses under the frozen strict-core rule",
+      "primary_scope": "strict_core_2008_2011",
+      "gain": {
+        "phenology_delta_log_loss": 0.07671189331237421,
+        "phenology_positive_folds": "3/3",
+        "abundance": "positive_but_fold_unstable",
+        "plant_morphology": "no_reproducible_incremental_information",
+        "pollinator_morphology": "no_reproducible_incremental_information"
+      },
+      "loss": {
+        "phenology_delta_log_loss": 0.030255186941361423,
+        "phenology_positive_folds": "3/3",
+        "abundance": "positive_but_fold_unstable",
+        "plant_morphology": "positive_but_fold_unstable",
+        "pollinator_morphology": "no_reproducible_incremental_information"
+      },
+      "sensitivity": "phenology retains reproducible_incremental_information for both endpoints in near-core 4/4 and all-annual 5/5 folds",
+      "next_gate": "freeze an independent cognition/decision exposure without redefining the conventional baseline",
+      "claim_boundary": "predictive filter attribution only; no causal primacy, decision-equivalence, or routeability inference",
+      "regression_test": "tests/test_villavicencio_filter_block_ablation_result.py"
     }
   ]
 }
