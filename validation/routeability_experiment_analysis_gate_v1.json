@@ -98,5 +98,24 @@
       "timeout/abandonment probability",
       "decision latency among valid timed responses"
     ]
+  },
+  "protocol_validation": {
+    "module": "adaptive_gain/routeability_trial_validation.py",
+    "regression_test": "tests/test_routeability_trial_validation.py",
+    "planned_observed_join": "exact (individual_id, trial_index) key match required",
+    "protocol_invalid": [
+      "revealed cue sequence mismatch",
+      "cue duration outside frozen tolerance",
+      "required context not persistent during terminal presentation",
+      "apparatus error",
+      "invalid response coding"
+    ],
+    "biological_zeroes": [
+      "incorrect terminal decision within response window",
+      "no terminal decision before timeout",
+      "terminal decision after response window"
+    ],
+    "primary_scoring_rule": "protocol-valid timeout or incorrect decision = 0; protocol-invalid apparatus/presentation trial = not scored biologically and must be reported separately",
+    "forbidden": "do not relabel biological timeout as apparatus failure or drop it from the primary denominator"
   }
 }
