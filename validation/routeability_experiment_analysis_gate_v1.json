@@ -1,0 +1,77 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-analysis-gate-v1",
+  "date": "2026-09-27",
+  "status": "prospective_confirmatory_estimands_frozen_before_data",
+  "scope": "direct artificial-flower routeability experiment",
+  "analysis_population": {
+    "independent_unit": "individual forager",
+    "repeated_unit": "trial",
+    "higher_level_group": "colony where applicable",
+    "inclusion": "all valid test trials from individuals satisfying predeclared training and minimum-initiation criteria",
+    "forbidden": [
+      "counting trials as independent biological replicates",
+      "excluding individuals because test accuracy is low",
+      "dropping slow or incorrect trials to improve the primary endpoint"
+    ]
+  },
+  "primary_endpoint": "binary correct accept/reject response",
+  "model": {
+    "family": "binomial logistic mixed model",
+    "fixed_effects": "architecture * access_mode * categorical_budget",
+    "random_effects": [
+      "individual random intercept",
+      "colony random intercept where multiple colonies are used"
+    ],
+    "primary_model_covariates": "none beyond randomized factorial terms",
+    "trial_order": "secondary prespecified sensitivity / learning-slope analysis, not a model-selection knob for H1",
+    "budget_coding": "categorical B1/B2/B3; do not impose a linear budget trend"
+  },
+  "estimands": {
+    "interaction_by_budget": "Delta_B = [P(correct|routeable,contingent,B)-P(correct|routeable,fixed,B)] - [P(correct|bypass,contingent,B)-P(correct|bypass,fixed,B)]",
+    "H1": {
+      "name": "routeability_sensitive_B2_interaction",
+      "estimand": "Delta_B2",
+      "directional_prediction": "> 0",
+      "confirmatory_role": "primary"
+    },
+    "H2": {
+      "name": "budget_window_localization",
+      "estimand": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3)",
+      "directional_prediction": "> 0",
+      "confirmatory_role": "hierarchically gated secondary confirmatory contrast"
+    }
+  },
+  "multiplicity": {
+    "rule": "hierarchical gatekeeping",
+    "order": [
+      "H1",
+      "H2"
+    ],
+    "alpha": 0.05,
+    "test_sidedness": "two-sided inferential test with preregistered directional interpretation",
+    "H2_confirmatory_only_if": "H1 rejects at the frozen alpha; otherwise H2 is descriptive/sensitivity only"
+  },
+  "reporting": {
+    "required": [
+      "cell-level individuals and valid trial counts",
+      "marginal predicted correctness for all 12 cells with uncertainty",
+      "Delta_B1, Delta_B2, Delta_B3 on probability scale",
+      "H1 and H2 model-scale contrasts with uncertainty",
+      "colony and individual variance estimates",
+      "exclusion flow and reasons"
+    ],
+    "forbidden": [
+      "replacing accuracy with latency after seeing H1",
+      "claiming the theoretical 0.25 ceiling as the expected behavioral effect",
+      "promoting a B1 or B3 interaction as support for routeability if B2 localization fails"
+    ]
+  },
+  "secondary_endpoints": [
+    "decision latency after final allowed cue",
+    "context-conditioned terminal-window choice in autonomous-routing phase",
+    "abandonment probability",
+    "learning slope across test trials"
+  ],
+  "sample_size_boundary": "sample size remains unfrozen until nuisance-parameter calibration; do not power from the exact 0.25 information ceiling or the focal confirmatory interaction observed in a pilot",
+  "claim_ceiling": "A positive H1 plus localized H2 supports a behavioral consequence of contingent information architecture in the controlled task. It does not establish natural-network rewiring, niche breadth, or ecosystem-level effects."
+}
