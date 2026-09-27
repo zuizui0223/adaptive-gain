@@ -2,6 +2,7 @@ from adaptive_gain.ecological_routeability_experiment import (
     bypass_matched_control_task,
     ecological_routeability_experiment_contrast,
     experimental_stimulus_table,
+    routeability_budget_information_ceilings,
 )
 from adaptive_gain.minimal_normal_form import minimal_strict_gain_standard_task
 
@@ -64,3 +65,32 @@ def test_control_preserves_marginals_but_allows_route_bypass():
         pattern = (row["q_left"], row["q_right"])
         previous = patterns.setdefault(pattern, row["target"])
         assert previous == row["target"]
+
+
+def test_budget_ladder_localizes_architecture_by_access_interaction_to_b2():
+    rows = {
+        row.budget: row
+        for row in routeability_budget_information_ceilings()
+    }
+    assert set(rows) == {1, 2, 3}
+
+    b1 = rows[1]
+    assert b1.routeable_adaptive_policy == 0.5
+    assert b1.routeable_fixed_policy == 0.75
+    assert b1.control_adaptive_policy == 0.5
+    assert b1.control_fixed_policy == 0.75
+    assert b1.architecture_by_access_interaction == 0.0
+
+    b2 = rows[2]
+    assert b2.routeable_adaptive_policy == 1.0
+    assert b2.routeable_fixed_policy == 0.75
+    assert b2.control_adaptive_policy == 1.0
+    assert b2.control_fixed_policy == 1.0
+    assert b2.architecture_by_access_interaction == 0.25
+
+    b3 = rows[3]
+    assert b3.routeable_adaptive_policy == 1.0
+    assert b3.routeable_fixed_policy == 1.0
+    assert b3.control_adaptive_policy == 1.0
+    assert b3.control_fixed_policy == 1.0
+    assert b3.architecture_by_access_interaction == 0.0
