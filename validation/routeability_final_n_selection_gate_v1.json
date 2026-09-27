@@ -10,6 +10,12 @@
       "fit_success_fraction",
       "h1_directional_rejection_fraction",
       "h2_hierarchical_pass_fraction"
+    ],
+    "frozen_across_surface": [
+      "expected_h1_delta_b2",
+      "expected_h2_localization",
+      "sesoi_provenance",
+      "trials_per_individual"
     ]
   },
   "rule": {
@@ -22,8 +28,12 @@
       "selecting a larger or smaller N after viewing confirmatory outcomes",
       "changing H1/H2 thresholds after viewing the final power surface",
       "selecting N from the best-case scenario",
-      "using a power surface with only one scenario at a candidate N"
-    ]
+      "using a power surface with only one scenario at a candidate N",
+      "mixing different H1/H2 SESOI values across robustness scenarios",
+      "mixing SESOI provenance across robustness scenarios",
+      "mixing different trials-per-individual designs in one final-N selection surface"
+    ],
+    "robustness_boundary": "nuisance/baseline/colony-allocation assumptions may vary across scenarios, but the scientific SESOI target, provenance and trials-per-individual design are frozen across the entire surface"
   },
   "machine_surface": {
     "module": "adaptive_gain/routeability_final_n_selection.py",
