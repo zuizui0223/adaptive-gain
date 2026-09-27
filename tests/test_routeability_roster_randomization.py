@@ -152,6 +152,8 @@ def test_roster_exporter_records_hash_and_rejects_outcome_columns(tmp_path):
 
     result = json.loads(receipt_path.read_text(encoding="utf-8"))
     assert len(result["roster_sha256"]) == 64
+    assert len(result["assignments_sha256"]) == 64
+    assert len(result["unassigned_sha256"]) == 64
     assert result["focal_treatment_or_outcome_columns_used"] is False
     assert result["receipt"]["assigned_individual_count"] == 48
     assert result["receipt"]["complete_blocks_valid"] is True
