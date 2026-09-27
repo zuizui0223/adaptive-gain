@@ -90,3 +90,16 @@ def test_experiment_design_matches_pairwise_information_not_just_marginals():
         "Fixed semantic 0/1 labels are not claimed to have identical signed contingency tables",
     ):
         assert phrase in text
+
+
+def test_experiment_design_blocks_post_randomization_training_selection():
+    text = _text()
+    for phrase in (
+        "fixed amount",
+        "Do not require an architecture-specific accuracy threshold",
+        "part of the randomized biological response",
+        "per-protocol",
+        "Differential training completion or non-response",
+    ):
+        assert phrase in text
+    assert "failure to meet a prespecified training criterion" not in text
