@@ -61,6 +61,85 @@ safe_logit <- function(p) {
   qlogis(pmin(pmax(p, 1e-8), 1 - 1e-8))
 }
 
+normal_quadrature <- function(n = 25L) {
+  if (n < 2) {
+    stop("normal quadrature requires n >= 2")
+  }
+  jacobi <- matrix(0, nrow = n, ncol = n)
+  off_diagonal <- sqrt(seq_len(n - 1L))
+  for (i in seq_len(n - 1L)) {
+    jacobi[i, i + 1L] <- off_diagonal[i]
+    jacobi[i + 1L, i] <- off_diagonal[i]
+  }
+  eig <- eigen(jacobi, symmetric = TRUE)
+  list(
+    nodes = eig$values,
+    weights = eig$vectors[1, ] ^ 2
+  )
+}
+
+NORMAL_QUADRATURE <- normal_quadrature(25L)
+
+marginal_logistic <- function(eta, random_sd) {
+  if (!is.finite(random_sd) || random_sd < 0) {
+    stop("random_sd must be finite and non-negative")
+  }
+  if (random_sd == 0) {
+    return(inv_logit(eta))
+  }
+  sum(
+    NORMAL_QUADRATURE$weights *
+      inv_logit(eta + random_sd * NORMAL_QUADRATURE$nodes)
+  )
+}
+
+marginal_logistic_slope <- function(eta, random_sd) {
+  if (random_sd == 0) {
+    p <- inv_logit(eta)
+    return(p * (1 - p))
+  }
+  p <- inv_logit(eta + random_sd * NORMAL_QUADRATURE$nodes)
+  sum(NORMAL_QUADRATURE$weights * p * (1 - p))
+}
+
+solve_population_calibrated_logit <- function(
+  primary_success_probability,
+  timeout_fraction,
+  random_sd
+) {
+  target_conditional <- primary_success_probability / (1 - timeout_fraction)
+  if (!is.finite(target_conditional) ||
+      target_conditional <= 0 ||
+      target_conditional >= 1) {
+    stop(
+      "primary success and timeout imply an invalid conditional correctness probability"
+    )
+  }
+  if (random_sd == 0) {
+    return(safe_logit(target_conditional))
+  }
+
+  objective <- function(eta) {
+    marginal_logistic(eta, random_sd) - target_conditional
+  }
+  lower <- objective(-30)
+  upper <- objective(30)
+  if (lower > 0 || upper < 0) {
+    stop("failed to bracket population-calibrated logit")
+  }
+  uniroot(objective, interval = c(-30, 30), tol = 1e-10)$root
+}
+
+fitted_random_intercept_sd <- function(fit) {
+  components <- lme4::VarCorr(fit)
+  variance <- 0
+  for (component in components) {
+    standard_deviation <- attr(component, "stddev")
+    variance <- variance + sum(as.numeric(standard_deviation) ^ 2)
+  }
+  sqrt(variance)
+}
+
 cell_probability <- function(row, architecture, access_mode, budget) {
   architecture_code <- if (architecture == "routeable") "R" else "K"
   access_code <- if (access_mode == "contingent") "C" else "F"
@@ -125,8 +204,20 @@ contrast_from_fit <- function(fit, grid, weights) {
   vc <- vc[names(beta), names(beta), drop = FALSE]
 
   eta <- as.vector(x %*% beta)
-  probability <- inv_logit(eta)
-  gradient_rows <- x * as.vector(probability * (1 - probability))
+  random_sd <- fitted_random_intercept_sd(fit)
+  probability <- vapply(
+    eta,
+    marginal_logistic,
+    numeric(1),
+    random_sd = random_sd
+  )
+  slope <- vapply(
+    eta,
+    marginal_logistic_slope,
+    numeric(1),
+    random_sd = random_sd
+  )
+  gradient_rows <- x * as.vector(slope)
 
   estimate <- sum(weights * probability)
   gradient <- colSums(gradient_rows * weights)
@@ -181,6 +272,7 @@ simulate_one <- function(row, simulation_index) {
   set.seed(as.integer(row$seed) + simulation_index - 1L)
 
   colony_effect <- rnorm(colony_count, mean = 0, sd = colony_sd)
+  population_random_sd <- sqrt(individual_sd ^ 2 + colony_sd ^ 2)
   rows <- list()
   row_index <- 1L
   randomized_individual_count <- 0L
@@ -204,8 +296,11 @@ simulate_one <- function(row, simulation_index) {
             "cell primary-success probability exceeds 1-timeout_fraction"
           )
         }
-        p_correct_given_response <- p_primary / (1 - timeout_fraction)
-        base_logit <- safe_logit(p_correct_given_response)
+        base_logit <- solve_population_calibrated_logit(
+          primary_success_probability = p_primary,
+          timeout_fraction = timeout_fraction,
+          random_sd = population_random_sd
+        )
 
         for (individual_index in seq_len(individuals_per_cell)) {
           randomized_individual_count <- randomized_individual_count + 1L
