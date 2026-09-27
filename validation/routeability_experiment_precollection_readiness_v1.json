@@ -67,6 +67,15 @@
       "note": "fixed-dose post-randomization training; no treatment-specific accuracy exclusion; timeout remains in primary denominator"
     },
     {
+      "item": "trial-log protocol validation",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_trial_validation.py",
+        "tests/test_routeability_trial_validation.py"
+      ],
+      "note": "machine-checks cue sequence, cue duration, persistent context, apparatus errors and timeout scoring against the frozen schedule; real apparatus logs not yet available"
+    },
+    {
       "item": "procedural pilot protocol",
       "status": "PASS_PROTOCOL_ONLY",
       "evidence": [
