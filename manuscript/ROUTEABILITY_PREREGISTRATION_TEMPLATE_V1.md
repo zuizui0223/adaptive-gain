@@ -106,9 +106,13 @@ The response window is frozen from the architecture-neutral procedural pilot:
 
 - pilot receipt: {{pilot_receipt_reference}}
 
+The **primary confirmatory H1/H2 experiment uses guided contingent presentation**. The apparatus, not the animal, selects which branch-specific terminal cue is revealed after context.
+
 Contingent access uses context first, followed by the context-selected terminal cue while context remains visible.
 
 Fixed access uses one terminal cue first, followed by the other terminal cue while the first remains visible. A→B versus B→A order is counterbalanced independently of state.
+
+Autonomous terminal-window routing is a separate mechanistic follow-up and is not pooled into the guided confirmatory H1/H2 dataset.
 
 Thus the manipulation is not sequential versus simultaneous presentation.
 
