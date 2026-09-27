@@ -146,3 +146,25 @@ def test_batch_requires_exact_planned_trial_keys():
             nominal_cue_duration_seconds=1.0,
             cue_duration_tolerance_seconds=0.1,
         )
+
+
+def test_inconsistent_response_logging_is_protocol_invalid():
+    planned = _planned_b2_contingent()
+
+    missing_latency = _validate(
+        planned,
+        _observed(planned, response_latency_seconds=None),
+    )
+    assert not missing_latency.protocol_valid
+    assert "missing_response_latency_for_terminal_decision" in missing_latency.protocol_errors
+
+    latency_without_decision = _validate(
+        planned,
+        _observed(
+            planned,
+            terminal_decision=None,
+            response_latency_seconds=1.0,
+        ),
+    )
+    assert not latency_without_decision.protocol_valid
+    assert "response_latency_without_terminal_decision" in latency_without_decision.protocol_errors
