@@ -87,10 +87,11 @@
     }
   },
   "ecological_interpretation": {
-    "supported": "phenological overlap is the only prespecified conventional-filter block that carries reproducible incremental held-out information for both annual link gains and losses under the frozen primary rule, and the same classification persists in both broader sampling sensitivities",
-    "gain_loss_asymmetry": "the absolute held-out log-loss penalty from removing phenology is larger for gains than losses in the primary scope",
-    "morphology": "raw plant and pollinator morphology blocks do not meet the frozen all-primary-fold reproducibility rule for either endpoint; plant morphology is fold-unstable for losses",
-    "abundance": "flower abundance has positive pooled information but is fold-unstable for both endpoints"
+    "status": "QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE_AUDIT",
+    "numerical_ablation": "Removing the published phenology block still causes the recorded held-out performance drop, but this cannot be promoted as independent ecological information for gain because the phenology support surface is conditioned on ever-realized links.",
+    "clean_gain_baseline": "The already-fitted drop-phenology model has primary gain AUC 0.5142 and relative log-loss reduction -0.00759 versus null.",
+    "clean_loss_baseline": "The drop-phenology model has primary loss AUC 0.5995 and relative log-loss reduction 0.0131 versus null.",
+    "consequence": "Do not describe phenology as a validated predictive filter for candidate link gains until an independently reconstructed opportunity surface is tested."
   },
   "not_established": [
     "causal primacy of phenology",
@@ -100,11 +101,23 @@
     "environmental routeability",
     "strict prospective forecasting from past-only covariates"
   ],
-  "next_gate": "freeze and test an independent cognition/decision exposure against this phenology-dominated conventional baseline without redefining conventional filters",
-  "claim_ceiling": "The result identifies a reproducible predictive-filter pattern for held-out annual link responses. Because key conventional covariates are study-wide six-year aggregates, it is not a strict prospective forecast. It is not a causal decomposition and does not validate routeability.",
+  "next_gate": "reconstruct an outcome-independent temporal-opportunity surface from raw dated records with focal-response exclusion, then rerun gain/loss prediction before any decision-layer comparison",
+  "claim_ceiling": "The ablation arithmetic is retained as a historical result. Its phenology interpretation is quarantined by the support-leakage audit and cannot validate ecological filtering, causality, or routeability.",
   "time_support": {
     "phenological_overlap": "study-wide six-year aggregate",
     "flower_abundance": "study-wide six-year aggregate",
     "consequence": "block ablation tests held-out response discrimination, not past-only forecasting"
+  },
+  "historical_ecological_interpretation": {
+    "supported": "phenological overlap is the only prespecified conventional-filter block that carries reproducible incremental held-out information for both annual link gains and losses under the frozen primary rule, and the same classification persists in both broader sampling sensitivities",
+    "gain_loss_asymmetry": "the absolute held-out log-loss penalty from removing phenology is larger for gains than losses in the primary scope",
+    "morphology": "raw plant and pollinator morphology blocks do not meet the frozen all-primary-fold reproducibility rule for either endpoint; plant morphology is fold-unstable for losses",
+    "abundance": "flower abundance has positive pooled information but is fold-unstable for both endpoints"
+  },
+  "supersession": {
+    "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
+    "date": "2026-09-28",
+    "phenology_gain_interpretation_valid": false,
+    "phenology_loss_interpretation": "descriptive association only; source surface is study-wide and interaction-conditioned"
   }
 }
