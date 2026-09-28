@@ -83,9 +83,11 @@ This is a second public release from the same Villavicencio plant–pollinator s
 
 ### Screening decision
 
-**Preferred Stage-1 response source, conditional on a clean ID join to Candidate 1 traits.**
+**Preferred Stage-1 response grain is now reconstructable from the public raw dated records.**
 
-The higher temporal resolution improves the feasibility test substantially. Rather than relying only on five year-to-year transitions, the primary Stage-1 contrast should use the 12 within-year adjacent transitions:
+The Dryad methods define the three subseasons by date, so the public Figshare visitor records can reconstruct an 18-period response without requiring the unavailable RData bytes. The frozen 45 × 135 subset yields 18 non-empty period networks and 12 within-year adjacent transitions. Exact byte-for-byte identity with the RData object is **not** claimed.
+
+The higher temporal resolution improves the feasibility test substantially. Rather than relying only on five year-to-year transitions, the primary Stage-1 response contains 12 within-year adjacent transitions:
 
 [
 6\;\text{years}\times(\text{early}\to\text{mid},\;\text{mid}\to\text{late})=12.
@@ -93,19 +95,15 @@ The higher temporal resolution improves the feasibility test substantially. Rath
 
 Year-end to next-year early transitions should be sensitivity analyses rather than part of the primary series because they span a qualitatively different seasonal gap.
 
-The trait/phenology workbook from Candidate 1 remains the preferred conventional-filter source. The 18-network response should be restricted **before response inspection** to species with a verified crosswalk into that trait surface.
+The response reconstruction is frozen to the same 45 plant × 135 pollinator subset used by the annual analysis. The published aggregate `phenological_overlap` matrix is **not** reused as a candidate-gain opportunity surface; conventional opportunity must be rebuilt from raw dated records with focal-response exclusion.
 
-### Join gate
+The reconstructed Stage-1 response contains **4,581 shared-dyad rows and 853 changed links (422 gains, 431 losses)**, and all **12/12** within-year transitions contain both changed and unchanged shared dyads. Presence is still defined from observed positive links, so the turnover partition remains detection-sensitive rather than true species turnover.
 
-Before any ecological model is fit:
+### Date-completeness boundary
 
-1. recover the plant and pollinator ID tables from the RData object;
-2. crosswalk those IDs to the names/codes used in the trait workbook;
-3. report exact matched/unmatched counts separately for plants and pollinators;
-4. freeze the analysis subset;
-5. preserve zero-degree but independently present species when the source object permits it.
+Dated raw records recover complete annual positive-link support for 2006–2010. In 2011, **433 of 440** annual links have dated support; seven links occur only in positive rows lacking a date and therefore cannot be assigned to a subseason. The 12-transition response is retained with this limitation explicit, while 2006–2010 provides a dated-complete sensitivity. Exact equality to the inaccessible RData object is not asserted.
 
-If zero observed degree is used as a proxy for absence, the resulting turnover partition must be labelled a detection-sensitive fallback rather than true species turnover.
+A second modeling boundary is also explicit: 2006 mid→late contains one gain and no loss. That transition is valid for the changed-versus-unchanged Stage-1 feasibility audit, but separate endpoint-specific gain/loss models must use a prespecified nondegenerate scope.
 
 ## Candidate 2 — Catalan butterfly–plant long-term network
 
@@ -203,17 +201,19 @@ This is precisely why the prospective reserve forbids deriving decision classes 
 
 ### Stage 1 — Villavicencio ecological baseline
 
-The annual fallback has now passed after a leakage repair.
+Stage 1 now has two complementary green surfaces.
 
-Current result:
+**Response surface:** public raw dated records reconstruct the documented 18-period grain, giving 12 within-year transitions with 4,581 shared-dyad rows and 853 changed links. This removes the earlier dependence on unavailable RData bytes for response feasibility, while retaining an explicit 2011 missing-date limitation.
+
+**Ecological baseline:** the annual focal-response-excluded opportunity repair remains the cleaner current-state predictor analysis.
+
+Current annual result:
 - focal-response-excluded current-year availability/activity discriminates both gain and loss across held-out annual response transitions;
 - the signal is stronger for gains;
 - pair-specific weekly overlap is only a small, sensitivity-dependent increment beyond the marginal opportunity terms;
 - the same opportunity construction measured one year earlier does not recover the current-state signal.
 
-The preferred higher-resolution response surface remains the 18-subseason release `10.5061/dryad.j6q573n9j` if exact source bytes can be materialized and mapped reproducibly.
-
-For any future 18-subseason analysis, rebuild opportunity from raw dated records or another independently defined support surface. Do **not** reuse the published aggregate overlap matrix as though it covered all candidate dyads independently of realized interactions.
+The 18-subseason response is therefore no longer blocked on RData materialization. What remains unavailable is only a byte-for-byte cross-check against that published object. Any predictor analysis at the subseason grain must still rebuild opportunity from raw dated records or another independently defined support surface. Do **not** reuse the published aggregate overlap matrix as though it covered all candidate dyads independently of realized interactions.
 
 **Stage-1 success does not validate routeability.** It supplies the clean ecological baseline against which an independent decision layer must compete.
 
