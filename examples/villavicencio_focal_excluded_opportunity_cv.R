@@ -8,16 +8,28 @@ input_path <- args[[1]]
 prediction_path <- args[[2]]
 fold_path <- args[[3]]
 
-full_predictors <- c(
+current_predictors <- c(
   "focal_excluded_overlap_weeks",
   "plant_flowering_weeks",
   "pollinator_otherplant_active_weeks"
 )
+lagged_predictors <- c(
+  "lagged_focal_excluded_overlap_weeks",
+  "lagged_plant_flowering_weeks",
+  "lagged_pollinator_otherplant_active_weeks"
+)
+all_predictors <- c(current_predictors, lagged_predictors)
+
 model_sets <- list(
-  full = full_predictors,
-  drop_pairwise_overlap = c(
+  current_full = current_predictors,
+  current_drop_pairwise_overlap = c(
     "plant_flowering_weeks",
     "pollinator_otherplant_active_weeks"
+  ),
+  lagged_full = lagged_predictors,
+  lagged_drop_pairwise_overlap = c(
+    "lagged_plant_flowering_weeks",
+    "lagged_pollinator_otherplant_active_weeks"
   )
 )
 
@@ -28,14 +40,14 @@ scopes <- list(
 )
 
 data <- read.csv(input_path, stringsAsFactors = FALSE, check.names = FALSE)
-required <- c("transition", "risk_set", "outcome", full_predictors)
+required <- c("transition", "risk_set", "outcome", all_predictors)
 missing <- setdiff(required, names(data))
 if (length(missing) > 0) {
   stop(paste("missing required columns:", paste(missing, collapse = ", ")))
 }
 
 prepare_fold <- function(train, test) {
-  for (name in full_predictors) {
+  for (name in all_predictors) {
     train_value <- log1p(as.numeric(train[[name]]))
     test_value <- log1p(as.numeric(test[[name]]))
     center <- mean(train_value)
