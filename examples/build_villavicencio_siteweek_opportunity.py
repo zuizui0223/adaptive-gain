@@ -134,14 +134,15 @@ def main() -> None:
         p_cells = plant_cells.get((current_year, plant), set())
         q_cells = {
             (site, week)
-            for site, week in {
-                cell
-                for year, site, week, q in pollinator_cell_plants
-                if year == current_year and q == pollinator
-            }
-            if pollinator_cell_plants[
-                (current_year, site, week, pollinator)
-            ] - {plant}
+            for year, site, week, q in pollinator_cell_plants
+            if (
+                year == current_year
+                and q == pollinator
+                and pollinator_cell_plants[
+                    (current_year, site, week, pollinator)
+                ]
+                - {plant}
+            )
         }
         overlap = p_cells & q_cells
 
