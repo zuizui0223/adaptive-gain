@@ -43,25 +43,30 @@ The screen below intentionally distinguishes a good network dataset from a good 
 Why it is strong:
 
 - repeated yearly networks;
+- raw public dated visitor records;
 - independently measured morphology;
-- phenological overlap;
-- abundance;
 - a large set of shared species and links across years;
-- conventional compatibility filters can be modelled explicitly rather than absorbed into the routeability term.
+- raw records permit focal-response-excluded availability/activity opportunity to be reconstructed rather than inferred from the focal link itself.
+
+Important repair boundary:
+
+- the published `phenological_overlap` matrix is **not** a valid full candidate-dyad gain predictor for this project because its non-zero support is nested inside dyads realized as links at least once;
+- the historical published-overlap gain model is therefore quarantined for ecological interpretation;
+- the repaired raw-record opportunity surface has broad support among never-realized dyads and is the valid conventional ecological baseline.
 
 Why it is **not Tier A**:
 
-- morphology and phenology describe compatibility and accessibility constraints, but they do not by themselves establish the cue hierarchy or contingent decision problem of a pollinator;
+- availability, activity and morphology do not establish the cue hierarchy or contingent decision problem of a pollinator;
 - defining decision-equivalence classes directly from the same network links would be circular;
-- therefore a morphology-derived class system can only be an exploratory proxy unless it is externally justified by independent behavioral evidence.
+- a trait- or network-derived class system can only be exploratory unless externally justified by independent behavioral evidence.
 
 ### Allowed pilot use
 
-Use the dataset to answer a narrower feasibility question:
+The annual fallback now answers a clean narrower question:
 
-> After controlling for abundance, phenology and morphology, is there enough repeated link turnover and shared-partner structure to support a later independently defined decision-class test?
+> Does focal-response-excluded current ecological opportunity discriminate link gain and loss, and how much residual structure remains for a later independently defined decision-class test?
 
-Do **not** call a morphology clustering result an exact empirical decision-equivalence test.
+The repaired answer is yes for current-year opportunity, while the one-year-lagged negative control does not recover the same signal. Do **not** call this routeability or strict forecasting.
 
 
 ## Candidate 1b — Villavicencio 18-subseason response surface
@@ -150,21 +155,20 @@ Use only after verifying that the processed archive retains the link-level trans
 
 The temporal resolution is excellent, but the public Dryad surface is not the right unit for the prospective dyad-level decision-boundary test. It remains useful for benchmarking the expected magnitude and temporal structure of rewiring.
 
-## Candidate 4 — six-year trait-matching study as conventional-filter reference
+## Candidate 4 — Villavicencio as a clean non-routeability baseline
 
-The Villavicencio dataset is also valuable even if it never supplies decision classes.
+The Villavicencio system remains valuable even if it never supplies decision classes, but its baseline must respect the support-leakage audit.
 
-Its strongest role may be to freeze the **non-routeability** part of the model:
+The clean **non-routeability** layer is now:
 
-- phenological overlap;
-- floral abundance;
-- corolla length / aperture;
-- insect proboscis dimensions;
-- body size.
+- focal-response-excluded current-year plant availability;
+- pollinator activity on other plants;
+- the small incremental focal-excluded weekly-overlap term;
+- independently measured plant and pollinator morphology where used with an outcome-independent support definition.
 
-These are exactly the filters that the V5 claim says routeability does **not** replace.
+The published aggregate phenological-overlap matrix is retained only as historical/source context, not as the full candidate-dyad gain surface.
 
-That makes this dataset useful for testing whether a later decision-structure term adds information after strong conventional compatibility models are already present.
+This repaired baseline is the appropriate comparator for asking whether a later independent decision-structure term adds information beyond ordinary ecological opportunity.
 
 ## Candidate 5 — habitat-loss seasonal rewiring network
 
@@ -197,33 +201,21 @@ This is precisely why the prospective reserve forbids deriving decision classes 
 
 ## Best next move — two-stage empirical program
 
-### Stage 1 — feasibility reanalysis on Villavicencio
+### Stage 1 — Villavicencio ecological baseline
 
-Goal: determine whether the network response has enough structure to justify collecting or importing independent decision data.
+The annual fallback has now passed after a leakage repair.
 
-Preferred response surface: the 18-subseason network release `10.5061/dryad.j6q573n9j`, joined to the trait/phenology workbook `10.5061/dryad.8cz8w9gm1`.
+Current result:
+- focal-response-excluded current-year availability/activity discriminates both gain and loss across held-out annual response transitions;
+- the signal is stronger for gains;
+- pair-specific weekly overlap is only a small, sensitivity-dependent increment beyond the marginal opportunity terms;
+- the same opportunity construction measured one year earlier does not recover the current-state signal.
 
-Freeze before analysis:
+The preferred higher-resolution response surface remains the 18-subseason release `10.5061/dryad.j6q573n9j` if exact source bytes can be materialized and mapped reproducibly.
 
-- the 12 within-year adjacent transitions as the primary temporal series;
-- year-boundary transitions as sensitivity analyses only;
-- shared species / shared partner sets;
-- independent species-presence information where available;
-- abundance;
-- phenological overlap;
-- morphology compatibility;
-- one prespecified rewiring outcome;
-- the species crosswalk and trait-available analysis subset before inspecting rewiring contrasts.
+For any future 18-subseason analysis, rebuild opportunity from raw dated records or another independently defined support surface. Do **not** reuse the published aggregate overlap matrix as though it covered all candidate dyads independently of realized interactions.
 
-Outputs:
-
-1. annual species-turnover and rewiring components;
-2. distribution of shared-partner opportunity;
-3. number of repeated dyads;
-4. how much rewiring remains after morphology, phenology and abundance;
-5. power / estimability of a future independent decision-class exposure.
-
-**Stage-1 success does not validate routeability.** It only shows that the response surface is usable.
+**Stage-1 success does not validate routeability.** It supplies the clean ecological baseline against which an independent decision layer must compete.
 
 ### Stage 2 — independent decision-structure layer
 
