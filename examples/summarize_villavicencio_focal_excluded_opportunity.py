@@ -16,7 +16,12 @@ EXPECTED_FOLDS = {
     "near_core_2007_2011": 4,
     "all_annual_2006_2011": 5,
 }
-MODELS = ("full", "drop_pairwise_overlap")
+MODELS = (
+    "current_full",
+    "current_drop_pairwise_overlap",
+    "lagged_full",
+    "lagged_drop_pairwise_overlap",
+)
 
 
 def _read(path: Path):
@@ -95,23 +100,20 @@ def _metrics(rows):
     }
 
 
-def _opportunity_rates(table_rows, scope_transitions, risk):
+def _opportunity_rates(table_rows, scope_transitions, risk, *, lagged=False):
     rows = [
         row
         for row in table_rows
         if row["transition"] in scope_transitions
         and row["risk_set"] == risk
     ]
-    positive = [
-        row
-        for row in rows
-        if int(row["focal_excluded_opportunity_positive"]) == 1
-    ]
-    zero = [
-        row
-        for row in rows
-        if int(row["focal_excluded_opportunity_positive"]) == 0
-    ]
+    field = (
+        "lagged_focal_excluded_opportunity_positive"
+        if lagged
+        else "focal_excluded_opportunity_positive"
+    )
+    positive = [row for row in rows if int(row[field]) == 1]
+    zero = [row for row in rows if int(row[field]) == 0]
 
     def event_rate(group):
         if not group:
@@ -134,13 +136,84 @@ def _opportunity_rates(table_rows, scope_transitions, risk):
     }
 
 
-def _classify_overlap(pooled_delta, fold_deltas):
+def _classify_increment(pooled_delta, fold_deltas):
     positive = sum(value > 0 for value in fold_deltas.values())
     if pooled_delta > 0 and positive == len(fold_deltas):
         return "reproducible_incremental_information"
     if pooled_delta > 0 and positive > 0:
         return "positive_but_fold_unstable"
     return "no_reproducible_incremental_information"
+
+
+def _increment(full, drop, transitions):
+    fold_delta_log_loss = {
+        transition: (
+            drop["folds"][transition]["model_log_loss"]
+            - full["folds"][transition]["model_log_loss"]
+        )
+        for transition in transitions
+    }
+    fold_delta_brier = {
+        transition: (
+            drop["folds"][transition]["model_brier"]
+            - full["folds"][transition]["model_brier"]
+        )
+        for transition in transitions
+    }
+    fold_delta_auc = {
+        transition: (
+            full["folds"][transition]["roc_auc"]
+            - drop["folds"][transition]["roc_auc"]
+        )
+        for transition in transitions
+    }
+    pooled_delta_log_loss = drop["model_log_loss"] - full["model_log_loss"]
+    return {
+        "delta_log_loss_drop_minus_full": pooled_delta_log_loss,
+        "delta_brier_drop_minus_full": (
+            drop["model_brier"] - full["model_brier"]
+        ),
+        "delta_auc_full_minus_drop": (
+            full["roc_auc"] - drop["roc_auc"]
+        ),
+        "fold_delta_log_loss": fold_delta_log_loss,
+        "fold_delta_brier": fold_delta_brier,
+        "fold_delta_auc": fold_delta_auc,
+        "positive_log_loss_fold_count": sum(
+            value > 0 for value in fold_delta_log_loss.values()
+        ),
+        "classification": _classify_increment(
+            pooled_delta_log_loss,
+            fold_delta_log_loss,
+        ),
+    }
+
+
+def _current_vs_lagged(current, lagged, transitions):
+    return {
+        "relative_log_loss_reduction_difference_current_minus_lagged": (
+            current["relative_log_loss_reduction"]
+            - lagged["relative_log_loss_reduction"]
+        ),
+        "auc_difference_current_minus_lagged": (
+            current["roc_auc"] - lagged["roc_auc"]
+        ),
+        "brier_improvement_difference_current_minus_lagged": (
+            current["brier_improvement"] - lagged["brier_improvement"]
+        ),
+        "fold_relative_log_loss_skill_difference": {
+            transition: (
+                current["folds"][transition]["relative_log_loss_reduction"]
+                - lagged["folds"][transition]["relative_log_loss_reduction"]
+            )
+            for transition in transitions
+        },
+        "current_better_log_loss_skill_fold_count": sum(
+            current["folds"][transition]["relative_log_loss_reduction"]
+            > lagged["folds"][transition]["relative_log_loss_reduction"]
+            for transition in transitions
+        ),
+    }
 
 
 def main() -> None:
@@ -181,7 +254,7 @@ def main() -> None:
             {
                 transition
                 for s, _, transition, model in grouped
-                if s == scope and model == "full"
+                if s == scope and model == "current_full"
             }
         )
         if len(transitions) != expected:
@@ -229,59 +302,46 @@ def main() -> None:
                 )
                 model_results[model] = aggregate
 
-            full = model_results["full"]
-            drop = model_results["drop_pairwise_overlap"]
-            fold_delta_log_loss = {
-                transition: (
-                    drop["folds"][transition]["model_log_loss"]
-                    - full["folds"][transition]["model_log_loss"]
-                )
-                for transition in transitions
-            }
-            fold_delta_brier = {
-                transition: (
-                    drop["folds"][transition]["model_brier"]
-                    - full["folds"][transition]["model_brier"]
-                )
-                for transition in transitions
-            }
-            fold_delta_auc = {
-                transition: (
-                    full["folds"][transition]["roc_auc"]
-                    - drop["folds"][transition]["roc_auc"]
-                )
-                for transition in transitions
-            }
-            pooled_delta_log_loss = (
-                drop["model_log_loss"] - full["model_log_loss"]
-            )
-            overlap = {
-                "delta_log_loss_drop_minus_full": pooled_delta_log_loss,
-                "delta_brier_drop_minus_full": (
-                    drop["model_brier"] - full["model_brier"]
-                ),
-                "delta_auc_full_minus_drop": (
-                    full["roc_auc"] - drop["roc_auc"]
-                ),
-                "fold_delta_log_loss": fold_delta_log_loss,
-                "fold_delta_brier": fold_delta_brier,
-                "fold_delta_auc": fold_delta_auc,
-                "positive_log_loss_fold_count": sum(
-                    value > 0 for value in fold_delta_log_loss.values()
-                ),
-                "classification": _classify_overlap(
-                    pooled_delta_log_loss,
-                    fold_delta_log_loss,
-                ),
-            }
+            current_full = model_results["current_full"]
+            current_drop = model_results["current_drop_pairwise_overlap"]
+            lagged_full = model_results["lagged_full"]
+            lagged_drop = model_results["lagged_drop_pairwise_overlap"]
+
             endpoints[risk] = {
-                "full": full,
-                "marginal_only": drop,
-                "pairwise_overlap_increment": overlap,
-                "opportunity_rates": _opportunity_rates(
-                    table,
+                "current": {
+                    "full": current_full,
+                    "marginal_only": current_drop,
+                    "pairwise_overlap_increment": _increment(
+                        current_full,
+                        current_drop,
+                        transitions,
+                    ),
+                    "opportunity_rates": _opportunity_rates(
+                        table,
+                        transitions,
+                        risk,
+                        lagged=False,
+                    ),
+                },
+                "lagged": {
+                    "full": lagged_full,
+                    "marginal_only": lagged_drop,
+                    "pairwise_overlap_increment": _increment(
+                        lagged_full,
+                        lagged_drop,
+                        transitions,
+                    ),
+                    "opportunity_rates": _opportunity_rates(
+                        table,
+                        transitions,
+                        risk,
+                        lagged=True,
+                    ),
+                },
+                "current_vs_lagged": _current_vs_lagged(
+                    current_full,
+                    lagged_full,
                     transitions,
-                    risk,
                 ),
             }
 
@@ -296,28 +356,50 @@ def main() -> None:
         }
 
     primary = scopes[PRIMARY_SCOPE]["endpoints"]
-    full_signal = all(
-        primary[risk]["full"]["all_folds_converged"]
-        and primary[risk]["full"]["relative_log_loss_reduction"] > 0
+    current_signal = all(
+        primary[risk]["current"]["full"]["all_folds_converged"]
+        and primary[risk]["current"]["full"]["relative_log_loss_reduction"] > 0
+        for risk in ("gain", "loss")
+    )
+    lagged_both_positive = all(
+        primary[risk]["lagged"]["full"]["relative_log_loss_reduction"] > 0
+        for risk in ("gain", "loss")
+    )
+    current_better_both = all(
+        primary[risk]["current_vs_lagged"][
+            "relative_log_loss_reduction_difference_current_minus_lagged"
+        ] > 0
         for risk in ("gain", "loss")
     )
     overlap_classes = {
-        risk: primary[risk]["pairwise_overlap_increment"]["classification"]
+        risk: {
+            "current": primary[risk]["current"][
+                "pairwise_overlap_increment"
+            ]["classification"],
+            "lagged": primary[risk]["lagged"][
+                "pairwise_overlap_increment"
+            ]["classification"],
+        }
         for risk in ("gain", "loss")
     }
+
+    if current_signal and current_better_both and not lagged_both_positive:
+        status = "retrospective_current_state_signal_lagged_control_not_recovered"
+    elif current_signal:
+        status = "retrospective_current_state_signal_present"
+    else:
+        status = "retrospective_repair_mixed"
+
     result = {
         "schema": (
             "adaptive-gain-villavicencio-focal-excluded-opportunity-cv-v1"
         ),
         "date": "2026-09-28",
-        "status": (
-            "retrospective_repair_signal_present"
-            if full_signal
-            else "retrospective_repair_mixed"
-        ),
+        "status": status,
         "analysis_status": (
-            "post_leakage_repair; retrospective contemporaneous opportunity "
-            "analysis; not preregistered or causal"
+            "post_leakage_repair; current-year analysis is retrospective and "
+            "contemporaneous; one-year-lagged models are past-only negative "
+            "controls; not preregistered or causal"
         ),
         "primary_scope": PRIMARY_SCOPE,
         "published_phenological_overlap_used": False,
@@ -325,18 +407,25 @@ def main() -> None:
         "focal_response_excluded_from_opportunity": True,
         "scopes": scopes,
         "primary_overlap_classification": overlap_classes,
+        "primary_current_signal": current_signal,
+        "primary_lagged_both_positive": lagged_both_positive,
+        "primary_current_better_than_lagged_both_endpoints": current_better_both,
         "ecological_read": (
-            "The full focal-response-excluded availability/activity surface can "
-            "be interpreted separately from the incremental dyad-specific "
-            "weekly-overlap term. If the overlap ablation is weak, model skill "
-            "belongs to marginal availability/activity rather than pair-specific "
-            "phenological matching."
+            "The repaired analysis separates three questions: whether a clean "
+            "current-year availability/activity surface discriminates annual "
+            "link dynamics, whether dyad-specific weekly overlap adds information "
+            "beyond the two marginal opportunity components, and whether the "
+            "same construction has past-only one-year-lagged predictive value. "
+            "A current-only pattern supports current ecological opportunity, "
+            "not stable dyad propensity or strict forecasting."
         ),
         "claim_ceiling": (
-            "Retrospective contemporaneous focal-response-excluded opportunity "
-            "association only. Full-model skill cannot by itself establish "
-            "pair-specific temporal matching, strict prospective forecasting, "
-            "causality, decision equivalence, or routeability."
+            "Retrospective focal-response-excluded opportunity association only. "
+            "Current-year skill cannot establish pair-specific temporal matching "
+            "unless the overlap increment is reproducible, and failure of the "
+            "lagged control limits the result to current-state ecology. None of "
+            "these analyses establishes causality, decision equivalence, or "
+            "routeability."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
