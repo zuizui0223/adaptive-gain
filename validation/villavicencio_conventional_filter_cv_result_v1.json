@@ -104,6 +104,21 @@
     }
   },
   "ecological_interpretation": {
+    "status": "QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE_AUDIT",
+    "gain": "The numerical full-model gain skill is reproducible but cannot be interpreted as an outcome-independent ecological-filter result because non-zero published phenological overlap is nested entirely within dyads that are observed as links at least once over 2006-2011.",
+    "loss": "The loss endpoint remains descriptive only. Removing phenology leaves modest primary discrimination (AUC 0.5995; relative log-loss reduction 0.0131) and one of three primary folds has negative proper-score skill.",
+    "routeability": "No routeability or decision-equivalence inference is supported."
+  },
+  "next_gate": "freeze an independent decision-structure exposure, then compare conventional-only versus conventional-plus-decision models using the same temporal holdout scopes; the decision layer must improve held-out performance without being derived from the network response",
+  "claim_ceiling": "Historical held-out numerical performance only. The full-model gain result is quarantined for ecological-filter interpretation by validation/villavicencio_phenology_support_leakage_v1.json; it is not evidence for prospective forecasting, causal filtering, or routeability.",
+  "time_support": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "held_out": "annual link outcomes",
+    "not_held_out": "full temporal support used to construct phenological overlap and flower abundance",
+    "interpretation": "held-out annual-link discrimination, not strict prospective forecasting"
+  },
+  "historical_ecological_interpretation": {
     "primary": "independently measured phenology, abundance and raw morphology carry reproducible information about both link formation and link loss across held-out annual transitions",
     "asymmetry": "the conventional-filter baseline discriminates held-out annual link gains substantially better than losses in the sampling-consistent primary scope",
     "residual_opportunity": "predictive improvement is incomplete for both endpoints, leaving a well-defined residual target for any later independent decision-structure layer",
@@ -116,13 +131,11 @@
       "strict prospective forecasting from past-only covariates"
     ]
   },
-  "next_gate": "freeze an independent decision-structure exposure, then compare conventional-only versus conventional-plus-decision models using the same temporal holdout scopes; the decision layer must improve held-out performance without being derived from the network response",
-  "claim_ceiling": "This result establishes a held-out-response conventional-filter baseline for annual link dynamics. Because key covariates are study-wide six-year aggregates, it is not a strict prospective forecast. It is not evidence for routeability by itself and does not replace the 18-subseason primary design.",
-  "time_support": {
-    "phenological_overlap": "study-wide six-year aggregate",
-    "flower_abundance": "study-wide six-year aggregate",
-    "held_out": "annual link outcomes",
-    "not_held_out": "full temporal support used to construct phenological overlap and flower abundance",
-    "interpretation": "held-out annual-link discrimination, not strict prospective forecasting"
+  "supersession": {
+    "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
+    "date": "2026-09-28",
+    "numerical_result_retained": true,
+    "gain_filter_interpretation_valid": false,
+    "required_next_step": "reconstruct outcome-independent opportunity/phenology from raw dated records before any gain-filter promotion"
   }
 }
