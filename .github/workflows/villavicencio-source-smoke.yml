@@ -10,6 +10,8 @@ on:
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
       - "examples/summarize_villavicencio_filter_block_ablation.py"
+      - "examples/villavicencio_gain_loss_matched_audit.R"
+      - "examples/summarize_villavicencio_gain_loss_asymmetry.py"
       - "examples/build_villavicencio_transition_pairs.py"
       - "adaptive_gain/empirical_rewiring.py"
       - "validation/villavicencio_source_manifest_v1.json"
@@ -546,6 +548,67 @@ jobs:
               if not endpoint["all_folds_converged"]:
                   raise SystemExit(f"{risk}: block-ablation model convergence failure")
           print(json.dumps(result["primary_summary"], indent=2, sort_keys=True))
+          PY
+
+      - name: Audit gain-loss predictability asymmetry
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-gain-loss-asymmetry-audit-v1","materialized":false}' \
+              > artifact/annual_gain_loss_asymmetry_audit.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_gain_loss_matched_audit.R \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_gain_loss_matched_replicates.csv \
+            100
+
+          python examples/summarize_villavicencio_gain_loss_asymmetry.py \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_gain_loss_matched_replicates.csv \
+            artifact/annual_gain_loss_asymmetry_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_gain_loss_asymmetry_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "posthoc_direction_seen_before_matched_audit" not in result["analysis_status"]:
+              raise SystemExit("asymmetry audit lost its retrospective-status firewall")
+          for scope, expected in (
+              ("strict_core_2008_2011", 3),
+              ("near_core_2007_2011", 4),
+              ("all_annual_2006_2011", 5),
+          ):
+              observed = result["scopes"][scope]
+              if observed["transition_count"] != expected:
+                  raise SystemExit(f"{scope}: transition count changed")
+              for transition in observed["transitions"].values():
+                  matched = transition["matched_information_training"]
+                  if matched["replicates"] != 100:
+                      raise SystemExit("matched audit replicate count changed")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "strict_core_consistent": result["scopes"][
+                          "strict_core_2008_2011"
+                      ]["all_transitions_directionally_consistent"],
+                      "all_annual_consistent": result["scopes"][
+                          "all_annual_2006_2011"
+                      ]["all_transitions_directionally_consistent"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
           PY
 
       - name: Summarize exported periods before response analysis
