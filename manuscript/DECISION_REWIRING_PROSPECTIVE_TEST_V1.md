@@ -204,39 +204,39 @@ The observed association between boundary crossing and rewiring is then compared
 
 This tests whether the ecological signal depends on the declared decision structure rather than merely on having grouped species into classes.
 
-## Current Stage-1 ecological result — phenology as eligibility gate and persistence gradient
+## Current Stage-1 empirical status — candidate-filter result quarantined
 
-Status: **post-result ecological diagnostic, not a confirmatory routeability test.**
+The raw-source audit changes the interpretation of the annual Villavicencio fallback.
 
-The annual Villavicencio fallback now supports a more specific ecological reading than the original statement that phenology predicts rewiring.
+The published `phenological_overlap` matrix is **not** an outcome-independent opportunity surface over all 45 × 135 candidate dyads. Across all 6,075 dyads, every one of the 827 dyads with non-zero published overlap appears as a realized interaction in at least one annual network, while none of the 5,194 never-linked dyads has positive published overlap.
 
-Within the sampling-consistent 2008–2011 scope:
+Therefore the earlier annual gain result cannot be used as evidence that phenology independently filters candidate interaction formation. The arithmetic remains reproducible, but its ecological interpretation is quarantined.
 
-- study-wide phenological overlap strongly separates link gains from stable absences when zero-overlap dyads are retained (pooled AUC = 0.9055);
-- after restricting to dyads with positive phenological overlap, that gain-versus-stable-absence discrimination disappears (pooled AUC = 0.5058; primary-fold AUCs 0.4643, 0.4570, 0.5678);
-- among already established positive-overlap links, larger overlap continues to discriminate retention from loss (pooled AUC = 0.6568; primary-fold AUCs 0.6593, 0.6598, 0.6563);
-- among changed dyads, phenological overlap carries essentially no information about whether the change is a gain or a loss (pooled AUC = 0.4907).
+The already-fitted model with phenology removed makes the consequence explicit in the sampling-consistent 2008–2011 annual scope:
 
-The corresponding state medians are 0 weeks for stable absences, 12 for gains, 13 for losses and 20 for retained links. Zero overlap occurs in 87.2% of stable absences but only 6.3% of gains, 5.2% of losses and 2.0% of retained links.
+- gain AUC falls to 0.5142 and relative held-out log-loss reduction versus null becomes -0.00759;
+- loss AUC is 0.5995 with relative reduction +0.01307.
 
-A leave-one-species-out audit shows that this pattern is not driven by one plant or pollinator. After removing each plant in turn, the positive-overlap retention-versus-loss AUC remains 0.643–0.666; after removing each pollinator in turn it remains 0.650–0.670. The gain-versus-loss contrast stays near chance under every omission.
+Thus the previously reported strong gain discrimination and gain-over-loss asymmetry are properties of the original feature surface, not established biological asymmetries in assembly versus disassembly.
 
-### Ecological interpretation
+Machine audit:
+- `validation/villavicencio_phenology_support_leakage_v1.json`
 
-The supported descriptive hypothesis is a **two-stage phenological filter**:
+This finding does **not** invalidate Peralta et al. (2020), which used phenology to study stability and functionality of observed interactions. It invalidates this project's reuse of that published overlap matrix as if it independently covered the full gain-risk dyad surface.
 
-1. **eligibility gate:** non-zero temporal co-occurrence largely separates dyads that can enter the realized interaction network from dyads that remain absent;
-2. **persistence gradient:** once a link exists and positive overlap is available, greater overlap is associated with retaining that interaction rather than losing it.
+### Revised Stage-1 route
 
-What is *not* supported is a directional-switch interpretation in which overlap magnitude decides whether a changing dyad becomes a gain or a loss.
+Public Figshare visitor records now provide a direct way forward. They reproduce every cell of the six published annual interaction matrices for the 45 × 135 trait subset exactly. The next Stage-1 task is therefore to reconstruct an opportunity surface from raw dated records without importing the focal dyad's own realized-link history.
 
-This decomposition is more specific than the established result that phenology constrains plant–pollinator interaction turnover. CaraDonna et al. (2017, DOI 10.1111/ele.12740) showed that phenology and relative abundance constrain rewiring, and Peralta et al. (2020, DOI 10.1111/ele.13510) showed in this Villavicencio system that well-matched phenologies contribute to stable interactions. The present reanalysis therefore does **not** claim novelty for "phenology matters." Its added value is the state-transition decomposition: the same aggregate overlap variable behaves like an entry-support constraint and, conditionally on positive support, a persistence correlate.
+The preferred observational construction is:
 
-### Boundary of the result
+1. derive plant flowering/observation availability from dated plant census records;
+2. derive pollinator activity from visits to **other** plants, excluding the focal plant-dyad response;
+3. combine these at a prespecified site/time grain to define candidate-dyad temporal opportunity;
+4. build within-year subseason transitions from the raw dates;
+5. test gain and loss on held-out transitions using this leakage-controlled opportunity surface plus raw morphology.
 
-The phenological-overlap matrix is a six-year aggregate, not a year-specific exposure. Therefore these annual analyses hold out link responses but not all temporal information used to construct the covariates. They support retrospective held-out discrimination, not strict future forecasting or causal claims about year-to-year phenological change.
-
-This result also remains below the routeability evidence ladder: no independent decision-equivalence classes are measured, and the phenological gate must not be renamed routeability.
+Until that reconstruction is frozen and validated, the Villavicencio work establishes **response feasibility and source recoverability**, not a validated conventional-filter baseline.
 
 ## Evidence ladder
 
