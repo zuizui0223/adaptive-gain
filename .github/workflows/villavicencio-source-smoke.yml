@@ -15,8 +15,10 @@ on:
       - "examples/summarize_villavicencio_gain_loss_asymmetry.py"
       - "examples/diagnose_villavicencio_phenology_states.py"
       - "examples/audit_villavicencio_species_leverage.py"
+      - "examples/audit_villavicencio_phenology_support_leakage.py"
       - "validation/villavicencio_phenology_state_stratification_v1.json"
       - "validation/villavicencio_species_leverage_audit_v1.json"
+      - "validation/villavicencio_phenology_support_leakage_v1.json"
       - "examples/build_villavicencio_transition_pairs.py"
       - "adaptive_gain/empirical_rewiring.py"
       - "validation/villavicencio_source_manifest_v1.json"
@@ -633,6 +635,82 @@ jobs:
               if not endpoint["all_folds_converged"]:
                   raise SystemExit(f"{risk}: block-ablation model convergence failure")
           print(json.dumps(result["primary_summary"], indent=2, sort_keys=True))
+          PY
+
+      - name: Audit phenology support leakage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt || ! test -f artifact/annual_filter_block_ablation_predictions.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-phenology-support-leakage-audit-v1","materialized":false}' > artifact/annual_phenology_support_leakage.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python examples/audit_villavicencio_phenology_support_leakage.py \
+            "$XLSX" \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_filter_block_ablation_predictions.csv \
+            artifact/annual_phenology_support_leakage.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_phenology_support_leakage.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_phenology_support_leakage_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["status"] != "gain_filter_quarantined_support_leakage":
+              raise SystemExit("phenology leakage audit lost quarantine status")
+
+          obs_surface = observed["workbook_dyad_surface"]
+          exp_surface = frozen["workbook_dyad_surface"]
+          if obs_surface["contingency"] != exp_surface["contingency"]:
+              raise SystemExit("phenology support contingency changed")
+          if not obs_surface["nonzero_phenology_subset_of_ever_linked_support"]:
+              raise SystemExit("expected non-zero phenology to remain nested in realized-link support")
+
+          primary = observed["drop_phenology_performance"]["strict_core_2008_2011"]
+          exp_primary = frozen["primary_drop_phenology"]
+          for risk in ("gain", "loss"):
+              if abs(
+                  primary[risk]["drop_phenology_roc_auc"]
+                  - exp_primary[risk]["roc_auc"]
+              ) > 1e-12:
+                  raise SystemExit(f"{risk}: drop-phenology AUC changed")
+              if abs(
+                  primary[risk]["drop_phenology_relative_log_loss_reduction_vs_null"]
+                  - exp_primary[risk]["relative_log_loss_reduction_vs_null"]
+              ) > 1e-12:
+                  raise SystemExit(f"{risk}: drop-phenology log-loss skill changed")
+
+          print(
+              json.dumps(
+                  {
+                      "status": observed["status"],
+                      "support_contingency": obs_surface["contingency"],
+                      "primary_gain_drop_phenology_auc": primary["gain"][
+                          "drop_phenology_roc_auc"
+                      ],
+                      "primary_gain_drop_phenology_logloss_skill": primary["gain"][
+                          "drop_phenology_relative_log_loss_reduction_vs_null"
+                      ],
+                      "primary_loss_drop_phenology_auc": primary["loss"][
+                          "drop_phenology_roc_auc"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
           PY
 
       - name: Audit gain-loss predictability asymmetry
