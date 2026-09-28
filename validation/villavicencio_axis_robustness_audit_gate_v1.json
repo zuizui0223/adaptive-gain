@@ -1,0 +1,26 @@
+{
+  "schema": "adaptive-gain-villavicencio-axis-robustness-audit-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_endpoint_axis_robustness_frozen",
+  "analysis_status": "designed after the gain-versus-loss opportunity-axis asymmetry was observed; hypothesis-generating robustness only",
+  "question": "Does the endpoint reversal in marginal opportunity information persist across stricter spatial matching and stricter observed-link frequency thresholds?",
+  "contexts": {
+    "weekly_k1": "week-level focal-response-excluded opportunity; any positive annual visit defines a link",
+    "weekly_k2": "same weekly predictors; >=2 annual visits define a link",
+    "weekly_k3": "same weekly predictors; >=3 annual visits define a link",
+    "siteweek_k1": "same-site same-week focal-response-excluded opportunity; any positive annual visit defines a link"
+  },
+  "scope": "strict_core_2008_2011",
+  "models": {
+    "full_marginal": "plant opportunity axis + pollinator opportunity axis",
+    "drop_plant": "pollinator opportunity axis only",
+    "drop_pollinator": "plant opportunity axis only",
+    "metric": "held-out log-loss penalty when each axis is removed"
+  },
+  "directional_hypothesis": {
+    "gain": "pollinator-axis removal penalty > plant-axis removal penalty",
+    "loss": "plant-axis removal penalty > pollinator-axis removal penalty"
+  },
+  "promotion_rule": "Describe the reversal as robust hypothesis-generating predictive information only if the expected direction holds in all 3 primary folds under every frozen context.",
+  "claim_ceiling": "Post-result robustness of a predictive-information asymmetry only. It does not establish distinct causal assembly/disassembly mechanisms, sampling-effort independence, behavioral causation, decision equivalence, or routeability."
+}
