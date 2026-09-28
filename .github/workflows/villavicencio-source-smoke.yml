@@ -12,6 +12,8 @@ on:
       - "examples/summarize_villavicencio_filter_block_ablation.py"
       - "examples/villavicencio_gain_loss_matched_audit.R"
       - "examples/summarize_villavicencio_gain_loss_asymmetry.py"
+      - "examples/diagnose_villavicencio_phenology_states.py"
+      - "validation/villavicencio_phenology_state_stratification_v1.json"
       - "examples/build_villavicencio_transition_pairs.py"
       - "adaptive_gain/empirical_rewiring.py"
       - "validation/villavicencio_source_manifest_v1.json"
@@ -656,6 +658,54 @@ jobs:
                   sort_keys=True,
               )
           )
+          PY
+
+      - name: Audit phenology state stratification
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-phenology-state-stratification-v1","materialized":false}' \
+              > artifact/annual_phenology_state_stratification.json
+            exit 0
+          fi
+
+          python examples/diagnose_villavicencio_phenology_states.py \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_phenology_state_stratification.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_phenology_state_stratification.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_phenology_state_stratification_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["prospective_status"] != "post_hoc_not_confirmatory":
+              raise SystemExit("phenology-state diagnostic lost its post-hoc label")
+
+          obs = observed["primary_summary"]
+          exp = frozen["primary_summary"]
+          for key in (
+              "pooled_gain_vs_stable_absent_auc",
+              "pooled_retained_vs_loss_auc",
+              "pooled_gain_vs_loss_auc",
+          ):
+              if abs(obs[key] - exp[key]) > 1e-12:
+                  raise SystemExit(f"{key} changed: {obs[key]} != {exp[key]}")
+          if obs["state_medians"] != exp["state_medians"]:
+              raise SystemExit("phenology state medians changed")
+
+          print(json.dumps(obs, indent=2, sort_keys=True))
           PY
 
       - name: Summarize exported periods before response analysis
