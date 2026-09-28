@@ -102,7 +102,7 @@
     "strict prospective forecasting from past-only covariates"
   ],
   "next_gate": "reconstruct an outcome-independent temporal-opportunity surface from raw dated records with focal-response exclusion, then rerun gain/loss prediction before any decision-layer comparison",
-  "claim_ceiling": "The ablation arithmetic is retained as a historical result. Its phenology interpretation is quarantined by the support-leakage audit and cannot validate ecological filtering, causality, or routeability.",
+  "claim_ceiling": "The ablation arithmetic is retained as a historical result. It is not a causal decomposition. Its phenology interpretation is quarantined by the support-leakage audit and cannot validate ecological filtering, causality, or routeability.",
   "time_support": {
     "phenological_overlap": "study-wide six-year aggregate",
     "flower_abundance": "study-wide six-year aggregate",
