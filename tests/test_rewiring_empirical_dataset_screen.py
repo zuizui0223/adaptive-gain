@@ -73,7 +73,8 @@ def test_screen_prioritizes_subseason_response_without_overclaiming():
         "10.5061/dryad.j6q573n9j",
         "12 within-year adjacent transitions",
         "Year-end to next-year early transitions should be sensitivity analyses",
-        "verified crosswalk",
-        "detection-sensitive fallback rather than true species turnover",
+        "4,581 shared-dyad rows and 853 changed links",
+        "detection-sensitive rather than true species turnover",
+        "seven links occur only in positive rows lacking a date",
     ):
         assert phrase in text
