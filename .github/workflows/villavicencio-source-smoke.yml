@@ -718,15 +718,11 @@ jobs:
         run: |
           set -euo pipefail
           if ! test -f artifact/annual_conventional_filter_dyads.csv; then
-            printf '%s\\n' \\
-              '{"schema":"adaptive-gain-villavicencio-species-leverage-audit-v1","materialized":false}' \\
-              > artifact/annual_species_leverage_audit.json
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-species-leverage-audit-v1","materialized":false}' > artifact/annual_species_leverage_audit.json
             exit 0
           fi
 
-          python examples/audit_villavicencio_species_leverage.py \\
-            artifact/annual_conventional_filter_dyads.csv \\
-            artifact/annual_species_leverage_audit.json
+          python examples/audit_villavicencio_species_leverage.py artifact/annual_conventional_filter_dyads.csv artifact/annual_species_leverage_audit.json
 
           python - <<'PY'
           import json
