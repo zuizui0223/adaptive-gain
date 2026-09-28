@@ -1,0 +1,128 @@
+{
+  "schema": "adaptive-gain-villavicencio-gain-loss-asymmetry-audit-v1",
+  "date": "2026-09-28",
+  "status": "exploratory_gain_discrimination_and_phenology_gate_asymmetry",
+  "analysis_role": "post-result diagnostic prompted by the observed gain-loss skill contrast; not a preregistered confirmatory test",
+  "source_predictions": "annual_conventional_filter_cv_predictions.csv",
+  "source_ablation_predictions": "annual_filter_block_ablation_predictions.csv",
+  "common_prevalence_audit": {
+    "target_event_prevalence": 0.5,
+    "method": "rebase each held-out model probability from its training-fold event prevalence to a common 0.5 prior using posterior odds / training prior odds, then score with equal total weight on events and non-events",
+    "purpose": "remove the direct effect of differing gain/loss event prevalence from log-loss and Brier comparisons",
+    "auc_note": "ROC AUC is prevalence-invariant and is reported without rebasing"
+  },
+  "primary_scope": {
+    "name": "strict_core_2008_2011",
+    "folds": [
+      {
+        "transition": "2008->2009",
+        "gain": {
+          "n": 1971,
+          "events": 130,
+          "auc": 0.8283123720386077,
+          "balanced_log_loss_reduction_vs_half": 0.22228274098174855,
+          "balanced_brier_improvement_vs_half": 0.07684082587681346,
+          "phenology_drop_balanced_log_loss_penalty": 0.20972131322600363,
+          "phenology_drop_balanced_brier_penalty": 0.09139145652496755,
+          "phenology_drop_auc_penalty": 0.2677850666443822
+        },
+        "loss": {
+          "n": 273,
+          "events": 139,
+          "auc": 0.65419306345968,
+          "balanced_log_loss_reduction_vs_half": 0.05231223345038939,
+          "balanced_brier_improvement_vs_half": 0.017838410864397136,
+          "phenology_drop_balanced_log_loss_penalty": 0.024332627049712174,
+          "phenology_drop_balanced_brier_penalty": 0.010802732587564201,
+          "phenology_drop_auc_penalty": 0.0355417158810265
+        }
+      },
+      {
+        "transition": "2009->2010",
+        "gain": {
+          "n": 1140,
+          "events": 87,
+          "auc": 0.8917924703365316,
+          "balanced_log_loss_reduction_vs_half": 0.3438722148310482,
+          "balanced_brier_improvement_vs_half": 0.1134613211854375,
+          "phenology_drop_balanced_log_loss_penalty": 0.2077325809462952,
+          "phenology_drop_balanced_brier_penalty": 0.09860032491664891,
+          "phenology_drop_auc_penalty": 0.25666131796399994
+        },
+        "loss": {
+          "n": 210,
+          "events": 114,
+          "auc": 0.7000182748538012,
+          "balanced_log_loss_reduction_vs_half": 0.08982188650450423,
+          "balanced_brier_improvement_vs_half": 0.029916002213429188,
+          "phenology_drop_balanced_log_loss_penalty": 0.02446152432937576,
+          "phenology_drop_balanced_brier_penalty": 0.011474600886769909,
+          "phenology_drop_auc_penalty": 0.033534356725146264
+        }
+      },
+      {
+        "transition": "2010->2011",
+        "gain": {
+          "n": 1369,
+          "events": 213,
+          "auc": 0.9171783875107624,
+          "balanced_log_loss_reduction_vs_half": 0.37875197717355197,
+          "balanced_brier_improvement_vs_half": 0.11796063229293793,
+          "phenology_drop_balanced_log_loss_penalty": 0.2641747441003296,
+          "phenology_drop_balanced_brier_penalty": 0.1181543726930577,
+          "phenology_drop_auc_penalty": 0.34203664895950103
+        },
+        "loss": {
+          "n": 191,
+          "events": 77,
+          "auc": 0.6113009797220323,
+          "balanced_log_loss_reduction_vs_half": 0.01394586897655693,
+          "balanced_brier_improvement_vs_half": 0.0044437239393340655,
+          "phenology_drop_balanced_log_loss_penalty": 0.0388727414439578,
+          "phenology_drop_balanced_brier_penalty": 0.016289867646432366,
+          "phenology_drop_auc_penalty": 0.059125085440874914
+        }
+      }
+    ]
+  },
+  "directional_consistency": {
+    "primary_3_folds": {
+      "auc_gap": "3/3",
+      "balanced_log_loss_reduction_gap": "3/3",
+      "balanced_brier_improvement_gap": "3/3",
+      "phenology_drop_balanced_log_loss_penalty_gap": "3/3",
+      "phenology_drop_balanced_brier_penalty_gap": "3/3",
+      "phenology_drop_auc_penalty_gap": "3/3"
+    },
+    "near_core_4_folds": {
+      "auc_gap": "4/4",
+      "balanced_log_loss_reduction_gap": "4/4",
+      "balanced_brier_improvement_gap": "4/4",
+      "phenology_drop_balanced_log_loss_penalty_gap": "4/4",
+      "phenology_drop_balanced_brier_penalty_gap": "4/4",
+      "phenology_drop_auc_penalty_gap": "4/4"
+    },
+    "all_annual_5_folds": {
+      "auc_gap": "5/5",
+      "balanced_log_loss_reduction_gap": "5/5",
+      "balanced_brier_improvement_gap": "5/5",
+      "phenology_drop_balanced_log_loss_penalty_gap": "5/5",
+      "phenology_drop_balanced_brier_penalty_gap": "5/5",
+      "phenology_drop_auc_penalty_gap": "5/5"
+    }
+  },
+  "ecological_read": {
+    "supported": "Across every primary held-out transition, absent dyads that later form links are more strongly discriminated by the frozen conventional-filter model than existing dyads that later lose links, even after common-prevalence rebasing. Removing phenological overlap damages gain discrimination and balanced predictive skill more than loss discrimination in every primary fold, with the same directional pattern in 4-fold and 5-fold sensitivities.",
+    "phenology_semantics": "In this annual fallback, phenological_overlap is a fixed dyad-level overlap surface joined from the workbook, not a year-specific phenological-change exposure. The result therefore supports an assembly-filter interpretation, not a claim that year-to-year phenological change causes rewiring.",
+    "candidate_hypothesis": "phenological compatibility behaves more like a gate on link formation than a symmetric controller of link disappearance"
+  },
+  "not_established": [
+    "causal primacy of phenology",
+    "a causal difference between assembly and disassembly processes",
+    "routeability or decision-equivalence classes",
+    "year-specific phenological change as the driver of link change",
+    "sampling-effort-corrected true rewiring",
+    "generalization beyond this system"
+  ],
+  "claim_ceiling": "Exploratory held-out predictive asymmetry only. The strongest defensible ecological statement is that conventional filters, especially static phenological overlap, separate future link gains more strongly than future link losses in this annual Villavicencio fallback."
+}
