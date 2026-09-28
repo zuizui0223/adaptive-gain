@@ -75,10 +75,10 @@ def test_source_manifest_pins_trait_mirror_without_trusting_name_alone():
     assert "published Dryad digest" in mirror["admission_rule"]
 
 
-def test_stage1_gate_records_green_annual_response_estimability():
+def test_stage1_gate_records_green_annual_and_raw_subseason_response():
     data = json.loads(GATE.read_text(encoding="utf-8"))
     annual = data["annual_detection_sensitive_fallback"]
-    assert data["status"] == "annual_repaired_opportunity_green_primary_subseason_blocked"
+    assert data["status"] == "raw_subseason_response_green_rdata_byte_validation_unavailable"
     assert annual["transition_count"] == 5
     assert annual["shared_dyad_rows"] == 7620
     assert annual["changed_count"] == 1134
@@ -89,3 +89,15 @@ def test_stage1_gate_records_green_annual_response_estimability():
     assert annual["gate"] == "PASS_response_estimability"
     assert data["stage1_success_gate_status"]["conventional_filter_join"] == "PASS_NUMERIC_SURFACE"
     assert data["stage1_success_gate_status"]["focal_excluded_opportunity_repair"] == "PASS_CURRENT_STATE_OPPORTUNITY"
+    assert data["stage1_success_gate_status"]["primary_12_transition_reconstruction"] == "PASS_RAW_PUBLIC_18_PERIOD_RECONSTRUCTION"
+    assert data["stage1_success_gate_status"]["primary_12_transition_rdata_byte_identity"] == "UNVERIFIED_RDATA_BYTES_UNAVAILABLE"
+
+    raw = data["raw_subseason_response_reconstruction"]
+    assert raw["period_count"] == 18
+    assert raw["primary_transition_count"] == 12
+    assert raw["eligible_shared_dyad_rows"] == 4581
+    assert raw["changed_count"] == 853
+    assert raw["gain_count"] == 422
+    assert raw["loss_count"] == 431
+    assert raw["transitions_with_both_changed_and_unchanged"] == 12
+    assert "7 links" in raw["date_missingness"]["2011"]
