@@ -307,13 +307,16 @@ def main() -> None:
             "that gain and loss arise from different biological mechanisms",
             "environmental routeability",
             "decision-equivalence classes",
-            "sampling-effort-corrected true rewiring",\n            "strict prospective forecasting from covariates measured only before the held-out transition",
+            "sampling-effort-corrected true rewiring",
+            "strict prospective forecasting from covariates measured only before the held-out transition",
         ],
         "claim_ceiling": (
             "This is a retrospective robustness result. It supports a "
             "descriptive asymmetry in held-out annual-link discrimination and a "
             "stronger predictive contribution of phenology to gains, but it "
-            "cannot promote the asymmetry to a preregistered causal claim or a "\n            "past-only forecasting result because key conventional covariates "\n            "are aggregated over the full six-year study."
+            "cannot promote the asymmetry to a preregistered causal claim or a "
+            "past-only forecasting result because key conventional covariates "
+            "are aggregated over the full six-year study."
         ),
     }
     args.output.write_text(
