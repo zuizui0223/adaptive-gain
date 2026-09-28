@@ -7,6 +7,8 @@ Machine surfaces:
 - `validation/villavicencio_focal_excluded_opportunity_gate_v1.json`
 - `validation/villavicencio_focal_excluded_opportunity_result_v1.json`
 - `validation/villavicencio_current_opportunity_axis_audit_result_v1.json`
+- `validation/villavicencio_siteweek_opportunity_audit_result_v1.json`
+- `validation/villavicencio_raw_subseason_reconstruction_result_v1.json`
 
 ## 1. The original published-overlap interpretation is superseded
 
@@ -76,6 +78,17 @@ For 692 established dyad-transition rows with 343 losses:
 The broad 4-transition and 5-transition sensitivity scopes retain positive full-model log-loss skill for both gain and loss in every held-out transition.
 
 These are **retrospective current-state opportunity associations**. The current-year predictors are measured from the same ecological year as the response endpoint, so this is not prospective forecasting.
+
+### Same-site same-week robustness
+
+The signal is not created solely by pooling spatially separated observations within the same week. Requiring focal-plant flowering and focal-pollinator activity on other plants to occur in the **same site × ISO-week cell** gives, in the same primary scope:
+
+- gain AUC = **0.7496**, relative held-out log-loss reduction = **0.1465**, positive skill in **3/3** transitions;
+- loss AUC = **0.6894**, relative held-out log-loss reduction = **0.08721**, positive skill in **3/3** transitions.
+
+Descriptively, previously absent dyads form links at **12.72%** when same-site same-week opportunity is positive versus **2.96%** when it is zero (rate ratio ≈ **4.29**). Established links are lost at **47.14%** with positive site-week opportunity versus **61.74%** when it is zero.
+
+This strengthens the current-state opportunity interpretation, but the predictors and responses are still observed through the same sampling process. It does not remove sampling-effort confounding or make the result causal.
 
 ## 4. Pair-specific temporal matching is not the main result
 
@@ -167,7 +180,9 @@ This analysis does not establish:
 - decision-equivalence classes;
 - environmental routeability.
 
-The annual response remains detection-sensitive, and the preferred 18-subseason response surface remains a separate higher-resolution target when exact source bytes become available.
+The response remains detection-sensitive. However, the higher-resolution target is no longer blocked on RData bytes: the Dryad-documented date boundaries applied to the public raw visitor records reconstruct **18 non-empty subseason networks and 12 within-year transitions**, with **4,581 shared-dyad rows and 853 changed links (422 gains, 431 losses)**.
+
+Dated records fully recover annual link support for 2006–2010. In 2011, 433 of 440 annual links are date-reconstructable and seven occur only in undated positive rows, so a dated-complete sensitivity excluding 2011 is required for subseason analyses. The reconstruction does not claim byte-for-byte identity with the unavailable RData object.
 
 ## 9. Relation to routeability
 
