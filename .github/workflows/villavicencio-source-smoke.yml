@@ -19,6 +19,9 @@ on:
       - "examples/build_villavicencio_focal_excluded_opportunity.py"
       - "examples/villavicencio_focal_excluded_opportunity_cv.R"
       - "examples/summarize_villavicencio_focal_excluded_opportunity.py"
+      - "examples/villavicencio_current_opportunity_axis_audit.R"
+      - "examples/summarize_villavicencio_current_opportunity_axis_audit.py"
+      - "validation/villavicencio_current_opportunity_axis_audit_gate_v1.json"
       - "validation/villavicencio_focal_excluded_opportunity_gate_v1.json"
       - "validation/villavicencio_phenology_state_stratification_v1.json"
       - "validation/villavicencio_species_leverage_audit_v1.json"
@@ -820,6 +823,61 @@ jobs:
                       "current_better_both": result[
                           "primary_current_better_than_lagged_both_endpoints"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit current opportunity axes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_focal_excluded_opportunity_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-current-opportunity-axis-audit-v1","materialized":false}' > artifact/annual_current_opportunity_axis_audit.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_current_opportunity_axis_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_current_opportunity_axis_predictions.csv \
+            artifact/annual_current_opportunity_axis_folds.csv
+
+          python examples/summarize_villavicencio_current_opportunity_axis_audit.py \
+            artifact/annual_current_opportunity_axis_predictions.csv \
+            artifact/annual_current_opportunity_axis_folds.csv \
+            artifact/annual_current_opportunity_axis_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_current_opportunity_axis_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_current_opportunity_axis_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "post_result" not in result["analysis_status"]:
+              raise SystemExit("axis audit lost its retrospective-status firewall")
+          if "designed after" not in gate["analysis_status"]:
+              raise SystemExit("axis audit gate lost its post-result status")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_plant_increment": primary["gain"]["plant_availability_increment"]["delta_log_loss"],
+                      "gain_pollinator_increment": primary["gain"]["pollinator_activity_increment"]["delta_log_loss"],
+                      "gain_axis_positive_folds": result["primary_pattern"]["gain_direction_positive_folds"],
+                      "loss_plant_increment": primary["loss"]["plant_availability_increment"]["delta_log_loss"],
+                      "loss_pollinator_increment": primary["loss"]["pollinator_activity_increment"]["delta_log_loss"],
+                      "loss_axis_positive_folds": result["primary_pattern"]["loss_direction_positive_folds"],
                   },
                   indent=2,
                   sort_keys=True,
