@@ -8,6 +8,8 @@ on:
       - "examples/fetch_dryad_source_manifest.py"
       - "examples/fetch_figshare_article_files.py"
       - "examples/export_villavicencio_subseasons.R"
+      - "examples/reconstruct_villavicencio_subseasons_from_raw.py"
+      - "validation/villavicencio_raw_subseason_reconstruction_gate_v1.json"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
       - "examples/summarize_villavicencio_filter_block_ablation.py"
@@ -492,6 +494,83 @@ jobs:
               raise SystemExit("annual plant codes do not fully join to plant_names")
           if join["unmatched_observed_pollinator_count"] != 0:
               raise SystemExit("annual pollinator codes do not fully join to insect_names")
+          PY
+
+      - name: Reconstruct 18 subseasons from raw dated records
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p artifact/raw_subseason
+          python examples/reconstruct_villavicencio_subseasons_from_raw.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason
+
+          python examples/build_villavicencio_transition_pairs.py \
+            artifact/raw_subseason/raw_subseason_period_map.csv \
+            artifact/raw_subseason/raw_subseason_transitions.csv
+
+          python examples/villavicencio_stage1_from_csv.py \
+            artifact/raw_subseason/raw_subseason_interactions_long.csv \
+            artifact/raw_subseason/raw_subseason_transitions.csv \
+            --output artifact/raw_subseason/raw_subseason_stage1.json \
+            --dyad-output artifact/raw_subseason/raw_subseason_stage1_dyads.csv
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/raw_subseason/raw_subseason_reconstruction_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          result = json.loads(
+              Path("artifact/raw_subseason/raw_subseason_stage1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_raw_subseason_reconstruction_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if summary["period_count"] != 18 or not summary["all_periods_nonempty"]:
+              raise SystemExit("raw subseason reconstruction did not produce 18 nonempty periods")
+          if result["primary_transition_count"] != 12:
+              raise SystemExit("raw subseason Stage-1 did not produce 12 primary transitions")
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("raw subseason Stage-1 inferred decision equivalence")
+          estimability = result["primary_estimability"]
+          if estimability["transitions_with_both_outcomes"] != 12:
+              raise SystemExit("not every within-year subseason transition has changed and unchanged dyads")
+          if estimability["eligible_dyad_row_count"] <= 0 or estimability["changed_count"] <= 0:
+              raise SystemExit("raw subseason response is degenerate")
+          if summary["published_rdata_bytes_used"]:
+              raise SystemExit("raw subseason reconstruction unexpectedly used RData bytes")
+          if "does not by itself establish true species presence" not in gate["claim_ceiling"]:
+              raise SystemExit("raw subseason gate lost claim ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "primary_transitions": result["primary_transition_count"],
+                      "eligible_dyad_rows": estimability["eligible_dyad_row_count"],
+                      "changed": estimability["changed_count"],
+                      "gain": estimability["gain_count"],
+                      "loss": estimability["loss_count"],
+                      "both_outcome_transitions": estimability["transitions_with_both_outcomes"],
+                      "undated_positive_rows": summary["undated_positive_rows"],
+                      "undated_positive_visits": summary["undated_positive_visits"],
+                      "annual_completeness": summary["annual_completeness"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
           PY
 
       - name: Build frozen conventional-filter dyad table
