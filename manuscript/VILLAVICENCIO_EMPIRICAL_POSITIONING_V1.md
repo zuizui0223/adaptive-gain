@@ -6,6 +6,7 @@ Machine surfaces:
 - `validation/villavicencio_phenology_support_leakage_v1.json`
 - `validation/villavicencio_focal_excluded_opportunity_gate_v1.json`
 - `validation/villavicencio_focal_excluded_opportunity_result_v1.json`
+- `validation/villavicencio_current_opportunity_axis_audit_result_v1.json`
 
 ## 1. The original published-overlap interpretation is superseded
 
@@ -118,7 +119,30 @@ Current-year log-loss skill exceeds the lagged model in **3/3 primary folds for 
 
 Thus the repaired signal is not well described as a stable dyad propensity that can simply be carried forward one year. It is much more consistent with **current ecological opportunity**.
 
-## 6. What is now supported
+## 6. Current opportunity is itself asymmetric across endpoints
+
+A post-result decomposition asks which of the two clean marginal opportunity axes carries more held-out information:
+
+- **plant availability:** focal-plant flowering weeks;
+- **pollinator activity:** weeks in which the pollinator visits other plants.
+
+Both axes add reproducible information in the primary scope, but their relative contributions reverse between link gain and link loss.
+
+### Gain
+
+Removing pollinator activity from the two-axis marginal model worsens held-out log loss by **0.02620**, whereas removing plant availability worsens it by **0.01169**. The pollinator-activity increment is larger in **3/3** primary folds and **4/4** near-core folds; the same direction persists in **5/5** annual folds.
+
+### Loss
+
+Removing plant availability worsens held-out log loss by **0.03671**, whereas removing pollinator activity worsens it by only **0.00506**. The plant-availability increment is larger in **3/3** primary folds and **4/4** near-core folds. In the all-annual sensitivity it remains larger in **4/5** folds; the exception is 2006→2007, the transition already isolated as sampling-sensitive because 2006 used an expanded site pool.
+
+The resulting ecological hypothesis is therefore more specific:
+
+> **Formation appears more pollinator-activity weighted, whereas loss appears more plant-availability weighted.**
+
+This wording is deliberately predictive rather than causal. The decomposition was motivated after the repaired result was seen, both axes are measured through the observational sampling process, and the 2006 sensitivity demonstrates that the contrast is not immune to sampling design. It is a hypothesis-generating endpoint asymmetry for independent replication, not evidence that pollinator behaviour causes link formation or that plant phenology causes link loss.
+
+## 7. What is now supported
 
 The strongest defensible empirical statement is:
 
@@ -131,7 +155,7 @@ This is more specific than saying that “phenology predicts rewiring.” It sep
 
 The first is supported; the second is small and sensitivity-dependent; the third is not supported as a useful forecasting explanation.
 
-## 7. What remains unresolved
+## 8. What remains unresolved
 
 This analysis does not establish:
 - a causal effect of phenology or temporal opportunity;
@@ -145,7 +169,7 @@ This analysis does not establish:
 
 The annual response remains detection-sensitive, and the preferred 18-subseason response surface remains a separate higher-resolution target when exact source bytes become available.
 
-## 8. Relation to routeability
+## 9. Relation to routeability
 
 The Villavicencio repair now supplies a valid **ecological baseline layer**:
 
