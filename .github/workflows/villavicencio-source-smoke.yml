@@ -745,6 +745,10 @@ jobs:
           )
           if summary["response_mismatch_count"] != 0:
               raise SystemExit("raw Figshare response no longer matches Stage-1 annual response")
+          if not summary.get("current_year_surface"):
+              raise SystemExit("current-year opportunity surface missing")
+          if not summary.get("one_year_lagged_surface"):
+              raise SystemExit("one-year-lagged opportunity surface missing")
           support = summary["support_audit"]
           if support["opportunity_support_nested_in_ever_linked"]:
               raise SystemExit("focal-excluded opportunity unexpectedly collapsed onto realized-link support")
@@ -788,22 +792,34 @@ jobs:
               raise SystemExit("repair analysis lost retrospective-status firewall")
           primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
           for risk in ("gain", "loss"):
-              if not primary[risk]["full"]["all_folds_converged"]:
-                  raise SystemExit(f"{risk}: focal-excluded full model failed to converge")
-              if not primary[risk]["marginal_only"]["all_folds_converged"]:
-                  raise SystemExit(f"{risk}: focal-excluded marginal model failed to converge")
+              for surface in ("current", "lagged"):
+                  if not primary[risk][surface]["full"]["all_folds_converged"]:
+                      raise SystemExit(
+                          f"{risk}/{surface}: focal-excluded full model failed to converge"
+                      )
+                  if not primary[risk][surface]["marginal_only"]["all_folds_converged"]:
+                      raise SystemExit(
+                          f"{risk}/{surface}: focal-excluded marginal model failed to converge"
+                      )
           if "not a causal or routeability test" not in gate["claim_ceiling"]:
               raise SystemExit("repair gate lost claim ceiling")
           print(
               json.dumps(
                   {
                       "status": result["status"],
-                      "gain_auc": primary["gain"]["full"]["roc_auc"],
-                      "gain_logloss_skill": primary["gain"]["full"]["relative_log_loss_reduction"],
-                      "gain_overlap_class": primary["gain"]["pairwise_overlap_increment"]["classification"],
-                      "loss_auc": primary["loss"]["full"]["roc_auc"],
-                      "loss_logloss_skill": primary["loss"]["full"]["relative_log_loss_reduction"],
-                      "loss_overlap_class": primary["loss"]["pairwise_overlap_increment"]["classification"],
+                      "gain_current_auc": primary["gain"]["current"]["full"]["roc_auc"],
+                      "gain_current_logloss_skill": primary["gain"]["current"]["full"]["relative_log_loss_reduction"],
+                      "gain_current_overlap_class": primary["gain"]["current"]["pairwise_overlap_increment"]["classification"],
+                      "gain_lagged_auc": primary["gain"]["lagged"]["full"]["roc_auc"],
+                      "gain_lagged_logloss_skill": primary["gain"]["lagged"]["full"]["relative_log_loss_reduction"],
+                      "loss_current_auc": primary["loss"]["current"]["full"]["roc_auc"],
+                      "loss_current_logloss_skill": primary["loss"]["current"]["full"]["relative_log_loss_reduction"],
+                      "loss_current_overlap_class": primary["loss"]["current"]["pairwise_overlap_increment"]["classification"],
+                      "loss_lagged_auc": primary["loss"]["lagged"]["full"]["roc_auc"],
+                      "loss_lagged_logloss_skill": primary["loss"]["lagged"]["full"]["relative_log_loss_reduction"],
+                      "current_better_both": result[
+                          "primary_current_better_than_lagged_both_endpoints"
+                      ],
                   },
                   indent=2,
                   sort_keys=True,
