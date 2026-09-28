@@ -1,0 +1,90 @@
+{
+  "schema": "adaptive-gain-villavicencio-focal-excluded-opportunity-gate-v1",
+  "date": "2026-09-28",
+  "status": "post_leakage_repair_design_frozen",
+  "analysis_status": "retrospective repair after discovery of support leakage in the published phenological-overlap surface; not preregistered or confirmatory",
+  "purpose": "Reconstruct a focal-response-excluded temporal opportunity surface from raw dated visitor records, then ask whether that clean surface discriminates annual link gains and losses across held-out transitions.",
+  "sources": {
+    "raw_visits": {
+      "figshare_article_id": 11794503,
+      "file": "visits_2006-2011_data.csv"
+    },
+    "plant_codes": "plant_names.csv",
+    "pollinator_codes": "insect_names.csv",
+    "response": "artifact/annual_stage1_dyads.csv",
+    "response_ledger": "validation/villavicencio_annual_stage1_fallback_result_v1.json"
+  },
+  "trait_subset": {
+    "plant_count": 45,
+    "pollinator_count": 135,
+    "dyad_surface": 6075
+  },
+  "opportunity_definition": {
+    "time_grain": "ISO calendar week within the target year",
+    "plant_flowering_week": "the focal plant has at least one dated raw observation row in the target year with no.fl.obs > 0",
+    "pollinator_otherplant_active_week": "the focal pollinator has at least one dated positive visit in the target year to a plant species other than the focal plant",
+    "focal_excluded_overlap_weeks": "count of target-year weeks satisfying both plant_flowering_week and pollinator_otherplant_active_week",
+    "marginal_predictors": [
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "primary_predictor": "focal_excluded_overlap_weeks",
+    "focal_response_exclusion": "No visit by the focal pollinator to the focal plant contributes to pollinator activity or overlap for that dyad.",
+    "undated_rows": "Undated positive visits may define the annual response link but never contribute to weekly opportunity predictors."
+  },
+  "response_integrity": {
+    "required": "raw Figshare positive-visit link states must agree exactly with previous_link/current_link in every Stage-1 dyad row for the 45 x 135 subset",
+    "mismatch_policy": "fail closed"
+  },
+  "risk_sets": {
+    "gain": "Stage-1 shared-species dyads with previous_link = false; outcome is current_link",
+    "loss": "Stage-1 shared-species dyads with previous_link = true; outcome is not current_link"
+  },
+  "sampling_scopes": {
+    "strict_core_2008_2011": {
+      "role": "primary",
+      "transitions": ["2008->2009", "2009->2010", "2010->2011"]
+    },
+    "near_core_2007_2011": {
+      "role": "sampling-effort sensitivity",
+      "transitions": ["2007->2008", "2008->2009", "2009->2010", "2010->2011"]
+    },
+    "all_annual_2006_2011": {
+      "role": "broad sensitivity",
+      "transitions": ["2006->2007", "2007->2008", "2008->2009", "2009->2010", "2010->2011"]
+    }
+  },
+  "model": {
+    "family": "separate binomial logistic models for gain and loss",
+    "predictors": [
+      "focal_excluded_overlap_weeks",
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "transform": "log1p each predictor, then z-score using training-fold moments only",
+    "interactions": false,
+    "cross_validation": "leave one annual transition out within each frozen sampling scope",
+    "null_model": "training-fold event prevalence",
+    "metrics": ["log_loss", "brier_score", "roc_auc"]
+  },
+  "support_audit": {
+    "required": "non-zero reconstructed opportunity must not be structurally nested inside ever-realized focal links",
+    "report": [
+      "opportunity-positive ever-linked dyads",
+      "opportunity-positive never-linked dyads",
+      "P(ever linked | opportunity positive)"
+    ]
+  },
+  "interpretation": {
+    "allowed": "focal-response-excluded contemporaneous temporal opportunity discriminates annual link gain or loss in held-out response transitions",
+    "forbidden": [
+      "strict prospective forecasting from past-only covariates",
+      "causal effect of phenology",
+      "causal primacy of temporal opportunity",
+      "decision-equivalence or routeability",
+      "independence of dyad-year observations",
+      "true absence for zero observed links"
+    ]
+  },
+  "claim_ceiling": "This repair can recover a clean ecological opportunity association because the focal dyad response is excluded from the predictor. It remains a retrospective, contemporaneous, detection-sensitive network reanalysis and is not a causal or routeability test."
+}
