@@ -19,6 +19,10 @@ on:
       - "examples/build_villavicencio_focal_excluded_opportunity.py"
       - "examples/villavicencio_focal_excluded_opportunity_cv.R"
       - "examples/summarize_villavicencio_focal_excluded_opportunity.py"
+      - "examples/build_villavicencio_siteweek_opportunity.py"
+      - "examples/villavicencio_siteweek_opportunity_audit.R"
+      - "examples/summarize_villavicencio_siteweek_opportunity_audit.py"
+      - "validation/villavicencio_siteweek_opportunity_audit_gate_v1.json"
       - "examples/villavicencio_current_opportunity_axis_audit.R"
       - "examples/summarize_villavicencio_current_opportunity_axis_audit.py"
       - "validation/villavicencio_current_opportunity_axis_audit_gate_v1.json"
@@ -823,6 +827,69 @@ jobs:
                       "current_better_both": result[
                           "primary_current_better_than_lagged_both_endpoints"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit same-site same-week opportunity
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/build_villavicencio_siteweek_opportunity.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/annual_stage1_dyads.csv \
+            artifact/annual_siteweek_opportunity_dyads.csv
+
+          Rscript examples/villavicencio_siteweek_opportunity_audit.R \
+            artifact/annual_siteweek_opportunity_dyads.csv \
+            artifact/annual_siteweek_opportunity_predictions.csv \
+            artifact/annual_siteweek_opportunity_folds.csv
+
+          python examples/summarize_villavicencio_siteweek_opportunity_audit.py \
+            artifact/annual_siteweek_opportunity_predictions.csv \
+            artifact/annual_siteweek_opportunity_folds.csv \
+            artifact/annual_siteweek_opportunity_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_siteweek_opportunity_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_siteweek_opportunity_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != "post-result same-site same-week robustness; not confirmatory":
+              raise SystemExit("site-week audit lost retrospective-status firewall")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          for risk in ("gain", "loss"):
+              if not primary[risk]["all_folds_converged"]:
+                  raise SystemExit(f"{risk}: site-week model convergence failure")
+          if "no causality" not in result["claim_ceiling"]:
+              raise SystemExit("site-week result lost claim ceiling")
+          if "Post-result spatiotemporal robustness only" not in gate["claim_ceiling"]:
+              raise SystemExit("site-week gate lost claim ceiling")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_auc": primary["gain"]["roc_auc"],
+                      "gain_logloss_skill": primary["gain"]["relative_log_loss_reduction"],
+                      "gain_positive_folds": primary["gain"]["positive_log_loss_folds"],
+                      "loss_auc": primary["loss"]["roc_auc"],
+                      "loss_logloss_skill": primary["loss"]["relative_log_loss_reduction"],
+                      "loss_positive_folds": primary["loss"]["positive_log_loss_folds"],
                   },
                   indent=2,
                   sort_keys=True,
