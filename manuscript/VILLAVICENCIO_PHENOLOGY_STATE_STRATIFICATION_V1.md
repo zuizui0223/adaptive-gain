@@ -1,5 +1,7 @@
 # Villavicencio phenology state stratification v1
 
+> **SUPERSEDED INTERPRETATION — 2026-09-28.** The numerical state-stratification values below remain reproducible, but the "eligibility filter" interpretation is withdrawn. A support audit found that every non-zero value in the published phenological-overlap matrix belongs to a dyad observed as an interaction at least once over 2006–2011; none of 5,194 never-linked dyads has positive published overlap. Therefore the gain-side zero/non-zero separation is response-conditioned and cannot establish an independent ecological eligibility gate. See `validation/villavicencio_phenology_support_leakage_v1.json`. The retention-versus-loss association is retained only as a descriptive association among previously realized links, not as prospective or causal evidence.
+
 Status: post-result ecological diagnostic for PR #65. This file does **not** modify the frozen Evolution Letters V5 submission surface.
 
 ## Main pattern
