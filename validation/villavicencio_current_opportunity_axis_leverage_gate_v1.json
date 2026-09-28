@@ -1,0 +1,32 @@
+{
+  "schema": "adaptive-gain-villavicencio-current-opportunity-axis-leverage-gate-v1",
+  "date": "2026-09-28",
+  "status": "post_result_species_leverage_audit_frozen",
+  "analysis_status": "robustness audit designed after observing the current-opportunity axis asymmetry; not confirmatory",
+  "parent_result": "validation/villavicencio_current_opportunity_axis_audit_result_v1.json",
+  "scope": "strict_core_2008_2011",
+  "procedure": {
+    "plant_omission": "remove all dyad-transition rows involving one plant species from both training and held-out sets, then rerun the same three-model leave-one-transition-out audit",
+    "pollinator_omission": "remove all dyad-transition rows involving one pollinator species from both training and held-out sets, then rerun the same three-model leave-one-transition-out audit",
+    "models": [
+      "plant_flowering_weeks + pollinator_otherplant_active_weeks",
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "preprocessing": "log1p then training-fold z-score, identical to the parent axis audit",
+    "gain_contrast": "pollinator activity increment minus plant availability increment",
+    "loss_contrast": "plant availability increment minus pollinator activity increment"
+  },
+  "success_rule": "report the fraction and range of leave-one-species-out contrasts; do not infer independence from species identity unless every omission preserves the declared sign",
+  "interpretation": {
+    "allowed": "the post-hoc axis asymmetry is or is not dominated by any single plant or pollinator species in the primary scope",
+    "forbidden": [
+      "causal mechanism",
+      "population-level independence",
+      "generalization beyond Villavicencio",
+      "sampling-effort independence",
+      "routeability or decision equivalence"
+    ]
+  },
+  "claim_ceiling": "Species-leverage robustness only. Preserving the sign under every single-species omission rules out domination by one plant or pollinator species, but does not convert the post-result predictive asymmetry into a causal or confirmatory ecological mechanism."
+}
