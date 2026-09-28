@@ -289,7 +289,7 @@ def main() -> None:
         },
         "scopes": scopes,
         "ecological_read": (
-            "Conventional ecological filters discriminate future link gains "
+            "Conventional ecological filters discriminate held-out annual link gains "
             "more strongly than link losses across every held-out annual "
             "transition examined. Equalizing training class information does "
             "not erase that directional pattern. Phenology contributes "
@@ -302,13 +302,13 @@ def main() -> None:
             "that gain and loss arise from different biological mechanisms",
             "environmental routeability",
             "decision-equivalence classes",
-            "sampling-effort-corrected true rewiring",
+            "sampling-effort-corrected true rewiring",\n            "strict prospective forecasting from covariates measured only before the held-out transition",
         ],
         "claim_ceiling": (
             "This is a retrospective robustness result. It supports a "
             "descriptive asymmetry in out-of-time predictability and a "
             "stronger predictive contribution of phenology to gains, but it "
-            "cannot promote the asymmetry to a preregistered causal claim."
+            "cannot promote the asymmetry to a preregistered causal claim or a "\n            "past-only forecasting result because key conventional covariates "\n            "are aggregated over the full six-year study."
         ),
     }
     args.output.write_text(
