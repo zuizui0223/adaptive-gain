@@ -26,7 +26,7 @@ def test_villavicencio_is_strongest_pilot_not_confirmation():
         "Tier B — strongest current public pilot candidate.",
         "yearly plant–pollinator matrices for six consecutive years",
         "proboscis length/width",
-        "morphology and phenology describe compatibility and accessibility constraints",
+        "raw records permit focal-response-excluded availability/activity opportunity",
         "Do **not** call a morphology clustering result an exact empirical decision-equivalence test.",
     ):
         assert phrase in text
@@ -46,7 +46,7 @@ def test_dataset_screen_keeps_independent_exposure_rule():
 def test_screen_has_two_stage_program():
     text = _text()
     for phrase in (
-        "Stage 1 — feasibility reanalysis on Villavicencio",
+        "Stage 1 — Villavicencio ecological baseline",
         "Stage-1 success does not validate routeability.",
         "Stage 2 — independent decision-structure layer",
         "freeze decision classes before joining them to the network response",
