@@ -16,6 +16,10 @@ on:
       - "examples/diagnose_villavicencio_phenology_states.py"
       - "examples/audit_villavicencio_species_leverage.py"
       - "examples/audit_villavicencio_phenology_support_leakage.py"
+      - "examples/build_villavicencio_focal_excluded_opportunity.py"
+      - "examples/villavicencio_focal_excluded_opportunity_cv.R"
+      - "examples/summarize_villavicencio_focal_excluded_opportunity.py"
+      - "validation/villavicencio_focal_excluded_opportunity_gate_v1.json"
       - "validation/villavicencio_phenology_state_stratification_v1.json"
       - "validation/villavicencio_species_leverage_audit_v1.json"
       - "validation/villavicencio_phenology_support_leakage_v1.json"
@@ -706,6 +710,96 @@ jobs:
                       "primary_loss_drop_phenology_auc": primary["loss"][
                           "drop_phenology_roc_auc"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Rebuild focal-excluded temporal opportunity
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_stage1_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-focal-excluded-opportunity-cv-v1","materialized":false}' > artifact/annual_focal_excluded_opportunity_cv.json
+            exit 0
+          fi
+
+          python examples/build_villavicencio_focal_excluded_opportunity.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/annual_stage1_dyads.csv \
+            --output artifact/annual_focal_excluded_opportunity_dyads.csv \
+            --summary artifact/annual_focal_excluded_opportunity_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/annual_focal_excluded_opportunity_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["response_mismatch_count"] != 0:
+              raise SystemExit("raw Figshare response no longer matches Stage-1 annual response")
+          support = summary["support_audit"]
+          if support["opportunity_support_nested_in_ever_linked"]:
+              raise SystemExit("focal-excluded opportunity unexpectedly collapsed onto realized-link support")
+          if support["opportunity_positive_never_linked_count"] <= 0:
+              raise SystemExit("focal-excluded opportunity has no unrealized support")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+          Rscript examples/villavicencio_focal_excluded_opportunity_cv.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_focal_excluded_opportunity_cv_predictions.csv \
+            artifact/annual_focal_excluded_opportunity_cv_folds.csv
+
+          python examples/summarize_villavicencio_focal_excluded_opportunity.py \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_focal_excluded_opportunity_cv_predictions.csv \
+            artifact/annual_focal_excluded_opportunity_cv_folds.csv \
+            artifact/annual_focal_excluded_opportunity_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_focal_excluded_opportunity_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_focal_excluded_opportunity_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["primary_scope"] != "strict_core_2008_2011":
+              raise SystemExit("focal-excluded opportunity primary scope changed")
+          if result["published_phenological_overlap_used"]:
+              raise SystemExit("published phenological overlap re-entered repair analysis")
+          if not result["focal_response_excluded_from_opportunity"]:
+              raise SystemExit("focal-response exclusion flag lost")
+          if "not preregistered" not in result["analysis_status"]:
+              raise SystemExit("repair analysis lost retrospective-status firewall")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          for risk in ("gain", "loss"):
+              if not primary[risk]["all_folds_converged"]:
+                  raise SystemExit(f"{risk}: focal-excluded opportunity model failed to converge")
+          if "not a causal or routeability test" not in gate["claim_ceiling"]:
+              raise SystemExit("repair gate lost claim ceiling")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_auc": primary["gain"]["roc_auc"],
+                      "gain_logloss_skill": primary["gain"]["relative_log_loss_reduction"],
+                      "loss_auc": primary["loss"]["roc_auc"],
+                      "loss_logloss_skill": primary["loss"]["relative_log_loss_reduction"],
                   },
                   indent=2,
                   sort_keys=True,
