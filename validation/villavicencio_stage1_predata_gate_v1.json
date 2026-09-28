@@ -1,14 +1,21 @@
 {
   "schema": "adaptive-gain-villavicencio-stage1-predata-gate-v1",
   "date": "2026-09-26",
-  "status": "annual_repaired_opportunity_green_primary_subseason_blocked",
+  "status": "raw_subseason_response_green_rdata_byte_validation_unavailable",
   "purpose": "test whether the repeated Villavicencio network response is estimable after conventional opportunity and compatibility filters, without inferring decision-equivalence classes",
   "sources": {
     "response": {
       "doi": "10.5061/dryad.j6q573n9j",
       "object": "bipartite.networks",
       "declared_network_count": 18,
-      "grain": "three subseasons per year across 2006-2011"
+      "grain": "three subseasons per year across 2006-2011",
+      "raw_reconstruction": {
+        "source": "Figshare article 11794503 / visits_2006-2011_data.csv",
+        "result": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+        "period_count": 18,
+        "primary_within_year_transitions": 12,
+        "exact_rdata_identity_established": false
+      }
     },
     "traits_and_covariates": {
       "doi": "10.5061/dryad.8cz8w9gm1",
@@ -26,7 +33,7 @@
     "year_count": 6,
     "expected_primary_transition_count": 12,
     "year_boundary_transitions": "sensitivity_only",
-    "exact_source_period_name_mapping": "must_be_frozen_after_object_inventory_before_response_analysis"
+    "exact_source_period_name_mapping": "externally_reconstructed_from documented Dryad subseason date boundaries; exact RData object identity remains unverified"
   },
   "response_definition": {
     "primary_stage1_quantity": "changed links among species independently present in both adjacent networks",
@@ -42,13 +49,13 @@
   },
   "compatibility_policy": {
     "allowed_inputs": [
-      "phenological overlap",
-      "floral abundance or other opportunity covariates",
+      "outcome-independent temporal opportunity reconstructed from raw dated records",
+      "floral abundance or other opportunity covariates defined independently of the focal response",
       "corolla length and aperture",
       "pollinator body and proboscis dimensions"
     ],
     "use": "opportunity and compatibility controls only",
-    "forbidden": "renaming trait clusters as decision-equivalence classes"
+    "forbidden": "renaming trait clusters as decision-equivalence classes; using the published aggregate phenological-overlap support as an independent full candidate-dyad gain surface after the support-leakage audit"
   },
   "decision_structure_policy": {
     "stage1_decision_equivalence_inference": false,
@@ -96,13 +103,21 @@
   "claim_ceiling": "Stage 1 can establish response feasibility only. It cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer.",
   "source_materialization_gate": {
     "workflow_artifact": "villavicencio-source-inventory",
-    "required_before_period_mapping": [
-      "raw response RData SHA256",
-      "raw trait workbook SHA256",
-      "18-row period index",
-      "workbook sheet inventory"
-    ],
-    "response_model_fit_during_source_smoke": false
+    "raw_record_route": {
+      "status": "PASS",
+      "required": [
+        "checksum-validated public Figshare raw visitor files",
+        "externally documented subseason date boundaries",
+        "frozen 45 x 135 trait subset",
+        "18-period reconstruction receipt"
+      ],
+      "result": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json"
+    },
+    "rdata_route": {
+      "status": "UNAVAILABLE_FOR_BYTE_VALIDATION",
+      "required_for_raw_record_reconstruction": false,
+      "remaining_role": "optional byte-for-byte cross-check against the published 18-network RData object if access becomes available"
+    }
   },
   "response_estimability_gate": {
     "implementation": "adaptive_gain.empirical_rewiring.rewiring_estimability_audit",
@@ -128,7 +143,9 @@
     "published_digest_verification_required_for_materialized_bytes": true,
     "bytes_without_token_may_be_unavailable": true,
     "metadata_only_run_is_not_analysis_failure": true,
-    "response_analysis_requires_materialized_verified_bytes": true
+    "response_analysis_requires_materialized_verified_bytes": false,
+    "raw_figshare_response_reconstruction_allowed": true,
+    "raw_figshare_reconstruction_condition": "public raw-record checksums plus externally documented subseason boundaries and an explicit missing-date audit"
   },
   "sampling_detection_policy": {
     "problem": "apparent link gain/loss can reflect unequal observation effort or imperfect detection rather than biological rewiring",
@@ -161,17 +178,18 @@
     "join_unmatched_pollinators": 0,
     "gate": "PASS_response_estimability",
     "limitation": "observed-positive-link presence makes species-turnover partition detection-sensitive",
-    "primary_design_status": "still blocked on exact 18-subseason RData bytes"
+    "primary_design_status": "retained as the annual ecological-baseline analysis; no longer the highest-resolution Stage-1 response because the 18-period raw-record response is reconstructed"
   },
   "stage1_success_gate_status": {
     "annual_fallback_response_estimability": "PASS",
-    "primary_12_transition_reconstruction": "BLOCKED_response_RData_not_materialized",
+    "primary_12_transition_reconstruction": "PASS_RAW_PUBLIC_18_PERIOD_RECONSTRUCTION",
     "conventional_filter_join": "PASS_NUMERIC_SURFACE",
-    "sampling_effort_semantics": "UNRESOLVED",
+    "sampling_effort_semantics": "UNRESOLVED_DETECTION_AND_EFFORT_SENSITIVE",
     "conventional_filter_temporal_cv": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "filter_block_ablation": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "focal_excluded_opportunity_repair": "PASS_CURRENT_STATE_OPPORTUNITY",
-    "next": "USE_CLEAN_OPPORTUNITY_AS_BASELINE_BEFORE_ANY_INDEPENDENT_DECISION_LAYER"
+    "next": "USE_RAW_18_PERIOD_RESPONSE_FOR_STAGE1_FEASIBILITY; KEEP_ANNUAL_REPAIRED_OPPORTUNITY_AS_CLEAN_ECOLOGICAL_BASELINE; REQUIRE_INDEPENDENT_DECISION_LAYER_FOR_ROUTEABILITY",
+    "primary_12_transition_rdata_byte_identity": "UNVERIFIED_RDATA_BYTES_UNAVAILABLE"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
@@ -216,5 +234,24 @@
     "support_nested_in_ever_linked": false,
     "interpretation": "Focal-response-excluded current-year plant availability and pollinator activity carry reproducible information about annual link dynamics. One-year-lagged opportunity does not recover the same signal; pair-specific weekly overlap is only a small, sensitivity-dependent increment.",
     "claim_ceiling": "retrospective current-state opportunity association only; no causality, strict forecasting, decision equivalence, or routeability"
+  },
+  "raw_subseason_response_reconstruction": {
+    "gate": "validation/villavicencio_raw_subseason_reconstruction_gate_v1.json",
+    "result": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+    "period_count": 18,
+    "primary_transition_count": 12,
+    "eligible_shared_dyad_rows": 4581,
+    "changed_count": 853,
+    "unchanged_count": 3728,
+    "gain_count": 422,
+    "loss_count": 431,
+    "transitions_with_both_changed_and_unchanged": 12,
+    "detection_sensitive": true,
+    "date_missingness": {
+      "2011": "433 of 440 annual links date-reconstructable; 7 links occur only in undated positive rows",
+      "2006_2010": "complete annual link support from dated positive records"
+    },
+    "endpoint_model_boundary": "2006_mid->2006_late has gain=1 and loss=0; response feasibility is green, but separate endpoint-specific held-out loss modeling must use a nondegenerate prespecified scope.",
+    "interpretation": "The documented 18-period temporal response grain is reconstructable from public raw dated records without using routeability exposure information. Exact byte identity with the unavailable RData object is not claimed."
   }
 }
