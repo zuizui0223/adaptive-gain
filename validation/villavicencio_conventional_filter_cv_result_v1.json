@@ -2,11 +2,12 @@
   "schema": "adaptive-gain-villavicencio-conventional-filter-cv-result-v1",
   "date": "2026-09-27",
   "status": "green_conventional_filter_predictive_baseline",
-  "scope": "annual detection-sensitive fallback; sampling-effort-stratified temporal holdout",
+  "scope": "annual detection-sensitive fallback; sampling-effort-stratified response holdout",
   "source": {
     "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
-    "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json"
+    "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json",
+    "covariate_time_support_audit": "validation/villavicencio_covariate_time_support_audit_v1.json"
   },
   "validation": {
     "workflow": "Villavicencio source smoke",
@@ -104,16 +105,24 @@
   },
   "ecological_interpretation": {
     "primary": "independently measured phenology, abundance and raw morphology carry reproducible information about both link formation and link loss across held-out annual transitions",
-    "asymmetry": "the conventional-filter baseline is substantially more predictive for gains than for losses in the sampling-consistent primary scope",
+    "asymmetry": "the conventional-filter baseline discriminates held-out annual link gains substantially better than losses in the sampling-consistent primary scope",
     "residual_opportunity": "predictive improvement is incomplete for both endpoints, leaving a well-defined residual target for any later independent decision-structure layer",
     "not_established": [
       "causal effects of individual traits",
       "true species turnover",
       "decision-equivalence classes",
       "environmental routeability",
-      "incremental value of decision structure beyond conventional filters"
+      "incremental value of decision structure beyond conventional filters",
+      "strict prospective forecasting from past-only covariates"
     ]
   },
   "next_gate": "freeze an independent decision-structure exposure, then compare conventional-only versus conventional-plus-decision models using the same temporal holdout scopes; the decision layer must improve held-out performance without being derived from the network response",
-  "claim_ceiling": "This result establishes a predictive conventional-filter baseline for annual link dynamics. It is not evidence for routeability by itself and does not replace the 18-subseason primary design."
+  "claim_ceiling": "This result establishes a held-out-response conventional-filter baseline for annual link dynamics. Because key covariates are study-wide six-year aggregates, it is not a strict prospective forecast. It is not evidence for routeability by itself and does not replace the 18-subseason primary design.",
+  "time_support": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "held_out": "annual link outcomes",
+    "not_held_out": "full temporal support used to construct phenological overlap and flower abundance",
+    "interpretation": "held-out annual-link discrimination, not strict prospective forecasting"
+  }
 }
