@@ -280,6 +280,11 @@ def main() -> None:
                 "ROC AUC on the untouched full held-out risk set; AUC is "
                 "prevalence-insensitive as a scoring metric"
             ),
+            "time_support": (
+                "phenological overlap and flower abundance are study-wide "
+                "six-year aggregates in the source workbook; this audit holds "
+                "out annual link outcomes, not past-only covariate information"
+            ),
             "random_seed": 20260928,
             "replicates_per_scope_transition": (
                 len(next(iter(matched_groups.values())))
@@ -306,7 +311,7 @@ def main() -> None:
         ],
         "claim_ceiling": (
             "This is a retrospective robustness result. It supports a "
-            "descriptive asymmetry in out-of-time predictability and a "
+            "descriptive asymmetry in held-out annual-link discrimination and a "
             "stronger predictive contribution of phenology to gains, but it "
             "cannot promote the asymmetry to a preregistered causal claim or a "\n            "past-only forecasting result because key conventional covariates "\n            "are aggregated over the full six-year study."
         ),
