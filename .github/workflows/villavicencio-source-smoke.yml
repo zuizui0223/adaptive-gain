@@ -699,11 +699,16 @@ jobs:
               "pooled_gain_vs_stable_absent_auc",
               "pooled_retained_vs_loss_auc",
               "pooled_gain_vs_loss_auc",
+              "positive_overlap_only_gain_vs_stable_absent_auc",
+              "positive_overlap_only_retained_vs_loss_auc",
           ):
               if abs(obs[key] - exp[key]) > 1e-12:
                   raise SystemExit(f"{key} changed: {obs[key]} != {exp[key]}")
           if obs["state_medians"] != exp["state_medians"]:
               raise SystemExit("phenology state medians changed")
+          for state, value in exp["zero_overlap_fraction"].items():
+              if abs(obs["zero_overlap_fraction"][state] - value) > 1e-12:
+                  raise SystemExit(f"zero-overlap fraction changed for {state}")
 
           print(json.dumps(obs, indent=2, sort_keys=True))
           PY
