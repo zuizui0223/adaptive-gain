@@ -86,17 +86,35 @@ jobs:
                   if not item.get("md5_matches", False):
                       raise SystemExit(f"Figshare checksum mismatch: {item['name']}")
 
+          import csv
+          import shutil
+
           inventory = []
+          raw_copy = Path("artifact/figshare/raw")
+          raw_copy.mkdir(parents=True, exist_ok=True)
           for path in sorted(Path("source/figshare_visitors").iterdir()):
               if not path.is_file():
                   continue
-              inventory.append(
-                  {
-                      "name": path.name,
-                      "size": path.stat().st_size,
-                      "suffix": path.suffix.lower(),
-                  }
-              )
+              entry = {
+                  "name": path.name,
+                  "size": path.stat().st_size,
+                  "suffix": path.suffix.lower(),
+              }
+              if path.suffix.lower() == ".csv":
+                  with path.open(newline="", encoding="utf-8-sig") as handle:
+                      reader = csv.reader(handle)
+                      header = next(reader, [])
+                      first_rows = []
+                      row_count = 0
+                      for row in reader:
+                          row_count += 1
+                          if len(first_rows) < 5:
+                              first_rows.append(row)
+                  entry["header"] = header
+                  entry["data_row_count"] = row_count
+                  entry["first_rows"] = first_rows
+              shutil.copy2(path, raw_copy / path.name)
+              inventory.append(entry)
           Path("artifact/figshare/visitor_records_inventory.json").write_text(
               json.dumps(
                   {
