@@ -6,7 +6,8 @@
   "source": {
     "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
     "gate": "validation/villavicencio_filter_block_ablation_gate_v1.json",
-    "baseline_result": "validation/villavicencio_conventional_filter_cv_result_v1.json"
+    "baseline_result": "validation/villavicencio_conventional_filter_cv_result_v1.json",
+    "covariate_time_support_audit": "validation/villavicencio_covariate_time_support_audit_v1.json"
   },
   "validation": {
     "workflow": "Villavicencio source smoke",
@@ -96,8 +97,14 @@
     "absence of morphological effects under other model structures",
     "true species turnover",
     "decision-equivalence classes",
-    "environmental routeability"
+    "environmental routeability",
+    "strict prospective forecasting from past-only covariates"
   ],
   "next_gate": "freeze and test an independent cognition/decision exposure against this phenology-dominated conventional baseline without redefining conventional filters",
-  "claim_ceiling": "The result identifies a reproducible predictive filter pattern for annual link dynamics. It is not a causal decomposition and does not validate routeability."
+  "claim_ceiling": "The result identifies a reproducible predictive-filter pattern for held-out annual link responses. Because key conventional covariates are study-wide six-year aggregates, it is not a strict prospective forecast. It is not a causal decomposition and does not validate routeability.",
+  "time_support": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "consequence": "block ablation tests held-out response discrimination, not past-only forecasting"
+  }
 }
