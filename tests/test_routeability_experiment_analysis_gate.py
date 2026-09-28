@@ -69,4 +69,7 @@ def test_routeability_analysis_gate_freezes_guided_primary_phase():
     assert "apparatus reveals q_route first" in phase["contingent_arm"]
     assert "separate mechanistic follow-up" in phase["autonomous_phase"]
     assert "must not be pooled" in phase["autonomous_phase"]
-    assert "pooling autonomous-routing trials" in data["reporting"]["forbidden"]
+    assert any(
+        "pooling autonomous-routing trials" in rule
+        for rule in data["reporting"]["forbidden"]
+    )
