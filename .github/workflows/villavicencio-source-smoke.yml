@@ -584,6 +584,27 @@ jobs:
           )
           if "posthoc_direction_seen_before_matched_audit" not in result["analysis_status"]:
               raise SystemExit("asymmetry audit lost its retrospective-status firewall")
+          expected_result = json.loads(
+              Path("validation/villavicencio_gain_loss_asymmetry_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["status"] != expected_result["status"]:
+              raise SystemExit("asymmetry audit status disagrees with frozen result ledger")
+          time_support = result["matched_training_design"].get("time_support", "")
+          if "six-year aggregates" not in time_support:
+              raise SystemExit("asymmetry audit lost the aggregate-covariate time-support warning")
+          wording_surface = " ".join(
+              [
+                  result.get("ecological_read", ""),
+                  result.get("claim_ceiling", ""),
+              ]
+          ).lower()
+          for forbidden in ("future link gains", "out-of-time predictability"):
+              if forbidden in wording_surface:
+                  raise SystemExit(
+                      f"asymmetry audit reintroduced forbidden prospective wording: {forbidden}"
+                  )
           for scope, expected in (
               ("strict_core_2008_2011", 3),
               ("near_core_2007_2011", 4),
