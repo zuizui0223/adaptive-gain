@@ -1,0 +1,30 @@
+{
+  "schema": "adaptive-gain-external-axis-replication-screen-gate-v1",
+  "date": "2026-09-29",
+  "status": "source_inventory_only_frozen",
+  "purpose": "Screen the independent Dominguez-Garcia et al. 2026 eight-year, 12-site plant-pollinator dataset for a non-circular replication of the Villavicencio gain/loss opportunity-axis asymmetry.",
+  "source": {
+    "article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293",
+    "zenodo_record": 17362189,
+    "zenodo_doi": "10.5281/zenodo.17362189",
+    "version": "v3",
+    "archive": "Sup_CODE_Resubmission.zip",
+    "published_md5": "7243776b1fd8f2b9340321be5e7a4185"
+  },
+  "screen_only": true,
+  "admission_requirements": [
+    "site x year or finer interaction data sufficient to reconstruct link gain and loss among shared species",
+    "plant-side opportunity information measured independently of the focal link outcome, such as flower abundance or activity",
+    "pollinator-side opportunity information measured independently of the focal link outcome, such as abundance or activity",
+    "species and site/year identifiers sufficient to keep repeated observations and independent sites distinct",
+    "exposure definitions must not be derived from the same focal gain/loss response"
+  ],
+  "reject_or_downgrade_if": [
+    "only aggregate turnover statistics are public",
+    "plant/pollinator opportunity fields are interaction-derived in a way that reuses the focal response",
+    "link-level temporal states cannot be reconstructed",
+    "site/year identity is lost"
+  ],
+  "candidate_replication": "If admitted, test only the directional predictive-information asymmetry: pollinator-side opportunity increment > plant-side increment for gains, and plant-side increment > pollinator-side increment for losses. Do not test routeability.",
+  "claim_ceiling": "Source inventory only. No ecological replication, causal mechanism, decision equivalence, or routeability claim is permitted until the independent data structure is audited and an effect-blind replication analysis is frozen."
+}
