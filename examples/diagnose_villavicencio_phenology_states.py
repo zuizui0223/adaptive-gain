@@ -95,11 +95,15 @@ def _state(row):
     return "retained"
 
 
-def _contrast(rows, positive_state, negative_state):
+def _contrast(rows, positive_state, negative_state, *, positive_overlap_only=False):
     selected = [
         row
         for row in rows
         if row["state"] in {positive_state, negative_state}
+        and (
+            not positive_overlap_only
+            or row["phenological_overlap"] > 0
+        )
     ]
     y = [int(row["state"] == positive_state) for row in selected]
     score = [row["phenological_overlap"] for row in selected]
@@ -165,6 +169,34 @@ def main() -> None:
                     "gain_vs_loss_among_changed": _contrast(
                         fold, "gain", "loss"
                     ),
+                    "positive_overlap_only": {
+                        "gain_vs_stable_absent": _contrast(
+                            fold,
+                            "gain",
+                            "stable_absent",
+                            positive_overlap_only=True,
+                        ),
+                        "retained_vs_loss": _contrast(
+                            fold,
+                            "retained",
+                            "loss",
+                            positive_overlap_only=True,
+                        ),
+                    },
+                    "zero_overlap_fraction": {
+                        state: (
+                            None
+                            if not states[state]
+                            else sum(value == 0 for value in states[state])
+                            / len(states[state])
+                        )
+                        for state in (
+                            "stable_absent",
+                            "gain",
+                            "loss",
+                            "retained",
+                        )
+                    },
                 }
             )
 
@@ -190,6 +222,34 @@ def main() -> None:
             "gain_vs_loss_among_changed": _contrast(
                 scope_rows, "gain", "loss"
             ),
+            "positive_overlap_only": {
+                "gain_vs_stable_absent": _contrast(
+                    scope_rows,
+                    "gain",
+                    "stable_absent",
+                    positive_overlap_only=True,
+                ),
+                "retained_vs_loss": _contrast(
+                    scope_rows,
+                    "retained",
+                    "loss",
+                    positive_overlap_only=True,
+                ),
+            },
+            "zero_overlap_fraction": {
+                state: (
+                    None
+                    if not state_values[state]
+                    else sum(value == 0 for value in state_values[state])
+                    / len(state_values[state])
+                )
+                for state in (
+                    "stable_absent",
+                    "gain",
+                    "loss",
+                    "retained",
+                )
+            },
         }
         scopes[scope] = {"folds": folds, "pooled": pooled}
 
@@ -229,18 +289,31 @@ def main() -> None:
                     "retained",
                 )
             },
+            "zero_overlap_fraction": primary["pooled"]["zero_overlap_fraction"],
+            "positive_overlap_only_gain_vs_stable_absent_auc": (
+                primary["pooled"]["positive_overlap_only"][
+                    "gain_vs_stable_absent"
+                ]["auc_high_overlap_predicts_positive"]
+            ),
+            "positive_overlap_only_retained_vs_loss_auc": (
+                primary["pooled"]["positive_overlap_only"][
+                    "retained_vs_loss"
+                ]["auc_high_overlap_predicts_positive"]
+            ),
         },
         "interpretation": {
             "supported": (
                 "Phenological overlap strongly separates candidate gains from "
-                "stable absences, more weakly separates retained from lost "
-                "established links, and carries almost no directional "
-                "information distinguishing gain from loss among changed dyads."
+                "stable absences primarily through a zero-versus-positive overlap "
+                "gate, while overlap magnitude retains moderate information about "
+                "persistence among established positive-overlap links and carries "
+                "almost no directional information distinguishing gain from loss "
+                "among changed dyads."
             ),
             "ecological_read": (
-                "In this annual fallback, phenology behaves more like an "
-                "interaction eligibility and persistence filter than a "
-                "directional switch for rewiring."
+                "In this annual fallback, phenology behaves first like a near-binary "
+                "interaction-eligibility filter and secondarily like a persistence "
+                "gradient, not like a directional switch for rewiring."
             ),
             "not_supported": (
                 "Year-to-year phenological shifts caused rewiring, or phenology "
@@ -252,7 +325,8 @@ def main() -> None:
             "the diagnostic is descriptive and post hoc",
             "gain/loss state contrasts are not routeability or decision-equivalence tests",
             "repeated dyads across transitions are not independent biological replicates",
-            "do not promote the three-level state pattern as a universal threshold without independent replication",
+            "zero overlap is not a deterministic impossibility because some observed gains have zero in the study-wide overlap matrix",
+            "do not promote the state pattern as a universal threshold without independent replication",
         ],
     }
     args.output.write_text(
