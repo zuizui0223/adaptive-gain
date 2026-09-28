@@ -1,0 +1,103 @@
+{
+  "schema": "adaptive-gain-villavicencio-gain-loss-asymmetry-result-v1",
+  "date": "2026-09-28",
+  "status": "retrospective_robustness_green",
+  "analysis_status": "posthoc_direction_seen_before_matched_audit; not_confirmatory_or_preregistered",
+  "source_analysis": {
+    "baseline_result": "validation/villavicencio_conventional_filter_cv_result_v1.json",
+    "block_ablation_result": "validation/villavicencio_filter_block_ablation_result_v1.json",
+    "time_support_audit": "validation/villavicencio_covariate_time_support_audit_v1.json",
+    "matched_audit_script": "examples/villavicencio_gain_loss_matched_audit.R",
+    "summary_script": "examples/summarize_villavicencio_gain_loss_asymmetry.py"
+  },
+  "validated_run": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36376438140,
+    "run_number": 295,
+    "head_sha": "7a2f4a1c59d77f6439bfbc1b3ebbbe48e8ee2ece",
+    "conclusion": "success",
+    "artifact_id": 10950184958,
+    "artifact_digest": "sha256:a2b404832e0c197ab2e4fd1280c5a38a168b942c9d671d51dca1b0e12f3410a5"
+  },
+  "matched_information_design": {
+    "replicates_per_scope_transition": 100,
+    "random_seed": 20260928,
+    "training_balance": "for each held-out transition, gain and loss models are each trained on the same number of positive and negative examples; the common per-class count is the minimum available across the four endpoint/class cells",
+    "heldout_evaluation": "untouched full endpoint-specific risk sets",
+    "metric": "ROC AUC",
+    "purpose": "test whether the observed gain-over-loss discrimination asymmetry survives unequal prevalence and unequal training-set information",
+    "inference_status": "robustness resampling only; q025/q975 are empirical resampling quantiles, not confirmatory confidence intervals"
+  },
+  "strict_core_2008_2011": {
+    "all_three_transitions_directionally_consistent": true,
+    "transitions": {
+      "2008->2009": {
+        "original_gain_auc": 0.8283123720386077,
+        "original_loss_auc": 0.65419306345968,
+        "matched_gain_minus_loss_auc_mean": 0.20587717222354737,
+        "matched_gain_minus_loss_auc_q025": 0.15898264230018386,
+        "matched_gain_minus_loss_auc_q975": 0.24471742019846215,
+        "matched_positive_fraction": 1.0,
+        "gain_phenology_auc_delta_mean": 0.3020019220323402,
+        "loss_phenology_auc_delta_mean": 0.03643133254590356,
+        "gain_minus_loss_phenology_auc_delta_mean": 0.2655705894864367,
+        "phenology_difference_positive_fraction": 1.0
+      },
+      "2009->2010": {
+        "original_gain_auc": 0.8917924703365316,
+        "original_loss_auc": 0.7000182748538012,
+        "matched_gain_minus_loss_auc_mean": 0.2006892280589724,
+        "matched_gain_minus_loss_auc_q025": 0.18591610999189095,
+        "matched_gain_minus_loss_auc_q975": 0.215707802152508,
+        "matched_positive_fraction": 1.0,
+        "gain_phenology_auc_delta_mean": 0.27580115924943494,
+        "loss_phenology_auc_delta_mean": 0.03726151315789474,
+        "gain_minus_loss_phenology_auc_delta_mean": 0.2385396460915402,
+        "phenology_difference_positive_fraction": 1.0
+      },
+      "2010->2011": {
+        "original_gain_auc": 0.9171783875107624,
+        "original_loss_auc": 0.6113009797220323,
+        "matched_gain_minus_loss_auc_mean": 0.3221808887907447,
+        "matched_gain_minus_loss_auc_q025": 0.30738723328531015,
+        "matched_gain_minus_loss_auc_q975": 0.336640898436096,
+        "matched_positive_fraction": 1.0,
+        "gain_phenology_auc_delta_mean": 0.354481415598551,
+        "loss_phenology_auc_delta_mean": 0.06187742082478924,
+        "gain_minus_loss_phenology_auc_delta_mean": 0.29260399477376164,
+        "phenology_difference_positive_fraction": 1.0
+      }
+    }
+  },
+  "broad_2006_2011_sensitivity": {
+    "all_five_transitions_gain_auc_exceeds_loss_auc": true,
+    "all_five_matched_gain_minus_loss_auc_positive_in_100_of_100_resamples": true,
+    "matched_gain_minus_loss_auc_mean_by_transition": {
+      "2006->2007": 0.18426012260170366,
+      "2007->2008": 0.2182055649747959,
+      "2008->2009": 0.19113980861663957,
+      "2009->2010": 0.20445828110664138,
+      "2010->2011": 0.30664
+    },
+    "phenology_auc_contribution_positive_for_both_endpoints_in_all_resamples": true,
+    "phenology_auc_contribution_larger_for_gain_in_all_resamples": true
+  },
+  "time_support_firewall": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "consequence": "annual transitions are held out at the response level, but key conventional covariates are not estimated from training years alone",
+    "allowed_interpretation": "held-out annual-link discrimination / predictive-filter association",
+    "forbidden_interpretation": "strict prospective future-link forecasting from past-only covariates"
+  },
+  "ecological_read": "Under the frozen conventional-filter model, annual link formation is more discriminable than link loss in every examined held-out transition, and this asymmetry survives endpoint prevalence and training-information matching. Phenological overlap contributes positive discrimination to both endpoints but contributes substantially more to gains under the matched audit.",
+  "not_established": [
+    "causal asymmetry between link assembly and disassembly",
+    "causal primacy of phenology",
+    "distinct biological mechanisms for gain and loss",
+    "strict prospective forecasting",
+    "sampling-effort-corrected true rewiring",
+    "environmental routeability",
+    "decision-equivalence classes"
+  ],
+  "claim_ceiling": "This is a retrospective robustness result supporting a descriptive gain-loss asymmetry in held-out annual-link discrimination. It must not be promoted to a preregistered causal or routeability result."
+}
