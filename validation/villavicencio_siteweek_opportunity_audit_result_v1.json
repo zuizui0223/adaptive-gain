@@ -1,0 +1,101 @@
+{
+  "schema": "adaptive-gain-villavicencio-siteweek-opportunity-audit-result-v1",
+  "date": "2026-09-29",
+  "status": "retrospective_spatiotemporal_robustness_green",
+  "analysis_status": "post-result same-site same-week robustness; not confirmatory",
+  "source": {
+    "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "design_gate": "validation/villavicencio_siteweek_opportunity_audit_gate_v1.json",
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36445393210,
+    "run_number": 370,
+    "conclusion": "success",
+    "head_sha": "115cd33aeb9123b53bc030e7dde795e5cdd72b0b",
+    "artifact_id": 10980721875,
+    "artifact_digest": "sha256:9593753aa216d97c5ef521eef3251bbb2651f84990408466b96cca84c72807a6"
+  },
+  "strict_core_2008_2011": {
+    "gain": {
+      "n": 4750,
+      "events": 443,
+      "roc_auc": 0.7495884436119268,
+      "relative_log_loss_reduction": 0.14651002528695423,
+      "brier_improvement": 0.009495394675112317,
+      "positive_log_loss_folds": "3/3",
+      "fold_auc": {
+        "2008->2009": 0.70249835018148,
+        "2009->2010": 0.7020750801735521,
+        "2010->2011": 0.7883751026797476
+      },
+      "binary_siteweek_opportunity": {
+        "positive_n": 3097,
+        "positive_events": 394,
+        "positive_event_rate": 0.1272198902163384,
+        "zero_n": 1653,
+        "zero_events": 49,
+        "zero_event_rate": 0.029643073200241985,
+        "rate_ratio": 4.291724051583824
+      }
+    },
+    "loss": {
+      "n": 692,
+      "events": 343,
+      "roc_auc": 0.6893790672224682,
+      "relative_log_loss_reduction": 0.08721134436438777,
+      "brier_improvement": 0.029869316802485862,
+      "positive_log_loss_folds": "3/3",
+      "fold_auc": {
+        "2008->2009": 0.67171868747499,
+        "2009->2010": 0.7048878616675227,
+        "2010->2011": 0.688821412505623
+      },
+      "binary_siteweek_opportunity": {
+        "positive_n": 577,
+        "positive_events": 272,
+        "positive_event_rate": 0.4714038128249567,
+        "zero_n": 115,
+        "zero_events": 71,
+        "zero_event_rate": 0.6173913043478261,
+        "loss_rate_ratio_positive_over_zero": 0.7635413869700003
+      }
+    }
+  },
+  "sensitivities": {
+    "near_core_2007_2011": {
+      "gain_auc": 0.7449216725038247,
+      "gain_relative_log_loss_reduction": 0.12816153674678563,
+      "gain_positive_folds": "4/4",
+      "loss_auc": 0.6827318386578988,
+      "loss_relative_log_loss_reduction": 0.0794513659516181,
+      "loss_positive_folds": "4/4"
+    },
+    "all_annual_2006_2011": {
+      "gain_auc": 0.7264228529164191,
+      "gain_relative_log_loss_reduction": 0.10965222644775023,
+      "gain_positive_folds": "4/5",
+      "loss_auc": 0.6688144541176856,
+      "loss_relative_log_loss_reduction": 0.06624627259804745,
+      "loss_positive_folds": "4/5",
+      "exception": "2006->2007",
+      "exception_context": "The broad sensitivity includes the known expanded 2006 site pool; both endpoints have negative held-out log-loss skill for this transition."
+    }
+  },
+  "ecological_read": {
+    "supported": "The repaired current-state opportunity signal persists when focal-plant flowering and focal-pollinator activity on other plants must coincide within the same site and ISO week. It is therefore not generated solely by pooling spatially separated observations within a week.",
+    "formation": "In the strict-core scope, previously absent dyads with positive same-site same-week focal-excluded opportunity form links at 12.72% versus 2.96% when opportunity is zero (rate ratio about 4.29).",
+    "persistence": "Among established links, loss occurs at 47.14% with positive same-site same-week opportunity versus 61.74% when opportunity is zero.",
+    "scope": "These are contemporaneous observational associations measured through the same field sampling process."
+  },
+  "not_established": [
+    "causal effect of local spatiotemporal co-occurrence",
+    "sampling-effort-independent ecological mechanism",
+    "strict future-link forecasting from past-only data",
+    "true absence for zero observed links",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Post-result spatiotemporal robustness only. Persistence under same-site same-week matching strengthens the current-state opportunity interpretation but does not establish causality, sampling-effort independence, strict forecasting, decision equivalence, or routeability."
+}
