@@ -1,0 +1,44 @@
+{
+  "schema": "adaptive-gain-villavicencio-raw-subseason-reconstruction-gate-v1",
+  "date": "2026-09-29",
+  "status": "external_boundary_reconstruction_frozen",
+  "analysis_status": "response-source reconstruction from public raw dated records; no ecological predictor effects inspected to define periods",
+  "purpose": "Replace dependence on unavailable RData bytes for Stage-1 response reconstruction by applying the subseason boundaries stated in the Dryad methods to public raw visit dates.",
+  "source": {
+    "figshare_article_id": 11794503,
+    "raw_visits": "visits_2006-2011_data.csv",
+    "plant_codes": "plant_names.csv",
+    "pollinator_codes": "insect_names.csv",
+    "dryad_response_doi": "10.5061/dryad.j6q573n9j"
+  },
+  "subseason_rule": {
+    "early": "date < November 1 of the declared study year",
+    "mid": "November 1 through November 30 inclusive",
+    "late": "date > November 30 of the declared study year, including January observations assigned to the preceding study year",
+    "provenance": "Dryad dataset methods state that visits were pooled into three approximately equal subseasons: before November 1st, after November 30th, and in between."
+  },
+  "analysis_subset": {
+    "plant_count": 45,
+    "pollinator_count": 135,
+    "reason": "freeze the same trait-available subset used by the annual Stage-1 fallback before constructing the response surface"
+  },
+  "interaction_weight": "sum no.fl.visit over all sites and raw observation rows within study year x subseason x plant x pollinator",
+  "undated_policy": {
+    "rule": "positive visit rows without a date are not assigned to a subseason",
+    "required_report": [
+      "undated positive rows",
+      "undated positive visit count",
+      "affected study years",
+      "annual links represented only by undated rows"
+    ],
+    "promotion_rule": "the reconstructed 12-transition surface may be used as the preferred raw-record Stage-1 response if every transition remains estimable and the undated-row limitation is explicit; analyses sensitive to 2011 must retain a dated-complete sensitivity excluding 2011"
+  },
+  "period_map": {
+    "period_count": 18,
+    "period_names": "YYYY_early, YYYY_mid, YYYY_late",
+    "within_year_primary_transitions": 12,
+    "year_boundary_sensitivity_transitions": 5
+  },
+  "presence_semantics": "observed-positive-link presence unless an independent subseason presence surface is supplied; therefore response remains detection-sensitive",
+  "claim_ceiling": "This reconstructs the documented temporal response grain from public raw records. It does not by itself establish true species presence, sampling-effort-corrected rewiring, ecological filtering, decision equivalence, or routeability."
+}
