@@ -30,6 +30,9 @@ on:
       - "validation/villavicencio_siteweek_opportunity_audit_gate_v1.json"
       - "examples/villavicencio_current_opportunity_axis_audit.R"
       - "examples/summarize_villavicencio_current_opportunity_axis_audit.py"
+      - "examples/villavicencio_axis_robustness_audit.R"
+      - "examples/summarize_villavicencio_axis_robustness_audit.py"
+      - "validation/villavicencio_axis_robustness_audit_gate_v1.json"
       - "validation/villavicencio_current_opportunity_axis_audit_gate_v1.json"
       - "validation/villavicencio_focal_excluded_opportunity_gate_v1.json"
       - "validation/villavicencio_phenology_state_stratification_v1.json"
@@ -1089,6 +1092,69 @@ jobs:
                       "loss_plant_increment": primary["loss"]["plant_availability_increment"]["delta_log_loss"],
                       "loss_pollinator_increment": primary["loss"]["pollinator_activity_increment"]["delta_log_loss"],
                       "loss_axis_positive_folds": result["primary_pattern"]["loss_direction_positive_folds"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit endpoint opportunity-axis robustness
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_axis_robustness_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_siteweek_opportunity_dyads.csv \
+            artifact/annual_axis_robustness_rows.csv
+
+          python examples/summarize_villavicencio_axis_robustness_audit.py \
+            artifact/annual_axis_robustness_rows.csv \
+            artifact/annual_axis_robustness_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_axis_robustness_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_axis_robustness_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != (
+              "post-result endpoint-axis robustness across spatial and "
+              "link-frequency definitions; hypothesis-generating only"
+          ):
+              raise SystemExit("axis robustness lost post-result firewall")
+          for context in ("weekly_k1", "weekly_k2", "weekly_k3", "siteweek_k1"):
+              for risk in ("gain", "loss"):
+                  endpoint = result["contexts"][context][risk]
+                  if endpoint["expected_direction_positive_folds"] != 3:
+                      raise SystemExit(
+                          f"{context}/{risk}: endpoint-axis reversal lost a primary fold"
+                      )
+          if "not establish distinct causal" not in gate["claim_ceiling"]:
+              raise SystemExit("axis robustness gate lost causal firewall")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "contexts": {
+                          context: {
+                              risk: {
+                                  "expected_direction_positive_folds": result["contexts"][context][risk]["expected_direction_positive_folds"],
+                                  "mean_expected_direction_difference": result["contexts"][context][risk]["mean_expected_direction_difference"],
+                              }
+                              for risk in ("gain", "loss")
+                          }
+                          for context in ("weekly_k1", "weekly_k2", "weekly_k3", "siteweek_k1")
+                      },
                   },
                   indent=2,
                   sort_keys=True,
