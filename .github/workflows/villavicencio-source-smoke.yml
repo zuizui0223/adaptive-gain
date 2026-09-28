@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/villavicencio-source-smoke.yml"
       - "examples/fetch_dryad_source_manifest.py"
+      - "examples/fetch_figshare_article_files.py"
       - "examples/export_villavicencio_subseasons.R"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
@@ -56,6 +57,63 @@ jobs:
           python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.j6q573n9j"             artifact/manifests/response_dryad_manifest.json             --target-name "miele-JAE.RData"             --target-id-output artifact/response_file_id.txt
 
           python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.8cz8w9gm1"             artifact/manifests/traits_dryad_manifest.json             --target-name "plant_pollinator_data.xlsx"             --target-id-output artifact/traits_file_id.txt
+
+      - name: Recover public raw visitor records from Figshare
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/figshare_visitors artifact/figshare
+          python examples/fetch_figshare_article_files.py \
+            11794503 \
+            source/figshare_visitors \
+            artifact/figshare/visitor_records_manifest.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(
+              Path("artifact/figshare/visitor_records_manifest.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if manifest["downloaded_count"] < 1:
+              raise SystemExit("no public Figshare visitor-record files materialized")
+          for item in manifest["files"]:
+              if item.get("downloaded"):
+                  if not item.get("size_matches", False):
+                      raise SystemExit(f"Figshare size mismatch: {item['name']}")
+                  if not item.get("md5_matches", False):
+                      raise SystemExit(f"Figshare checksum mismatch: {item['name']}")
+
+          inventory = []
+          for path in sorted(Path("source/figshare_visitors").iterdir()):
+              if not path.is_file():
+                  continue
+              inventory.append(
+                  {
+                      "name": path.name,
+                      "size": path.stat().st_size,
+                      "suffix": path.suffix.lower(),
+                  }
+              )
+          Path("artifact/figshare/visitor_records_inventory.json").write_text(
+              json.dumps(
+                  {
+                      "schema": "adaptive-gain-villavicencio-figshare-visitor-inventory-v1",
+                      "article_id": 11794503,
+                      "files": inventory,
+                      "ecological_role": "independent public raw-record fallback for reconstructing the 18-subseason response surface",
+                      "response_analysis_run": False,
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+              + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(inventory, indent=2))
+          PY
 
       - name: Download published source bytes when authorized or mirrored
         shell: bash
