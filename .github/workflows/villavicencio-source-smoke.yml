@@ -21,6 +21,9 @@ on:
       - "examples/build_villavicencio_focal_excluded_opportunity.py"
       - "examples/villavicencio_focal_excluded_opportunity_cv.R"
       - "examples/summarize_villavicencio_focal_excluded_opportunity.py"
+      - "examples/villavicencio_link_frequency_threshold_audit.R"
+      - "examples/summarize_villavicencio_link_frequency_threshold_audit.py"
+      - "validation/villavicencio_link_frequency_threshold_audit_gate_v1.json"
       - "examples/build_villavicencio_siteweek_opportunity.py"
       - "examples/villavicencio_siteweek_opportunity_audit.R"
       - "examples/summarize_villavicencio_siteweek_opportunity_audit.py"
@@ -906,6 +909,68 @@ jobs:
                       "current_better_both": result[
                           "primary_current_better_than_lagged_both_endpoints"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit link-frequency thresholds
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_link_frequency_threshold_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_link_frequency_threshold_predictions.csv \
+            artifact/annual_link_frequency_threshold_folds.csv
+
+          python examples/summarize_villavicencio_link_frequency_threshold_audit.py \
+            artifact/annual_link_frequency_threshold_predictions.csv \
+            artifact/annual_link_frequency_threshold_folds.csv \
+            artifact/annual_link_frequency_threshold_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_link_frequency_threshold_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_link_frequency_threshold_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != "post-result >=2 and >=3 visit threshold sensitivity; not confirmatory":
+              raise SystemExit("frequency threshold audit lost post-result firewall")
+          for threshold in ("2", "3"):
+              for risk in ("gain", "loss"):
+                  endpoint = result["thresholds"][threshold][risk]
+                  if endpoint["positive_log_loss_folds"] != 3:
+                      raise SystemExit(
+                          f"{threshold}/{risk}: threshold robustness lost an annual fold"
+                      )
+          if "not a detection model" not in gate["claim_ceiling"].lower():
+              raise SystemExit("frequency threshold gate lost detection-model firewall")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "thresholds": {
+                          threshold: {
+                              risk: {
+                                  "auc": result["thresholds"][threshold][risk]["roc_auc"],
+                                  "logloss_skill": result["thresholds"][threshold][risk]["relative_log_loss_reduction"],
+                                  "positive_folds": result["thresholds"][threshold][risk]["positive_log_loss_folds"],
+                              }
+                              for risk in ("gain", "loss")
+                          }
+                          for threshold in ("2", "3")
+                      },
                   },
                   indent=2,
                   sort_keys=True,
