@@ -1,13 +1,17 @@
-"""Build a focal-response-excluded weekly opportunity surface for Villavicencio.
+"""Build focal-response-excluded weekly opportunity surfaces for Villavicencio.
 
 The published phenological-overlap matrix is not used here. For each focal
-plant-pollinator dyad and target year, opportunity is reconstructed from raw
-Figshare records as overlap between:
+plant-pollinator dyad, opportunity is reconstructed from raw Figshare records
+as overlap between:
 
 1. weeks in which the focal plant was observed flowering; and
 2. weeks in which the focal pollinator was observed visiting any *other* plant.
 
-Thus the focal dyad's own realized interaction never contributes to its
+Two predictor surfaces are exported for every annual transition:
+- current: reconstructed from the target/current year;
+- lagged: reconstructed from the previous year only.
+
+Thus the focal dyad's own realized interaction never contributes to either
 opportunity predictor. Undated positive visits may define annual response links
 but never contribute to weekly opportunity.
 """
@@ -80,6 +84,33 @@ def _code_set(path: Path, field: str) -> set[str]:
     return out
 
 
+def _opportunity_features(
+    year: int,
+    plant: str,
+    pollinator: str,
+    *,
+    plant_flowering_weeks: dict[tuple[int, str], set[int]],
+    pollinator_week_plants: dict[tuple[int, int, str], set[str]],
+) -> tuple[int, int, int, int]:
+    plant_weeks = plant_flowering_weeks.get((year, plant), set())
+    pollinator_otherplant_weeks = {
+        week
+        for week in range(1, 54)
+        if pollinator_week_plants.get(
+            (year, week, pollinator),
+            set(),
+        )
+        - {plant}
+    }
+    overlap_weeks = plant_weeks & pollinator_otherplant_weeks
+    return (
+        len(overlap_weeks),
+        len(plant_weeks),
+        len(pollinator_otherplant_weeks),
+        int(bool(overlap_weeks)),
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("visits", type=Path)
@@ -113,7 +144,12 @@ def main() -> None:
         if year not in YEARS or not plant:
             continue
 
-        if plant in plant_codes and flowers is not None and flowers > 0 and week is not None:
+        if (
+            plant in plant_codes
+            and flowers is not None
+            and flowers > 0
+            and week is not None
+        ):
             plant_flowering_weeks[(year, plant)].add(week)
 
         positive_visit = (
@@ -133,8 +169,8 @@ def main() -> None:
                 dated_positive_links.add((plant, pollinator))
 
         if week is not None:
-            # All sampled plant species may provide independent evidence that
-            # the pollinator was active; the focal plant is removed dyad by dyad.
+            # Any sampled plant may provide independent evidence that the
+            # pollinator was active; the focal plant is removed dyad by dyad.
             pollinator_week_plants[(year, week, pollinator)].add(plant)
 
     stage1_rows = _read_rows(args.stage1_dyads)
@@ -160,17 +196,30 @@ def main() -> None:
         if previous_link != raw_previous_link or current_link != raw_current_link:
             response_mismatch_count += 1
 
-        plant_weeks = plant_flowering_weeks.get((current_year, plant), set())
-        pollinator_otherplant_weeks = {
-            week
-            for week in range(1, 54)
-            if pollinator_week_plants.get(
-                (current_year, week, pollinator),
-                set(),
-            )
-            - {plant}
-        }
-        overlap_weeks = plant_weeks & pollinator_otherplant_weeks
+        (
+            current_overlap,
+            current_plant_weeks,
+            current_pollinator_weeks,
+            current_positive,
+        ) = _opportunity_features(
+            current_year,
+            plant,
+            pollinator,
+            plant_flowering_weeks=plant_flowering_weeks,
+            pollinator_week_plants=pollinator_week_plants,
+        )
+        (
+            lagged_overlap,
+            lagged_plant_weeks,
+            lagged_pollinator_weeks,
+            lagged_positive,
+        ) = _opportunity_features(
+            previous_year,
+            plant,
+            pollinator,
+            plant_flowering_weeks=plant_flowering_weeks,
+            pollinator_week_plants=pollinator_week_plants,
+        )
 
         if previous_link:
             risk_set = "loss"
@@ -186,14 +235,14 @@ def main() -> None:
                 "risk_set": risk_set,
                 "outcome": outcome,
                 "target_year": current_year,
-                "focal_excluded_overlap_weeks": len(overlap_weeks),
-                "plant_flowering_weeks": len(plant_weeks),
-                "pollinator_otherplant_active_weeks": len(
-                    pollinator_otherplant_weeks
-                ),
-                "focal_excluded_opportunity_positive": int(
-                    bool(overlap_weeks)
-                ),
+                "focal_excluded_overlap_weeks": current_overlap,
+                "plant_flowering_weeks": current_plant_weeks,
+                "pollinator_otherplant_active_weeks": current_pollinator_weeks,
+                "focal_excluded_opportunity_positive": current_positive,
+                "lagged_focal_excluded_overlap_weeks": lagged_overlap,
+                "lagged_plant_flowering_weeks": lagged_plant_weeks,
+                "lagged_pollinator_otherplant_active_weeks": lagged_pollinator_weeks,
+                "lagged_focal_excluded_opportunity_positive": lagged_positive,
             }
         )
 
@@ -224,15 +273,14 @@ def main() -> None:
     for year in YEARS:
         year_positive: set[tuple[str, str]] = set()
         for plant, pollinator in all_dyads:
-            plant_weeks = plant_flowering_weeks.get((year, plant), set())
-            if any(
-                pollinator_week_plants.get(
-                    (year, week, pollinator),
-                    set(),
-                )
-                - {plant}
-                for week in plant_weeks
-            ):
+            overlap, _, _, positive = _opportunity_features(
+                year,
+                plant,
+                pollinator,
+                plant_flowering_weeks=plant_flowering_weeks,
+                pollinator_week_plants=pollinator_week_plants,
+            )
+            if positive and overlap > 0:
                 year_positive.add((plant, pollinator))
         opportunity_positive_any_year |= year_positive
         realized = positive_links_by_year[year]
@@ -256,35 +304,32 @@ def main() -> None:
         rows = [row for row in output_rows if row["risk_set"] == risk]
         events = [row for row in rows if int(row["outcome"]) == 1]
         nonevents = [row for row in rows if int(row["outcome"]) == 0]
+
+        def _fraction(group, field):
+            if not group:
+                return None
+            return sum(int(row[field]) for row in group) / len(group)
+
         risk_summary[risk] = {
             "n": len(rows),
             "events": len(events),
-            "opportunity_positive_fraction": (
-                sum(
-                    int(row["focal_excluded_opportunity_positive"])
-                    for row in rows
-                )
-                / len(rows)
-                if rows
-                else None
+            "current_opportunity_positive_fraction": _fraction(
+                rows, "focal_excluded_opportunity_positive"
             ),
-            "event_opportunity_positive_fraction": (
-                sum(
-                    int(row["focal_excluded_opportunity_positive"])
-                    for row in events
-                )
-                / len(events)
-                if events
-                else None
+            "current_event_opportunity_positive_fraction": _fraction(
+                events, "focal_excluded_opportunity_positive"
             ),
-            "nonevent_opportunity_positive_fraction": (
-                sum(
-                    int(row["focal_excluded_opportunity_positive"])
-                    for row in nonevents
-                )
-                / len(nonevents)
-                if nonevents
-                else None
+            "current_nonevent_opportunity_positive_fraction": _fraction(
+                nonevents, "focal_excluded_opportunity_positive"
+            ),
+            "lagged_opportunity_positive_fraction": _fraction(
+                rows, "lagged_focal_excluded_opportunity_positive"
+            ),
+            "lagged_event_opportunity_positive_fraction": _fraction(
+                events, "lagged_focal_excluded_opportunity_positive"
+            ),
+            "lagged_nonevent_opportunity_positive_fraction": _fraction(
+                nonevents, "lagged_focal_excluded_opportunity_positive"
             ),
         }
 
@@ -331,6 +376,8 @@ def main() -> None:
         },
         "risk_sets_all_annual": risk_summary,
         "focal_response_exclusion": True,
+        "current_year_surface": True,
+        "one_year_lagged_surface": True,
         "published_phenological_overlap_used": False,
         "published_aggregate_flower_abundance_used": False,
     }
