@@ -12,8 +12,8 @@ on:
       - "examples/summarize_villavicencio_filter_block_ablation.py"
       - "examples/villavicencio_gain_loss_matched_audit.R"
       - "examples/summarize_villavicencio_gain_loss_asymmetry.py"
-      - "examples/diagnose_villavicencio_phenology_states.py"
-      - "validation/villavicencio_phenology_state_stratification_v1.json"
+      - "examples/diagnose_villavicencio_phenology_states.py"\n      - "examples/audit_villavicencio_species_leverage.py"
+      - "validation/villavicencio_phenology_state_stratification_v1.json"\n      - "validation/villavicencio_species_leverage_audit_v1.json"
       - "examples/build_villavicencio_transition_pairs.py"
       - "adaptive_gain/empirical_rewiring.py"
       - "validation/villavicencio_source_manifest_v1.json"
@@ -711,6 +711,88 @@ jobs:
                   raise SystemExit(f"zero-overlap fraction changed for {state}")
 
           print(json.dumps(obs, indent=2, sort_keys=True))
+          PY
+
+      - name: Audit phenology species leverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\\n' \\
+              '{"schema":"adaptive-gain-villavicencio-species-leverage-audit-v1","materialized":false}' \\
+              > artifact/annual_species_leverage_audit.json
+            exit 0
+          fi
+
+          python examples/audit_villavicencio_species_leverage.py \\
+            artifact/annual_conventional_filter_dyads.csv \\
+            artifact/annual_species_leverage_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_species_leverage_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_species_leverage_audit_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["status"] != "post_hoc_species_leverage_diagnostic":
+              raise SystemExit("species-leverage audit lost its post-hoc label")
+          if observed["base"]["plant_count"] != frozen["base"]["plant_count"]:
+              raise SystemExit("species-leverage plant count changed")
+          if observed["base"]["pollinator_count"] != frozen["base"]["pollinator_count"]:
+              raise SystemExit("species-leverage pollinator count changed")
+
+          for section, metric in (
+              ("base", "positive_overlap_retained_vs_loss_auc"),
+              ("base", "gain_vs_loss_auc"),
+          ):
+              if abs(observed[section][metric] - frozen[section][metric]) > 1e-12:
+                  raise SystemExit(f"{section}/{metric} changed")
+
+          for section in ("leave_one_plant_out", "leave_one_pollinator_out"):
+              for metric in (
+                  "positive_overlap_gain_vs_stable_absent_auc",
+                  "positive_overlap_retained_vs_loss_auc",
+                  "gain_vs_loss_auc",
+              ):
+                  for key in ("min", "median", "max"):
+                      a = observed[section][metric][key]
+                      b = frozen[section][metric][key]
+                      if abs(a - b) > 1e-12:
+                          raise SystemExit(f"{section}/{metric}/{key} changed")
+
+          print(
+              json.dumps(
+                  {
+                      "plant_retention_auc_range": [
+                          observed["leave_one_plant_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["min"],
+                          observed["leave_one_plant_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["max"],
+                      ],
+                      "pollinator_retention_auc_range": [
+                          observed["leave_one_pollinator_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["min"],
+                          observed["leave_one_pollinator_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["max"],
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
           PY
 
       - name: Summarize exported periods before response analysis
