@@ -1,0 +1,65 @@
+{
+  "schema": "adaptive-gain-villavicencio-phenology-state-stratification-v1",
+  "date": "2026-09-28",
+  "status": "post_result_ecological_diagnostic",
+  "prospective_status": "post_hoc_not_confirmatory",
+  "exposure": "single dyad-level phenological-overlap matrix reused across annual transitions",
+  "primary_summary": {
+    "pooled_gain_vs_stable_absent_auc": 0.9054708584553546,
+    "pooled_retained_vs_loss_auc": 0.6613239957716702,
+    "pooled_gain_vs_loss_auc": 0.49068357998590556,
+    "state_medians": {
+      "stable_absent": 0.0,
+      "gain": 12.0,
+      "loss": 13.0,
+      "retained": 20.0
+    },
+    "primary_fold_gain_vs_stable_absent_auc": [
+      0.9028182843772198,
+      0.9035705319230224,
+      0.9127698718261124
+    ],
+    "primary_fold_retained_vs_loss_auc": [
+      0.6717760120262,
+      0.6611385233918129,
+      0.6492367281840966
+    ],
+    "primary_fold_gain_vs_loss_auc": [
+      0.4465688987271721,
+      0.49702561000201656,
+      0.511096884336321
+    ],
+    "primary_fold_state_medians": {
+      "2008->2009": {
+        "stable_absent": 0.0,
+        "gain": 10.5,
+        "loss": 12.0,
+        "retained": 20.0
+      },
+      "2009->2010": {
+        "stable_absent": 0.0,
+        "gain": 13.0,
+        "loss": 14.0,
+        "retained": 20.0
+      },
+      "2010->2011": {
+        "stable_absent": 0.0,
+        "gain": 14.0,
+        "loss": 13.0,
+        "retained": 19.0
+      }
+    }
+  },
+  "interpretation": {
+    "supported": "Phenological overlap strongly separates candidate gains from stable absences, more weakly separates retained from lost established links, and carries almost no directional information distinguishing gain from loss among changed dyads.",
+    "ecological_read": "In this annual fallback, phenology behaves more like an interaction eligibility and persistence filter than a directional switch for rewiring.",
+    "not_supported": "Year-to-year phenological shifts caused rewiring, or phenology determines the direction of a link change."
+  },
+  "claim_firewall": [
+    "the phenological-overlap exposure is not year-specific in this annual fallback",
+    "the diagnostic is descriptive and post hoc",
+    "gain/loss state contrasts are not routeability or decision-equivalence tests",
+    "repeated dyads across transitions are not independent biological replicates",
+    "do not promote the three-level state pattern as a universal threshold without independent replication"
+  ]
+}
