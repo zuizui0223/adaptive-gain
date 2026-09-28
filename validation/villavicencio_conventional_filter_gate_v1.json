@@ -118,7 +118,7 @@
   "model_family": {
     "type": "separate binomial logistic models for gain and loss",
     "formula_policy": "main effects only; no data-driven interactions",
-    "transition_handling": "leave-one-transition-out temporal cross-validation within each frozen sampling-effort scope",
+    "transition_handling": "leave-one-transition-out response holdout within each frozen sampling-effort scope",
     "null_model": "training-fold event prevalence",
     "metrics": [
       "log_loss",
@@ -195,12 +195,21 @@
     "do not tune predictor definitions after seeing coefficients or skill",
     "do not call annual positive-link presence true species presence",
     "do not promote annual fallback over the 18-subseason primary design",
-    "do not interpret predictive improvement as a causal effect"
+    "do not interpret predictive improvement as a causal effect",
+    "do not describe the annual analysis as strict prospective forecasting because phenology and flower abundance are study-wide six-year aggregates"
   ],
   "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json",
   "anti_leakage": {
     "policy": "use independently measured raw morphology and phenological overlap; do not import interaction-derived trait-matching scores into the link-change predictor set",
     "reason": "an interaction-derived matching score could reuse the response network and make the conventional-filter benchmark circular",
     "original_paper_trait_matching": "treated as literature context, not as a frozen predictor in this prospective link-change audit"
+  },
+  "covariate_time_support": {
+    "audit": "validation/villavicencio_covariate_time_support_audit_v1.json",
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "consequence": "transition outcomes are held out, but these conventional covariates are not reconstructed from training years alone",
+    "allowed_label": "held-out response discrimination",
+    "forbidden_label": "strict prospective forecasting from past-only covariates"
   }
 }
