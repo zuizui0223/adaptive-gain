@@ -86,8 +86,10 @@
       "roc_auc"
     ],
     "models": {
-      "full": "focal_excluded_overlap_weeks + plant_flowering_weeks + pollinator_otherplant_active_weeks",
-      "drop_pairwise_overlap": "plant_flowering_weeks + pollinator_otherplant_active_weeks"
+      "current_full": "target-year focal_excluded_overlap_weeks + target-year plant_flowering_weeks + target-year pollinator_otherplant_active_weeks",
+      "current_drop_pairwise_overlap": "target-year plant_flowering_weeks + target-year pollinator_otherplant_active_weeks",
+      "lagged_full": "previous-year lagged_focal_excluded_overlap_weeks + lagged_plant_flowering_weeks + lagged_pollinator_otherplant_active_weeks",
+      "lagged_drop_pairwise_overlap": "previous-year lagged_plant_flowering_weeks + lagged_pollinator_otherplant_active_weeks"
     },
     "incremental_question": "Does dyad-specific weekly overlap add held-out information beyond the two marginal availability/activity week counts?"
   },
@@ -100,7 +102,7 @@
     ]
   },
   "interpretation": {
-    "allowed": "The focal-response-excluded availability/activity surface may discriminate annual link dynamics across held-out response transitions. Pair-specific temporal matching may be described only if the full model reproducibly outperforms the marginal-only model.",
+    "allowed": "The focal-response-excluded current-year availability/activity surface may discriminate annual link dynamics across held-out response transitions. Pair-specific temporal matching requires incremental full-versus-marginal skill. The lagged model is a past-only negative control for stable propensity/forecastability.",
     "forbidden": [
       "strict prospective forecasting from past-only covariates",
       "causal effect of phenology",
@@ -111,5 +113,11 @@
       "calling marginal availability/activity skill evidence for pair-specific phenological matching"
     ]
   },
-  "claim_ceiling": "This repair can recover a clean focal-response-excluded availability/activity association. Pair-specific temporal overlap is a separate incremental question and must not be inferred from the full-model skill alone. The analysis remains retrospective, contemporaneous, detection-sensitive, and is not a causal or routeability test."
+  "claim_ceiling": "This repair can recover a clean focal-response-excluded availability/activity association. Pair-specific temporal overlap is a separate incremental question and must not be inferred from the full-model skill alone. The analysis remains retrospective, contemporaneous, detection-sensitive, and is not a causal or routeability test.",
+  "negative_control": {
+    "name": "one_year_lagged_opportunity",
+    "definition": "Recompute the same focal-response-excluded overlap and marginal activity/availability predictors using the previous year only, then predict the next annual link transition.",
+    "purpose": "Distinguish contemporaneous opportunity association from a stable dyad propensity or genuine past-only forecast.",
+    "interpretation": "Failure of the lagged model does not invalidate the contemporaneous opportunity association; it limits the result to current-state ecology rather than forecastability."
+  }
 }
