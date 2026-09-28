@@ -43,15 +43,30 @@
   "sampling_scopes": {
     "strict_core_2008_2011": {
       "role": "primary",
-      "transitions": ["2008->2009", "2009->2010", "2010->2011"]
+      "transitions": [
+        "2008->2009",
+        "2009->2010",
+        "2010->2011"
+      ]
     },
     "near_core_2007_2011": {
       "role": "sampling-effort sensitivity",
-      "transitions": ["2007->2008", "2008->2009", "2009->2010", "2010->2011"]
+      "transitions": [
+        "2007->2008",
+        "2008->2009",
+        "2009->2010",
+        "2010->2011"
+      ]
     },
     "all_annual_2006_2011": {
       "role": "broad sensitivity",
-      "transitions": ["2006->2007", "2007->2008", "2008->2009", "2009->2010", "2010->2011"]
+      "transitions": [
+        "2006->2007",
+        "2007->2008",
+        "2008->2009",
+        "2009->2010",
+        "2010->2011"
+      ]
     }
   },
   "model": {
@@ -65,7 +80,16 @@
     "interactions": false,
     "cross_validation": "leave one annual transition out within each frozen sampling scope",
     "null_model": "training-fold event prevalence",
-    "metrics": ["log_loss", "brier_score", "roc_auc"]
+    "metrics": [
+      "log_loss",
+      "brier_score",
+      "roc_auc"
+    ],
+    "models": {
+      "full": "focal_excluded_overlap_weeks + plant_flowering_weeks + pollinator_otherplant_active_weeks",
+      "drop_pairwise_overlap": "plant_flowering_weeks + pollinator_otherplant_active_weeks"
+    },
+    "incremental_question": "Does dyad-specific weekly overlap add held-out information beyond the two marginal availability/activity week counts?"
   },
   "support_audit": {
     "required": "non-zero reconstructed opportunity must not be structurally nested inside ever-realized focal links",
@@ -76,15 +100,16 @@
     ]
   },
   "interpretation": {
-    "allowed": "focal-response-excluded contemporaneous temporal opportunity discriminates annual link gain or loss in held-out response transitions",
+    "allowed": "The focal-response-excluded availability/activity surface may discriminate annual link dynamics across held-out response transitions. Pair-specific temporal matching may be described only if the full model reproducibly outperforms the marginal-only model.",
     "forbidden": [
       "strict prospective forecasting from past-only covariates",
       "causal effect of phenology",
       "causal primacy of temporal opportunity",
       "decision-equivalence or routeability",
       "independence of dyad-year observations",
-      "true absence for zero observed links"
+      "true absence for zero observed links",
+      "calling marginal availability/activity skill evidence for pair-specific phenological matching"
     ]
   },
-  "claim_ceiling": "This repair can recover a clean ecological opportunity association because the focal dyad response is excluded from the predictor. It remains a retrospective, contemporaneous, detection-sensitive network reanalysis and is not a causal or routeability test."
+  "claim_ceiling": "This repair can recover a clean focal-response-excluded availability/activity association. Pair-specific temporal overlap is a separate incremental question and must not be inferred from the full-model skill alone. The analysis remains retrospective, contemporaneous, detection-sensitive, and is not a causal or routeability test."
 }
