@@ -77,7 +77,7 @@
       "2007->2008": 0.2182055649747959,
       "2008->2009": 0.19113980861663957,
       "2009->2010": 0.20445828110664138,
-      "2010->2011": 0.30664
+      "2010->2011": 0.3066410085874651
     },
     "phenology_auc_contribution_positive_for_both_endpoints_in_all_resamples": true,
     "phenology_auc_contribution_larger_for_gain_in_all_resamples": true
