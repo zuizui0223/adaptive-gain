@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-stage1-predata-gate-v1",
   "date": "2026-09-26",
-  "status": "annual_conventional_baseline_green_primary_subseason_blocked",
+  "status": "annual_repaired_opportunity_green_primary_subseason_blocked",
   "purpose": "test whether the repeated Villavicencio network response is estimable after conventional opportunity and compatibility filters, without inferring decision-equivalence classes",
   "sources": {
     "response": {
@@ -166,11 +166,12 @@
   "stage1_success_gate_status": {
     "annual_fallback_response_estimability": "PASS",
     "primary_12_transition_reconstruction": "BLOCKED_response_RData_not_materialized",
-    "conventional_filter_join": "PASS",
+    "conventional_filter_join": "PASS_NUMERIC_SURFACE",
     "sampling_effort_semantics": "UNRESOLVED",
-    "conventional_filter_temporal_cv": "PASS",
-    "next": "FREEZE_INDEPENDENT_COGNITION_DECISION_EXPOSURE",
-    "filter_block_ablation": "PASS_phenology_reproducible_both_endpoints"
+    "conventional_filter_temporal_cv": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
+    "filter_block_ablation": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
+    "focal_excluded_opportunity_repair": "PASS_CURRENT_STATE_OPPORTUNITY",
+    "next": "USE_CLEAN_OPPORTUNITY_AS_BASELINE_BEFORE_ANY_INDEPENDENT_DECISION_LAYER"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
@@ -182,7 +183,8 @@
     "loss_roc_auc": 0.6504668780831572,
     "gain_gate": "PASS",
     "loss_gate": "PASS",
-    "interpretation": "conventional filters predict held-out annual link dynamics, especially gains; any routeability test must now demonstrate incremental value beyond this frozen baseline"
+    "interpretation": "Historical numerical baseline only. Its gain-filter ecological interpretation is quarantined because the published non-zero phenological-overlap support is nested inside ever-realized links. Use the focal-excluded raw-record repair as the valid ecological baseline.",
+    "superseded_for_ecological_interpretation_by": "validation/villavicencio_focal_excluded_opportunity_result_v1.json"
   },
   "filter_block_ablation": {
     "gate": "validation/villavicencio_filter_block_ablation_gate_v1.json",
@@ -196,7 +198,23 @@
     "plant_morphology_loss": "positive_but_fold_unstable_2_of_3",
     "pollinator_morphology_gain": "no_reproducible_incremental_information",
     "pollinator_morphology_loss": "no_reproducible_incremental_information",
-    "ecological_read": "phenological overlap is the only frozen conventional-filter block with reproducible incremental held-out information for both gain and loss across every primary fold; the classification persists in broader temporal sensitivities",
-    "claim_ceiling": "predictive block attribution only; no causal primacy or routeability inference"
+    "ecological_read": "Historical block-ablation arithmetic only. The phenology block cannot be interpreted as an outcome-independent candidate-dyad filter because of the support-leakage audit.",
+    "claim_ceiling": "historical numerical attribution only; superseded for ecological interpretation by the support-leakage audit and focal-excluded repair"
+  },
+  "focal_excluded_opportunity_repair": {
+    "gate": "validation/villavicencio_focal_excluded_opportunity_gate_v1.json",
+    "result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "primary_scope": "strict_core_2008_2011",
+    "gain_current_relative_log_loss_reduction": 0.13929307446228167,
+    "gain_current_roc_auc": 0.743386402837315,
+    "loss_current_relative_log_loss_reduction": 0.06824534246916754,
+    "loss_current_roc_auc": 0.6684320883490523,
+    "gain_lagged_relative_log_loss_reduction": 0.010387722347296274,
+    "gain_lagged_roc_auc": 0.527768853370622,
+    "loss_lagged_relative_log_loss_reduction": -0.027121299435686023,
+    "loss_lagged_roc_auc": 0.4059495267611752,
+    "support_nested_in_ever_linked": false,
+    "interpretation": "Focal-response-excluded current-year plant availability and pollinator activity carry reproducible information about annual link dynamics. One-year-lagged opportunity does not recover the same signal; pair-specific weekly overlap is only a small, sensitivity-dependent increment.",
+    "claim_ceiling": "retrospective current-state opportunity association only; no causality, strict forecasting, decision equivalence, or routeability"
   }
 }
