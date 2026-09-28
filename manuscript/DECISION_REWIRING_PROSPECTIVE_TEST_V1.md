@@ -204,6 +204,40 @@ The observed association between boundary crossing and rewiring is then compared
 
 This tests whether the ecological signal depends on the declared decision structure rather than merely on having grouped species into classes.
 
+## Current Stage-1 ecological result — phenology as eligibility gate and persistence gradient
+
+Status: **post-result ecological diagnostic, not a confirmatory routeability test.**
+
+The annual Villavicencio fallback now supports a more specific ecological reading than the original statement that phenology predicts rewiring.
+
+Within the sampling-consistent 2008–2011 scope:
+
+- study-wide phenological overlap strongly separates link gains from stable absences when zero-overlap dyads are retained (pooled AUC = 0.9055);
+- after restricting to dyads with positive phenological overlap, that gain-versus-stable-absence discrimination disappears (pooled AUC = 0.5058; primary-fold AUCs 0.4643, 0.4570, 0.5678);
+- among already established positive-overlap links, larger overlap continues to discriminate retention from loss (pooled AUC = 0.6568; primary-fold AUCs 0.6593, 0.6598, 0.6563);
+- among changed dyads, phenological overlap carries essentially no information about whether the change is a gain or a loss (pooled AUC = 0.4907).
+
+The corresponding state medians are 0 weeks for stable absences, 12 for gains, 13 for losses and 20 for retained links. Zero overlap occurs in 87.2% of stable absences but only 6.3% of gains, 5.2% of losses and 2.0% of retained links.
+
+A leave-one-species-out audit shows that this pattern is not driven by one plant or pollinator. After removing each plant in turn, the positive-overlap retention-versus-loss AUC remains 0.643–0.666; after removing each pollinator in turn it remains 0.650–0.670. The gain-versus-loss contrast stays near chance under every omission.
+
+### Ecological interpretation
+
+The supported descriptive hypothesis is a **two-stage phenological filter**:
+
+1. **eligibility gate:** non-zero temporal co-occurrence largely separates dyads that can enter the realized interaction network from dyads that remain absent;
+2. **persistence gradient:** once a link exists and positive overlap is available, greater overlap is associated with retaining that interaction rather than losing it.
+
+What is *not* supported is a directional-switch interpretation in which overlap magnitude decides whether a changing dyad becomes a gain or a loss.
+
+This decomposition is more specific than the established result that phenology constrains plant–pollinator interaction turnover. CaraDonna et al. (2017, DOI 10.1111/ele.12740) showed that phenology and relative abundance constrain rewiring, and Peralta et al. (2020, DOI 10.1111/ele.13510) showed in this Villavicencio system that well-matched phenologies contribute to stable interactions. The present reanalysis therefore does **not** claim novelty for "phenology matters." Its added value is the state-transition decomposition: the same aggregate overlap variable behaves like an entry-support constraint and, conditionally on positive support, a persistence correlate.
+
+### Boundary of the result
+
+The phenological-overlap matrix is a six-year aggregate, not a year-specific exposure. Therefore these annual analyses hold out link responses but not all temporal information used to construct the covariates. They support retrospective held-out discrimination, not strict future forecasting or causal claims about year-to-year phenological change.
+
+This result also remains below the routeability evidence ladder: no independent decision-equivalence classes are measured, and the phenological gate must not be renamed routeability.
+
 ## Evidence ladder
 
 ### Level 0 — descriptive compatibility
