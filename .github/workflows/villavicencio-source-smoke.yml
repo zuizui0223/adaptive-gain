@@ -16,7 +16,10 @@ on:
       - "adaptive_gain/empirical_rewiring.py"
       - "validation/villavicencio_source_manifest_v1.json"
       - "validation/villavicencio_stage1_predata_gate_v1.json"
+      - "validation/villavicencio_conventional_filter_gate_v1.json"
+      - "validation/villavicencio_conventional_filter_cv_result_v1.json"
       - "validation/villavicencio_filter_block_ablation_gate_v1.json"
+      - "validation/villavicencio_filter_block_ablation_result_v1.json"
       - "validation/villavicencio_covariate_time_support_audit_v1.json"
       - "validation/villavicencio_gain_loss_asymmetry_result_v1.json"
 
@@ -591,6 +594,27 @@ jobs:
           )
           if result["status"] != expected_result["status"]:
               raise SystemExit("asymmetry audit status disagrees with frozen result ledger")
+          time_audit = json.loads(
+              Path("validation/villavicencio_covariate_time_support_audit_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          baseline_ledger = json.loads(
+              Path("validation/villavicencio_conventional_filter_cv_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          ablation_ledger = json.loads(
+              Path("validation/villavicencio_filter_block_ablation_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if time_audit["status"] != "aggregate_time_support_confirmed":
+              raise SystemExit("covariate time-support audit is not frozen green")
+          if "not strict prospective forecasting" not in baseline_ledger["time_support"]["interpretation"]:
+              raise SystemExit("baseline ledger lost the prospective-forecasting firewall")
+          if "not past-only forecasting" not in ablation_ledger["time_support"]["consequence"]:
+              raise SystemExit("ablation ledger lost the time-support firewall")
           time_support = result["matched_training_design"].get("time_support", "")
           if "six-year aggregates" not in time_support:
               raise SystemExit("asymmetry audit lost the aggregate-covariate time-support warning")
