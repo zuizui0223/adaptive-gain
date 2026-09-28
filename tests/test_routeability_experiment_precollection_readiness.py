@@ -15,7 +15,9 @@ def test_precollection_readiness_marks_design_gates_green_but_power_blocked():
     assert data["frozen_v5_unchanged"] is True
     by_item = {row["item"]: row for row in data["gates"]}
     assert by_item["exact routeable versus bypass contrast"]["status"] == "PASS"
-    assert by_item["randomization and counterbalance schedule"]["status"] == "PASS"
+    assert by_item["generic randomization/counterbalance schedule mechanics"]["status"] == "PASS"
+    assert by_item["eligible-roster treatment randomization"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["roster-to-final trial schedule linkage"]["status"] == "PASS_CODE_ONLY"
     assert by_item["confirmatory estimands and multiplicity"]["status"] == "PASS"
     assert by_item["final GLMM operating-characteristic simulation"]["status"] == "BLOCKED_INPUTS_CODE_READY"
     assert by_item["definitive biological sample size"]["status"] == "BLOCKED"
