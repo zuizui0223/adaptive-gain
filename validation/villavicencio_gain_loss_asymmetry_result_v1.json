@@ -37,11 +37,11 @@
         "matched_gain_minus_loss_auc_mean": 0.20587717222354737,
         "matched_gain_minus_loss_auc_q025": 0.15898264230018386,
         "matched_gain_minus_loss_auc_q975": 0.24471742019846215,
-        "matched_positive_fraction": 1.0,
+        "matched_positive_fraction": 1,
         "gain_phenology_auc_delta_mean": 0.3020019220323402,
         "loss_phenology_auc_delta_mean": 0.03643133254590356,
         "gain_minus_loss_phenology_auc_delta_mean": 0.2655705894864367,
-        "phenology_difference_positive_fraction": 1.0
+        "phenology_difference_positive_fraction": 1
       },
       "2009->2010": {
         "original_gain_auc": 0.8917924703365316,
@@ -49,11 +49,11 @@
         "matched_gain_minus_loss_auc_mean": 0.2006892280589724,
         "matched_gain_minus_loss_auc_q025": 0.18591610999189095,
         "matched_gain_minus_loss_auc_q975": 0.215707802152508,
-        "matched_positive_fraction": 1.0,
+        "matched_positive_fraction": 1,
         "gain_phenology_auc_delta_mean": 0.27580115924943494,
         "loss_phenology_auc_delta_mean": 0.03726151315789474,
         "gain_minus_loss_phenology_auc_delta_mean": 0.2385396460915402,
-        "phenology_difference_positive_fraction": 1.0
+        "phenology_difference_positive_fraction": 1
       },
       "2010->2011": {
         "original_gain_auc": 0.9171783875107624,
@@ -61,11 +61,11 @@
         "matched_gain_minus_loss_auc_mean": 0.3221808887907447,
         "matched_gain_minus_loss_auc_q025": 0.30738723328531015,
         "matched_gain_minus_loss_auc_q975": 0.336640898436096,
-        "matched_positive_fraction": 1.0,
+        "matched_positive_fraction": 1,
         "gain_phenology_auc_delta_mean": 0.354481415598551,
         "loss_phenology_auc_delta_mean": 0.06187742082478924,
         "gain_minus_loss_phenology_auc_delta_mean": 0.29260399477376164,
-        "phenology_difference_positive_fraction": 1.0
+        "phenology_difference_positive_fraction": 1
       }
     }
   },
@@ -89,7 +89,7 @@
     "allowed_interpretation": "held-out annual-link discrimination / predictive-filter association",
     "forbidden_interpretation": "strict prospective future-link forecasting from past-only covariates"
   },
-  "ecological_read": "Under the frozen conventional-filter model, annual link formation is more discriminable than link loss in every examined held-out transition, and this asymmetry survives endpoint prevalence and training-information matching. Phenological overlap contributes positive discrimination to both endpoints but contributes substantially more to gains under the matched audit.",
+  "ecological_read": "SUPERSEDED for mechanistic interpretation: the full-model gain-over-loss AUC asymmetry is largely driven by a phenology surface whose non-zero support is nested inside ever-realized links. It remains a reproducible property of that feature set, not evidence that natural link formation is intrinsically more predictable than link loss.",
   "not_established": [
     "causal asymmetry between link assembly and disassembly",
     "causal primacy of phenology",
@@ -99,5 +99,13 @@
     "environmental routeability",
     "decision-equivalence classes"
   ],
-  "claim_ceiling": "This is a retrospective robustness result supporting a descriptive gain-loss asymmetry in held-out annual-link discrimination. It must not be promoted to a preregistered causal or routeability result."
+  "claim_ceiling": "Retain this ledger only as a retrospective robustness record for the original feature set. Do not use its gain-over-loss asymmetry as a biological assembly/disassembly result, predictive-filter result, or routeability bridge.",
+  "historical_ecological_read": "Under the frozen conventional-filter model, annual link formation is more discriminable than link loss in every examined held-out transition, and this asymmetry survives endpoint prevalence and training-information matching. Phenological overlap contributes positive discrimination to both endpoints but contributes substantially more to gains under the matched audit.",
+  "supersession": {
+    "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
+    "date": "2026-09-28",
+    "matched_resampling_result_retained": true,
+    "ecological_gain_loss_asymmetry_claim_valid": false,
+    "reason": "endpoint matching cannot repair predictor support that encodes realized-link membership across the same six-year study"
+  }
 }
