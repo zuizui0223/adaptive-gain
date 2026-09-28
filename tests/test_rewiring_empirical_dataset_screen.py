@@ -27,7 +27,7 @@ def test_villavicencio_is_strongest_pilot_not_confirmation():
         "yearly plant–pollinator matrices for six consecutive years",
         "proboscis length/width",
         "raw records permit focal-response-excluded availability/activity opportunity",
-        "Do **not** call a morphology clustering result an exact empirical decision-equivalence test.",
+        "a trait- or network-derived class system can only be exploratory",
     ):
         assert phrase in text
 
