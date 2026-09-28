@@ -16,6 +16,7 @@ EXPECTED_FOLDS = {
     "near_core_2007_2011": 4,
     "all_annual_2006_2011": 5,
 }
+MODELS = ("full", "drop_pairwise_overlap")
 
 
 def _read(path: Path):
@@ -117,19 +118,29 @@ def _opportunity_rates(table_rows, scope_transitions, risk):
             return None
         return sum(int(row["outcome"]) for row in group) / len(group)
 
+    positive_rate = event_rate(positive)
+    zero_rate = event_rate(zero)
     return {
         "n": len(rows),
         "opportunity_positive_n": len(positive),
         "opportunity_zero_n": len(zero),
-        "event_rate_opportunity_positive": event_rate(positive),
-        "event_rate_opportunity_zero": event_rate(zero),
+        "event_rate_opportunity_positive": positive_rate,
+        "event_rate_opportunity_zero": zero_rate,
         "event_rate_ratio_positive_over_zero": (
             None
-            if not zero
-            or event_rate(zero) in (None, 0)
-            else event_rate(positive) / event_rate(zero)
+            if zero_rate in (None, 0) or positive_rate is None
+            else positive_rate / zero_rate
         ),
     }
+
+
+def _classify_overlap(pooled_delta, fold_deltas):
+    positive = sum(value > 0 for value in fold_deltas.values())
+    if pooled_delta > 0 and positive == len(fold_deltas):
+        return "reproducible_incremental_information"
+    if pooled_delta > 0 and positive > 0:
+        return "positive_but_fold_unstable"
+    return "no_reproducible_incremental_information"
 
 
 def main() -> None:
@@ -152,73 +163,127 @@ def main() -> None:
                 row["analysis_scope"],
                 row["risk_set"],
                 row["transition"],
+                row["model"],
             )
         ].append(row)
     for row in folds:
         fold_groups[
-            (row["analysis_scope"], row["risk_set"])
+            (
+                row["analysis_scope"],
+                row["risk_set"],
+                row["model"],
+            )
         ].append(row)
 
     scopes = {}
-    transition_lookup = {
-        scope: sorted(
+    for scope, expected in EXPECTED_FOLDS.items():
+        transitions = sorted(
             {
-                row["transition"]
-                for row in predictions
-                if row["analysis_scope"] == scope
+                transition
+                for s, _, transition, model in grouped
+                if s == scope and model == "full"
             }
         )
-        for scope in EXPECTED_FOLDS
-    }
-
-    for scope, expected in EXPECTED_FOLDS.items():
-        transitions = transition_lookup[scope]
         if len(transitions) != expected:
             raise SystemExit(
                 f"{scope}: expected {expected} transitions, found {len(transitions)}"
             )
+
         endpoints = {}
         for risk in ("gain", "loss"):
-            pooled = []
-            fold_metrics = {}
-            for transition in transitions:
-                rows = grouped[(scope, risk, transition)]
-                if not rows:
-                    raise SystemExit(
-                        f"{scope}/{risk}/{transition}: no predictions"
-                    )
-                pooled.extend(rows)
-                fold_metrics[transition] = _metrics(rows)
+            model_results = {}
+            for model in MODELS:
+                pooled = []
+                fold_metrics = {}
+                for transition in transitions:
+                    rows = grouped[(scope, risk, transition, model)]
+                    if not rows:
+                        raise SystemExit(
+                            f"{scope}/{risk}/{transition}/{model}: no predictions"
+                        )
+                    pooled.extend(rows)
+                    fold_metrics[transition] = _metrics(rows)
 
-            state = fold_groups[(scope, risk)]
-            if len(state) != expected:
-                raise SystemExit(
-                    f"{scope}/{risk}: expected {expected} fold receipts"
+                state = fold_groups[(scope, risk, model)]
+                if len(state) != expected:
+                    raise SystemExit(
+                        f"{scope}/{risk}/{model}: expected {expected} fold receipts"
+                    )
+                all_converged = all(
+                    _bool(row["converged"])
+                    and int(row["finite_coefficient_count"])
+                    == int(row["coefficient_count"])
+                    for row in state
                 )
-            all_converged = all(
-                _bool(row["converged"])
-                and int(row["finite_coefficient_count"])
-                == int(row["coefficient_count"])
-                for row in state
+                aggregate = _metrics(pooled)
+                aggregate.update(
+                    {
+                        "fold_count": expected,
+                        "all_folds_converged": all_converged,
+                        "folds": fold_metrics,
+                        "all_folds_positive_log_loss_skill": all(
+                            item["relative_log_loss_reduction"] > 0
+                            for item in fold_metrics.values()
+                        ),
+                    }
+                )
+                model_results[model] = aggregate
+
+            full = model_results["full"]
+            drop = model_results["drop_pairwise_overlap"]
+            fold_delta_log_loss = {
+                transition: (
+                    drop["folds"][transition]["model_log_loss"]
+                    - full["folds"][transition]["model_log_loss"]
+                )
+                for transition in transitions
+            }
+            fold_delta_brier = {
+                transition: (
+                    drop["folds"][transition]["model_brier"]
+                    - full["folds"][transition]["model_brier"]
+                )
+                for transition in transitions
+            }
+            fold_delta_auc = {
+                transition: (
+                    full["folds"][transition]["roc_auc"]
+                    - drop["folds"][transition]["roc_auc"]
+                )
+                for transition in transitions
+            }
+            pooled_delta_log_loss = (
+                drop["model_log_loss"] - full["model_log_loss"]
             )
-            endpoint = _metrics(pooled)
-            endpoint.update(
-                {
-                    "fold_count": expected,
-                    "all_folds_converged": all_converged,
-                    "folds": fold_metrics,
-                    "all_folds_positive_log_loss_skill": all(
-                        item["relative_log_loss_reduction"] > 0
-                        for item in fold_metrics.values()
-                    ),
-                    "opportunity_rates": _opportunity_rates(
-                        table,
-                        transitions,
-                        risk,
-                    ),
-                }
-            )
-            endpoints[risk] = endpoint
+            overlap = {
+                "delta_log_loss_drop_minus_full": pooled_delta_log_loss,
+                "delta_brier_drop_minus_full": (
+                    drop["model_brier"] - full["model_brier"]
+                ),
+                "delta_auc_full_minus_drop": (
+                    full["roc_auc"] - drop["roc_auc"]
+                ),
+                "fold_delta_log_loss": fold_delta_log_loss,
+                "fold_delta_brier": fold_delta_brier,
+                "fold_delta_auc": fold_delta_auc,
+                "positive_log_loss_fold_count": sum(
+                    value > 0 for value in fold_delta_log_loss.values()
+                ),
+                "classification": _classify_overlap(
+                    pooled_delta_log_loss,
+                    fold_delta_log_loss,
+                ),
+            }
+            endpoints[risk] = {
+                "full": full,
+                "marginal_only": drop,
+                "pairwise_overlap_increment": overlap,
+                "opportunity_rates": _opportunity_rates(
+                    table,
+                    transitions,
+                    risk,
+                ),
+            }
 
         scopes[scope] = {
             "role": (
@@ -231,6 +296,15 @@ def main() -> None:
         }
 
     primary = scopes[PRIMARY_SCOPE]["endpoints"]
+    full_signal = all(
+        primary[risk]["full"]["all_folds_converged"]
+        and primary[risk]["full"]["relative_log_loss_reduction"] > 0
+        for risk in ("gain", "loss")
+    )
+    overlap_classes = {
+        risk: primary[risk]["pairwise_overlap_increment"]["classification"]
+        for risk in ("gain", "loss")
+    }
     result = {
         "schema": (
             "adaptive-gain-villavicencio-focal-excluded-opportunity-cv-v1"
@@ -238,11 +312,7 @@ def main() -> None:
         "date": "2026-09-28",
         "status": (
             "retrospective_repair_signal_present"
-            if all(
-                primary[risk]["all_folds_converged"]
-                and primary[risk]["relative_log_loss_reduction"] > 0
-                for risk in ("gain", "loss")
-            )
+            if full_signal
             else "retrospective_repair_mixed"
         ),
         "analysis_status": (
@@ -254,15 +324,19 @@ def main() -> None:
         "published_aggregate_flower_abundance_used": False,
         "focal_response_excluded_from_opportunity": True,
         "scopes": scopes,
+        "primary_overlap_classification": overlap_classes,
         "ecological_read": (
-            "A positive result means that weekly temporal opportunity rebuilt "
-            "without the focal dyad response carries reproducible information "
-            "about annual link dynamics across held-out response transitions."
+            "The full focal-response-excluded availability/activity surface can "
+            "be interpreted separately from the incremental dyad-specific "
+            "weekly-overlap term. If the overlap ablation is weak, model skill "
+            "belongs to marginal availability/activity rather than pair-specific "
+            "phenological matching."
         ),
         "claim_ceiling": (
-            "Contemporaneous focal-response-excluded opportunity association "
-            "only. This is not strict prospective forecasting, a causal "
-            "phenology effect, decision equivalence, or routeability."
+            "Retrospective contemporaneous focal-response-excluded opportunity "
+            "association only. Full-model skill cannot by itself establish "
+            "pair-specific temporal matching, strict prospective forecasting, "
+            "causality, decision equivalence, or routeability."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
