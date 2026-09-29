@@ -55,7 +55,8 @@
     "final-N receipt power-surface/rule hashes and selected total randomized N must match the artifact chain",
     "every candidate N is evaluated on the exact same robustness_id set before final-N selection",
     "all final power-surface rows use the same frozen H1/H2 SESOI values and provenance",
-    "all final power-surface rows use one frozen simulations-per-scenario count meeting the final-N rule minimum"
+    "all final power-surface rows use one frozen simulations-per-scenario count meeting the final-N rule minimum",
+    "preregistration H1/H2 SESOI values and provenance exactly match validation/routeability_sesoi_gate_v1.json"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -97,5 +98,14 @@
       "Monte Carlo replicate count is constant across candidate N and meets the frozen minimum"
     ]
   },
-  "final_n_selection_gate": "validation/routeability_final_n_selection_gate_v1.json"
+  "final_n_selection_gate": "validation/routeability_final_n_selection_gate_v1.json",
+  "resolved_inputs": {
+    "external_sesoi": {
+      "status": "FROZEN",
+      "source": "validation/routeability_sesoi_gate_v1.json",
+      "h1_probability_scale": 0.1,
+      "h2_probability_scale": 0.1,
+      "provenance": "practical_decision_threshold_frozen_2026-09-29"
+    }
+  }
 }
