@@ -76,6 +76,8 @@ discriminates observed gain from observed loss with:
 
 Observed gains occur where focal-plant census effort tends to increase; observed losses occur where it tends to decrease.
 
+This AUC is a **supporting diagnostic, not independent inferential evidence**. Gain and loss are themselves defined by a reversal of observed detection state between adjacent periods, so an effort-change score is mechanically aligned with the contrast whenever detectability changes. The stronger evidence for material detection sensitivity comes from three less circular diagnostics: positive held-out skill of effort-only models, state instability under matched-effort rarefaction, and low Chao2 link completeness.
+
 This does **not** mean the changes are pure observer artefacts. Census allocation is partly endogenous to plant flowering availability, so effort itself contains biology.
 
 But it does mean that binary zero/non-zero link states cannot identify true absence.
