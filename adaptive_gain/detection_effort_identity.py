@@ -3,15 +3,24 @@
 These functions describe the observation map for a latent link that is
 persistent across two periods. They do not model ecological gain or loss.
 
-If q_previous and q_current are the probabilities of detecting the persistent
-link at least once in the two periods, then:
+For any two binary observations Y_previous and Y_current, no independence
+assumption is needed for the conservation identity
+
+P(0 -> 1) - P(1 -> 0)
+= P(Y_current = 1) - P(Y_previous = 1).
+
+For a persistent latent link, if q_previous and q_current are the marginal
+probabilities of detecting the link at least once in the two periods, the
+right-hand side is q_current - q_previous.
+
+The separate product formulas
 
 P(observed gain) = (1 - q_previous) * q_current
 P(observed loss) = q_previous * (1 - q_current)
 
-and therefore
-
-P(observed gain) - P(observed loss) = q_current - q_previous.
+require conditional independence of the two period-level detection events
+given the persistent latent link. The gain/loss odds-ratio identity has the
+same requirement.
 
 With independent per-census detection p and n censuses,
 q = 1 - (1 - p)**n.
@@ -20,6 +29,35 @@ q = 1 - (1 - p)**n.
 from __future__ import annotations
 
 import math
+
+
+def binary_transition_conservation(
+    p00: float,
+    p01: float,
+    p10: float,
+    p11: float,
+) -> dict[str, float]:
+    """Exact two-time binary flow identity, with no independence assumption.
+
+    States use previous/current ordering: p01 is observed gain and p10 is
+    observed loss.
+    """
+    probabilities = [float(p00), float(p01), float(p10), float(p11)]
+    if any(value < 0.0 or value > 1.0 for value in probabilities):
+        raise ValueError("joint probabilities must be in [0, 1]")
+    if not math.isclose(sum(probabilities), 1.0, rel_tol=0, abs_tol=1e-12):
+        raise ValueError("joint probabilities must sum to 1")
+
+    previous_presence = probabilities[2] + probabilities[3]
+    current_presence = probabilities[1] + probabilities[3]
+    return {
+        "gain_minus_loss": probabilities[1] - probabilities[2],
+        "current_minus_previous_presence": (
+            current_presence - previous_presence
+        ),
+        "previous_presence": previous_presence,
+        "current_presence": current_presence,
+    }
 
 
 def period_detection_probability(
@@ -40,7 +78,12 @@ def persistent_observed_transition_probabilities(
     q_previous: float,
     q_current: float,
 ) -> dict[str, float]:
-    """Observed binary transition probabilities for a persistent latent link."""
+    """Observed transition probabilities under period-level conditional independence.
+
+    The difference identity q_current-q_previous is more general and does not
+    itself require this independence assumption; this function additionally
+    supplies the individual joint-cell probabilities using the product model.
+    """
     q1 = float(q_previous)
     q2 = float(q_current)
     if not 0.0 <= q1 <= 1.0 or not 0.0 <= q2 <= 1.0:
