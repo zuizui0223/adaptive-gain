@@ -16,6 +16,10 @@ on:
       - "examples/audit_villavicencio_effort_balanced_rarefaction.py"
       - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_result_v1.json"
+      - "examples/build_villavicencio_annual_opportunity_effort_table.py"
+      - "examples/villavicencio_opportunity_effort_control_cv.R"
+      - "examples/summarize_villavicencio_opportunity_effort_control.py"
+      - "validation/villavicencio_opportunity_effort_control_gate_v1.json"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
       - "examples/summarize_villavicencio_filter_block_ablation.py"
@@ -1021,6 +1025,67 @@ jobs:
                       "current_better_both": result[
                           "primary_current_better_than_lagged_both_endpoints"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Control clean annual opportunity for focal-plant census effort
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_focal_excluded_opportunity_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-opportunity-effort-control-v1","materialized":false}' > artifact/annual_opportunity_effort_control.json
+            exit 0
+          fi
+
+          python examples/build_villavicencio_annual_opportunity_effort_table.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            --output artifact/annual_opportunity_effort_dyads.csv \
+            --summary artifact/annual_opportunity_effort_table_summary.json
+
+          Rscript examples/villavicencio_opportunity_effort_control_cv.R \
+            artifact/annual_opportunity_effort_dyads.csv \
+            artifact/annual_opportunity_effort_predictions.csv \
+            artifact/annual_opportunity_effort_folds.csv
+
+          python examples/summarize_villavicencio_opportunity_effort_control.py \
+            artifact/annual_opportunity_effort_predictions.csv \
+            artifact/annual_opportunity_effort_folds.csv \
+            artifact/annual_opportunity_effort_control.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_opportunity_effort_control.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          table = json.loads(
+              Path("artifact/annual_opportunity_effort_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if table["missing_effort_rows"] != 0:
+              raise SystemExit("annual effort join has missing rows")
+          if table["annual_raw_census_counts"]["2010"] != 463:
+              raise SystemExit("annual effort table silently changed 2010 raw count")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          if not result["primary_read"]["gain_opportunity_increment_positive_all_folds"]:
+              raise SystemExit("clean gain opportunity no longer adds information beyond effort in all primary folds")
+          print(
+              json.dumps(
+                  {
+                      "gain_effort_only": primary["gain"]["models"]["effort_only"],
+                      "gain_opportunity_only": primary["gain"]["models"]["opportunity_only"],
+                      "gain_combined": primary["gain"]["models"]["opportunity_plus_effort"],
+                      "gain_opportunity_increment": primary["gain"]["opportunity_increment_beyond_effort"],
+                      "loss_opportunity_increment": primary["loss"]["opportunity_increment_beyond_effort"],
                   },
                   indent=2,
                   sort_keys=True,
