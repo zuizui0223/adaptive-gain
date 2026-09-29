@@ -224,19 +224,33 @@ Machine audit:
 
 This finding does **not** invalidate Peralta et al. (2020), which used phenology to study stability and functionality of observed interactions. It invalidates this project's reuse of that published overlap matrix as if it independently covered the full gain-risk dyad surface.
 
-### Revised Stage-1 route
+### Revised Stage-1 outcome
 
-Public Figshare visitor records now provide a direct way forward. They reproduce every cell of the six published annual interaction matrices for the 45 × 135 trait subset exactly. The next Stage-1 task is therefore to reconstruct an opportunity surface from raw dated records without importing the focal dyad's own realized-link history.
+The raw-record route has now been completed, and it closes rather than opens the Villavicencio natural-rewiring path.
 
-The preferred observational construction is:
+Public Figshare visitor records reconstruct the documented 18-period temporal grain and 12 within-year transitions on the frozen 45 × 135 subset. Sampling effort is also reconstructable as identifiable 5-min focal-plant censuses.
 
-1. derive plant flowering/observation availability from dated plant census records;
-2. derive pollinator activity from visits to **other** plants, excluding the focal plant-dyad response;
-3. combine these at a prespecified site/time grain to define candidate-dyad temporal opportunity;
-4. build within-year subseason transitions from the raw dates;
-5. test gain and loss on held-out transitions using this leakage-controlled opportunity surface plus raw morphology.
+However, the response-side detection gate fails in the sense relevant to a natural-rewiring claim:
 
-Until that reconstruction is frozen and validated, the Villavicencio work establishes **response feasibility and source recoverability**, not a validated conventional-filter baseline.
+1. subseason effort varies strongly (38-424 identifiable censuses per period);
+2. incidence-Chao2 observed-link completeness is only about 31-65%;
+3. effort-only models predict observed binary gain/loss;
+4. matched-effort rarefaction destabilizes the original binary labels;
+5. an effort-standardized per-census interaction-incidence model leaves only a small, fold-mixed current-opportunity increment (4/6 positive held-out transitions);
+6. a pre-frozen latent state-versus-detection decomposition gives state-side opportunity support in only 1/6 transitions versus a required 5/6, while detection/activity-side support occurs in 4/6;
+7. beta-binomial detection is preferred in 6/6 transitions and drives at least one latent transition parameter to the frozen boundary in 6/6.
+
+Therefore Villavicencio is retained as a **response-feasibility, detection-diagnostics and empirical failure-boundary case**, not as a validated natural-rewiring mechanism.
+
+The machine-level resolution is frozen in:
+
+- `validation/villavicencio_rewiring_claim_resolution_v1.json`
+- `validation/villavicencio_subseason_effort_audit_result_v1.json`
+- `validation/villavicencio_census_rate_result_v1.json`
+- `validation/villavicencio_latent_opportunity_decomposition_result_v1.json`
+- `validation/villavicencio_detection_overdispersion_result_v1.json`
+
+For a future observational Level-1 test, the dataset must satisfy the response-side detection gate **before** the decision-structure exposure is evaluated. Villavicencio should not be re-opened with increasingly flexible observation models to search for a positive rewiring result.
 
 ## Evidence ladder
 
@@ -294,10 +308,12 @@ Keep this file outside the initial V5 submission.
 Promote it only if:
 
 1. a reviewer asks how routeability could be tested in real interaction networks;
-2. an empirical dataset with independently measurable decision structure is identified; or
-3. a follow-up paper is explicitly framed around network rewiring.
+2. an independent dataset is identified that has both an externally measurable decision structure **and** a detection-defensible interaction response; or
+3. a controlled experiment manipulates decision structure while holding response detection approximately fixed.
 
-If promoted, use the low-turnover (D=1) versus (D=0) contrast as the first empirical test. Do not broaden the initial V5 headline.
+Do not use Villavicencio as the confirmatory natural-network route: its observed and model-based link-transition surfaces remain materially detection- and observation-model-dependent.
+
+If a qualifying observational dataset is identified, use the low-turnover (D=1) versus (D=0) contrast as the first empirical test. Do not broaden the initial V5 headline.
 
 ## Claim firewall
 
