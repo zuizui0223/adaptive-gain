@@ -57,6 +57,8 @@ def main() -> None:
     transitions = {}
     state_support_count = 0
     detection_support_count = 0
+    strict_state_support_count = 0
+    strict_detection_support_count = 0
 
     for transition in TRANSITIONS:
         item = {}
@@ -83,28 +85,42 @@ def main() -> None:
         state = item["state_only"]
         both = item["state_plus_detection"]
 
-        def reliable(model):
+        # Primary frozen effect rule: this is the rule declared before the
+        # opportunity coefficients were inspected. Do not retroactively add
+        # optimizer-stability thresholds to redefine this primary result.
+        state_supported = (
+            both["aic"] <= detection["aic"] - 2
+            and both["beta_gain"] > 0
+            and both["beta_loss"] < 0
+        )
+        detection_supported = (
+            detection["aic"] <= base["aic"] - 2
+            and detection["beta_detection"] > 0
+        )
+
+        # Post-result optimizer-reliability sensitivity. This is deliberately
+        # reported separately and may only make the interpretation stricter.
+        def strict_reliable(model):
             return (
                 model["best_convergence"] == 0
                 and model["all_starts_converged"]
                 and model["multi_start_nll_range"] <= 1e-6
             )
 
-        state_supported = (
-            reliable(detection)
-            and reliable(both)
-            and both["aic"] <= detection["aic"] - 2
-            and both["beta_gain"] > 0
-            and both["beta_loss"] < 0
+        strict_state_supported = (
+            strict_reliable(detection)
+            and strict_reliable(both)
+            and state_supported
         )
-        detection_supported = (
-            reliable(base)
-            and reliable(detection)
-            and detection["aic"] <= base["aic"] - 2
-            and detection["beta_detection"] > 0
+        strict_detection_supported = (
+            strict_reliable(base)
+            and strict_reliable(detection)
+            and detection_supported
         )
         state_support_count += int(state_supported)
         detection_support_count += int(detection_supported)
+        strict_state_support_count += int(strict_state_supported)
+        strict_detection_support_count += int(strict_detection_supported)
 
         transitions[transition] = {
             **item,
@@ -121,12 +137,14 @@ def main() -> None:
                 "both_delta_aic_vs_state_only": (
                     both["aic"] - state["aic"]
                 ),
-                "base_fit_reliable": reliable(base),
-                "detection_fit_reliable": reliable(detection),
-                "state_fit_reliable": reliable(state),
-                "both_fit_reliable": reliable(both),
+                "strict_base_fit_reliable": strict_reliable(base),
+                "strict_detection_fit_reliable": strict_reliable(detection),
+                "strict_state_fit_reliable": strict_reliable(state),
+                "strict_both_fit_reliable": strict_reliable(both),
                 "state_component_supported": state_supported,
                 "detection_component_supported": detection_supported,
+                "strict_state_component_supported": strict_state_supported,
+                "strict_detection_component_supported": strict_detection_supported,
             },
         }
 
@@ -150,6 +168,12 @@ def main() -> None:
         "state_supported_transition_count": state_support_count,
         "detection_supported_transition_count": detection_support_count,
         "general_state_promotion_rule_met": general_state,
+        "post_result_optimizer_reliability_sensitivity": {
+            "criterion": "best fit converged, all deterministic starts converged, and multi-start NLL range <= 1e-6",
+            "strict_state_supported_transition_count": strict_state_support_count,
+            "strict_detection_supported_transition_count": strict_detection_support_count,
+            "role": "post-result robustness only; does not redefine the frozen primary rule"
+        },
         "transitions": transitions,
         "ecological_read": {
             "state_rule": (
