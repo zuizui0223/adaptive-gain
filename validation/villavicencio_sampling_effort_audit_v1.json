@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-sampling-effort-audit-v1",
   "date": "2026-09-27",
-  "status": "external_methods_frozen_before_formal_filter_cv_result",
+  "status": "SUPERSEDED_BY_RAW_SUBSEASON_EFFORT_AUDIT",
   "source": {
     "article": "Peralta et al. 2020, Ecology Letters 23:1107-1116",
     "doi": "10.1111/ele.13510",
@@ -56,5 +56,11 @@
     "formal_cv_result_seen_before_scope_freeze": false,
     "decision_structure_effect_seen": false
   },
-  "claim_ceiling": "Annual analyses remain feasibility/sensitivity analyses. The 18-subseason response is still preferred because it better preserves the intended temporal design once exact source bytes are available."
+  "claim_ceiling": "The original methods-based annual audit is superseded by the raw-census subseason audit. Current evidence resolves effort semantics but shows material detection sensitivity; do not identify binary gain/loss as true rewiring.",
+  "superseded_by": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+  "current_resolution": {
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "response_label": "observed-link turnover, not identified ecological rewiring"
+  }
 }
