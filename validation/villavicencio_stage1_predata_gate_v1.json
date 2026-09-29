@@ -100,7 +100,7 @@
     "most apparent species turnover is inseparable from non-detection",
     "no usable rewiring variation remains after conventional opportunity filters"
   ],
-  "claim_ceiling": "Stage 1 can establish response feasibility only. It cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer.",
+  "claim_ceiling": "Stage 1 establishes a reproducible 18-period observed-link turnover surface and resolves its sampling-effort semantics. Because binary detection remains materially effort-sensitive, it does not identify true ecological rewiring. It also cannot validate environmental routeability or decision-structural turnover without an independent decision-structure layer.",
   "source_materialization_gate": {
     "workflow_artifact": "villavicencio-source-inventory",
     "raw_record_route": {
@@ -154,7 +154,7 @@
       "whether sampling sites or observation effort changed among years/subseasons",
       "distribution of interaction weights for links classified as gains or losses"
     ],
-    "primary_stage1_status": "detection-sensitive feasibility outcome until effort semantics are verified",
+    "primary_stage1_status": "observed-link turnover feasibility surface; do not identify binary gains/losses as ecological rewiring",
     "prespecified_sensitivities_if_bytes_allow": [
       "repeat link-change audit after excluding the lowest-frequency observed links using a threshold frozen before decision-structure analysis",
       "report weighted interaction change alongside binary link change",
@@ -163,7 +163,11 @@
     "forbidden": [
       "interpreting every zero interaction as a true forbidden or absent link",
       "choosing a frequency threshold after inspecting decision-structure effects"
-    ]
+    ],
+    "status": "EFFORT_SEMANTICS_RESOLVED_BINARY_DETECTION_MATERIAL",
+    "effort_result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED"
   },
   "annual_detection_sensitive_fallback": {
     "result_ledger": "validation/villavicencio_annual_stage1_fallback_result_v1.json",
@@ -184,12 +188,14 @@
     "annual_fallback_response_estimability": "PASS",
     "primary_12_transition_reconstruction": "PASS_RAW_PUBLIC_18_PERIOD_RECONSTRUCTION",
     "conventional_filter_join": "PASS_NUMERIC_SURFACE",
-    "sampling_effort_semantics": "UNRESOLVED_DETECTION_AND_EFFORT_SENSITIVE",
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
     "conventional_filter_temporal_cv": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "filter_block_ablation": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "focal_excluded_opportunity_repair": "PASS_CURRENT_STATE_OPPORTUNITY",
-    "next": "USE_RAW_18_PERIOD_RESPONSE_FOR_STAGE1_FEASIBILITY; KEEP_ANNUAL_REPAIRED_OPPORTUNITY_AS_CLEAN_ECOLOGICAL_BASELINE; REQUIRE_INDEPENDENT_DECISION_LAYER_FOR_ROUTEABILITY",
-    "primary_12_transition_rdata_byte_identity": "UNVERIFIED_RDATA_BYTES_UNAVAILABLE"
+    "next": "KEEP_RAW_18_PERIOD_BINARY_RESPONSE_AS_FEASIBILITY_AND_DETECTION_AUDIT; USE_CLEAN_ANNUAL_OPPORTUNITY_AS_ECOLOGICAL_ASSOCIATION; REQUIRE_DETECTION_STANDARDIZATION_BEFORE NATURAL_REWIRING_CLAIM; REQUIRE_INDEPENDENT_DECISION_LAYER_FOR_ROUTEABILITY",
+    "primary_12_transition_rdata_byte_identity": "UNVERIFIED_RDATA_BYTES_UNAVAILABLE",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "primary_12_transition_ecological_rewiring_status": "NOT_IDENTIFIED_USE_OBSERVED_LINK_TURNOVER"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
