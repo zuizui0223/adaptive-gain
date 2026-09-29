@@ -11,13 +11,17 @@ def _gate():
 
 def test_glmm_oc_gate_keeps_final_n_unfrozen_until_real_inputs_exist():
     data = _gate()
-    assert data["status"] == "simulator_code_ready_pilot_inputs_pending"
+    assert data["status"] == "simulator_and_robustness_policy_code_ready_real_pilot_inputs_pending"
     assert data["final_N_promotion_rule"]["final_N_status"] == "not frozen"
     required = data["final_N_promotion_rule"]["required"]
     assert any("procedural pilot nuisance receipt" in item for item in required)
     assert any("0.10/0.10" in item for item in required)
     assert data["inputs"]["sesoi"]["status"] == "FROZEN_H1_0.10_H2_0.10"
-    assert any("multiple plausible nuisance/baseline scenarios" in item for item in required)
+    assert any("robustness scenarios generated mechanically" in item for item in required)
+    assert data["inputs"]["baseline_surface"]["frozen_policy_source"].endswith(
+        "routeability_nuisance_robustness_grid_gate_v1.json"
+    )
+    assert data["inputs"]["nuisance"]["bridge"]["focal_contrast_allowed"] is False
 
 
 def test_glmm_oc_gate_counts_fit_failures_against_operating_characteristics():
