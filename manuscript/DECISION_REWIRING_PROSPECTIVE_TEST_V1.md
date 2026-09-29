@@ -248,9 +248,17 @@ Interpretation: descriptive only.
 
 ### Level 1 — independent decision classes
 
-Decision classes are frozen from independent assays or prior data, and predict rewiring in held-out network transitions.
+Decision classes are frozen from independent assays or prior data, and predict a **detection-defensible interaction response** in held-out network transitions.
 
-Interpretation: prospective association consistent with the routeability bridge.
+For observational visit networks, "detection-defensible" means at least one of:
+
+- the response is an effort-standardized interaction-incidence quantity whose denominator is the repeated observation effort;
+- a repeated-detection model separates latent interaction state from the observation process and the decision exposure adds information to the **state** component rather than only to detection;
+- an externally validated design establishes sufficiently stable link detection for the declared response.
+
+A predictor of raw binary link gain/loss does not meet Level 1 merely because it generalizes out of sample. It can predict the probability that an interaction is **recorded** without predicting the probability that the latent ecological interaction state changed.
+
+Interpretation: prospective association consistent with the routeability bridge only after the response-side detection gate is met.
 
 ### Level 2 — perturbation
 
@@ -273,7 +281,9 @@ The ecological rewiring bridge should be treated as unsupported if, in a preregi
 - (D) adds no reproducible information beyond taxonomic turnover, partner opportunity and compatibility;
 - within-class and boundary-crossing turnover have indistinguishable rewiring responses across adequately powered contrasts;
 - final-representative loss does not differ from comparable non-final loss in the predicted accessibility outcome;
-- shuffled class labels perform as well as or better than biologically frozen decision classes.
+- shuffled class labels perform as well as or better than biologically frozen decision classes;
+- the declared decision exposure improves only the observation/detection component of a repeated-detection model, with no reproducible state-side information;
+- the apparent boundary-crossing effect disappears when the interaction response is standardized for observation effort.
 
 A failed empirical bridge does **not** falsify the exact target-relevant quotient theorem. It falsifies the claim that this formal structure is an important driver of rewiring in the tested ecological system.
 
@@ -297,3 +307,5 @@ If promoted, use the low-turnover (D=1) versus (D=0) contrast as the first empir
 - Do not call the final-representative prediction ecosystem resilience or biodiversity insurance.
 - Do not treat a positive (eta_D) as causal without a design that manipulates or otherwise identifies decision structure.
 - Do not promote the reserve into V5 merely because the prediction is interesting.
+- Do not call a held-out predictor of raw zero/non-zero links a rewiring mechanism until sampling effort and imperfect detection are explicitly separated from latent interaction state.
+- Do not treat state-versus-detection model decomposition as causal identification; it is a response-validity gate.
