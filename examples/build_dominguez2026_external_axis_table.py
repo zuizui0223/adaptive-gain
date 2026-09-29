@@ -63,12 +63,18 @@ def main() -> None:
         links[(site, year)].add((plant, pollinator))
 
     poll_presence = defaultdict(set)
+    poll_abundance = {}
+    poll_phenology = {}
     for row in _read(args.pollinator_table):
         site = _text(row.get("Site_ID"))
         year = int(float(row["Year"]))
         pollinator = _text(row.get("Pol_gen_sp"))
+        abundance = _number(row.get("Abundance"))
+        phenology = _number(row.get("Phenology"))
         if site and pollinator and year in YEARS:
             poll_presence[(site, year)].add(pollinator)
+            poll_abundance[(site, year, pollinator)] = abundance
+            poll_phenology[(site, year, pollinator)] = phenology
 
     plant_presence = defaultdict(set)
     plant_phenology = {}
@@ -133,6 +139,17 @@ def main() -> None:
                         pollinator, set()
                     ) - {plant}
                     poll_activity = len(otherplants)
+                    published_poll_abundance = poll_abundance.get(
+                        (site, current_year, pollinator)
+                    )
+                    published_poll_phenology = poll_phenology.get(
+                        (site, current_year, pollinator)
+                    )
+                    if (
+                        published_poll_abundance is None
+                        or published_poll_phenology is None
+                    ):
+                        continue
 
                     if previous_link:
                         risk_set = "loss"
@@ -160,6 +177,12 @@ def main() -> None:
                             "plant_phenology_days": phenology,
                             "plant_abundance": abundance,
                             "pollinator_otherplant_degree": poll_activity,
+                            "published_pollinator_abundance": (
+                                published_poll_abundance
+                            ),
+                            "published_pollinator_phenology": (
+                                published_poll_phenology
+                            ),
                         }
                     )
 
@@ -219,6 +242,12 @@ def main() -> None:
             "primary_plant_axis": "plant_phenology_days",
             "primary_pollinator_axis": "pollinator_otherplant_degree",
             "plant_abundance_sensitivity": "plant_abundance",
+            "posthoc_pollinator_abundance": (
+                "published_pollinator_abundance"
+            ),
+            "posthoc_pollinator_phenology": (
+                "published_pollinator_phenology"
+            ),
         },
         "focal_dyad_excluded_from_pollinator_activity": True,
         "published_pollinator_abundance_used": False,
