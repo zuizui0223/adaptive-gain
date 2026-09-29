@@ -120,19 +120,19 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "fit_success_fraction,h1_directional_rejection_fraction,"
         "h2_hierarchical_pass_fraction,expected_h1_delta_b2,expected_h2_localization\n"
         "n4_robust_a,a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold_frozen_2026-09-29,"
+        "practical_decision_threshold,"
         "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
         "0.99,0.82,0.80,0.10,0.10\n"
         "n4_robust_b,b,1000,4,8,4,1;1;1;1,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold_frozen_2026-09-29,"
+        "practical_decision_threshold,"
         "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
         "0.97,0.83,0.81,0.10,0.10\n"
         "n8_robust_a,a,1000,8,8,4,2;2;2;2,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold_frozen_2026-09-29,"
+        "practical_decision_threshold,"
         "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
         "0.99,0.90,0.87,0.10,0.10\n"
         "n8_robust_b,b,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold_frozen_2026-09-29,"
+        "practical_decision_threshold,"
         "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
         "0.98,0.88,0.85,0.10,0.10\n",
         encoding="utf-8",
@@ -197,7 +197,7 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "final_n_receipt_sha256": _sha(final_n_receipt),
         "h1_sesoi": 0.10,
         "h2_sesoi": 0.10,
-        "sesoi_provenance": "practical_decision_threshold_frozen_2026-09-29",
+        "sesoi_provenance": "practical_decision_threshold",
         "apparatus_description": "Three-window artificial-flower apparatus",
         "cue_alphabet_description": "Counterbalanced binary visual symbols",
         "nominal_cue_duration_seconds": 1.0,
@@ -295,7 +295,7 @@ def test_finalizer_rejects_sesoi_drift_from_frozen_gate(tmp_path):
     assert "must exactly match the frozen" in completed.stderr
 
     bad = dict(payload)
-    bad["sesoi_provenance"] = "practical_decision_threshold"
+    bad["sesoi_provenance"] = "independent_prior_study"
     completed, _ = _run_finalizer(tmp_path, bad)
     assert completed.returncode != 0
     assert "must exactly match the frozen" in completed.stderr
