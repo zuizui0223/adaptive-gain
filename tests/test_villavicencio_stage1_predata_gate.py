@@ -33,10 +33,26 @@ def test_stage1_gate_forbids_decision_class_proxying():
 
 def test_source_manifest_records_partial_verified_materialization():
     data = json.loads(SOURCES.read_text(encoding="utf-8"))
-    assert data["status"] == "trait_bytes_verified_response_metadata_only"
+    assert data["status"] == "trait_bytes_verified_response_rdata_metadata_only_raw_response_reconstructed"
     assert len(data["sources"]) == 2
     response, traits = data["sources"]
     assert response["raw_sha256"] is None
+    assert response["materialization"]["status"] == (
+        "published_rdata_bytes_unavailable_for_byte_validation"
+    )
+    assert response["materialization"]["anonymous_file_stream_attempt"] == (
+        "HTTP_403_FORBIDDEN"
+    )
+    assert response["raw_record_reconstruction"]["status"] == (
+        "PASS_INDEPENDENT_PUBLIC_RAW_ROUTE"
+    )
+    assert response["raw_record_reconstruction"]["period_count"] == 18
+    assert response["raw_record_reconstruction"][
+        "primary_within_year_transition_count"
+    ] == 12
+    assert response["raw_record_reconstruction"][
+        "exact_rdata_identity_established"
+    ] is False
     assert traits["raw_sha256"] == traits["target_file"]["published_digest"]
     assert traits["materialization"]["dryad_digest_match"] is True
 
