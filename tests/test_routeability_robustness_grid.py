@@ -121,6 +121,16 @@ def test_grid_rejects_non_multiple_candidate_n_and_opened_focal_contrast():
             seed_base=1,
         )
 
+
+    with pytest.raises(ValueError, match="positive integer"):
+        build_frozen_robustness_scenarios(
+            _nuisance(),
+            candidate_individuals_per_cell=[12.5],
+            colony_count=2,
+            simulations_per_scenario=100,
+            seed_base=1,
+        )
+
     with pytest.raises(ValueError, match="closed focal contrast"):
         build_frozen_robustness_scenarios(
             _nuisance(focal_architecture_access_contrast_opened=True),
