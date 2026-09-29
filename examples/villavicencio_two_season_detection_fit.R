@@ -173,17 +173,12 @@ for (transition in transitions) {
   best <- optim_results[[best_index]]$fit
   best_theta <- best$par
 
-  # Recompute numerical Hessian at the selected optimum with unconstrained BFGS
-  # initialized exactly at the bounded solution. If BFGS cannot improve, its
-  # Hessian still supplies the local curvature diagnostic.
-  hessian_fit <- tryCatch(
-    optim(
+  # Evaluate numerical curvature at the selected optimum without moving it.
+  hessian_raw <- tryCatch(
+    optimHess(
       par = best_theta,
       fn = negative_log_likelihood,
-      frame = frame,
-      method = "BFGS",
-      control = list(maxit = 1),
-      hessian = TRUE
+      frame = frame
     ),
     error = function(e) NULL
   )
@@ -195,8 +190,8 @@ for (transition in transitions) {
   hessian_condition_number <- NA_real_
   se_values <- rep(NA_real_, 5)
 
-  if (!is.null(hessian_fit) && all(is.finite(hessian_fit$hessian))) {
-    hessian <- (hessian_fit$hessian + t(hessian_fit$hessian)) / 2
+  if (!is.null(hessian_raw) && all(is.finite(hessian_raw))) {
+    hessian <- (hessian_raw + t(hessian_raw)) / 2
     eigenvalues <- tryCatch(
       eigen(hessian, symmetric = TRUE, only.values = TRUE)$values,
       error = function(e) rep(NA_real_, 5)
