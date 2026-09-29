@@ -80,3 +80,19 @@ def test_claim_resolution_has_one_line_final_status_vector():
     assert status["natural_ecological_rewiring"] == "NOT_IDENTIFIED"
     assert status["routeability"] == "NOT_VALIDATED"
     assert "Sampling effort is no longer unresolved" in data["resolution_sentence"]
+
+
+def test_claim_resolution_integrates_exact_detection_effort_identity():
+    data = _result()
+    status = data["final_status_vector"]
+    assert status["detection_effort_observation_map"] == (
+        "EXACT_IDENTITY_WITH_STRONG_DIAGNOSTIC_ALIGNMENT_AUC_0_852"
+    )
+    decision = data["claim_decisions"][
+        "observed_gain_loss_direction_explainable_by_detection_map"
+    ]
+    assert decision.startswith("SUPPORTED_MECHANISTICALLY")
+    level8 = [row for row in data["evidence_chain"] if row["level"] == 8]
+    assert len(level8) == 1
+    assert "0.852" in level8[0]["result"]
+    assert "persistent latent link" in level8[0]["result"]
