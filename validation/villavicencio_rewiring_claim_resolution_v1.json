@@ -59,6 +59,13 @@
       "result": "for a persistent latent link, P(observed gain)-P(observed loss)=q_current-q_previous exactly; using transition-specific fitted detection and dyad census counts, q_current-q_previous ranks observed gain over loss at AUC 0.852 across all six transitions and 0.837 across the five identified transitions",
       "boundary": "the score uses detection probabilities fitted from the same repeated-census data and is a mechanistic observation-map diagnostic, not independent ecological validation or an estimator of false rewiring",
       "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
+    },
+    {
+      "level": 8,
+      "surface": "exact detection-effort observation-map identity",
+      "result": "For a persistent latent link, P(observed gain)-P(observed loss)=q_current-q_previous exactly. Using fitted period detection probabilities and dyad-specific census counts, q_current-q_previous ranks observed gain over loss at AUC 0.852 across all six dated-core transitions and 0.837 on the five-transition identified subset.",
+      "boundary": "The fitted q values come from the same repeated-census dataset, so this is a mechanistic observation-map diagnostic rather than independent prediction or an estimate of false-rewiring fraction.",
+      "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
     }
   ],
   "claim_decisions": {
@@ -69,14 +76,16 @@
     "current_opportunity_tracks_current_detectability_activity": "SUPPORTED_AS_MODEL_COMPARISON_PATTERN: detection-side support 4/6 under the frozen rule",
     "routeability_validated": "NO",
     "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent",
-    "observed_gain_loss_direction_identified_as_ecological": "NO: exact detection identity shows that changing period-level detectability alone is sufficient to bias gain versus loss direction, and the Villavicencio diagnostic AUC is 0.852."
+    "observed_gain_loss_direction_identified_as_ecological": "NO: exact detection identity shows that changing period-level detectability alone is sufficient to bias gain versus loss direction, and the Villavicencio diagnostic AUC is 0.852.",
+    "observed_gain_loss_direction_explainable_by_detection_map": "SUPPORTED_MECHANISTICALLY: unequal period-level detection is sufficient to generate directional observed gain/loss under a persistent-link counterfactual; diagnostic AUC is 0.852 across six transitions"
   },
   "strongest_ecological_interpretation": {
     "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system, and even detection-corrected latent transition estimates are sensitive to the observation model.",
     "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
     "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used.",
     "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models.",
-    "detection_direction_identity": "Directional observed-link turnover is itself confounded by period-level detectability: for a persistent latent link, the observed gain-minus-loss probability equals q_current-q_previous exactly. In Villavicencio this detection-map score ranks observed gain over loss at AUC 0.852, showing that the direction of binary turnover can arise from the observation process without a latent state transition."
+    "detection_direction_identity": "Directional observed-link turnover is itself confounded by period-level detectability: for a persistent latent link, the observed gain-minus-loss probability equals q_current-q_previous exactly. In Villavicencio this detection-map score ranks observed gain over loss at AUC 0.852, showing that the direction of binary turnover can arise from the observation process without a latent state transition.",
+    "detection_effort_identity": "The gain/loss direction itself is strongly aligned with the exact observation-process asymmetry q_current-q_previous expected even when a latent interaction persists. This explains why effort/detection changes can mimic directional turnover without identifying any particular observed change as false."
   },
   "allowed_terms": [
     "observed-link turnover",
@@ -102,7 +111,8 @@
     "latent_link_state_opportunity_effect": "NOT_GENERAL_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6",
     "observation_model_robustness": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6",
     "natural_ecological_rewiring": "NOT_IDENTIFIED",
-    "routeability": "NOT_VALIDATED"
+    "routeability": "NOT_VALIDATED",
+    "detection_effort_observation_map": "EXACT_IDENTITY_WITH_STRONG_DIAGNOSTIC_ALIGNMENT_AUC_0_852"
   },
-  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is detection-sensitive, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent."
+  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is materially detection-sensitive, its gain/loss direction is strongly aligned with the exact detection-effort observation map, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent."
 }
