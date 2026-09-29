@@ -11,7 +11,7 @@ The Villavicencio work has now resolved the two largest observational ambiguitie
 
 The resulting conclusion is narrower, but much more defensible:
 
-> **The public Villavicencio data provide a reproducible observed-link turnover and sampling-effort test bed. They do not presently identify natural ecological rewiring. A focal-response-excluded current-opportunity signal is visible on binary link surfaces, but its incremental information becomes small and temporally inconsistent after the response is standardized by focal-plant census effort.**
+> **The public Villavicencio data provide a reproducible observed-link turnover and sampling-effort test bed, but they do not identify a general natural ecological rewiring mechanism. A focal-response-excluded current-opportunity signal is strong on binary link surfaces, small and fold-mixed on an effort-standardized census-incidence response, and maps more consistently to current detectability/activity (4/6 transitions) than to latent link-state transitions (1/6).**
 
 This means the observational network analysis is now a **feasibility and failure-boundary result**, not empirical confirmation of routeability.
 
@@ -121,12 +121,14 @@ Allowed language:
 - detection-sensitive Stage-1 response;
 - response feasibility.
 
-Not allowed without a latent-detection model or a better standardized response:
+Not allowed as observed facts:
 
 - true interaction gain;
 - true interaction extinction;
 - ecological rewiring event;
 - sampling-effort-corrected rewiring.
+
+A simple latent-detection model has now been fitted as a sensitivity analysis, but its posterior states remain model-based quantities rather than observed truth.
 
 ## 7. Historical published-phenology result remains quarantined
 
@@ -244,7 +246,105 @@ The evidence is consistent with a mixture of:
 
 The present data do not identify those components uniquely.
 
-## 11. External 12-site result
+## 11. Repeated-detection model: binary gain/loss is not latent state identity
+
+The repeated 5-min censuses make a simple two-season dynamic occupancy/detection sensitivity possible.
+
+For each adjacent subseason transition, the model estimates:
+
+- previous latent link occupancy `psi`;
+- latent colonization `gamma`;
+- latent extinction `epsilon`;
+- previous and current per-census detection probabilities.
+
+The identifiability rule was frozen before fitting. A transition must have:
+
+- optimizer convergence from all deterministic starts;
+- multi-start NLL range <= 1e-6;
+- positive-definite Hessian;
+- finite logit-scale standard errors;
+- interior detection probabilities.
+
+Five of six strict dated-core transitions pass. The only weak transition is **2009 early -> mid**, where the multi-start NLL range is 2.565e-6 rather than <= 1e-6.
+
+Conditional per-census detection probabilities are low:
+
+- previous-period `p`: about **0.051-0.147**;
+- current-period `p`: about **0.055-0.180**.
+
+This is enough to explain why zeros are dangerous.
+
+On the focal-response-excluded candidate surface:
+
+- observed binary gains = **196**;
+- summed posterior expected latent gains = **279.6**;
+- observed binary losses = **253**;
+- summed posterior expected latent losses = **212.1**.
+
+These are not corrected event counts. They are model-based posterior sums.
+
+More revealingly, among observed binary changes:
+
+- weighted mean posterior probability that an observed gain is a true latent gain = **0.575**;
+- weighted mean posterior probability that an observed loss is a true latent loss = **0.464**.
+
+The mapping varies sharply among transitions. For example, in 2009 early->mid, the mean posterior true-loss probability among observed losses is only **0.134**.
+
+So even when a simple detection model is identifiable enough to use as a sensitivity layer, the observed gain/loss labels are not reliable latent-state identities.
+
+## 12. Current opportunity decomposes mainly onto detection, not latent rewiring
+
+Because current opportunity is constructed from pollinator activity on other plants, it could affect either:
+
+1. the latent link-state transition itself; or
+2. the probability of detecting the focal pollinator in the current period.
+
+These were separated in four predeclared models per transition:
+
+- base;
+- detection-only;
+- state-only;
+- state + detection.
+
+A state-side transition was counted as supported only when:
+
+- state + detection beat detection-only by at least 2 AIC;
+- `beta_gain > 0`;
+- `beta_loss < 0`.
+
+A general state result required this in **at least 5/6** transitions.
+
+Result:
+
+- latent state-side support: **1/6**;
+- detection-side support: **4/6**;
+- general state promotion: **FAIL**.
+
+The only transition passing the state rule is **2008 early->mid**.
+
+Detection-only is materially favored in:
+
+- 2008 early->mid;
+- 2008 mid->late;
+- 2010 early->mid;
+- 2010 mid->late.
+
+The two 2009 transitions support neither a robust detection-side nor a state-side opportunity component under the frozen rule.
+
+This changes the ecological interpretation substantially.
+
+The strong binary opportunity signal is not best read as:
+
+> opportunity drives network rewiring.
+
+It is better read as:
+
+> **current ecological opportunity strongly marks when active pollinators are encounterable/detectable, while evidence that it generally changes latent link states is weak and non-replicated across subseasons.**
+
+Encounter and detectability are still ecological. They reflect activity, co-occurrence and observation opportunity. But they are not the same thing as latent interaction assembly or extinction.
+
+## 13. External 12-site result
+
 
 The independent Domínguez-Garcia et al. dataset remains useful as a cross-system predictive test, but it also uses observational network states and should not be treated as a latent-detection validation of Villavicencio.
 
@@ -257,7 +357,7 @@ Measurement-mapping sensitivities showed that exact plant-versus-pollinator axis
 
 The cross-system lesson is therefore not a universal assembly/disassembly mechanism.
 
-## 12. Relation to routeability
+## 14. Relation to routeability
 
 None of these observational analyses validates routeability.
 
@@ -271,7 +371,7 @@ Routeability requires an independent layer:
 
 The network response cannot be used to manufacture that decision structure.
 
-## 13. Stop rule for observational expansion
+## 15. Stop rule for observational expansion
 
 Do **not** keep adding flexible observational models to Villavicencio in search of a positive natural-rewiring result.
 
@@ -282,8 +382,11 @@ The useful questions have been answered:
 - Is binary turnover materially effort-sensitive? **Yes.**
 - Does equalizing effort destabilize states? **Yes.**
 - Does current opportunity retain a universally reproducible increment on an effort-standardized census-rate response? **No; 4/6 folds only.**
+- Can repeated censuses support a simple latent-state sensitivity model? **Yes, in 5/6 transitions.**
+- Does current opportunity then show a general latent state-transition effect? **No; state support is 1/6 versus a frozen 5/6 requirement.**
+- Is a detection/activity-side opportunity component more common? **Yes; 4/6 transitions.**
 
-Further observational model searching risks turning a useful failure-boundary result into specification hunting.
+The observational program has therefore reached its stop rule. Further model searching for a positive natural-rewiring result would be specification hunting.
 
 The next routeability evidence should come from the already designed controlled experiment or from a genuinely detection-standardized independent network dataset with an externally defined decision layer.
 
@@ -291,7 +394,7 @@ The next routeability evidence should come from the already designed controlled 
 
 The strongest defensible empirical statement is now:
 
-> **Villavicencio provides a reproducible 18-period observed interaction-turnover surface whose sampling effort can be reconstructed exactly enough to show that binary link dynamics are materially detection-sensitive. A focal-response-excluded opportunity signal is strong on binary observed-link surfaces but becomes small and temporally heterogeneous when interaction incidence is standardized by 5-min census effort. Thus the public data support response feasibility and a detection boundary, not identified ecological rewiring or routeability.**
+> **Villavicencio provides a reproducible 18-period observed interaction-turnover surface whose sampling effort can be reconstructed well enough to show that binary link dynamics are materially detection-sensitive. A focal-response-excluded opportunity signal is strong on binary observed-link surfaces, small and temporally heterogeneous on an effort-standardized census-incidence response, and in a repeated-detection sensitivity maps more consistently to current detectability/activity (4/6 transitions) than to latent state transitions (1/6). Thus the public data support response feasibility, ecological activity/detection structure and a sharp rewiring-identification boundary—not a general natural rewiring mechanism or routeability.**
 
 Do not claim:
 
