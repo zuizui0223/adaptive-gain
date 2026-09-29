@@ -75,3 +75,24 @@ def test_equal_period_detection_makes_gain_loss_symmetric():
         0.0,
         abs_tol=1e-15,
     )
+
+
+def test_gain_loss_odds_ratio_equals_detectability_odds_ratio():
+    for q1, q2 in ((0.2, 0.7), (0.7, 0.2), (0.4, 0.6)):
+        result = persistent_observed_transition_probabilities(q1, q2)
+        observed_ratio = result["gain"] / result["loss"]
+        detectability_odds_ratio = (
+            (q2 / (1 - q2)) / (q1 / (1 - q1))
+        )
+        assert math.isclose(
+            observed_ratio,
+            detectability_odds_ratio,
+            rel_tol=1e-14,
+            abs_tol=0.0,
+        )
+        assert math.isclose(
+            math.exp(observed_gain_log_odds_vs_loss(q1, q2)),
+            detectability_odds_ratio,
+            rel_tol=1e-14,
+            abs_tol=0.0,
+        )
