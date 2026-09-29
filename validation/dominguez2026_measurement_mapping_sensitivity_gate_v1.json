@@ -1,0 +1,46 @@
+{
+  "schema": "adaptive-gain-dominguez2026-measurement-mapping-sensitivity-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_measurement_sensitivity_frozen",
+  "analysis_status": "designed after the pre-frozen external gain direction failed; diagnostic only and cannot redefine the primary replication",
+  "parent_result": "validation/dominguez2026_external_axis_replication_result_v1.json",
+  "question": "Is the external gain-direction mismatch sensitive to the pollinator-side measurement choice (focal-excluded other-plant degree versus published pollinator abundance or phenology)?",
+  "same_response_and_cv": "Use the identical shared-species dyad gain/loss response and leave-one-site-out folds as the pre-frozen external replication.",
+  "alternative_measurements": {
+    "pollinator_abundance": "current-year Abundance from Abn_Pheno.csv",
+    "pollinator_phenology": "current-year Phenology from Abn_Pheno.csv",
+    "plant_phenology": "current-year PhenologyP from Abn_Pheno_P.csv",
+    "plant_abundance": "current-year AbundanceP from Abn_Pheno_P.csv"
+  },
+  "model_pairs": {
+    "phenology_vs_pollinator_abundance": [
+      "plant_phenology",
+      "pollinator_abundance"
+    ],
+    "phenology_vs_pollinator_phenology": [
+      "plant_phenology",
+      "pollinator_phenology"
+    ],
+    "abundance_vs_pollinator_abundance": [
+      "plant_abundance",
+      "pollinator_abundance"
+    ]
+  },
+  "metrics": [
+    "pooled out-of-site full-model AUC",
+    "drop-one-axis held-out log-loss increment",
+    "frozen directional contrast",
+    "held-out site sign count"
+  ],
+  "interpretation": {
+    "allowed": "diagnose whether measurement mapping plausibly contributes to the cross-system gain-direction mismatch",
+    "forbidden": [
+      "reclassifying the pre-frozen primary external gain test as replicated",
+      "calling published pollinator abundance or phenology focal-response-independent",
+      "causal mechanism",
+      "decision equivalence",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "Post-result measurement sensitivity only. Even if a published pollinator metric restores the Villavicencio gain direction, the pre-frozen focal-excluded external gain replication remains failed/mixed because the alternative pollinator metrics may share observation support with the focal interaction response."
+}
