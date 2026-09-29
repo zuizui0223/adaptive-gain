@@ -254,6 +254,22 @@ def test_final_n_selector_rejects_sparse_n_or_no_passing_n(tmp_path):
         select_final_individuals_per_cell(surface, _rule())
 
 
+def test_final_n_selector_accepts_colony_feasible_minimum_above_four(tmp_path):
+    surface = tmp_path / "surface.csv"
+    rows = [
+        row
+        for row in _rows()
+        if int(row["individuals_per_cell"]) != 4
+    ]
+    for row in rows:
+        row["colony_count"] = 6
+    _write_surface(surface, rows)
+
+    receipt = select_final_individuals_per_cell(surface, _rule())
+    assert receipt.evaluated_n_values == (8, 12, 16)
+    assert receipt.selected_individuals_per_cell == 12
+
+
 def test_final_n_selector_rejects_missing_smaller_or_intermediate_candidate_n(tmp_path):
     surface = tmp_path / "surface.csv"
 
