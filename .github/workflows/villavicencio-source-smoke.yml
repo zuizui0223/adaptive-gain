@@ -21,6 +21,9 @@ on:
       - "examples/villavicencio_two_season_detection_fit.R"
       - "examples/summarize_villavicencio_two_season_detection.py"
       - "validation/villavicencio_two_season_detection_gate_v1.json"
+      - "examples/villavicencio_latent_opportunity_decomposition.R"
+      - "examples/summarize_villavicencio_latent_opportunity_decomposition.py"
+      - "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_result_v1.json"
       - "examples/build_villavicencio_annual_opportunity_effort_table.py"
@@ -845,6 +848,90 @@ jobs:
                       ],
                       "expected_latent_loss": result["aggregate_descriptive"][
                           "sum_expected_latent_loss"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Decompose latent opportunity into state versus detection
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PROMOTE="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/raw_subseason/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print("true" if result["promotion_to_latent_opportunity_model_allowed"] else "false")
+          PY
+          )"
+
+          if test "$PROMOTE" != "true"; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-latent-opportunity-decomposition-v1","status":"SKIPPED_BY_DETECTION_IDENTIFIABILITY_GATE","general_state_promotion_rule_met":false}' \
+              > artifact/raw_subseason/latent_opportunity_decomposition.json
+            echo "latent opportunity decomposition skipped by frozen detection gate"
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_latent_opportunity_decomposition.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/latent_opportunity_models.csv \
+            artifact/raw_subseason/latent_opportunity_posteriors.csv
+
+          python examples/summarize_villavicencio_latent_opportunity_decomposition.py \
+            artifact/raw_subseason/latent_opportunity_models.csv \
+            artifact/raw_subseason/latent_opportunity_posteriors.csv \
+            artifact/raw_subseason/latent_opportunity_decomposition.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/raw_subseason/latent_opportunity_decomposition.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path(
+                  "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if result["transition_count"] != 6:
+              raise SystemExit("latent opportunity decomposition lost six-transition scope")
+          if result["general_state_promotion_rule_met"]:
+              if result["state_supported_transition_count"] < 5:
+                  raise SystemExit("latent state promotion rule internally inconsistent")
+          else:
+              if result["state_supported_transition_count"] >= 5:
+                  raise SystemExit("latent state promotion rule internally inconsistent")
+          if "five of six" not in gate["model_comparison"]["cross_transition_promotion"]:
+              raise SystemExit("latent opportunity cross-transition rule changed")
+          if "must not" not in result["claim_ceiling"]:
+              raise SystemExit("latent opportunity result lost fail-closed ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "state_supported_transitions": result[
+                          "state_supported_transition_count"
+                      ],
+                      "detection_supported_transitions": result[
+                          "detection_supported_transition_count"
+                      ],
+                      "general_state_promotion": result[
+                          "general_state_promotion_rule_met"
                       ],
                   },
                   indent=2,
