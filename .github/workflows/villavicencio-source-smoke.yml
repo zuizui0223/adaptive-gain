@@ -14,6 +14,10 @@ on:
       - "examples/villavicencio_subseason_effort_only_cv.R"
       - "examples/summarize_villavicencio_subseason_effort_only.py"
       - "examples/audit_villavicencio_effort_balanced_rarefaction.py"
+      - "examples/build_villavicencio_census_rate_table.py"
+      - "examples/villavicencio_census_rate_cv.R"
+      - "examples/summarize_villavicencio_census_rate_cv.py"
+      - "validation/villavicencio_census_rate_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_result_v1.json"
       - "examples/build_villavicencio_annual_opportunity_effort_table.py"
@@ -685,6 +689,86 @@ jobs:
                       "rarefied_loss_same_state_mean": rare_primary["loss"][
                           "mean_same_state_probability"
                       ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Test effort-standardized census interaction incidence
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/build_villavicencio_census_rate_table.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            --output artifact/raw_subseason/census_rate_table.csv \
+            --summary artifact/raw_subseason/census_rate_table_summary.json
+
+          Rscript examples/villavicencio_census_rate_cv.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/census_rate_predictions.csv \
+            artifact/raw_subseason/census_rate_folds.csv
+
+          python examples/summarize_villavicencio_census_rate_cv.py \
+            artifact/raw_subseason/census_rate_table_summary.json \
+            artifact/raw_subseason/census_rate_predictions.csv \
+            artifact/raw_subseason/census_rate_folds.csv \
+            artifact/raw_subseason/census_rate_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          table = json.loads(
+              Path("artifact/raw_subseason/census_rate_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          result = json.loads(
+              Path("artifact/raw_subseason/census_rate_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_census_rate_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if table["transition_count"] != 6:
+              raise SystemExit("census-rate table lost frozen six-transition scope")
+          if not table["focal_response_excluded_from_candidate_surface"]:
+              raise SystemExit("census-rate candidate surface reused focal response")
+          if not table["focal_response_excluded_from_opportunity"]:
+              raise SystemExit("census-rate opportunity reused focal response")
+          if result["primary_scope"] != "strict_dated_core_2008_2010":
+              raise SystemExit("census-rate primary scope changed")
+          if "ecological rewiring" not in result["not_established"]:
+              raise SystemExit("census-rate result lost rewiring firewall")
+          if "true rewiring" not in gate["claim_ceiling"]:
+              raise SystemExit("census-rate gate lost claim ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "dyad_rows": table["candidate_dyad_rows"],
+                      "dyad_census_trials": table[
+                          "total_current_dyad_census_trials"
+                      ],
+                      "opportunity_logloss_increment": result["pooled"][
+                          "opportunity_increment"
+                      ]["per_census_log_loss_improvement"],
+                      "opportunity_brier_increment": result["pooled"][
+                          "opportunity_increment"
+                      ]["trial_weighted_brier_improvement"],
+                      "positive_folds": result["pooled"][
+                          "opportunity_increment"
+                      ]["positive_log_loss_folds"],
                   },
                   indent=2,
                   sort_keys=True,
