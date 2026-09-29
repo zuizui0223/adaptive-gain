@@ -8,22 +8,22 @@
   "minimum_scenarios_per_n": 12,
   "minimum_simulations_per_scenario": 1000,
   "counterbalance_multiple": 4,
-  "selection": "smallest individuals_per_cell passing all thresholds in every frozen robustness scenario after all required candidate N values have been evaluated",
+  "selection": "smallest colony-feasible individuals_per_cell passing all thresholds in every frozen robustness scenario after all required candidate N values have been evaluated",
   "interpretation": {
     "fit_success": "At least 95% of simulations must produce a usable frozen-model fit in every required robustness scenario.",
     "h1": "At least 80% directional two-sided rejection for the frozen H1 SESOI in every required robustness scenario.",
     "h2": "At least 80% hierarchical H2 pass, including H1 gatekeeping, in every required robustness scenario.",
     "monte_carlo": "At least 1000 simulations per scenario; the same simulation count must be used across all candidate N and robustness scenarios.",
     "scenario_count": "All 3 baseline x 4 nuisance robustness profiles must be present at every candidate N.",
-    "candidate_n": "No smaller counterbalanced N may be omitted from the operating-characteristic surface; the sequence is 4, 8, 12, ... through the frozen operational maximum."
+    "candidate_n": "No smaller colony-feasible counterbalanced N may be omitted. For example, 4 colonies imply 4,8,12,...; 6 colonies imply 8,12,16,... through the frozen operational maximum."
   },
   "firewalls": [
     "thresholds cannot be changed after the final operating-characteristic surface is visible",
     "a failing robustness scenario cannot be averaged away",
     "the smallest passing counterbalanced N must be selected mechanically",
     "H1/H2 SESOI values remain frozen separately in validation/routeability_sesoi_gate_v1.json",
-    "candidate N values cannot start above 4 or contain gaps"
+    "candidate N values cannot start above the colony-feasible minimum or contain gaps"
   ],
-  "claim_ceiling": "This rule fixes operating-characteristic thresholds and gapless candidate-N coverage. It does not determine the nuisance/baseline robustness grid, the husbandry-defined operational maximum, or the final N before real pilot inputs exist.",
-  "candidate_n_coverage": "every multiple of four from 4 through the separately frozen operational maximum individuals_per_cell"
+  "claim_ceiling": "This rule fixes operating-characteristic thresholds and gapless colony-feasible candidate-N coverage. It does not determine the nuisance/baseline robustness grid, colony supply, husbandry-defined operational maximum, or final N before real pilot inputs exist.",
+  "candidate_n_coverage": "every multiple of four from the smallest colony-feasible value (4*ceil(colony_count/4)) through the separately frozen operational maximum individuals_per_cell"
 }
