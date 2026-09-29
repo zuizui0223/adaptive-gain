@@ -101,3 +101,20 @@ def test_stage1_gate_records_green_annual_and_raw_subseason_response():
     assert raw["loss_count"] == 431
     assert raw["transitions_with_both_changed_and_unchanged"] == 12
     assert "7 links" in raw["date_missingness"]["2011"]
+
+
+def test_stage1_gate_resolves_effort_semantics_but_not_true_link_detection():
+    data = json.loads(GATE.read_text(encoding="utf-8"))
+    status = data["stage1_success_gate_status"]
+    assert status["sampling_effort_semantics"] == "RESOLVED_RAW_5MIN_CENSUS_IDENTITY"
+    assert status["binary_link_detection"] == (
+        "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED"
+    )
+    assert status["primary_12_transition_ecological_rewiring_status"] == (
+        "NOT_IDENTIFIED_USE_OBSERVED_LINK_TURNOVER"
+    )
+    policy = data["sampling_detection_policy"]
+    assert policy["effort_result"].endswith(
+        "villavicencio_subseason_effort_audit_result_v1.json"
+    )
+    assert "observed-link turnover" in policy["primary_stage1_status"]
