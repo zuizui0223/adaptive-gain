@@ -59,6 +59,7 @@
     "finalizer independently recomputes the smallest passing N from the frozen power surface and frozen rule",
     "preregistered individuals-per-cell must equal the independently recomputed selected N",
     "final-N receipt power-surface/rule hashes and selected total randomized N must match the artifact chain",
+    "final power surface candidate N values are gapless counterbalance multiples from the smallest colony-feasible value through the frozen operational maximum",
     "every candidate N is evaluated on the exact same robustness_id set before final-N selection",
     "all final power-surface rows use the same frozen H1/H2 SESOI values and provenance",
     "all final power-surface rows use one frozen simulations-per-scenario count meeting the final-N rule minimum",
@@ -85,7 +86,8 @@
     "changing final-N thresholds after the power surface is visible",
     "supplying a final-N receipt whose selected N differs from independent recomputation",
     "finalizing with an unqualified physical cue material set",
-    "editing or replacing cue materials after a PASS material receipt without a new architecture-neutral pretest and hash chain"
+    "editing or replacing cue materials after a PASS material receipt without a new architecture-neutral pretest and hash chain",
+    "supplying a final power surface that omits a smaller colony-feasible candidate N"
   ],
   "output_status": "FINALIZED PRE-COLLECTION PREREGISTRATION CANDIDATE",
   "current_output_status": "no final preregistration generated",
@@ -106,7 +108,8 @@
       "logical stimulus artifact exactly matches the eight frozen architecture/state rows",
       "final-N selection is independently recomputed from the frozen power surface and threshold rule",
       "candidate-N robustness_id sets are identical and effect definition does not drift across the final power surface",
-      "Monte Carlo replicate count is constant across candidate N and meets the frozen minimum"
+      "Monte Carlo replicate count is constant across candidate N and meets the frozen minimum",
+      "candidate-N sequence is independently recomputed from colony_count and contains no omitted feasible smaller counterbalanced value"
     ]
   },
   "final_n_selection_gate": "validation/routeability_final_n_selection_gate_v1.json",
@@ -127,7 +130,8 @@
       "minimum_h2_hierarchical_pass_fraction": 0.8,
       "minimum_scenarios_per_n": 12,
       "minimum_simulations_per_scenario": 1000,
-      "counterbalance_multiple": 4
+      "counterbalance_multiple": 4,
+      "candidate_n_coverage": "gapless multiples of four from smallest colony-feasible N through frozen operational maximum"
     },
     "robustness_grid_policy": {
       "status": "FROZEN",
