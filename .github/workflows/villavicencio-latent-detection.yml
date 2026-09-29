@@ -18,8 +18,8 @@ on:
       - "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
 
 concurrency:
-  group: villavicencio-latent-detection-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: villavicencio-latent-detection-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
 
 jobs:
   latent-detection:
