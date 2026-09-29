@@ -16,6 +16,9 @@ on:
       - "validation/villavicencio_census_rate_gate_v1.json"
       - "validation/villavicencio_two_season_detection_gate_v1.json"
       - "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
+      - "examples/villavicencio_detection_overdispersion_fit.R"
+      - "examples/summarize_villavicencio_detection_overdispersion.py"
+      - "validation/villavicencio_detection_overdispersion_gate_v1.json"
 
 concurrency:
   group: villavicencio-latent-detection-${{ github.event.pull_request.head.sha || github.sha }}
@@ -164,6 +167,38 @@ jobs:
                   "promotion_to_latent_opportunity_model_allowed"
               ],
               "aggregate_descriptive": result["aggregate_descriptive"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Stress-test detection overdispersion
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/villavicencio_detection_overdispersion_fit.R \
+            artifact/result/census_rate_table.csv \
+            artifact/result/two_season_detection_fits.csv \
+            artifact/result/detection_overdispersion_fits.csv
+
+          python examples/summarize_villavicencio_detection_overdispersion.py \
+            artifact/result/detection_overdispersion_fits.csv \
+            artifact/result/detection_overdispersion_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/detection_overdispersion_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "beta_binomial_preferred_transition_count": result[
+                  "beta_binomial_preferred_transition_count"
+              ],
+              "state_transition_boundary_count": result[
+                  "state_transition_boundary_count"
+              ],
           }, indent=2, sort_keys=True))
           PY
 
