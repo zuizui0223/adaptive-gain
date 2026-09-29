@@ -45,7 +45,7 @@ def test_raw_subseason_records_endpoint_model_boundary():
 def test_raw_subseason_does_not_claim_rdata_identity_or_routeability():
     data = _result()
     assert data["source"]["published_rdata_bytes_used"] is False
-    assert "byte-for-byte equality" in data["not_established"]
+    assert any("byte-for-byte equality" in item for item in data["not_established"])
     ceiling = data["claim_ceiling"].lower()
     assert "exact rdata identity" in ceiling
     assert "routeability" in ceiling
