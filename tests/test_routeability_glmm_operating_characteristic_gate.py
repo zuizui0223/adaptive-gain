@@ -15,7 +15,8 @@ def test_glmm_oc_gate_keeps_final_n_unfrozen_until_real_inputs_exist():
     assert data["final_N_promotion_rule"]["final_N_status"] == "not frozen"
     required = data["final_N_promotion_rule"]["required"]
     assert any("procedural pilot nuisance receipt" in item for item in required)
-    assert any("external H1/H2 SESOI" in item for item in required)
+    assert any("0.10/0.10" in item for item in required)
+    assert data["inputs"]["sesoi"]["status"] == "FROZEN_H1_0.10_H2_0.10"
     assert any("multiple plausible nuisance/baseline scenarios" in item for item in required)
 
 
