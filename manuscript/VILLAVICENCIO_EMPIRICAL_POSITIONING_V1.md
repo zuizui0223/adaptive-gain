@@ -372,6 +372,62 @@ Accordingly, neither the raw binary changes nor the model-based latent transitio
 Source:
 - `validation/villavicencio_detection_overdispersion_result_v1.json`
 
+## 12c. Exact detection-effort identity explains directional apparent turnover
+
+The sampling-effort result has a simple exact observation-process explanation.
+
+For a latent interaction that is truly present in both adjacent periods, let
+`q_1` and `q_2` be the probabilities of detecting that interaction at least
+once in the two periods. The observed binary network then gives
+
+```text
+P(observed gain) = (1 - q_1) q_2
+P(observed loss) = q_1 (1 - q_2)
+```
+
+so
+
+```text
+P(observed gain) - P(observed loss) = q_2 - q_1.
+```
+
+Thus changing detectability alone creates a directional excess of apparent gain
+or loss even if the latent interaction never changes.
+
+With independent per-census detection `p` and `n` censuses,
+
+```text
+q(n) = 1 - (1 - p)^n,
+```
+
+so increasing census intensity mechanically biases a persistent latent link
+toward observed gain, while decreasing intensity biases it toward observed loss.
+
+Using the transition-specific fitted detection probabilities from the simple
+two-season sensitivity model and each dyad's actual focal-plant census counts:
+
+- all six transitions: detection-map `q_current - q_previous` ranks observed
+  gain over loss with AUC **0.852**;
+- the five transitions passing the frozen simple-model identifiability gate:
+  AUC **0.837**;
+- every individual transition has AUC > **0.73**.
+
+This is deliberately **not** treated as independent ecological prediction. The
+same repeated-census data were used to fit the detection probabilities. The
+value of the calculation is mechanistic: it shows that the observed gain/loss
+direction is strongly aligned with an observation-process asymmetry that exists
+even under a persistent-link counterfactual.
+
+This sharpens the stop rule. The issue is not merely that sampling effort is a
+nuisance covariate. **Binary link-turnover direction is itself non-identifying
+when period-level detectability differs.**
+
+Files:
+- `adaptive_gain/detection_effort_identity.py`
+- `theory/DETECTION_EFFORT_GAIN_LOSS_IDENTITY.md`
+- `validation/detection_effort_gain_loss_identity_v1.json`
+- `validation/villavicencio_detection_effort_identity_result_v1.json`
+
 ## 13. External 12-site result
 
 
