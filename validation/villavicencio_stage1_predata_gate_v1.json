@@ -169,7 +169,7 @@
     "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
     "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
     "effort_standardized_result": "validation/villavicencio_census_rate_result_v1.json",
-    "final_observational_resolution": "EFFORT_SEMANTICS_RESOLVED; BINARY_LINK_STATE_NOT_IDENTIFIED; CENSUS_INCIDENCE_OPPORTUNITY_INCREMENT_MIXED_4_OF_6",
+    "final_observational_resolution": "EFFORT_SEMANTICS_RESOLVED; BINARY_LINK_STATE_NOT_IDENTIFIED; CENSUS_INCIDENCE_OPPORTUNITY_INCREMENT_MIXED_4_OF_6; SIMPLE_LATENT_STATE_OPPORTUNITY_SUPPORT_1_OF_6; RICHER_DETECTION_MODEL_PREFERRED_6_OF_6_WITH_STATE_BOUNDARY_6_OF_6",
     "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
     "latent_opportunity_decomposition_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
     "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json",
@@ -179,7 +179,9 @@
       "simple_latent_detection_model": "IDENTIFIED_ENOUGH_FOR_SENSITIVITY_5_OF_6",
       "latent_state_opportunity_effect": "NOT_GENERAL_STATE_SUPPORT_1_OF_6",
       "opportunity_detection_activity_effect": "SUPPORTED_IN_4_OF_6_TRANSITIONS",
-      "natural_rewiring_mechanism": "NOT_IDENTIFIED"
+      "natural_rewiring_mechanism": "NOT_IDENTIFIED",
+      "detection_overdispersion": "BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_TRANSITION_BOUNDARY_6_OF_6",
+      "detection_corrected_rewiring": "NOT_IDENTIFIED_OBSERVATION_MODEL_DEPENDENT"
     }
   },
   "annual_detection_sensitive_fallback": {
@@ -217,7 +219,8 @@
     "latent_detection_simple_model": "PASS_5_OF_6_FOR_SENSITIVITY_ONLY",
     "latent_opportunity_state_promotion": "FAIL_PRIMARY_RULE_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6",
     "latent_opportunity_optimizer_sensitivity": "STRICT_POSTHOC_STATE_0_OF_6_DETECTION_2_OF_6",
-    "detection_overdispersion_stress": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6"
+    "detection_overdispersion_stress": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6",
+    "detection_corrected_rewiring": "NOT_IDENTIFIED_MODEL_SENSITIVE"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
