@@ -170,38 +170,6 @@ jobs:
           }, indent=2, sort_keys=True))
           PY
 
-      - name: Stress-test detection overdispersion
-        shell: bash
-        run: |
-          set -euo pipefail
-          Rscript examples/villavicencio_detection_overdispersion_fit.R \
-            artifact/result/census_rate_table.csv \
-            artifact/result/two_season_detection_fits.csv \
-            artifact/result/detection_overdispersion_fits.csv
-
-          python examples/summarize_villavicencio_detection_overdispersion.py \
-            artifact/result/detection_overdispersion_fits.csv \
-            artifact/result/detection_overdispersion_result.json
-
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          result = json.loads(
-              Path("artifact/result/detection_overdispersion_result.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          print(json.dumps({
-              "status": result["status"],
-              "beta_binomial_preferred_transition_count": result[
-                  "beta_binomial_preferred_transition_count"
-              ],
-              "state_transition_boundary_count": result[
-                  "state_transition_boundary_count"
-              ],
-          }, indent=2, sort_keys=True))
-          PY
-
       - name: Run conditional state-versus-detection decomposition
         shell: bash
         run: |
@@ -258,6 +226,38 @@ jobs:
               ],
               "general_state_promotion_rule_met": result[
                   "general_state_promotion_rule_met"
+              ],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Stress-test detection overdispersion
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/villavicencio_detection_overdispersion_fit.R \
+            artifact/result/census_rate_table.csv \
+            artifact/result/two_season_detection_fits.csv \
+            artifact/result/detection_overdispersion_fits.csv
+
+          python examples/summarize_villavicencio_detection_overdispersion.py \
+            artifact/result/detection_overdispersion_fits.csv \
+            artifact/result/detection_overdispersion_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/detection_overdispersion_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "beta_binomial_preferred_transition_count": result[
+                  "beta_binomial_preferred_transition_count"
+              ],
+              "state_transition_boundary_count": result[
+                  "state_transition_boundary_count"
               ],
           }, indent=2, sort_keys=True))
           PY
