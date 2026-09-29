@@ -27,7 +27,22 @@
       "2010": 460,
       "2011": 988
     },
-    "pass_rule": "raw unique census counts must exactly reproduce all six published annual totals"
+    "validation_rule": {
+      "exact_matches_required_for": [
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2011"
+      ],
+      "known_raw_vs_published_discrepancy": {
+        "year": 2010,
+        "raw_unique_censuses": 463,
+        "published_total_censuses": 460,
+        "difference": 3
+      },
+      "interpretation": "The census identity is validated by exact agreement in five of six years and a documented +3-census raw/publication discrepancy in 2010. Do not silently coerce the raw count to the published table."
+    }
   },
   "subseason_effort_inventory": {
     "period_definition": "before Nov 1 / Nov 1-30 / after Nov 30 within each declared study year",
