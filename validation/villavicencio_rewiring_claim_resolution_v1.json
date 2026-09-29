@@ -52,6 +52,13 @@
       "result": "beta-binomial detection is preferred over the simple binomial detection model in 6/6 primary transitions, with AIC improvements of at least 13.8",
       "boundary": "at least one latent transition parameter hits the frozen state boundary in 6/6 transitions under the richer observation model, so detection-corrected gain/loss estimates are observation-model dependent",
       "source": "validation/villavicencio_detection_overdispersion_result_v1.json"
+    },
+    {
+      "level": 8,
+      "surface": "exact detection-effort direction identity",
+      "result": "for a persistent latent link, P(observed gain)-P(observed loss)=q_current-q_previous exactly; using transition-specific fitted detection and dyad census counts, q_current-q_previous ranks observed gain over loss at AUC 0.852 across all six transitions and 0.837 across the five identified transitions",
+      "boundary": "the score uses detection probabilities fitted from the same repeated-census data and is a mechanistic observation-map diagnostic, not independent ecological validation or an estimator of false rewiring",
+      "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
     }
   ],
   "claim_decisions": {
@@ -61,13 +68,15 @@
     "current_opportunity_drives_latent_link_rewiring": "NOT_SUPPORTED: state-side support 1/6 under the pre-frozen latent model-comparison rule",
     "current_opportunity_tracks_current_detectability_activity": "SUPPORTED_AS_MODEL_COMPARISON_PATTERN: detection-side support 4/6 under the frozen rule",
     "routeability_validated": "NO",
-    "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent"
+    "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent",
+    "observed_gain_loss_direction_identified_as_ecological": "NO: exact detection identity shows that changing period-level detectability alone is sufficient to bias gain versus loss direction, and the Villavicencio diagnostic AUC is 0.852."
   },
   "strongest_ecological_interpretation": {
     "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system, and even detection-corrected latent transition estimates are sensitive to the observation model.",
     "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
     "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used.",
-    "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models."
+    "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models.",
+    "detection_direction_identity": "Directional observed-link turnover is itself confounded by period-level detectability: for a persistent latent link, the observed gain-minus-loss probability equals q_current-q_previous exactly. In Villavicencio this detection-map score ranks observed gain over loss at AUC 0.852, showing that the direction of binary turnover can arise from the observation process without a latent state transition."
   },
   "allowed_terms": [
     "observed-link turnover",
@@ -84,7 +93,7 @@
     "routeability validation",
     "detection-corrected rewiring as an identified ecological response"
   ],
-  "next_scientific_gate": "Stop adding flexible Villavicencio observation models to search for a positive rewiring mechanism. A natural-network rewiring mechanism now requires an independent dataset with a defensible detection-standardized state process and an independent decision layer, or experimental separation of interaction state from detection/encounter. The controlled routeability experiment remains the clean direct mechanism test.",
+  "next_scientific_gate": "Stop adding flexible Villavicencio observation models to search for a positive rewiring mechanism. The exact detection-effort identity now explains why binary gain/loss direction can be strongly biased by period-level detectability even for persistent latent links. A natural-network rewiring mechanism requires an independent dataset with defensible detection-standardized state inference plus an independent decision layer, or experimental separation of ecological state from detection/encounter. The controlled routeability experiment remains the clean direct mechanism test.",
   "claim_ceiling": "Villavicencio supports reproducible response reconstruction, sampling/detection diagnostics, and ecological opportunity/activity associations. It does not identify binary or detection-corrected ecological rewiring as a stable natural response, and it does not validate routeability.",
   "final_status_vector": {
     "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
