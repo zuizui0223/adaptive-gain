@@ -18,6 +18,9 @@ on:
       - "examples/villavicencio_census_rate_cv.R"
       - "examples/summarize_villavicencio_census_rate_cv.py"
       - "validation/villavicencio_census_rate_gate_v1.json"
+      - "examples/villavicencio_two_season_detection_fit.R"
+      - "examples/summarize_villavicencio_two_season_detection.py"
+      - "validation/villavicencio_two_season_detection_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
       - "validation/villavicencio_subseason_effort_audit_result_v1.json"
       - "examples/build_villavicencio_annual_opportunity_effort_table.py"
@@ -769,6 +772,80 @@ jobs:
                       "positive_folds": result["pooled"][
                           "opportunity_increment"
                       ]["positive_log_loss_folds"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit latent-link detection identifiability
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_two_season_detection_fit.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/two_season_detection_posteriors.csv
+
+          python examples/summarize_villavicencio_two_season_detection.py \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/two_season_detection_posteriors.csv \
+            artifact/raw_subseason/two_season_detection_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/raw_subseason/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_two_season_detection_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if result["transition_count"] != 6:
+              raise SystemExit("latent-link audit lost frozen six-transition scope")
+          if result["required_identified_transition_count"] != 5:
+              raise SystemExit("latent-link promotion threshold changed")
+          if result["promotion_to_latent_opportunity_model_allowed"]:
+              if result["identified_transition_count"] < 5:
+                  raise SystemExit("latent-link promotion gate internally inconsistent")
+          else:
+              if result["identified_transition_count"] >= 5:
+                  raise SystemExit("latent-link promotion gate internally inconsistent")
+          if "changing the model after seeing the result" not in result["claim_ceiling"]:
+              raise SystemExit("latent-link result lost fail-closed claim ceiling")
+          if "five of six" not in gate["promotion_rule"]:
+              raise SystemExit("latent-link gate promotion rule changed")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "identified_transitions": result[
+                          "identified_transition_count"
+                      ],
+                      "promotion_allowed": result[
+                          "promotion_to_latent_opportunity_model_allowed"
+                      ],
+                      "observed_gain": result["aggregate_descriptive"][
+                          "observed_binary_gain_count"
+                      ],
+                      "expected_latent_gain": result["aggregate_descriptive"][
+                          "sum_expected_latent_gain"
+                      ],
+                      "observed_loss": result["aggregate_descriptive"][
+                          "observed_binary_loss_count"
+                      ],
+                      "expected_latent_loss": result["aggregate_descriptive"][
+                          "sum_expected_latent_loss"
+                      ],
                   },
                   indent=2,
                   sort_keys=True,
