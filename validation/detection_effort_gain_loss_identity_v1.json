@@ -8,7 +8,9 @@
     "gain": "P(G) = (1-q_previous) * q_current",
     "loss": "P(L) = q_previous * (1-q_current)",
     "difference": "P(G)-P(L) = q_current-q_previous",
-    "independent_census_special_case": "q(n)=1-(1-p)^n"
+    "independent_census_special_case": "q(n)=1-(1-p)^n",
+    "odds_ratio": "P(G)/P(L) = odds(q_current)/odds(q_previous)",
+    "log_odds_ratio": "log[P(G)/P(L)] = logit(q_current)-logit(q_previous)"
   },
   "direction": {
     "q_current_gt_q_previous": "observed gain is more probable than observed loss despite no latent state change",
