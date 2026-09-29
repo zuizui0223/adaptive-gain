@@ -44,36 +44,27 @@ negative_log_likelihood <- function(theta, frame) {
   kappa1 <- exp(theta[[6]])
   kappa2 <- exp(theta[[7]])
 
-  total <- 0
-  for (i in seq_len(nrow(frame))) {
-    y1 <- frame$previous_success_censuses[[i]]
-    n1 <- frame$previous_trials[[i]]
-    y2 <- frame$current_success_censuses[[i]]
-    n2 <- frame$current_trials[[i]]
+  y1 <- frame$previous_success_censuses
+  n1 <- frame$previous_trials
+  y2 <- frame$current_success_censuses
+  n2 <- frame$current_trials
 
-    state_logs <- c(
-      log1p(-psi) + log1p(-gamma),
-      log1p(-psi) + log(gamma),
-      log(psi) + log(epsilon),
-      log(psi) + log1p(-epsilon)
-    )
+  obs1_z0 <- ifelse(y1 == 0, 0, -Inf)
+  obs2_z0 <- ifelse(y2 == 0, 0, -Inf)
+  obs1_z1 <- dbetabinom_log(y1, n1, p1, kappa1)
+  obs2_z1 <- dbetabinom_log(y2, n2, p2, kappa2)
 
-    obs1_z0 <- if (y1 == 0) 0 else -Inf
-    obs2_z0 <- if (y2 == 0) 0 else -Inf
-    obs1_z1 <- dbetabinom_log(y1, n1, p1, kappa1)
-    obs2_z1 <- dbetabinom_log(y2, n2, p2, kappa2)
+  terms <- cbind(
+    log1p(-psi) + log1p(-gamma) + obs1_z0 + obs2_z0,
+    log1p(-psi) + log(gamma) + obs1_z0 + obs2_z1,
+    log(psi) + log(epsilon) + obs1_z1 + obs2_z0,
+    log(psi) + log1p(-epsilon) + obs1_z1 + obs2_z1
+  )
 
-    terms <- c(
-      state_logs[[1]] + obs1_z0 + obs2_z0,
-      state_logs[[2]] + obs1_z0 + obs2_z1,
-      state_logs[[3]] + obs1_z1 + obs2_z0,
-      state_logs[[4]] + obs1_z1 + obs2_z1
-    )
-    value <- log_sum_exp(terms)
-    if (!is.finite(value)) return(1e100)
-    total <- total - value
-  }
-  total
+  maxima <- apply(terms, 1, max)
+  values <- maxima + log(rowSums(exp(terms - maxima)))
+  if (any(!is.finite(values))) return(1e100)
+  -sum(values)
 }
 
 make_starts <- function(base_row) {
