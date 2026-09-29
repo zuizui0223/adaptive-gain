@@ -28,7 +28,7 @@
   "candidate_replication": "Test only the pre-frozen directional predictive-information asymmetry under leave-one-site-out validation: pollinator-side focal-excluded activity increment > plant-side availability increment for gains, and plant-side increment > pollinator-side increment for losses. Do not test routeability.",
   "claim_ceiling": "External dyad-level replication of a predictive-information direction only. Even if the frozen direction replicates, this does not establish a causal assembly/disassembly mechanism, sampling-effort independence, decision equivalence, or routeability.",
   "source_audit": {
-    "plant_abundance_provenance": "Annual plant resource abundance was measured from flower counts in ten 1 m2 subplots and normalized by annual sampling effort; this is independent of the focal dyad interaction state.",
+    "plant_abundance_provenance": "Annual plant resource abundance was measured from flower counts in ten 1 m2 subplots and normalized by annual sampling effort. Plant phenology was measured as the number of days the species was present in the field.",
     "pollinator_abundance_boundary": "Published pollinator abundance counts recorded individuals and may share observation support with the interaction network, so raw Abundance is not the primary pollinator-side exposure for the focal-dyad replication.",
     "primary_pollinator_axis": "current-year number of distinct other plant partners recorded for the focal pollinator after excluding the focal plant; the focal dyad can never contribute to this predictor",
     "source_article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293"
@@ -47,7 +47,7 @@
       "purpose": "define shared-species risk sets independently of focal dyad link state"
     },
     "predictors": {
-      "plant_availability": "current-year AbundanceP for the focal plant",
+      "plant_availability": "current-year PhenologyP (plant activity/flowering duration) for the focal plant",
       "pollinator_activity": "current-year distinct other-plant partner count for the focal pollinator, excluding the focal plant"
     },
     "models": {
@@ -74,7 +74,11 @@
       "gain": "pollinator_activity_increment > plant_availability_increment",
       "loss": "plant_availability_increment > pollinator_activity_increment"
     },
-    "classification": "report pooled contrast and the number of held-out sites with the frozen directional contrast; do not tune definitions after seeing the result"
+    "classification": "report pooled contrast and the number of held-out sites with the frozen directional contrast; do not tune definitions after seeing the result",
+    "plant_abundance_sensitivity": {
+      "replacement": "replace PhenologyP with current-year AbundanceP while keeping focal-excluded pollinator activity unchanged",
+      "role": "prespecified sensitivity only; directional replication status is defined by the PhenologyP primary analysis"
+    }
   },
-  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant abundance is independently sampled; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response."
+  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant phenology/flower abundance are tabulated at species x site x year independently of focal dyad identity; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response."
 }
