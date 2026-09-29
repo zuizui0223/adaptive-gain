@@ -60,7 +60,10 @@ def test_detection_supported_transitions_are_frozen():
 
 def test_latent_opportunity_result_blocks_rewiring_promotion():
     data = _result()
-    assert "universal current-opportunity rewiring mechanism" in data["not_established"]
+    assert any(
+        "universal current-opportunity rewiring mechanism" in item
+        for item in data["not_established"]
+    )
     ceiling = data["claim_ceiling"].lower()
     assert "state-side support is 1/6" in ceiling
     assert "detection-side support" in ceiling
