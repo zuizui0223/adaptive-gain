@@ -36,6 +36,7 @@ on:
       - "validation/routeability_roster_randomization_gate_v1.json"
       - "validation/routeability_final_schedule_gate_v1.json"
       - "validation/routeability_final_n_selection_gate_v1.json"
+      - "validation/routeability_final_n_threshold_rule_v1.json"
       - "validation/routeability_preregistration_gate_v1.json"
       - "theory/PAIRWISE_INFORMATION_ROUTEABILITY_NONIDENTIFIABILITY.md"
       - "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
