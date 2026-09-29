@@ -114,6 +114,28 @@ def test_pilot_anchor_and_stress_rules_are_mechanical():
     assert combined["simulation"]["timeout_fraction"] == pytest.approx(0.08)
 
 
+def test_grid_starts_at_smallest_colony_feasible_counterbalanced_n():
+    scenarios = build_frozen_robustness_scenarios(
+        _nuisance(),
+        candidate_individuals_per_cell=[8, 12],
+        colony_count=6,
+        simulations_per_scenario=100,
+        seed_base=1,
+    )
+    assert {
+        row["simulation"]["individuals_per_cell"]
+        for row in scenarios
+    } == {8, 12}
+    assert all(
+        len(row["simulation"]["colony_block_counts"]) == 6
+        for row in scenarios
+    )
+    assert all(
+        min(row["simulation"]["colony_block_counts"]) >= 1
+        for row in scenarios
+    )
+
+
 def test_grid_rejects_candidate_n_gaps_or_start_above_four():
     with pytest.raises(ValueError, match="every multiple of four"):
         build_frozen_robustness_scenarios(
