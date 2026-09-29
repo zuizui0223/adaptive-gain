@@ -45,6 +45,13 @@
       "result": "detection-side opportunity support occurs in 4/6 transitions",
       "boundary": "latent state-transition support occurs in only 1/6 versus a frozen 5/6 requirement; general state promotion fails",
       "source": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json"
+    },
+    {
+      "level": 7,
+      "surface": "observation-model robustness with beta-binomial detection",
+      "result": "beta-binomial detection is preferred over the simple binomial detection model in 6/6 primary transitions, with AIC improvements of at least 13.8",
+      "boundary": "at least one latent transition parameter hits the frozen state boundary in 6/6 transitions under the richer observation model, so detection-corrected gain/loss estimates are observation-model dependent",
+      "source": "validation/villavicencio_detection_overdispersion_result_v1.json"
     }
   ],
   "claim_decisions": {
@@ -53,12 +60,14 @@
     "current_opportunity_predicts_effort_standardized_interaction_incidence": "MIXED: small pooled increment, positive in 4/6 subseason folds",
     "current_opportunity_drives_latent_link_rewiring": "NOT_SUPPORTED: state-side support 1/6 under the pre-frozen latent model-comparison rule",
     "current_opportunity_tracks_current_detectability_activity": "SUPPORTED_AS_MODEL_COMPARISON_PATTERN: detection-side support 4/6 under the frozen rule",
-    "routeability_validated": "NO"
+    "routeability_validated": "NO",
+    "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent"
   },
   "strongest_ecological_interpretation": {
-    "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system.",
+    "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system, and even detection-corrected latent transition estimates are sensitive to the observation model.",
     "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
-    "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used."
+    "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used.",
+    "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models."
   },
   "allowed_terms": [
     "observed-link turnover",
@@ -72,8 +81,9 @@
     "phenology is a causal rewiring filter",
     "current opportunity generally drives latent link gain/loss",
     "detection-corrected true rewiring",
-    "routeability validation"
+    "routeability validation",
+    "detection-corrected rewiring as an identified ecological response"
   ],
-  "next_scientific_gate": "A natural-network rewiring mechanism would require either an independently validated multi-season detection model with stronger state-side replication, or a design in which interaction state and detection/encounter are experimentally or independently separated. The controlled routeability experiment remains the clean direct mechanism test.",
-  "claim_ceiling": "Villavicencio supports response reconstruction, detection-bias diagnostics, and ecological opportunity/activity associations. It does not currently support a general natural-network rewiring mechanism or routeability inference."
+  "next_scientific_gate": "Stop adding flexible Villavicencio observation models to search for a positive rewiring mechanism. A natural-network rewiring mechanism now requires an independent dataset with a defensible detection-standardized state process and an independent decision layer, or experimental separation of interaction state from detection/encounter. The controlled routeability experiment remains the clean direct mechanism test.",
+  "claim_ceiling": "Villavicencio supports reproducible response reconstruction, sampling/detection diagnostics, and ecological opportunity/activity associations. It does not identify binary or detection-corrected ecological rewiring as a stable natural response, and it does not validate routeability."
 }
