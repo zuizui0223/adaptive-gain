@@ -4,217 +4,270 @@ Status: post-freeze empirical revision reserve. This file does **not** modify th
 
 ## Current position
 
-The Villavicencio bridge has now passed through three distinct stages:
+The Villavicencio work has now resolved the two largest observational ambiguities that were previously left open:
 
-1. the original published phenological-overlap reanalysis produced strong gain discrimination but was found to reuse a response-conditioned support surface;
-2. that interpretation was quarantined rather than defended;
-3. a focal-response-excluded opportunity surface was rebuilt from public raw dated records and independently validated.
+1. the published phenological-overlap surface was response-conditioned for the candidate-gain task and was quarantined;
+2. raw 5-min census effort was reconstructed and showed that binary link gain/loss is materially detection-sensitive.
 
-The valid ecological result is therefore the repaired raw-record result, not the historical published-overlap model.
+The resulting conclusion is narrower, but much more defensible:
 
-## 1. Leakage repair
+> **The public Villavicencio data provide a reproducible observed-link turnover and sampling-effort test bed. They do not presently identify natural ecological rewiring. A focal-response-excluded current-opportunity signal is visible on binary link surfaces, but its incremental information becomes small and temporally inconsistent after the response is standardized by focal-plant census effort.**
 
-The published `phenological_overlap` matrix cannot be used as an independent full candidate-dyad gain predictor in this project. Every dyad with non-zero published overlap was observed as an interaction at least once over the six-year study, while none of the 5,194 never-linked dyads had positive published overlap.
+This means the observational network analysis is now a **feasibility and failure-boundary result**, not empirical confirmation of routeability.
 
-That support leakage explains why the historical full model reached gain AUC 0.865. Removing the published overlap term collapses gain AUC to about 0.514 and proper-score skill to slightly below the null.
+## 1. Raw 18-period response reconstruction
 
-The historical result is retained numerically but is not ecological evidence.
+The preferred response is reconstructed from the public Figshare raw visitor records rather than requiring unavailable Dryad RData bytes.
 
-## Detection boundary of the raw 18-period response
+Using the externally documented early / mid / late date boundaries gives:
 
-The public raw records reconstruct 18 subseason networks and 12 within-year transitions (4,581 shared-dyad rows; 853 observed binary changes = 422 gains + 431 losses). A dedicated census-effort audit now resolves the sampling semantics rather than leaving them as `UNRESOLVED`.
+- 18 non-empty subseason networks;
+- 12 within-year adjacent transitions;
+- 4,581 shared-dyad rows;
+- 853 observed binary changes;
+- 422 observed gains;
+- 431 observed losses;
+- changed and unchanged dyads in all 12 transitions.
 
-A 5-min focal-plant census is identifiable as `site x study-year x date x plant x obs.time`. Raw annual census totals exactly match the published values in 2006, 2007, 2008, 2009 and 2011; in 2010 the raw file contains 463 identifiable censuses versus 460 in the published table, a discrepancy of three retained explicitly rather than coerced away.
+The raw reconstruction is reproducible and receipt-backed.
 
-The important result is not reassurance. Subseason effort is highly heterogeneous, and incidence Chao2 on the 45 x 135 Stage-1 subset indicates only about **31.4–65.4%** of expected binary links are observed across individual subseasons.
+Exact byte-for-byte identity with the unavailable published RData object is **not** established. That is an optional source-identity cross-check, not a prerequisite for reproducing the public raw-record response surface.
 
-Focal-plant census effort is also strongly aligned with observed link-change direction. Among observed changed dyads, the change in log census effort ranks gain versus loss with:
+The more important limitation is detection.
 
-- AUC = **0.815** in the dated 2008–2010 core;
-- AUC = **0.824** in the 2008–2011 two-site core;
-- AUC = **0.834** across all 12 within-year transitions.
+## 2. Sampling-effort semantics are resolved
 
-An effort-only leave-one-transition-out model remains predictive in the dated core:
+The raw metadata define `obs.time` as the start time of a 5-min focal-plant observation period.
 
-- gain AUC = **0.697**, relative log-loss reduction = **0.043**;
-- loss AUC = **0.670**, relative log-loss reduction = **0.050**.
+A census is therefore identified by:
 
-A 500-replicate matched-effort rarefaction gives mean probability that the original state label survives of only about **0.580 for gains**, **0.595 for losses**, and **0.604 for stable-present links** in the dated 2008–2010 core.
+`site × study year × date × focal plant × obs.time`.
 
-Therefore the 853 changes are reproducible **observed-link state changes**, but they are not 853 identified ecological rewiring events. Census allocation is partly coupled to flowering availability, so this cannot be reduced to pure observer bias; nevertheless, observed zero/non-zero transitions cannot identify true link absence under the present design.
+The reconstructed annual census counts are:
 
-Current ledger language is deliberately split:
+- 2006: **532** raw / **532** published;
+- 2007: **372 / 372**;
+- 2008: **530 / 530**;
+- 2009: **836 / 836**;
+- 2010: **463 / 460**;
+- 2011: **988 / 988**.
 
-- sampling-effort semantics: **RESOLVED**;
-- binary link detection: **MATERIAL DETECTION SENSITIVITY**;
-- true absence: **UNRESOLVED**;
-- ecological rewiring identity of the 853 changes: **NOT IDENTIFIED**.
+Thus the census identity reproduces the published totals exactly in five of six years. The +3 difference in 2010 is retained explicitly rather than coerced away.
 
-The raw 18-period response is therefore retained for response feasibility, temporal-grain reconstruction and detection audits. A natural-network rewiring claim requires a detection-standardized response rather than stronger wording around the same binary zeros.
+So `sampling_effort_semantics` is no longer UNRESOLVED.
 
-## 2. Repaired current-state opportunity
+The unresolved quantity is now the **latent link state under incomplete detection**.
 
-Opportunity was rebuilt from raw dated visitor records without allowing the focal dyad response to construct its own predictor.
+## 3. Detection sensitivity is material
 
-For each focal plant-pollinator dyad, current-year opportunity is based on:
+Subseason census effort varies from **38 to 424** identifiable 5-min censuses, even in the stable two-site core.
 
-- focal-plant flowering availability;
-- focal-pollinator activity on **other** plants;
-- their focal-response-excluded temporal overlap.
+Bias-corrected incidence Chao2 implies that the observed trait-subset link surface represents only about **31.4% to 65.4%** of the estimated incidence support across subseasons.
 
-The repaired support is broad: 3,467 never-realized dyads have positive reconstructed opportunity, so opportunity is no longer nested inside realized-link support.
+More directly, among the 853 observed changes, the simple score
 
-In the sampling-consistent annual primary scope:
+`log(1 + current focal-plant censuses) - log(1 + previous focal-plant censuses)`
 
-- **gain:** AUC = **0.7434**, relative held-out log-loss reduction = **0.1393**;
-- **loss:** AUC = **0.6684**, relative held-out log-loss reduction = **0.0682**;
-- proper-score skill is positive in every primary held-out transition for both endpoints.
+discriminates observed gain from observed loss with:
 
-The same variables measured one year earlier do not recover the current-state signal:
+- strict dated core 2008–2010: AUC **0.815**;
+- two-site core 2008–2011: AUC **0.824**;
+- all 2006–2011: AUC **0.834**.
 
-- gain lagged AUC = **0.5278**;
-- loss lagged AUC = **0.4059**, with log-loss worse than the null.
+Observed gains occur where focal-plant census effort tends to increase; observed losses occur where it tends to decrease.
 
-So the result is about **current ecological opportunity**, not a stable dyad propensity or a useful past-only forecasting rule.
+This does **not** mean the changes are pure observer artefacts. Census allocation is partly endogenous to plant flowering availability, so effort itself contains biology.
 
-## 3. Spatiotemporal robustness
+But it does mean that binary zero/non-zero link states cannot identify true absence.
 
-The result remains when opportunity is made stricter: the focal plant must be flowering and the focal pollinator must be active on another plant in the **same site and ISO week**.
+## 4. Effort-only held-out models already predict binary turnover
 
-Primary same-site same-week results:
+Using only previous- and current-period focal-plant census counts, without ecological opportunity or routeability variables, gives held-out discrimination in the strict dated core:
 
-- **gain:** AUC = **0.7496**, relative log-loss reduction = **0.1465**, positive proper-score skill in 3/3 folds;
-- **loss:** AUC = **0.6894**, relative log-loss reduction = **0.0872**, positive skill in 3/3 folds.
+- gain AUC = **0.697**, relative log-loss reduction = **0.0430**;
+- loss AUC = **0.670**, relative log-loss reduction = **0.0503**.
 
-A previously absent dyad with positive same-site same-week opportunity forms a link at **12.72%**, versus **2.96%** when opportunity is zero, a rate ratio of about **4.29**.
+The effect persists broadly, although not in every fold.
 
-Among established links, loss occurs at **47.14%** with positive same-site same-week opportunity versus **61.74%** when opportunity is zero.
+Therefore sampling intensity is not merely a theoretical nuisance. It contains enough information to predict a non-trivial part of the observed binary gain/loss surface.
 
-This rules out the simple explanation that the repaired result exists only because spatially separated observations were pooled within the same week.
+## 5. Matched-effort rarefaction destabilizes link-state labels
 
-It does **not** remove shared sampling-process dependence or establish causality.
+A 500-replicate stress test downsampled both adjacent periods, within focal plant × site, to the smaller number of identifiable 5-min censuses.
 
-## 4. Pair-specific overlap is not the main result
+In the strict dated core, the mean probability of retaining the original binary state is only:
 
-The clean current-state model separates two marginal opportunity axes:
+- observed gain: **0.580**;
+- observed loss: **0.595**;
+- stable present: **0.604**.
 
-- plant flowering availability;
-- pollinator activity on other plants.
+Across all years, gain and loss retention remain only about **0.57–0.58**.
 
-Adding the dyad-specific weekly-overlap term on top of those marginals yields only a small increment:
+These complements are **not** false-rewiring fractions: downsampling can create additional false non-detections even for true persistent links.
 
-- gain primary delta log-loss = **0.00128**;
-- loss primary delta log-loss = **0.00389**;
+The correct conclusion is state instability under observation-intensity standardization.
 
-and the increment becomes fold-unstable in broader temporal sensitivities.
+## 6. Consequence for the 853 changes
 
-Therefore the empirical bridge should **not** be framed as “fine pairwise phenological matching explains rewiring.”
+The 853 binary changes are reproducible **observed-link turnover events**.
 
-The stronger result is that the current availability/activity state of the two sides constrains link dynamics.
+They are **not 853 identified ecological rewiring events**.
 
-## 5. Villavicencio endpoint-axis decomposition
+Allowed language:
 
-Within Villavicencio, a post-result decomposition suggested an endpoint asymmetry:
+- observed link gain;
+- observed link loss;
+- observed-link turnover;
+- detection-sensitive Stage-1 response;
+- response feasibility.
 
-- link **gain** carries more predictive information from pollinator activity on other plants than from plant availability;
-- link **loss** carries more predictive information from focal-plant availability than from pollinator activity.
+Not allowed without a latent-detection model or a better standardized response:
 
-The primary and near-core folds are directionally consistent.
+- true interaction gain;
+- true interaction extinction;
+- ecological rewiring event;
+- sampling-effort-corrected rewiring.
 
-This was explicitly treated as hypothesis-generating rather than promoted to a mechanism.
+## 7. Historical published-phenology result remains quarantined
 
-## 6. Independent 12-site external test
+The original published `phenological_overlap` reanalysis produced:
 
-The endpoint-axis direction was then frozen **before** opening dyad-level gain/loss effects in an independent eight-year, 12-site plant-pollinator dataset (Domínguez-Garcia et al. 2026).
+- gain AUC ≈ **0.865**;
+- loss AUC ≈ **0.650**;
+- strong phenology block-ablation arithmetic.
 
-The external test used leave-one-site-out validation and a focal-response-excluded pollinator-side activity measure.
+But the source-surface audit showed that every non-zero published-overlap dyad belonged to the ever-realized interaction support, while none of 5,194 never-linked candidate dyads had positive published overlap.
 
-### Gain: does not replicate
+The gain-side ecological interpretation is therefore response-support leakage.
 
-External gain:
+Those numbers remain reproducible historical arithmetic, not evidence that phenology independently predicts candidate link formation.
 
-- full AUC = **0.6449**;
-- plant-availability increment = **0.01549**;
-- pollinator-activity increment = **0.00410**;
-- frozen pollinator-minus-plant contrast = **-0.01139**;
-- only **2/12** held-out sites match the Villavicencio gain direction.
+## 8. Focal-response-excluded binary opportunity repair
 
-Thus the Villavicencio statement “formation is more pollinator-side weighted” does **not** generalize under the pre-frozen external measurement.
+Raw dated records were used to construct current ecological opportunity without allowing the focal link itself to define its predictor.
 
-### Loss: directionally replicates
+This successfully removed the support leakage.
 
-External loss:
+On the annual binary surface, the repaired current-state model showed substantial held-out discrimination:
 
-- full AUC = **0.6118**;
-- plant-availability increment = **0.02161**;
-- pollinator-activity increment = **-0.00153**;
-- frozen plant-minus-pollinator contrast = **+0.02314**;
-- **10/12** held-out sites match the Villavicencio loss direction.
+- gain AUC ≈ **0.743**;
+- loss AUC ≈ **0.668**.
 
-This provides cross-system support for a plant-availability-weighted loss/persistence pattern under the clean focal-excluded definitions.
+Same-site × same-week opportunity also retained strong binary discrimination.
 
-## 7. Measurement mapping is itself part of the result
+These results remain useful **detection-sensitive associations**.
 
-A post-result external sensitivity replaced the focal-excluded pollinator activity proxy with published pollinator abundance or phenology.
+They are no longer sufficient for an ecological rewiring claim because the binary response itself is effort-sensitive.
 
-The exact axis dominance changed substantially:
+## 9. Effort-standardized census-incidence response
 
-- gain ranged from plant-dominant to approximately tied to weakly pollinator-dominant;
-- loss became pollinator-dominant under the published pollinator metrics.
+To move observation effort into the response denominator, a second analysis models the number of positive focal-interaction detections out of the number of identifiable 5-min focal-plant censuses.
 
-Because those published pollinator metrics may share observation support with focal interaction detection, they cannot replace the clean primary external test.
+The primary strict dated scope uses six within-year transitions from 2008–2010.
 
-But they show something important:
+Candidate dyads are defined independently of the focal response:
 
-> **the existence of an ecological-opportunity signal is more portable than the exact allocation of predictive information between plant and pollinator axes.**
+- the focal plant has identifiable censuses in both periods;
+- the pollinator is independently observed on another plant in both periods.
 
-Axis dominance is therefore not a universal mechanism in the present evidence.
+This yields:
 
-## 8. Revised ecological result
+- **3,117** dyad-transition rows;
+- **24,684** current dyad-census trials;
+- **617** positive focal-interaction censuses.
 
-The strongest defensible empirical statement is now:
+The baseline model uses previous-period interaction incidence.
 
-> **Annual plant-pollinator link dynamics contain a reproducible current-state opportunity signal after focal-response leakage is removed. This signal survives same-site same-week matching, is substantially stronger than a one-year-lagged control, and is carried mainly by marginal plant availability and pollinator activity rather than by fine dyad-specific temporal matching. Which side dominates link formation is not cross-system invariant. Plant-side availability shows more consistent support for link persistence/loss under the focal-excluded definitions, but even this is not yet a causal mechanism.**
+Adding current focal-response-excluded same-site × same-week opportunity gives:
 
-This is a stronger ecological position than the earlier “phenology predicts rewiring” claim because it specifies:
+- history-only per-census log loss: **0.111207**;
+- history + opportunity: **0.109937**;
+- pooled improvement: **0.001270**;
+- positive fold direction: **4/6**.
 
-- what the valid opportunity exposure is;
-- what information is excluded from it;
-- what temporal and spatial controls it survives;
-- which component does **not** generalize.
+Two 2009 transitions become worse when opportunity is added.
 
-## 9. Relation to routeability
+Under the frozen rule, the result is therefore:
 
-None of these analyses validates routeability.
+**not reproducible across primary transitions**.
 
-The empirical hierarchy is:
+This is the most important update to the ecological interpretation.
 
-`current ecological opportunity -> realized link dynamics`
+## 10. What survives after effort standardization?
 
-The missing routeability layer is still:
+A weak residual survives:
 
-`independent cue / decision structure -> incremental information beyond ecological opportunity`
+> current focal-response-excluded opportunity has a small positive pooled association with per-census interaction incidence after accounting for recent interaction history.
 
-Decision-equivalence classes must therefore come from independent cognition or cue-choice evidence, or from the controlled routeability experiment already designed in PR #65.
+What does **not** survive:
 
-The network analyses cannot manufacture that layer from the same links they predict.
+> a reproducibly positive opportunity increment across all primary subseason transitions.
+
+Therefore the strong binary-network result cannot be promoted as an effort-independent ecological mechanism.
+
+The evidence is consistent with a mixture of:
+
+- biological opportunity;
+- variation in floral availability;
+- observation allocation;
+- imperfect interaction detection;
+- genuinely changing interactions.
+
+The present data do not identify those components uniquely.
+
+## 11. External 12-site result
+
+The independent Domínguez-Garcia et al. dataset remains useful as a cross-system predictive test, but it also uses observational network states and should not be treated as a latent-detection validation of Villavicencio.
+
+The pre-frozen external axis test was mixed:
+
+- Villavicencio gain-side pollinator dominance did **not** replicate;
+- the plant-side loss direction replicated under the clean focal-excluded external definition.
+
+Measurement-mapping sensitivities showed that exact plant-versus-pollinator axis dominance changes with variable definition.
+
+The cross-system lesson is therefore not a universal assembly/disassembly mechanism.
+
+## 12. Relation to routeability
+
+None of these observational analyses validates routeability.
+
+The observational chain reaches only:
+
+`sampling process + ecological opportunity -> observed interaction incidence / observed link states`.
+
+Routeability requires an independent layer:
+
+`cue / decision architecture -> additional effect beyond ordinary opportunity`.
+
+The network response cannot be used to manufacture that decision structure.
+
+## 13. Stop rule for observational expansion
+
+Do **not** keep adding flexible observational models to Villavicencio in search of a positive natural-rewiring result.
+
+The useful questions have been answered:
+
+- Can the 18-period response be reconstructed? **Yes.**
+- Can sampling effort be reconstructed? **Yes.**
+- Is binary turnover materially effort-sensitive? **Yes.**
+- Does equalizing effort destabilize states? **Yes.**
+- Does current opportunity retain a universally reproducible increment on an effort-standardized census-rate response? **No; 4/6 folds only.**
+
+Further observational model searching risks turning a useful failure-boundary result into specification hunting.
+
+The next routeability evidence should come from the already designed controlled experiment or from a genuinely detection-standardized independent network dataset with an externally defined decision layer.
 
 ## Claim ceiling
 
-Allowed:
+The strongest defensible empirical statement is now:
 
-- focal-response-excluded current ecological opportunity discriminates annual link gain and loss;
-- the result survives a same-site same-week opportunity definition;
-- a one-year-lagged opportunity surface does not recover the same signal;
-- dyad-specific overlap adds only small, sensitivity-dependent information beyond marginal opportunity;
-- the Villavicencio gain-side axis dominance does not generalize in the pre-frozen external test;
-- the plant-side loss direction is cross-system consistent under the focal-excluded primary definitions.
+> **Villavicencio provides a reproducible 18-period observed interaction-turnover surface whose sampling effort can be reconstructed exactly enough to show that binary link dynamics are materially detection-sensitive. A focal-response-excluded opportunity signal is strong on binary observed-link surfaces but becomes small and temporally heterogeneous when interaction incidence is standardized by 5-min census effort. Thus the public data support response feasibility and a detection boundary, not identified ecological rewiring or routeability.**
 
-Not allowed:
+Do not claim:
 
-- the published aggregate phenology surface is an independent gain filter;
-- current opportunity causally determines rewiring;
-- gain and loss have universally distinct causal mechanisms;
-- pollinator-side control of formation is universal;
-- plant-side control of persistence is a universal mechanism independent of measurement;
-- these results validate decision equivalence or routeability.
+- 853 true rewiring events;
+- sampling-effort-corrected gain/loss;
+- a universal current-opportunity mechanism;
+- causal plant/pollinator control of network assembly;
+- empirical routeability from Villavicencio.
