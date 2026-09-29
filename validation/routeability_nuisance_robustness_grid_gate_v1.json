@@ -33,9 +33,21 @@
     },
     "baseline_profiles": {
       "hard_center": {
-        "bypass_fixed_by_budget": {"1": 0.50, "2": 0.55, "3": 0.65},
-        "bypass_access_effect_by_budget": {"1": 0.00, "2": 0.00, "3": 0.00},
-        "routeable_fixed_effect_by_budget": {"1": 0.00, "2": 0.00, "3": 0.00}
+        "bypass_fixed_by_budget": {
+          "1": 0.5,
+          "2": 0.55,
+          "3": 0.65
+        },
+        "bypass_access_effect_by_budget": {
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": 0,
+          "3": 0
+        }
       },
       "pilot_anchored": {
         "bypass_fixed_by_budget": {
@@ -43,37 +55,57 @@
           "2": "pilot_pooled_B3_success - 0.10",
           "3": "pilot_pooled_B3_success"
         },
-        "bypass_access_effect_by_budget": {"1": 0.02, "2": 0.02, "3": 0.00},
-        "routeable_fixed_effect_by_budget": {"1": 0.00, "2": -0.02, "3": 0.00}
+        "bypass_access_effect_by_budget": {
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": -0.02,
+          "3": 0
+        }
       },
       "high_performance": {
-        "bypass_fixed_by_budget": {"1": 0.65, "2": 0.70, "3": 0.80},
-        "bypass_access_effect_by_budget": {"1": 0.02, "2": 0.02, "3": 0.00},
-        "routeable_fixed_effect_by_budget": {"1": 0.00, "2": -0.02, "3": 0.00}
+        "bypass_fixed_by_budget": {
+          "1": 0.65,
+          "2": 0.7,
+          "3": 0.8
+        },
+        "bypass_access_effect_by_budget": {
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": -0.02,
+          "3": 0
+        }
       }
     },
     "nuisance_profiles": {
       "nominal": {
-        "individual_sd_multiplier": 1.0,
-        "individual_sd_floor": 0.0,
-        "colony_sd_multiplier": 1.0,
-        "colony_sd_floor": 0.0,
-        "dropout_add": 0.0,
-        "timeout_add": 0.0
+        "individual_sd_multiplier": 1,
+        "individual_sd_floor": 0,
+        "colony_sd_multiplier": 1,
+        "colony_sd_floor": 0,
+        "dropout_add": 0,
+        "timeout_add": 0
       },
       "variance_stress": {
         "individual_sd_multiplier": 1.5,
         "individual_sd_floor": 0.25,
         "colony_sd_multiplier": 1.5,
         "colony_sd_floor": 0.15,
-        "dropout_add": 0.0,
-        "timeout_add": 0.0
+        "dropout_add": 0,
+        "timeout_add": 0
       },
       "attrition_stress": {
-        "individual_sd_multiplier": 1.0,
-        "individual_sd_floor": 0.0,
-        "colony_sd_multiplier": 1.0,
-        "colony_sd_floor": 0.0,
+        "individual_sd_multiplier": 1,
+        "individual_sd_floor": 0,
+        "colony_sd_multiplier": 1,
+        "colony_sd_floor": 0,
         "dropout_add": 0.05,
         "timeout_add": 0.05
       },
@@ -98,10 +130,12 @@
     "actual_roster_constraint": "final confirmatory randomization may proceed only if the actual colony supply can realize the selected-N block allocation; otherwise rerun the already frozen power policy with the revised pre-allocation colony count before treatment assignment"
   },
   "candidate_N_policy": {
-    "values": "multiples of four only",
+    "values": "every multiple of four from 4 through a separately frozen operational maximum individuals_per_cell",
     "same_robustness_id_set_at_every_N": true,
     "same_trials_per_individual_at_every_N": true,
-    "same_simulations_per_scenario_at_every_N": true
+    "same_simulations_per_scenario_at_every_N": true,
+    "no_gaps": true,
+    "operational_max_role": "husbandry/supply feasibility input frozen after Pilot B nuisance calibration but before final power simulation; it cannot be chosen from the power result"
   },
   "claim_ceiling": "This gate freezes how real nuisance pilot values will be converted into final robustness scenarios. It does not provide nuisance estimates, power, or a biological sample size before the real pilot."
 }
