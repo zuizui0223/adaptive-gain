@@ -244,6 +244,12 @@ def build_frozen_robustness_scenarios(
     for n in ns:
         if n % 4 != 0:
             raise ValueError("every candidate individuals_per_cell must be a multiple of four")
+    expected_ns = tuple(range(4, ns[-1] + 4, 4))
+    if ns != expected_ns:
+        raise ValueError(
+            "candidate individuals_per_cell must contain every multiple of four "
+            f"from 4 through {ns[-1]}; observed {ns!r}"
+        )
 
     colonies = _positive_int(colony_count, "colony_count")
     simulations = _positive_int(simulations_per_scenario, "simulations_per_scenario")
