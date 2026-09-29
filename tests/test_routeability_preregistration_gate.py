@@ -251,6 +251,8 @@ def test_preregistration_gate_requires_pilot_power_and_human_inputs():
     assert "ethics/regulatory approval recorded" in required
     assert "final schedule is compiled from the hash-matching randomized assignment artifact" in required
     assert data["current_output_status"] == "no final preregistration generated"
+    assert data["resolved_inputs"]["external_sesoi"]["status"] == "FROZEN"
+    assert data["resolved_inputs"]["final_n_threshold_rule"]["status"] == "FROZEN"
 
 
 def test_finalizer_generates_complete_candidate_from_real_artifact_chain(tmp_path):
@@ -451,4 +453,4 @@ def test_finalizer_rejects_changed_final_n_rule_after_selection(tmp_path):
 
     completed, _ = _run_finalizer(tmp_path, payload)
     assert completed.returncode != 0
-    assert "final-N receipt rule hash mismatch" in completed.stderr
+    assert "must exactly match the frozen" in completed.stderr
