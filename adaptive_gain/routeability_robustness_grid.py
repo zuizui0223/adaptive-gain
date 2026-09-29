@@ -233,11 +233,15 @@ def build_frozen_robustness_scenarios(
     alpha_two_sided: float = 0.05,
 ) -> tuple[dict[str, object], ...]:
     nuisance = validate_nuisance_receipt(nuisance_receipt)
-    ns = tuple(sorted(set(int(value) for value in candidate_individuals_per_cell)))
-    if not ns:
+    raw_ns = tuple(candidate_individuals_per_cell)
+    if not raw_ns:
         raise ValueError("candidate_individuals_per_cell cannot be empty")
+    parsed_ns = tuple(
+        _positive_int(value, "candidate individuals_per_cell")
+        for value in raw_ns
+    )
+    ns = tuple(sorted(set(parsed_ns)))
     for n in ns:
-        _positive_int(n, "candidate individuals_per_cell")
         if n % 4 != 0:
             raise ValueError("every candidate individuals_per_cell must be a multiple of four")
 
