@@ -12,7 +12,8 @@
       "workflow_run": 36588463423,
       "run_number": 116,
       "artifact_id": 11044862992,
-      "artifact_digest": "sha256:61077e9af5e8a41775dd35dfc14a659d331854e1273773afe112283fb9da3cd9"
+      "artifact_digest": "sha256:61077e9af5e8a41775dd35dfc14a659d331854e1273773afe112283fb9da3cd9",
+      "role": "independent pre-workflow cross-check retained for provenance; superseded as primary validation by validation.workflow_run"
     }
   },
   "exact_identity": {
@@ -64,5 +65,15 @@
     "true latent ecological gain or loss",
     "routeability"
   ],
-  "claim_ceiling": "The exact identity plus the high diagnostic AUC explains why binary gain/loss direction can track effort and detectability so strongly. It strengthens the rewiring-identification boundary but does not convert detection modeling into a corrected ecological rewiring response."
+  "claim_ceiling": "The exact identity plus the high diagnostic AUC explains why binary gain/loss direction can track effort and detectability so strongly. It strengthens the rewiring-identification boundary but does not convert detection modeling into a corrected ecological rewiring response.",
+  "validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36621806381,
+    "run_number": 120,
+    "conclusion": "success",
+    "head_sha": "e07e2b79bd8a8a4a269ba9d9e67eadf8cc8e7363",
+    "artifact_id": 11058975675,
+    "artifact_digest": "sha256:36affa6daf26599713c8aa6fb5da7f86bf1b9777c954026330e280ad7437b99e",
+    "reproduction": "dedicated identity audit step reproduced the frozen AUCs and per-transition values from the same census-rate and two-season-detection surfaces"
+  }
 }
