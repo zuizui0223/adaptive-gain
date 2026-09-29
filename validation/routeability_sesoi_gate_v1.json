@@ -7,13 +7,13 @@
     "H1": {
       "name": "routeability_sensitive_B2_interaction",
       "estimand": "Delta_B2",
-      "sesoi_probability_points": 0.10,
+      "sesoi_probability_points": 0.1,
       "direction": "> 0"
     },
     "H2": {
       "name": "budget_window_localization",
       "estimand": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3)",
-      "sesoi_probability_points": 0.10,
+      "sesoi_probability_points": 0.1,
       "direction": "> 0"
     }
   },
@@ -43,10 +43,11 @@
     "literature": "External discrimination accuracies are contextual and are not converted into a meta-analytic expected H1/H2 effect."
   },
   "power_interface": {
-    "h1_sesoi": 0.10,
-    "h2_sesoi": 0.10,
-    "sesoi_provenance": "practical_decision_threshold_frozen_2026-09-29",
-    "use": "These exact values and provenance must be identical in every robustness scenario and candidate N in the final GLMM operating-characteristic surface."
+    "h1_sesoi": 0.1,
+    "h2_sesoi": 0.1,
+    "sesoi_provenance": "practical_decision_threshold",
+    "use": "These exact values and provenance must be identical in every robustness scenario and candidate N in the final GLMM operating-characteristic surface.",
+    "freeze_id": "practical_decision_threshold_frozen_2026-09-29"
   },
   "claim_ceiling": "The 0.10 values are smallest-worthwhile-effect thresholds for design and interpretation, not predictions of the true behavioral effect. A smaller estimated effect may be scientifically nonzero but is below the predeclared mechanism-relevance threshold."
 }
