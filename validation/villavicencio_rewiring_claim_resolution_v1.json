@@ -56,8 +56,8 @@
     {
       "level": 8,
       "surface": "exact detection-effort direction identity",
-      "result": "for a persistent latent link, P(observed gain)-P(observed loss)=q_current-q_previous exactly; using transition-specific fitted detection and dyad census counts, q_current-q_previous ranks observed gain over loss at AUC 0.852 across all six transitions and 0.837 across the five identified transitions",
-      "boundary": "the score uses detection probabilities fitted from the same repeated-census data and is a mechanistic observation-map diagnostic, not independent ecological validation or an estimator of false rewiring",
+      "result": "For any two binary observations, P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1) without an independence assumption. For a persistent latent link this becomes q_current-q_previous. Using transition-specific fitted detection and dyad census counts, that detectability difference ranks observed gain over loss at AUC 0.852 across all six transitions and 0.837 across the five identified transitions.",
+      "boundary": "The fitted-q diagnostic is not independent ecological validation; q is estimated from the same repeated-census data. The general gain-minus-loss conservation identity is assumption-light, while the product and odds-ratio special cases require conditional-independence assumptions.",
       "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
     },
     {
@@ -84,7 +84,7 @@
     "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
     "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used.",
     "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models.",
-    "detection_direction_identity": "Directional observed-link turnover is itself confounded by period-level detectability: for a persistent latent link, the observed gain-minus-loss probability equals q_current-q_previous exactly. In Villavicencio this detection-map score ranks observed gain over loss at AUC 0.852, showing that the direction of binary turnover can arise from the observation process without a latent state transition.",
+    "detection_direction_identity": "Binary turnover direction has an independence-free conservation law: observed gain minus observed loss equals the change in marginal observed-presence probability. On a persistent latent link this is q_current-q_previous. Thus detectability changes can create directional apparent turnover even without ecological state change; Villavicencio aligns strongly with this axis (AUC 0.852).",
     "detection_effort_identity": "The gain/loss direction itself is strongly aligned with the exact observation-process asymmetry q_current-q_previous expected even when a latent interaction persists. This explains why effort/detection changes can mimic directional turnover without identifying any particular observed change as false."
   },
   "allowed_terms": [
