@@ -57,53 +57,72 @@ By contrast, among changed dyads, phenology is nearly useless for distinguishing
 - pooled gain-vs-loss AUC = **0.4907**;
 - primary folds = **0.4466, 0.4970, 0.5111**.
 
-## Ecological interpretation
+## Current interpretation — historical diagnostic only
 
-The most defensible two-stage reading is:
+The numerical state-stratification calculations above remain reproducible, but
+their original ecological reading is superseded.
 
-> **Phenology first gates interaction eligibility through temporal co-occurrence; among established temporally compatible links, greater overlap is associated with persistence. Phenology does not determine the direction of rewiring among links that change.**
+The published `phenological_overlap` matrix is response-conditioned for this
+candidate-dyad use: non-zero support is nested inside dyads realized as links
+at least once over the study. The strong gain-versus-stable-absence separation
+therefore cannot establish an independent eligibility gate.
 
-This is more precise than the earlier phrase “phenology predicts rewiring.” It also explains much of the gain/loss discrimination asymmetry without requiring a claim that assembly and disassembly have different causal machinery. The gain risk set contains thousands of zero-overlap dyads that can be screened out immediately, whereas existing links have already largely passed that eligibility filter.
+Subsequent raw-census analyses further show that binary link gain/loss is
+materially effort- and detection-sensitive. Accordingly, the numerical
+state-stratification surface should now be read only as a diagnostic of how the
+published feature matrix relates to the observed network states from which its
+support was constructed.
 
-## Relation to Peralta et al. (2020)
+The positive-overlap retention-versus-loss association may be reported only as
+a **descriptive association among previously realized links**. It is not a
+prospective filter, a latent-state result, or a causal persistence mechanism.
 
-The source paper already showed that phenologically well-matched interactions form a more stable backbone and argued that phenological overlap can help predict changes in species interactions. No novelty is claimed for “phenology matters.”
+## Relation to the routeability program
 
-The useful addition here is the directional-state decomposition plus the zero-overlap sensitivity:
+This historical diagnostic does **not** improve the evidential routeability
+bridge.
 
-- **eligibility:** zero versus positive overlap explains most gain discrimination;
-- **persistence:** overlap magnitude still separates retention from loss among positive-overlap links;
-- **direction:** gain versus loss among changed links is not resolved by phenology.
+The valid empirical sequence is now:
 
-That decomposition tells us what the conventional ecological filter is doing and, importantly, what remains unexplained.
+```text
+published-overlap diagnostic
+    -> support-leakage quarantine
+    -> focal-response-excluded raw opportunity
+    -> sampling-effort audit
+    -> effort-standardized census incidence
+    -> repeated-detection state-versus-observation decomposition
+    -> observational stop rule
+```
 
-## Link to the routeability program
+The final claim resolution is frozen in:
 
-This result improves the empirical bridge without validating routeability.
+- `validation/villavicencio_rewiring_claim_resolution_v1.json`;
+- `validation/villavicencio_subseason_effort_audit_result_v1.json`;
+- `validation/villavicencio_latent_opportunity_decomposition_result_v1.json`;
+- `validation/villavicencio_detection_overdispersion_result_v1.json`.
 
-The conventional layer now has a concrete role:
-
-**temporal co-occurrence -> eligible interaction surface -> persistence gradient**
-
-but the residual direction of change remains unresolved:
-
-**eligible changing link -> gain or loss**
-
-An independently measured decision layer would have to add information at that residual stage. It cannot be inferred from this phenology surface.
+An independent decision layer must be tested on a detection-defensible response
+or in the controlled experiment; it cannot be recovered from this published
+phenology surface.
 
 ## Claim ceiling
 
 Allowed:
 
-- study-wide phenological overlap behaves primarily as a near-binary eligibility filter for candidate gains;
-- among positive-overlap established links, greater overlap is associated with retention;
-- phenology does not distinguish gain from loss among changing links in this annual fallback;
-- the gain-discrimination advantage is largely compatible with prior filtering of candidate links.
+- report the historical numerical stratification values as reproducible;
+- state that the published feature surface strongly separates some observed
+  binary network states;
+- report the positive-overlap retention-versus-loss pattern as descriptive
+  among previously realized links;
+- explain why the original eligibility-filter interpretation was withdrawn.
 
 Not allowed:
 
-- annual phenological change caused rewiring;
-- progressively greater overlap continuously predicts gain among already eligible dyads;
-- zero overlap is a deterministic forbidden-link condition;
-- assembly and disassembly are proven to be distinct causal processes;
-- this result validates routeability.
+- call the published overlap surface an independent candidate-gain eligibility
+  filter;
+- use the 0.9055 gain-versus-absence AUC as ecological-filter evidence;
+- infer annual phenological change caused link gain/loss;
+- infer a latent persistence mechanism from the retention association;
+- call observed gain/loss ecological rewiring;
+- use this diagnostic as evidence for decision equivalence or routeability.
+
