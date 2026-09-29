@@ -92,7 +92,23 @@ fit <- suppressWarnings(
 )
 
 messages <- fit@optinfo$conv$lme4$messages
-converged <- is.null(messages) || length(messages) == 0
+optimizer_code <- fit@optinfo$conv$opt
+optimizer_converged <- (
+  is.null(optimizer_code)
+  || all(as.integer(optimizer_code) == 0L)
+)
+
+# lme4 may report a boundary/singular fit through the same message channel
+# used for genuine convergence warnings. Singularity is a separate nuisance
+# diagnostic below and must not be mislabeled as optimizer non-convergence.
+if (is.null(messages)) {
+  non_singular_messages <- character(0)
+} else {
+  non_singular_messages <- messages[
+    !grepl("boundary \\(singular\\) fit", messages)
+  ]
+}
+converged <- optimizer_converged && length(non_singular_messages) == 0
 singular <- isSingular(fit, tol = 1e-4)
 
 vc <- as.data.frame(VarCorr(fit))
