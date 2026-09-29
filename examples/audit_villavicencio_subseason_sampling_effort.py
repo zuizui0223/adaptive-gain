@@ -393,9 +393,10 @@ def main() -> None:
         "changed_dyad_direction_effort_auc": direction_auc,
         "ecological_read": {
             "supported": (
-                "The raw-data meaning of effort is no longer unresolved: exact "
-                "5-min census counts are reconstructable and reproduce all six "
-                "published annual totals. However, focal-plant census effort is "
+                "The raw-data meaning of effort is no longer unresolved: 5-min "
+                "census counts are reconstructable, with exact agreement to "
+                "published annual totals in five years and a documented raw "
+                "excess of three censuses in 2010. Focal-plant census effort is "
                 "strongly aligned with observed gain/loss direction, so binary "
                 "link turnover is materially detection-sensitive."
             ),
