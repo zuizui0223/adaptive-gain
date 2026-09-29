@@ -1,0 +1,45 @@
+{
+  "schema": "adaptive-gain-binary-turnover-detection-nonidentifiability-v1",
+  "date": "2026-09-30",
+  "status": "exact_opposite_latent_direction_witness_frozen",
+  "role": "post-freeze rewiring-identification boundary; not a new V5 theorem family",
+  "generic_occupancy_detection_novelty_claimed": false,
+  "observation_model": {
+    "latent_previous_prevalence": "psi",
+    "latent_colonization": "gamma",
+    "latent_extinction": "epsilon",
+    "period_detection": ["q_previous", "q_current"],
+    "false_positives": false,
+    "period_detection_conditional_independence": true
+  },
+  "shared_observed_table": {
+    "stable_absent": "3/5",
+    "gain": "1/5",
+    "loss": "1/10",
+    "stable_present": "1/10",
+    "observed_previous_prevalence": "1/5",
+    "observed_current_prevalence": "3/10"
+  },
+  "witness_A_latent_increase": {
+    "psi": "1/4",
+    "gamma": "7/15",
+    "epsilon": "0",
+    "q_previous": "4/5",
+    "q_current": "1/2",
+    "latent_current": "3/5",
+    "latent_change": "+7/20"
+  },
+  "witness_B_latent_decrease": {
+    "psi": "11/20",
+    "gamma": "1/18",
+    "epsilon": "1/2",
+    "q_previous": "4/11",
+    "q_current": "1",
+    "latent_current": "3/10",
+    "latent_change": "-1/4"
+  },
+  "conclusion": "The full observed two-period binary transition table does not identify even the sign of latent link-prevalence change when detection is unknown.",
+  "existing_literature_boundary": "Occupancy/detection confounding and the role of repeated surveys are established in the occupancy literature. The frozen object is an explicit network gain/loss witness, not a claim to have discovered imperfect detection.",
+  "implementation": "adaptive_gain.detection_effort_identity.dynamic_latent_observed_transition_table",
+  "claim_ceiling": "This exact witness establishes a binary-network identification failure under the stated observation model. It does not say latent turnover is never identifiable when repeated detections, validated observation models, experiments, or other independent information are available, and it does not validate routeability."
+}
