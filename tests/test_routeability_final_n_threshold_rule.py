@@ -24,7 +24,7 @@ def test_final_n_threshold_rule_is_frozen_before_power_surface():
 def test_final_n_threshold_rule_keeps_counterbalance_and_mc_precision():
     data = _rule()
     assert data["counterbalance_multiple"] == 4
-    assert data["minimum_scenarios_per_n"] >= 2
+    assert data["minimum_scenarios_per_n"] == 12
     assert data["minimum_simulations_per_scenario"] >= 1000
 
 
