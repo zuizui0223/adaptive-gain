@@ -107,10 +107,11 @@
     "status": "QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE_AUDIT",
     "gain": "The numerical full-model gain skill is reproducible but cannot be interpreted as an outcome-independent ecological-filter result because non-zero published phenological overlap is nested entirely within dyads that are observed as links at least once over 2006-2011.",
     "loss": "The loss endpoint remains descriptive only. Removing phenology leaves modest primary discrimination (AUC 0.5995; relative log-loss reduction 0.0131) and one of three primary folds has negative proper-score skill.",
-    "routeability": "No routeability or decision-equivalence inference is supported."
+    "routeability": "No routeability or decision-equivalence inference is supported.",
+    "detection_update": "A later raw-census audit reconstructs 5-min observation effort and shows binary link gain/loss is materially detection-sensitive. Therefore even apart from phenology support leakage, this annual response cannot identify true ecological rewiring."
   },
-  "next_gate": "freeze an independent decision-structure exposure, then compare conventional-only versus conventional-plus-decision models using the same temporal holdout scopes; the decision layer must improve held-out performance without being derived from the network response",
-  "claim_ceiling": "Historical held-out numerical performance only. The full-model gain result is quarantined for ecological-filter interpretation by validation/villavicencio_phenology_support_leakage_v1.json; it is not evidence for prospective forecasting, causal filtering, or routeability.",
+  "next_gate": "Do not add an independent decision layer to this historical binary baseline as though it were identified rewiring. Use the raw-census effort audit and census-incidence result to define the observational claim ceiling; routeability requires an independently defined decision layer and preferably the controlled experiment.",
+  "claim_ceiling": "Historical held-out numerical performance only. The gain result is quarantined by phenology support leakage, and the binary annual response is materially detection-sensitive under the raw-census audit. It is not evidence for sampling-effort-independent ecological rewiring, prospective forecasting, causal filtering, or routeability.",
   "time_support": {
     "phenological_overlap": "study-wide six-year aggregate",
     "flower_abundance": "study-wide six-year aggregate",
@@ -136,6 +137,8 @@
     "date": "2026-09-28",
     "numerical_result_retained": true,
     "gain_filter_interpretation_valid": false,
-    "required_next_step": "reconstruct outcome-independent opportunity/phenology from raw dated records before any gain-filter promotion"
+    "required_next_step": "reconstruct outcome-independent opportunity/phenology from raw dated records before any gain-filter promotion",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_result": "validation/villavicencio_census_rate_result_v1.json"
   }
 }
