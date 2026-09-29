@@ -9,6 +9,9 @@ on:
       - "examples/build_dominguez2026_external_axis_table.py"
       - "examples/dominguez2026_external_axis_cv.R"
       - "examples/summarize_dominguez2026_external_axis_replication.py"
+      - "examples/dominguez2026_measurement_mapping_sensitivity.R"
+      - "examples/summarize_dominguez2026_measurement_mapping_sensitivity.py"
+      - "validation/dominguez2026_measurement_mapping_sensitivity_gate_v1.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -181,6 +184,9 @@ jobs:
             artifact/dominguez2026_external_axis_predictions.csv \
             artifact/dominguez2026_external_axis_folds.csv \
             artifact/dominguez2026_external_axis_result.json
+            artifact/dominguez2026_measurement_mapping_predictions.csv
+            artifact/dominguez2026_measurement_mapping_folds.csv
+            artifact/dominguez2026_measurement_mapping_result.json
 
           python - <<'PY'
           import json
@@ -217,6 +223,36 @@ jobs:
                   sort_keys=True,
               )
           )
+          PY
+
+      - name: Run post-result measurement-mapping sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/dominguez2026_measurement_mapping_sensitivity.R \
+            artifact/dominguez2026_external_axis_table.csv \
+            artifact/dominguez2026_measurement_mapping_predictions.csv \
+            artifact/dominguez2026_measurement_mapping_folds.csv
+
+          python examples/summarize_dominguez2026_measurement_mapping_sensitivity.py \
+            artifact/dominguez2026_measurement_mapping_predictions.csv \
+            artifact/dominguez2026_measurement_mapping_folds.csv \
+            artifact/dominguez2026_measurement_mapping_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/dominguez2026_measurement_mapping_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "post-result diagnostic" not in result["analysis_status"]:
+              raise SystemExit("measurement sensitivity lost post-result status")
+          if "cannot redefine primary replication" not in result["analysis_status"]:
+              raise SystemExit("measurement sensitivity lost primary-result firewall")
+          print(json.dumps(result["pairs"], indent=2, sort_keys=True))
           PY
 
       - name: Upload external replication result
