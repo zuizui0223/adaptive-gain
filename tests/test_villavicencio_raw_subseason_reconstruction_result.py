@@ -49,3 +49,15 @@ def test_raw_subseason_does_not_claim_rdata_identity_or_routeability():
     ceiling = data["claim_ceiling"].lower()
     assert "exact rdata identity" in ceiling
     assert "routeability" in ceiling
+
+
+def test_raw_subseason_is_observed_turnover_not_identified_rewiring():
+    data = _result()
+    followup = data["sampling_effort_followup"]
+    assert followup["status"] == (
+        "EFFORT_SEMANTICS_RESOLVED_BINARY_DETECTION_MATERIAL"
+    )
+    assert "not 853 identified ecological rewiring events" in followup["consequence"]
+    ceiling = data["claim_ceiling"].lower()
+    assert "sampling-effort-corrected ecological rewiring" in ceiling
+    assert "binary detection is materially effort-sensitive" in ceiling
