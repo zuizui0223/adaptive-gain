@@ -38,35 +38,36 @@ The screen below intentionally distinguishes a good network dataset from a good 
 
 ### Screening decision
 
-**Tier B — strongest current public pilot candidate.**
+**Tier C — high-value response/detection test bed, not a routeability pilot.**
 
-Why it is strong:
+Why it remains valuable:
 
 - repeated yearly networks;
 - raw public dated visitor records;
 - independently measured morphology;
 - a large set of shared species and links across years;
-- raw records permit focal-response-excluded availability/activity opportunity to be reconstructed rather than inferred from the focal link itself.
+- raw records permit focal-response-excluded availability/activity opportunity and 5-min census effort to be reconstructed.
 
-Important repair boundary:
+Why it is no longer treated as Tier B:
 
-- the published `phenological_overlap` matrix is **not** a valid full candidate-dyad gain predictor for this project because its non-zero support is nested inside dyads realized as links at least once;
-- the historical published-overlap gain model is therefore quarantined for ecological interpretation;
-- the repaired raw-record opportunity surface has broad support among never-realized dyads and is the valid conventional ecological baseline.
+- the published `phenological_overlap` candidate-gain surface is response-conditioned and is quarantined;
+- binary gain/loss is materially effort- and detection-sensitive;
+- an effort-standardized census-incidence response leaves only a small, fold-mixed opportunity increment (4/6 dated-core transitions);
+- a simple repeated-detection model is identifiable enough for sensitivity analysis in 5/6 transitions, but current opportunity receives latent state-transition support in only 1/6 while a detection/activity component is supported in 4/6;
+- availability, activity and morphology still do not establish an independent cue hierarchy or decision-equivalence structure.
 
-Why it is **not Tier A**:
+A trait- or network-derived class system can only be exploratory unless externally justified by independent behavioral evidence.
 
-- availability, activity and morphology do not establish the cue hierarchy or contingent decision problem of a pollinator;
-- defining decision-equivalence classes directly from the same network links would be circular;
-- a trait- or network-derived class system can only be exploratory unless externally justified by independent behavioral evidence.
+### Allowed use
 
-### Allowed pilot use
+Use Villavicencio for:
 
-The annual fallback now answers a clean narrower question:
+- response reconstruction;
+- sampling-effort and detection diagnostics;
+- focal-response-excluded ecological opportunity/activity associations;
+- demonstrating why observed-link turnover cannot automatically be interpreted as latent ecological rewiring.
 
-> Does focal-response-excluded current ecological opportunity discriminate link gain and loss, and how much residual structure remains for a later independently defined decision-class test?
-
-The repaired answer is yes for current-year opportunity, while the one-year-lagged negative control does not recover the same signal. Do **not** call this routeability or strict forecasting.
+Do **not** use it as the observational Stage-2 routeability test. The predeclared natural-rewiring bridge fails its general latent-state promotion rule in this system.
 
 
 ## Candidate 1b — Villavicencio 18-subseason response surface
@@ -197,57 +198,58 @@ but the formal V5 extension requires a third ingredient: **independent informati
 
 This is precisely why the prospective reserve forbids deriving decision classes from observed rewiring.
 
-## Best next move — two-stage empirical program
+## Best next move — observational stop rule, then direct mechanism test
 
-### Detection boundary before Stage 1 interpretation
+### Villavicencio observational result — stop here
 
-The public raw records now also resolve the observation-effort semantics of the reconstructed 18-period response. The response should **not** be called ecological rewiring at this stage.
+Villavicencio has now answered the observational feasibility question as far as the public data allow.
 
-Across the reconstructed subseasons, 5-min focal-plant census effort varies strongly and incidence Chao2 suggests substantial incomplete link detection. Effort change alone predicts whether an observed changed dyad is labelled gain versus loss, and matched-effort rarefaction materially changes the original state labels.
+**Response reconstruction**
+- 18 subseason networks and 12 within-year transitions are reproducible from public raw dated visits;
+- the 45 × 135 subset yields 4,581 shared-dyad rows and 853 observed binary changes;
+- exact RData byte identity remains an optional source cross-check, not an ecological result.
 
-Accordingly:
+**Detection boundary**
+- 5-min census effort is reconstructable;
+- binary turnover is materially effort-sensitive;
+- matched-effort rarefaction destabilizes original link-state labels;
+- the 853 changes must be called **observed-link turnover**, not identified ecological rewiring.
 
-- the 18-period surface is admitted for **response feasibility and detection diagnostics**;
-- its 853 binary changes are **observed-link turnover**;
-- ecological rewiring remains unidentifiable without a detection-standardized response;
-- this limitation is distinct from, and prior to, any decision-structure / routeability question.
+**Opportunity after effort handling**
+- annual gain prediction contains information beyond focal-plant census count;
+- at the finer dated-core scale, effort-standardized interaction incidence shows only a small opportunity increment and only **4/6** held-out transitions improve;
+- a simple two-season detection model passes its identifiability gate in **5/6** transitions;
+- after separating opportunity effects on latent state from opportunity effects on current detection, state-side support appears in only **1/6** transitions versus a frozen **5/6** requirement, whereas detection/activity-side support appears in **4/6**.
 
-See `validation/villavicencio_subseason_effort_audit_result_v1.json`.
+Therefore the Villavicencio natural-network routeability bridge is **not promoted**.
 
-### Stage 1 — Villavicencio ecological baseline
+The useful empirical conclusion is a failure boundary:
 
-Stage 1 now has two complementary green surfaces.
+> strong apparent binary rewiring predictors can largely map onto ecological activity/encounter/detectability once repeated detection is modeled.
 
-**Response surface:** public raw dated records reconstruct the documented 18-period grain, giving 12 within-year transitions with 4,581 shared-dyad rows and 853 changed links. This removes the earlier dependence on unavailable RData bytes for response feasibility, while retaining an explicit 2011 missing-date limitation.
+This is exactly the point at which additional flexible observational modeling should stop.
 
-**Ecological baseline:** the annual focal-response-excluded opportunity repair remains the cleaner current-state predictor analysis.
+See:
+- `validation/villavicencio_subseason_effort_audit_result_v1.json`
+- `validation/villavicencio_census_rate_result_v1.json`
+- `validation/villavicencio_two_season_detection_result_v1.json`
+- `validation/villavicencio_latent_opportunity_decomposition_result_v1.json`
+- `validation/villavicencio_rewiring_claim_resolution_v1.json`
 
-Current annual result:
-- focal-response-excluded current-year availability/activity discriminates both gain and loss across held-out annual response transitions;
-- the signal is stronger for gains;
-- pair-specific weekly overlap is only a small, sensitivity-dependent increment beyond the marginal opportunity terms;
-- the same opportunity construction measured one year earlier does not recover the current-state signal.
+### Next empirical mechanism test
 
-The 18-subseason response is therefore no longer blocked on RData materialization. What remains unavailable is only a byte-for-byte cross-check against that published object. Any predictor analysis at the subseason grain must still rebuild opportunity from raw dated records or another independently defined support surface. Do **not** reuse the published aggregate overlap matrix as though it covered all candidate dyads independently of realized interactions.
+Do **not** proceed by adding a decision-class proxy to the Villavicencio links.
 
-**Stage-1 success does not validate routeability.** It supplies the clean ecological baseline against which an independent decision layer must compete.
+The next routeability evidence must instead come from either:
 
-### Stage 2 — independent decision-structure layer
+1. a genuinely independent network dataset with detection-standardized link states **and** an independently measured cue/decision layer; or
+2. the controlled routeability experiment already frozen in this PR.
 
-Only after Stage 1 passes.
+For an observational dataset, decision classes must be frozen before joining them to the network response and must not be inferred from the same links being predicted.
 
-Acceptable routes:
+## Preferred direct experiment
 
-1. published or newly collected pollinator cue-choice assays;
-2. independent flower-choice experiments;
-3. externally trained cue-response models;
-4. a new experiment that manipulates cue hierarchy while holding partner composition approximately constant.
-
-Then freeze decision classes before joining them to the network response.
-
-## Preferred experimental fallback
-
-If no public dataset supplies independent decision structure, a controlled plant–pollinator experiment is cleaner than inventing trait-proxy classes.
+Given the Villavicencio detection boundary and the absence of a Tier A public dataset, the controlled plant–pollinator experiment is now the preferred direct mechanism test rather than merely a fallback.
 
 Minimal design:
 
@@ -261,20 +263,23 @@ This directly targets the Level-2 / Level-3 evidence ladder from the prospective
 
 ## Stop rules
 
-Do not proceed from Stage 1 to Stage 2 if:
+Villavicencio has reached the observational stop rule because:
 
-- too few species persist across adjacent networks to define rewiring independently of species turnover;
-- morphology / phenology / abundance already explain nearly all observable link change, leaving no estimable residual contrast;
-- the network has too few repeated transitions for matched (D=1) versus (D=0) comparisons;
-- decision classes can only be obtained by inspecting the same link outcomes to be predicted.
+- observed binary turnover is materially detection-sensitive;
+- the effort-standardized opportunity increment is fold-mixed;
+- the repeated-detection sensitivity supports a general opportunity effect on latent state transitions in only 1/6 transitions;
+- the same opportunity variable more commonly maps onto current detection/activity;
+- an independent decision class is still absent.
 
-Do not label a trait cluster as “decision equivalence” merely because it improves prediction.
+Do not add more flexible Villavicencio models to search for a positive rewiring mechanism, and do not label a trait cluster as “decision equivalence” merely because it improves prediction.
+
+For any future observational candidate, stop if true link state cannot be separated defensibly from detection or if decision classes can only be obtained by inspecting the same link outcomes to be predicted.
 
 ## Promotion rule
 
-The dataset screen can enter a follow-up manuscript only after one of two gates is met:
+The natural-network routeability extension can be promoted only after one of two gates is met:
 
-1. a Tier A observational dataset is identified; or
-2. an independent experimental decision-structure layer is added to a Tier B network response.
+1. a Tier A observational dataset is identified with detection-standardized link states and an independent decision layer; or
+2. the controlled routeability experiment supplies direct behavioral evidence for the frozen cue architecture contrast.
 
-Until then, the public-data work is feasibility analysis, not empirical confirmation of V5 routeability.
+Villavicencio itself is retained as a response/detection boundary case, not empirical confirmation of V5 routeability.
