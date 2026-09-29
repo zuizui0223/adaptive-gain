@@ -39,6 +39,15 @@
       ]
     },
     {
+      "item": "physical cue architecture feasibility",
+      "status": "PASS_PROTOCOL_ONLY",
+      "evidence": [
+        "validation/routeability_physical_cue_feasibility_gate_v1.json",
+        "tests/test_routeability_physical_cue_feasibility_gate.py"
+      ],
+      "note": "persistent/concurrent route context, matched sequential timing across access arms, architecture-neutral 80%-criterion material qualification and salience balancing are frozen; exact local materials/species remain pending"
+    },
+    {
       "item": "generic randomization/counterbalance schedule mechanics",
       "status": "PASS",
       "evidence": [
@@ -169,7 +178,7 @@
     {
       "item": "species/husbandry/apparatus implementation",
       "status": "BLOCKED_OPERATIONAL",
-      "blocker": "local animal availability, colony supply, ethics/regulatory constraints, apparatus materials and physical cue choices remain site-specific"
+      "blocker": "exact local bumblebee species/colony supply, arena geometry, physical colors/patterns and material spectra, reward implementation and husbandry remain site-specific; cue-architecture constraints and material-pretest rules are now frozen in validation/routeability_physical_cue_feasibility_gate_v1.json"
     },
     {
       "item": "ethics and regulatory approval",
@@ -190,6 +199,6 @@
     }
   ],
   "next_machine_action": "after procedural pilot, freeze external SESOI and robustness grid, run the GLMM operating-characteristic simulator, run the frozen final-N selector, randomize the architecture-neutral eligible roster at the selected N, compile the hash-locked final trial schedule, then finalize the preregistration package",
-  "next_biological_action": "run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
-  "claim_ceiling": "Pre-collection readiness means the experimental logic, stimuli, allocation and analysis are frozen. It does not mean animal work, power, ethics or apparatus validation are complete."
+  "next_biological_action": "qualify the exact local cue materials with the architecture-neutral physical-cue pretest, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
+  "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
 }
