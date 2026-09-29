@@ -10,6 +10,11 @@ on:
       - "examples/export_villavicencio_subseasons.R"
       - "examples/reconstruct_villavicencio_subseasons_from_raw.py"
       - "validation/villavicencio_raw_subseason_reconstruction_gate_v1.json"
+      - "examples/audit_villavicencio_subseason_sampling_effort.py"
+      - "examples/villavicencio_subseason_effort_only_cv.R"
+      - "examples/summarize_villavicencio_subseason_effort_only.py"
+      - "examples/audit_villavicencio_effort_balanced_rarefaction.py"
+      - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
       - "examples/summarize_villavicencio_filter_block_ablation.py"
@@ -572,6 +577,109 @@ jobs:
                       "undated_positive_rows": summary["undated_positive_rows"],
                       "undated_positive_visits": summary["undated_positive_visits"],
                       "annual_completeness": summary["annual_completeness"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit subseason sampling effort and detection sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/audit_villavicencio_subseason_sampling_effort.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            --output artifact/raw_subseason/subseason_effort_audit.json \
+            --plant-effort-output artifact/raw_subseason/subseason_plant_effort.csv
+
+          Rscript examples/villavicencio_subseason_effort_only_cv.R \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            artifact/raw_subseason/subseason_plant_effort.csv \
+            artifact/raw_subseason/subseason_effort_only_predictions.csv \
+            artifact/raw_subseason/subseason_effort_only_folds.csv
+
+          python examples/summarize_villavicencio_subseason_effort_only.py \
+            artifact/raw_subseason/subseason_effort_only_predictions.csv \
+            artifact/raw_subseason/subseason_effort_only_folds.csv \
+            artifact/raw_subseason/subseason_effort_only_cv.json
+
+          python examples/audit_villavicencio_effort_balanced_rarefaction.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            --output artifact/raw_subseason/subseason_effort_balanced_rarefaction.json \
+            --replicates 500 \
+            --seed 20260929
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          effort = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          cv = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_only_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          rare = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_balanced_rarefaction.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if not effort["census_semantics"][
+              "all_six_published_total_census_counts_match_exactly"
+          ]:
+              raise SystemExit("raw 5-min census semantics did not validate")
+          if effort["status"] != "effort_semantics_resolved_detection_sensitivity_material":
+              raise SystemExit("effort audit status changed")
+          if cv["status"] != "effort_only_predictive_signal_material":
+              raise SystemExit("effort-only diagnostic no longer shows material signal")
+          if rare["identifiable_census_full_state_mismatch_count"] != 0:
+              raise SystemExit("identifiable censuses no longer reconstruct Stage-1 states")
+
+          primary = cv["scopes"]["strict_dated_core_2008_2010"]["endpoints"]
+          rare_primary = rare["scopes"]["strict_dated_core_2008_2010"]
+
+          print(
+              json.dumps(
+                  {
+                      "effort_status": effort["status"],
+                      "chao2_min_observed_fraction": effort[
+                          "trait_subset_chao2_completeness"
+                      ]["minimum_observed_fraction"],
+                      "chao2_max_observed_fraction": effort[
+                          "trait_subset_chao2_completeness"
+                      ]["maximum_observed_fraction"],
+                      "changed_direction_effort_auc_core": effort[
+                          "changed_dyad_direction_effort_auc"
+                      ]["strict_dated_core_2008_2010"][
+                          "auc_effort_increase_ranks_gain_over_loss"
+                      ],
+                      "effort_only_gain_auc": primary["gain"]["roc_auc"],
+                      "effort_only_gain_logloss_skill": primary["gain"][
+                          "relative_log_loss_reduction"
+                      ],
+                      "effort_only_loss_auc": primary["loss"]["roc_auc"],
+                      "effort_only_loss_logloss_skill": primary["loss"][
+                          "relative_log_loss_reduction"
+                      ],
+                      "rarefied_gain_same_state_mean": rare_primary["gain"][
+                          "mean_same_state_probability"
+                      ],
+                      "rarefied_loss_same_state_mean": rare_primary["loss"][
+                          "mean_same_state_probability"
+                      ],
                   },
                   indent=2,
                   sort_keys=True,
