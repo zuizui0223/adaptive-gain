@@ -233,7 +233,7 @@ jobs:
           Path("artifact/nuisance_fixture_planning.json").write_text(
               json.dumps(
                   {
-                      "candidate_individuals_per_cell": [12, 16],
+                      "candidate_individuals_per_cell": [4, 8, 12, 16],
                       "colony_count": 2,
                       "simulations_per_scenario": 2,
                       "seed_base": 20260929,
@@ -293,8 +293,8 @@ jobs:
               raise SystemExit("nuisance fixture opened focal contrast")
           if config["scenario_count_per_N"] != 12:
               raise SystemExit("robustness fixture must contain 12 scenarios per N")
-          if len(rows) != 24:
-              raise SystemExit("two candidate Ns should produce 24 scenario rows")
+          if len(rows) != 48:
+              raise SystemExit("four candidate Ns should produce 48 scenario rows")
 
           by_n = defaultdict(set)
           for row in rows:
@@ -303,9 +303,11 @@ jobs:
                   raise SystemExit("fixture H1 SESOI changed")
               if float(row["expected_h2_localization"]) != 0.10:
                   raise SystemExit("fixture H2 SESOI changed")
-          if set(by_n) != {12, 16}:
+          if set(by_n) != {4, 8, 12, 16}:
               raise SystemExit("fixture candidate N set changed")
-          if by_n[12] != by_n[16] or len(by_n[12]) != 12:
+          if len(by_n[4]) != 12:
+              raise SystemExit("fixture must contain 12 robustness IDs")
+          if any(by_n[n] != by_n[4] for n in (8, 12, 16)):
               raise SystemExit("robustness ID set differs across candidate N")
 
           print(
@@ -314,7 +316,7 @@ jobs:
                   "singular_fit": receipt["singular_fit"],
                   "individual_sd_logit": receipt["individual_sd_logit"],
                   "colony_sd_logit": receipt["colony_sd_logit"],
-                  "robustness_ids": len(by_n[12]),
+                  "robustness_ids": len(by_n[4]),
                   "scenario_rows": len(rows),
               }
           )
