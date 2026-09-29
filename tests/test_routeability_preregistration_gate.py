@@ -120,21 +120,21 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "fit_success_fraction,h1_directional_rejection_fraction,"
         "h2_hierarchical_pass_fraction,expected_h1_delta_b2,expected_h2_localization\n"
         "n4_robust_a,a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold,"
+        "practical_decision_threshold_frozen_2026-09-29,"
         "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
-        "0.99,0.82,0.80,0.12,0.10\n"
+        "0.99,0.82,0.80,0.10,0.10\n"
         "n4_robust_b,b,1000,4,8,4,1;1;1;1,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold,"
+        "practical_decision_threshold_frozen_2026-09-29,"
         "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
-        "0.97,0.83,0.81,0.12,0.10\n"
+        "0.97,0.83,0.81,0.10,0.10\n"
         "n8_robust_a,a,1000,8,8,4,2;2;2;2,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold,"
+        "practical_decision_threshold_frozen_2026-09-29,"
         "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
-        "0.99,0.90,0.87,0.12,0.10\n"
+        "0.99,0.90,0.87,0.10,0.10\n"
         "n8_robust_b,b,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold,"
+        "practical_decision_threshold_frozen_2026-09-29,"
         "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
-        "0.98,0.88,0.85,0.12,0.10\n",
+        "0.98,0.88,0.85,0.10,0.10\n",
         encoding="utf-8",
     )
     final_n_rule.write_text(
@@ -195,9 +195,9 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "final_n_rule_sha256": _sha(final_n_rule),
         "final_n_receipt_reference": final_n_receipt.name,
         "final_n_receipt_sha256": _sha(final_n_receipt),
-        "h1_sesoi": 0.12,
+        "h1_sesoi": 0.10,
         "h2_sesoi": 0.10,
-        "sesoi_provenance": "practical_decision_threshold",
+        "sesoi_provenance": "practical_decision_threshold_frozen_2026-09-29",
         "apparatus_description": "Three-window artificial-flower apparatus",
         "cue_alphabet_description": "Counterbalanced binary visual symbols",
         "nominal_cue_duration_seconds": 1.0,
@@ -263,7 +263,7 @@ def test_finalizer_generates_complete_candidate_from_real_artifact_chain(tmp_pat
     assert "{{" not in text
     assert "individuals per cell: 4" in text
     assert "total randomized individuals: 48" in text
-    assert "H1 probability-scale SESOI: 0.12" in text
+    assert "H1 probability-scale SESOI: 0.1" in text
     assert "TEST-APPROVAL-001" in text
     assert payload["randomization_receipt_sha256"] in text
     assert payload["final_assignment_sha256"] in text
@@ -283,6 +283,22 @@ def test_finalizer_rejects_missing_or_pending_human_fields(tmp_path):
     completed, _ = _run_finalizer(tmp_path, pending)
     assert completed.returncode != 0
     assert "pending placeholder" in completed.stderr
+
+
+def test_finalizer_rejects_sesoi_drift_from_frozen_gate(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+
+    bad = dict(payload)
+    bad["h1_sesoi"] = 0.11
+    completed, _ = _run_finalizer(tmp_path, bad)
+    assert completed.returncode != 0
+    assert "must exactly match the frozen" in completed.stderr
+
+    bad = dict(payload)
+    bad["sesoi_provenance"] = "practical_decision_threshold"
+    completed, _ = _run_finalizer(tmp_path, bad)
+    assert completed.returncode != 0
+    assert "must exactly match the frozen" in completed.stderr
 
 
 def test_finalizer_rejects_theory_ceiling_and_unbalanced_cell_n(tmp_path):
