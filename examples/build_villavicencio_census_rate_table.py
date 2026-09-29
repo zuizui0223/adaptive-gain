@@ -149,6 +149,12 @@ def main() -> None:
             (key, visitors, census_siteweek[key])
         )
 
+    pollinator_period_cells = defaultdict(dict)
+    for (period, site, week, pollinator), plants in pollinator_cell_plants.items():
+        pollinator_period_cells[(period, pollinator)][
+            (site, week)
+        ] = frozenset(plants)
+
     rows = []
     transition_summary = []
     for previous_period, current_period in PRIMARY_TRANSITIONS:
@@ -189,16 +195,11 @@ def main() -> None:
             for pollinator in sorted(trait_pollinators):
                 def otherplant_cells(period):
                     return {
-                        (site, week)
-                        for (
-                            candidate_period,
-                            site,
-                            week,
-                            candidate_pollinator,
-                        ), plants in pollinator_cell_plants.items()
-                        if candidate_period == period
-                        and candidate_pollinator == pollinator
-                        and (plants - {plant})
+                        cell
+                        for cell, plants in pollinator_period_cells.get(
+                            (period, pollinator), {}
+                        ).items()
+                        if plants - {plant}
                     }
 
                 previous_other_cells = otherplant_cells(previous_period)
