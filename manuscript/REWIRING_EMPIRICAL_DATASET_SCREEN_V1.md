@@ -199,6 +199,21 @@ This is precisely why the prospective reserve forbids deriving decision classes 
 
 ## Best next move — two-stage empirical program
 
+### Detection boundary before Stage 1 interpretation
+
+The public raw records now also resolve the observation-effort semantics of the reconstructed 18-period response. The response should **not** be called ecological rewiring at this stage.
+
+Across the reconstructed subseasons, 5-min focal-plant census effort varies strongly and incidence Chao2 suggests substantial incomplete link detection. Effort change alone predicts whether an observed changed dyad is labelled gain versus loss, and matched-effort rarefaction materially changes the original state labels.
+
+Accordingly:
+
+- the 18-period surface is admitted for **response feasibility and detection diagnostics**;
+- its 853 binary changes are **observed-link turnover**;
+- ecological rewiring remains unidentifiable without a detection-standardized response;
+- this limitation is distinct from, and prior to, any decision-structure / routeability question.
+
+See `validation/villavicencio_subseason_effort_audit_result_v1.json`.
+
 ### Stage 1 — Villavicencio ecological baseline
 
 Stage 1 now has two complementary green surfaces.
