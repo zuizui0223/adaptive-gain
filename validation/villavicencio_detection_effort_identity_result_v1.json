@@ -60,7 +60,7 @@
   },
   "not_established": [
     "that individual observed gains or losses are false",
-    "the biological fraction of observed turnover",
+    "biological fraction of observed turnover",
     "that the simple fitted detection model is the true observation process",
     "true latent ecological gain or loss",
     "routeability"
