@@ -19,7 +19,7 @@
     ]
   },
   "rule": {
-    "selection": "smallest individuals_per_cell whose worst scenario meets every frozen threshold, after every multiple-of-four N from 4 through the frozen operational maximum has been evaluated",
+    "selection": "smallest colony-feasible individuals_per_cell whose worst scenario meets every frozen threshold, after every required counterbalanced N through the frozen operational maximum has been evaluated",
     "all_scenarios_required": true,
     "minimum_scenarios_per_n": ">=2 and frozen before selection",
     "counterbalance": "every evaluated N must be a multiple of four",
@@ -36,14 +36,14 @@
       "changing H1/H2 SESOI or provenance across candidate N values",
       "using fewer Monte Carlo replicates at selected candidate N values",
       "changing simulations-per-scenario across robustness scenarios or candidate N values",
-      "omitting a smaller counterbalanced candidate N from the power surface"
+      "omitting a smaller colony-feasible counterbalanced candidate N from the power surface"
     ],
     "robustness_boundary": "nuisance/baseline/colony-allocation assumptions may vary across scenarios, but the scientific SESOI target, provenance and trials-per-individual design are frozen across the entire surface",
     "robustness_matching": "every candidate N must contain exactly the same non-empty robustness_id set, with one row per robustness_id",
     "effect_surface": "all rows must use identical frozen expected H1 Delta_B2, H2 localization and SESOI provenance",
     "monte_carlo_precision": "all rows must use one frozen simulations-per-scenario count, and it must meet the rule's minimum_simulations_per_scenario",
     "threshold_source": "validation/routeability_final_n_threshold_rule_v1.json",
-    "candidate_n_coverage": "The power surface must contain every counterbalance multiple from counterbalance_multiple (4) through the frozen operational maximum individuals per cell, with no skipped smaller candidate N values."
+    "candidate_n_coverage": "The power surface must contain every counterbalance multiple from the smallest colony-feasible N (the smallest multiple of four >= the maximum planned colony_count across required robustness scenarios) through the frozen operational maximum, with no skipped feasible smaller N values."
   },
   "machine_surface": {
     "module": "adaptive_gain/routeability_final_n_selection.py",
@@ -53,6 +53,6 @@
   },
   "preregistration_link": "the preregistration finalizer must verify that individuals_per_cell equals the selected N in the hash-matching final-N receipt",
   "current_status": "threshold_rule_frozen_real_power_surface_pending",
-  "claim_ceiling": "The selector removes analyst discretion from choosing N once the robustness surface, operational maximum N and thresholds are frozen. It rejects surfaces that skip smaller multiples of four. It does not determine the scientific SESOI or operational maximum itself.",
+  "claim_ceiling": "The selector removes analyst discretion from choosing N once the robustness surface, colony allocation, operational maximum and thresholds are frozen. It rejects surfaces that skip smaller colony-feasible multiples of four. It does not determine the scientific SESOI, colony supply or operational maximum itself.",
   "frozen_threshold_rule": "validation/routeability_final_n_threshold_rule_v1.json"
 }
