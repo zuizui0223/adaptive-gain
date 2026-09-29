@@ -1,0 +1,77 @@
+import math
+
+from adaptive_gain.detection_effort_identity import (
+    observed_gain_log_odds_vs_loss,
+    period_detection_probability,
+    persistent_observed_transition_probabilities,
+    persistent_transition_from_census_effort,
+)
+
+
+def test_period_detection_probability_matches_at_least_once_formula():
+    assert period_detection_probability(0.2, 0) == 0.0
+    assert math.isclose(
+        period_detection_probability(0.2, 3),
+        1 - 0.8**3,
+        rel_tol=0,
+        abs_tol=1e-15,
+    )
+
+
+def test_persistent_transition_probabilities_sum_to_one():
+    result = persistent_observed_transition_probabilities(0.3, 0.7)
+    total = sum(
+        result[key]
+        for key in (
+            "gain",
+            "loss",
+            "stable_present",
+            "stable_absent",
+        )
+    )
+    assert math.isclose(total, 1.0, rel_tol=0, abs_tol=1e-15)
+
+
+def test_gain_minus_loss_identity_is_exact():
+    for q1, q2 in ((0.1, 0.8), (0.8, 0.1), (0.4, 0.4), (0.0, 1.0)):
+        result = persistent_observed_transition_probabilities(q1, q2)
+        assert math.isclose(
+            result["gain_minus_loss"],
+            result["q_current_minus_q_previous"],
+            rel_tol=0,
+            abs_tol=1e-15,
+        )
+
+
+def test_more_censuses_bias_persistent_link_toward_observed_gain():
+    result = persistent_transition_from_census_effort(
+        p_previous=0.1,
+        n_previous=3,
+        p_current=0.1,
+        n_current=12,
+    )
+    assert result["q_current"] > result["q_previous"]
+    assert result["gain"] > result["loss"]
+    assert result["gain_minus_loss"] > 0
+
+
+def test_fewer_censuses_bias_persistent_link_toward_observed_loss():
+    result = persistent_transition_from_census_effort(
+        p_previous=0.1,
+        n_previous=12,
+        p_current=0.1,
+        n_current=3,
+    )
+    assert result["q_current"] < result["q_previous"]
+    assert result["gain"] < result["loss"]
+    assert result["gain_minus_loss"] < 0
+
+
+def test_equal_period_detection_makes_gain_loss_symmetric():
+    result = persistent_observed_transition_probabilities(0.6, 0.6)
+    assert math.isclose(result["gain"], result["loss"])
+    assert math.isclose(
+        observed_gain_log_odds_vs_loss(0.6, 0.6),
+        0.0,
+        abs_tol=1e-15,
+    )
