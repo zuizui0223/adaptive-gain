@@ -20,14 +20,16 @@ def test_dataset_screen_has_admission_tiers():
         assert phrase in text
 
 
-def test_villavicencio_is_strongest_pilot_not_confirmation():
+def test_villavicencio_is_detection_testbed_not_routeability_pilot():
     text = _text()
     for phrase in (
-        "Tier B — strongest current public pilot candidate.",
+        "Tier C — high-value response/detection test bed, not a routeability pilot.",
         "yearly plant–pollinator matrices for six consecutive years",
         "proboscis length/width",
         "raw records permit focal-response-excluded availability/activity opportunity",
-        "a trait- or network-derived class system can only be exploratory",
+        "state-transition support in only 1/6",
+        "detection/activity component is supported in 4/6",
+        "A trait- or network-derived class system can only be exploratory",
     ):
         assert phrase in text
 
@@ -43,13 +45,15 @@ def test_dataset_screen_keeps_independent_exposure_rule():
         assert phrase in text
 
 
-def test_screen_has_two_stage_program():
+def test_screen_has_observational_stop_then_direct_mechanism_program():
     text = _text()
     for phrase in (
-        "Stage 1 — Villavicencio ecological baseline",
-        "Stage-1 success does not validate routeability.",
-        "Stage 2 — independent decision-structure layer",
-        "freeze decision classes before joining them to the network response",
+        "Villavicencio observational result — stop here",
+        "state-side support appears in only **1/6** transitions",
+        "detection/activity-side support appears in **4/6**",
+        "Villavicencio natural-network routeability bridge is **not promoted**",
+        "Next empirical mechanism test",
+        "decision classes must be frozen before joining them to the network response",
     ):
         assert phrase in text
 
@@ -57,7 +61,7 @@ def test_screen_has_two_stage_program():
 def test_screen_has_experimental_fallback_and_stop_rules():
     text = _text()
     for phrase in (
-        "Preferred experimental fallback",
+        "Preferred direct experiment",
         "manipulate whether an early cue partitions alternatives into informative branches",
         "non-final versus final representative",
         "Stop rules",
