@@ -1,6 +1,7 @@
 import math
 
 from adaptive_gain.detection_effort_identity import (
+    finite_binary_turnover_balance,
     binary_transition_conservation,
     observed_gain_log_odds_vs_loss,
     period_detection_probability,
@@ -121,3 +122,27 @@ def test_binary_flow_identity_needs_no_independence():
     )
     assert math.isclose(result["previous_presence"], 0.70)
     assert math.isclose(result["current_presence"], 0.85)
+
+
+def test_finite_network_gain_loss_balance_equals_edge_count_change():
+    previous = [0, 0, 1, 1, 1, 0, 1]
+    current = [1, 0, 1, 0, 1, 1, 0]
+    result = finite_binary_turnover_balance(previous, current)
+
+    assert result["gains"] == 2
+    assert result["losses"] == 2
+    assert result["gain_minus_loss"] == 0
+    assert result["previous_edges"] == 4
+    assert result["current_edges"] == 4
+    assert result["edge_count_change"] == 0
+
+
+def test_finite_network_gain_surplus_is_exactly_edge_count_increase():
+    previous = [0, 0, 0, 1, 1]
+    current = [1, 1, 0, 1, 0]
+    result = finite_binary_turnover_balance(previous, current)
+
+    assert result["gains"] == 2
+    assert result["losses"] == 1
+    assert result["gain_minus_loss"] == 1
+    assert result["edge_count_change"] == 1
