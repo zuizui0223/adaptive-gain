@@ -105,7 +105,8 @@
       "source": "validation/routeability_sesoi_gate_v1.json",
       "h1_probability_scale": 0.1,
       "h2_probability_scale": 0.1,
-      "provenance": "practical_decision_threshold_frozen_2026-09-29"
+      "provenance": "practical_decision_threshold",
+      "freeze_id": "practical_decision_threshold_frozen_2026-09-29"
     }
   }
 }
