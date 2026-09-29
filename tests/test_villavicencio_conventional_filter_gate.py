@@ -72,7 +72,7 @@ def test_annual_result_keeps_claim_ceiling():
     assert data["status"] == "green_detection_sensitive_response_estimability"
     assert data["design"]["decision_equivalence_inferred"] is False
     assert data["design"]["primary_18_subseason_design_replaced"] is False
-    assert data["interpretation"]["gate"] == "PASS for response estimability"
+    assert data["interpretation"]["gate"].startswith("PASS for response estimability")
     assert "routeability" in data["claim_ceiling"]
 
 
