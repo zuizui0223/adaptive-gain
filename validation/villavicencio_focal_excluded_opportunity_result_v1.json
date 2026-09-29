@@ -2,7 +2,7 @@
   "schema": "adaptive-gain-villavicencio-focal-excluded-opportunity-result-v1",
   "date": "2026-09-28",
   "status": "retrospective_repair_green_current_state_opportunity",
-  "analysis_status": "post-leakage repair; retrospective and contemporaneous; not preregistered, causal, or routeability evidence",
+  "analysis_status": "post-leakage repair on a detection-sensitive annual binary-link response; retrospective and contemporaneous; not preregistered, causal, effort-standardized, or routeability evidence",
   "source": {
     "figshare_article_id": 11794503,
     "raw_visits": "visits_2006-2011_data.csv",
@@ -154,12 +154,16 @@
     "formation_read": "In the primary scope, a previously absent dyad with positive current-year focal-excluded opportunity forms a link about 3.61 times as often as a zero-opportunity dyad. This is a contemporaneous opportunity association, not a causal effect.",
     "persistence_read": "Current-year opportunity also discriminates link loss moderately, whereas the one-year-lagged surface performs worse than the null for loss.",
     "negative_control_read": "The same variables measured one year earlier do not recover the current-state signal: gain discrimination is near chance and loss prediction is worse than null. This argues against interpreting the result as a stable dyad propensity or a useful past-only forecasting rule.",
-    "pairwise_matching_read": "The pair-specific overlap term is not the main ecological result: its incremental log-loss contribution is small and becomes fold-unstable in broader temporal sensitivities."
+    "pairwise_matching_read": "The pair-specific overlap term is not the main ecological result: its incremental log-loss contribution is small and becomes fold-unstable in broader temporal sensitivities.",
+    "current_interpretation": "The annual binary-link signal is retained as a reproducible detection-sensitive association. The later raw-census effort audit shows that binary link states are materially effort-sensitive, and the effort-standardized subseason census-incidence opportunity increment is small and fold-mixed (4/6)."
   },
   "supersession": {
     "published_overlap_gain_filter_claim_valid": false,
     "reason": "the published non-zero phenological-overlap support was nested inside ever-realized focal links",
-    "replacement": "focal-response-excluded current-year availability/activity opportunity"
+    "replacement": "focal-response-excluded current-year availability/activity opportunity",
+    "detection_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_result": "validation/villavicencio_census_rate_result_v1.json",
+    "current_claim_status": "BINARY_ASSOCIATION_RETAINED_EFFORT_INDEPENDENT_MECHANISM_NOT_SUPPORTED"
   },
   "not_established": [
     "causal effect of phenology or temporal opportunity",
@@ -167,9 +171,10 @@
     "strict future-link forecasting from past-only data",
     "a universal assembly-disassembly mechanism",
     "pair-specific phenological matching as the dominant driver",
+    "reproducible effort-standardized opportunity effect",
     "sampling-effort-corrected true rewiring",
     "decision-equivalence classes",
     "environmental routeability"
   ],
-  "claim_ceiling": "The repaired Villavicencio result is a retrospective current-state ecological opportunity result. It establishes that independently reconstructed, focal-response-excluded availability/activity contains reproducible information about annual link gain and loss, especially gain formation. It does not establish causality, strict forecasting, pair-specific matching as the dominant mechanism, decision equivalence, or routeability."
+  "claim_ceiling": "The repaired annual result is a retrospective detection-sensitive current-state opportunity association. It does not establish causality, strict forecasting, pair-specific matching as the dominant mechanism, sampling-effort-independent ecological rewiring, decision equivalence, or routeability. The raw-census effort audit shows material binary-state detection sensitivity, and the effort-standardized census-incidence opportunity increment is fold-mixed."
 }
