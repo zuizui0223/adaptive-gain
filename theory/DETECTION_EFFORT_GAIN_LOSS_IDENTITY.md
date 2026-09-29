@@ -29,6 +29,28 @@ P(observed gain) - P(observed loss) = q_2 - q_1.
 So an increase in period-level detectability mechanically creates an excess of
 observed gains over losses; a decrease creates an excess of observed losses.
 
+## Directional odds identity
+
+Whenever both observed-gain and observed-loss probabilities are non-zero,
+
+```text
+P(observed gain) / P(observed loss)
+= [(1-q_1) q_2] / [q_1 (1-q_2)]
+= odds(q_2) / odds(q_1).
+```
+
+Equivalently,
+
+```text
+log[P(observed gain) / P(observed loss)]
+= logit(q_2) - logit(q_1).
+```
+
+Thus, for a persistent latent link, the observed gain:loss direction is exactly
+the period-level **detectability odds ratio**. This is stronger than saying
+sampling effort is merely correlated with turnover: the binary observation map
+itself converts a detectability change into directional apparent turnover.
+
 ## Census-effort special case
 
 If each of `n` independent focal-plant censuses detects the persistent
