@@ -48,6 +48,17 @@
       "note": "persistent/concurrent route context, matched sequential timing across access arms, architecture-neutral 80%-criterion material qualification and salience balancing are frozen; exact local materials/species remain pending"
     },
     {
+      "item": "physical cue material qualification receipt",
+      "status": "PASS_CODE_ONLY",
+      "evidence": [
+        "adaptive_gain/routeability_material_pretest.py",
+        "examples/build_routeability_material_pretest_receipt.py",
+        "validation/routeability_material_pretest_receipt_gate_v1.json",
+        "tests/test_routeability_material_pretest.py"
+      ],
+      "note": "raw architecture-neutral pretest choices and exact material spec are SHA-256 locked; q_route/q_left/q_right must each reach final-20 accuracy >=0.80 and best-minus-worst final-20 accuracy <=0.10; confirmatory-roster individuals are fail-closed; real local material/pretest data remain pending"
+    },
+    {
       "item": "generic randomization/counterbalance schedule mechanics",
       "status": "PASS",
       "evidence": [
@@ -240,6 +251,6 @@
     }
   ],
   "next_machine_action": "after the real procedural pilot, fit the already frozen pooled-B3 nuisance GLMM, freeze pre-allocation colony_count and operational maximum N, generate the fixed 12-robustness-ID grid for every multiple-of-four N from 4 through that maximum, run the GLMM operating-characteristic simulator, apply the frozen final-N selector, randomize the architecture-neutral eligible roster, compile the hash-locked final schedule, then finalize the preregistration package",
-  "next_biological_action": "qualify the exact local cue materials with the architecture-neutral physical-cue pretest, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
-  "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
+  "next_biological_action": "select the exact local cue materials/species, run the architecture-neutral material pretest and generate a PASS hash-locked material qualification receipt, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
+  "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, material-qualification algorithm, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
 }
