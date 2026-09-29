@@ -1,6 +1,7 @@
 import math
 
 from adaptive_gain.detection_effort_identity import (
+    binary_transition_conservation,
     observed_gain_log_odds_vs_loss,
     period_detection_probability,
     persistent_observed_transition_probabilities,
@@ -96,3 +97,27 @@ def test_gain_loss_odds_ratio_equals_detectability_odds_ratio():
             rel_tol=1e-14,
             abs_tol=0.0,
         )
+
+
+def test_binary_flow_identity_needs_no_independence():
+    # Deliberately non-product joint table.
+    result = binary_transition_conservation(
+        p00=0.10,
+        p01=0.20,
+        p10=0.05,
+        p11=0.65,
+    )
+    assert math.isclose(
+        result["gain_minus_loss"],
+        0.15,
+        rel_tol=0,
+        abs_tol=1e-15,
+    )
+    assert math.isclose(
+        result["current_minus_previous_presence"],
+        0.15,
+        rel_tol=0,
+        abs_tol=1e-15,
+    )
+    assert math.isclose(result["previous_presence"], 0.70)
+    assert math.isclose(result["current_presence"], 0.85)
