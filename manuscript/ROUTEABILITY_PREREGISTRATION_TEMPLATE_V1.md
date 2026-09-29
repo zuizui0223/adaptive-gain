@@ -96,6 +96,19 @@ Apparatus: {{apparatus_description}}
 
 Physical cue alphabet / materials: {{cue_alphabet_description}}
 
+Hash-locked material qualification:
+
+- raw architecture-neutral pretest log: {{material_pretest_log_reference}}
+- raw pretest SHA-256: `{{material_pretest_log_sha256}}`
+- exact material specification: {{material_spec_reference}}
+- material specification SHA-256: `{{material_spec_sha256}}`
+- qualification receipt: {{material_pretest_receipt_reference}}
+- qualification receipt SHA-256: `{{material_pretest_receipt_sha256}}`
+
+The qualification receipt must independently reproduce a PASS under the frozen
+80%-final-20 per-cue rule and <=0.10 best-minus-worst final-20 accuracy spread.
+Confirmatory-roster animals are forbidden from the material pretest.
+
 Frozen cue timing:
 
 - nominal cue-stage duration: {{nominal_cue_duration_seconds}} s
@@ -278,6 +291,10 @@ The final N must equal the independently recomputed smallest individuals-per-cel
 ## 14. Data and code freeze
 
 Repository: `zuizui0223/adaptive-gain`
+
+Material pretest receipt: {{material_pretest_receipt_reference}}
+
+SHA-256: `{{material_pretest_receipt_sha256}}`
 
 Frozen pre-collection commit: {{frozen_precollection_commit}}
 
