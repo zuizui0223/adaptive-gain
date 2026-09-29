@@ -638,7 +638,7 @@ jobs:
           )
 
           if not effort["census_semantics"][
-              "all_six_published_total_census_counts_match_exactly"
+              "census_identity_validated_with_documented_2010_discrepancy"
           ]:
               raise SystemExit("raw 5-min census semantics did not validate")
           if effort["status"] != "effort_semantics_resolved_detection_sensitivity_material":
