@@ -159,6 +159,35 @@ These results remain useful **detection-sensitive associations**.
 
 They are no longer sufficient for an ecological rewiring claim because the binary response itself is effort-sensitive.
 
+## 8b. Annual binary gain is not exhausted by focal-plant effort
+
+The annual repaired opportunity signal was also compared directly against raw focal-plant census counts.
+
+In the strict 2008–2011 annual core:
+
+**Gain**
+- effort-only log loss = **0.30345**, AUC = **0.6442**;
+- opportunity-only log loss = **0.27804**, AUC = **0.7400**;
+- opportunity + effort log loss = **0.27357**, AUC = **0.7552**;
+- opportunity increment beyond effort = **+0.02988**, positive in **3/3** folds.
+
+The same gain direction is positive in **4/4** near-core folds, but **4/5** when the 2006 expanded site pool is included.
+
+**Loss**
+- opportunity increment beyond effort = only **+0.00292**;
+- positive in **2/3** strict-core folds.
+
+Thus focal-plant census effort is **not a complete explanation of the annual gain association**.
+
+This does not rescue a true-rewiring claim. The response is still binary observed-link presence/absence, so pollinator-side detection and zero-state misclassification remain unresolved.
+
+The annual effort-control result and the subseason census-rate result answer different questions:
+
+- annual binary gain: opportunity contains information beyond focal-plant census counts;
+- effort-standardized subseason incidence: that incremental opportunity signal is small and only **4/6** folds positive.
+
+Together they argue against both extreme interpretations: neither “the entire signal is just focal-plant effort” nor “the signal is a reproducible effort-independent rewiring mechanism” is supported.
+
 ## 9. Effort-standardized census-incidence response
 
 To move observation effort into the response denominator, a second analysis models the number of positive focal-interaction detections out of the number of identifiable 5-min focal-plant censuses.
