@@ -168,7 +168,7 @@ def test_grid_fails_closed_instead_of_clipping_invalid_pilot_anchor():
                 pooled_success_fraction=0.99,
                 pooled_timeout_fraction=0.03,
             ),
-            candidate_individuals_per_cell=[16],
+            candidate_individuals_per_cell=[4],
             colony_count=4,
             simulations_per_scenario=100,
             seed_base=1,
