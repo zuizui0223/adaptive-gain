@@ -184,9 +184,6 @@ jobs:
             artifact/dominguez2026_external_axis_predictions.csv \
             artifact/dominguez2026_external_axis_folds.csv \
             artifact/dominguez2026_external_axis_result.json
-            artifact/dominguez2026_measurement_mapping_predictions.csv
-            artifact/dominguez2026_measurement_mapping_folds.csv
-            artifact/dominguez2026_measurement_mapping_result.json
 
           python - <<'PY'
           import json
@@ -264,6 +261,9 @@ jobs:
             artifact/dominguez2026_external_axis_predictions.csv
             artifact/dominguez2026_external_axis_folds.csv
             artifact/dominguez2026_external_axis_result.json
+            artifact/dominguez2026_measurement_mapping_predictions.csv
+            artifact/dominguez2026_measurement_mapping_folds.csv
+            artifact/dominguez2026_measurement_mapping_result.json
           if-no-files-found: error
           retention-days: 14
 
