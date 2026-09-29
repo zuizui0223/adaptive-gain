@@ -38,7 +38,8 @@
     "status": "FROZEN_H1_0.10_H2_0.10",
     "h1_probability_scale": 0.1,
     "h2_probability_scale": 0.1,
-    "provenance": "practical_decision_threshold_frozen_2026-09-29"
+    "provenance": "practical_decision_threshold",
+    "freeze_id": "practical_decision_threshold_frozen_2026-09-29"
   },
   "conservative_screening": {
     "module": "adaptive_gain/routeability_experiment_power.py",
