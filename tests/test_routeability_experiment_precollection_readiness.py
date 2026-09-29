@@ -20,6 +20,7 @@ def test_precollection_readiness_marks_design_gates_green_but_power_blocked():
     assert by_item["roster-to-final trial schedule linkage"]["status"] == "PASS_CODE_ONLY"
     assert by_item["confirmatory estimands and multiplicity"]["status"] == "PASS"
     assert by_item["external H1/H2 SESOI"]["status"] == "PASS_FROZEN"
+    assert by_item["physical cue material qualification receipt"]["status"] == "PASS_CODE_ONLY"
     assert by_item["pilot nuisance GLMM bridge and robustness-grid policy"]["status"] == "PASS_CODE_ONLY"
     assert by_item["final GLMM operating-characteristic simulation"]["status"] == "BLOCKED_REAL_INPUTS_POLICY_CODE_READY"
     assert by_item["definitive biological sample size"]["status"] == "BLOCKED"
@@ -35,6 +36,7 @@ def test_precollection_readiness_keeps_operational_and_human_blocks_explicit():
 
 def test_precollection_readiness_points_to_pilot_as_next_biological_action():
     data = _ledger()
+    assert "material pretest" in data["next_biological_action"]
     assert "Pilot A" in data["next_biological_action"]
     assert "Pilot B" in data["next_biological_action"]
     assert "GLMM operating-characteristic simulator" in data["next_machine_action"]
