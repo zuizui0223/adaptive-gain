@@ -39,75 +39,50 @@ inv_logit <- function(x) {
   1 / (1 + exp(-x))
 }
 
-log_sum_exp <- function(values) {
-  finite <- values[is.finite(values)]
-  if (length(finite) == 0) {
-    return(-Inf)
+log_sum_exp_rows <- function(matrix_values) {
+  row_max <- apply(matrix_values, 1, max)
+  if (any(!is.finite(row_max))) {
+    stop("latent likelihood row has no finite state")
   }
-  m <- max(finite)
-  m + log(sum(exp(finite - m)))
+  row_max + log(
+    rowSums(exp(matrix_values - row_max))
+  )
 }
 
-row_log_terms <- function(theta, y1, n1, y2, n2) {
+log_terms_matrix <- function(theta, frame) {
   psi <- inv_logit(theta[[1]])
   gamma <- inv_logit(theta[[2]])
   epsilon <- inv_logit(theta[[3]])
   p1 <- inv_logit(theta[[4]])
   p2 <- inv_logit(theta[[5]])
 
-  state_logs <- c(
-    log1p(-psi) + log1p(-gamma),
-    log1p(-psi) + log(gamma),
-    log(psi) + log(epsilon),
-    log(psi) + log1p(-epsilon)
-  )
+  y1 <- frame$previous_success_censuses
+  n1 <- frame$previous_trials
+  y2 <- frame$current_success_censuses
+  n2 <- frame$current_trials
 
-  obs1_z0 <- if (y1 == 0) 0 else -Inf
-  obs2_z0 <- if (y2 == 0) 0 else -Inf
+  obs1_z0 <- ifelse(y1 == 0, 0, -Inf)
+  obs2_z0 <- ifelse(y2 == 0, 0, -Inf)
   obs1_z1 <- dbinom(y1, size = n1, prob = p1, log = TRUE)
   obs2_z1 <- dbinom(y2, size = n2, prob = p2, log = TRUE)
 
-  c(
-    state_logs[[1]] + obs1_z0 + obs2_z0,
-    state_logs[[2]] + obs1_z0 + obs2_z1,
-    state_logs[[3]] + obs1_z1 + obs2_z0,
-    state_logs[[4]] + obs1_z1 + obs2_z1
+  cbind(
+    log1p(-psi) + log1p(-gamma) + obs1_z0 + obs2_z0,
+    log1p(-psi) + log(gamma) + obs1_z0 + obs2_z1,
+    log(psi) + log(epsilon) + obs1_z1 + obs2_z0,
+    log(psi) + log1p(-epsilon) + obs1_z1 + obs2_z1
   )
 }
 
 negative_log_likelihood <- function(theta, frame) {
-  total <- 0
-  for (i in seq_len(nrow(frame))) {
-    terms <- row_log_terms(
-      theta,
-      frame$previous_success_censuses[[i]],
-      frame$previous_trials[[i]],
-      frame$current_success_censuses[[i]],
-      frame$current_trials[[i]]
-    )
-    value <- log_sum_exp(terms)
-    if (!is.finite(value)) {
-      return(1e100)
-    }
-    total <- total - value
-  }
-  total
+  -sum(log_sum_exp_rows(log_terms_matrix(theta, frame)))
 }
 
 posterior_probs <- function(theta, frame) {
-  out <- matrix(NA_real_, nrow = nrow(frame), ncol = 4)
+  terms <- log_terms_matrix(theta, frame)
+  norms <- log_sum_exp_rows(terms)
+  out <- exp(terms - norms)
   colnames(out) <- c("p00", "p01", "p10", "p11")
-  for (i in seq_len(nrow(frame))) {
-    terms <- row_log_terms(
-      theta,
-      frame$previous_success_censuses[[i]],
-      frame$previous_trials[[i]],
-      frame$current_success_censuses[[i]],
-      frame$current_trials[[i]]
-    )
-    norm <- log_sum_exp(terms)
-    out[i, ] <- exp(terms - norm)
-  }
   out
 }
 
