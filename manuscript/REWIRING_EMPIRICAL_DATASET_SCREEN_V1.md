@@ -167,7 +167,7 @@ The clean **non-routeability** layer is now:
 
 The published aggregate phenological-overlap matrix is retained only as historical/source context, not as the full candidate-dyad gain surface.
 
-This repaired baseline is the appropriate comparator for asking whether a later independent decision-structure term adds information beyond ordinary ecological opportunity.
+This repaired baseline is useful for calibrating ordinary ecological opportunity and detection. It is **not** an admissible latent-rewiring response for a later decision-structure test in this dataset, because the repeated-detection analysis does not identify a stable natural rewiring process. Any future decision-layer comparison must use a different observational system with defensible detection-standardized link states, or the controlled experiment.
 
 ## Candidate 5 — habitat-loss seasonal rewiring network
 
