@@ -170,9 +170,17 @@ def select_final_individuals_per_cell(
 
     evaluated_n_values = tuple(sorted(grouped))
     maximum_n = evaluated_n_values[-1]
+    colony_counts = {int(row["colony_count"]) for row in rows}
+    if any(value < 1 for value in colony_counts):
+        raise ValueError("colony_count must be positive")
+    maximum_colony_count = max(colony_counts)
+    minimum_feasible_n = rule.counterbalance_multiple * (
+        (maximum_colony_count + rule.counterbalance_multiple - 1)
+        // rule.counterbalance_multiple
+    )
     expected_n_values = tuple(
         range(
-            rule.counterbalance_multiple,
+            minimum_feasible_n,
             maximum_n + rule.counterbalance_multiple,
             rule.counterbalance_multiple,
         )
@@ -180,8 +188,8 @@ def select_final_individuals_per_cell(
     if evaluated_n_values != expected_n_values:
         raise ValueError(
             "candidate N surface must contain every counterbalanced value "
-            f"from {rule.counterbalance_multiple} through {maximum_n}; "
-            f"observed {evaluated_n_values!r}"
+            f"from the smallest colony-feasible N={minimum_feasible_n} "
+            f"through {maximum_n}; observed {evaluated_n_values!r}"
         )
 
     robustness_signatures: dict[str, tuple[object, ...]] = {}
@@ -279,8 +287,8 @@ def select_final_individuals_per_cell(
         selection_rule=(
             "smallest individuals_per_cell that meets all frozen fit-success, "
             "H1 and hierarchical-H2 thresholds in every robustness scenario "
-            "after evaluating every counterbalanced N from the minimum through "
-            "the frozen maximum"
+            "after evaluating every counterbalanced N from the smallest "
+            "colony-feasible value through the frozen maximum"
         ),
     )
 
