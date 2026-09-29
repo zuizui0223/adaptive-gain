@@ -250,6 +250,39 @@ The physical implementation is constrained by prior bee-learning work rather tha
 
 These studies establish feasibility of contextual and multicue learning. None tests the matched routeable-versus-bypass architecture defined here.
 
+### Physical-material qualification before Pilot A
+
+The formal cue bits are not themselves a physical stimulus specification. Exact colours, patterns, printed materials, Perspex pieces, displays and viewing distances remain local implementation choices.
+
+A candidate material set must therefore pass a separate **architecture-neutral cue qualification** before any confirmatory treatment allocation.
+
+For each of the three cue identities (context, terminal A, terminal B):
+
+1. test the two physical cue outcomes in a simple differential two-choice task outside the routeable/bypass architecture;
+2. require at least **80% correct over the last 20 scored choices** for that cue identity;
+3. require the absolute difference between the best and worst of the three final-20 accuracies to be **<= 0.10**.
+
+The 80% criterion follows common operational practice in bumblebee visual-discrimination training; here it is used only to qualify the **apparatus/material set**, not to select confirmatory animals.
+
+If any cue fails, or if one cue is much easier than the others, replace/resize/recalibrate the physical symbols and repeat this architecture-neutral pretest. Do **not** inspect B=2 architecture x access outcomes and then alter the cue set.
+
+This rule addresses a real multicue confound: bumblebees can overweight the most salient or easiest feature and underlearn other elements. A routeability contrast is only interpretable if success is not driven by one trivially dominant visual component.
+
+Additional physical constraints:
+
+- q_route must remain visible during terminal presentation and response;
+- q_left and q_right use the same terminal-symbol family, with query identity carried by the inspection window rather than by a permanently easier cue type;
+- context and terminal symbol assignments are counterbalanced through the already frozen bit-flip profiles;
+- fixed access remains sequential and persistence-matched rather than simultaneous;
+- contacted artificial-flower surfaces follow one frozen cleaning protocol to suppress scent-marking cues;
+- exact material specifications are hash-frozen after qualification and before confirmatory allocation.
+
+Machine-readable gate:
+
+- `validation/routeability_physical_cue_feasibility_gate_v1.json`.
+
+This qualification does not replace Pilot A. It establishes that the chosen physical cue contrasts are individually learnable and not grossly imbalanced; Pilot A still calibrates response timing, timeouts, side/window bias and apparatus reliability.
+
 ## Guided versus autonomous routing
 
 The exact contrast supports two implementation levels.
