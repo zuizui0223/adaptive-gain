@@ -33,6 +33,7 @@ def test_power_interface_is_constant():
     data = _data()["power_interface"]
     assert data["h1_sesoi"] == 0.10
     assert data["h2_sesoi"] == 0.10
-    assert data["sesoi_provenance"] == (
+    assert data["sesoi_provenance"] == "practical_decision_threshold"
+    assert data["freeze_id"] == (
         "practical_decision_threshold_frozen_2026-09-29"
     )
