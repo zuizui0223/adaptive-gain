@@ -23,6 +23,9 @@ from adaptive_gain.routeability_final_n_selection import (
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
 SESOI_GATE = ROOT / "validation" / "routeability_sesoi_gate_v1.json"
+FINAL_N_THRESHOLD_RULE = (
+    ROOT / "validation" / "routeability_final_n_threshold_rule_v1.json"
+)
 
 REQUIRED_FIELDS = (
     "preregistration_version",
@@ -578,6 +581,25 @@ def validate_finalization_payload(
         verified["final_n_rule_reference"],
         "final_n_rule_reference",
     )
+    frozen_final_n_rule = _read_json(
+        FINAL_N_THRESHOLD_RULE,
+        "routeability_final_n_threshold_rule_v1.json",
+    )
+    frozen_rule_fields = (
+        "minimum_fit_success_fraction",
+        "minimum_h1_directional_rejection_fraction",
+        "minimum_h2_hierarchical_pass_fraction",
+        "minimum_scenarios_per_n",
+        "minimum_simulations_per_scenario",
+        "counterbalance_multiple",
+    )
+    for field in frozen_rule_fields:
+        if final_n_rule_payload.get(field) != frozen_final_n_rule.get(field):
+            raise ValueError(
+                "final-N threshold rule must exactly match the frozen "
+                "routeability_final_n_threshold_rule_v1.json; "
+                f"field {field!r} differs"
+            )
     final_n_rule = FinalNRule(
         minimum_fit_success_fraction=float(
             final_n_rule_payload["minimum_fit_success_fraction"]
