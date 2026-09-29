@@ -146,3 +146,50 @@ def observed_gain_log_odds_vs_loss(
     if gain == 0.0:
         return -math.inf
     return math.log(gain / loss)
+
+
+
+def dynamic_latent_observed_transition_table(
+    *,
+    psi_previous: float,
+    colonization: float,
+    extinction: float,
+    q_previous: float,
+    q_current: float,
+) -> dict[str, float]:
+    """Observed 2x2 table under a two-season latent-state/detection model.
+
+    Assumes no false positives and period-level conditional independence of
+    detection given latent states.
+    """
+    values = (
+        float(psi_previous),
+        float(colonization),
+        float(extinction),
+        float(q_previous),
+        float(q_current),
+    )
+    if any(value < 0.0 or value > 1.0 for value in values):
+        raise ValueError("all probabilities must be in [0, 1]")
+
+    psi1, gamma, epsilon, q1, q2 = values
+    psi2 = psi1 * (1.0 - epsilon) + (1.0 - psi1) * gamma
+
+    observed_previous = psi1 * q1
+    observed_current = psi2 * q2
+    stable_present = psi1 * (1.0 - epsilon) * q1 * q2
+    loss = observed_previous - stable_present
+    gain = observed_current - stable_present
+    stable_absent = 1.0 - stable_present - loss - gain
+
+    return {
+        "stable_absent": stable_absent,
+        "gain": gain,
+        "loss": loss,
+        "stable_present": stable_present,
+        "latent_previous": psi1,
+        "latent_current": psi2,
+        "latent_change": psi2 - psi1,
+        "observed_previous": observed_previous,
+        "observed_current": observed_current,
+    }
