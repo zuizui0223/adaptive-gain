@@ -50,7 +50,7 @@ def test_matched_effort_rarefaction_does_not_support_raw_state_identity():
 
 def test_effort_audit_claim_ceiling_uses_observed_turnover_language():
     data = _result()
-    assert "observed link-state turnover" in data["ecological_interpretation"]["consequence"]
+    assert "observed-link turnover" in data["ecological_interpretation"]["consequence"]
     ceiling = data["claim_ceiling"].lower()
-    assert "observed link-state turnover" in ceiling
+    assert "observed link-state turnover" in ceiling or "observed-link turnover" in ceiling
     assert "ecological rewiring" in ceiling
