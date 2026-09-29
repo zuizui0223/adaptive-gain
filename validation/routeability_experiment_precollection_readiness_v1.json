@@ -155,9 +155,20 @@
       "note": "external H1/H2 SESOI is now frozen at 0.10/0.10; screening still requires real pilot nuisance inputs and remains non-final"
     },
     {
+      "item": "nuisance robustness-grid policy",
+      "status": "PASS_FROZEN",
+      "evidence": [
+        "validation/routeability_nuisance_robustness_grid_gate_v1.json",
+        "adaptive_gain/routeability_robustness_grid.py",
+        "examples/build_routeability_robustness_grid.py",
+        "tests/test_routeability_robustness_grid.py"
+      ],
+      "note": "3 frozen baseline profiles x 4 frozen nuisance profiles = the same 12 robustness IDs at every candidate N; pilot values only instantiate the frozen policy"
+    },
+    {
       "item": "final GLMM operating-characteristic simulation",
       "status": "BLOCKED_INPUTS_CODE_READY",
-      "blocker": "real procedural-pilot nuisance receipt, actual colony allocation, and a prespecified robust baseline/nuisance scenario grid are still required; H1/H2 SESOI is frozen separately",
+      "blocker": "real procedural-pilot nuisance receipt and actual/planned colony count are still required; SESOI, robustness-grid policy and final-N operating thresholds are already frozen",
       "promotion_rule": "run the frozen GLMM simulator across the required robustness surface before choosing definitive individuals per cell",
       "evidence": [
         "adaptive_gain/routeability_operating_characteristics.py",
@@ -165,7 +176,9 @@
         "examples/simulate_routeability_glmm_operating_characteristics.R",
         "validation/routeability_glmm_operating_characteristic_gate_v1.json",
         ".github/workflows/routeability-experiment-smoke.yml",
-        "validation/routeability_sesoi_gate_v1.json"
+        "validation/routeability_sesoi_gate_v1.json",
+        "validation/routeability_nuisance_robustness_grid_gate_v1.json",
+        "adaptive_gain/routeability_robustness_grid.py"
       ]
     },
     {
@@ -183,7 +196,7 @@
     {
       "item": "definitive biological sample size",
       "status": "BLOCKED",
-      "blocker": "real pilot inputs and the final GLMM robustness surface are not yet available for mechanical selection; SESOI and final-N operating thresholds are already frozen",
+      "blocker": "real pilot nuisance values, colony count and the resulting frozen-policy GLMM operating-characteristic surface are still required; SESOI, robustness-grid construction and final-N thresholds are already frozen",
       "forbidden_shortcut": "do not hand-select N, use the exact 0.25 information ceiling, or use a focal pilot interaction as the effect-size/power target"
     },
     {
@@ -209,7 +222,7 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after procedural pilot, freeze the robustness baseline/nuisance grid, run the GLMM operating-characteristic simulator using the already frozen 0.10 H1/H2 SESOI, run the frozen final-N selector, randomize the architecture-neutral eligible roster at the selected N, compile the hash-locked final trial schedule, then finalize the preregistration package",
+  "next_machine_action": "after procedural pilot, instantiate the already frozen 12-scenario robustness policy from the nuisance receipt and colony count, run the GLMM operating-characteristic simulator using frozen 0.10/0.10 SESOI, apply the frozen final-N selector/thresholds, randomize the architecture-neutral eligible roster, compile the hash-locked final schedule, then finalize preregistration",
   "next_biological_action": "qualify the exact local cue materials with the architecture-neutral physical-cue pretest, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
 }
