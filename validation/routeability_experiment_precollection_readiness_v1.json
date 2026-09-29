@@ -193,7 +193,7 @@
     {
       "item": "final GLMM operating-characteristic simulation",
       "status": "BLOCKED_REAL_INPUTS_POLICY_CODE_READY",
-      "blocker": "real procedural-pilot nuisance receipt/pooled B3 nuisance GLMM fit, pre-allocation colony_count, and operational maximum individuals-per-cell are still required; the H1/H2 SESOI, baseline/nuisance robustness expansion and final-N thresholds are already frozen",
+      "blocker": "real procedural-pilot nuisance receipt/pooled B3 nuisance GLMM fit, pre-allocation contributing colony_count and operational maximum individuals-per-cell are still required; the H1/H2 SESOI, baseline/nuisance robustness expansion and final-N thresholds are already frozen",
       "promotion_rule": "run the frozen GLMM simulator across the required robustness surface before choosing definitive individuals per cell",
       "evidence": [
         "adaptive_gain/routeability_operating_characteristics.py",
@@ -252,7 +252,7 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after the real procedural pilot, fit the already frozen pooled-B3 nuisance GLMM, freeze pre-allocation colony_count and operational maximum N, generate the fixed 12-robustness-ID grid for every multiple-of-four N from 4 through that maximum, run the GLMM operating-characteristic simulator, apply the frozen final-N selector, randomize the architecture-neutral eligible roster, compile the hash-locked final schedule, then finalize the preregistration package",
+  "next_machine_action": "after the real procedural pilot, fit the already frozen pooled-B3 nuisance GLMM, freeze pre-allocation colony_count and operational maximum N, generate the fixed 12-robustness-ID grid for every multiple-of-four N from the smallest colony-feasible value (4*ceil(colony_count/4)) through that maximum, run the GLMM operating-characteristic simulator, apply the frozen final-N selector, randomize the architecture-neutral eligible roster, compile the hash-locked final schedule, then finalize the preregistration package",
   "next_biological_action": "select the exact local cue materials/species, run the architecture-neutral material pretest and generate a PASS hash-locked material qualification receipt, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, material-qualification algorithm, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
 }
