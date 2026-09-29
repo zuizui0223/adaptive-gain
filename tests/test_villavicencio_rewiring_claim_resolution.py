@@ -60,3 +60,23 @@ def test_claim_resolution_has_observational_stop_rule():
     assert "does not identify binary or detection-corrected ecological rewiring" in data[
         "claim_ceiling"
     ]
+
+
+def test_claim_resolution_has_one_line_final_status_vector():
+    data = _result()
+    status = data["final_status_vector"]
+    assert status["sampling_effort_semantics"] == (
+        "RESOLVED_RAW_5MIN_CENSUS_IDENTITY"
+    )
+    assert status["binary_observed_link_state"] == (
+        "MATERIAL_DETECTION_SENSITIVITY_NOT_LATENT_TRUTH"
+    )
+    assert status["effort_standardized_interaction_incidence"] == (
+        "MIXED_OPPORTUNITY_INCREMENT_4_OF_6"
+    )
+    assert status["latent_link_state_opportunity_effect"] == (
+        "NOT_GENERAL_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6"
+    )
+    assert status["natural_ecological_rewiring"] == "NOT_IDENTIFIED"
+    assert status["routeability"] == "NOT_VALIDATED"
+    assert "Sampling effort is no longer unresolved" in data["resolution_sentence"]
