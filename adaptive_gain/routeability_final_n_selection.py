@@ -168,6 +168,22 @@ def select_final_individuals_per_cell(
             )
         grouped.setdefault(n, []).append(row)
 
+    evaluated_n_values = tuple(sorted(grouped))
+    maximum_n = evaluated_n_values[-1]
+    expected_n_values = tuple(
+        range(
+            rule.counterbalance_multiple,
+            maximum_n + rule.counterbalance_multiple,
+            rule.counterbalance_multiple,
+        )
+    )
+    if evaluated_n_values != expected_n_values:
+        raise ValueError(
+            "candidate N surface must contain every counterbalanced value "
+            f"from {rule.counterbalance_multiple} through {maximum_n}; "
+            f"observed {evaluated_n_values!r}"
+        )
+
     robustness_signatures: dict[str, tuple[object, ...]] = {}
     for row in rows:
         robustness_id = row["robustness_id"].strip()
@@ -257,12 +273,14 @@ def select_final_individuals_per_cell(
     return FinalNSelectionReceipt(
         selected_individuals_per_cell=selected,
         total_randomized_individuals=12 * selected,
-        evaluated_n_values=tuple(sorted(grouped)),
+        evaluated_n_values=evaluated_n_values,
         candidate_receipts=tuple(receipts),
         rule=rule,
         selection_rule=(
             "smallest individuals_per_cell that meets all frozen fit-success, "
-            "H1 and hierarchical-H2 thresholds in every robustness scenario"
+            "H1 and hierarchical-H2 thresholds in every robustness scenario "
+            "after evaluating every counterbalanced N from the minimum through "
+            "the frozen maximum"
         ),
     )
 
