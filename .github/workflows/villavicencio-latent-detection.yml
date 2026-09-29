@@ -11,6 +11,10 @@ on:
       - "examples/summarize_villavicencio_census_rate_cv.py"
       - "examples/villavicencio_two_season_detection_fit.R"
       - "examples/summarize_villavicencio_two_season_detection.py"
+      - "adaptive_gain/detection_effort_identity.py"
+      - "examples/audit_villavicencio_detection_effort_identity.py"
+      - "validation/detection_effort_gain_loss_identity_v1.json"
+      - "tests/test_detection_effort_identity.py"
       - "examples/villavicencio_latent_opportunity_decomposition.R"
       - "examples/summarize_villavicencio_latent_opportunity_decomposition.py"
       - "validation/villavicencio_census_rate_gate_v1.json"
@@ -168,6 +172,47 @@ jobs:
               ],
               "aggregate_descriptive": result["aggregate_descriptive"],
           }, indent=2, sort_keys=True))
+          PY
+
+      - name: Audit exact detection-effort gain-loss direction
+        shell: bash
+        run: |
+          set -euo pipefail
+          python examples/audit_villavicencio_detection_effort_identity.py \
+            artifact/result/census_rate_table.csv \
+            artifact/result/two_season_detection_result.json \
+            artifact/result/detection_effort_identity_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/result/detection_effort_identity_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path(
+                  "validation/detection_effort_gain_loss_identity_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+          if "P(G)-P(L)" not in gate["identities"]["difference"]:
+              raise SystemExit("detection-effort identity gate changed")
+          if "not an ecological model" not in result["analysis_status"]:
+              raise SystemExit("identity audit lost observation-process boundary")
+          print(
+              json.dumps(
+                  {
+                      "all_six": result["all_six_transitions"],
+                      "identified_five": result[
+                          "identified_five_transition_subset"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
           PY
 
       - name: Run conditional state-versus-detection decomposition
