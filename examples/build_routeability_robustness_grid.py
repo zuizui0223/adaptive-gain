@@ -28,11 +28,29 @@ def main() -> None:
     )
     planning = json.loads(args.planning_json.read_text(encoding="utf-8"))
 
+    if "candidate_individuals_per_cell" in planning:
+        raise ValueError(
+            "planning_json must freeze operational_max_individuals_per_cell, "
+            "not hand-list candidate N values"
+        )
+    operational_max = int(
+        planning["operational_max_individuals_per_cell"]
+    )
+    if (
+        operational_max < 4
+        or operational_max % 4 != 0
+        or float(planning["operational_max_individuals_per_cell"])
+        != operational_max
+    ):
+        raise ValueError(
+            "operational_max_individuals_per_cell must be an integer "
+            "multiple of four >= 4"
+        )
+    candidate_n = list(range(4, operational_max + 1, 4))
+
     scenarios = build_frozen_robustness_scenarios(
         nuisance,
-        candidate_individuals_per_cell=planning[
-            "candidate_individuals_per_cell"
-        ],
+        candidate_individuals_per_cell=candidate_n,
         colony_count=planning["colony_count"],
         simulations_per_scenario=planning["simulations_per_scenario"],
         seed_base=planning["seed_base"],
@@ -56,6 +74,7 @@ def main() -> None:
             args.nuisance_receipt_json
         ),
         "planning_input_sha256": _sha256(args.planning_json),
+        "operational_max_individuals_per_cell": operational_max,
         "candidate_individuals_per_cell": ns,
         "robustness_ids": robustness_ids,
         "scenario_count_per_N": len(robustness_ids),
