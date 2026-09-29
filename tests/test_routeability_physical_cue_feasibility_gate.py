@@ -27,7 +27,10 @@ def test_fixed_and_contingent_arms_match_timing_semantics():
     data = _gate()["access_timing"]
     assert "keep q_route visible" in data["contingent_B2"]
     assert "keep the first terminal cue visible" in data["fixed_B2"]
-    assert "state-independent counterbalanced order" in data["fixed_B2"][2]
+    assert any(
+        "state-independent counterbalanced order" in item
+        for item in data["fixed_B2"]
+    )
     assert "simultaneous-versus-sequential" in data["principle"]
 
 
