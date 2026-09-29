@@ -3,9 +3,9 @@
   "date": "2026-09-29",
   "status": "frozen_before_pilot_and_final_power_surface",
   "minimum_fit_success_fraction": 0.95,
-  "minimum_h1_directional_rejection_fraction": 0.80,
-  "minimum_h2_hierarchical_pass_fraction": 0.80,
-  "minimum_scenarios_per_n": 2,
+  "minimum_h1_directional_rejection_fraction": 0.8,
+  "minimum_h2_hierarchical_pass_fraction": 0.8,
+  "minimum_scenarios_per_n": 12,
   "minimum_simulations_per_scenario": 1000,
   "counterbalance_multiple": 4,
   "selection": "smallest individuals_per_cell passing all thresholds in every frozen robustness scenario",
@@ -13,7 +13,8 @@
     "fit_success": "At least 95% of simulations must produce a usable frozen-model fit in every required robustness scenario.",
     "h1": "At least 80% directional two-sided rejection for the frozen H1 SESOI in every required robustness scenario.",
     "h2": "At least 80% hierarchical H2 pass, including H1 gatekeeping, in every required robustness scenario.",
-    "monte_carlo": "At least 1000 simulations per scenario; the same simulation count must be used across all candidate N and robustness scenarios."
+    "monte_carlo": "At least 1000 simulations per scenario; the same simulation count must be used across all candidate N and robustness scenarios.",
+    "scenario_count": "All 3 baseline x 4 nuisance robustness profiles must be present at every candidate N."
   },
   "firewalls": [
     "thresholds cannot be changed after the final operating-characteristic surface is visible",
