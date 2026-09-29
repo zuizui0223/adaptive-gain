@@ -20,7 +20,8 @@ def test_precollection_readiness_marks_design_gates_green_but_power_blocked():
     assert by_item["roster-to-final trial schedule linkage"]["status"] == "PASS_CODE_ONLY"
     assert by_item["confirmatory estimands and multiplicity"]["status"] == "PASS"
     assert by_item["external H1/H2 SESOI"]["status"] == "PASS_FROZEN"
-    assert by_item["final GLMM operating-characteristic simulation"]["status"] == "BLOCKED_INPUTS_CODE_READY"
+    assert by_item["pilot nuisance GLMM bridge and robustness-grid policy"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["final GLMM operating-characteristic simulation"]["status"] == "BLOCKED_REAL_INPUTS_POLICY_CODE_READY"
     assert by_item["definitive biological sample size"]["status"] == "BLOCKED"
 
 
