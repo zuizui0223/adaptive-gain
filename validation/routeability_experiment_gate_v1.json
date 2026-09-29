@@ -152,7 +152,8 @@
   "tests": [
     "tests/test_ecological_routeability_experiment.py",
     "tests/test_routeability_experiment_design.py",
-    "tests/test_routeability_experiment_stimulus_builder.py"
+    "tests/test_routeability_experiment_stimulus_builder.py",
+    "tests/test_routeability_physical_cue_feasibility_gate.py"
   ],
   "promotion_rule": "This is the preferred first direct empirical test because branch structure is manipulated independently of species composition, conventional compatibility filters, and observed network response.",
   "machine_surface": {
@@ -176,7 +177,9 @@
       "Spaethe et al. 2026, Bees flexibly adjust decision strategies to information content in a foraging task"
     ],
     "fixed_access_timing": "two sequential stages matched to contingent access: first terminal cue remains visible while the second terminal cue is presented; A-to-B versus B-to-A order is state-independent and counterbalanced",
-    "access_difference_ceiling": "do not implement fixed access as simultaneous two-cue exposure; both arms are sequentially staged and differ only in whether the second cue identity depends on the first cue outcome"
+    "access_difference_ceiling": "do not implement fixed access as simultaneous two-cue exposure; both arms are sequentially staged and differ only in whether the second cue identity depends on the first cue outcome",
+    "physical_cue_gate": "validation/routeability_physical_cue_feasibility_gate_v1.json",
+    "material_admission": "exact physical symbols are not confirmatory-ready until the separate architecture-neutral cue pretest reaches the frozen 80% last-20 criterion for all three cue identities and the <=0.10 salience-balance margin"
   },
   "routing_phases": {
     "guided": {
