@@ -1,197 +1,188 @@
 # Villavicencio empirical positioning v1
 
-Status: **REPAIRED AFTER SUPPORT-LEAKAGE AUDIT on 2026-09-28.** This file remains a post-freeze empirical revision reserve and does **not** modify the frozen Evolution Letters V5 submission surface.
+Status: post-freeze empirical revision reserve. This file does **not** modify the frozen Evolution Letters V5 submission surface.
 
-Machine surfaces:
-- `validation/villavicencio_phenology_support_leakage_v1.json`
-- `validation/villavicencio_focal_excluded_opportunity_gate_v1.json`
-- `validation/villavicencio_focal_excluded_opportunity_result_v1.json`
-- `validation/villavicencio_current_opportunity_axis_audit_result_v1.json`
-- `validation/villavicencio_siteweek_opportunity_audit_result_v1.json`
-- `validation/villavicencio_raw_subseason_reconstruction_result_v1.json`
+## Current position
 
-## 1. The original published-overlap interpretation is superseded
+The Villavicencio bridge has now passed through three distinct stages:
 
-The original annual analysis treated the published `phenological_overlap` matrix as an outcome-independent ecological opportunity filter over all 45 × 135 candidate plant-pollinator dyads. A raw-surface audit showed that this assumption is false for that use.
+1. the original published phenological-overlap reanalysis produced strong gain discrimination but was found to reuse a response-conditioned support surface;
+2. that interpretation was quarantined rather than defended;
+3. a focal-response-excluded opportunity surface was rebuilt from public raw dated records and independently validated.
 
-Across all 6,075 dyads:
-- 881 are observed as positive links in at least one annual network;
-- 827 have non-zero published phenological overlap;
-- all 827 non-zero-overlap dyads belong to the 881 ever-observed links;
-- among the 5,194 never-observed dyads, zero have non-zero published overlap.
+The valid ecological result is therefore the repaired raw-record result, not the historical published-overlap model.
 
-Thus `P(ever linked | published overlap > 0) = 1.0` on the workbook surface. The published overlap matrix cannot be used as an independent candidate-dyad predictor of link gain.
+## 1. Leakage repair
 
-The historical full-model values remain numerically reproducible (gain AUC 0.8652, loss AUC 0.6505), but their phenology/gain-filter interpretation is quarantined. This does **not** invalidate Peralta et al. (2020); it invalidates this project's reuse of their observed-interaction phenology surface as a full candidate-dyad predictor.
+The published `phenological_overlap` matrix cannot be used as an independent full candidate-dyad gain predictor in this project. Every dyad with non-zero published overlap was observed as an interaction at least once over the six-year study, while none of the 5,194 never-linked dyads had positive published overlap.
 
-## 2. Focal-response-excluded repair
+That support leakage explains why the historical full model reached gain AUC 0.865. Removing the published overlap term collapses gain AUC to about 0.514 and proper-score skill to slightly below the null.
 
-The raw Figshare visitor records were used to reconstruct temporal opportunity without allowing the focal plant-pollinator link to define its own predictor.
+The historical result is retained numerically but is not ecological evidence.
 
-For focal plant `p`, pollinator `i`, and year `y`:
+## 2. Repaired current-state opportunity
 
-1. **plant availability:** weeks in which `p` was observed flowering;
-2. **pollinator activity:** weeks in which `i` was observed visiting at least one plant other than `p`;
-3. **focal-excluded overlap:** weeks satisfying both conditions.
+Opportunity was rebuilt from raw dated visitor records without allowing the focal dyad response to construct its own predictor.
 
-The focal `p-i` interaction is excluded from the pollinator-activity and overlap predictors. Undated positive visits may define the annual response link but never enter weekly opportunity predictors.
+For each focal plant-pollinator dyad, current-year opportunity is based on:
 
-The raw positive-visit records reproduce the Stage-1 annual response exactly: response mismatch count = **0** across all 7,620 shared-dyad transition rows.
+- focal-plant flowering availability;
+- focal-pollinator activity on **other** plants;
+- their focal-response-excluded temporal overlap.
 
-### Support is no longer response-conditioned
+The repaired support is broad: 3,467 never-realized dyads have positive reconstructed opportunity, so opportunity is no longer nested inside realized-link support.
 
-The repaired surface covers candidate dyads that never became links:
+In the sampling-consistent annual primary scope:
 
-- total trait-subset dyads: **6,075**;
-- ever linked: **881**;
-- never linked: **5,194**;
-- positive reconstructed opportunity in at least one year: **4,295**;
-- opportunity-positive but never linked: **3,467**;
-- `P(ever linked | repaired opportunity > 0) = 0.193`.
+- **gain:** AUC = **0.7434**, relative held-out log-loss reduction = **0.1393**;
+- **loss:** AUC = **0.6684**, relative held-out log-loss reduction = **0.0682**;
+- proper-score skill is positive in every primary held-out transition for both endpoints.
 
-Therefore the repaired opportunity surface is not nested inside realized-link support.
+The same variables measured one year earlier do not recover the current-state signal:
 
-## 3. Ecological result: current opportunity, not stable propensity
+- gain lagged AUC = **0.5278**;
+- loss lagged AUC = **0.4059**, with log-loss worse than the null.
 
-The primary sampling-consistent scope is 2008–2011, evaluated by leave-one-transition-out response holdout.
+So the result is about **current ecological opportunity**, not a stable dyad propensity or a useful past-only forecasting rule.
 
-### Link gain
+## 3. Spatiotemporal robustness
 
-For 4,750 previously absent dyad-transition rows with 443 gains, the focal-response-excluded **current-year** opportunity model gives:
+The result remains when opportunity is made stricter: the focal plant must be flowering and the focal pollinator must be active on another plant in the **same site and ISO week**.
 
-- ROC AUC = **0.7434**;
-- relative held-out log-loss reduction = **0.1393**;
-- held-out Brier improvement = **0.00908**;
-- positive log-loss skill in **3/3** primary held-out transitions.
+Primary same-site same-week results:
 
-A binary descriptive contrast is also large: gain rate is **0.1147** when current focal-excluded opportunity is positive versus **0.0318** when it is zero, a ratio of **3.61**.
+- **gain:** AUC = **0.7496**, relative log-loss reduction = **0.1465**, positive proper-score skill in 3/3 folds;
+- **loss:** AUC = **0.6894**, relative log-loss reduction = **0.0872**, positive skill in 3/3 folds.
 
-### Link loss
+A previously absent dyad with positive same-site same-week opportunity forms a link at **12.72%**, versus **2.96%** when opportunity is zero, a rate ratio of about **4.29**.
 
-For 692 established dyad-transition rows with 343 losses:
+Among established links, loss occurs at **47.14%** with positive same-site same-week opportunity versus **61.74%** when opportunity is zero.
 
-- ROC AUC = **0.6684**;
-- relative held-out log-loss reduction = **0.06825**;
-- held-out Brier improvement = **0.02355**;
-- positive log-loss skill in **3/3** primary held-out transitions.
+This rules out the simple explanation that the repaired result exists only because spatially separated observations were pooled within the same week.
 
-The broad 4-transition and 5-transition sensitivity scopes retain positive full-model log-loss skill for both gain and loss in every held-out transition.
+It does **not** remove shared sampling-process dependence or establish causality.
 
-These are **retrospective current-state opportunity associations**. The current-year predictors are measured from the same ecological year as the response endpoint, so this is not prospective forecasting.
+## 4. Pair-specific overlap is not the main result
 
-### Same-site same-week robustness
+The clean current-state model separates two marginal opportunity axes:
 
-The signal is not created solely by pooling spatially separated observations within the same week. Requiring focal-plant flowering and focal-pollinator activity on other plants to occur in the **same site × ISO-week cell** gives, in the same primary scope:
+- plant flowering availability;
+- pollinator activity on other plants.
 
-- gain AUC = **0.7496**, relative held-out log-loss reduction = **0.1465**, positive skill in **3/3** transitions;
-- loss AUC = **0.6894**, relative held-out log-loss reduction = **0.08721**, positive skill in **3/3** transitions.
+Adding the dyad-specific weekly-overlap term on top of those marginals yields only a small increment:
 
-Descriptively, previously absent dyads form links at **12.72%** when same-site same-week opportunity is positive versus **2.96%** when it is zero (rate ratio ≈ **4.29**). Established links are lost at **47.14%** with positive site-week opportunity versus **61.74%** when it is zero.
+- gain primary delta log-loss = **0.00128**;
+- loss primary delta log-loss = **0.00389**;
 
-This strengthens the current-state opportunity interpretation, but the predictors and responses are still observed through the same sampling process. It does not remove sampling-effort confounding or make the result causal.
+and the increment becomes fold-unstable in broader temporal sensitivities.
 
-## 4. Pair-specific temporal matching is not the main result
+Therefore the empirical bridge should **not** be framed as “fine pairwise phenological matching explains rewiring.”
 
-The full model contains pair-specific focal-excluded overlap plus two marginal quantities:
-- plant flowering weeks;
-- pollinator activity weeks on other plants.
+The stronger result is that the current availability/activity state of the two sides constrains link dynamics.
 
-Removing the pair-specific overlap term leaves almost all of the predictive skill.
+## 5. Villavicencio endpoint-axis decomposition
 
-Primary scope:
+Within Villavicencio, a post-result decomposition suggested an endpoint asymmetry:
 
-- gain marginal-only AUC = **0.7400**, relative log-loss reduction = **0.1353**;
-- loss marginal-only AUC = **0.6647**, relative log-loss reduction = **0.06268**.
+- link **gain** carries more predictive information from pollinator activity on other plants than from plant availability;
+- link **loss** carries more predictive information from focal-plant availability than from pollinator activity.
 
-The pair-specific overlap term improves primary log loss in 3/3 folds, but the pooled increment is small:
-- gain Δ log loss = **+0.00128** when overlap is removed;
-- loss Δ log loss = **+0.00389**.
+The primary and near-core folds are directionally consistent.
 
-More importantly, this increment becomes fold-unstable in broader temporal sensitivities:
-- gain: 3/4 and 4/5 positive folds;
-- loss: 3/4 and 3/5 positive folds.
+This was explicitly treated as hypothesis-generating rather than promoted to a mechanism.
 
-Therefore the ecological headline is **availability/activity opportunity**, not pair-specific phenological matching.
+## 6. Independent 12-site external test
 
-## 5. Past-only negative control
+The endpoint-axis direction was then frozen **before** opening dyad-level gain/loss effects in an independent eight-year, 12-site plant-pollinator dataset (Domínguez-Garcia et al. 2026).
 
-The same opportunity variables were reconstructed using the **previous year only** and used as a past-only negative control.
+The external test used leave-one-site-out validation and a focal-response-excluded pollinator-side activity measure.
 
-Primary scope:
+### Gain: does not replicate
 
-### Gain
-- lagged AUC = **0.5278**;
-- relative log-loss reduction = **0.01039**.
+External gain:
 
-### Loss
-- lagged AUC = **0.4059**;
-- relative log-loss reduction = **−0.02712**;
-- Brier performance is also worse than the null.
+- full AUC = **0.6449**;
+- plant-availability increment = **0.01549**;
+- pollinator-activity increment = **0.00410**;
+- frozen pollinator-minus-plant contrast = **-0.01139**;
+- only **2/12** held-out sites match the Villavicencio gain direction.
 
-Current-year log-loss skill exceeds the lagged model in **3/3 primary folds for both endpoints**, **4/4** folds in the near-core sensitivity, and **5/5** folds in the full annual sensitivity.
+Thus the Villavicencio statement “formation is more pollinator-side weighted” does **not** generalize under the pre-frozen external measurement.
 
-Thus the repaired signal is not well described as a stable dyad propensity that can simply be carried forward one year. It is much more consistent with **current ecological opportunity**.
+### Loss: directionally replicates
 
-## 6. Current opportunity is itself asymmetric across endpoints
+External loss:
 
-A post-result decomposition asks which of the two clean marginal opportunity axes carries more held-out information:
+- full AUC = **0.6118**;
+- plant-availability increment = **0.02161**;
+- pollinator-activity increment = **-0.00153**;
+- frozen plant-minus-pollinator contrast = **+0.02314**;
+- **10/12** held-out sites match the Villavicencio loss direction.
 
-- **plant availability:** focal-plant flowering weeks;
-- **pollinator activity:** weeks in which the pollinator visits other plants.
+This provides cross-system support for a plant-availability-weighted loss/persistence pattern under the clean focal-excluded definitions.
 
-Both axes add reproducible information in the primary scope, but their relative contributions reverse between link gain and link loss.
+## 7. Measurement mapping is itself part of the result
 
-### Gain
+A post-result external sensitivity replaced the focal-excluded pollinator activity proxy with published pollinator abundance or phenology.
 
-Removing pollinator activity from the two-axis marginal model worsens held-out log loss by **0.02620**, whereas removing plant availability worsens it by **0.01169**. The pollinator-activity increment is larger in **3/3** primary folds and **4/4** near-core folds; the same direction persists in **5/5** annual folds.
+The exact axis dominance changed substantially:
 
-### Loss
+- gain ranged from plant-dominant to approximately tied to weakly pollinator-dominant;
+- loss became pollinator-dominant under the published pollinator metrics.
 
-Removing plant availability worsens held-out log loss by **0.03671**, whereas removing pollinator activity worsens it by only **0.00506**. The plant-availability increment is larger in **3/3** primary folds and **4/4** near-core folds. In the all-annual sensitivity it remains larger in **4/5** folds; the exception is 2006→2007, the transition already isolated as sampling-sensitive because 2006 used an expanded site pool.
+Because those published pollinator metrics may share observation support with focal interaction detection, they cannot replace the clean primary external test.
 
-The resulting ecological hypothesis is therefore more specific:
+But they show something important:
 
-> **Formation appears more pollinator-activity weighted, whereas loss appears more plant-availability weighted.**
+> **the existence of an ecological-opportunity signal is more portable than the exact allocation of predictive information between plant and pollinator axes.**
 
-This wording is deliberately predictive rather than causal. The decomposition was motivated after the repaired result was seen, both axes are measured through the observational sampling process, and the 2006 sensitivity demonstrates that the contrast is not immune to sampling design. It is a hypothesis-generating endpoint asymmetry for independent replication, not evidence that pollinator behaviour causes link formation or that plant phenology causes link loss.
+Axis dominance is therefore not a universal mechanism in the present evidence.
 
-## 7. What is now supported
+## 8. Revised ecological result
 
-The strongest defensible empirical statement is:
+The strongest defensible empirical statement is now:
 
-> **Plant-pollinator link dynamics are strongly conditioned by current ecological opportunity. Independently reconstructed plant availability and pollinator activity discriminate link formation and, more moderately, link loss even when the focal interaction is excluded from predictor construction. The same variables measured one year earlier do not recover that signal.**
+> **Annual plant-pollinator link dynamics contain a reproducible current-state opportunity signal after focal-response leakage is removed. This signal survives same-site same-week matching, is substantially stronger than a one-year-lagged control, and is carried mainly by marginal plant availability and pollinator activity rather than by fine dyad-specific temporal matching. Which side dominates link formation is not cross-system invariant. Plant-side availability shows more consistent support for link persistence/loss under the focal-excluded definitions, but even this is not yet a causal mechanism.**
 
-This is more specific than saying that “phenology predicts rewiring.” It separates:
-- current availability/activity;
-- pair-specific temporal matching;
-- stable past-only propensity.
+This is a stronger ecological position than the earlier “phenology predicts rewiring” claim because it specifies:
 
-The first is supported; the second is small and sensitivity-dependent; the third is not supported as a useful forecasting explanation.
-
-## 8. What remains unresolved
-
-This analysis does not establish:
-- a causal effect of phenology or temporal opportunity;
-- causal primacy of availability/activity;
-- strict future-link forecasting;
-- a universal assembly-versus-disassembly mechanism;
-- pair-specific phenological matching as the dominant driver;
-- sampling-effort-corrected true rewiring;
-- decision-equivalence classes;
-- environmental routeability.
-
-The response remains detection-sensitive. However, the higher-resolution target is no longer blocked on RData bytes: the Dryad-documented date boundaries applied to the public raw visitor records reconstruct **18 non-empty subseason networks and 12 within-year transitions**, with **4,581 shared-dyad rows and 853 changed links (422 gains, 431 losses)**.
-
-Dated records fully recover annual link support for 2006–2010. In 2011, 433 of 440 annual links are date-reconstructable and seven occur only in undated positive rows, so a dated-complete sensitivity excluding 2011 is required for subseason analyses. The reconstruction does not claim byte-for-byte identity with the unavailable RData object.
+- what the valid opportunity exposure is;
+- what information is excluded from it;
+- what temporal and spatial controls it survives;
+- which component does **not** generalize.
 
 ## 9. Relation to routeability
 
-The Villavicencio repair now supplies a valid **ecological baseline layer**:
+None of these analyses validates routeability.
 
-`species persistence -> current availability/activity opportunity -> realized link dynamics`.
+The empirical hierarchy is:
 
-Routeability, if tested later, must add information beyond this clean baseline using an independently measured decision layer. The network data alone still do not validate routeability.
+`current ecological opportunity -> realized link dynamics`
+
+The missing routeability layer is still:
+
+`independent cue / decision structure -> incremental information beyond ecological opportunity`
+
+Decision-equivalence classes must therefore come from independent cognition or cue-choice evidence, or from the controlled routeability experiment already designed in PR #65.
+
+The network analyses cannot manufacture that layer from the same links they predict.
 
 ## Claim ceiling
 
-The repaired Villavicencio result is a retrospective current-state ecological opportunity result. It establishes that focal-response-excluded availability/activity contains reproducible information about annual link gain and loss, especially gain formation. It does **not** establish causality, strict forecasting, pair-specific temporal matching as the dominant mechanism, decision equivalence, or routeability.
+Allowed:
+
+- focal-response-excluded current ecological opportunity discriminates annual link gain and loss;
+- the result survives a same-site same-week opportunity definition;
+- a one-year-lagged opportunity surface does not recover the same signal;
+- dyad-specific overlap adds only small, sensitivity-dependent information beyond marginal opportunity;
+- the Villavicencio gain-side axis dominance does not generalize in the pre-frozen external test;
+- the plant-side loss direction is cross-system consistent under the focal-excluded primary definitions.
+
+Not allowed:
+
+- the published aggregate phenology surface is an independent gain filter;
+- current opportunity causally determines rewiring;
+- gain and loss have universally distinct causal mechanisms;
+- pollinator-side control of formation is universal;
+- plant-side control of persistence is a universal mechanism independent of measurement;
+- these results validate decision equivalence or routeability.
