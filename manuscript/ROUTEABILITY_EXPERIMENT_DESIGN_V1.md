@@ -596,7 +596,8 @@ The external smallest-effect threshold is now frozen **before pilot/confirmatory
 
 - H1 `Delta_B2` SESOI = **0.10** on the probability scale;
 - H2 budget-localization SESOI = **0.10**;
-- provenance = `practical_decision_threshold_frozen_2026-09-29`.
+- provenance type = `practical_decision_threshold`;
+- freeze ID = `practical_decision_threshold_frozen_2026-09-29`.
 
 The 0.10 threshold means one additional correct decision per ten test trials attributable to the routeability-specific interaction. It is a smallest-worthwhile-effect threshold, not a prediction of the true effect. External bumblebee artificial-flower studies that use 80% learning criteria or report >85% discrimination accuracy provide feasibility context only; their accuracies are not converted into the focal effect estimate.
 
