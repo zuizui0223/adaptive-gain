@@ -20,6 +20,38 @@ That support leakage explains why the historical full model reached gain AUC 0.8
 
 The historical result is retained numerically but is not ecological evidence.
 
+## Detection boundary of the raw 18-period response
+
+The public raw records reconstruct 18 subseason networks and 12 within-year transitions (4,581 shared-dyad rows; 853 observed binary changes = 422 gains + 431 losses). A dedicated census-effort audit now resolves the sampling semantics rather than leaving them as `UNRESOLVED`.
+
+A 5-min focal-plant census is identifiable as `site x study-year x date x plant x obs.time`. Raw annual census totals exactly match the published values in 2006, 2007, 2008, 2009 and 2011; in 2010 the raw file contains 463 identifiable censuses versus 460 in the published table, a discrepancy of three retained explicitly rather than coerced away.
+
+The important result is not reassurance. Subseason effort is highly heterogeneous, and incidence Chao2 on the 45 x 135 Stage-1 subset indicates only about **31.4–65.4%** of expected binary links are observed across individual subseasons.
+
+Focal-plant census effort is also strongly aligned with observed link-change direction. Among observed changed dyads, the change in log census effort ranks gain versus loss with:
+
+- AUC = **0.815** in the dated 2008–2010 core;
+- AUC = **0.824** in the 2008–2011 two-site core;
+- AUC = **0.834** across all 12 within-year transitions.
+
+An effort-only leave-one-transition-out model remains predictive in the dated core:
+
+- gain AUC = **0.697**, relative log-loss reduction = **0.043**;
+- loss AUC = **0.670**, relative log-loss reduction = **0.050**.
+
+A 500-replicate matched-effort rarefaction gives mean probability that the original state label survives of only about **0.580 for gains**, **0.595 for losses**, and **0.604 for stable-present links** in the dated 2008–2010 core.
+
+Therefore the 853 changes are reproducible **observed-link state changes**, but they are not 853 identified ecological rewiring events. Census allocation is partly coupled to flowering availability, so this cannot be reduced to pure observer bias; nevertheless, observed zero/non-zero transitions cannot identify true link absence under the present design.
+
+Current ledger language is deliberately split:
+
+- sampling-effort semantics: **RESOLVED**;
+- binary link detection: **MATERIAL DETECTION SENSITIVITY**;
+- true absence: **UNRESOLVED**;
+- ecological rewiring identity of the 853 changes: **NOT IDENTIFIED**.
+
+The raw 18-period response is therefore retained for response feasibility, temporal-grain reconstruction and detection audits. A natural-network rewiring claim requires a detection-standardized response rather than stronger wording around the same binary zeros.
+
 ## 2. Repaired current-state opportunity
 
 Opportunity was rebuilt from raw dated visitor records without allowing the focal dyad response to construct its own predictor.
