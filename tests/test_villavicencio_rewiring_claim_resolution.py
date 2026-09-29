@@ -38,3 +38,25 @@ def test_claim_resolution_uses_observed_turnover_language():
 def test_claim_resolution_points_to_direct_mechanism_gate():
     data = _result()
     assert "controlled routeability experiment" in data["next_scientific_gate"]
+
+
+def test_claim_resolution_records_observation_model_sensitivity():
+    data = _result()
+    assert data["claim_decisions"]["detection_corrected_true_rewiring_identified"].startswith(
+        "NO:"
+    )
+    level7 = [row for row in data["evidence_chain"] if row["level"] == 7]
+    assert len(level7) == 1
+    assert "6/6" in level7[0]["result"]
+    assert "6/6" in level7[0]["boundary"]
+    assert "observation-model dependent" in level7[0]["boundary"]
+
+
+def test_claim_resolution_has_observational_stop_rule():
+    data = _result()
+    assert "Stop adding flexible Villavicencio observation models" in data[
+        "next_scientific_gate"
+    ]
+    assert "does not identify binary or detection-corrected ecological rewiring" in data[
+        "claim_ceiling"
+    ]
