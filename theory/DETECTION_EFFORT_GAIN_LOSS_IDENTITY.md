@@ -105,3 +105,27 @@ binary observation map. It does not promote model-based latent states to truth.
 - Do not assume independent per-census detection is the true observation model.
 - Use it to show why binary gain/loss direction is not identified when
   period-level detection probabilities differ.
+
+
+## Relation to existing imperfect-detection literature
+
+No novelty is claimed for the general fact that ecological interaction networks
+are distorted by incomplete sampling or imperfect detection. Prior work has
+explicitly separated interaction processes from detection and shown that
+sampling effort can alter inferred network structure and mechanism:
+
+- Weinstein & Graham (2017), *Food Webs*,
+  DOI: 10.1016/j.fooweb.2017.05.002.
+- Vizentin-Bugoni et al. (2016), *Journal of Animal Ecology*,
+  DOI: 10.1111/1365-2656.12459.
+- Jordano (2016), *Functional Ecology*,
+  DOI: 10.1111/1365-2435.12763.
+
+The narrower contribution here is the explicit two-time binary flow identity
+for the **direction** of observed link turnover, its separation into
+assumption-free and conditional-independence special cases, and its empirical
+diagnostic application to repeated-census plant-pollinator data.
+
+This identity should therefore be presented as a clarification of the
+observation map and an identification boundary, not as a claim that imperfect
+detection in ecological networks has newly been discovered.
