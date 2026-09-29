@@ -78,6 +78,11 @@
     "plant_abundance_sensitivity": {
       "replacement": "replace PhenologyP with current-year AbundanceP while keeping focal-excluded pollinator activity unchanged",
       "role": "prespecified sensitivity only; directional replication status is defined by the PhenologyP primary analysis"
+    },
+    "replication_rule": {
+      "primary": "direction_matches_both_endpoints if the pooled out-of-site gain contrast (pollinator minus plant increment) is > 0 and the pooled out-of-site loss contrast (plant minus pollinator increment) is > 0",
+      "site_robustness": "report the number of 12 held-out sites with the frozen direction for each endpoint; no post-hoc site-count threshold is used to redefine the primary result",
+      "no_p_value": "leave-one-site-out folds share training data, so fold sign counts are treated as robustness rather than independent hypothesis tests"
     }
   },
   "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant phenology/flower abundance are tabulated at species x site x year independently of focal dyad identity; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response."
