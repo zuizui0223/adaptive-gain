@@ -130,14 +130,15 @@
     "actual_roster_constraint": "final confirmatory randomization may proceed only if the actual colony supply can realize the selected-N block allocation; otherwise rerun the already frozen power policy with the revised pre-allocation colony count before treatment assignment"
   },
   "candidate_N_policy": {
-    "values": "every multiple of four from 4 through a separately frozen operational maximum individuals_per_cell",
+    "values": "every counterbalance multiple from the smallest value that can allocate at least one complete 12-cell block to each planned contributing colony through the separately frozen operational maximum individuals_per_cell",
     "same_robustness_id_set_at_every_N": true,
     "same_trials_per_individual_at_every_N": true,
     "same_simulations_per_scenario_at_every_N": true,
     "no_gaps": true,
     "operational_max_role": "husbandry/supply feasibility input frozen after Pilot B nuisance calibration but before final power simulation; it cannot be chosen from the power result",
-    "input_contract": "planning input supplies only operational_max_individuals_per_cell; examples/build_routeability_robustness_grid.py derives 4,8,12,...,max automatically and rejects hand-listed candidate arrays",
-    "operational_max_freeze": "freeze from husbandry/colony-supply feasibility before final power simulation and before viewing any final operating-characteristic result"
+    "input_contract": "planning input supplies operational_max_individuals_per_cell and colony_count only; examples/build_routeability_robustness_grid.py derives the complete colony-feasible N sequence automatically and rejects hand-listed candidate arrays",
+    "operational_max_freeze": "freeze from husbandry/colony-supply feasibility before final power simulation and before viewing any final operating-characteristic result",
+    "minimum_formula": "counterbalance_multiple * ceil(colony_count / counterbalance_multiple); with counterbalance_multiple=4"
   },
   "claim_ceiling": "This gate freezes how real nuisance pilot values will be converted into final robustness scenarios. It does not provide nuisance estimates, power, or a biological sample size before the real pilot."
 }
