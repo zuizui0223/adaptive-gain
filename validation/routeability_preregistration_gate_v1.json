@@ -57,7 +57,8 @@
     "all final power-surface rows use the same frozen H1/H2 SESOI values and provenance",
     "all final power-surface rows use one frozen simulations-per-scenario count meeting the final-N rule minimum",
     "preregistration H1/H2 SESOI values and provenance exactly match validation/routeability_sesoi_gate_v1.json",
-    "final-N threshold rule payload exactly matches validation/routeability_final_n_threshold_rule_v1.json"
+    "final-N threshold rule payload exactly matches validation/routeability_final_n_threshold_rule_v1.json",
+    "final power surface uses the exact 12 robustness_id values frozen by validation/routeability_nuisance_robustness_grid_gate_v1.json at every candidate N"
   ],
   "forbidden": [
     "finalizing the template before pilot and power inputs are frozen",
@@ -118,6 +119,13 @@
       "minimum_scenarios_per_n": 2,
       "minimum_simulations_per_scenario": 1000,
       "counterbalance_multiple": 4
+    },
+    "robustness_grid_policy": {
+      "status": "FROZEN",
+      "source": "validation/routeability_nuisance_robustness_grid_gate_v1.json",
+      "baseline_profiles": 3,
+      "nuisance_profiles": 4,
+      "scenario_count_per_candidate_n": 12
     }
   }
 }
