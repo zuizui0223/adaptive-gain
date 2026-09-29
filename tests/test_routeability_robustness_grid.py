@@ -55,12 +55,12 @@ def test_balanced_colony_blocks_are_complete_and_deterministic():
 def test_robustness_grid_has_same_twelve_ids_at_every_candidate_n():
     scenarios = build_frozen_robustness_scenarios(
         _nuisance(),
-        candidate_individuals_per_cell=[12, 16],
+        candidate_individuals_per_cell=[4, 8, 12, 16],
         colony_count=4,
         simulations_per_scenario=250,
         seed_base=20260929,
     )
-    assert len(scenarios) == 24
+    assert len(scenarios) == 48
 
     by_n = {}
     for row in scenarios:
@@ -76,17 +76,17 @@ def test_robustness_grid_has_same_twelve_ids_at_every_candidate_n():
         assert sum(counts) == n
         assert max(counts) - min(counts) <= 1
 
-    assert set(by_n) == {12, 16}
-    ids12 = {row["robustness_id"] for row in by_n[12]}
-    ids16 = {row["robustness_id"] for row in by_n[16]}
-    assert ids12 == ids16
-    assert len(ids12) == 12
+    assert set(by_n) == {4, 8, 12, 16}
+    reference = {row["robustness_id"] for row in by_n[4]}
+    assert len(reference) == 12
+    for n in (8, 12, 16):
+        assert {row["robustness_id"] for row in by_n[n]} == reference
 
 
 def test_pilot_anchor_and_stress_rules_are_mechanical():
     scenarios = build_frozen_robustness_scenarios(
         _nuisance(),
-        candidate_individuals_per_cell=[16],
+        candidate_individuals_per_cell=[4],
         colony_count=4,
         simulations_per_scenario=100,
         seed_base=7,
@@ -109,6 +109,26 @@ def test_pilot_anchor_and_stress_rules_are_mechanical():
     assert combined["simulation"]["colony_sd_logit"] == pytest.approx(0.18)
     assert combined["simulation"]["dropout_fraction"] == pytest.approx(0.15)
     assert combined["simulation"]["timeout_fraction"] == pytest.approx(0.08)
+
+
+def test_grid_rejects_candidate_n_gaps_or_start_above_four():
+    with pytest.raises(ValueError, match="every multiple of four"):
+        build_frozen_robustness_scenarios(
+            _nuisance(),
+            candidate_individuals_per_cell=[8, 12],
+            colony_count=4,
+            simulations_per_scenario=100,
+            seed_base=1,
+        )
+
+    with pytest.raises(ValueError, match="every multiple of four"):
+        build_frozen_robustness_scenarios(
+            _nuisance(),
+            candidate_individuals_per_cell=[4, 12],
+            colony_count=4,
+            simulations_per_scenario=100,
+            seed_base=1,
+        )
 
 
 def test_grid_rejects_non_multiple_candidate_n_and_opened_focal_contrast():
@@ -134,7 +154,7 @@ def test_grid_rejects_non_multiple_candidate_n_and_opened_focal_contrast():
     with pytest.raises(ValueError, match="closed focal contrast"):
         build_frozen_robustness_scenarios(
             _nuisance(focal_architecture_access_contrast_opened=True),
-            candidate_individuals_per_cell=[16],
+            candidate_individuals_per_cell=[4],
             colony_count=4,
             simulations_per_scenario=100,
             seed_base=1,
