@@ -15,6 +15,7 @@ on:
       - "examples/summarize_villavicencio_subseason_effort_only.py"
       - "examples/audit_villavicencio_effort_balanced_rarefaction.py"
       - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
+      - "validation/villavicencio_subseason_effort_audit_result_v1.json"
       - "examples/villavicencio_stage1_from_csv.py"
       - "examples/villavicencio_conventional_filter_block_ablation.R"
       - "examples/summarize_villavicencio_filter_block_ablation.py"
