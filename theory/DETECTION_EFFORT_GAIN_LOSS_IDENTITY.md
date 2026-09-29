@@ -5,25 +5,34 @@ the frozen Evolution Letters V5 theorem surface.
 
 ## Setup
 
-Suppose a latent interaction is truly present in both adjacent periods. Let
-
-- `q_1` = probability that the interaction is detected at least once in period 1;
-- `q_2` = probability that the interaction is detected at least once in period 2.
-
-The observed binary network records a link as present when at least one
-interaction is detected in the period.
-
-Then, even though the latent link never changes,
+For any two binary observations `Y_1,Y_2`,
 
 ```text
-P(observed gain) = (1 - q_1) q_2
-P(observed loss) = q_1 (1 - q_2)
+P(Y_1=0,Y_2=1) - P(Y_1=1,Y_2=0)
+= P(Y_2=1) - P(Y_1=1).
 ```
 
-and therefore exactly
+This is a probability-conservation identity and requires **no independence
+assumption**.
+
+Now suppose a latent interaction is truly present in both adjacent periods.
+Let
+
+- `q_1` = marginal probability that the interaction is detected at least once in period 1;
+- `q_2` = marginal probability that the interaction is detected at least once in period 2.
+
+Then, even if period-level detection events are correlated,
 
 ```text
 P(observed gain) - P(observed loss) = q_2 - q_1.
+```
+
+If period-level detections are additionally conditionally independent given
+the persistent latent link, the individual transition probabilities factor as
+
+```text
+P(observed gain) = (1 - q_1) q_2
+P(observed loss) = q_1 (1 - q_2).
 ```
 
 So an increase in period-level detectability mechanically creates an excess of
@@ -31,7 +40,8 @@ observed gains over losses; a decrease creates an excess of observed losses.
 
 ## Directional odds identity
 
-Whenever both observed-gain and observed-loss probabilities are non-zero,
+Under the additional period-level conditional-independence assumption, and
+whenever both observed-gain and observed-loss probabilities are non-zero,
 
 ```text
 P(observed gain) / P(observed loss)
@@ -53,8 +63,8 @@ itself converts a detectability change into directional apparent turnover.
 
 ## Census-effort special case
 
-If each of `n` independent focal-plant censuses detects the persistent
-interaction with probability `p` when it is present,
+If each of `n` conditionally independent focal-plant censuses detects the
+persistent interaction with probability `p` when it is present,
 
 ```text
 q(n) = 1 - (1 - p)^n.
@@ -69,6 +79,13 @@ n_2 < n_1  =>  P(observed gain) < P(observed loss).
 ```
 
 This is an observation-process identity, not an ecological transition theorem.
+
+The beta-binomial robustness result in Villavicencio shows why the independent-
+census formula for `q(n)` should not be treated as the true observation model.
+Crucially, the more general binary conservation identity above survives that
+relaxation: any change in marginal observed-presence probability creates a
+gain-minus-loss imbalance, regardless of the within- or between-period
+dependence structure.
 
 ## Interpretation
 
