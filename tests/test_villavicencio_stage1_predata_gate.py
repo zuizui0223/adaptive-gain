@@ -116,6 +116,9 @@ def test_stage1_gate_resolves_effort_semantics_but_not_true_link_detection():
     assert status["effort_standardized_census_incidence"] == (
         "MIXED_OPPORTUNITY_INCREMENT_4_OF_6"
     )
+    assert status["annual_opportunity_beyond_focal_plant_effort"] == (
+        "GAIN_REPRODUCIBLE_3_OF_3_LOSS_MIXED_2_OF_3"
+    )
     policy = data["sampling_detection_policy"]
     assert policy["effort_result"].endswith(
         "villavicencio_subseason_effort_audit_result_v1.json"
