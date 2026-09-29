@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-villavicencio-source-manifest-v1",
   "date": "2026-09-26",
-  "status": "trait_bytes_verified_response_metadata_only",
+  "status": "trait_bytes_verified_response_rdata_metadata_only_raw_response_reconstructed",
   "sources": [
     {
       "role": "high-temporal-resolution interaction response",
@@ -36,6 +36,27 @@
         "size_bytes": 1232,
         "digest_type": "sha-256",
         "published_digest": "4bd03522eba91d631014c05d71dae501efe513b6b9a4e94e8dfe68feb7de38f3"
+      },
+      "materialization": {
+        "status": "published_rdata_bytes_unavailable_for_byte_validation",
+        "official_file_present": true,
+        "file_id": 268444,
+        "declared_size_bytes": 62453,
+        "published_sha256": "2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b",
+        "anonymous_file_stream_attempt": "HTTP_403_FORBIDDEN",
+        "public_github_mirror_search": "NO_EXACT_RDATA_MIRROR_FOUND",
+        "consequence": "exact byte-for-byte RData identity remains unverified"
+      },
+      "raw_record_reconstruction": {
+        "status": "PASS_INDEPENDENT_PUBLIC_RAW_ROUTE",
+        "source": "Figshare article 11794503 / visits_2006-2011_data.csv",
+        "period_rule": "externally documented Dryad subseason date boundaries",
+        "result": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+        "period_count": 18,
+        "primary_within_year_transition_count": 12,
+        "shared_dyad_rows": 4581,
+        "observed_binary_change_count": 853,
+        "exact_rdata_identity_established": false
       }
     },
     {
@@ -84,16 +105,17 @@
       }
     }
   ],
-  "freeze_rule": "Do not record a raw-file checksum until the exact downloaded bytes have been materialized and inspected.",
+  "freeze_rule": "Do not record a raw RData checksum until the exact downloaded bytes have been materialized. Keep RData byte identity separate from the independently reproducible raw-record response reconstruction.",
   "join_rule": "Freeze plant and pollinator crosswalks before inspecting the focal rewiring contrasts.",
-  "analysis_rule": "The 18-network source supplies the preferred response surface; the trait workbook supplies conventional filters. Neither source alone supplies independent decision-equivalence classes.",
+  "analysis_rule": "The exact RData object remains an optional source-identity cross-check. Stage-1 response feasibility may use the checksum-validated public raw Figshare visits plus externally documented subseason boundaries. Neither route supplies independent decision-equivalence classes, and observed binary link states remain detection-sensitive.",
   "acquisition_policy": {
-    "anonymous_metadata": "required and sufficient for source discovery, file IDs, declared sizes and published digests",
-    "published_bytes": "materialize only through an authenticated Dryad download route or a verified public institutional mirror",
-    "dryad_token_secret": "optional repository secret DRYAD_TOKEN; absence must not fail metadata smoke",
-    "no_credential_fallback": "record metadata_only_bytes_unavailable and retain source manifests",
-    "analysis_gate": "no response modelling until exact source bytes are materialized and checksummed",
-    "verified_public_mirror": "allowed only when the mirror is commit-pinned and its materialized bytes match the published Dryad digest"
+    "anonymous_metadata": "required for Dryad file IDs, declared sizes and published digests",
+    "rdata_bytes": "materialize only through an authenticated Dryad route or an exact mirror whose SHA-256 matches the published digest",
+    "raw_record_response_route": "allowed independently of RData byte materialization when public raw visit files are checksum-validated and the documented subseason boundaries are frozen",
+    "dryad_token_secret": "optional repository secret DRYAD_TOKEN",
+    "no_credential_fallback": "retain metadata-only RData status; do not treat missing RData bytes as failure of the raw-record reconstruction",
+    "rdata_identity_gate": "exact RData identity remains UNVERIFIED until SHA-256 2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b is matched",
+    "ecological_response_gate": "raw-record reconstruction may establish observed-link response feasibility only; detection-standardized ecological rewiring remains a separate identification problem"
   },
   "implementation": {
     "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
@@ -116,5 +138,13 @@
     "decision_structure_model_fitted": false,
     "transition_mapping_verified": false
   },
-  "next_materialization_gate": "The annual trait/network workbook is verified and usable for detection-sensitive fallback analysis. The 18-subseason response RData remains blocked until an authenticated Dryad route or exact verified mirror is available."
+  "next_materialization_gate": "Optional source cross-check: materialize exact miele-JAE.RData bytes and verify SHA-256 2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b. This is no longer required for the independent raw-record response reconstruction and cannot by itself resolve ecological detection bias.",
+  "latest_source_resolution": {
+    "response_rdata": "metadata_only_official_file_present_anonymous_download_forbidden",
+    "raw_response_reconstruction": "PASS_18_PERIODS_12_WITHIN_YEAR_TRANSITIONS",
+    "trait_workbook": "verified_materialized_sha256_match",
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "natural_rewiring_status": "NOT_IDENTIFIED_DETECTION_AND_OBSERVATION_MODEL_SENSITIVE",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+  }
 }
