@@ -1,0 +1,79 @@
+{
+  "schema": "adaptive-gain-villavicencio-rewiring-claim-resolution-v1",
+  "date": "2026-09-29",
+  "status": "natural_rewiring_mechanism_not_identified_opportunity_signal_largely_detection_activity_side",
+  "purpose": "Resolve the ecological interpretation of the Villavicencio empirical bridge after raw-source reconstruction, support-leakage repair, sampling-effort audit, effort-standardized response analysis, and latent detection modeling.",
+  "evidence_chain": [
+    {
+      "level": 1,
+      "surface": "raw 18-subseason binary observed-link response",
+      "result": "18 periods and 12 within-year transitions reconstructed from Figshare raw dated visits; 4,581 shared-dyad rows and 853 observed binary changes (422 gains, 431 losses)",
+      "boundary": "published RData byte identity remains unverified and binary zeros are detection-sensitive",
+      "source": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json"
+    },
+    {
+      "level": 2,
+      "surface": "sampling-effort semantics and detection audit",
+      "result": "5-min census identity reconstructed; subseason effort ranges 38-424 censuses; trait-subset Chao2 observed fraction 0.314-0.654; effort-change ranks observed gain over loss at AUC 0.815 in the dated core",
+      "boundary": "matched-effort rarefaction retains original gain/loss labels only around 0.58-0.60 on average",
+      "source": "validation/villavicencio_subseason_effort_audit_result_v1.json"
+    },
+    {
+      "level": 3,
+      "surface": "annual focal-response-excluded opportunity",
+      "result": "annual gain association remains predictive after focal-plant census-count adjustment; opportunity increment beyond effort is positive in 3/3 strict-core and 4/4 near-core gain folds",
+      "boundary": "annual binary response remains detection-sensitive; loss increment is fold-unstable",
+      "source": "validation/villavicencio_opportunity_effort_control_result_v1.json"
+    },
+    {
+      "level": 4,
+      "surface": "effort-standardized 5-min census interaction incidence",
+      "result": "current focal-response-excluded opportunity has a small positive pooled increment beyond recent interaction history",
+      "boundary": "increment is positive in only 4/6 held-out subseason transitions and fails the frozen reproducibility rule",
+      "source": "validation/villavicencio_census_rate_result_v1.json"
+    },
+    {
+      "level": 5,
+      "surface": "two-season latent link detection model",
+      "result": "simple repeated-detection model passes the frozen identifiability gate in 5/6 dated-core transitions; per-census detection probabilities are about 0.05-0.18",
+      "boundary": "posterior latent transition identity differs materially from observed binary gain/loss labels; the model remains a sensitivity analysis rather than ground truth",
+      "source": "validation/villavicencio_two_season_detection_result_v1.json"
+    },
+    {
+      "level": 6,
+      "surface": "latent state versus current-detection opportunity decomposition",
+      "result": "detection-side opportunity support occurs in 4/6 transitions",
+      "boundary": "latent state-transition support occurs in only 1/6 versus a frozen 5/6 requirement; general state promotion fails",
+      "source": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json"
+    }
+  ],
+  "claim_decisions": {
+    "phenology_predicts_rewiring": "REJECT_AS_STATED: the original published-overlap gain signal is support-leaky and quarantined",
+    "current_opportunity_predicts_observed_link_turnover": "SUPPORTED_DESCRIPTIVELY: especially for annual gain, but response remains detection-sensitive",
+    "current_opportunity_predicts_effort_standardized_interaction_incidence": "MIXED: small pooled increment, positive in 4/6 subseason folds",
+    "current_opportunity_drives_latent_link_rewiring": "NOT_SUPPORTED: state-side support 1/6 under the pre-frozen latent model-comparison rule",
+    "current_opportunity_tracks_current_detectability_activity": "SUPPORTED_AS_MODEL_COMPARISON_PATTERN: detection-side support 4/6 under the frozen rule",
+    "routeability_validated": "NO"
+  },
+  "strongest_ecological_interpretation": {
+    "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system.",
+    "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
+    "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used."
+  },
+  "allowed_terms": [
+    "observed-link turnover",
+    "interaction detection incidence",
+    "current ecological opportunity association",
+    "detection/activity-side opportunity signal",
+    "latent-state sensitivity analysis"
+  ],
+  "forbidden_terms_without_new_evidence": [
+    "853 ecological rewiring events",
+    "phenology is a causal rewiring filter",
+    "current opportunity generally drives latent link gain/loss",
+    "detection-corrected true rewiring",
+    "routeability validation"
+  ],
+  "next_scientific_gate": "A natural-network rewiring mechanism would require either an independently validated multi-season detection model with stronger state-side replication, or a design in which interaction state and detection/encounter are experimentally or independently separated. The controlled routeability experiment remains the clean direct mechanism test.",
+  "claim_ceiling": "Villavicencio supports response reconstruction, detection-bias diagnostics, and ecological opportunity/activity associations. It does not currently support a general natural-network rewiring mechanism or routeability inference."
+}
