@@ -96,3 +96,16 @@ def test_claim_resolution_integrates_exact_detection_effort_identity():
     assert len(level8) == 1
     assert "0.852" in level8[0]["result"]
     assert "persistent latent link" in level8[0]["result"]
+
+
+def test_claim_resolution_freezes_no_more_flexible_observation_models():
+    data = _result()
+    stop = data["observational_stop_rule"]
+    assert stop["status"] == "FROZEN_STOP"
+    assert len(stop["trigger"]) >= 5
+    assert "Do not add further flexible Villavicencio observation models" in stop[
+        "consequence"
+    ]
+    assert "controlled routeability experiment with an independent decision layer" in stop[
+        "allowed_next_evidence"
+    ]
