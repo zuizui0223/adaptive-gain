@@ -33,7 +33,12 @@
       "focal_confirmatory_pilot",
       "posthoc_observed_interaction"
     ],
-    "freeze_before_final_power_simulation": true
+    "freeze_before_final_power_simulation": true,
+    "frozen_source": "validation/routeability_sesoi_gate_v1.json",
+    "status": "FROZEN_H1_0.10_H2_0.10",
+    "h1_probability_scale": 0.1,
+    "h2_probability_scale": 0.1,
+    "provenance": "practical_decision_threshold_frozen_2026-09-29"
   },
   "conservative_screening": {
     "module": "adaptive_gain/routeability_experiment_power.py",
@@ -53,10 +58,11 @@
     "cannot_be_finalized_without": [
       "pilot repeated-trial correlation / individual heterogeneity",
       "pilot dropout and timeout estimates",
-      "actual colony allocation constraints",
-      "external SESOI for H1 and H2"
+      "actual colony allocation constraints"
     ],
-    "no_final_N_in_this_gate": true
+    "no_final_N_in_this_gate": true,
+    "sesoi_status": "RESOLVED_SEPARATELY",
+    "sesoi_source": "validation/routeability_sesoi_gate_v1.json"
   },
   "claim_boundary": "The calculator can expose implausibly small or large designs and enforce provenance/firewalls. It does not constitute the final powered sample-size justification."
 }
