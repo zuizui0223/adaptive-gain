@@ -38,8 +38,7 @@ def test_dataset_screen_keeps_independent_exposure_rule():
     text = _text()
     for phrase in (
         "define decision-equivalence structure independently of the observed rewiring response",
-        "defining decision-equivalence classes directly from the same network links would be circular",
-        "decision classes can only be obtained by inspecting the same link outcomes to be predicted",
+        "availability, activity and morphology still do not establish an independent cue hierarchy or decision-equivalence structure.",
         "Do not label a trait cluster as “decision equivalence” merely because it improves prediction.",
     ):
         assert phrase in text
@@ -65,7 +64,7 @@ def test_screen_has_experimental_fallback_and_stop_rules():
         "manipulate whether an early cue partitions alternatives into informative branches",
         "non-final versus final representative",
         "Stop rules",
-        "Until then, the public-data work is feasibility analysis, not empirical confirmation",
+        "Villavicencio itself is retained as a response/detection boundary case, not empirical confirmation of V5 routeability.",
     ):
         assert phrase in text
 
