@@ -144,11 +144,13 @@
       "decision-structural turnover",
       "decision-equivalence classes",
       "true ecological rewiring from binary observed gain/loss",
-      "latent true link state under imperfect detection"
-    ]
+      "latent true link state under imperfect detection",
+      "true ecological rewiring from binary observed-link changes"
+    ],
+    "current_detection_status": "Sampling-effort semantics are resolved from raw 5-min census identities, but binary link detection is materially effort-sensitive and true absence remains unidentified."
   },
   "next_gate": "Do not add another binary rewiring model. Use validation/villavicencio_subseason_effort_audit_result_v1.json for detection sensitivity and validation/villavicencio_census_rate_result_v1.json for the effort-standardized interaction-incidence check; require an independent decision layer for any routeability test.",
-  "claim_ceiling": "This annual fallback establishes only that an observed-link response surface is estimable. Raw 5-min-census audits show material detection sensitivity, so binary gain/loss must not be identified as true ecological rewiring. It cannot validate routeability or true species turnover because presence is based on positive observed links and no independent decision-structure layer is used.",
+  "claim_ceiling": "This annual fallback establishes response estimability only. Sampling-effort semantics are now resolved, but binary observed-link states remain materially detection-sensitive; annual gains/losses must be treated as observed-link turnover rather than identified ecological rewiring. It cannot validate routeability or true species turnover.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
@@ -168,5 +170,12 @@
     "latent_link_state": "UNRESOLVED",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
     "consequence": "Annual and subseason binary gain/loss remain observed-link turnover rather than identified ecological rewiring. Annual aggregation may reduce some short-term non-detection noise but does not convert observed zeros into true absences."
+  },
+  "detection_audit": {
+    "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "response_label": "observed-link turnover",
+    "ecological_rewiring_identified": false
   }
 }
