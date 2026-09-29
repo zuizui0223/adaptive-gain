@@ -124,5 +124,22 @@
     "decision-equivalence classes",
     "environmental routeability"
   ],
-  "claim_ceiling": "The five-of-six identifiability gate permits a detection-model sensitivity analysis, not promotion of posterior latent transitions to observed ecological rewiring."
+  "claim_ceiling": "The five-of-six identifiability gate permits a detection-model sensitivity analysis, not promotion of posterior latent transitions to observed ecological rewiring.",
+  "reproduction_validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36541521307,
+    "run_number": 21,
+    "conclusion": "success",
+    "head_sha": "13a493fc75c742ecc364fa23e5e59c16d91a641a",
+    "artifact_id": 11020653096,
+    "artifact_digest": "sha256:19d34b8f1c33101b1e53bc3bbae06e7001a6efb6de38a5c2324c054bdb47aea6",
+    "identified_transition_count": 5,
+    "promotion_to_latent_opportunity_model_allowed": true,
+    "note": "Independent dedicated-workflow reproduction confirms the same five-of-six simple-model identifiability gate."
+  },
+  "downstream_resolution": {
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "detection_overdispersion_result": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "conclusion": "Passing the simple-model identifiability gate did not restore ecological rewiring: the frozen general latent state-opportunity rule failed and richer detection heterogeneity made latent transition inference model-sensitive."
+  }
 }
