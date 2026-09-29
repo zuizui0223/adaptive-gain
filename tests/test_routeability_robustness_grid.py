@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -17,6 +19,7 @@ GATE = (
     / "validation"
     / "routeability_nuisance_robustness_grid_gate_v1.json"
 )
+EXPORTER = ROOT / "examples" / "build_routeability_robustness_grid.py"
 
 
 def _nuisance(**overrides):
@@ -173,3 +176,76 @@ def test_grid_fails_closed_instead_of_clipping_invalid_pilot_anchor():
             simulations_per_scenario=100,
             seed_base=1,
         )
+
+
+def test_robustness_exporter_derives_gapless_grid_from_operational_max(tmp_path):
+    nuisance_path = tmp_path / "nuisance.json"
+    planning_path = tmp_path / "planning.json"
+    output_path = tmp_path / "robustness.json"
+    nuisance_path.write_text(json.dumps(_nuisance()), encoding="utf-8")
+    planning_path.write_text(
+        json.dumps(
+            {
+                "operational_max_individuals_per_cell": 16,
+                "colony_count": 4,
+                "simulations_per_scenario": 100,
+                "seed_base": 20260929,
+                "alpha_two_sided": 0.05,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(EXPORTER),
+            str(nuisance_path),
+            str(planning_path),
+            str(output_path),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+    result = json.loads(output_path.read_text(encoding="utf-8"))
+    assert result["operational_max_individuals_per_cell"] == 16
+    assert result["candidate_individuals_per_cell"] == [4, 8, 12, 16]
+    assert result["scenario_count_per_N"] == 12
+    assert len(result["scenarios"]) == 48
+
+
+def test_robustness_exporter_rejects_hand_listed_candidate_n(tmp_path):
+    nuisance_path = tmp_path / "nuisance.json"
+    planning_path = tmp_path / "planning.json"
+    output_path = tmp_path / "robustness.json"
+    nuisance_path.write_text(json.dumps(_nuisance()), encoding="utf-8")
+    planning_path.write_text(
+        json.dumps(
+            {
+                "candidate_individuals_per_cell": [4, 8, 12],
+                "colony_count": 4,
+                "simulations_per_scenario": 100,
+                "seed_base": 1,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(EXPORTER),
+            str(nuisance_path),
+            str(planning_path),
+            str(output_path),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "operational_max_individuals_per_cell" in completed.stderr
