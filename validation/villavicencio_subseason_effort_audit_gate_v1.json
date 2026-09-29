@@ -11,7 +11,13 @@
   },
   "census_semantics": {
     "unit": "one 5-min focal-plant observation period",
-    "raw_identity": ["site", "year", "date", "codigo.p", "obs.time"],
+    "raw_identity": [
+      "site",
+      "year",
+      "date",
+      "codigo.p",
+      "obs.time"
+    ],
     "missing_obs_time": "rows without obs.time are excluded from exact census reconstruction because a 5-min start cannot be uniquely identified",
     "validation_target_total_censuses": {
       "2006": 532,
@@ -59,7 +65,12 @@
     "models": "separate gain and loss binomial logistic models",
     "cross_validation": "leave-one-subseason-transition-out within frozen scopes",
     "primary_scope": "strict_dated_core_2008_2010",
-    "metrics": ["held-out log loss", "relative log-loss reduction vs training prevalence", "Brier improvement", "ROC AUC"]
+    "metrics": [
+      "held-out log loss",
+      "relative log-loss reduction vs training prevalence",
+      "Brier improvement",
+      "ROC AUC"
+    ]
   },
   "interpretation": {
     "allowed": "determine whether binary observed-link turnover is materially sampling-effort-sensitive",
@@ -70,5 +81,20 @@
       "routeability inference"
     ]
   },
-  "claim_ceiling": "This audit can resolve effort semantics and diagnose whether binary link turnover is detection-sensitive. It cannot separate biological availability from observer allocation or convert observed zeros into true absences. If effort strongly predicts gain/loss, raw 18-period binary changes remain feasibility data rather than ecological rewiring evidence until a detection-standardized response is used."
+  "claim_ceiling": "This audit can resolve effort semantics and diagnose whether binary link turnover is detection-sensitive. It cannot separate biological availability from observer allocation or convert observed zeros into true absences. If effort strongly predicts gain/loss, raw 18-period binary changes remain feasibility data rather than ecological rewiring evidence until a detection-standardized response is used.",
+  "effort_balanced_rarefaction": {
+    "role": "post-result robustness stress test, not a latent-link estimator",
+    "sampling_unit": "5-min census with non-missing obs.time",
+    "response_surface": "fixed original Stage-1 shared-species dyad rows",
+    "balancing": "within each transition x focal plant x site, sample without replacement from both periods to the smaller of the two census counts",
+    "replicates": 500,
+    "seed": 20260929,
+    "report": [
+      "probability an original gain remains a gain",
+      "probability an original loss remains a loss",
+      "probability an original stable-present link remains stable-present",
+      "transition-level changed-link counts under matched effort"
+    ],
+    "interpretation": "Low state retention means binary link-state classification is sensitive to observation intensity; it does not estimate a false-positive fraction because downsampling can also create non-detections from true persistent links."
+  }
 }
