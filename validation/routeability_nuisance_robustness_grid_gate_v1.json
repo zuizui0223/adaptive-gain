@@ -135,7 +135,9 @@
     "same_trials_per_individual_at_every_N": true,
     "same_simulations_per_scenario_at_every_N": true,
     "no_gaps": true,
-    "operational_max_role": "husbandry/supply feasibility input frozen after Pilot B nuisance calibration but before final power simulation; it cannot be chosen from the power result"
+    "operational_max_role": "husbandry/supply feasibility input frozen after Pilot B nuisance calibration but before final power simulation; it cannot be chosen from the power result",
+    "input_contract": "planning input supplies only operational_max_individuals_per_cell; examples/build_routeability_robustness_grid.py derives 4,8,12,...,max automatically and rejects hand-listed candidate arrays",
+    "operational_max_freeze": "freeze from husbandry/colony-supply feasibility before final power simulation and before viewing any final operating-characteristic result"
   },
   "claim_ceiling": "This gate freezes how real nuisance pilot values will be converted into final robustness scenarios. It does not provide nuisance estimates, power, or a biological sample size before the real pilot."
 }
