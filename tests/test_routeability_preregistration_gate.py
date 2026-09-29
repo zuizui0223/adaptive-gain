@@ -13,6 +13,9 @@ STIMULUS_BUILDER = ROOT / "examples" / "build_routeability_experiment_stimuli.py
 RANDOMIZER = ROOT / "examples" / "randomize_routeability_roster.py"
 SCHEDULE_COMPILER = ROOT / "examples" / "compile_routeability_final_schedule.py"
 FINAL_N_SELECTOR = ROOT / "examples" / "select_routeability_final_n.py"
+MATERIAL_PRETEST_BUILDER = (
+    ROOT / "examples" / "build_routeability_material_pretest_receipt.py"
+)
 
 
 def _sha(path: Path) -> str:
@@ -52,6 +55,9 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
     final_n_rule = tmp_path / "final_n_rule.json"
     final_n_receipt = tmp_path / "final_n_receipt.json"
     stimuli = tmp_path / "final_stimuli.csv"
+    material_log = tmp_path / "material_pretest.csv"
+    material_spec = tmp_path / "material_spec.json"
+    material_receipt = tmp_path / "material_pretest_receipt.json"
 
     with roster.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
@@ -262,6 +268,61 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
     )
     assert built_stimuli.returncode == 0, built_stimuli.stderr
 
+    material_spec.write_text(
+        json.dumps(
+            {
+                "material_set_id": "test-materials-v1",
+                "cue_roles": {
+                    "q_route": {"description": "test context"},
+                    "q_left": {"description": "test terminal A"},
+                    "q_right": {"description": "test terminal B"},
+                },
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    material_rows = []
+    for cue, correct_count in (
+        ("q_route", 16),
+        ("q_left", 17),
+        ("q_right", 18),
+    ):
+        for index in range(1, 21):
+            material_rows.append(
+                {
+                    "material_set_id": "test-materials-v1",
+                    "individual_id": f"{cue}-pretest-{index}",
+                    "cue_identity": cue,
+                    "sequence_index": index,
+                    "correct": int(index <= correct_count),
+                    "architecture_neutral": True,
+                    "confirmatory_roster_member": False,
+                }
+            )
+    with material_log.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(material_rows[0]),
+        )
+        writer.writeheader()
+        writer.writerows(material_rows)
+    qualified_materials = subprocess.run(
+        [
+            sys.executable,
+            str(MATERIAL_PRETEST_BUILDER),
+            str(material_log),
+            str(material_spec),
+            str(material_receipt),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert qualified_materials.returncode == 0, qualified_materials.stderr
+
     return {
         "preregistration_version": "v1-final-test-fixture",
         "species": "Bombus testus",
@@ -282,6 +343,12 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         "sesoi_provenance": "practical_decision_threshold",
         "apparatus_description": "Three-window artificial-flower apparatus",
         "cue_alphabet_description": "Counterbalanced binary visual symbols",
+        "material_pretest_log_reference": material_log.name,
+        "material_pretest_log_sha256": _sha(material_log),
+        "material_spec_reference": material_spec.name,
+        "material_spec_sha256": _sha(material_spec),
+        "material_pretest_receipt_reference": material_receipt.name,
+        "material_pretest_receipt_sha256": _sha(material_receipt),
         "nominal_cue_duration_seconds": 1.0,
         "cue_duration_tolerance_seconds": 0.1,
         "response_window_seconds": 3.0,
@@ -318,6 +385,9 @@ def test_preregistration_template_is_explicitly_blocked():
     assert "{{final_schedule_receipt_sha256}}" in text
     assert "{{final_n_rule_sha256}}" in text
     assert "{{final_n_receipt_sha256}}" in text
+    assert "{{material_pretest_log_sha256}}" in text
+    assert "{{material_spec_sha256}}" in text
+    assert "{{material_pretest_receipt_sha256}}" in text
     assert "primary confirmatory H1/H2 experiment uses guided contingent presentation" in text
     assert "Autonomous terminal-window routing is a separate mechanistic follow-up" in text
 
@@ -331,6 +401,10 @@ def test_preregistration_gate_requires_pilot_power_and_human_inputs():
     assert "procedural pilot response window frozen" in required
     assert "final GLMM operating-characteristic robustness surface completed" in required
     assert "ethics/regulatory approval recorded" in required
+    assert (
+        "architecture-neutral physical-cue material pretest passed under the frozen qualification rule"
+        in required
+    )
     assert "final schedule is compiled from the hash-matching randomized assignment artifact" in required
     assert data["current_output_status"] == "no final preregistration generated"
     assert data["resolved_inputs"]["external_sesoi"]["status"] == "FROZEN"
@@ -352,6 +426,8 @@ def test_finalizer_generates_complete_candidate_from_real_artifact_chain(tmp_pat
     assert payload["randomization_receipt_sha256"] in text
     assert payload["final_assignment_sha256"] in text
     assert payload["final_schedule_receipt_sha256"] in text
+    assert payload["material_pretest_receipt_sha256"] in text
+    assert payload["material_spec_sha256"] in text
 
 
 def test_finalizer_rejects_missing_or_pending_human_fields(tmp_path):
@@ -415,6 +491,23 @@ def test_finalizer_rejects_unhashed_or_fixture_power_inputs(tmp_path):
     completed, _ = _run_finalizer(tmp_path, bad)
     assert completed.returncode != 0
     assert "cannot point to a software fixture" in completed.stderr
+
+
+def test_finalizer_rejects_rehashed_but_falsified_material_receipt(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    receipt_path = tmp_path / payload["material_pretest_receipt_reference"]
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["qualified"] = False
+    receipt["status"] = "FAIL_material_set_not_qualified"
+    receipt_path.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    payload["material_pretest_receipt_sha256"] = _sha(receipt_path)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "material pretest receipt disagrees with independent recomputation" in completed.stderr
 
 
 def test_finalizer_rejects_tampered_artifact_bytes(tmp_path):
