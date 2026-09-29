@@ -428,6 +428,48 @@ Files:
 - `validation/detection_effort_gain_loss_identity_v1.json`
 - `validation/villavicencio_detection_effort_identity_result_v1.json`
 
+## 12d. Full binary transition tables still do not identify latent turnover direction
+
+The detection boundary is stronger than unequal sampling effort.
+
+Under a standard two-season latent-state model with unknown detection, the
+**entire observed 2 x 2 transition table** can be identical under opposite
+latent network changes.
+
+One exact pair of models produces the same observed table:
+
+```text
+stable absent = 3/5
+observed gain = 1/5
+observed loss = 1/10
+stable present = 1/10
+```
+
+while latent link prevalence is:
+
+- model A: **1/4 -> 3/5** (change **+7/20**);
+- model B: **11/20 -> 3/10** (change **-1/4**).
+
+Thus neither the observed gain/loss imbalance nor the complete aggregated
+binary transition table identifies even the **sign** of latent link-prevalence
+change without additional information about detection.
+
+This is not presented as a new occupancy theorem. Occupancy/detection
+confounding and the need for repeated surveys are established. The contribution
+here is an explicit plant-pollinator/network-turnover witness that makes the
+identification failure concrete in gain/loss language.
+
+Villavicencio contains repeated 5-min censuses, which is why the failure can be
+diagnosed rather than merely asserted. But its richer beta-binomial observation
+model is preferred in 6/6 transitions and makes the latent transition surface
+hit parameter boundaries in 6/6, so the repeated data still do not support one
+stable detection-corrected rewiring process.
+
+Files:
+- `theory/BINARY_TURNOVER_DETECTION_NONIDENTIFIABILITY.md`
+- `validation/binary_turnover_detection_nonidentifiability_v1.json`
+- `tests/test_binary_turnover_detection_nonidentifiability.py`
+
 ## 13. External 12-site result
 
 
