@@ -31,6 +31,40 @@ from __future__ import annotations
 import math
 
 
+def finite_binary_turnover_balance(
+    previous,
+    current,
+) -> dict[str, int]:
+    """Exact finite-network turnover balance on a fixed dyad universe.
+
+    For binary adjacency vectors on the same dyads:
+    gains - losses == current edge count - previous edge count.
+    """
+    previous_values = [bool(value) for value in previous]
+    current_values = [bool(value) for value in current]
+    if len(previous_values) != len(current_values):
+        raise ValueError("previous and current must have the same dyad count")
+
+    gains = sum(
+        (not before) and after
+        for before, after in zip(previous_values, current_values)
+    )
+    losses = sum(
+        before and (not after)
+        for before, after in zip(previous_values, current_values)
+    )
+    previous_edges = sum(previous_values)
+    current_edges = sum(current_values)
+    return {
+        "gains": gains,
+        "losses": losses,
+        "gain_minus_loss": gains - losses,
+        "previous_edges": previous_edges,
+        "current_edges": current_edges,
+        "edge_count_change": current_edges - previous_edges,
+    }
+
+
 def binary_transition_conservation(
     p00: float,
     p01: float,
