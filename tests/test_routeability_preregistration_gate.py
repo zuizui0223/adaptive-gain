@@ -478,14 +478,34 @@ def test_finalizer_rejects_schedule_assignment_fidelity_break(tmp_path):
 def test_finalizer_rejects_power_surface_changed_after_final_n_selection(tmp_path):
     payload = _prepare_artifacts(tmp_path)
     power = tmp_path / payload["power_surface_reference"]
-    text = power.read_text(encoding="utf-8")
-    text = text.replace(",0.99,0.82,0.80,0.12,0.10", ",0.98,0.82,0.80,0.12,0.10", 1)
-    power.write_text(text, encoding="utf-8")
+    rows = list(csv.DictReader(power.open(newline="", encoding="utf-8")))
+    rows[0]["fit_success_fraction"] = "0.96"
+    with power.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
     payload["power_surface_sha256"] = _sha(power)
 
     completed, _ = _run_finalizer(tmp_path, payload)
     assert completed.returncode != 0
     assert "final-N receipt power-surface hash mismatch" in completed.stderr
+
+
+def test_finalizer_rejects_incomplete_frozen_robustness_grid(tmp_path):
+    payload = _prepare_artifacts(tmp_path)
+    power = tmp_path / payload["power_surface_reference"]
+    rows = list(csv.DictReader(power.open(newline="", encoding="utf-8")))
+    removed = rows.pop(0)
+    with power.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    payload["power_surface_sha256"] = _sha(power)
+
+    completed, _ = _run_finalizer(tmp_path, payload)
+    assert completed.returncode != 0
+    assert "exact frozen 12 robustness_id" in completed.stderr
+    assert removed["robustness_id"] in completed.stderr
 
 
 def test_finalizer_rejects_rehashed_but_wrong_logical_stimulus_mapping(tmp_path):
