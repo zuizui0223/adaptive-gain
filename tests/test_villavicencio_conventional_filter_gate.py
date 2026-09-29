@@ -89,7 +89,7 @@ def test_sampling_effort_audit_controls_annual_scope():
     path = ROOT / "validation" / "villavicencio_sampling_effort_audit_v1.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     consequence = data["consequence"]
-    assert data["status"] == "external_methods_frozen_before_formal_filter_cv_result"
+    assert data["status"] == "SUPERSEDED_BY_RAW_SUBSEASON_EFFORT_AUDIT"
     assert consequence["primary_filter_cv_scope"]["name"] == "strict_core_2008_2011"
     assert consequence["primary_filter_cv_scope"]["transitions"] == [
         "2008->2009",
@@ -98,6 +98,10 @@ def test_sampling_effort_audit_controls_annual_scope():
     ]
     assert "two additional" in data["documented_sampling"]["extra_sites_2006"]
     assert data["freeze_boundary"]["formal_cv_result_seen_before_scope_freeze"] is False
+    resolution = data["current_resolution"]
+    assert resolution["sampling_effort_semantics"] == "RESOLVED_RAW_5MIN_CENSUS_IDENTITY"
+    assert "MATERIAL_DETECTION_SENSITIVITY" in resolution["binary_link_detection"]
+    assert "observed-link turnover" in resolution["response_label"]
 
 
 def test_conventional_filter_gate_blocks_interaction_derived_matching_leakage():
