@@ -101,8 +101,8 @@
     "environmental routeability",
     "strict prospective forecasting from past-only covariates"
   ],
-  "next_gate": "reconstruct an outcome-independent temporal-opportunity surface from raw dated records with focal-response exclusion, then rerun gain/loss prediction before any decision-layer comparison",
-  "claim_ceiling": "The ablation arithmetic is retained as a historical result. It is not a causal decomposition. Its phenology interpretation is quarantined by the support-leakage audit and cannot validate ecological filtering, causality, or routeability.",
+  "next_gate": "No further ecological promotion from this historical ablation. Follow validation/villavicencio_rewiring_claim_resolution_v1.json: the published-overlap interpretation is quarantined, binary turnover is detection-sensitive, and natural rewiring remains unidentified. Any routeability mechanism test requires an independent decision layer or the controlled experiment.",
+  "claim_ceiling": "The ablation arithmetic is retained as a historical numerical result. It is not a causal decomposition. The phenology interpretation is invalid for candidate gain because of support leakage, and the binary response is not an identified ecological rewiring surface after the raw-census detection audits. It cannot validate ecological filtering, causality, rewiring, or routeability.",
   "time_support": {
     "phenological_overlap": "study-wide six-year aggregate",
     "flower_abundance": "study-wide six-year aggregate",
@@ -118,6 +118,12 @@
     "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
     "date": "2026-09-28",
     "phenology_gain_interpretation_valid": false,
-    "phenology_loss_interpretation": "descriptive association only; source surface is study-wide and interaction-conditioned"
+    "phenology_loss_interpretation": "descriptive association only; source surface is study-wide and interaction-conditioned",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_rate_result": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "final_claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
   }
 }
