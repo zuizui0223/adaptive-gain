@@ -98,14 +98,20 @@
     },
     "consequence": "Do not require a separate loss-model held-out fold for 2006_mid->2006_late. Endpoint-specific modeling should use a nondegenerate prespecified scope such as 2007 onward or the sampling-consistent core."
   },
-  "ecological_read": "The preferred within-season response grain can be reconstructed from public raw dated records without the unavailable RData bytes. This upgrades Stage 1 from five annual transitions to twelve documented within-year transitions while keeping response construction independent of the routeability exposure.",
+  "ecological_read": "The documented 18-period response grain can be reconstructed from public raw dated records without the unavailable RData bytes. This upgrades response feasibility from five annual to twelve within-year transitions. A subsequent raw-census audit shows that the binary period states are materially sampling-effort-sensitive, so the response is retained as observed-link turnover rather than identified ecological rewiring.",
   "not_established": [
     "byte-for-byte equality with the unavailable published RData object",
     "true species presence or absence",
     "sampling-effort-corrected rewiring",
     "ecological filtering",
     "decision-equivalence classes",
-    "environmental routeability"
+    "environmental routeability",
+    "ecological rewiring identity for the 853 observed binary changes"
   ],
-  "claim_ceiling": "This establishes a reproducible public-raw-record reconstruction of the documented 18-period response surface, with an explicit 2011 date-missingness boundary. It does not establish exact RData identity, true presence, sampling-effort-corrected rewiring, ecological filtering, decision equivalence, or routeability."
+  "claim_ceiling": "This establishes a reproducible public-raw-record reconstruction of the documented 18-period observed-link surface, with an explicit 2011 date-missingness boundary. Sampling-effort semantics are now reconstructable, but binary detection is materially effort-sensitive. It does not establish exact RData identity, true presence/absence, sampling-effort-corrected ecological rewiring, decision equivalence, or routeability.",
+  "sampling_effort_followup": {
+    "status": "EFFORT_SEMANTICS_RESOLVED_BINARY_DETECTION_MATERIAL",
+    "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "consequence": "The 853 changes are reproducible observed-link state changes, not 853 identified ecological rewiring events."
+  }
 }
