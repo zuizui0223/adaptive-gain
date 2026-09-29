@@ -31,6 +31,7 @@ on:
       - "validation/routeability_experiment_precollection_readiness_v1.json"
       - "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md"
       - "validation/routeability_experiment_pilot_power_gate_v1.json"
+      - "validation/routeability_sesoi_gate_v1.json"
       - "validation/routeability_glmm_operating_characteristic_gate_v1.json"
       - "validation/routeability_roster_randomization_gate_v1.json"
       - "validation/routeability_final_schedule_gate_v1.json"
