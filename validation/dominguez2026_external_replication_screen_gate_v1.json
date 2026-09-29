@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-external-axis-replication-screen-gate-v1",
   "date": "2026-09-29",
-  "status": "source_inventory_only_frozen",
+  "status": "effect_blind_external_axis_replication_design_frozen",
   "purpose": "Screen the independent Dominguez-Garcia et al. 2026 eight-year, 12-site plant-pollinator dataset for a non-circular replication of the Villavicencio gain/loss opportunity-axis asymmetry.",
   "source": {
     "article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293",
@@ -25,6 +25,56 @@
     "link-level temporal states cannot be reconstructed",
     "site/year identity is lost"
   ],
-  "candidate_replication": "If admitted, test only the directional predictive-information asymmetry: pollinator-side opportunity increment > plant-side increment for gains, and plant-side increment > pollinator-side increment for losses. Do not test routeability.",
-  "claim_ceiling": "Source inventory only. No ecological replication, causal mechanism, decision equivalence, or routeability claim is permitted until the independent data structure is audited and an effect-blind replication analysis is frozen."
+  "candidate_replication": "Test only the pre-frozen directional predictive-information asymmetry under leave-one-site-out validation: pollinator-side focal-excluded activity increment > plant-side availability increment for gains, and plant-side increment > pollinator-side increment for losses. Do not test routeability.",
+  "claim_ceiling": "External dyad-level replication of a predictive-information direction only. Even if the frozen direction replicates, this does not establish a causal assembly/disassembly mechanism, sampling-effort independence, decision equivalence, or routeability.",
+  "source_audit": {
+    "plant_abundance_provenance": "Annual plant resource abundance was measured from flower counts in ten 1 m2 subplots and normalized by annual sampling effort; this is independent of the focal dyad interaction state.",
+    "pollinator_abundance_boundary": "Published pollinator abundance counts recorded individuals and may share observation support with the interaction network, so raw Abundance is not the primary pollinator-side exposure for the focal-dyad replication.",
+    "primary_pollinator_axis": "current-year number of distinct other plant partners recorded for the focal pollinator after excluding the focal plant; the focal dyad can never contribute to this predictor",
+    "source_article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293"
+  },
+  "replication_design": {
+    "unit": "shared-species plant-pollinator dyad within adjacent site-year transition",
+    "sites": "12 independent sites",
+    "years": "2015-2022",
+    "response": {
+      "gain": "dyad absent at t and present at t+1 among plant and pollinator species present in both years",
+      "loss": "dyad present at t and absent at t+1 among plant and pollinator species present in both years"
+    },
+    "species_presence": {
+      "plant": "site-year row present in Abn_Pheno_P.csv",
+      "pollinator": "site-year row present in Abn_Pheno.csv",
+      "purpose": "define shared-species risk sets independently of focal dyad link state"
+    },
+    "predictors": {
+      "plant_availability": "current-year AbundanceP for the focal plant",
+      "pollinator_activity": "current-year distinct other-plant partner count for the focal pollinator, excluding the focal plant"
+    },
+    "models": {
+      "full": [
+        "plant_availability",
+        "pollinator_activity"
+      ],
+      "plant_only": [
+        "plant_availability"
+      ],
+      "pollinator_only": [
+        "pollinator_activity"
+      ]
+    },
+    "preprocessing": "log1p, then training-fold z-score",
+    "cross_validation": "leave-one-site-out; each of the 12 sites is held out in turn",
+    "primary_metric": "held-out log-loss",
+    "secondary_metric": "ROC AUC",
+    "axis_increments": {
+      "plant_availability_increment": "pollinator-only log-loss minus full-model log-loss",
+      "pollinator_activity_increment": "plant-only log-loss minus full-model log-loss"
+    },
+    "frozen_directional_replication": {
+      "gain": "pollinator_activity_increment > plant_availability_increment",
+      "loss": "plant_availability_increment > pollinator_activity_increment"
+    },
+    "classification": "report pooled contrast and the number of held-out sites with the frozen directional contrast; do not tune definitions after seeing the result"
+  },
+  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant abundance is independently sampled; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response."
 }
