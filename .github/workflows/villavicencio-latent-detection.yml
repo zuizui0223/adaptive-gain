@@ -1,0 +1,239 @@
+name: Villavicencio latent detection audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/villavicencio-latent-detection.yml"
+      - "examples/fetch_figshare_article_files.py"
+      - "examples/build_villavicencio_census_rate_table.py"
+      - "examples/villavicencio_census_rate_cv.R"
+      - "examples/summarize_villavicencio_census_rate_cv.py"
+      - "examples/villavicencio_two_season_detection_fit.R"
+      - "examples/summarize_villavicencio_two_season_detection.py"
+      - "examples/villavicencio_latent_opportunity_decomposition.R"
+      - "examples/summarize_villavicencio_latent_opportunity_decomposition.py"
+      - "validation/villavicencio_census_rate_gate_v1.json"
+      - "validation/villavicencio_two_season_detection_gate_v1.json"
+      - "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
+
+concurrency:
+  group: villavicencio-latent-detection-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  latent-detection:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Fetch checksum-validated public Figshare raw records
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/figshare artifact/raw artifact/result
+          python examples/fetch_figshare_article_files.py \
+            11794503 \
+            source/figshare \
+            artifact/raw/figshare_manifest.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(
+              Path("artifact/raw/figshare_manifest.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          names = {item["name"] for item in manifest["files"] if item.get("downloaded")}
+          required = {
+              "visits_2006-2011_data.csv",
+              "plant_names.csv",
+              "insect_names.csv",
+          }
+          if not required <= names:
+              raise SystemExit(
+                  f"missing required Figshare files: {sorted(required - names)}"
+              )
+          for item in manifest["files"]:
+              if item.get("downloaded"):
+                  if not item.get("size_matches", False):
+                      raise SystemExit(f"size mismatch for {item['name']}")
+                  if not item.get("md5_matches", False):
+                      raise SystemExit(f"checksum mismatch for {item['name']}")
+          PY
+
+      - name: Build effort-standardized census-rate table
+        shell: bash
+        run: |
+          set -euo pipefail
+          python examples/build_villavicencio_census_rate_table.py \
+            source/figshare/visits_2006-2011_data.csv \
+            source/figshare/plant_names.csv \
+            source/figshare/insect_names.csv \
+            --output artifact/result/census_rate_table.csv \
+            --summary artifact/result/census_rate_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary = json.loads(
+              Path("artifact/result/census_rate_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["transition_count"] != 6:
+              raise SystemExit("census-rate table lost six-transition primary scope")
+          if not summary["focal_response_excluded_from_candidate_surface"]:
+              raise SystemExit("candidate surface reused focal response")
+          if not summary["focal_response_excluded_from_opportunity"]:
+              raise SystemExit("opportunity reused focal response")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+      - name: Reproduce effort-standardized incidence result
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/villavicencio_census_rate_cv.R \
+            artifact/result/census_rate_table.csv \
+            artifact/result/census_rate_predictions.csv \
+            artifact/result/census_rate_folds.csv
+
+          python examples/summarize_villavicencio_census_rate_cv.py \
+            artifact/result/census_rate_table_summary.json \
+            artifact/result/census_rate_predictions.csv \
+            artifact/result/census_rate_folds.csv \
+            artifact/result/census_rate_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/census_rate_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["status"] not in {
+              "effort_standardized_opportunity_increment_reproducible",
+              "effort_standardized_opportunity_increment_mixed",
+          }:
+              raise SystemExit("unexpected census-rate result status")
+          print(json.dumps({
+              "status": result["status"],
+              "opportunity_increment": result["pooled"]["opportunity_increment"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Fit two-season detection model
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/villavicencio_two_season_detection_fit.R \
+            artifact/result/census_rate_table.csv \
+            artifact/result/two_season_detection_fits.csv \
+            artifact/result/two_season_detection_posteriors.csv
+
+          python examples/summarize_villavicencio_two_season_detection.py \
+            artifact/result/two_season_detection_fits.csv \
+            artifact/result/two_season_detection_posteriors.csv \
+            artifact/result/two_season_detection_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["required_identified_transition_count"] != 5:
+              raise SystemExit("detection promotion threshold changed")
+          print(json.dumps({
+              "status": result["status"],
+              "identified_transition_count": result["identified_transition_count"],
+              "promotion_allowed": result[
+                  "promotion_to_latent_opportunity_model_allowed"
+              ],
+              "aggregate_descriptive": result["aggregate_descriptive"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Run conditional state-versus-detection decomposition
+        shell: bash
+        run: |
+          set -euo pipefail
+          PROMOTE="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print(
+              "true"
+              if result["promotion_to_latent_opportunity_model_allowed"]
+              else "false"
+          )
+          PY
+          )"
+
+          if test "$PROMOTE" != "true"; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-latent-opportunity-decomposition-v1","status":"SKIPPED_BY_DETECTION_IDENTIFIABILITY_GATE","general_state_promotion_rule_met":false}' \
+              > artifact/result/latent_opportunity_decomposition.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_latent_opportunity_decomposition.R \
+            artifact/result/census_rate_table.csv \
+            artifact/result/two_season_detection_fits.csv \
+            artifact/result/latent_opportunity_models.csv \
+            artifact/result/latent_opportunity_posteriors.csv
+
+          python examples/summarize_villavicencio_latent_opportunity_decomposition.py \
+            artifact/result/latent_opportunity_models.csv \
+            artifact/result/latent_opportunity_posteriors.csv \
+            artifact/result/latent_opportunity_decomposition.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/result/latent_opportunity_decomposition.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "state_supported_transition_count": result[
+                  "state_supported_transition_count"
+              ],
+              "detection_supported_transition_count": result[
+                  "detection_supported_transition_count"
+              ],
+              "general_state_promotion_rule_met": result[
+                  "general_state_promotion_rule_met"
+              ],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload latent detection audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: villavicencio-latent-detection-audit
+          path: |
+            artifact/raw/figshare_manifest.json
+            artifact/result
+          if-no-files-found: error
+          retention-days: 14
