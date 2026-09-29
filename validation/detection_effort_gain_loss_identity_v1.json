@@ -1,0 +1,27 @@
+{
+  "schema": "adaptive-gain-detection-effort-gain-loss-identity-v1",
+  "date": "2026-09-30",
+  "status": "exact_observation_process_identity_frozen",
+  "role": "post-freeze detection diagnostic; not a new V5 theorem family",
+  "setup": "latent interaction persists across both periods and false-positive detection is absent",
+  "identities": {
+    "gain": "P(G) = (1-q_previous) * q_current",
+    "loss": "P(L) = q_previous * (1-q_current)",
+    "difference": "P(G)-P(L) = q_current-q_previous",
+    "independent_census_special_case": "q(n)=1-(1-p)^n"
+  },
+  "direction": {
+    "q_current_gt_q_previous": "observed gain is more probable than observed loss despite no latent state change",
+    "q_current_eq_q_previous": "observed gain and loss are equally probable",
+    "q_current_lt_q_previous": "observed loss is more probable than observed gain despite no latent state change"
+  },
+  "implementation": "adaptive_gain/detection_effort_identity.py",
+  "villavicencio_audit": {
+    "input_table": "artifact/result/census_rate_table.csv",
+    "detection_fit": "artifact/result/two_season_detection_result.json",
+    "score": "q_current - q_previous using transition-specific fitted p_previous,p_current and each dyad's focal-plant census counts",
+    "endpoint": "among observed binary changed dyads, ROC AUC ranking gain over loss",
+    "interpretation": "mechanistic observation-process diagnostic only; the score is not an independent ecological predictor"
+  },
+  "claim_ceiling": "The identity proves that unequal period-level detectability can create directional observed gain/loss from a persistent latent link. It does not estimate how many Villavicencio changes are biological, does not establish the binomial detection model as true, and does not validate ecological rewiring or routeability."
+}
