@@ -132,26 +132,28 @@
     }
   ],
   "interpretation": {
-    "gate": "PASS for response estimability only",
-    "reason": "all five annual transitions contain changed and unchanged shared dyads and source identifiers join exactly",
-    "current_detection_resolution": "Sampling effort is now reconstructable from raw 5-min censuses and binary link states are materially effort-sensitive. Annual gain/loss remains observed-link turnover, not identified ecological rewiring.",
-    "historical_predictive_baseline": "The later conventional-filter model produced strong numerical held-out discrimination, but its published phenological-overlap gain interpretation is quarantined by support leakage.",
+    "gate": "PASS for annual observed-response estimability only",
+    "reason": "all five annual transitions contain both changed and unchanged shared dyads and source identifiers join exactly",
+    "current_resolution": "Subsequent raw-census audits show that observed binary link turnover is materially detection- and effort-sensitive. The annual response is therefore retained as a feasibility/descriptive surface, not identified ecological rewiring.",
     "not_established": [
       "true species presence/absence",
       "sampling-effort-corrected rewiring",
-      "a reproducible effort-standardized opportunity effect",
+      "latent true link gain/loss",
       "environmental routeability",
       "decision-structural turnover",
-      "decision-equivalence classes",
-      "true ecological rewiring from binary observed gain/loss",
-      "latent true link state under imperfect detection",
-      "true ecological rewiring from binary observed-link changes"
+      "decision-equivalence classes"
     ],
-    "current_detection_status": "Sampling-effort semantics are resolved from raw 5-min census identities, but binary link detection is materially effort-sensitive and true absence remains unidentified.",
-    "current": "The annual surface is reproducible and estimable, but observed positive-link presence is effort/detection sensitive. Use it as historical feasibility and descriptive observed-link turnover only."
+    "superseded_ecological_interpretation_by": [
+      "validation/villavicencio_subseason_effort_audit_result_v1.json",
+      "validation/villavicencio_census_rate_result_v1.json",
+      "validation/villavicencio_two_season_detection_result_v1.json",
+      "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+      "validation/villavicencio_detection_overdispersion_result_v1.json",
+      "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    ]
   },
-  "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: do not add flexible Villavicencio models to search for a positive natural-rewiring mechanism. Use the claim-resolution ledger; natural routeability evidence requires the controlled experiment or an independent detection-standardized network with an external decision layer.",
-  "claim_ceiling": "This annual fallback establishes response estimability and reproducible observed-link turnover only. Sampling-effort semantics are now resolved, but latent link state is not stably identified; do not call annual gains/losses true rewiring, and do not use this surface to validate routeability.",
+  "next_gate": "STOP observational promotion of annual binary gain/loss as natural rewiring. Use the claim-resolution ledger; further routeability evidence requires a controlled experiment or an independent detection-defensible network with an externally defined decision layer.",
+  "claim_ceiling": "This annual fallback establishes response estimability for observed binary link states only. Raw-census effort, census-incidence, latent-detection and overdispersion audits show that those states do not identify true ecological rewiring. Do not use the historical annual gain/loss numbers as routeability or detection-corrected rewiring evidence.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
