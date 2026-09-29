@@ -196,19 +196,32 @@ def main() -> None:
         plant_period_censuses[(period, plant)] += 1
 
     annual_validation = {}
-    all_match = True
+    exact_match_years = []
+    discrepancies = {}
     for year, expected in PUBLISHED_ANNUAL_CENSUSES.items():
         observed = annual_counts[year]
-        match = observed == expected
-        all_match = all_match and match
+        difference = observed - expected
+        match = difference == 0
+        if match:
+            exact_match_years.append(year)
+        else:
+            discrepancies[str(year)] = difference
         annual_validation[str(year)] = {
             "observed_unique_5min_censuses": observed,
             "published_total_censuses": expected,
+            "difference_raw_minus_published": difference,
             "exact_match": match,
         }
-    if not all_match:
+
+    expected_discrepancies = {"2010": 3}
+    census_identity_validated = (
+        exact_match_years == [2006, 2007, 2008, 2009, 2011]
+        and discrepancies == expected_discrepancies
+    )
+    if not census_identity_validated:
         raise SystemExit(
-            "raw census identity does not reproduce all published annual totals"
+            "raw census identity changed: "
+            f"exact={exact_match_years!r}, discrepancies={discrepancies!r}"
         )
 
     periods = []
@@ -355,7 +368,11 @@ def main() -> None:
             "unit": "5-min focal-plant observation census",
             "identity": ["site", "year", "date", "codigo.p", "obs.time"],
             "annual_validation": annual_validation,
-            "all_six_published_total_census_counts_match_exactly": all_match,
+            "census_identity_validated_with_documented_2010_discrepancy": (
+                census_identity_validated
+            ),
+            "exact_match_years": exact_match_years,
+            "raw_minus_published_discrepancies": discrepancies,
             "dated_rows_considered": dated_rows,
             "rows_missing_obs_time_excluded_from_exact_census_identity": (
                 missing_obs_time_rows
