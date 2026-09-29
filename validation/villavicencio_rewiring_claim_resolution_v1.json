@@ -85,5 +85,15 @@
     "detection-corrected rewiring as an identified ecological response"
   ],
   "next_scientific_gate": "Stop adding flexible Villavicencio observation models to search for a positive rewiring mechanism. A natural-network rewiring mechanism now requires an independent dataset with a defensible detection-standardized state process and an independent decision layer, or experimental separation of interaction state from detection/encounter. The controlled routeability experiment remains the clean direct mechanism test.",
-  "claim_ceiling": "Villavicencio supports reproducible response reconstruction, sampling/detection diagnostics, and ecological opportunity/activity associations. It does not identify binary or detection-corrected ecological rewiring as a stable natural response, and it does not validate routeability."
+  "claim_ceiling": "Villavicencio supports reproducible response reconstruction, sampling/detection diagnostics, and ecological opportunity/activity associations. It does not identify binary or detection-corrected ecological rewiring as a stable natural response, and it does not validate routeability.",
+  "final_status_vector": {
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_observed_link_state": "MATERIAL_DETECTION_SENSITIVITY_NOT_LATENT_TRUTH",
+    "effort_standardized_interaction_incidence": "MIXED_OPPORTUNITY_INCREMENT_4_OF_6",
+    "latent_link_state_opportunity_effect": "NOT_GENERAL_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6",
+    "observation_model_robustness": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6",
+    "natural_ecological_rewiring": "NOT_IDENTIFIED",
+    "routeability": "NOT_VALIDATED"
+  },
+  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is detection-sensitive, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent."
 }
