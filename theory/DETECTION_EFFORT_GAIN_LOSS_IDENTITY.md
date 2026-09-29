@@ -3,6 +3,31 @@
 Status: post-freeze observation-process identity. This file does **not** modify
 the frozen Evolution Letters V5 theorem surface.
 
+## Finite-network balance identity
+
+For any fixed set of candidate dyads with binary observed link states
+`A_1(d), A_2(d)`, define
+
+```text
+G = number of dyads with A_1=0, A_2=1
+L = number of dyads with A_1=1, A_2=0.
+```
+
+Then exactly
+
+```text
+G - L = E_2 - E_1,
+```
+
+where `E_t = sum_d A_t(d)` is the number of observed links at time `t`.
+
+This is pure bookkeeping. Aggregate excess gain over loss is therefore not an
+independent statistic from change in observed link count on the same dyad
+universe. If sampling or detectability changes the number of observed links,
+it necessarily changes the gain-minus-loss balance by the same amount.
+
+The probability identity below is the population analogue.
+
 ## Setup
 
 For any two binary observations `Y_1,Y_2`,
