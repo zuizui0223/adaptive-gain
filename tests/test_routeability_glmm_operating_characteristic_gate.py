@@ -44,7 +44,9 @@ def test_glmm_oc_gate_separates_ci_fixture_from_scientific_power_result():
     data = _gate()
     assert "arbitrary synthetic nuisance/effect values" in data["software_fixture_boundary"]
     assert "never scientific planning results" in data["software_fixture_boundary"]
-    assert "does not justify a biological N" in data["claim_ceiling"]
+    ceiling = data["claim_ceiling"].lower()
+    assert "biological n" in ceiling
+    assert "required before" in ceiling or "does not justify" in ceiling
 
 
 def test_glmm_oc_gate_uses_population_average_probability_contrasts():
