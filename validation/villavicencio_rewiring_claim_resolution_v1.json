@@ -61,13 +61,6 @@
       "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
     },
     {
-      "level": 8,
-      "surface": "exact detection-effort observation-map identity",
-      "result": "For a persistent latent link, P(observed gain)-P(observed loss)=q_current-q_previous exactly. Using fitted period detection probabilities and dyad-specific census counts, q_current-q_previous ranks observed gain over loss at AUC 0.852 across all six dated-core transitions and 0.837 on the five-transition identified subset.",
-      "boundary": "The fitted q values come from the same repeated-census dataset, so this is a mechanistic observation-map diagnostic rather than independent prediction or an estimate of false-rewiring fraction.",
-      "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
-    },
-    {
       "level": 9,
       "surface": "exact binary-turnover latent-state nonidentifiability witness",
       "result": "Two dynamic latent-state/detection parameterizations generate exactly the same observed transition table (P00=3/5, P01=1/5, P10=1/10, P11=1/10) while latent link prevalence changes in opposite directions: 1/4->3/5 versus 11/20->3/10.",
@@ -126,5 +119,22 @@
     "routeability": "NOT_VALIDATED",
     "detection_effort_observation_map": "EXACT_IDENTITY_WITH_STRONG_DIAGNOSTIC_ALIGNMENT_AUC_0_852"
   },
-  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is materially detection-sensitive, its gain/loss direction is strongly aligned with the exact detection-effort observation map, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent."
+  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is materially detection-sensitive, its gain/loss direction is strongly aligned with the exact detection-effort observation map, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent.",
+  "observational_stop_rule": {
+    "status": "FROZEN_STOP",
+    "trigger": [
+      "binary observed-link turnover is materially detection-sensitive",
+      "effort-standardized opportunity increment is fold-mixed (4/6)",
+      "latent state-side opportunity support fails the pre-frozen rule (1/6 vs required 5/6)",
+      "beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a state boundary in 6/6",
+      "the full binary transition table is formally non-identifying for latent turnover direction when detection is unknown"
+    ],
+    "consequence": "Do not add further flexible Villavicencio observation models whose purpose is to search for a positive natural-rewiring mechanism. New Villavicencio work must either test a pre-specified identification remedy with genuinely new independent information or remain a robustness/identification analysis.",
+    "allowed_next_evidence": [
+      "independent repeated-detection data or externally validated observation model",
+      "independent latent-state information",
+      "experimental separation of ecological state from encounter/detection",
+      "controlled routeability experiment with an independent decision layer"
+    ]
+  }
 }
