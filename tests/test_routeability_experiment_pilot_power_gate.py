@@ -25,6 +25,10 @@ def test_pilot_power_gate_requires_external_sesoi():
     assert "external_biological_criterion" in sesoi["allowed_provenance"]
     assert "theoretical_information_ceiling" in sesoi["forbidden_provenance"]
     assert sesoi["freeze_before_final_power_simulation"] is True
+    assert sesoi["status"] == "FROZEN_H1_0.10_H2_0.10"
+    assert sesoi["h1_probability_scale"] == 0.10
+    assert sesoi["h2_probability_scale"] == 0.10
+    assert sesoi["frozen_source"] == "validation/routeability_sesoi_gate_v1.json"
 
 
 def test_power_screening_exporter_emits_nonfinal_receipt(tmp_path):
@@ -42,8 +46,8 @@ def test_power_screening_exporter_emits_nonfinal_receipt(tmp_path):
                     "focal_architecture_access_contrast_opened": False
                 },
                 "sesoi": {
-                    "h1_probability_interaction": 0.15,
-                    "h2_probability_localization": 0.15,
+                    "h1_probability_interaction": 0.10,
+                    "h2_probability_localization": 0.10,
                     "provenance": "practical_decision_threshold"
                 },
                 "planning": {
