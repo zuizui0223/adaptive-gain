@@ -83,13 +83,24 @@ def main() -> None:
         state = item["state_only"]
         both = item["state_plus_detection"]
 
+        def reliable(model):
+            return (
+                model["best_convergence"] == 0
+                and model["all_starts_converged"]
+                and model["multi_start_nll_range"] <= 1e-6
+            )
+
         state_supported = (
-            both["aic"] <= detection["aic"] - 2
+            reliable(detection)
+            and reliable(both)
+            and both["aic"] <= detection["aic"] - 2
             and both["beta_gain"] > 0
             and both["beta_loss"] < 0
         )
         detection_supported = (
-            detection["aic"] <= base["aic"] - 2
+            reliable(base)
+            and reliable(detection)
+            and detection["aic"] <= base["aic"] - 2
             and detection["beta_detection"] > 0
         )
         state_support_count += int(state_supported)
@@ -110,6 +121,10 @@ def main() -> None:
                 "both_delta_aic_vs_state_only": (
                     both["aic"] - state["aic"]
                 ),
+                "base_fit_reliable": reliable(base),
+                "detection_fit_reliable": reliable(detection),
+                "state_fit_reliable": reliable(state),
+                "both_fit_reliable": reliable(both),
                 "state_component_supported": state_supported,
                 "detection_component_supported": detection_supported,
             },
