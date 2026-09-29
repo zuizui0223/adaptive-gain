@@ -22,6 +22,7 @@ from adaptive_gain.routeability_final_n_selection import (
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
+SESOI_GATE = ROOT / "validation" / "routeability_sesoi_gate_v1.json"
 
 REQUIRED_FIELDS = (
     "preregistration_version",
@@ -465,6 +466,26 @@ def validate_finalization_payload(
         h2_probability_localization=float(payload["h2_sesoi"]),
         provenance=str(payload["sesoi_provenance"]),
     ).validated()
+
+    frozen_sesoi_gate = _read_json(
+        SESOI_GATE,
+        "routeability_sesoi_gate_v1.json",
+    )
+    frozen_power = frozen_sesoi_gate["power_interface"]
+    frozen_h1 = float(frozen_power["h1_sesoi"])
+    frozen_h2 = float(frozen_power["h2_sesoi"])
+    frozen_provenance = str(frozen_power["sesoi_provenance"])
+    if (
+        abs(sesoi.h1_probability_interaction - frozen_h1) > 1e-12
+        or abs(sesoi.h2_probability_localization - frozen_h2) > 1e-12
+        or sesoi.provenance != frozen_provenance
+    ):
+        raise ValueError(
+            "preregistration SESOI must exactly match the frozen "
+            "routeability_sesoi_gate_v1.json values/provenance: "
+            f"H1={frozen_h1}, H2={frozen_h2}, "
+            f"provenance={frozen_provenance!r}"
+        )
 
     commit = _nonempty(
         payload["frozen_precollection_commit"],
