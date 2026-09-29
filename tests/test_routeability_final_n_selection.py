@@ -128,6 +128,36 @@ def _rows():
             "sesoi_provenance": "practical_decision_threshold",
         },
     ]
+    rows.extend(
+        [
+            {
+                "scenario_id": "n4_a",
+                "robustness_id": "a",
+                "individuals_per_cell": 4,
+                "simulations": 1000,
+                "trials_per_individual": 8,
+                "fit_success_fraction": 0.97,
+                "h1_directional_rejection_fraction": 0.72,
+                "h2_hierarchical_pass_fraction": 0.55,
+                "expected_h1_delta_b2": 0.12,
+                "expected_h2_localization": 0.10,
+                "sesoi_provenance": "practical_decision_threshold",
+            },
+            {
+                "scenario_id": "n4_b",
+                "robustness_id": "b",
+                "individuals_per_cell": 4,
+                "simulations": 1000,
+                "trials_per_individual": 8,
+                "fit_success_fraction": 0.96,
+                "h1_directional_rejection_fraction": 0.70,
+                "h2_hierarchical_pass_fraction": 0.50,
+                "expected_h1_delta_b2": 0.12,
+                "expected_h2_localization": 0.10,
+                "sesoi_provenance": "practical_decision_threshold",
+            },
+        ]
+    )
 
 
     profiles = {
@@ -184,12 +214,13 @@ def test_final_n_selector_chooses_smallest_n_passing_every_scenario(tmp_path):
 
     assert receipt.selected_individuals_per_cell == 12
     assert receipt.total_randomized_individuals == 144
-    assert receipt.evaluated_n_values == (8, 12, 16)
+    assert receipt.evaluated_n_values == (4, 8, 12, 16)
 
     by_n = {
         row.individuals_per_cell: row
         for row in receipt.candidate_receipts
     }
+    assert by_n[4].passes is False
     assert by_n[8].passes is False
     assert by_n[12].passes is True
     assert by_n[16].passes is True
@@ -220,6 +251,26 @@ def test_final_n_selector_rejects_sparse_n_or_no_passing_n(tmp_path):
         row["h2_hierarchical_pass_fraction"] = 0.5
     _write_surface(surface, no_pass)
     with pytest.raises(ValueError, match="no evaluated individuals-per-cell"):
+        select_final_individuals_per_cell(surface, _rule())
+
+
+def test_final_n_selector_rejects_missing_smaller_or_intermediate_candidate_n(tmp_path):
+    surface = tmp_path / "surface.csv"
+
+    missing_minimum = [
+        row for row in _rows()
+        if int(row["individuals_per_cell"]) != 4
+    ]
+    _write_surface(surface, missing_minimum)
+    with pytest.raises(ValueError, match="every counterbalanced value"):
+        select_final_individuals_per_cell(surface, _rule())
+
+    missing_intermediate = [
+        row for row in _rows()
+        if int(row["individuals_per_cell"]) != 8
+    ]
+    _write_surface(surface, missing_intermediate)
+    with pytest.raises(ValueError, match="every counterbalanced value"):
         select_final_individuals_per_cell(surface, _rule())
 
 
