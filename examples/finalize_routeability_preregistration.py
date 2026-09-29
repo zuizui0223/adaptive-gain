@@ -23,6 +23,9 @@ from adaptive_gain.routeability_robustness_grid import (
     BASELINE_PROFILE_NAMES,
     NUISANCE_PROFILES,
 )
+from adaptive_gain.routeability_material_pretest import (
+    qualify_material_pretest,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
@@ -51,6 +54,12 @@ REQUIRED_FIELDS = (
     "sesoi_provenance",
     "apparatus_description",
     "cue_alphabet_description",
+    "material_pretest_log_reference",
+    "material_pretest_log_sha256",
+    "material_spec_reference",
+    "material_spec_sha256",
+    "material_pretest_receipt_reference",
+    "material_pretest_receipt_sha256",
     "nominal_cue_duration_seconds",
     "cue_duration_tolerance_seconds",
     "response_window_seconds",
@@ -535,6 +544,9 @@ def validate_finalization_payload(
         "final_n_receipt_reference",
         "apparatus_description",
         "cue_alphabet_description",
+        "material_pretest_log_reference",
+        "material_spec_reference",
+        "material_pretest_receipt_reference",
         "pilot_receipt_reference",
         "familiarization_protocol",
         "training_dose",
@@ -558,6 +570,9 @@ def validate_finalization_payload(
         )
 
     hash_fields = (
+        "material_pretest_log_sha256",
+        "material_spec_sha256",
+        "material_pretest_receipt_sha256",
         "pilot_receipt_sha256",
         "power_surface_sha256",
         "final_n_rule_sha256",
@@ -574,6 +589,9 @@ def validate_finalization_payload(
     }
 
     artifact_pairs = (
+        ("material_pretest_log_reference", "material_pretest_log_sha256"),
+        ("material_spec_reference", "material_spec_sha256"),
+        ("material_pretest_receipt_reference", "material_pretest_receipt_sha256"),
         ("pilot_receipt_reference", "pilot_receipt_sha256"),
         ("power_surface_reference", "power_surface_sha256"),
         ("final_n_rule_reference", "final_n_rule_sha256"),
@@ -591,6 +609,36 @@ def validate_finalization_payload(
             hashes[hash_field],
             artifact_root=artifact_root,
             name=ref_field,
+        )
+
+    material_rows = _read_csv(
+        verified["material_pretest_log_reference"],
+        "material_pretest_log_reference",
+    )
+    material_spec = _read_json(
+        verified["material_spec_reference"],
+        "material_spec_reference",
+    )
+    recomputed_material_receipt = qualify_material_pretest(
+        material_rows,
+        material_spec=material_spec,
+        trial_log_sha256=hashes["material_pretest_log_sha256"],
+        material_spec_sha256=hashes["material_spec_sha256"],
+    )
+    material_receipt = _read_json(
+        verified["material_pretest_receipt_reference"],
+        "material_pretest_receipt_reference",
+    )
+    if material_receipt != recomputed_material_receipt:
+        raise ValueError(
+            "material pretest receipt disagrees with independent recomputation"
+        )
+    if (
+        material_receipt.get("status") != "PASS_material_set_qualified"
+        or material_receipt.get("qualified") is not True
+    ):
+        raise ValueError(
+            "material pretest receipt does not certify a qualified material set"
         )
 
     _validate_power_surface_csv(
