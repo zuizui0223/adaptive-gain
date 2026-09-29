@@ -1,0 +1,74 @@
+{
+  "schema": "adaptive-gain-villavicencio-subseason-effort-audit-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_detection_bias_audit_frozen",
+  "analysis_status": "designed after the raw 18-period response was reconstructed and sampling-effort concern was raised; bias audit only, not confirmatory ecology",
+  "purpose": "Resolve the raw-data meaning of sampling effort, quantify effort heterogeneity across the 18 reconstructed subseasons, and test whether apparent gain/loss direction is materially associated with focal-plant observation effort.",
+  "sources": {
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "raw_response": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+    "published_sampling_reference": "Chacoff et al. 2018 Ecology 99:21-28, DOI 10.1002/ecy.2063"
+  },
+  "census_semantics": {
+    "unit": "one 5-min focal-plant observation period",
+    "raw_identity": ["site", "year", "date", "codigo.p", "obs.time"],
+    "missing_obs_time": "rows without obs.time are excluded from exact census reconstruction because a 5-min start cannot be uniquely identified",
+    "validation_target_total_censuses": {
+      "2006": 532,
+      "2007": 372,
+      "2008": 530,
+      "2009": 836,
+      "2010": 460,
+      "2011": 988
+    },
+    "pass_rule": "raw unique census counts must exactly reproduce all six published annual totals"
+  },
+  "subseason_effort_inventory": {
+    "period_definition": "before Nov 1 / Nov 1-30 / after Nov 30 within each declared study year",
+    "report": [
+      "unique 5-min censuses",
+      "total observation minutes",
+      "number of sampled sites",
+      "number of sampled dates",
+      "number of focal plant species",
+      "plant x period census counts"
+    ]
+  },
+  "sampling_completeness": {
+    "estimator": "bias-corrected incidence Chao2 = S_obs + Q1(Q1-1)/(2(Q2+1))",
+    "incidence_unit": "5-min census",
+    "link_surface": "45 plant x 135 pollinator trait subset used by Stage 1",
+    "role": "descriptive detection-completeness diagnostic, not a corrected network estimator"
+  },
+  "effort_direction_diagnostic": {
+    "fixed_response_surface": "original raw-subseason shared-species dyad rows; eligible dyads are not reselected from effort",
+    "score": "log(1 + current focal-plant censuses) - log(1 + previous focal-plant censuses)",
+    "contrast": "among observed changed dyads only, classify gain versus loss from the effort-change score",
+    "scopes": {
+      "strict_dated_core_2008_2010": "six within-year transitions; two core sites and no 2011 missing-date boundary",
+      "core_sites_2008_2011": "eight transitions; stable two-site pool, includes 2011 date-missingness limitation",
+      "all_2006_2011": "all twelve reconstructed transitions"
+    },
+    "metric": "ROC AUC; descriptive only"
+  },
+  "effort_only_cv": {
+    "predictors": [
+      "log1p previous-period focal-plant census count",
+      "log1p current-period focal-plant census count"
+    ],
+    "models": "separate gain and loss binomial logistic models",
+    "cross_validation": "leave-one-subseason-transition-out within frozen scopes",
+    "primary_scope": "strict_dated_core_2008_2010",
+    "metrics": ["held-out log loss", "relative log-loss reduction vs training prevalence", "Brier improvement", "ROC AUC"]
+  },
+  "interpretation": {
+    "allowed": "determine whether binary observed-link turnover is materially sampling-effort-sensitive",
+    "forbidden": [
+      "calling effort association pure observer bias because census allocation is partly coupled to flowering availability",
+      "calling raw binary gain/loss true rewiring",
+      "claiming a detection-corrected ecological network",
+      "routeability inference"
+    ]
+  },
+  "claim_ceiling": "This audit can resolve effort semantics and diagnose whether binary link turnover is detection-sensitive. It cannot separate biological availability from observer allocation or convert observed zeros into true absences. If effort strongly predicts gain/loss, raw 18-period binary changes remain feasibility data rather than ecological rewiring evidence until a detection-standardized response is used."
+}
