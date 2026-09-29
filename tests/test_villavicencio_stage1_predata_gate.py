@@ -111,7 +111,7 @@ def test_stage1_gate_resolves_effort_semantics_but_not_true_link_detection():
         "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED"
     )
     assert status["primary_12_transition_ecological_rewiring_status"] == (
-        "NOT_IDENTIFIED_USE_OBSERVED_LINK_TURNOVER"
+        "NOT_IDENTIFIED_OBSERVED_LINK_TURNOVER_ONLY"
     )
     assert status["effort_standardized_census_incidence"] == (
         "MIXED_OPPORTUNITY_INCREMENT_4_OF_6"
