@@ -93,13 +93,13 @@
       "H1/H2 SESOI values 0.10/0.10 and provenance match validation/routeability_sesoi_gate_v1.json",
       "robustness scenarios generated mechanically from validation/routeability_nuisance_robustness_grid_gate_v1.json",
       "planned colony_count and operational maximum individuals-per-cell frozen before final power simulation",
-      "candidate N set contains every multiple of four from 4 through the frozen operational maximum, so no smaller N is skipped",
+      "candidate N set contains every multiple of four from the smallest colony-feasible value (4*ceil(planned colony_count/4)) through the frozen operational maximum, so no feasible smaller N is skipped",
       "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface",
       "every candidate individuals-per-cell value is evaluated on the exact same frozen robustness_id set",
       "all rows in the final power surface use the same frozen H1/H2 SESOI values and SESOI provenance"
     ],
     "final_N_status": "not frozen",
-    "forbidden": "do not select N from the most favorable scenario, hand-edit robustness profiles, clip invalid pilot-anchored probabilities, skip smaller multiples of four, or rerun the grid after viewing confirmatory outcomes; do not vary the robustness scenario set or SESOI across candidate N values"
+    "forbidden": "do not select N from the most favorable scenario, hand-edit robustness profiles, clip invalid pilot-anchored probabilities, skip smaller colony-feasible multiples of four, or rerun the grid after viewing confirmatory outcomes; do not vary the robustness scenario set or SESOI across candidate N values"
   },
   "software_fixture_boundary": "CI may use arbitrary synthetic nuisance/effect values solely to verify code execution. Fixture outputs are never scientific planning results and must not enter the readiness ledger as power evidence.",
   "claim_ceiling": "The simulator, nuisance-only GLMM bridge and 12-scenario robustness policy are code-frozen. Real pilot nuisance values, pre-allocation colony count/operational N cap and the resulting operating-characteristic surface are still required before any biological N is justified."
