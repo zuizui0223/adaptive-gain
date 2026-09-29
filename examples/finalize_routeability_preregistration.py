@@ -19,6 +19,10 @@ from adaptive_gain.routeability_final_n_selection import (
     FinalNRule,
     select_final_individuals_per_cell,
 )
+from adaptive_gain.routeability_robustness_grid import (
+    BASELINE_PROFILE_NAMES,
+    NUISANCE_PROFILES,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "manuscript" / "ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md"
@@ -202,6 +206,27 @@ def _validate_power_surface_csv(
     ids = [row["scenario_id"] for row in rows]
     if any(not value.strip() for value in ids) or len(ids) != len(set(ids)):
         raise ValueError("final power surface scenario_id values must be unique and non-empty")
+
+    expected_robustness_ids = {
+        f"{baseline}__{nuisance}"
+        for baseline in BASELINE_PROFILE_NAMES
+        for nuisance in NUISANCE_PROFILES
+    }
+    robustness_by_n: dict[int, set[str]] = {}
+    for row in rows:
+        n_value = int(row["individuals_per_cell"])
+        robustness_by_n.setdefault(n_value, set()).add(
+            row["robustness_id"].strip()
+        )
+    for n_value, observed_ids in robustness_by_n.items():
+        if observed_ids != expected_robustness_ids:
+            missing = sorted(expected_robustness_ids - observed_ids)
+            extra = sorted(observed_ids - expected_robustness_ids)
+            raise ValueError(
+                "final power surface must use the exact frozen 12 robustness_id "
+                f"values at every candidate N; N={n_value}, "
+                f"missing={missing!r}, extra={extra!r}"
+            )
 
     matching_final_n = False
     for row in rows:
