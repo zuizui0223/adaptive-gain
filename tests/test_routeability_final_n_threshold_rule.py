@@ -28,6 +28,13 @@ def test_final_n_threshold_rule_keeps_counterbalance_and_mc_precision():
     assert data["minimum_simulations_per_scenario"] >= 1000
 
 
+def test_final_n_threshold_rule_requires_gapless_candidate_n_values():
+    data = _rule()
+    assert data["counterbalance_multiple"] == 4
+    assert "every multiple of four from 4" in data["candidate_n_coverage"]
+    assert any("cannot start above 4 or contain gaps" in item for item in data["firewalls"])
+
+
 def test_final_n_threshold_rule_uses_worst_scenario_selection():
     data = _rule()
     assert "every frozen robustness scenario" in data["selection"]
