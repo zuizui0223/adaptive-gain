@@ -110,33 +110,115 @@ def _prepare_artifacts(tmp_path: Path) -> dict:
         ),
         encoding="utf-8",
     )
-    power.write_text(
-        "scenario_id,robustness_id,simulations,individuals_per_cell,trials_per_individual,"
-        "colony_count,colony_block_counts,individual_sd_logit,colony_sd_logit,dropout_fraction,"
-        "timeout_fraction,alpha_two_sided,sesoi_provenance,"
-        "p_KF_B1,p_KC_B1,p_RF_B1,p_RC_B1,"
-        "p_KF_B2,p_KC_B2,p_RF_B2,p_RC_B2,"
-        "p_KF_B3,p_KC_B3,p_RF_B3,p_RC_B3,"
-        "fit_success_fraction,h1_directional_rejection_fraction,"
-        "h2_hierarchical_pass_fraction,expected_h1_delta_b2,expected_h2_localization\n"
-        "n4_robust_a,a,1000,4,8,4,1;1;1;1,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold,"
-        "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
-        "0.99,0.82,0.80,0.10,0.10\n"
-        "n4_robust_b,b,1000,4,8,4,1;1;1;1,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold,"
-        "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
-        "0.97,0.83,0.81,0.10,0.10\n"
-        "n8_robust_a,a,1000,8,8,4,2;2;2;2,0.5,0.2,0.10,0.05,0.05,"
-        "practical_decision_threshold,"
-        "0.50,0.51,0.50,0.53,0.60,0.62,0.58,0.72,0.70,0.71,0.70,0.73,"
-        "0.99,0.90,0.87,0.10,0.10\n"
-        "n8_robust_b,b,1000,8,8,4,2;2;2;2,0.8,0.3,0.15,0.08,0.05,"
-        "practical_decision_threshold,"
-        "0.45,0.46,0.45,0.48,0.55,0.57,0.53,0.67,0.65,0.66,0.65,0.68,"
-        "0.98,0.88,0.85,0.10,0.10\n",
-        encoding="utf-8",
-    )
+    robustness_ids = [
+        f"{baseline}__{nuisance}"
+        for baseline in (
+            "hard_center",
+            "pilot_anchored",
+            "high_performance",
+        )
+        for nuisance in (
+            "nominal",
+            "variance_stress",
+            "attrition_stress",
+            "combined_stress",
+        )
+    ]
+    power_fields = [
+        "scenario_id",
+        "robustness_id",
+        "simulations",
+        "individuals_per_cell",
+        "trials_per_individual",
+        "colony_count",
+        "colony_block_counts",
+        "individual_sd_logit",
+        "colony_sd_logit",
+        "dropout_fraction",
+        "timeout_fraction",
+        "alpha_two_sided",
+        "sesoi_provenance",
+        "p_KF_B1",
+        "p_KC_B1",
+        "p_RF_B1",
+        "p_RC_B1",
+        "p_KF_B2",
+        "p_KC_B2",
+        "p_RF_B2",
+        "p_RC_B2",
+        "p_KF_B3",
+        "p_KC_B3",
+        "p_RF_B3",
+        "p_RC_B3",
+        "fit_success_fraction",
+        "h1_directional_rejection_fraction",
+        "h2_hierarchical_pass_fraction",
+        "expected_h1_delta_b2",
+        "expected_h2_localization",
+    ]
+    with power.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=power_fields)
+        writer.writeheader()
+        for n in (4, 8):
+            for index, robustness_id in enumerate(robustness_ids):
+                variance_stress = (
+                    "variance_stress" in robustness_id
+                    or "combined_stress" in robustness_id
+                )
+                attrition_stress = (
+                    "attrition_stress" in robustness_id
+                    or "combined_stress" in robustness_id
+                )
+                if robustness_id.startswith("hard_center"):
+                    baseline = (
+                        0.50, 0.50, 0.50, 0.50,
+                        0.55, 0.55, 0.55, 0.65,
+                        0.65, 0.65, 0.65, 0.65,
+                    )
+                elif robustness_id.startswith("pilot_anchored"):
+                    baseline = (
+                        0.58, 0.60, 0.58, 0.60,
+                        0.68, 0.70, 0.66, 0.78,
+                        0.78, 0.78, 0.78, 0.78,
+                    )
+                else:
+                    baseline = (
+                        0.65, 0.67, 0.65, 0.67,
+                        0.70, 0.72, 0.68, 0.80,
+                        0.80, 0.80, 0.80, 0.80,
+                    )
+                row = {
+                    "scenario_id": f"N{n}__{robustness_id}",
+                    "robustness_id": robustness_id,
+                    "simulations": 1000,
+                    "individuals_per_cell": n,
+                    "trials_per_individual": 8,
+                    "colony_count": 4,
+                    "colony_block_counts": (
+                        "1;1;1;1" if n == 4 else "2;2;2;2"
+                    ),
+                    "individual_sd_logit": 0.75 if variance_stress else 0.50,
+                    "colony_sd_logit": 0.30 if variance_stress else 0.20,
+                    "dropout_fraction": 0.15 if attrition_stress else 0.10,
+                    "timeout_fraction": 0.10 if attrition_stress else 0.05,
+                    "alpha_two_sided": 0.05,
+                    "sesoi_provenance": "practical_decision_threshold",
+                    "fit_success_fraction": 0.97 if n == 4 else 0.99,
+                    "h1_directional_rejection_fraction": 0.82 if n == 4 else 0.90,
+                    "h2_hierarchical_pass_fraction": 0.80 if n == 4 else 0.87,
+                    "expected_h1_delta_b2": 0.10,
+                    "expected_h2_localization": 0.10,
+                }
+                for field, value in zip(
+                    (
+                        "p_KF_B1", "p_KC_B1", "p_RF_B1", "p_RC_B1",
+                        "p_KF_B2", "p_KC_B2", "p_RF_B2", "p_RC_B2",
+                        "p_KF_B3", "p_KC_B3", "p_RF_B3", "p_RC_B3",
+                    ),
+                    baseline,
+                ):
+                    row[field] = value
+                writer.writerow(row)
     final_n_rule.write_text(
         json.dumps(
             {
