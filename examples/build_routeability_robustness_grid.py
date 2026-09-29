@@ -46,12 +46,23 @@ def main() -> None:
             "operational_max_individuals_per_cell must be an integer "
             "multiple of four >= 4"
         )
-    candidate_n = list(range(4, operational_max + 1, 4))
+    colony_count = int(planning["colony_count"])
+    if colony_count < 1 or float(planning["colony_count"]) != colony_count:
+        raise ValueError("colony_count must be a positive integer")
+    minimum_feasible_n = 4 * ((colony_count + 3) // 4)
+    if operational_max < minimum_feasible_n:
+        raise ValueError(
+            "operational_max_individuals_per_cell is below the smallest "
+            f"colony-feasible counterbalanced N={minimum_feasible_n}"
+        )
+    candidate_n = list(
+        range(minimum_feasible_n, operational_max + 1, 4)
+    )
 
     scenarios = build_frozen_robustness_scenarios(
         nuisance,
         candidate_individuals_per_cell=candidate_n,
-        colony_count=planning["colony_count"],
+        colony_count=colony_count,
         simulations_per_scenario=planning["simulations_per_scenario"],
         seed_base=planning["seed_base"],
         alpha_two_sided=planning.get("alpha_two_sided", 0.05),
@@ -74,6 +85,8 @@ def main() -> None:
             args.nuisance_receipt_json
         ),
         "planning_input_sha256": _sha256(args.planning_json),
+        "colony_count": colony_count,
+        "minimum_feasible_individuals_per_cell": minimum_feasible_n,
         "operational_max_individuals_per_cell": operational_max,
         "candidate_individuals_per_cell": ns,
         "robustness_ids": robustness_ids,
