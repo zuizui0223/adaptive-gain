@@ -59,5 +59,5 @@ def test_raw_subseason_is_observed_turnover_not_identified_rewiring():
     )
     assert "not 853 identified ecological rewiring events" in followup["consequence"]
     ceiling = data["claim_ceiling"].lower()
-    assert "sampling-effort-corrected ecological rewiring" in ceiling
+    assert "sampling-effort-corrected rewiring" in ceiling
     assert "binary detection is materially effort-sensitive" in ceiling
