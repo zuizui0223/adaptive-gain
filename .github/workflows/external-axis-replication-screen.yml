@@ -6,6 +6,9 @@ on:
     paths:
       - ".github/workflows/external-axis-replication-screen.yml"
       - "validation/dominguez2026_external_replication_screen_gate_v1.json"
+      - "examples/build_dominguez2026_external_axis_table.py"
+      - "examples/dominguez2026_external_axis_cv.R"
+      - "examples/summarize_dominguez2026_external_axis_replication.py"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -16,6 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
 
       - name: Fetch checksum-pinned Zenodo v3 archive
         shell: bash
@@ -125,6 +136,100 @@ jobs:
               sort_keys=True,
           ))
           PY
+
+      - name: Run effect-blind external axis replication
+        shell: bash
+        run: |
+          set -euo pipefail
+          DATA="source/unpacked/Sup_CODE/Data"
+          python examples/build_dominguez2026_external_axis_table.py \
+            "$DATA/Ilist_byyear.csv" \
+            "$DATA/Abn_Pheno.csv" \
+            "$DATA/Abn_Pheno_P.csv" \
+            --output artifact/dominguez2026_external_axis_table.csv \
+            --summary artifact/dominguez2026_external_axis_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/dominguez2026_external_axis_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["site_count"] != 12:
+              raise SystemExit(
+                  f"expected 12 sites, found {summary['site_count']}"
+              )
+          if summary["year_range"] != [2015, 2022]:
+              raise SystemExit("external year range changed")
+          if not summary["focal_dyad_excluded_from_pollinator_activity"]:
+              raise SystemExit("focal-response exclusion lost")
+          if summary["published_pollinator_abundance_used"]:
+              raise SystemExit("published pollinator abundance entered primary replication")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+          Rscript examples/dominguez2026_external_axis_cv.R \
+            artifact/dominguez2026_external_axis_table.csv \
+            artifact/dominguez2026_external_axis_predictions.csv \
+            artifact/dominguez2026_external_axis_folds.csv
+
+          python examples/summarize_dominguez2026_external_axis_replication.py \
+            artifact/dominguez2026_external_axis_table_summary.json \
+            artifact/dominguez2026_external_axis_predictions.csv \
+            artifact/dominguez2026_external_axis_folds.csv \
+            artifact/dominguez2026_external_axis_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/dominguez2026_external_axis_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path(
+                  "validation/dominguez2026_external_replication_screen_gate_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+          if "effect-blind" not in result["analysis_status"]:
+              raise SystemExit("external replication lost effect-blind status")
+          if "routeability" not in result["claim_ceiling"]:
+              raise SystemExit("external replication lost routeability ceiling")
+          if "leave-one-site-out" not in gate["replication_design"]["cross_validation"]:
+              raise SystemExit("external CV design changed")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_direction": result["primary_phenology_axis"]["gain"][
+                          "frozen_direction"
+                      ],
+                      "loss_direction": result["primary_phenology_axis"]["loss"][
+                          "frozen_direction"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Upload external replication result
+        uses: actions/upload-artifact@v4
+        with:
+          name: dominguez2026-external-axis-replication
+          path: |
+            artifact/dominguez2026_external_axis_table_summary.json
+            artifact/dominguez2026_external_axis_predictions.csv
+            artifact/dominguez2026_external_axis_folds.csv
+            artifact/dominguez2026_external_axis_result.json
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Upload source inventory
         uses: actions/upload-artifact@v4
