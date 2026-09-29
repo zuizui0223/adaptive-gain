@@ -34,6 +34,16 @@ log_sum_exp <- function(values) {
   m + log(sum(exp(finite - m)))
 }
 
+log_sum_exp_rows <- function(matrix_values) {
+  row_max <- apply(matrix_values, 1, max)
+  if (any(!is.finite(row_max))) {
+    stop("latent opportunity likelihood row has no finite state")
+  }
+  row_max + log(
+    rowSums(exp(matrix_values - row_max))
+  )
+}
+
 unpack_parameters <- function(theta, model, x) {
   if (model == "base") {
     psi <- inv_logit(theta[[1]])
@@ -86,43 +96,47 @@ unpack_parameters <- function(theta, model, x) {
 negative_log_likelihood <- function(theta, frame, model) {
   x <- frame$opportunity_z
   par <- unpack_parameters(theta, model, x)
-  total <- 0
 
-  for (i in seq_len(nrow(frame))) {
-    psi <- par$psi
-    gamma <- par$gamma[[i]]
-    epsilon <- par$epsilon[[i]]
-    p1 <- par$p_previous[[i]]
-    p2 <- par$p_current[[i]]
+  y1 <- frame$previous_success_censuses
+  n1 <- frame$previous_trials
+  y2 <- frame$current_success_censuses
+  n2 <- frame$current_trials
 
-    y1 <- frame$previous_success_censuses[[i]]
-    n1 <- frame$previous_trials[[i]]
-    y2 <- frame$current_success_censuses[[i]]
-    n2 <- frame$current_trials[[i]]
+  obs1_z0 <- ifelse(y1 == 0, 0, -Inf)
+  obs2_z0 <- ifelse(y2 == 0, 0, -Inf)
+  obs1_z1 <- dbinom(
+    y1,
+    size = n1,
+    prob = par$p_previous,
+    log = TRUE
+  )
+  obs2_z1 <- dbinom(
+    y2,
+    size = n2,
+    prob = par$p_current,
+    log = TRUE
+  )
 
-    state_logs <- c(
-      log1p(-psi) + log1p(-gamma),
-      log1p(-psi) + log(gamma),
-      log(psi) + log(epsilon),
-      log(psi) + log1p(-epsilon)
-    )
-    obs1_z0 <- if (y1 == 0) 0 else -Inf
-    obs2_z0 <- if (y2 == 0) 0 else -Inf
-    obs1_z1 <- dbinom(y1, size = n1, prob = p1, log = TRUE)
-    obs2_z1 <- dbinom(y2, size = n2, prob = p2, log = TRUE)
+  terms <- cbind(
+    log1p(-par$psi)
+      + log1p(-par$gamma)
+      + obs1_z0
+      + obs2_z0,
+    log1p(-par$psi)
+      + log(par$gamma)
+      + obs1_z0
+      + obs2_z1,
+    log(par$psi)
+      + log(par$epsilon)
+      + obs1_z1
+      + obs2_z0,
+    log(par$psi)
+      + log1p(-par$epsilon)
+      + obs1_z1
+      + obs2_z1
+  )
 
-    terms <- c(
-      state_logs[[1]] + obs1_z0 + obs2_z0,
-      state_logs[[2]] + obs1_z0 + obs2_z1,
-      state_logs[[3]] + obs1_z1 + obs2_z0,
-      state_logs[[4]] + obs1_z1 + obs2_z1
-    )
-    value <- log_sum_exp(terms)
-    if (!is.finite(value)) return(1e100)
-    total <- total - value
-  }
-
-  total
+  -sum(log_sum_exp_rows(terms))
 }
 
 make_starts <- function(base_row, model) {
