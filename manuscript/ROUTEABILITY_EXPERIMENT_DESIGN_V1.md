@@ -585,12 +585,22 @@ Sample-size planning is separated into three explicit stages.
 
 1. **Nuisance receipt.** Freeze Pilot A/B nuisance quantities before opening the focal contrast.
 2. **Conservative screening.** Use `adaptive_gain/routeability_experiment_power.py` and `examples/plan_routeability_experiment.py` to obtain a balanced-cell screening calculation. The effect input must be an externally justified probability-scale SESOI, not the theoretical 0.25 information ceiling and not a focal pilot effect.
-3. **Final simulation.** Before confirmatory collection, replace the screening approximation with simulation of the frozen binomial mixed model using the actual colony allocation, response-window process, nuisance estimates and externally frozen H1/H2 SESOI.
+3. **Nuisance GLMM and robustness expansion.** Fit a pooled full-information `B=3` nuisance-only GLMM that contains no architecture, access, `B=2`, H1 or H2 labels. Freeze the individual and colony random-intercept SDs, then mechanically cross the frozen three baseline profiles with four nuisance profiles (nominal, variance stress, attrition stress, combined stress). The resulting **12 robustness IDs** must be identical at every candidate N. Pilot-anchored probabilities and stress values are never clipped; invalid scenarios fail closed.
+4. **Final simulation.** Before confirmatory collection, use the already frozen robustness policy to simulate the frozen binomial mixed model across every multiple-of-four candidate N from 4 through a husbandry-defined operational maximum, using the pre-allocation colony count and externally frozen H1/H2 SESOI.
+
+The nuisance-to-robustness machine surface is:
+
+- `examples/fit_routeability_pilot_nuisance_glmm.R`;
+- `examples/summarize_routeability_pilot_nuisance_glmm.py`;
+- `adaptive_gain/routeability_robustness_grid.py`;
+- `examples/build_routeability_robustness_grid.py`;
+- `validation/routeability_nuisance_robustness_grid_gate_v1.json`.
 
 The machine-readable firewall is:
 
 - `validation/routeability_experiment_pilot_power_gate_v1.json`;
-- `validation/routeability_sesoi_gate_v1.json`.
+- `validation/routeability_sesoi_gate_v1.json`;
+- `validation/routeability_nuisance_robustness_grid_gate_v1.json`.
 
 The external smallest-effect threshold is now frozen **before pilot/confirmatory treatment contrasts**:
 
