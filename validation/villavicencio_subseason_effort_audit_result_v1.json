@@ -1,0 +1,132 @@
+{
+  "schema": "adaptive-gain-villavicencio-subseason-effort-audit-result-v1",
+  "date": "2026-09-29",
+  "status": "effort_semantics_resolved_binary_detection_materially_sensitive",
+  "analysis_status": "post-result detection-bias audit; sampling effort is reconstructable, but true link state remains unidentified",
+  "source": {
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "raw_subseason_response": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+    "design_gate": "validation/villavicencio_subseason_effort_audit_gate_v1.json",
+    "published_sampling_reference": "Chacoff et al. 2018 Ecology 99:21-28, DOI 10.1002/ecy.2063"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36522416959,
+    "run_number": 405,
+    "conclusion": "success",
+    "head_sha": "d84107afc9555a54482a6674398c6512a5d01f1a",
+    "artifact_id": 11012818490,
+    "artifact_digest": "sha256:c16d5f3e108d4d8ab108d3957a761b8a87ded1be2da631cf52cc3bef94084972"
+  },
+  "effort_semantics": {
+    "unit": "5-min focal-plant observation census",
+    "raw_identity": ["site", "year", "date", "codigo.p", "obs.time"],
+    "annual_raw_vs_published": {
+      "2006": {"raw": 532, "published": 532, "difference": 0},
+      "2007": {"raw": 372, "published": 372, "difference": 0},
+      "2008": {"raw": 530, "published": 530, "difference": 0},
+      "2009": {"raw": 836, "published": 836, "difference": 0},
+      "2010": {"raw": 463, "published": 460, "difference": 3},
+      "2011": {"raw": 988, "published": 988, "difference": 0}
+    },
+    "interpretation": "The raw census identity is validated by exact agreement in five of six years. The 2010 raw/publication +3 discrepancy is retained explicitly rather than silently coerced."
+  },
+  "subseason_effort_range": {
+    "minimum_censuses": 38,
+    "maximum_censuses": 424,
+    "minimum_minutes": 190,
+    "maximum_minutes": 2120,
+    "core_2008_2011_sites_per_period": 2,
+    "note": "Subseason observation intensity varies strongly even when the two-site pool is stable."
+  },
+  "trait_subset_detection_completeness": {
+    "estimator": "bias-corrected incidence Chao2 over 5-min censuses",
+    "minimum_observed_fraction": 0.3138357705286839,
+    "maximum_observed_fraction": 0.6538461538461539,
+    "interpretation": "Many subseason binary link surfaces are substantially incomplete; this diagnostic does not itself recover latent link states."
+  },
+  "effort_alignment_with_observed_direction": {
+    "score": "log1p(current focal-plant censuses) - log1p(previous focal-plant censuses)",
+    "strict_dated_core_2008_2010_auc_gain_over_loss": 0.8146667681843561,
+    "core_sites_2008_2011_auc_gain_over_loss": 0.8235504244791865,
+    "all_2006_2011_auc_gain_over_loss": 0.834054496871598,
+    "all_2006_2011_endpoint_means": {
+      "observed_gain": {
+        "n": 422,
+        "mean_previous_censuses": 8.5,
+        "mean_current_censuses": 17.40995260663507,
+        "mean_delta_censuses": 8.909952606635072
+      },
+      "observed_loss": {
+        "n": 431,
+        "mean_previous_censuses": 18.501160092807424,
+        "mean_current_censuses": 9.566125290023201,
+        "mean_delta_censuses": -8.935034802784223
+      },
+      "stable_absent": {
+        "n": 3359,
+        "mean_delta_censuses": -0.2857993450431676
+      },
+      "stable_present": {
+        "n": 369,
+        "mean_delta_censuses": 0.7777777777777778
+      }
+    }
+  },
+  "effort_only_heldout_cv": {
+    "strict_dated_core_2008_2010": {
+      "gain": {
+        "n": 1825,
+        "events": 199,
+        "roc_auc": 0.6973273501579237,
+        "relative_log_loss_reduction": 0.0430466605803364,
+        "brier_improvement": 0.000606453599309581,
+        "positive_log_loss_folds": "4/6"
+      },
+      "loss": {
+        "n": 372,
+        "events": 198,
+        "roc_auc": 0.6695692557761523,
+        "relative_log_loss_reduction": 0.050298828955001026,
+        "brier_improvement": 0.019540362272804535,
+        "positive_log_loss_folds": "5/6"
+      }
+    },
+    "core_sites_2008_2011": {
+      "gain": {"roc_auc": 0.6883763260023403, "relative_log_loss_reduction": 0.06725051349883844, "positive_log_loss_folds": "7/8"},
+      "loss": {"roc_auc": 0.6880067609970797, "relative_log_loss_reduction": 0.0778572012257268, "positive_log_loss_folds": "7/8"}
+    },
+    "all_2007_2011": {
+      "gain": {"roc_auc": 0.6898360332498051, "relative_log_loss_reduction": 0.06695602321445661, "positive_log_loss_folds": "9/10"},
+      "loss": {"roc_auc": 0.7010282953761214, "relative_log_loss_reduction": 0.08932102131686542, "positive_log_loss_folds": "9/10"}
+    }
+  },
+  "matched_effort_rarefaction": {
+    "replicates": 500,
+    "seed": 20260929,
+    "strict_dated_core_2008_2010": {
+      "gain": {"n": 199, "mean_same_state_probability": 0.5796582914572865, "median": 0.582},
+      "loss": {"n": 198, "mean_same_state_probability": 0.5953131313131311, "median": 0.667},
+      "stable_present": {"n": 174, "mean_same_state_probability": 0.6038275862068968, "median": 0.635}
+    },
+    "all_2006_2011": {
+      "gain": {"n": 422, "mean_same_state_probability": 0.5694312796208534, "median": 0.541},
+      "loss": {"n": 431, "mean_same_state_probability": 0.5803665893271456, "median": 0.638},
+      "stable_present": {"n": 369, "mean_same_state_probability": 0.6651111111111114, "median": 0.778}
+    },
+    "interpretation": "Equalizing census intensity materially changes observed link-state classification. The complement of retention is not a false-rewiring fraction because downsampling can also create non-detection from persistent true links."
+  },
+  "ecological_interpretation": {
+    "supported": "Sampling-effort semantics are resolved, and detection sensitivity is material rather than hypothetical.",
+    "consequence": "The 853 binary changes (422 gains, 431 losses) cannot be treated as 853 identified ecological rewiring events. They remain observed-link turnover on a detection-sensitive response surface.",
+    "important_boundary": "Focal-plant census effort is partly endogenous to flowering availability, so the strong effort association is not pure observer bias. It nevertheless prevents identification of observed zeros as true absences."
+  },
+  "not_established": [
+    "true absence for unobserved links",
+    "sampling-effort-corrected rewiring",
+    "the fraction of 853 observed changes that are biological",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Use the raw 18-period binary response for response feasibility and detection audits. Until a detection-standardized response is used, call gains/losses observed link-state turnover rather than ecological rewiring."
+}
