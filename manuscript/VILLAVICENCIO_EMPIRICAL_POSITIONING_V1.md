@@ -345,6 +345,33 @@ It is better read as:
 
 Encounter and detectability are still ecological. They reflect activity, co-occurrence and observation opportunity. But they are not the same thing as latent interaction assembly or extinction.
 
+## 12b. Richer detection heterogeneity makes latent transition inference model-dependent
+
+The simple repeated-detection model is not the end of the detection problem.
+
+A frozen robustness analysis replaced simple binomial detection with a beta-binomial observation model that allows extra-binomial heterogeneity among repeated focal-interaction detections.
+
+Result:
+
+- beta-binomial detection is preferred in **6/6** primary transitions;
+- its AIC is at least **13.8** lower than the simple binomial model in every transition;
+- under the richer observation model, at least one latent transition parameter reaches the frozen state boundary in **6/6** transitions.
+
+So the simple-binomial latent gain/loss estimates are not stable enough to be promoted as a detection-corrected ecological response.
+
+This closes an important loophole. The correct lesson is not:
+
+> fit a more sophisticated occupancy model and recover the true rewiring surface.
+
+It is:
+
+> **the repeated censuses are sufficient to diagnose strong detection dependence, but the latent transition surface itself remains observation-model dependent.**
+
+Accordingly, neither the raw binary changes nor the model-based latent transitions identify a stable natural rewiring mechanism in this dataset.
+
+Source:
+- `validation/villavicencio_detection_overdispersion_result_v1.json`
+
 ## 13. External 12-site result
 
 
