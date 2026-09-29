@@ -177,19 +177,20 @@
         "final-versus-non-final representative threshold perturbation"
       ],
       "regression_test": "tests/test_decision_rewiring_prospective_test.py",
-      "promotion_rule": "Promote only for reviewer-requested testability, an identified empirical network with independently measurable decision structure, or a dedicated rewiring follow-up; keep the initial V5 headline unchanged.",
+      "promotion_rule": "Promote only for reviewer-requested testability or a dedicated follow-up with both an independently measurable decision structure and a detection-defensible interaction response; otherwise prefer the controlled routeability experiment. Keep the initial V5 headline unchanged.",
       "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect.",
-      "formal_empirical_boundary": "exact result: non-final within-class loss can leave the declared contingent decision problem invariant; empirical hypothesis: final-representative loss is more likely to alter rewiring opportunity, not guaranteed to change observed rewiring"
+      "formal_empirical_boundary": "exact result: non-final within-class loss can leave the declared contingent decision problem invariant; empirical hypothesis: final-representative loss is more likely to alter rewiring opportunity, not guaranteed to change observed rewiring",
+      "response_validity_rule": "raw binary link gain/loss is not sufficient: observational promotion requires effort-standardized interaction incidence or a repeated-detection model in which the independent decision exposure adds reproducible state-side information rather than only detection-side information."
     },
     {
       "path": "manuscript/REWIRING_EMPIRICAL_DATASET_SCREEN_V1.md",
       "status": "feasibility_screen_not_empirical_confirmation",
-      "central_result": "no Tier A public dataset identified; Villavicencio six-year plant-pollinator data are the strongest current Tier B pilot because repeated networks, morphology, phenology and abundance are jointly available",
+      "central_result": "no Tier A public observational dataset identified; Villavicencio now serves as a response-feasibility and detection-identification boundary rather than natural rewiring confirmation",
       "strongest_candidate": {
-        "dataset": "Chacoff, Vazquez & Lomascolo / Peralta et al. Villavicencio plant-pollinator network",
+        "dataset": "Villavicencio plant-pollinator network / raw Figshare visitor records",
         "doi": "10.5061/dryad.8cz8w9gm1",
-        "admission": "Tier B strong pilot",
-        "reason_not_tier_a": "independent contingent cue/decision structure is not supplied; morphology and phenology are compatibility filters, not exact decision-equivalence classes"
+        "admission": "Tier B response-feasibility pilot only; observed-link turnover and repeated-census detection are available, but stable detection-corrected natural rewiring is not identified",
+        "reason_not_tier_a": "independent contingent decision structure is absent, binary link states are materially detection-sensitive, the effort-standardized opportunity increment is fold-mixed, and richer detection models make latent transitions observation-model dependent"
       },
       "other_candidates": [
         {
@@ -208,10 +209,11 @@
           "admission": "Tier B-minus reserve pending independent decision-cue surface"
         }
       ],
-      "next_gate": "Stage 1 feasibility reanalysis on Villavicencio before collecting or importing an independent decision-structure layer",
+      "next_gate": "stop Villavicencio observational rewiring model expansion; use the controlled routeability experiment or a new detection-defensible network with an independently frozen decision layer",
       "anti_proxy_rule": "do not label morphology or trait clusters as decision equivalence merely because they predict rewiring",
       "regression_test": "tests/test_rewiring_empirical_dataset_screen.py",
-      "promotion_rule": "public-data work remains feasibility analysis until either a Tier A observational dataset is identified or an independent experimental decision-structure layer is added to a Tier B network response"
+      "promotion_rule": "public-data work remains feasibility/detection-boundary evidence. Natural-network routeability requires both an independently measured decision exposure and a detection-defensible ecological response.",
+      "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
     },
     {
       "path": "manuscript/INDEPENDENT_DECISION_LAYER_SCREEN_V1.md",
@@ -243,8 +245,8 @@
     },
     {
       "path": "validation/villavicencio_filter_block_ablation_result_v1.json",
-      "status": "green_stage1_filter_attribution_not_routeability",
-      "central_result": "phenological overlap is the only prespecified conventional-filter block with reproducible incremental held-out information for both annual link gains and losses under the frozen strict-core rule",
+      "status": "historical_numeric_ablation_quarantined_for_ecological_interpretation",
+      "central_result": "the historical annual ablation arithmetic is reproducible, but the published phenology support is response-conditioned for candidate gains and the binary response is materially detection-sensitive; it is not a validated ecological-filter result",
       "primary_scope": "strict_core_2008_2011",
       "gain": {
         "phenology_delta_log_loss": 0.07671189331237421,
@@ -261,9 +263,17 @@
         "pollinator_morphology": "no_reproducible_incremental_information"
       },
       "sensitivity": "phenology retains reproducible_incremental_information for both endpoints in near-core 4/4 and all-annual 5/5 folds",
-      "next_gate": "freeze an independent cognition/decision exposure without redefining the conventional baseline",
-      "claim_boundary": "predictive filter attribution only; no causal primacy, decision-equivalence, or routeability inference",
-      "regression_test": "tests/test_villavicencio_filter_block_ablation_result.py"
+      "next_gate": "none for ecological promotion from this surface; follow validation/villavicencio_rewiring_claim_resolution_v1.json and move mechanism testing to a detection-defensible independent response or the controlled experiment",
+      "claim_boundary": "historical numerical attribution only; support leakage plus imperfect detection block ecological-filter, natural-rewiring, causal or routeability interpretation",
+      "regression_test": "tests/test_villavicencio_filter_block_ablation_result.py",
+      "final_detection_resolution": {
+        "effort_semantics": "resolved from raw 5-min censuses",
+        "census_incidence_opportunity_increment": "mixed 4/6 primary folds",
+        "latent_state_opportunity_support": "1/6 versus frozen 5/6 requirement",
+        "detection_side_support": "4/6",
+        "observation_model_stress": "beta-binomial preferred 6/6; latent state boundary 6/6",
+        "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+      }
     },
     {
       "path": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
