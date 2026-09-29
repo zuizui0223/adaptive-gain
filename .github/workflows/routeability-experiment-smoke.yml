@@ -11,6 +11,7 @@ on:
       - "adaptive_gain/routeability_procedural_pilot.py"
       - "adaptive_gain/routeability_experiment_power.py"
       - "adaptive_gain/routeability_operating_characteristics.py"
+      - "adaptive_gain/routeability_robustness_grid.py"
       - "adaptive_gain/routeability_roster_randomization.py"
       - "adaptive_gain/routeability_final_schedule.py"
       - "adaptive_gain/routeability_final_n_selection.py"
@@ -19,6 +20,9 @@ on:
       - "examples/build_routeability_procedural_pilot_receipt.py"
       - "examples/plan_routeability_experiment.py"
       - "examples/build_routeability_glmm_simulation_scenarios.py"
+      - "examples/fit_routeability_pilot_nuisance_glmm.R"
+      - "examples/summarize_routeability_pilot_nuisance_glmm.py"
+      - "examples/build_routeability_robustness_grid.py"
       - "examples/simulate_routeability_glmm_operating_characteristics.R"
       - "examples/randomize_routeability_roster.py"
       - "examples/compile_routeability_final_schedule.py"
@@ -33,6 +37,7 @@ on:
       - "validation/routeability_experiment_pilot_power_gate_v1.json"
       - "validation/routeability_sesoi_gate_v1.json"
       - "validation/routeability_glmm_operating_characteristic_gate_v1.json"
+      - "validation/routeability_nuisance_robustness_grid_gate_v1.json"
       - "validation/routeability_roster_randomization_gate_v1.json"
       - "validation/routeability_final_schedule_gate_v1.json"
       - "validation/routeability_final_n_selection_gate_v1.json"
@@ -80,6 +85,154 @@ jobs:
             tests/test_routeability*.py \
             tests/test_ecological_routeability_experiment.py \
             tests/test_pairwise_information_routeability_nonidentifiability.py
+
+      - name: Run software-only nuisance-to-robustness fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          rows = []
+          patterns = [
+              [1,1,1,1,1,1,0,0],
+              [1,1,1,1,1,0,0,0],
+              [1,1,1,1,0,0,0,0],
+              [1,1,1,1,1,1,1,0],
+          ]
+          for individual in range(1, 13):
+              colony = "c1" if individual <= 6 else "c2"
+              pattern = patterns[(individual - 1) % len(patterns)]
+              for block, correct in enumerate(pattern, start=1):
+                  timeout = int((individual + block) % 17 == 0)
+                  if timeout:
+                      correct = 0
+                  rows.append(
+                      {
+                          "individual_id": f"i{individual}",
+                          "colony_id": colony,
+                          "correct_within_window": correct,
+                          "timeout": timeout,
+                          "block": block,
+                      }
+                  )
+
+          path = Path("artifact/nuisance_fixture_pilot_b.csv")
+          with path.open("w", newline="", encoding="utf-8") as handle:
+              writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+              writer.writeheader()
+              writer.writerows(rows)
+
+          success = sum(row["correct_within_window"] for row in rows) / len(rows)
+          timeout = sum(row["timeout"] for row in rows) / len(rows)
+          bundle = {
+              "schema": "software-fixture-only",
+              "focal_architecture_access_contrast_opened": False,
+              "pooled_full_information": {
+                  "focal_architecture_contrast_opened": False,
+                  "pooled_success_fraction": success,
+                  "pooled_timeout_fraction": timeout,
+                  "randomized_individual_dropout_fraction": 0.10,
+                  "trials_per_individual": 8,
+              },
+          }
+          Path("artifact/nuisance_fixture_pilot_bundle.json").write_text(
+              json.dumps(bundle, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          Path("artifact/nuisance_fixture_planning.json").write_text(
+              json.dumps(
+                  {
+                      "candidate_individuals_per_cell": [12, 16],
+                      "colony_count": 2,
+                      "simulations_per_scenario": 2,
+                      "seed_base": 20260929,
+                      "alpha_two_sided": 0.05,
+                  },
+                  indent=2,
+              )
+              + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+          Rscript examples/fit_routeability_pilot_nuisance_glmm.R \
+            artifact/nuisance_fixture_pilot_b.csv \
+            artifact/nuisance_fixture_glmm.csv
+
+          python examples/summarize_routeability_pilot_nuisance_glmm.py \
+            artifact/nuisance_fixture_pilot_bundle.json \
+            artifact/nuisance_fixture_glmm.csv \
+            artifact/nuisance_fixture_receipt.json
+
+          python examples/build_routeability_robustness_grid.py \
+            artifact/nuisance_fixture_receipt.json \
+            artifact/nuisance_fixture_planning.json \
+            artifact/nuisance_fixture_robustness.json
+
+          python examples/build_routeability_glmm_simulation_scenarios.py \
+            artifact/nuisance_fixture_robustness.json \
+            artifact/nuisance_fixture_scenarios.csv
+
+          python - <<'PY'
+          import csv
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+
+          receipt = json.loads(
+              Path("artifact/nuisance_fixture_receipt.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          config = json.loads(
+              Path("artifact/nuisance_fixture_robustness.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          rows = list(
+              csv.DictReader(
+                  Path("artifact/nuisance_fixture_scenarios.csv").open(
+                      newline="",
+                      encoding="utf-8",
+                  )
+              )
+          )
+
+          if receipt["focal_architecture_access_contrast_opened"]:
+              raise SystemExit("nuisance fixture opened focal contrast")
+          if config["scenario_count_per_N"] != 12:
+              raise SystemExit("robustness fixture must contain 12 scenarios per N")
+          if len(rows) != 24:
+              raise SystemExit("two candidate Ns should produce 24 scenario rows")
+
+          by_n = defaultdict(set)
+          for row in rows:
+              by_n[int(row["individuals_per_cell"])].add(row["robustness_id"])
+              if float(row["expected_h1_delta_b2"]) != 0.10:
+                  raise SystemExit("fixture H1 SESOI changed")
+              if float(row["expected_h2_localization"]) != 0.10:
+                  raise SystemExit("fixture H2 SESOI changed")
+          if set(by_n) != {12, 16}:
+              raise SystemExit("fixture candidate N set changed")
+          if by_n[12] != by_n[16] or len(by_n[12]) != 12:
+              raise SystemExit("robustness ID set differs across candidate N")
+
+          print(
+              {
+                  "nuisance_glmm_fixture_only": True,
+                  "singular_fit": receipt["singular_fit"],
+                  "individual_sd_logit": receipt["individual_sd_logit"],
+                  "colony_sd_logit": receipt["colony_sd_logit"],
+                  "robustness_ids": len(by_n[12]),
+                  "scenario_rows": len(rows),
+              }
+          )
+          PY
 
       - name: Parse final GLMM simulator
         run: |
