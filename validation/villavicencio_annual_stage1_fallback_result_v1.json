@@ -2,7 +2,7 @@
   "schema": "adaptive-gain-villavicencio-annual-stage1-fallback-result-v1",
   "date": "2026-09-27",
   "status": "green_detection_sensitive_response_estimability",
-  "role": "annual fallback feasibility analysis; does not replace the frozen 18-subseason primary design",
+  "role": "annual fallback response-estimability ledger retained for historical continuity; ecological interpretation is superseded by the raw-census effort audit and focal-response-excluded repair",
   "source": {
     "doi": "10.5061/dryad.8cz8w9gm1",
     "file": "plant_pollinator_data.xlsx",
@@ -132,24 +132,32 @@
     }
   ],
   "interpretation": {
-    "gate": "PASS for response estimability",
-    "reason": "all five annual transitions contain both changed and unchanged shared dyads and all observed species codes join exactly to the source name tables; this establishes response estimability only. Subsequent raw-census auditing resolved observation-effort semantics and showed that binary link detection is materially effort-sensitive.",
+    "gate": "PASS for response estimability only",
+    "reason": "all five annual transitions contain changed and unchanged shared dyads and source identifiers join exactly",
+    "current_detection_resolution": "Sampling effort is now reconstructable from raw 5-min censuses and binary link states are materially effort-sensitive. Annual gain/loss remains observed-link turnover, not identified ecological rewiring.",
+    "historical_predictive_baseline": "The later conventional-filter model produced strong numerical held-out discrimination, but its published phenological-overlap gain interpretation is quarantined by support leakage.",
     "not_established": [
-      "true latent link state under imperfect detection",
       "true species presence/absence",
       "sampling-effort-corrected rewiring",
+      "a reproducible effort-standardized opportunity effect",
       "environmental routeability",
       "decision-structural turnover",
       "decision-equivalence classes"
     ]
   },
-  "next_gate": "Use focal-response-excluded ecological opportunity only as a retrospective association baseline, and use an effort-standardized census-incidence response for ecological inference. Do not promote annual binary gain/loss to natural rewiring.",
-  "claim_ceiling": "This annual fallback establishes only an estimable observed-link turnover surface. Sampling-effort semantics are now resolved, but binary detection is materially effort-sensitive; annual gains/losses do not identify true ecological rewiring. The result cannot validate routeability, decision structure, or true species turnover.",
+  "next_gate": "Do not add another binary rewiring model. Use validation/villavicencio_subseason_effort_audit_result_v1.json for detection sensitivity and validation/villavicencio_census_rate_result_v1.json for the effort-standardized interaction-incidence check; require an independent decision layer for any routeability test.",
+  "claim_ceiling": "This annual fallback establishes response estimability only. Its binary gain/loss states are detection-sensitive observed-link turnover, not identified ecological rewiring. The historical phenology-based predictive result is quarantined for support leakage, and the later effort-standardized census-incidence opportunity increment is fold-mixed. None of these results validates routeability.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
     "census_unit": "5-min focal-plant observation census",
     "implication": "Annual positive-link presence remains detection-sensitive even though the raw meaning of observation effort is now resolved. The higher-resolution audit shows that unequal focal-plant census effort materially changes binary link-state classification.",
     "language_rule": "Use observed link-state turnover / annual link dynamics, not identified ecological rewiring."
+  },
+  "supersession": {
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_rate_result": "validation/villavicencio_census_rate_result_v1.json",
+    "clean_opportunity_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "published_overlap_support_leakage": "validation/villavicencio_phenology_support_leakage_v1.json"
   }
 }
