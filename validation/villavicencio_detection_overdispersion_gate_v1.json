@@ -1,0 +1,44 @@
+{
+  "schema": "adaptive-gain-villavicencio-detection-overdispersion-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_identifiability_model_sensitivity_frozen",
+  "analysis_status": "robustness stress test motivated by the homogeneous-detection assumption in the simple two-season model; not a new confirmatory ecology analysis",
+  "parent_gate": "validation/villavicencio_two_season_detection_gate_v1.json",
+  "purpose": "Test whether latent gain/loss inference is robust to extra-binomial heterogeneity in per-census interaction detection.",
+  "scope": "same six strict_dated_core_2008_2010 transitions and same focal-response-excluded candidate dyad surface",
+  "models": {
+    "binomial_detection": "parent two-season model with transition-specific constant p_previous and p_current",
+    "beta_binomial_detection": "same latent state process, but detections conditional on z=1 follow beta-binomial distributions with transition-specific mean p_previous/p_current and concentration kappa_previous/kappa_current"
+  },
+  "beta_binomial_parameters": [
+    "psi",
+    "gamma",
+    "epsilon",
+    "mean_p_previous",
+    "mean_p_current",
+    "kappa_previous",
+    "kappa_current"
+  ],
+  "optimizer": {
+    "method": "R optim L-BFGS-B",
+    "state_and_detection_logit_bounds": [-8, 8],
+    "log_kappa_bounds": [-2.302585092994046, 9.210340371976184],
+    "deterministic_multi_starts": true
+  },
+  "diagnostics": {
+    "aic_preference": "beta-binomial is materially preferred when AIC is at least 2 below the binomial model within a transition",
+    "state_boundary": "record whether gamma or epsilon is at |logit| >= 7.9; boundary estimates are evidence against stable latent-transition identification under the richer observation model",
+    "cross_transition_stress": "report counts of transitions with beta-binomial AIC preference and state-boundary estimates; do not convert these counts into an independent p-value"
+  },
+  "interpretation": {
+    "allowed": "assess whether the simple detection-corrected latent transition estimates are sensitive to plausible overdispersion in repeated census detections",
+    "forbidden": [
+      "claiming beta-binomial detection is the true observation process",
+      "using a richer model to rescue a preferred ecological conclusion",
+      "causal opportunity effects",
+      "decision equivalence",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "If beta-binomial detection materially outperforms the simple binomial model and destabilizes gamma/epsilon estimates, the correct conclusion is model-sensitive latent rewiring, not detection-corrected ecological rewiring. This stress test cannot identify the true observation process."
+}
