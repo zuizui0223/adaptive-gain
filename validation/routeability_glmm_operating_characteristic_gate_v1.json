@@ -14,7 +14,12 @@
         "theoretical 0.25 information ceiling as behavioral effect size",
         "opened focal pilot H1/H2 estimate",
         "post-hoc confirmatory effect"
-      ]
+      ],
+      "frozen_source": "validation/routeability_sesoi_gate_v1.json",
+      "status": "FROZEN_H1_0.10_H2_0.10",
+      "h1_probability_scale": 0.1,
+      "h2_probability_scale": 0.1,
+      "provenance": "practical_decision_threshold_frozen_2026-09-29"
     },
     "baseline_surface": {
       "required": [
@@ -66,7 +71,7 @@
   "final_N_promotion_rule": {
     "required": [
       "procedural pilot nuisance receipt frozen without focal contrast opening",
-      "external H1/H2 SESOI provenance frozen",
+      "H1/H2 SESOI values 0.10/0.10 and provenance match validation/routeability_sesoi_gate_v1.json",
       "baseline planning surface frozen",
       "actual/planned colony complete-block allocation vector frozen or included in the prespecified robustness surface",
       "operating-characteristic grid includes multiple plausible nuisance/baseline scenarios rather than one favorable point",
