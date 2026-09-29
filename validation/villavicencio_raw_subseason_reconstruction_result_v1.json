@@ -109,7 +109,7 @@
     "ecological rewiring identity for the 853 observed binary changes",
     "latent true link state under imperfect detection"
   ],
-  "claim_ceiling": "This establishes a reproducible public-raw-record reconstruction of the documented 18-period response surface, with an explicit 2011 date-missingness boundary. Sampling-effort semantics are resolved, but repeated-census diagnostics show material detection sensitivity, so the 853 binary changes cannot be identified as ecological rewiring events. Exact RData identity, true presence, sampling-effort-corrected rewiring, decision equivalence, and routeability remain unestablished.",
+  "claim_ceiling": "This establishes a reproducible public-raw-record reconstruction of the documented 18-period response surface, with an explicit 2011 date-missingness boundary. Sampling-effort semantics are resolved, but binary detection is materially effort-sensitive under repeated-census diagnostics, so the 853 binary changes cannot be identified as ecological rewiring events. Exact RData identity, true presence, sampling-effort-corrected rewiring, decision equivalence, and routeability remain unestablished.",
   "sampling_effort_followup": {
     "status": "EFFORT_SEMANTICS_RESOLVED_BINARY_DETECTION_MATERIAL",
     "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
