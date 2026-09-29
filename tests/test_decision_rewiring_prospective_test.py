@@ -100,3 +100,16 @@ def test_frozen_v5_surface_remains_present():
         ROOT / "manuscript" / "EVOLUTION_LETTERS_V5_ROUTEABILITY_READINESS_V1.json"
     ).read_text(encoding="utf-8")
     assert "v5_machine_submission_bundle_frozen_human_metadata_pending" in readiness
+
+def test_prospective_rewiring_requires_detection_defensible_response():
+    text = _text().lower()
+    for phrase in (
+        "detection-defensible interaction response",
+        "effort-standardized interaction-incidence",
+        "latent interaction state",
+        "without predicting the probability that the latent ecological interaction state changed",
+        "observation/detection component",
+        "raw zero/non-zero links",
+    ):
+        assert phrase in text
+
