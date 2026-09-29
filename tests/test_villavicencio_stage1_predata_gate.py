@@ -88,7 +88,7 @@ def test_stage1_gate_records_green_annual_and_raw_subseason_response():
     assert annual["join_unmatched_pollinators"] == 0
     assert annual["gate"] == "PASS_response_estimability"
     assert data["stage1_success_gate_status"]["conventional_filter_join"] == "PASS_NUMERIC_SURFACE"
-    assert data["stage1_success_gate_status"]["focal_excluded_opportunity_repair"] == "PASS_CURRENT_STATE_OPPORTUNITY"
+    assert data["stage1_success_gate_status"]["focal_excluded_opportunity_repair"] == "PASS_BINARY_DETECTION_SENSITIVE_ASSOCIATION"
     assert data["stage1_success_gate_status"]["primary_12_transition_reconstruction"] == "PASS_RAW_PUBLIC_18_PERIOD_RECONSTRUCTION"
     assert data["stage1_success_gate_status"]["primary_12_transition_rdata_byte_identity"] == "UNVERIFIED_RDATA_BYTES_UNAVAILABLE"
 
@@ -112,6 +112,9 @@ def test_stage1_gate_resolves_effort_semantics_but_not_true_link_detection():
     )
     assert status["primary_12_transition_ecological_rewiring_status"] == (
         "NOT_IDENTIFIED_USE_OBSERVED_LINK_TURNOVER"
+    )
+    assert status["effort_standardized_census_incidence"] == (
+        "MIXED_OPPORTUNITY_INCREMENT_4_OF_6"
     )
     policy = data["sampling_detection_policy"]
     assert policy["effort_result"].endswith(
