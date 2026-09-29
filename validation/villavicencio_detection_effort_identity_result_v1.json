@@ -21,7 +21,10 @@
     "gain": "P(G)=(1-q_previous)q_current",
     "loss": "P(L)=q_previous(1-q_current)",
     "difference": "P(G)-P(L)=q_current-q_previous",
-    "independent_census_special_case": "q=1-(1-p)^n"
+    "independent_census_special_case": "q=1-(1-p)^n",
+    "general_binary_conservation": "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1); no independence assumption",
+    "persistent_link_specialization": "P(observed gain)-P(observed loss)=q_current-q_previous; no period-independence assumption is needed for this difference",
+    "product_formula_assumption": "the listed product formulas P(G)=(1-q_previous)q_current and P(L)=q_previous(1-q_current), and the corresponding odds-ratio identity, require period-level conditional independence"
   },
   "all_six_transitions": {
     "changed_rows": 449,
@@ -55,7 +58,7 @@
   },
   "interpretation": {
     "supported": "The direction of observed binary changes is strongly aligned with the exact observation-process asymmetry expected when period-level detection probability changes, even under a persistent-latent-link counterfactual.",
-    "mechanistic_read": "Because P(observed gain)-P(observed loss)=q_current-q_previous exactly for a persistent latent link, unequal detectability is sufficient to create directional apparent turnover without any ecological state transition.",
+    "mechanistic_read": "The independence-free binary conservation identity shows that a change in marginal observed-presence probability necessarily creates a gain-minus-loss imbalance. For a persistent latent link this imbalance is q_current-q_previous. The fitted Villavicencio diagnostic then shows that observed gain/loss direction is strongly aligned with this detectability axis.",
     "important_boundary": "The q values use detection probabilities fitted from the same repeated-census dataset, so the AUC is a mechanistic diagnostic of the observation map, not independent predictive validation and not an estimate of the fraction of false rewiring."
   },
   "not_established": [
