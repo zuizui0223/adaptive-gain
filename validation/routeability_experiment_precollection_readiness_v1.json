@@ -137,25 +137,35 @@
       "note": "focal effect and theoretical 0.25 ceiling forbidden as power targets"
     },
     {
+      "item": "external H1/H2 SESOI",
+      "status": "PASS_FROZEN",
+      "evidence": [
+        "validation/routeability_sesoi_gate_v1.json",
+        "tests/test_routeability_sesoi_gate.py"
+      ],
+      "note": "H1 Delta_B2 SESOI = 0.10 and H2 localization SESOI = 0.10 on the probability scale; provenance is a practical decision threshold frozen before pilot/confirmatory treatment contrasts"
+    },
+    {
       "item": "conservative balanced-cell power screening",
       "status": "PASS_CODE_ONLY",
       "evidence": [
         "adaptive_gain/routeability_experiment_power.py",
         "examples/plan_routeability_experiment.py"
       ],
-      "note": "requires frozen pilot nuisance inputs and external SESOI; not final N"
+      "note": "external H1/H2 SESOI is now frozen at 0.10/0.10; screening still requires real pilot nuisance inputs and remains non-final"
     },
     {
       "item": "final GLMM operating-characteristic simulation",
       "status": "BLOCKED_INPUTS_CODE_READY",
-      "blocker": "real procedural-pilot nuisance receipt, actual colony allocation, externally frozen H1/H2 SESOI and a prespecified robust baseline/nuisance scenario grid are still required",
+      "blocker": "real procedural-pilot nuisance receipt, actual colony allocation, and a prespecified robust baseline/nuisance scenario grid are still required; H1/H2 SESOI is frozen separately",
       "promotion_rule": "run the frozen GLMM simulator across the required robustness surface before choosing definitive individuals per cell",
       "evidence": [
         "adaptive_gain/routeability_operating_characteristics.py",
         "examples/build_routeability_glmm_simulation_scenarios.py",
         "examples/simulate_routeability_glmm_operating_characteristics.R",
         "validation/routeability_glmm_operating_characteristic_gate_v1.json",
-        ".github/workflows/routeability-experiment-smoke.yml"
+        ".github/workflows/routeability-experiment-smoke.yml",
+        "validation/routeability_sesoi_gate_v1.json"
       ]
     },
     {
@@ -198,7 +208,7 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after procedural pilot, freeze external SESOI and robustness grid, run the GLMM operating-characteristic simulator, run the frozen final-N selector, randomize the architecture-neutral eligible roster at the selected N, compile the hash-locked final trial schedule, then finalize the preregistration package",
+  "next_machine_action": "after procedural pilot, freeze the robustness baseline/nuisance grid, run the GLMM operating-characteristic simulator using the already frozen 0.10 H1/H2 SESOI, run the frozen final-N selector, randomize the architecture-neutral eligible roster at the selected N, compile the hash-locked final trial schedule, then finalize the preregistration package",
   "next_biological_action": "qualify the exact local cue materials with the architecture-neutral physical-cue pretest, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
   "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
 }
