@@ -205,15 +205,19 @@
     "conventional_filter_temporal_cv": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "filter_block_ablation": "HISTORICAL_NUMERIC_RESULT_QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE",
     "focal_excluded_opportunity_repair": "PASS_BINARY_DETECTION_SENSITIVE_ASSOCIATION",
-    "next": "KEEP_RAW_18_PERIOD_BINARY_RESPONSE_AS_FEASIBILITY_AND_DETECTION_AUDIT; USE_EFFORT_STANDARDIZED_INCIDENCE_AND_LATENT_MODELS_AS_SENSITIVITIES; DO_NOT_PROMOTE_CURRENT_OPPORTUNITY_AS_GENERAL_NATURAL_REWIRING_DRIVER; REQUIRE_INDEPENDENT_DECISION_LAYER_OR_CONTROLLED_EXPERIMENT_FOR_ROUTEABILITY",
+    "next": "STOP_VILLAVICENCIO_OBSERVATIONAL_REWIRING_PROMOTION; RETAIN_AS_RESPONSE_VALIDITY_AND_FAILURE_BOUNDARY; REQUIRE_CONTROLLED_EXPERIMENT_OR_INDEPENDENT_DETECTION_DEFENSIBLE_NETWORK_FOR_ROUTEABILITY",
     "primary_12_transition_rdata_byte_identity": "UNVERIFIED_RDATA_BYTES_UNAVAILABLE",
     "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
-    "primary_12_transition_ecological_rewiring_status": "NOT_IDENTIFIED_USE_OBSERVED_LINK_TURNOVER",
+    "primary_12_transition_ecological_rewiring_status": "NOT_IDENTIFIED_OBSERVED_LINK_TURNOVER_ONLY",
     "effort_standardized_census_incidence": "MIXED_OPPORTUNITY_INCREMENT_4_OF_6",
     "annual_opportunity_beyond_focal_plant_effort": "GAIN_REPRODUCIBLE_3_OF_3_LOSS_MIXED_2_OF_3",
     "latent_detection_model": "PASS_SENSITIVITY_IDENTIFIABILITY_5_OF_6",
     "latent_opportunity_state_effect": "FAIL_GENERAL_PROMOTION_STATE_1_OF_6_DETECTION_4_OF_6",
-    "rewiring_claim_resolution": "OBSERVED_LINK_TURNOVER_ONLY_NATURAL_REWIRING_MECHANISM_NOT_IDENTIFIED"
+    "rewiring_claim_resolution": "OBSERVED_LINK_TURNOVER_ONLY_NATURAL_REWIRING_MECHANISM_NOT_IDENTIFIED",
+    "latent_detection_simple_model": "PASS_5_OF_6_FOR_SENSITIVITY_ONLY",
+    "latent_opportunity_state_promotion": "FAIL_PRIMARY_RULE_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6",
+    "latent_opportunity_optimizer_sensitivity": "STRICT_POSTHOC_STATE_0_OF_6_DETECTION_2_OF_6",
+    "detection_overdispersion_stress": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6"
   },
   "conventional_filter_baseline": {
     "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
@@ -312,5 +316,17 @@
       "interpretation": "small positive pooled increment but fold-unstable"
     },
     "claim_ceiling": "binary observed-link sensitivity only; does not correct pollinator-side detection or identify true rewiring"
+  },
+  "latent_response_validity_resolution": {
+    "simple_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
+    "simple_identified_transitions": "5/6",
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "frozen_state_support": "1/6",
+    "frozen_detection_support": "4/6",
+    "frozen_general_state_rule": "FAIL_required_5_of_6",
+    "strict_optimizer_sensitivity": "state_0_of_6_detection_2_of_6_post_result_only",
+    "overdispersion_result": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "overdispersion_resolution": "beta_binomial_preferred_6_of_6_and_state_transition_boundary_6_of_6",
+    "final_response_label": "observed-link turnover / observed interaction incidence, not identified ecological rewiring"
   }
 }
