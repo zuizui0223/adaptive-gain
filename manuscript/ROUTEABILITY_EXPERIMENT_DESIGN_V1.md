@@ -589,7 +589,16 @@ Sample-size planning is separated into three explicit stages.
 
 The machine-readable firewall is:
 
-- `validation/routeability_experiment_pilot_power_gate_v1.json`.
+- `validation/routeability_experiment_pilot_power_gate_v1.json`;
+- `validation/routeability_sesoi_gate_v1.json`.
+
+The external smallest-effect threshold is now frozen **before pilot/confirmatory treatment contrasts**:
+
+- H1 `Delta_B2` SESOI = **0.10** on the probability scale;
+- H2 budget-localization SESOI = **0.10**;
+- provenance = `practical_decision_threshold_frozen_2026-09-29`.
+
+The 0.10 threshold means one additional correct decision per ten test trials attributable to the routeability-specific interaction. It is a smallest-worthwhile-effect threshold, not a prediction of the true effect. External bumblebee artificial-flower studies that use 80% learning criteria or report >85% discrimination accuracy provide feasibility context only; their accuracies are not converted into the focal effect estimate.
 
 The screening calculator uses a conservative Bernoulli variance bound and repeated-trial design effect, then rounds randomized individuals per cell upward to the four-profile counterbalance multiple. It is intentionally not labelled the final powered N.
 
