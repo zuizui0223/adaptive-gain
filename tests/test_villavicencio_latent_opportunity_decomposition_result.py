@@ -64,3 +64,10 @@ def test_latent_opportunity_result_blocks_rewiring_promotion():
     ceiling = data["claim_ceiling"].lower()
     assert "state-side support is 1/6" in ceiling
     assert "detection-side support" in ceiling
+
+def test_stricter_optimizer_sensitivity_only_weakens_support():
+    data = _result()["post_result_optimizer_reliability_sensitivity"]
+    assert data["strict_state_supported_transition_count"] == 0
+    assert data["strict_detection_supported_transition_count"] == 2
+    assert "post-result robustness only" in data["role"]
+
