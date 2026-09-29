@@ -170,19 +170,20 @@
     },
     {
       "item": "mechanical final-N selection",
-      "status": "PASS_CODE_ONLY",
+      "status": "PASS_CODE_AND_THRESHOLD_RULE",
       "evidence": [
         "adaptive_gain/routeability_final_n_selection.py",
         "examples/select_routeability_final_n.py",
         "validation/routeability_final_n_selection_gate_v1.json",
-        "tests/test_routeability_final_n_selection.py"
+        "tests/test_routeability_final_n_selection.py",
+        "validation/routeability_final_n_threshold_rule_v1.json"
       ],
-      "note": "selects the smallest multiple-of-four individuals-per-cell value whose worst robustness scenario passes the frozen fit-success, H1 and hierarchical-H2 thresholds; real final power surface/rule pending"
+      "note": "selection algorithm and operating thresholds are frozen; real final power surface remains pending"
     },
     {
       "item": "definitive biological sample size",
       "status": "BLOCKED",
-      "blocker": "real pilot inputs, frozen final GLMM robustness surface and hash-addressed final-N threshold rule are not yet available for mechanical selection",
+      "blocker": "real pilot inputs and the final GLMM robustness surface are not yet available for mechanical selection; SESOI and final-N operating thresholds are already frozen",
       "forbidden_shortcut": "do not hand-select N, use the exact 0.25 information ceiling, or use a focal pilot interaction as the effect-size/power target"
     },
     {
