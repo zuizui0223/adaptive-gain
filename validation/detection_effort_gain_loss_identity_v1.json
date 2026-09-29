@@ -11,7 +11,8 @@
     "independent_census_special_case": "q(n)=1-(1-p)^n",
     "odds_ratio": "P(G)/P(L) = odds(q_current)/odds(q_previous)",
     "log_odds_ratio": "log[P(G)/P(L)] = logit(q_current)-logit(q_previous)",
-    "binary_conservation": "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1), with no independence assumption"
+    "binary_conservation": "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1), with no independence assumption",
+    "finite_network_balance": "#gains - #losses = observed_edges_current - observed_edges_previous on a fixed dyad universe"
   },
   "direction": {
     "q_current_gt_q_previous": "observed gain is more probable than observed loss despite no latent state change",
@@ -32,5 +33,10 @@
     "persistent_link_specialization": "latent link is present in both periods; q_previous/q_current are marginal period-level observed-presence probabilities",
     "product_and_odds_identities": "period-level detections are conditionally independent given the persistent latent link",
     "independent_census_special_case": "within-period census detections are conditionally independent with common per-census detection probability p"
+  },
+  "interpretation": {
+    "finite_network": "Aggregate gain-minus-loss imbalance is algebraically redundant with observed edge-count change.",
+    "probability": "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1) without independence.",
+    "persistent_link": "For a persistent latent link, the probability imbalance becomes q_current-q_previous."
   }
 }
