@@ -93,7 +93,8 @@
   "ecological_read": {
     "supported": "Current focal-response-excluded opportunity is more consistently associated with current-period detectability/activity than with latent link-state transitions under the simple detection model. Detection-only receives frozen support in four of six transitions; the latent state component meets the frozen support rule in only one of six.",
     "not_supported": "The predeclared five-of-six rule for a general opportunity effect on latent colonization/persistence fails decisively.",
-    "consequence": "The strong binary-turnover opportunity association must not be interpreted as a general ecological rewiring mechanism. A substantial part of the signal is compatible with detecting active pollinators more readily when current opportunity is high."
+    "consequence": "The strong binary-turnover opportunity association must not be interpreted as a general ecological rewiring mechanism. A substantial part of the signal is compatible with detecting active pollinators more readily when current opportunity is high.",
+    "optimizer_sensitivity": "The primary frozen result remains state 1/6 versus detection 4/6. A post-result stricter optimizer-stability sensitivity yields state 0/6 versus detection 2/6, strengthening rather than weakening the no-general-state conclusion without retroactively redefining the primary test."
   },
   "not_established": [
     "opportunity causally changes detection",
@@ -103,5 +104,22 @@
     "decision-equivalence classes",
     "environmental routeability"
   ],
-  "claim_ceiling": "The detection-model sensitivity does not support promoting current opportunity as a general driver of ecological rewiring: state-side support is 1/6 versus a frozen 5/6 requirement, while detection-side support occurs in 4/6 transitions."
+  "claim_ceiling": "The pre-frozen opportunity decomposition does not support a general latent-state rewiring effect: state-side support is 1/6 versus a frozen 5/6 requirement, while detection-side support occurs in 4/6 transitions. A post-result stricter optimizer sensitivity yields 0/6 versus 2/6 and cannot be used to rewrite the primary rule.",
+  "post_result_optimizer_reliability_sensitivity": {
+    "validation": {
+      "workflow": "Villavicencio latent detection audit",
+      "workflow_run": 36541521307,
+      "run_number": 21,
+      "conclusion": "success",
+      "head_sha": "13a493fc75c742ecc364fa23e5e59c16d91a641a",
+      "artifact_id": 11020653096,
+      "artifact_digest": "sha256:19d34b8f1c33101b1e53bc3bbae06e7001a6efb6de38a5c2324c054bdb47aea6"
+    },
+    "status": "stricter_optimizer_stability_makes_support_weaker",
+    "criterion": "best fit converged, all deterministic starts converged, and multi-start NLL range <= 1e-6",
+    "strict_state_supported_transition_count": 0,
+    "strict_detection_supported_transition_count": 2,
+    "role": "post-result robustness only; does not redefine the pre-frozen primary state/detection effect rule",
+    "interpretation": "Requiring stronger optimizer agreement does not rescue a latent-state opportunity effect; it removes the lone primary state-supported transition and reduces detection-side support from 4/6 to 2/6."
+  }
 }
