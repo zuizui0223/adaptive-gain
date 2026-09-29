@@ -133,8 +133,9 @@
   ],
   "interpretation": {
     "gate": "PASS for response estimability",
-    "reason": "all five annual transitions contain both changed and unchanged shared dyads, all observed species codes join exactly to the source name tables, and the link-change response is non-degenerate",
+    "reason": "all five annual transitions contain both changed and unchanged shared dyads and all observed species codes join exactly to the source name tables; this establishes response estimability only. Subsequent raw-census auditing resolved observation-effort semantics and showed that binary link detection is materially effort-sensitive.",
     "not_established": [
+      "true latent link state under imperfect detection",
       "true species presence/absence",
       "sampling-effort-corrected rewiring",
       "environmental routeability",
@@ -142,6 +143,13 @@
       "decision-equivalence classes"
     ]
   },
-  "next_gate": "construct a frozen conventional-filter dyad table from phenological overlap, flower abundance, plant morphology and pollinator morphology, then test how much annual link-change variation remains before any decision-structure exposure is introduced",
-  "claim_ceiling": "This annual fallback establishes only that the response surface is estimable. It cannot validate routeability or true species turnover because presence is based on positive observed links and no independent decision-structure layer is used."
+  "next_gate": "Use focal-response-excluded ecological opportunity only as a retrospective association baseline, and use an effort-standardized census-incidence response for ecological inference. Do not promote annual binary gain/loss to natural rewiring.",
+  "claim_ceiling": "This annual fallback establishes only an estimable observed-link turnover surface. Sampling-effort semantics are now resolved, but binary detection is materially effort-sensitive; annual gains/losses do not identify true ecological rewiring. The result cannot validate routeability, decision structure, or true species turnover.",
+  "sampling_effort_resolution": {
+    "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
+    "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_unit": "5-min focal-plant observation census",
+    "implication": "Annual positive-link presence remains detection-sensitive even though the raw meaning of observation effort is now resolved. The higher-resolution audit shows that unequal focal-plant census effort materially changes binary link-state classification.",
+    "language_rule": "Use observed link-state turnover / annual link dynamics, not identified ecological rewiring."
+  }
 }
