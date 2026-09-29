@@ -233,7 +233,7 @@ jobs:
           Path("artifact/nuisance_fixture_planning.json").write_text(
               json.dumps(
                   {
-                      "candidate_individuals_per_cell": [4, 8, 12, 16],
+                      "operational_max_individuals_per_cell": 16,
                       "colony_count": 2,
                       "simulations_per_scenario": 2,
                       "seed_base": 20260929,
