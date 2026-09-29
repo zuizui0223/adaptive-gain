@@ -240,12 +240,14 @@
     {
       "item": "confirmatory preregistration package",
       "status": "TEMPLATE_READY_FINALIZATION_BLOCKED",
-      "blocker": "final response window, pilot nuisance receipt, final GLMM robustness surface/N, apparatus/cue details, ethics approval, actual eligible roster, hash-locked randomization assignment, compiled final schedule/stimulus artifacts and pre-collection commit are not yet frozen",
+      "blocker": "PASS hash-locked physical-cue material qualification receipt, final response window, pilot nuisance receipt, final GLMM robustness surface/N, ethics approval, actual eligible roster, hash-locked randomization assignment, compiled final schedule/stimulus artifacts and pre-collection commit are not yet frozen",
       "evidence": [
         "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
         "examples/finalize_routeability_preregistration.py",
         "validation/routeability_preregistration_gate_v1.json",
-        "tests/test_routeability_preregistration_gate.py"
+        "tests/test_routeability_preregistration_gate.py",
+        "validation/routeability_material_pretest_receipt_gate_v1.json",
+        "adaptive_gain/routeability_material_pretest.py"
       ],
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
