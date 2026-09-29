@@ -39,7 +39,7 @@ def test_dataset_screen_keeps_independent_exposure_rule():
     for phrase in (
         "define decision-equivalence structure independently of the observed rewiring response",
         "availability, activity and morphology still do not establish an independent cue hierarchy or decision-equivalence structure.",
-        "Do not label a trait cluster as “decision equivalence” merely because it improves prediction.",
+        "do not label a trait cluster as “decision equivalence” merely because it improves prediction.",
     ):
         assert phrase in text
 
