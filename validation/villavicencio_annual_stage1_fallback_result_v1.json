@@ -2,7 +2,7 @@
   "schema": "adaptive-gain-villavicencio-annual-stage1-fallback-result-v1",
   "date": "2026-09-27",
   "status": "green_detection_sensitive_response_estimability",
-  "role": "annual fallback response-estimability ledger retained for historical continuity; ecological interpretation is superseded by the raw-census effort audit and focal-response-excluded repair",
+  "role": "historical annual detection-sensitive feasibility surface; retained for reproducibility and comparison, not a natural-rewiring endpoint",
   "source": {
     "doi": "10.5061/dryad.8cz8w9gm1",
     "file": "plant_pollinator_data.xlsx",
@@ -147,10 +147,11 @@
       "latent true link state under imperfect detection",
       "true ecological rewiring from binary observed-link changes"
     ],
-    "current_detection_status": "Sampling-effort semantics are resolved from raw 5-min census identities, but binary link detection is materially effort-sensitive and true absence remains unidentified."
+    "current_detection_status": "Sampling-effort semantics are resolved from raw 5-min census identities, but binary link detection is materially effort-sensitive and true absence remains unidentified.",
+    "current": "The annual surface is reproducible and estimable, but observed positive-link presence is effort/detection sensitive. Use it as historical feasibility and descriptive observed-link turnover only."
   },
-  "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: retain this annual surface for historical response estimability and descriptive association only. Natural rewiring is not identified after effort, repeated-detection, and observation-model robustness audits. Move mechanism testing to the controlled routeability experiment or a genuinely detection-defensible independent dataset.",
-  "claim_ceiling": "This annual fallback establishes response estimability on a detection-sensitive observed-link surface. Later raw-census audits resolve sampling-effort semantics but show that true absence and detection-corrected rewiring remain unidentified and observation-model dependent. It cannot validate natural ecological rewiring, routeability, or decision-structural turnover.",
+  "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: do not add flexible Villavicencio models to search for a positive natural-rewiring mechanism. Use the claim-resolution ledger; natural routeability evidence requires the controlled experiment or an independent detection-standardized network with an external decision layer.",
+  "claim_ceiling": "This annual fallback establishes response estimability and reproducible observed-link turnover only. Sampling-effort semantics are now resolved, but latent link state is not stably identified; do not call annual gains/losses true rewiring, and do not use this surface to validate routeability.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
@@ -159,14 +160,9 @@
     "language_rule": "Use observed link-state turnover / annual link dynamics, not identified ecological rewiring."
   },
   "supersession": {
-    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
-    "census_rate_result": "validation/villavicencio_census_rate_result_v1.json",
-    "clean_opportunity_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
-    "published_overlap_support_leakage": "validation/villavicencio_phenology_support_leakage_v1.json",
-    "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
-    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
-    "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
-    "final_claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    "ecological_interpretation_superseded_by": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "numeric_surface_retained": true,
+    "reason": "subseason effort, census-incidence, latent-detection and overdispersion audits show material detection sensitivity and observation-model dependence"
   },
   "detection_boundary": {
     "status": "MATERIAL_DETECTION_SENSITIVITY_ESTABLISHED_BY_RAW_5MIN_CENSUS_AUDIT",
@@ -193,5 +189,19 @@
     "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
     "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json",
     "consequence": "Annual gain/loss labels remain detection-sensitive observed-link turnover. The annual response is useful for descriptive association and feasibility, but it does not identify natural ecological rewiring."
+  },
+  "current_resolution": {
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_state": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "natural_rewiring_status": "NOT_IDENTIFIED",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "subseason_effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_incidence": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_sensitivity": "validation/villavicencio_two_season_detection_result_v1.json",
+    "observation_model_sensitivity": "validation/villavicencio_detection_overdispersion_result_v1.json"
+  },
+  "transition_field_semantics": {
+    "rewiring_count": "legacy field name retained for file compatibility; numerically this is observed shared-dyad binary link-state change, not identified ecological rewiring",
+    "rewiring_opportunity_rate": "legacy field name retained for compatibility; observed binary change fraction on the detection-sensitive shared-dyad surface"
   }
 }
