@@ -13,7 +13,8 @@
       "apparatus error rate"
     ],
     "response_window_rule": "smallest prespecified candidate window containing at least 95% of terminal decisions among engaged calibration trials, subject to a predeclared upper bound",
-    "failure": "if no candidate reaches 95%, redesign/re-run pilot rather than tune on confirmatory treatments"
+    "failure": "if no candidate reaches 95%, redesign/re-run pilot rather than tune on confirmatory treatments",
+    "material_precondition": "run only after the exact cue material set has passed the separate physical-cue feasibility gate; Pilot A does not rescue a failed cue-discrimination pretest"
   },
   "pilot_B": {
     "role": "pooled B=3 full-information nuisance calibration",
@@ -73,5 +74,11 @@
       "pooled_timeout_fraction"
     ],
     "focal_contrast_opened_must_be_false": true
+  },
+  "prerequisite_material_gate": {
+    "path": "validation/routeability_physical_cue_feasibility_gate_v1.json",
+    "rule": "exact local cue materials must pass the architecture-neutral cue qualification before Pilot A timing/timeout calibration is treated as valid for the confirmatory apparatus",
+    "confirmatory_subject_selection": false,
+    "note": "material qualification uses separate/pre-randomization apparatus animals and cannot use B=2 architecture x access outcomes"
   }
 }
