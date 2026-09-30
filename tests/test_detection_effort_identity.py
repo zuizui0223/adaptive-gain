@@ -2,6 +2,8 @@ import math
 
 from adaptive_gain.detection_effort_identity import (
     finite_binary_turnover_balance,
+    finite_binary_turnover_timeseries,
+    finite_weighted_turnover_balance,
     binary_transition_conservation,
     observed_gain_log_odds_vs_loss,
     period_detection_probability,
@@ -146,3 +148,40 @@ def test_finite_network_gain_surplus_is_exactly_edge_count_increase():
     assert result["losses"] == 1
     assert result["gain_minus_loss"] == 1
     assert result["edge_count_change"] == 1
+
+
+def test_binary_timeseries_balance_telescopes_to_endpoint_change():
+    states = [
+        [0, 0, 1, 0],
+        [1, 0, 1, 1],
+        [1, 1, 0, 1],
+        [0, 1, 0, 1],
+    ]
+    result = finite_binary_turnover_timeseries(states)
+
+    assert result["time_points"] == 4
+    assert result["cumulative_gains"] == 3
+    assert result["cumulative_losses"] == 3
+    assert result["cumulative_gain_minus_loss"] == 0
+    assert result["endpoint_edge_change"] == 0
+
+
+def test_weighted_turnover_balance_equals_total_weight_change():
+    result = finite_weighted_turnover_balance(
+        [0.0, 2.0, 1.5, 4.0],
+        [1.0, 1.0, 3.0, 2.5],
+    )
+
+    assert math.isclose(result["strengthening"], 2.5)
+    assert math.isclose(result["weakening"], 2.5)
+    assert math.isclose(result["strengthening_minus_weakening"], 0.0)
+    assert math.isclose(result["total_weight_change"], 0.0)
+
+
+def test_weighted_turnover_rejects_negative_or_nonfinite_weights():
+    import pytest
+
+    with pytest.raises(ValueError):
+        finite_weighted_turnover_balance([0.0, -1.0], [0.0, 1.0])
+    with pytest.raises(ValueError):
+        finite_weighted_turnover_balance([0.0, math.inf], [0.0, 1.0])
