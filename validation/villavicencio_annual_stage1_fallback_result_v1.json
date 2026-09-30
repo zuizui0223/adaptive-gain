@@ -154,7 +154,7 @@
       "validation/villavicencio_rewiring_claim_resolution_v1.json"
     ]
   },
-  "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: stop observational promotion of annual binary gain/loss as natural rewiring. Use the claim-resolution ledger; further routeability evidence requires a controlled experiment or an independent detection-defensible network with an externally defined decision layer.",
+  "next_gate": "No further flexible annual rewiring model search. Defer to validation/villavicencio_rewiring_claim_resolution_v1.json and its FROZEN_STOP rule; new natural-network mechanism work requires genuinely new independent detection/state information.",
   "claim_ceiling": "This annual fallback establishes response estimability only. Sampling-effort semantics are now resolved from raw 5-min censuses, but binary observed link states remain materially detection-sensitive and do not identify latent ecological gain/loss. The annual fallback cannot validate routeability or true species turnover.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
@@ -212,6 +212,7 @@
     "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
     "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
     "integrated_boundary": "validation/villavicencio_rewiring_identification_boundary_v1.json",
-    "consequence": "Annual binary changes remain observed-link turnover. Detection-sensitive no longer means effort semantics are unknown; it means observed zero/nonzero states do not identify latent ecological absence/presence."
+    "consequence": "Annual binary changes remain observed-link turnover. Detection-sensitive no longer means effort semantics are unknown; it means observed zero/nonzero states do not identify latent ecological absence/presence.",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
   }
 }
