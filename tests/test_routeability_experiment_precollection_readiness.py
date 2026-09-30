@@ -60,3 +60,24 @@ def test_precollection_readiness_links_operational_runbook():
     )
     assert runbook["confirmatory_collection_allowed"] is False
     assert "material qualification" in data["next_biological_action"]
+
+
+def test_precollection_readiness_links_observational_stop_to_experiment():
+    data = _ledger()
+    handoff = data["observational_handoff"]
+    assert handoff["status"] == "FROZEN_STOP_TO_CONTROLLED_EXPERIMENT"
+    assert handoff["source"] == (
+        "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    )
+    assert handoff["response_validity_gate"] == (
+        "validation/network_response_validity_gate_v1.json"
+    )
+    assert handoff["villavicencio_response_validity"] == (
+        "observed_link_turnover_only"
+    )
+    assert handoff["villavicencio_natural_rewiring_status"] == "NOT_IDENTIFIED"
+    assert handoff["villavicencio_routeability_status"] == "NOT_VALIDATED"
+    assert "Do not add further flexible Villavicencio observation models" in (
+        handoff["consequence"]
+    )
+    assert "controlled experiment" in handoff["consequence"]
