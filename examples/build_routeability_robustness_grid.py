@@ -1,0 +1,107 @@
+"""Build the frozen final-power robustness config from pilot nuisance data."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+from adaptive_gain.routeability_robustness_grid import (
+    build_frozen_robustness_scenarios,
+)
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("nuisance_receipt_json", type=Path)
+    parser.add_argument("planning_json", type=Path)
+    parser.add_argument("output_json", type=Path)
+    args = parser.parse_args()
+
+    nuisance = json.loads(
+        args.nuisance_receipt_json.read_text(encoding="utf-8")
+    )
+    planning = json.loads(args.planning_json.read_text(encoding="utf-8"))
+
+    if "candidate_individuals_per_cell" in planning:
+        raise ValueError(
+            "planning_json must freeze operational_max_individuals_per_cell, "
+            "not hand-list candidate N values"
+        )
+    operational_max = int(
+        planning["operational_max_individuals_per_cell"]
+    )
+    if (
+        operational_max < 4
+        or operational_max % 4 != 0
+        or float(planning["operational_max_individuals_per_cell"])
+        != operational_max
+    ):
+        raise ValueError(
+            "operational_max_individuals_per_cell must be an integer "
+            "multiple of four >= 4"
+        )
+    colony_count = int(planning["colony_count"])
+    if colony_count < 1 or float(planning["colony_count"]) != colony_count:
+        raise ValueError("colony_count must be a positive integer")
+    minimum_feasible_n = 4 * ((colony_count + 3) // 4)
+    if operational_max < minimum_feasible_n:
+        raise ValueError(
+            "operational_max_individuals_per_cell is below the smallest "
+            f"colony-feasible counterbalanced N={minimum_feasible_n}"
+        )
+    candidate_n = list(
+        range(minimum_feasible_n, operational_max + 1, 4)
+    )
+
+    scenarios = build_frozen_robustness_scenarios(
+        nuisance,
+        candidate_individuals_per_cell=candidate_n,
+        colony_count=colony_count,
+        simulations_per_scenario=planning["simulations_per_scenario"],
+        seed_base=planning["seed_base"],
+        alpha_two_sided=planning.get("alpha_two_sided", 0.05),
+    )
+
+    ns = sorted(
+        {
+            row["simulation"]["individuals_per_cell"]
+            for row in scenarios
+        }
+    )
+    robustness_ids = sorted({row["robustness_id"] for row in scenarios})
+    result = {
+        "schema": "adaptive-gain-routeability-frozen-robustness-config-v1",
+        "policy_gate": (
+            "validation/"
+            "routeability_nuisance_robustness_grid_gate_v1.json"
+        ),
+        "nuisance_receipt_sha256": _sha256(
+            args.nuisance_receipt_json
+        ),
+        "planning_input_sha256": _sha256(args.planning_json),
+        "colony_count": colony_count,
+        "minimum_feasible_individuals_per_cell": minimum_feasible_n,
+        "operational_max_individuals_per_cell": operational_max,
+        "candidate_individuals_per_cell": ns,
+        "robustness_ids": robustness_ids,
+        "scenario_count_per_N": len(robustness_ids),
+        "scenarios": list(scenarios),
+        "claim_ceiling": (
+            "Frozen planning scenarios only; no operating-characteristic "
+            "simulation or final biological N is implied by this file."
+        ),
+    }
+    args.output_json.write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+if __name__ == "__main__":
+    main()

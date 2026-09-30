@@ -1,0 +1,218 @@
+{
+  "schema": "adaptive-gain-villavicencio-annual-stage1-fallback-result-v1",
+  "date": "2026-09-27",
+  "status": "green_detection_sensitive_response_estimability",
+  "role": "historical annual detection-sensitive feasibility surface; retained for reproducibility and comparison, not a natural-rewiring endpoint",
+  "source": {
+    "doi": "10.5061/dryad.8cz8w9gm1",
+    "file": "plant_pollinator_data.xlsx",
+    "source_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "published_dryad_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "digest_match": true,
+    "materialization_route": "CONICET institutional mirror resolved from item metadata",
+    "materialization_url": "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?sequence=2&isAllowed=y"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36286304896,
+    "run_number": 28,
+    "conclusion": "success",
+    "artifact_id": 10920493516,
+    "artifact_digest": "sha256:1f3ae680203b0922e31e6f7f8c009772f33be1cf4dbfa6141bbccb35f447a38c",
+    "branch_head": "26560a13a59a1e802fb0acc31b8093e4f70393a3"
+  },
+  "design": {
+    "years": [
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011
+    ],
+    "transition_count": 5,
+    "transitions": [
+      "2006->2007",
+      "2007->2008",
+      "2008->2009",
+      "2009->2010",
+      "2010->2011"
+    ],
+    "presence_basis": "observed_positive_links",
+    "detection_sensitive": true,
+    "primary_18_subseason_design_replaced": false,
+    "decision_equivalence_inferred": false
+  },
+  "source_surface": {
+    "annual_link_counts": {
+      "2006": 150,
+      "2007": 206,
+      "2008": 342,
+      "2009": 300,
+      "2010": 215,
+      "2011": 440
+    },
+    "observed_plant_code_count": 45,
+    "observed_pollinator_code_count": 135,
+    "plant_name_table_count": 45,
+    "pollinator_name_table_count": 135,
+    "unmatched_observed_plant_count": 0,
+    "unmatched_observed_pollinator_count": 0,
+    "context_sheets_present": [
+      "Flower_abundance",
+      "phenological_overlap",
+      "plant_traits",
+      "pollinator_traits"
+    ]
+  },
+  "estimability": {
+    "shared_dyad_rows": 7620,
+    "changed_count": 1134,
+    "unchanged_count": 6486,
+    "changed_fraction": 0.14881889763779527,
+    "gain_count": 648,
+    "loss_count": 486,
+    "stable_present_count": 502,
+    "stable_absent_count": 5984,
+    "transitions_with_any_change": 5,
+    "transitions_with_both_outcomes": 5,
+    "global_outcome_nondegenerate": true,
+    "has_within_transition_contrast": true
+  },
+  "transition_receipts": [
+    {
+      "transition": "2006->2007",
+      "shared_plants": 17,
+      "shared_pollinators": 36,
+      "shared_dyads": 612,
+      "rewiring_count": 131,
+      "species_turnover_link_count": 111,
+      "rewiring_opportunity_rate": 0.21405228758169934,
+      "link_jaccard_dissimilarity": 0.8093645484949833
+    },
+    {
+      "transition": "2007->2008",
+      "shared_plants": 29,
+      "shared_pollinators": 54,
+      "shared_dyads": 1566,
+      "rewiring_count": 217,
+      "species_turnover_link_count": 139,
+      "rewiring_opportunity_rate": 0.13856960408684546,
+      "link_jaccard_dissimilarity": 0.7876106194690266
+    },
+    {
+      "transition": "2008->2009",
+      "shared_plants": 34,
+      "shared_pollinators": 70,
+      "shared_dyads": 2380,
+      "rewiring_count": 283,
+      "species_turnover_link_count": 87,
+      "rewiring_opportunity_rate": 0.11890756302521008,
+      "link_jaccard_dissimilarity": 0.7312252964426877
+    },
+    {
+      "transition": "2009->2010",
+      "shared_plants": 29,
+      "shared_pollinators": 50,
+      "shared_dyads": 1450,
+      "rewiring_count": 211,
+      "species_turnover_link_count": 106,
+      "rewiring_opportunity_rate": 0.14551724137931035,
+      "link_jaccard_dissimilarity": 0.7620192307692307
+    },
+    {
+      "transition": "2010->2011",
+      "shared_plants": 31,
+      "shared_pollinators": 52,
+      "shared_dyads": 1612,
+      "rewiring_count": 292,
+      "species_turnover_link_count": 135,
+      "rewiring_opportunity_rate": 0.18114143920595532,
+      "link_jaccard_dissimilarity": 0.789279112754159
+    }
+  ],
+  "interpretation": {
+    "gate": "PASS for response estimability — annual observed-response surface only",
+    "reason": "all five annual transitions contain both changed and unchanged shared dyads and source identifiers join exactly",
+    "current_resolution": "Subsequent raw-census audits show that observed binary link turnover is materially detection- and effort-sensitive. The annual response is therefore retained as a feasibility/descriptive surface, not identified ecological rewiring.",
+    "not_established": [
+      "true species presence/absence",
+      "sampling-effort-corrected rewiring",
+      "latent true link gain/loss",
+      "environmental routeability",
+      "decision-structural turnover",
+      "decision-equivalence classes",
+      "true latent link state under imperfect detection",
+      "ecological rewiring identified from binary observed gain/loss"
+    ],
+    "superseded_ecological_interpretation_by": [
+      "validation/villavicencio_subseason_effort_audit_result_v1.json",
+      "validation/villavicencio_census_rate_result_v1.json",
+      "validation/villavicencio_two_season_detection_result_v1.json",
+      "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+      "validation/villavicencio_detection_overdispersion_result_v1.json",
+      "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    ]
+  },
+  "next_gate": "No further flexible annual rewiring model search. Defer to validation/villavicencio_rewiring_claim_resolution_v1.json and its FROZEN_STOP rule; new natural-network mechanism work requires genuinely new independent detection/state information.",
+  "claim_ceiling": "This annual fallback establishes response estimability only. Sampling-effort semantics are now resolved from raw 5-min censuses, but binary observed link states remain materially detection-sensitive and do not identify latent ecological gain/loss. The annual fallback cannot validate routeability or true species turnover.",
+  "sampling_effort_resolution": {
+    "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
+    "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_unit": "5-min focal-plant observation census",
+    "implication": "Annual positive-link presence remains detection-sensitive even though the raw meaning of observation effort is now resolved. The higher-resolution audit shows that unequal focal-plant census effort materially changes binary link-state classification.",
+    "language_rule": "Use observed link-state turnover / annual link dynamics, not identified ecological rewiring."
+  },
+  "supersession": {
+    "ecological_interpretation_superseded_by": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "numeric_surface_retained": true,
+    "reason": "subseason effort, census-incidence, latent-detection and overdispersion audits show material detection sensitivity and observation-model dependence"
+  },
+  "detection_boundary": {
+    "status": "MATERIAL_DETECTION_SENSITIVITY_ESTABLISHED_BY_RAW_5MIN_CENSUS_AUDIT",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "latent_link_state": "UNRESOLVED",
+    "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "consequence": "Annual and subseason binary gain/loss remain observed-link turnover rather than identified ecological rewiring. Annual aggregation may reduce some short-term non-detection noise but does not convert observed zeros into true absences."
+  },
+  "detection_audit": {
+    "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "response_label": "observed-link turnover",
+    "ecological_rewiring_identified": false
+  },
+  "posthoc_detection_resolution": {
+    "date": "2026-09-29",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "raw_subseason_effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_rate_result": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "consequence": "Annual gain/loss labels remain detection-sensitive observed-link turnover. The annual response is useful for descriptive association and feasibility, but it does not identify natural ecological rewiring."
+  },
+  "current_resolution": {
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_state": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "natural_rewiring_status": "NOT_IDENTIFIED",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "subseason_effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_incidence": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_sensitivity": "validation/villavicencio_two_season_detection_result_v1.json",
+    "observation_model_sensitivity": "validation/villavicencio_detection_overdispersion_result_v1.json"
+  },
+  "transition_field_semantics": {
+    "rewiring_count": "legacy field name retained for file compatibility; numerically this is observed shared-dyad binary link-state change, not identified ecological rewiring",
+    "rewiring_opportunity_rate": "legacy field name retained for compatibility; observed binary change fraction on the detection-sensitive shared-dyad surface"
+  },
+  "current_detection_resolution": {
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "integrated_boundary": "validation/villavicencio_rewiring_identification_boundary_v1.json",
+    "consequence": "Annual binary changes remain observed-link turnover. Detection-sensitive no longer means effort semantics are unknown; it means observed zero/nonzero states do not identify latent ecological absence/presence.",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+  }
+}

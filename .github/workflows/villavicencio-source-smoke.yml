@@ -1,0 +1,1884 @@
+name: Villavicencio source smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/villavicencio-source-smoke.yml"
+      - "examples/fetch_dryad_source_manifest.py"
+      - "examples/fetch_figshare_article_files.py"
+      - "examples/export_villavicencio_subseasons.R"
+      - "examples/reconstruct_villavicencio_subseasons_from_raw.py"
+      - "validation/villavicencio_raw_subseason_reconstruction_gate_v1.json"
+      - "examples/audit_villavicencio_subseason_sampling_effort.py"
+      - "examples/villavicencio_subseason_effort_only_cv.R"
+      - "examples/summarize_villavicencio_subseason_effort_only.py"
+      - "examples/audit_villavicencio_effort_balanced_rarefaction.py"
+      - "examples/build_villavicencio_census_rate_table.py"
+      - "examples/villavicencio_census_rate_cv.R"
+      - "examples/summarize_villavicencio_census_rate_cv.py"
+      - "validation/villavicencio_census_rate_gate_v1.json"
+      - "examples/villavicencio_two_season_detection_fit.R"
+      - "examples/summarize_villavicencio_two_season_detection.py"
+      - "validation/villavicencio_two_season_detection_gate_v1.json"
+      - "examples/villavicencio_latent_opportunity_decomposition.R"
+      - "examples/summarize_villavicencio_latent_opportunity_decomposition.py"
+      - "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
+      - "validation/villavicencio_subseason_effort_audit_gate_v1.json"
+      - "validation/villavicencio_subseason_effort_audit_result_v1.json"
+      - "examples/build_villavicencio_annual_opportunity_effort_table.py"
+      - "examples/villavicencio_opportunity_effort_control_cv.R"
+      - "examples/summarize_villavicencio_opportunity_effort_control.py"
+      - "validation/villavicencio_opportunity_effort_control_gate_v1.json"
+      - "examples/villavicencio_stage1_from_csv.py"
+      - "examples/villavicencio_conventional_filter_block_ablation.R"
+      - "examples/summarize_villavicencio_filter_block_ablation.py"
+      - "examples/villavicencio_gain_loss_matched_audit.R"
+      - "examples/summarize_villavicencio_gain_loss_asymmetry.py"
+      - "examples/diagnose_villavicencio_phenology_states.py"
+      - "examples/audit_villavicencio_species_leverage.py"
+      - "examples/audit_villavicencio_phenology_support_leakage.py"
+      - "examples/build_villavicencio_focal_excluded_opportunity.py"
+      - "examples/villavicencio_focal_excluded_opportunity_cv.R"
+      - "examples/summarize_villavicencio_focal_excluded_opportunity.py"
+      - "examples/villavicencio_link_frequency_threshold_audit.R"
+      - "examples/summarize_villavicencio_link_frequency_threshold_audit.py"
+      - "validation/villavicencio_link_frequency_threshold_audit_gate_v1.json"
+      - "examples/build_villavicencio_siteweek_opportunity.py"
+      - "examples/villavicencio_siteweek_opportunity_audit.R"
+      - "examples/summarize_villavicencio_siteweek_opportunity_audit.py"
+      - "validation/villavicencio_siteweek_opportunity_audit_gate_v1.json"
+      - "examples/villavicencio_current_opportunity_axis_audit.R"
+      - "examples/summarize_villavicencio_current_opportunity_axis_audit.py"
+      - "examples/villavicencio_axis_robustness_audit.R"
+      - "examples/summarize_villavicencio_axis_robustness_audit.py"
+      - "validation/villavicencio_axis_robustness_audit_gate_v1.json"
+      - "validation/villavicencio_current_opportunity_axis_audit_gate_v1.json"
+      - "validation/villavicencio_focal_excluded_opportunity_gate_v1.json"
+      - "validation/villavicencio_phenology_state_stratification_v1.json"
+      - "validation/villavicencio_species_leverage_audit_v1.json"
+      - "validation/villavicencio_phenology_support_leakage_v1.json"
+      - "examples/build_villavicencio_transition_pairs.py"
+      - "adaptive_gain/empirical_rewiring.py"
+      - "validation/villavicencio_source_manifest_v1.json"
+      - "validation/villavicencio_stage1_predata_gate_v1.json"
+      - "validation/villavicencio_conventional_filter_gate_v1.json"
+      - "validation/villavicencio_conventional_filter_cv_result_v1.json"
+      - "validation/villavicencio_filter_block_ablation_gate_v1.json"
+      - "validation/villavicencio_filter_block_ablation_result_v1.json"
+      - "validation/villavicencio_covariate_time_support_audit_v1.json"
+      - "validation/villavicencio_gain_loss_asymmetry_result_v1.json"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-smoke:
+    runs-on: ubuntu-latest
+    env:
+      DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Resolve anonymous Dryad source manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/response source/traits artifact/raw artifact/export artifact/manifests
+
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.j6q573n9j"             artifact/manifests/response_dryad_manifest.json             --target-name "miele-JAE.RData"             --target-id-output artifact/response_file_id.txt
+
+          python examples/fetch_dryad_source_manifest.py             "doi:10.5061/dryad.8cz8w9gm1"             artifact/manifests/traits_dryad_manifest.json             --target-name "plant_pollinator_data.xlsx"             --target-id-output artifact/traits_file_id.txt
+
+      - name: Recover public raw visitor records from Figshare
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/figshare_visitors artifact/figshare
+          python examples/fetch_figshare_article_files.py \
+            11794503 \
+            source/figshare_visitors \
+            artifact/figshare/visitor_records_manifest.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(
+              Path("artifact/figshare/visitor_records_manifest.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if manifest["downloaded_count"] < 1:
+              raise SystemExit("no public Figshare visitor-record files materialized")
+          for item in manifest["files"]:
+              if item.get("downloaded"):
+                  if not item.get("size_matches", False):
+                      raise SystemExit(f"Figshare size mismatch: {item['name']}")
+                  if not item.get("md5_matches", False):
+                      raise SystemExit(f"Figshare checksum mismatch: {item['name']}")
+
+          import csv
+          import shutil
+
+          inventory = []
+          raw_copy = Path("artifact/figshare/raw")
+          raw_copy.mkdir(parents=True, exist_ok=True)
+          for path in sorted(Path("source/figshare_visitors").iterdir()):
+              if not path.is_file():
+                  continue
+              entry = {
+                  "name": path.name,
+                  "size": path.stat().st_size,
+                  "suffix": path.suffix.lower(),
+              }
+              if path.suffix.lower() == ".csv":
+                  with path.open(newline="", encoding="utf-8-sig") as handle:
+                      reader = csv.reader(handle)
+                      header = next(reader, [])
+                      first_rows = []
+                      row_count = 0
+                      for row in reader:
+                          row_count += 1
+                          if len(first_rows) < 5:
+                              first_rows.append(row)
+                  entry["header"] = header
+                  entry["data_row_count"] = row_count
+                  entry["first_rows"] = first_rows
+              shutil.copy2(path, raw_copy / path.name)
+              inventory.append(entry)
+          Path("artifact/figshare/visitor_records_inventory.json").write_text(
+              json.dumps(
+                  {
+                      "schema": "adaptive-gain-villavicencio-figshare-visitor-inventory-v1",
+                      "article_id": 11794503,
+                      "files": inventory,
+                      "ecological_role": "independent public raw-record fallback for reconstructing the 18-subseason response surface",
+                      "response_analysis_run": False,
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+              + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(inventory, indent=2))
+          PY
+
+      - name: Download published source bytes when authorized or mirrored
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RESPONSE_ID="$(cat artifact/response_file_id.txt)"
+          TRAITS_ID="$(cat artifact/traits_file_id.txt)"
+
+          if test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$RESPONSE_ID/download"               -o source/response/miele-JAE.RData
+            then
+              echo "dryad_response_bytes=available_via_bearer_token"                 > artifact/response_download_status.txt
+            else
+              rm -f source/response/miele-JAE.RData
+              echo "dryad_response_bytes=token_download_failed"                 > artifact/response_download_status.txt
+            fi
+          else
+            echo "dryad_response_bytes=metadata_only_no_bearer_token"               > artifact/response_download_status.txt
+          fi
+
+          CONICET_PAGE="https://datosdeinvestigacion.conicet.gov.ar/handle/11336/249358?show=full"
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "$CONICET_PAGE" -o artifact/conicet_item.html || true
+          curl -fL --retry 2 --retry-delay 2 -A "Mozilla/5.0"             "https://datosdeinvestigacion.conicet.gov.ar/rest/dataset/11336/249358"             -o artifact/conicet_dataset.json || true
+
+          CONICET_HREF="$(
+            python - <<'PY'
+          import html
+          import json
+          import re
+          from pathlib import Path
+
+          candidates = []
+
+          page = Path("artifact/conicet_item.html")
+          if page.exists():
+              text = page.read_text(encoding="utf-8", errors="ignore")
+              candidates.extend(
+                  html.unescape(value)
+                  for value in re.findall(
+                      r'href=["\x27]([^"\x27]*plant_pollinator_data\.xlsx[^"\x27]*)["\x27]',
+                      text,
+                  )
+              )
+
+          def walk(value):
+              if isinstance(value, dict):
+                  for child in value.values():
+                      walk(child)
+              elif isinstance(value, list):
+                  for child in value:
+                      walk(child)
+              elif isinstance(value, str):
+                  if "plant_pollinator_data.xlsx" in value or "/bitstream/" in value:
+                      candidates.append(value)
+
+          metadata = Path("artifact/conicet_dataset.json")
+          if metadata.exists():
+              try:
+                  walk(json.loads(metadata.read_text(encoding="utf-8")))
+              except Exception:
+                  pass
+
+          cleaned = []
+          for value in candidates:
+              value = html.unescape(value)
+              if value not in cleaned:
+                  cleaned.append(value)
+
+          Path("artifact/conicet_candidate_urls.txt").write_text(
+              "\n".join(cleaned) + ("\n" if cleaned else ""),
+              encoding="utf-8",
+          )
+          print(cleaned[0] if cleaned else "")
+          PY
+          )"
+
+          if test -n "$CONICET_HREF"; then
+            case "$CONICET_HREF" in
+              http*) CONICET_FILE="$CONICET_HREF" ;;
+              /*) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar$CONICET_HREF" ;;
+              *) CONICET_FILE="https://datosdeinvestigacion.conicet.gov.ar/$CONICET_HREF" ;;
+            esac
+          else
+            CONICET_FILE=""
+          fi
+          printf '%s\n' "$CONICET_FILE" > artifact/conicet_resolved_file_url.txt
+
+          TRAIT_DONE=0
+          if test -n "$CONICET_FILE" && curl -fL --retry 2 --retry-delay 2             -A "Mozilla/5.0"             -e "$CONICET_PAGE"             "$CONICET_FILE"             -o source/traits/plant_pollinator_data.xlsx
+          then
+            echo "trait_source=conicet_mirror_resolved_from_metadata"               > artifact/trait_download_status.txt
+            TRAIT_DONE=1
+          else
+            rm -f source/traits/plant_pollinator_data.xlsx
+          fi
+
+          if test "$TRAIT_DONE" -eq 0; then
+            EMLN_COMMIT="07797e23510cec0a68257ba405d763b60b8e6968"
+            EMLN_PATH="data/emln_db_datasets/65_Temporal_Chacoff_2020/plant_pollinator_data.xlsx"
+            EMLN_URL="https://raw.githubusercontent.com/Ecological-Complexity-Lab/emln_package/$EMLN_COMMIT/$EMLN_PATH"
+            if curl -fL --retry 2 --retry-delay 2 \
+              -A "Mozilla/5.0" \
+              "$EMLN_URL" \
+              -o source/traits/plant_pollinator_data.xlsx
+            then
+              echo "trait_source=github_emln_pinned_mirror_pending_digest_verification" \
+                > artifact/trait_download_status.txt
+              {
+                echo "repository=Ecological-Complexity-Lab/emln_package"
+                echo "commit=$EMLN_COMMIT"
+                echo "path=$EMLN_PATH"
+                echo "github_blob_sha=99eef735b001751b4407f8fae67d271c2c63a1f3"
+                echo "declared_size_bytes=230652"
+              } > artifact/trait_mirror_provenance.txt
+              TRAIT_DONE=1
+            else
+              rm -f source/traits/plant_pollinator_data.xlsx
+            fi
+          fi
+
+          if test "$TRAIT_DONE" -eq 0 && test -n "${DRYAD_TOKEN:-}"; then
+            if curl -fL --retry 2 --retry-delay 2               -H "Authorization: Bearer $DRYAD_TOKEN"               "https://datadryad.org/api/v2/files/$TRAITS_ID/download"               -o source/traits/plant_pollinator_data.xlsx
+            then
+              echo "trait_source=dryad_bearer_token"                 > artifact/trait_download_status.txt
+              TRAIT_DONE=1
+            else
+              rm -f source/traits/plant_pollinator_data.xlsx
+            fi
+          fi
+
+          if test "$TRAIT_DONE" -eq 0; then
+            echo "trait_source=metadata_only_bytes_unavailable"               > artifact/trait_download_status.txt
+          fi
+
+          if test -s source/traits/plant_pollinator_data.xlsx; then
+            file source/traits/plant_pollinator_data.xlsx
+          fi
+          if test -s source/response/miele-JAE.RData; then
+            file source/response/miele-JAE.RData
+          fi
+
+      - name: Verify materialized bytes against published Dryad digests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          checks = [
+              (
+                  "response",
+                  Path("artifact/manifests/response_dryad_manifest.json"),
+                  "miele-JAE.RData",
+                  Path("source/response/miele-JAE.RData"),
+              ),
+              (
+                  "traits",
+                  Path("artifact/manifests/traits_dryad_manifest.json"),
+                  "plant_pollinator_data.xlsx",
+                  Path("source/traits/plant_pollinator_data.xlsx"),
+              ),
+          ]
+
+          rows = []
+          mismatch = False
+          for role, manifest_path, source_name, source_path in checks:
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              matches = [
+                  row for row in manifest["files"]
+                  if row["path"] == source_name
+              ]
+              if len(matches) != 1:
+                  raise SystemExit(
+                      f"{role}: expected one manifest row for {source_name!r}"
+                  )
+              published = matches[0]
+              materialized = source_path.exists()
+              observed = None
+              digest_match = None
+              if materialized:
+                  observed = hashlib.sha256(source_path.read_bytes()).hexdigest()
+                  digest_type = str(published.get("digestType", "")).lower().replace("-", "")
+                  if digest_type != "sha256":
+                      raise SystemExit(
+                          f"{role}: unsupported published digest type {published.get('digestType')!r}"
+                      )
+                  digest_match = observed.lower() == str(
+                      published.get("digest", "")
+                  ).lower()
+                  mismatch = mismatch or not digest_match
+
+              rows.append(
+                  {
+                      "role": role,
+                      "source_name": source_name,
+                      "materialized": materialized,
+                      "published_digest_type": published.get("digestType"),
+                      "published_digest": published.get("digest"),
+                      "observed_sha256": observed,
+                      "digest_match": digest_match,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-source-digest-verification-v1",
+              "checks": rows,
+              "all_materialized_sources_match_published_digest": not mismatch,
+          }
+          Path("artifact/source_digest_verification.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          if mismatch:
+              raise SystemExit("materialized source bytes disagree with published Dryad digest")
+          PY
+
+      - name: Freeze raw checksums and locate available source files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          XLSX="$(find source/traits -type f -name 'plant_pollinator_data.xlsx' -print -quit || true)"
+          if test -n "$XLSX"; then
+            sha256sum "$XLSX" > artifact/traits_xlsx_sha256.txt
+            cp "$XLSX" artifact/raw/plant_pollinator_data.xlsx
+            printf '%s\n' "$XLSX" > artifact/traits_path.txt
+          else
+            echo "trait bytes not materialized; anonymous Dryad manifest retained"               > artifact/traits_xlsx_sha256.txt
+          fi
+
+          RDATA="$(find source/response -type f -name 'miele-JAE.RData' -print -quit || true)"
+          if test -n "$RDATA"; then
+            sha256sum "$RDATA" > artifact/response_rdata_sha256.txt
+            cp "$RDATA" artifact/raw/miele-JAE.RData
+            printf '%s\n' "$RDATA" > artifact/response_path.txt
+          else
+            echo "response bytes not materialized; anonymous Dryad manifest retained"               > artifact/response_rdata_sha256.txt
+          fi
+
+      - name: Export 18-network response surface when bytes are available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f artifact/response_path.txt; then
+            RDATA="$(cat artifact/response_path.txt)"
+            Rscript examples/export_villavicencio_subseasons.R "$RDATA" artifact/export
+            test "$(($(wc -l < artifact/export/period_index.csv) - 1))" -eq 18
+          else
+            echo "18-network export skipped: published bytes not authorized in this run"               > artifact/export/README_SKIPPED.txt
+          fi
+
+      - name: Inventory trait workbook when bytes are available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-workbook-inventory-v1","materialized":false,"model_fitted":false}'               > artifact/workbook_inventory.json
+            exit 0
+          fi
+
+          python -m pip install openpyxl
+          XLSX="$(cat artifact/traits_path.txt)"
+          python - "$XLSX" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          from openpyxl import load_workbook
+
+          path = Path(sys.argv[1])
+          wb = load_workbook(path, read_only=True, data_only=False)
+
+          sheets = []
+          for ws in wb.worksheets:
+              first_rows = []
+              for row in ws.iter_rows(
+                  min_row=1,
+                  max_row=min(ws.max_row, 5),
+                  values_only=True,
+              ):
+                  first_rows.append(
+                      [None if value is None else str(value) for value in row]
+                  )
+              sheets.append(
+                  {
+                      "title": ws.title,
+                      "max_row": ws.max_row,
+                      "max_column": ws.max_column,
+                      "first_rows": first_rows,
+                  }
+              )
+
+          out = {
+              "schema": "adaptive-gain-villavicencio-workbook-inventory-v1",
+              "materialized": True,
+              "workbook": path.name,
+              "sheet_count": len(sheets),
+              "sheets": sheets,
+              "model_fitted": False,
+          }
+          Path("artifact/workbook_inventory.json").write_text(
+              json.dumps(out, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Run annual detection-sensitive Stage-1 fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-annual-stage1-fallback-v1","materialized":false,"analysis_status":"skipped_no_verified_workbook"}' \
+              > artifact/annual_stage1_detection_sensitive.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python -m pip install -e .
+          python examples/villavicencio_annual_stage1_from_xlsx.py \
+            "$XLSX" \
+            --output artifact/annual_stage1_detection_sensitive.json \
+            --dyad-output artifact/annual_stage1_dyads.csv
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_stage1_detection_sensitive.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["transition_count"] != 5:
+              raise SystemExit("annual fallback did not produce exactly five transitions")
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("annual fallback must not infer decision equivalence")
+          if result["presence_basis"] != "observed_positive_links":
+              raise SystemExit("annual fallback presence basis changed unexpectedly")
+          join = result["join_audit"]
+          if join["unmatched_observed_plant_count"] != 0:
+              raise SystemExit("annual plant codes do not fully join to plant_names")
+          if join["unmatched_observed_pollinator_count"] != 0:
+              raise SystemExit("annual pollinator codes do not fully join to insect_names")
+          PY
+
+      - name: Reconstruct 18 subseasons from raw dated records
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p artifact/raw_subseason
+          python examples/reconstruct_villavicencio_subseasons_from_raw.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason
+
+          python examples/build_villavicencio_transition_pairs.py \
+            artifact/raw_subseason/raw_subseason_period_map.csv \
+            artifact/raw_subseason/raw_subseason_transitions.csv
+
+          python examples/villavicencio_stage1_from_csv.py \
+            artifact/raw_subseason/raw_subseason_interactions_long.csv \
+            artifact/raw_subseason/raw_subseason_transitions.csv \
+            --output artifact/raw_subseason/raw_subseason_stage1.json \
+            --dyad-output artifact/raw_subseason/raw_subseason_stage1_dyads.csv
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/raw_subseason/raw_subseason_reconstruction_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          result = json.loads(
+              Path("artifact/raw_subseason/raw_subseason_stage1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_raw_subseason_reconstruction_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if summary["period_count"] != 18 or not summary["all_periods_nonempty"]:
+              raise SystemExit("raw subseason reconstruction did not produce 18 nonempty periods")
+          if result["primary_transition_count"] != 12:
+              raise SystemExit("raw subseason Stage-1 did not produce 12 primary transitions")
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("raw subseason Stage-1 inferred decision equivalence")
+          estimability = result["primary_estimability"]
+          if estimability["transitions_with_both_outcomes"] != 12:
+              raise SystemExit("not every within-year subseason transition has changed and unchanged dyads")
+          if estimability["eligible_dyad_row_count"] <= 0 or estimability["changed_count"] <= 0:
+              raise SystemExit("raw subseason response is degenerate")
+          if summary["published_rdata_bytes_used"]:
+              raise SystemExit("raw subseason reconstruction unexpectedly used RData bytes")
+          if "does not by itself establish true species presence" not in gate["claim_ceiling"]:
+              raise SystemExit("raw subseason gate lost claim ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "primary_transitions": result["primary_transition_count"],
+                      "eligible_dyad_rows": estimability["eligible_dyad_row_count"],
+                      "changed": estimability["changed_count"],
+                      "gain": estimability["gain_count"],
+                      "loss": estimability["loss_count"],
+                      "both_outcome_transitions": estimability["transitions_with_both_outcomes"],
+                      "undated_positive_rows": summary["undated_positive_rows"],
+                      "undated_positive_visits": summary["undated_positive_visits"],
+                      "annual_completeness": summary["annual_completeness"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit subseason sampling effort and detection sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/audit_villavicencio_subseason_sampling_effort.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            --output artifact/raw_subseason/subseason_effort_audit.json \
+            --plant-effort-output artifact/raw_subseason/subseason_plant_effort.csv
+
+          Rscript examples/villavicencio_subseason_effort_only_cv.R \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            artifact/raw_subseason/subseason_plant_effort.csv \
+            artifact/raw_subseason/subseason_effort_only_predictions.csv \
+            artifact/raw_subseason/subseason_effort_only_folds.csv
+
+          python examples/summarize_villavicencio_subseason_effort_only.py \
+            artifact/raw_subseason/subseason_effort_only_predictions.csv \
+            artifact/raw_subseason/subseason_effort_only_folds.csv \
+            artifact/raw_subseason/subseason_effort_only_cv.json
+
+          python examples/audit_villavicencio_effort_balanced_rarefaction.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/raw_subseason/raw_subseason_stage1_dyads.csv \
+            --output artifact/raw_subseason/subseason_effort_balanced_rarefaction.json \
+            --replicates 500 \
+            --seed 20260929
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          effort = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          cv = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_only_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          rare = json.loads(
+              Path("artifact/raw_subseason/subseason_effort_balanced_rarefaction.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if not effort["census_semantics"][
+              "census_identity_validated_with_documented_2010_discrepancy"
+          ]:
+              raise SystemExit("raw 5-min census semantics did not validate")
+          if effort["status"] != "effort_semantics_resolved_detection_sensitivity_material":
+              raise SystemExit("effort audit status changed")
+          if cv["status"] != "effort_only_predictive_signal_material":
+              raise SystemExit("effort-only diagnostic no longer shows material signal")
+          if rare["identifiable_census_full_state_mismatch_count"] != 0:
+              raise SystemExit("identifiable censuses no longer reconstruct Stage-1 states")
+
+          primary = cv["scopes"]["strict_dated_core_2008_2010"]["endpoints"]
+          rare_primary = rare["scopes"]["strict_dated_core_2008_2010"]
+
+          print(
+              json.dumps(
+                  {
+                      "effort_status": effort["status"],
+                      "chao2_min_observed_fraction": effort[
+                          "trait_subset_chao2_completeness"
+                      ]["minimum_observed_fraction"],
+                      "chao2_max_observed_fraction": effort[
+                          "trait_subset_chao2_completeness"
+                      ]["maximum_observed_fraction"],
+                      "changed_direction_effort_auc_core": effort[
+                          "changed_dyad_direction_effort_auc"
+                      ]["strict_dated_core_2008_2010"][
+                          "auc_effort_increase_ranks_gain_over_loss"
+                      ],
+                      "effort_only_gain_auc": primary["gain"]["roc_auc"],
+                      "effort_only_gain_logloss_skill": primary["gain"][
+                          "relative_log_loss_reduction"
+                      ],
+                      "effort_only_loss_auc": primary["loss"]["roc_auc"],
+                      "effort_only_loss_logloss_skill": primary["loss"][
+                          "relative_log_loss_reduction"
+                      ],
+                      "rarefied_gain_same_state_mean": rare_primary["gain"][
+                          "mean_same_state_probability"
+                      ],
+                      "rarefied_loss_same_state_mean": rare_primary["loss"][
+                          "mean_same_state_probability"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Test effort-standardized census interaction incidence
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/build_villavicencio_census_rate_table.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            --output artifact/raw_subseason/census_rate_table.csv \
+            --summary artifact/raw_subseason/census_rate_table_summary.json
+
+          Rscript examples/villavicencio_census_rate_cv.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/census_rate_predictions.csv \
+            artifact/raw_subseason/census_rate_folds.csv
+
+          python examples/summarize_villavicencio_census_rate_cv.py \
+            artifact/raw_subseason/census_rate_table_summary.json \
+            artifact/raw_subseason/census_rate_predictions.csv \
+            artifact/raw_subseason/census_rate_folds.csv \
+            artifact/raw_subseason/census_rate_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          table = json.loads(
+              Path("artifact/raw_subseason/census_rate_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          result = json.loads(
+              Path("artifact/raw_subseason/census_rate_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_census_rate_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if table["transition_count"] != 6:
+              raise SystemExit("census-rate table lost frozen six-transition scope")
+          if not table["focal_response_excluded_from_candidate_surface"]:
+              raise SystemExit("census-rate candidate surface reused focal response")
+          if not table["focal_response_excluded_from_opportunity"]:
+              raise SystemExit("census-rate opportunity reused focal response")
+          if result["primary_scope"] != "strict_dated_core_2008_2010":
+              raise SystemExit("census-rate primary scope changed")
+          if "ecological rewiring" not in result["not_established"]:
+              raise SystemExit("census-rate result lost rewiring firewall")
+          if "true rewiring" not in gate["claim_ceiling"]:
+              raise SystemExit("census-rate gate lost claim ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "dyad_rows": table["candidate_dyad_rows"],
+                      "dyad_census_trials": table[
+                          "total_current_dyad_census_trials"
+                      ],
+                      "opportunity_logloss_increment": result["pooled"][
+                          "opportunity_increment"
+                      ]["per_census_log_loss_improvement"],
+                      "opportunity_brier_increment": result["pooled"][
+                          "opportunity_increment"
+                      ]["trial_weighted_brier_improvement"],
+                      "positive_folds": result["pooled"][
+                          "opportunity_increment"
+                      ]["positive_log_loss_folds"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit latent-link detection identifiability
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_two_season_detection_fit.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/two_season_detection_posteriors.csv
+
+          python examples/summarize_villavicencio_two_season_detection.py \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/two_season_detection_posteriors.csv \
+            artifact/raw_subseason/two_season_detection_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/raw_subseason/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_two_season_detection_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          if result["transition_count"] != 6:
+              raise SystemExit("latent-link audit lost frozen six-transition scope")
+          if result["required_identified_transition_count"] != 5:
+              raise SystemExit("latent-link promotion threshold changed")
+          if result["promotion_to_latent_opportunity_model_allowed"]:
+              if result["identified_transition_count"] < 5:
+                  raise SystemExit("latent-link promotion gate internally inconsistent")
+          else:
+              if result["identified_transition_count"] >= 5:
+                  raise SystemExit("latent-link promotion gate internally inconsistent")
+          if "changing the model after seeing the result" not in result["claim_ceiling"]:
+              raise SystemExit("latent-link result lost fail-closed claim ceiling")
+          if "five of six" not in gate["promotion_rule"]:
+              raise SystemExit("latent-link gate promotion rule changed")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "identified_transitions": result[
+                          "identified_transition_count"
+                      ],
+                      "promotion_allowed": result[
+                          "promotion_to_latent_opportunity_model_allowed"
+                      ],
+                      "observed_gain": result["aggregate_descriptive"][
+                          "observed_binary_gain_count"
+                      ],
+                      "expected_latent_gain": result["aggregate_descriptive"][
+                          "sum_expected_latent_gain"
+                      ],
+                      "observed_loss": result["aggregate_descriptive"][
+                          "observed_binary_loss_count"
+                      ],
+                      "expected_latent_loss": result["aggregate_descriptive"][
+                          "sum_expected_latent_loss"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Decompose latent opportunity into state versus detection
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PROMOTE="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(
+              Path("artifact/raw_subseason/two_season_detection_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          print("true" if result["promotion_to_latent_opportunity_model_allowed"] else "false")
+          PY
+          )"
+
+          if test "$PROMOTE" != "true"; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-latent-opportunity-decomposition-v1","status":"SKIPPED_BY_DETECTION_IDENTIFIABILITY_GATE","general_state_promotion_rule_met":false}' \
+              > artifact/raw_subseason/latent_opportunity_decomposition.json
+            echo "latent opportunity decomposition skipped by frozen detection gate"
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_latent_opportunity_decomposition.R \
+            artifact/raw_subseason/census_rate_table.csv \
+            artifact/raw_subseason/two_season_detection_fits.csv \
+            artifact/raw_subseason/latent_opportunity_models.csv \
+            artifact/raw_subseason/latent_opportunity_posteriors.csv
+
+          python examples/summarize_villavicencio_latent_opportunity_decomposition.py \
+            artifact/raw_subseason/latent_opportunity_models.csv \
+            artifact/raw_subseason/latent_opportunity_posteriors.csv \
+            artifact/raw_subseason/latent_opportunity_decomposition.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/raw_subseason/latent_opportunity_decomposition.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path(
+                  "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if result["transition_count"] != 6:
+              raise SystemExit("latent opportunity decomposition lost six-transition scope")
+          if result["general_state_promotion_rule_met"]:
+              if result["state_supported_transition_count"] < 5:
+                  raise SystemExit("latent state promotion rule internally inconsistent")
+          else:
+              if result["state_supported_transition_count"] >= 5:
+                  raise SystemExit("latent state promotion rule internally inconsistent")
+          if "five of six" not in gate["model_comparison"]["cross_transition_promotion"]:
+              raise SystemExit("latent opportunity cross-transition rule changed")
+          if "must not" not in result["claim_ceiling"]:
+              raise SystemExit("latent opportunity result lost fail-closed ceiling")
+
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "state_supported_transitions": result[
+                          "state_supported_transition_count"
+                      ],
+                      "detection_supported_transitions": result[
+                          "detection_supported_transition_count"
+                      ],
+                      "general_state_promotion": result[
+                          "general_state_promotion_rule_met"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Build frozen conventional-filter dyad table
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-conventional-filter-table-v1","materialized":false}' \
+              > artifact/annual_conventional_filter_table_summary.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python examples/villavicencio_annual_filter_table.py \
+            "$XLSX" \
+            artifact/annual_stage1_dyads.csv \
+            --output artifact/annual_conventional_filter_dyads.csv \
+            --summary artifact/annual_conventional_filter_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/annual_conventional_filter_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          expected = json.loads(
+              Path("validation/villavicencio_conventional_filter_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["row_count"] != expected["completeness"]["shared_dyad_rows"]:
+              raise SystemExit("conventional-filter row count changed")
+          if summary["complete_case_count"] != expected["completeness"]["complete_case_rows_all_frozen_predictors"]:
+              raise SystemExit("conventional-filter complete-case count changed")
+          for risk in ("gain", "loss"):
+              observed = summary["risk_sets"][risk]
+              frozen = expected["endpoints"][risk]
+              for key in ("n", "events", "nonevents"):
+                  if observed[key] != frozen[key]:
+                      raise SystemExit(
+                          f"{risk} {key} changed: {observed[key]} != {frozen[key]}"
+                      )
+          if summary["decision_equivalence_inferred"] is not False:
+              raise SystemExit("conventional-filter table inferred decision equivalence")
+          PY
+
+      - name: Fit frozen conventional-filter temporal CV
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-conventional-filter-cv-v1","materialized":false}' \
+              > artifact/annual_conventional_filter_cv.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_conventional_filter_cv.R \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_conventional_filter_cv_folds.csv
+
+          python examples/summarize_villavicencio_conventional_filter_cv.py \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_conventional_filter_cv_folds.csv \
+            artifact/annual_conventional_filter_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_conventional_filter_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("CV result inferred decision equivalence")
+          gate = json.loads(
+              Path("validation/villavicencio_conventional_filter_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          primary_scope = gate["model_family"]["primary_scope"]
+          if result["primary_scope"] != primary_scope:
+              raise SystemExit("CV primary scope disagrees with frozen gate")
+          for scope, specification in gate["model_family"]["transition_scopes"].items():
+              expected_folds = len(specification["transitions"])
+              for risk in ("gain", "loss"):
+                  endpoint = result["scopes"][scope]["endpoints"][risk]
+                  if endpoint["fold_count"] != expected_folds:
+                      raise SystemExit(
+                          f"{scope}/{risk}: expected {expected_folds} held-out transitions"
+                      )
+                  if endpoint["n"] <= 0:
+                      raise SystemExit(
+                          f"{scope}/{risk}: empty held-out prediction surface"
+                      )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+
+      - name: Run frozen conventional-filter block ablation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-filter-block-ablation-v1","materialized":false}' \
+              > artifact/annual_filter_block_ablation.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_conventional_filter_block_ablation.R \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_filter_block_ablation_predictions.csv \
+            artifact/annual_filter_block_ablation_folds.csv
+
+          python examples/summarize_villavicencio_filter_block_ablation.py \
+            artifact/annual_filter_block_ablation_predictions.csv \
+            artifact/annual_filter_block_ablation_folds.csv \
+            artifact/annual_filter_block_ablation.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_filter_block_ablation.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_filter_block_ablation_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["decision_equivalence_inferred"] is not False:
+              raise SystemExit("block ablation inferred decision equivalence")
+          if result["primary_scope"] != gate["primary_scope"]:
+              raise SystemExit("block-ablation primary scope disagrees with frozen gate")
+          if set(result["blocks_frozen_before_result"]) != set(gate["blocks"]):
+              raise SystemExit("block-ablation predictor blocks disagree with frozen gate")
+          primary = result["scopes"][gate["primary_scope"]]["endpoints"]
+          for risk in gate["risk_sets"]:
+              endpoint = primary[risk]
+              if not endpoint["all_models_present"]:
+                  raise SystemExit(f"{risk}: block-ablation model surface incomplete")
+              if not endpoint["all_folds_converged"]:
+                  raise SystemExit(f"{risk}: block-ablation model convergence failure")
+          print(json.dumps(result["primary_summary"], indent=2, sort_keys=True))
+          PY
+
+      - name: Audit phenology support leakage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/traits_path.txt || ! test -f artifact/annual_filter_block_ablation_predictions.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-phenology-support-leakage-audit-v1","materialized":false}' > artifact/annual_phenology_support_leakage.json
+            exit 0
+          fi
+
+          XLSX="$(cat artifact/traits_path.txt)"
+          python examples/audit_villavicencio_phenology_support_leakage.py \
+            "$XLSX" \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_filter_block_ablation_predictions.csv \
+            artifact/annual_phenology_support_leakage.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_phenology_support_leakage.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_phenology_support_leakage_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["status"] != "gain_filter_quarantined_support_leakage":
+              raise SystemExit("phenology leakage audit lost quarantine status")
+
+          obs_surface = observed["workbook_dyad_surface"]
+          exp_surface = frozen["workbook_dyad_surface"]
+          if obs_surface["contingency"] != exp_surface["contingency"]:
+              raise SystemExit("phenology support contingency changed")
+          if not obs_surface["nonzero_phenology_subset_of_ever_linked_support"]:
+              raise SystemExit("expected non-zero phenology to remain nested in realized-link support")
+
+          primary = observed["drop_phenology_performance"]["strict_core_2008_2011"]
+          exp_primary = frozen["primary_drop_phenology"]
+          for risk in ("gain", "loss"):
+              if abs(
+                  primary[risk]["drop_phenology_roc_auc"]
+                  - exp_primary[risk]["roc_auc"]
+              ) > 1e-12:
+                  raise SystemExit(f"{risk}: drop-phenology AUC changed")
+              if abs(
+                  primary[risk]["drop_phenology_relative_log_loss_reduction_vs_null"]
+                  - exp_primary[risk]["relative_log_loss_reduction_vs_null"]
+              ) > 1e-12:
+                  raise SystemExit(f"{risk}: drop-phenology log-loss skill changed")
+
+          print(
+              json.dumps(
+                  {
+                      "status": observed["status"],
+                      "support_contingency": obs_surface["contingency"],
+                      "primary_gain_drop_phenology_auc": primary["gain"][
+                          "drop_phenology_roc_auc"
+                      ],
+                      "primary_gain_drop_phenology_logloss_skill": primary["gain"][
+                          "drop_phenology_relative_log_loss_reduction_vs_null"
+                      ],
+                      "primary_loss_drop_phenology_auc": primary["loss"][
+                          "drop_phenology_roc_auc"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Rebuild focal-excluded temporal opportunity
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_stage1_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-focal-excluded-opportunity-cv-v1","materialized":false}' > artifact/annual_focal_excluded_opportunity_cv.json
+            exit 0
+          fi
+
+          python examples/build_villavicencio_focal_excluded_opportunity.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/annual_stage1_dyads.csv \
+            --output artifact/annual_focal_excluded_opportunity_dyads.csv \
+            --summary artifact/annual_focal_excluded_opportunity_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/annual_focal_excluded_opportunity_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["response_mismatch_count"] != 0:
+              raise SystemExit("raw Figshare response no longer matches Stage-1 annual response")
+          if not summary.get("current_year_surface"):
+              raise SystemExit("current-year opportunity surface missing")
+          if not summary.get("one_year_lagged_surface"):
+              raise SystemExit("one-year-lagged opportunity surface missing")
+          support = summary["support_audit"]
+          if support["opportunity_support_nested_in_ever_linked"]:
+              raise SystemExit("focal-excluded opportunity unexpectedly collapsed onto realized-link support")
+          if support["opportunity_positive_never_linked_count"] <= 0:
+              raise SystemExit("focal-excluded opportunity has no unrealized support")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+          Rscript examples/villavicencio_focal_excluded_opportunity_cv.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_focal_excluded_opportunity_cv_predictions.csv \
+            artifact/annual_focal_excluded_opportunity_cv_folds.csv
+
+          python examples/summarize_villavicencio_focal_excluded_opportunity.py \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_focal_excluded_opportunity_cv_predictions.csv \
+            artifact/annual_focal_excluded_opportunity_cv_folds.csv \
+            artifact/annual_focal_excluded_opportunity_cv.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_focal_excluded_opportunity_cv.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_focal_excluded_opportunity_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["primary_scope"] != "strict_core_2008_2011":
+              raise SystemExit("focal-excluded opportunity primary scope changed")
+          if result["published_phenological_overlap_used"]:
+              raise SystemExit("published phenological overlap re-entered repair analysis")
+          if not result["focal_response_excluded_from_opportunity"]:
+              raise SystemExit("focal-response exclusion flag lost")
+          if "not preregistered" not in result["analysis_status"]:
+              raise SystemExit("repair analysis lost retrospective-status firewall")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          for risk in ("gain", "loss"):
+              for surface in ("current", "lagged"):
+                  if not primary[risk][surface]["full"]["all_folds_converged"]:
+                      raise SystemExit(
+                          f"{risk}/{surface}: focal-excluded full model failed to converge"
+                      )
+                  if not primary[risk][surface]["marginal_only"]["all_folds_converged"]:
+                      raise SystemExit(
+                          f"{risk}/{surface}: focal-excluded marginal model failed to converge"
+                      )
+          if "not a causal or routeability test" not in gate["claim_ceiling"]:
+              raise SystemExit("repair gate lost claim ceiling")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_current_auc": primary["gain"]["current"]["full"]["roc_auc"],
+                      "gain_current_logloss_skill": primary["gain"]["current"]["full"]["relative_log_loss_reduction"],
+                      "gain_current_overlap_class": primary["gain"]["current"]["pairwise_overlap_increment"]["classification"],
+                      "gain_lagged_auc": primary["gain"]["lagged"]["full"]["roc_auc"],
+                      "gain_lagged_logloss_skill": primary["gain"]["lagged"]["full"]["relative_log_loss_reduction"],
+                      "loss_current_auc": primary["loss"]["current"]["full"]["roc_auc"],
+                      "loss_current_logloss_skill": primary["loss"]["current"]["full"]["relative_log_loss_reduction"],
+                      "loss_current_overlap_class": primary["loss"]["current"]["pairwise_overlap_increment"]["classification"],
+                      "loss_lagged_auc": primary["loss"]["lagged"]["full"]["roc_auc"],
+                      "loss_lagged_logloss_skill": primary["loss"]["lagged"]["full"]["relative_log_loss_reduction"],
+                      "current_better_both": result[
+                          "primary_current_better_than_lagged_both_endpoints"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Control clean annual opportunity for focal-plant census effort
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_focal_excluded_opportunity_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-opportunity-effort-control-v1","materialized":false}' > artifact/annual_opportunity_effort_control.json
+            exit 0
+          fi
+
+          python examples/build_villavicencio_annual_opportunity_effort_table.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            --output artifact/annual_opportunity_effort_dyads.csv \
+            --summary artifact/annual_opportunity_effort_table_summary.json
+
+          Rscript examples/villavicencio_opportunity_effort_control_cv.R \
+            artifact/annual_opportunity_effort_dyads.csv \
+            artifact/annual_opportunity_effort_predictions.csv \
+            artifact/annual_opportunity_effort_folds.csv
+
+          python examples/summarize_villavicencio_opportunity_effort_control.py \
+            artifact/annual_opportunity_effort_predictions.csv \
+            artifact/annual_opportunity_effort_folds.csv \
+            artifact/annual_opportunity_effort_control.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_opportunity_effort_control.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          table = json.loads(
+              Path("artifact/annual_opportunity_effort_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if table["missing_effort_rows"] != 0:
+              raise SystemExit("annual effort join has missing rows")
+          if table["annual_raw_census_counts"]["2010"] != 463:
+              raise SystemExit("annual effort table silently changed 2010 raw count")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          if not result["primary_read"]["gain_opportunity_increment_positive_all_folds"]:
+              raise SystemExit("clean gain opportunity no longer adds information beyond effort in all primary folds")
+          print(
+              json.dumps(
+                  {
+                      "gain_effort_only": primary["gain"]["models"]["effort_only"],
+                      "gain_opportunity_only": primary["gain"]["models"]["opportunity_only"],
+                      "gain_combined": primary["gain"]["models"]["opportunity_plus_effort"],
+                      "gain_opportunity_increment": primary["gain"]["opportunity_increment_beyond_effort"],
+                      "loss_opportunity_increment": primary["loss"]["opportunity_increment_beyond_effort"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit link-frequency thresholds
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_link_frequency_threshold_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_link_frequency_threshold_predictions.csv \
+            artifact/annual_link_frequency_threshold_folds.csv
+
+          python examples/summarize_villavicencio_link_frequency_threshold_audit.py \
+            artifact/annual_link_frequency_threshold_predictions.csv \
+            artifact/annual_link_frequency_threshold_folds.csv \
+            artifact/annual_link_frequency_threshold_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_link_frequency_threshold_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_link_frequency_threshold_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != "post-result >=2 and >=3 visit threshold sensitivity; not confirmatory":
+              raise SystemExit("frequency threshold audit lost post-result firewall")
+          for threshold in ("2", "3"):
+              for risk in ("gain", "loss"):
+                  endpoint = result["thresholds"][threshold][risk]
+                  if endpoint["positive_log_loss_folds"] != 3:
+                      raise SystemExit(
+                          f"{threshold}/{risk}: threshold robustness lost an annual fold"
+                      )
+          if "not a detection model" not in gate["claim_ceiling"].lower():
+              raise SystemExit("frequency threshold gate lost detection-model firewall")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "thresholds": {
+                          threshold: {
+                              risk: {
+                                  "auc": result["thresholds"][threshold][risk]["roc_auc"],
+                                  "logloss_skill": result["thresholds"][threshold][risk]["relative_log_loss_reduction"],
+                                  "positive_folds": result["thresholds"][threshold][risk]["positive_log_loss_folds"],
+                              }
+                              for risk in ("gain", "loss")
+                          }
+                          for threshold in ("2", "3")
+                      },
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit same-site same-week opportunity
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python examples/build_villavicencio_siteweek_opportunity.py \
+            artifact/figshare/raw/visits_2006-2011_data.csv \
+            artifact/figshare/raw/plant_names.csv \
+            artifact/figshare/raw/insect_names.csv \
+            artifact/annual_stage1_dyads.csv \
+            artifact/annual_siteweek_opportunity_dyads.csv
+
+          Rscript examples/villavicencio_siteweek_opportunity_audit.R \
+            artifact/annual_siteweek_opportunity_dyads.csv \
+            artifact/annual_siteweek_opportunity_predictions.csv \
+            artifact/annual_siteweek_opportunity_folds.csv
+
+          python examples/summarize_villavicencio_siteweek_opportunity_audit.py \
+            artifact/annual_siteweek_opportunity_predictions.csv \
+            artifact/annual_siteweek_opportunity_folds.csv \
+            artifact/annual_siteweek_opportunity_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_siteweek_opportunity_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_siteweek_opportunity_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != "post-result same-site same-week robustness; not confirmatory":
+              raise SystemExit("site-week audit lost retrospective-status firewall")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          for risk in ("gain", "loss"):
+              if not primary[risk]["all_folds_converged"]:
+                  raise SystemExit(f"{risk}: site-week model convergence failure")
+          if "no causality" not in result["claim_ceiling"]:
+              raise SystemExit("site-week result lost claim ceiling")
+          if "Post-result spatiotemporal robustness only" not in gate["claim_ceiling"]:
+              raise SystemExit("site-week gate lost claim ceiling")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_auc": primary["gain"]["roc_auc"],
+                      "gain_logloss_skill": primary["gain"]["relative_log_loss_reduction"],
+                      "gain_positive_folds": primary["gain"]["positive_log_loss_folds"],
+                      "loss_auc": primary["loss"]["roc_auc"],
+                      "loss_logloss_skill": primary["loss"]["relative_log_loss_reduction"],
+                      "loss_positive_folds": primary["loss"]["positive_log_loss_folds"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit current opportunity axes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_focal_excluded_opportunity_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-current-opportunity-axis-audit-v1","materialized":false}' > artifact/annual_current_opportunity_axis_audit.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_current_opportunity_axis_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_current_opportunity_axis_predictions.csv \
+            artifact/annual_current_opportunity_axis_folds.csv
+
+          python examples/summarize_villavicencio_current_opportunity_axis_audit.py \
+            artifact/annual_current_opportunity_axis_predictions.csv \
+            artifact/annual_current_opportunity_axis_folds.csv \
+            artifact/annual_current_opportunity_axis_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_current_opportunity_axis_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_current_opportunity_axis_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "post_result" not in result["analysis_status"]:
+              raise SystemExit("axis audit lost its retrospective-status firewall")
+          if "designed after" not in gate["analysis_status"]:
+              raise SystemExit("axis audit gate lost its post-result status")
+          primary = result["scopes"]["strict_core_2008_2011"]["endpoints"]
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_plant_increment": primary["gain"]["plant_availability_increment"]["delta_log_loss"],
+                      "gain_pollinator_increment": primary["gain"]["pollinator_activity_increment"]["delta_log_loss"],
+                      "gain_axis_positive_folds": result["primary_pattern"]["gain_direction_positive_folds"],
+                      "loss_plant_increment": primary["loss"]["plant_availability_increment"]["delta_log_loss"],
+                      "loss_pollinator_increment": primary["loss"]["pollinator_activity_increment"]["delta_log_loss"],
+                      "loss_axis_positive_folds": result["primary_pattern"]["loss_direction_positive_folds"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit endpoint opportunity-axis robustness
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          Rscript examples/villavicencio_axis_robustness_audit.R \
+            artifact/annual_focal_excluded_opportunity_dyads.csv \
+            artifact/annual_siteweek_opportunity_dyads.csv \
+            artifact/annual_axis_robustness_rows.csv
+
+          python examples/summarize_villavicencio_axis_robustness_audit.py \
+            artifact/annual_axis_robustness_rows.csv \
+            artifact/annual_axis_robustness_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_axis_robustness_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path("validation/villavicencio_axis_robustness_audit_gate_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["analysis_status"] != (
+              "post-result endpoint-axis robustness across spatial and "
+              "link-frequency definitions; hypothesis-generating only"
+          ):
+              raise SystemExit("axis robustness lost post-result firewall")
+          for context in ("weekly_k1", "weekly_k2", "weekly_k3", "siteweek_k1"):
+              for risk in ("gain", "loss"):
+                  endpoint = result["contexts"][context][risk]
+                  if endpoint["expected_direction_positive_folds"] != 3:
+                      raise SystemExit(
+                          f"{context}/{risk}: endpoint-axis reversal lost a primary fold"
+                      )
+          if "not establish distinct causal" not in gate["claim_ceiling"]:
+              raise SystemExit("axis robustness gate lost causal firewall")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "contexts": {
+                          context: {
+                              risk: {
+                                  "expected_direction_positive_folds": result["contexts"][context][risk]["expected_direction_positive_folds"],
+                                  "mean_expected_direction_difference": result["contexts"][context][risk]["mean_expected_direction_difference"],
+                              }
+                              for risk in ("gain", "loss")
+                          }
+                          for context in ("weekly_k1", "weekly_k2", "weekly_k3", "siteweek_k1")
+                      },
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit gain-loss predictability asymmetry
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-gain-loss-asymmetry-audit-v1","materialized":false}' \
+              > artifact/annual_gain_loss_asymmetry_audit.json
+            exit 0
+          fi
+
+          Rscript examples/villavicencio_gain_loss_matched_audit.R \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_gain_loss_matched_replicates.csv \
+            100
+
+          python examples/summarize_villavicencio_gain_loss_asymmetry.py \
+            artifact/annual_conventional_filter_cv_predictions.csv \
+            artifact/annual_gain_loss_matched_replicates.csv \
+            artifact/annual_gain_loss_asymmetry_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/annual_gain_loss_asymmetry_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "posthoc_direction_seen_before_matched_audit" not in result["analysis_status"]:
+              raise SystemExit("asymmetry audit lost its retrospective-status firewall")
+          expected_result = json.loads(
+              Path("validation/villavicencio_gain_loss_asymmetry_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if result["status"] != expected_result["status"]:
+              raise SystemExit("asymmetry audit status disagrees with frozen result ledger")
+          time_audit = json.loads(
+              Path("validation/villavicencio_covariate_time_support_audit_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          baseline_ledger = json.loads(
+              Path("validation/villavicencio_conventional_filter_cv_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          ablation_ledger = json.loads(
+              Path("validation/villavicencio_filter_block_ablation_result_v1.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if time_audit["status"] != "aggregate_time_support_confirmed":
+              raise SystemExit("covariate time-support audit is not frozen green")
+          if "not strict prospective forecasting" not in baseline_ledger["time_support"]["interpretation"]:
+              raise SystemExit("baseline ledger lost the prospective-forecasting firewall")
+          if "not past-only forecasting" not in ablation_ledger["time_support"]["consequence"]:
+              raise SystemExit("ablation ledger lost the time-support firewall")
+          time_support = result["matched_training_design"].get("time_support", "")
+          if "six-year aggregates" not in time_support:
+              raise SystemExit("asymmetry audit lost the aggregate-covariate time-support warning")
+          wording_surface = " ".join(
+              [
+                  result.get("ecological_read", ""),
+                  result.get("claim_ceiling", ""),
+              ]
+          ).lower()
+          for forbidden in ("future link gains", "out-of-time predictability"):
+              if forbidden in wording_surface:
+                  raise SystemExit(
+                      f"asymmetry audit reintroduced forbidden prospective wording: {forbidden}"
+                  )
+          for scope, expected in (
+              ("strict_core_2008_2011", 3),
+              ("near_core_2007_2011", 4),
+              ("all_annual_2006_2011", 5),
+          ):
+              observed = result["scopes"][scope]
+              if observed["transition_count"] != expected:
+                  raise SystemExit(f"{scope}: transition count changed")
+              for transition in observed["transitions"].values():
+                  matched = transition["matched_information_training"]
+                  if matched["replicates"] != 100:
+                      raise SystemExit("matched audit replicate count changed")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "strict_core_consistent": result["scopes"][
+                          "strict_core_2008_2011"
+                      ]["all_transitions_directionally_consistent"],
+                      "all_annual_consistent": result["scopes"][
+                          "all_annual_2006_2011"
+                      ]["all_transitions_directionally_consistent"],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Audit phenology state stratification
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' \
+              '{"schema":"adaptive-gain-villavicencio-phenology-state-stratification-v1","materialized":false}' \
+              > artifact/annual_phenology_state_stratification.json
+            exit 0
+          fi
+
+          python examples/diagnose_villavicencio_phenology_states.py \
+            artifact/annual_conventional_filter_dyads.csv \
+            artifact/annual_phenology_state_stratification.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_phenology_state_stratification.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_phenology_state_stratification_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["prospective_status"] != "post_hoc_not_confirmatory":
+              raise SystemExit("phenology-state diagnostic lost its post-hoc label")
+
+          obs = observed["primary_summary"]
+          exp = frozen["primary_summary"]
+          for key in (
+              "pooled_gain_vs_stable_absent_auc",
+              "pooled_retained_vs_loss_auc",
+              "pooled_gain_vs_loss_auc",
+              "positive_overlap_only_gain_vs_stable_absent_auc",
+              "positive_overlap_only_retained_vs_loss_auc",
+          ):
+              if abs(obs[key] - exp[key]) > 1e-12:
+                  raise SystemExit(f"{key} changed: {obs[key]} != {exp[key]}")
+          if obs["state_medians"] != exp["state_medians"]:
+              raise SystemExit("phenology state medians changed")
+          for state, value in exp["zero_overlap_fraction"].items():
+              if abs(obs["zero_overlap_fraction"][state] - value) > 1e-12:
+                  raise SystemExit(f"zero-overlap fraction changed for {state}")
+
+          print(json.dumps(obs, indent=2, sort_keys=True))
+          PY
+
+      - name: Audit phenology species leverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! test -f artifact/annual_conventional_filter_dyads.csv; then
+            printf '%s\n' '{"schema":"adaptive-gain-villavicencio-species-leverage-audit-v1","materialized":false}' > artifact/annual_species_leverage_audit.json
+            exit 0
+          fi
+
+          python examples/audit_villavicencio_species_leverage.py artifact/annual_conventional_filter_dyads.csv artifact/annual_species_leverage_audit.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          observed = json.loads(
+              Path("artifact/annual_species_leverage_audit.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          frozen = json.loads(
+              Path(
+                  "validation/villavicencio_species_leverage_audit_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          if observed["status"] != "post_hoc_species_leverage_diagnostic":
+              raise SystemExit("species-leverage audit lost its post-hoc label")
+          if observed["base"]["plant_count"] != frozen["base"]["plant_count"]:
+              raise SystemExit("species-leverage plant count changed")
+          if observed["base"]["pollinator_count"] != frozen["base"]["pollinator_count"]:
+              raise SystemExit("species-leverage pollinator count changed")
+
+          for section, metric in (
+              ("base", "positive_overlap_retained_vs_loss_auc"),
+              ("base", "gain_vs_loss_auc"),
+          ):
+              if abs(observed[section][metric] - frozen[section][metric]) > 1e-12:
+                  raise SystemExit(f"{section}/{metric} changed")
+
+          for section in ("leave_one_plant_out", "leave_one_pollinator_out"):
+              for metric in (
+                  "positive_overlap_gain_vs_stable_absent_auc",
+                  "positive_overlap_retained_vs_loss_auc",
+                  "gain_vs_loss_auc",
+              ):
+                  for key in ("min", "median", "max"):
+                      a = observed[section][metric][key]
+                      b = frozen[section][metric][key]
+                      if abs(a - b) > 1e-12:
+                          raise SystemExit(f"{section}/{metric}/{key} changed")
+
+          print(
+              json.dumps(
+                  {
+                      "plant_retention_auc_range": [
+                          observed["leave_one_plant_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["min"],
+                          observed["leave_one_plant_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["max"],
+                      ],
+                      "pollinator_retention_auc_range": [
+                          observed["leave_one_pollinator_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["min"],
+                          observed["leave_one_pollinator_out"][
+                              "positive_overlap_retained_vs_loss_auc"
+                          ]["max"],
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Summarize exported periods before response analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f artifact/export/period_index.csv; then
+            python - <<'PY'
+          import csv
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          period_index = list(
+              csv.DictReader(
+                  Path("artifact/export/period_index.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          interactions = list(
+              csv.DictReader(
+                  Path("artifact/export/subseason_interactions_long.csv").open(
+                      newline="",
+                      encoding="utf-8-sig",
+                  )
+              )
+          )
+          counts = Counter(row["period"] for row in interactions)
+          weights = Counter()
+          for row in interactions:
+              weights[row["period"]] += float(row["weight"])
+
+          summary = {
+              "schema": "adaptive-gain-villavicencio-period-inventory-v1",
+              "period_count": len(period_index),
+              "periods": [
+                  {
+                      "source_index": int(row["source_index"]),
+                      "period": row["period"],
+                      "positive_link_rows": counts[row["period"]],
+                      "total_weight": weights[row["period"]],
+                  }
+                  for row in period_index
+              ],
+              "transition_mapping_verified": False,
+              "response_model_fitted": False,
+          }
+          Path("artifact/period_inventory.json").write_text(
+              json.dumps(summary, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          else
+            printf '%s\n'               '{"schema":"adaptive-gain-villavicencio-period-inventory-v1","materialized":false,"transition_mapping_verified":false,"response_model_fitted":false}'               > artifact/period_inventory.json
+          fi
+
+      - name: Upload source inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: villavicencio-source-inventory
+          path: artifact
+          if-no-files-found: error
+          retention-days: 14

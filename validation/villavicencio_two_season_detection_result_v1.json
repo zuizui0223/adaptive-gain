@@ -1,0 +1,145 @@
+{
+  "schema": "adaptive-gain-villavicencio-two-season-detection-result-v1",
+  "date": "2026-09-29",
+  "status": "latent_link_detection_identified_enough_for_sensitivity",
+  "analysis_status": "post-effort-audit latent-state identifiability diagnostic; no opportunity effect used for the identification gate",
+  "source": {
+    "design_gate": "validation/villavicencio_two_season_detection_gate_v1.json",
+    "census_rate_gate": "validation/villavicencio_census_rate_gate_v1.json",
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv"
+  },
+  "validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36540686413,
+    "run_number": 5,
+    "conclusion": "success",
+    "head_sha": "2da133eaae456f2fda0b0d132e04a5367fdadfe8",
+    "artifact_id": 11020721111,
+    "artifact_digest": "sha256:6e84f05d6b04e3a9bd533ccd3b23dfe2efd68013609d7a3dbb1a6bb13ea1197c"
+  },
+  "primary_scope": {
+    "name": "strict_dated_core_2008_2010",
+    "transition_count": 6,
+    "identified_transition_count": 5,
+    "required_identified_transition_count": 5,
+    "promotion_to_latent_opportunity_model_allowed": true,
+    "weak_or_nonidentified_transition": {
+      "transition": "2009_early->2009_mid",
+      "reason": "multi-start NLL range 2.565e-06 exceeded the frozen 1e-06 tolerance; optimizer convergence, curvature and detection-probability criteria otherwise passed"
+    }
+  },
+  "detection_parameter_range": {
+    "p_previous_min": 0.0509470035410412,
+    "p_previous_max": 0.146794248523142,
+    "p_current_min": 0.0552677804593608,
+    "p_current_max": 0.179963221771234,
+    "interpretation": "Conditional per-5-min-census detection is low enough that zero detections cannot safely be equated with absence."
+  },
+  "aggregate_descriptive": {
+    "candidate_surface_observed_binary_gain_count": 196,
+    "candidate_surface_observed_binary_loss_count": 253,
+    "sum_expected_latent_gain": 279.56612074647154,
+    "sum_expected_latent_loss": 212.10781354266592,
+    "weighted_mean_posterior_true_gain_probability_among_observed_gains": 0.5745694698823861,
+    "weighted_mean_posterior_true_loss_probability_among_observed_losses": 0.4640277774660173,
+    "interpretation": "Expected latent counts and posterior probabilities are model-based diagnostics, not observed ecological events."
+  },
+  "transition_diagnostics": {
+    "2008_early->2008_mid": {
+      "status": "IDENTIFIED",
+      "p_previous": 0.146794248523142,
+      "p_current": 0.109934355783753,
+      "observed_gain": 51,
+      "expected_latent_gain": 81.586341597068,
+      "observed_loss": 54,
+      "expected_latent_loss": 47.0926655016624,
+      "mean_posterior_true_gain_among_observed_gain": 0.677788956073814,
+      "mean_posterior_true_loss_among_observed_loss": 0.49708280636795
+    },
+    "2008_mid->2008_late": {
+      "status": "IDENTIFIED",
+      "p_previous": 0.112364601311117,
+      "p_current": 0.132437759326548,
+      "observed_gain": 36,
+      "expected_latent_gain": 34.4785646285348,
+      "observed_loss": 55,
+      "expected_latent_loss": 56.4449798583952,
+      "mean_posterior_true_gain_among_observed_gain": 0.426953562051896,
+      "mean_posterior_true_loss_among_observed_loss": 0.549199815763052
+    },
+    "2009_early->2009_mid": {
+      "status": "WEAK_OR_NONIDENTIFIED",
+      "p_previous": 0.101963936577322,
+      "p_current": 0.0552677804593608,
+      "observed_gain": 45,
+      "expected_latent_gain": 50.1543451491209,
+      "observed_loss": 47,
+      "expected_latent_loss": 12.1787965135959,
+      "mean_posterior_true_gain_among_observed_gain": 0.406374525091231,
+      "mean_posterior_true_loss_among_observed_loss": 0.134259520069464
+    },
+    "2009_mid->2009_late": {
+      "status": "IDENTIFIED",
+      "p_previous": 0.0509470035410412,
+      "p_current": 0.179963221771234,
+      "observed_gain": 14,
+      "expected_latent_gain": 12.8882134093168,
+      "observed_loss": 44,
+      "expected_latent_loss": 64.0311669986855,
+      "mean_posterior_true_gain_among_observed_gain": 0.432713784800432,
+      "mean_posterior_true_loss_among_observed_loss": 0.764797740657696
+    },
+    "2010_early->2010_mid": {
+      "status": "IDENTIFIED",
+      "p_previous": 0.138356843199599,
+      "p_current": 0.0872566418628428,
+      "observed_gain": 25,
+      "expected_latent_gain": 54.0672616174718,
+      "observed_loss": 24,
+      "expected_latent_loss": 9.49605712368341,
+      "mean_posterior_true_gain_among_observed_gain": 0.707264219754084,
+      "mean_posterior_true_loss_among_observed_loss": 0.212283892780652
+    },
+    "2010_mid->2010_late": {
+      "status": "IDENTIFIED",
+      "p_previous": 0.128534949325582,
+      "p_current": 0.100244654277718,
+      "observed_gain": 25,
+      "expected_latent_gain": 46.3913943449593,
+      "observed_loss": 29,
+      "expected_latent_loss": 22.8641475466435,
+      "mean_posterior_true_gain_among_observed_gain": 0.826063959726054,
+      "mean_posterior_true_loss_among_observed_loss": 0.527394994107798
+    }
+  },
+  "ecological_read": {
+    "supported": "Repeated 5-min censuses contain enough information for a simple two-season detection model to pass the pre-frozen identifiability gate in five of six dated-core transitions.",
+    "important_boundary": "Observed binary gain/loss labels remain poor proxies for latent transition identity in several transitions. The simple model can be used only as a sensitivity layer, not as proof of true link state."
+  },
+  "not_established": [
+    "the simple occupancy model is the true ecological process",
+    "true ecological rewiring as an observed fact",
+    "the exact fraction of the 853 raw binary changes that is biological",
+    "causal opportunity effects",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "The five-of-six identifiability gate permits a detection-model sensitivity analysis, not promotion of posterior latent transitions to observed ecological rewiring.",
+  "reproduction_validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36541521307,
+    "run_number": 21,
+    "conclusion": "success",
+    "head_sha": "13a493fc75c742ecc364fa23e5e59c16d91a641a",
+    "artifact_id": 11020653096,
+    "artifact_digest": "sha256:19d34b8f1c33101b1e53bc3bbae06e7001a6efb6de38a5c2324c054bdb47aea6",
+    "identified_transition_count": 5,
+    "promotion_to_latent_opportunity_model_allowed": true,
+    "note": "Independent dedicated-workflow reproduction confirms the same five-of-six simple-model identifiability gate."
+  },
+  "downstream_resolution": {
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "detection_overdispersion_result": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "conclusion": "Passing the simple-model identifiability gate did not restore ecological rewiring: the frozen general latent state-opportunity rule failed and richer detection heterogeneity made latent transition inference model-sensitive."
+  }
+}

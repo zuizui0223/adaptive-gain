@@ -1,0 +1,276 @@
+name: External axis replication screen
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/external-axis-replication-screen.yml"
+      - "validation/dominguez2026_external_replication_screen_gate_v1.json"
+      - "examples/build_dominguez2026_external_axis_table.py"
+      - "examples/dominguez2026_external_axis_cv.R"
+      - "examples/summarize_dominguez2026_external_axis_replication.py"
+      - "examples/dominguez2026_measurement_mapping_sensitivity.R"
+      - "examples/summarize_dominguez2026_measurement_mapping_sensitivity.py"
+      - "validation/dominguez2026_measurement_mapping_sensitivity_gate_v1.json"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Fetch checksum-pinned Zenodo v3 archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact source
+          URL="https://zenodo.org/records/17362189/files/Sup_CODE_Resubmission.zip?download=1"
+          curl -fL --retry 3 --retry-delay 2 -A "adaptive-gain-replication-screen/1.0" \
+            "$URL" -o source/Sup_CODE_Resubmission.zip
+          echo "7243776b1fd8f2b9340321be5e7a4185  source/Sup_CODE_Resubmission.zip" \
+            | md5sum -c -
+
+      - name: Inventory archive without fitting ecological models
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source/unpacked artifact/inventory
+          unzip -q source/Sup_CODE_Resubmission.zip -d source/unpacked
+
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("source/unpacked")
+          rows = []
+          for path in sorted(root.rglob("*")):
+              if not path.is_file():
+                  continue
+              rel = path.relative_to(root).as_posix()
+              entry = {
+                  "path": rel,
+                  "size": path.stat().st_size,
+                  "suffix": path.suffix.lower(),
+                  "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+              }
+              if path.suffix.lower() in {".csv", ".tsv", ".txt"}:
+                  delimiter = "\t" if path.suffix.lower() == ".tsv" else ","
+                  try:
+                      with path.open(
+                          newline="",
+                          encoding="utf-8-sig",
+                          errors="replace",
+                      ) as handle:
+                          reader = csv.reader(handle, delimiter=delimiter)
+                          header = next(reader, [])
+                          sample = []
+                          count = 0
+                          for row in reader:
+                              count += 1
+                              if len(sample) < 3:
+                                  sample.append(row)
+                      entry["header"] = header
+                      entry["data_row_count"] = count
+                      entry["first_rows"] = sample
+                  except Exception as exc:
+                      entry["text_inventory_error"] = str(exc)
+              rows.append(entry)
+
+          lower_paths = [row["path"].lower() for row in rows]
+          keyword_hits = {
+              key: [
+                  rows[i]["path"]
+                  for i, value in enumerate(lower_paths)
+                  if key in value
+              ]
+              for key in (
+                  "interaction",
+                  "network",
+                  "abund",
+                  "flower",
+                  "pheno",
+                  "poll",
+                  "rewir",
+                  "turnover",
+                  "data",
+              )
+          }
+          result = {
+              "schema": "adaptive-gain-external-axis-replication-source-inventory-v1",
+              "date": "2026-09-29",
+              "zenodo_record": 17362189,
+              "archive": "Sup_CODE_Resubmission.zip",
+              "archive_md5_verified": True,
+              "file_count": len(rows),
+              "files": rows,
+              "keyword_path_hits": keyword_hits,
+              "model_fitted": False,
+              "response_inspected_beyond_schema": False,
+          }
+          Path("artifact/inventory/dominguez2026_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+
+          with Path("artifact/inventory/file_list.txt").open("w", encoding="utf-8") as handle:
+              for row in rows:
+                  handle.write(f"{row['path']}\t{row['size']}\n")
+
+          print(json.dumps(
+              {
+                  "file_count": result["file_count"],
+                  "keyword_path_hits": keyword_hits,
+              },
+              indent=2,
+              sort_keys=True,
+          ))
+          PY
+
+      - name: Run effect-blind external axis replication
+        shell: bash
+        run: |
+          set -euo pipefail
+          DATA="source/unpacked/Sup_CODE/Data"
+          python examples/build_dominguez2026_external_axis_table.py \
+            "$DATA/Ilist_byyear.csv" \
+            "$DATA/Abn_Pheno.csv" \
+            "$DATA/Abn_Pheno_P.csv" \
+            --output artifact/dominguez2026_external_axis_table.csv \
+            --summary artifact/dominguez2026_external_axis_table_summary.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(
+              Path("artifact/dominguez2026_external_axis_table_summary.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if summary["site_count"] != 12:
+              raise SystemExit(
+                  f"expected 12 sites, found {summary['site_count']}"
+              )
+          if summary["year_range"] != [2015, 2022]:
+              raise SystemExit("external year range changed")
+          if not summary["focal_dyad_excluded_from_pollinator_activity"]:
+              raise SystemExit("focal-response exclusion lost")
+          if summary["published_pollinator_abundance_used"]:
+              raise SystemExit("published pollinator abundance entered primary replication")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+          Rscript examples/dominguez2026_external_axis_cv.R \
+            artifact/dominguez2026_external_axis_table.csv \
+            artifact/dominguez2026_external_axis_predictions.csv \
+            artifact/dominguez2026_external_axis_folds.csv
+
+          python examples/summarize_dominguez2026_external_axis_replication.py \
+            artifact/dominguez2026_external_axis_table_summary.json \
+            artifact/dominguez2026_external_axis_predictions.csv \
+            artifact/dominguez2026_external_axis_folds.csv \
+            artifact/dominguez2026_external_axis_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/dominguez2026_external_axis_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          gate = json.loads(
+              Path(
+                  "validation/dominguez2026_external_replication_screen_gate_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+          if "effect-blind" not in result["analysis_status"]:
+              raise SystemExit("external replication lost effect-blind status")
+          if "routeability" not in result["claim_ceiling"]:
+              raise SystemExit("external replication lost routeability ceiling")
+          if "leave-one-site-out" not in gate["replication_design"]["cross_validation"]:
+              raise SystemExit("external CV design changed")
+          print(
+              json.dumps(
+                  {
+                      "status": result["status"],
+                      "gain_direction": result["primary_phenology_axis"]["gain"][
+                          "frozen_direction"
+                      ],
+                      "loss_direction": result["primary_phenology_axis"]["loss"][
+                          "frozen_direction"
+                      ],
+                  },
+                  indent=2,
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Run post-result measurement-mapping sensitivity
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript examples/dominguez2026_measurement_mapping_sensitivity.R \
+            artifact/dominguez2026_external_axis_table.csv \
+            artifact/dominguez2026_measurement_mapping_predictions.csv \
+            artifact/dominguez2026_measurement_mapping_folds.csv
+
+          python examples/summarize_dominguez2026_measurement_mapping_sensitivity.py \
+            artifact/dominguez2026_measurement_mapping_predictions.csv \
+            artifact/dominguez2026_measurement_mapping_folds.csv \
+            artifact/dominguez2026_measurement_mapping_result.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("artifact/dominguez2026_measurement_mapping_result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          if "post-result diagnostic" not in result["analysis_status"]:
+              raise SystemExit("measurement sensitivity lost post-result status")
+          if "cannot redefine primary replication" not in result["analysis_status"]:
+              raise SystemExit("measurement sensitivity lost primary-result firewall")
+          print(json.dumps(result["pairs"], indent=2, sort_keys=True))
+          PY
+
+      - name: Upload external replication result
+        uses: actions/upload-artifact@v4
+        with:
+          name: dominguez2026-external-axis-replication
+          path: |
+            artifact/dominguez2026_external_axis_table_summary.json
+            artifact/dominguez2026_external_axis_predictions.csv
+            artifact/dominguez2026_external_axis_folds.csv
+            artifact/dominguez2026_external_axis_result.json
+            artifact/dominguez2026_measurement_mapping_predictions.csv
+            artifact/dominguez2026_measurement_mapping_folds.csv
+            artifact/dominguez2026_measurement_mapping_result.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload source inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: dominguez2026-external-replication-inventory
+          path: artifact/inventory
+          if-no-files-found: error
+          retention-days: 14

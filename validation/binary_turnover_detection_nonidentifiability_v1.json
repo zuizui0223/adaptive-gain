@@ -1,0 +1,52 @@
+{
+  "schema": "adaptive-gain-binary-turnover-detection-nonidentifiability-v1",
+  "date": "2026-09-30",
+  "status": "exact_interior_opposite_latent_direction_witness_frozen",
+  "role": "post-freeze rewiring-identification boundary; not a new V5 theorem family",
+  "generic_occupancy_detection_novelty_claimed": false,
+  "observation_model": {
+    "latent_previous_prevalence": "psi",
+    "latent_colonization": "gamma",
+    "latent_extinction": "epsilon",
+    "period_detection": [
+      "q_previous",
+      "q_current"
+    ],
+    "false_positives": false,
+    "period_detection_conditional_independence": true
+  },
+  "shared_observed_table": {
+    "stable_absent": "3/5",
+    "gain": "1/5",
+    "loss": "1/10",
+    "stable_present": "1/10",
+    "observed_previous_prevalence": "1/5",
+    "observed_current_prevalence": "3/10"
+  },
+  "witness_A_latent_increase": {
+    "psi": "1/4",
+    "gamma": "7/18",
+    "epsilon": "1/6",
+    "q_previous": "4/5",
+    "q_current": "3/5",
+    "latent_current": "1/2",
+    "latent_change": "+1/4"
+  },
+  "witness_B_latent_decrease": {
+    "psi": "1/2",
+    "gamma": "1/8",
+    "epsilon": "3/8",
+    "q_previous": "2/5",
+    "q_current": "4/5",
+    "latent_current": "3/8",
+    "latent_change": "-1/8"
+  },
+  "conclusion": "The full observed two-period binary transition table does not identify even the sign of latent link-prevalence change when detection is unknown, and this failure occurs with all latent-transition and detection parameters strictly interior.",
+  "existing_literature_boundary": "Occupancy/detection confounding and the role of repeated surveys are established in the occupancy literature. The frozen object is an explicit network gain/loss witness, not a claim to have discovered imperfect detection.",
+  "implementation": "adaptive_gain.detection_effort_identity.dynamic_latent_observed_transition_table",
+  "claim_ceiling": "This exact strictly interior witness establishes a binary-network identification failure under the stated observation model. It does not say latent turnover is never identifiable when repeated detections, validated observation models, experiments, or other independent information are available, and it does not validate routeability.",
+  "interior_witness": {
+    "all_parameters_strictly_between_zero_and_one": true,
+    "interpretation": "The opposite latent directions are not a boundary artifact of perfect detection, zero extinction, zero colonization, or deterministic state change."
+  }
+}

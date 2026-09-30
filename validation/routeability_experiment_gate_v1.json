@@ -1,0 +1,283 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-gate-v1",
+  "date": "2026-09-27",
+  "status": "prospective_direct_experiment_design_frozen",
+  "formal_source": {
+    "module": "adaptive_gain/ecological_routeability_experiment.py",
+    "routeable_task": "minimal_strict_gain_standard_task",
+    "control_task": "bypass_matched_control_task"
+  },
+  "matched_surface": {
+    "world_count": 4,
+    "target_multiplicities": [
+      2,
+      2
+    ],
+    "query_count": 3,
+    "query_costs": [
+      1,
+      1,
+      1
+    ],
+    "query_outcome_multiplicities": [
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "same_between_architectures": true,
+    "same_pairwise_information_signatures": true,
+    "same_full_cue_joint_distribution": true,
+    "full_cue_joint_distribution": [
+      {
+        "q_left": 0,
+        "q_route": 0,
+        "q_right": 0,
+        "count": 1
+      },
+      {
+        "q_left": 0,
+        "q_route": 0,
+        "q_right": 1,
+        "count": 1
+      },
+      {
+        "q_left": 0,
+        "q_route": 1,
+        "q_right": 1,
+        "count": 1
+      },
+      {
+        "q_left": 1,
+        "q_route": 1,
+        "q_right": 1,
+        "count": 1
+      }
+    ],
+    "same_physical_cue_vectors": true,
+    "physical_cue_vectors": [
+      "000",
+      "001",
+      "011",
+      "111"
+    ],
+    "target_mapping": {
+      "routeable": {
+        "111": 1,
+        "000": 0,
+        "001": 1,
+        "011": 0
+      },
+      "bypass_control": {
+        "111": 1,
+        "000": 1,
+        "001": 0,
+        "011": 0
+      }
+    },
+    "target_relabelled_vectors": [
+      "000",
+      "001"
+    ],
+    "relational_interpretation": "the physical cue environment is identical; routeability changes because the focal target/reward mapping changes"
+  },
+  "exact_costs": {
+    "routeable": {
+      "adaptive": 2,
+      "fixed": 3
+    },
+    "bypass_control": {
+      "adaptive": 2,
+      "fixed": 2
+    }
+  },
+  "primary_budget": 2,
+  "uniform_information_ceiling": {
+    "routeable_contingent": 1,
+    "routeable_fixed_terminal_pair": 0.75,
+    "control_contingent": 1,
+    "control_fixed_terminal_pair": 1,
+    "architecture_by_access_interaction": 0.25,
+    "interpretation": "information-level ceiling contrast, not a required behavioral effect size"
+  },
+  "budget_ladder": {
+    "B1": {
+      "adaptive_policy_prefix": "q_route only",
+      "fixed_policy_prefix": "one terminal cue; q_left and q_right are accuracy-equivalent under uniform states",
+      "routeable_adaptive": 0.5,
+      "routeable_fixed": 0.75,
+      "control_adaptive": 0.5,
+      "control_fixed": 0.75,
+      "architecture_by_access_interaction": 0
+    },
+    "B2": {
+      "routeable_adaptive": 1,
+      "routeable_fixed": 0.75,
+      "control_adaptive": 1,
+      "control_fixed": 1,
+      "architecture_by_access_interaction": 0.25
+    },
+    "B3": {
+      "routeable_adaptive": 1,
+      "routeable_fixed": 1,
+      "control_adaptive": 1,
+      "control_fixed": 1,
+      "architecture_by_access_interaction": 0
+    },
+    "confirmatory_pattern": "architecture-by-access interaction localized to B=2: 0, 0.25, 0 at the exact information level"
+  },
+  "primary_endpoint": "correct accept/reject response",
+  "confirmatory_terms": [
+    "task architecture x information access at B=2",
+    "budget localization: architecture x access contrast larger at B=2 than at B=1 and B=3 boundary controls"
+  ],
+  "independent_unit": "individual forager",
+  "repeated_unit": "trial",
+  "pilot_policy": "estimate nuisance parameters under procedural/full-information conditions; do not power from the theoretical 1.00 versus 0.75 ceiling or from the focal confirmatory interaction",
+  "claim_firewall": [
+    "do not require observed behavioral accuracy to equal theoretical information ceilings",
+    "do not count trials as independent animals",
+    "do not infer natural-network rewiring from a positive artificial-flower task",
+    "do not interpret a failed behavioral bridge as falsifying the exact finite theorem"
+  ],
+  "manuscript": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
+  "tests": [
+    "tests/test_ecological_routeability_experiment.py",
+    "tests/test_routeability_experiment_design.py",
+    "tests/test_routeability_experiment_stimulus_builder.py",
+    "tests/test_routeability_physical_cue_feasibility_gate.py"
+  ],
+  "promotion_rule": "This is the preferred first direct empirical test because branch structure is manipulated independently of species composition, conventional compatibility filters, and observed network response.",
+  "machine_surface": {
+    "builder": "examples/build_routeability_experiment_stimuli.py",
+    "outputs": [
+      "8-row stimulus CSV: four routeable + four bypass-control states",
+      "JSON receipt with exact costs, matching checks and information ceilings"
+    ],
+    "primary_information_interaction": 0.25,
+    "regression_test": "tests/test_routeability_experiment_stimulus_builder.py"
+  },
+  "behavioral_feasibility": {
+    "context_presentation": "route cue appears before the terminal cue and remains visible while the branch-specific terminal cue is presented",
+    "reason": "pure delayed priming can be difficult for bumblebees; persistent/concurrent context has stronger precedent",
+    "timing_control": "match and report cue timing/persistence because bumblebee cue weighting depends on spatiotemporal scale",
+    "discriminability_control": "pretest and counterbalance physical symbols across context and terminal cue roles",
+    "references": [
+      "Dale et al. 2005, DOI 10.1242/jeb.01370",
+      "Fauria et al. 2002, DOI 10.1242/jeb.205.7.1009",
+      "Graver et al. 2026, DOI 10.1242/jeb.251126",
+      "Spaethe et al. 2026, Bees flexibly adjust decision strategies to information content in a foraging task"
+    ],
+    "fixed_access_timing": "two sequential stages matched to contingent access: first terminal cue remains visible while the second terminal cue is presented; A-to-B versus B-to-A order is state-independent and counterbalanced",
+    "access_difference_ceiling": "do not implement fixed access as simultaneous two-cue exposure; both arms are sequentially staged and differ only in whether the second cue identity depends on the first cue outcome",
+    "physical_cue_gate": "validation/routeability_physical_cue_feasibility_gate_v1.json",
+    "material_admission": "exact physical symbols are not confirmatory-ready until the separate architecture-neutral cue pretest reaches the frozen 80% last-20 criterion for all three cue identities and the <=0.10 salience-balance margin"
+  },
+  "routing_phases": {
+    "guided": {
+      "implementation": "apparatus reveals the context-selected terminal cue",
+      "purpose": "structural calibration isolating information architecture"
+    },
+    "autonomous": {
+      "implementation": "animal sees context then selects exactly one of two terminal cue windows within the two-cue budget",
+      "frozen_policy": "context=0 -> q_right; context=1 -> q_left",
+      "exact_policy_accuracy": {
+        "routeable": 1,
+        "bypass_control": 1
+      },
+      "outcomes": [
+        "context-conditioned terminal choice",
+        "final accept/reject accuracy",
+        "routing latency"
+      ]
+    },
+    "diagnostic": "guided success plus autonomous failure indicates a policy-learning/action-selection bottleneck rather than failure of the formal information contrast"
+  },
+  "pairwise_information_match": {
+    "status": "exact_certificate_green",
+    "variables": [
+      "target",
+      "q_left",
+      "q_route",
+      "q_right"
+    ],
+    "named_pair_count": 6,
+    "property": "for every named pair, routeable and bypass-control tasks have the same canonical binary 2x2 contingency-count profile up to independent relabeling of binary outcomes",
+    "consequence": "all pairwise mutual-information values are identical between architectures",
+    "interpretation": "the strict routeability contrast is higher-order and cannot be reduced to single-cue informativeness or the pairwise mutual-information matrix",
+    "executable": "adaptive_gain.ecological_routeability_experiment.pairwise_information_signature",
+    "regression_test": "tests/test_ecological_routeability_experiment.py",
+    "claim_boundary": "fixed semantic 0/1 labels are not claimed to produce identical signed contingency tables for every target-cue pair",
+    "higher_order_localization": {
+      "routeable_terminal_pair_target_information_bits": 0.5,
+      "control_terminal_pair_target_information_bits": 1,
+      "routeable_context_given_terminals_information_bits": 0.5,
+      "control_context_given_terminals_information_bits": 0,
+      "interpretation": "in the routeable task half a target bit remains outside the fixed terminal pair and is supplied by context; in the bypass control the terminal pair already contains the full target bit"
+    },
+    "full_cue_joint_match": "exact; the three-cue joint outcome distribution is identical between routeable and bypass architectures",
+    "stronger_interpretation": "cue ecology alone is distribution-matched; the architectures differ in the higher-order mapping from cue combinations to target/action structure"
+  },
+  "schedule": {
+    "gate": "validation/routeability_experiment_schedule_gate_v1.json",
+    "module": "adaptive_gain/routeability_experiment_schedule.py",
+    "exporter": "examples/build_routeability_experiment_schedule.py",
+    "design": "2 architecture x 2 access x 3 budget between-subject factorial",
+    "treatment_cells": 12,
+    "within_individual": "four-state blocks, terminal-side balance, state-independent fixed-order balance",
+    "between_individual": "four orthogonal cue-symbol flip profiles within every treatment cell",
+    "b3_control": "both access arms receive the same complete information surface",
+    "sample_size_status": "pending; minimum multiple-of-four cell size is counterbalance mechanics, not powered N"
+  },
+  "analysis_gate": {
+    "path": "validation/routeability_experiment_analysis_gate_v1.json",
+    "primary_model": "binomial logistic mixed model with architecture x access x categorical budget",
+    "H1": "Delta_B2 > 0",
+    "H2": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3) > 0",
+    "multiplicity": "hierarchical H1 then H2",
+    "independent_unit": "individual forager",
+    "repeated_unit": "trial",
+    "colony": "random intercept where applicable",
+    "sample_size_status": "pending nuisance-parameter calibration"
+  },
+  "training_selection_firewall": {
+    "rule": "architecture-neutral familiarization before assignment; fixed-dose architecture-specific training after assignment; no architecture-specific accuracy gate for randomized primary test entry",
+    "training_performance": "record as outcome/diagnostic rather than exclusion criterion",
+    "unavoidable_hard_criterion": "criterion-reacher test analysis becomes per-protocol and cannot replace the randomized primary interpretation"
+  },
+  "primary_endpoint_firewall": {
+    "endpoint": "correct accept/reject decision within frozen response window",
+    "timeout": "score 0 and retain in primary denominator",
+    "response_window": "freeze from architecture-neutral pilot timing",
+    "conditional_accuracy": "secondary only"
+  },
+  "operating_characteristics": {
+    "status": "simulator_code_ready_pilot_inputs_pending",
+    "gate": "validation/routeability_glmm_operating_characteristic_gate_v1.json",
+    "scenario_builder": "adaptive_gain/routeability_operating_characteristics.py",
+    "scenario_exporter": "examples/build_routeability_glmm_simulation_scenarios.py",
+    "simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
+    "smoke_workflow": ".github/workflows/routeability-experiment-smoke.yml",
+    "model": "frozen binomial GLMM with architecture x access x categorical budget and individual/colony random intercepts",
+    "contrast_engine": "population-average Delta_B2 and localization contrast obtained by integrating fitted random-intercept distributions, with delta-method fixed-effect uncertainty conditional on fitted variance components",
+    "fit_failure_policy": "fit failures remain failures in the operating-characteristic denominator",
+    "final_N_status": "not frozen; requires real pilot nuisance receipt, external SESOI, colony allocation and robustness grid",
+    "cell_probability_semantics": "population-average primary-success probability under the prespecified timeout and random-intercept distribution"
+  },
+  "preregistration": {
+    "status": "template_ready_finalization_blocked",
+    "template": "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+    "finalizer": "examples/finalize_routeability_preregistration.py",
+    "gate": "validation/routeability_preregistration_gate_v1.json",
+    "final_output_status": "none; unresolved pilot/power/operational/human fields remain",
+    "rule": "do not externally register the template or any document containing unresolved placeholders"
+  }
+}

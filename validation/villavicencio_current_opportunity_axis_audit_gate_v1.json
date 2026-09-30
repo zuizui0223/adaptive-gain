@@ -1,0 +1,48 @@
+{
+  "schema": "adaptive-gain-villavicencio-current-opportunity-axis-audit-gate-v1",
+  "date": "2026-09-28",
+  "status": "retrospective_post_result_axis_decomposition_frozen",
+  "analysis_status": "designed after the repaired current-state opportunity result was inspected; robustness/ecological decomposition only, not confirmatory",
+  "source_table": "artifact/annual_focal_excluded_opportunity_dyads.csv",
+  "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+  "question": "Within the clean current-year marginal opportunity model, do plant flowering availability and pollinator activity on other plants contribute differently to gain and loss discrimination?",
+  "models": {
+    "marginal_full": [
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "plant_only": [
+      "plant_flowering_weeks"
+    ],
+    "pollinator_only": [
+      "pollinator_otherplant_active_weeks"
+    ]
+  },
+  "increment_definitions": {
+    "plant_availability_increment": "pollinator_only held-out log-loss minus marginal_full held-out log-loss",
+    "pollinator_activity_increment": "plant_only held-out log-loss minus marginal_full held-out log-loss"
+  },
+  "endpoint_contrasts": {
+    "gain": "pollinator_activity_increment minus plant_availability_increment",
+    "loss": "plant_availability_increment minus pollinator_activity_increment"
+  },
+  "preprocessing": "log1p and training-fold z-score, identical to the repaired opportunity baseline",
+  "cross_validation": "same strict-core, near-core and all-annual leave-one-transition-out response holdouts",
+  "classification_rule": {
+    "reproducible_incremental_information": "pooled drop-one-axis log-loss penalty is positive and positive in every held-out transition in the declared scope",
+    "positive_but_fold_unstable": "pooled penalty is positive but at least one held-out transition is non-positive",
+    "no_reproducible_incremental_information": "pooled penalty is non-positive"
+  },
+  "interpretation": {
+    "allowed": "retrospective predictive-information asymmetry between plant-side availability and pollinator-side activity",
+    "forbidden": [
+      "causal mechanism",
+      "causal assembly-disassembly asymmetry",
+      "pollinator behavior as the demonstrated cause of gain",
+      "plant phenology as the demonstrated cause of loss",
+      "sampling-effort-independent process inference",
+      "routeability or decision equivalence"
+    ]
+  },
+  "claim_ceiling": "This audit can show which marginal current-state opportunity axis carries more held-out predictive information for each endpoint. Because it was motivated after the repaired result was seen and both axes are measured through the observational sampling process, it is descriptive and hypothesis-generating rather than causal or confirmatory."
+}

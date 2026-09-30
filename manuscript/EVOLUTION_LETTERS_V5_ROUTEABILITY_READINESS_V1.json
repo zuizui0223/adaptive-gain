@@ -150,6 +150,260 @@
         "witness_audit": "success",
         "certificate_audit": "success"
       }
+    },
+    {
+      "path": "manuscript/DECISION_REWIRING_PROSPECTIVE_TEST_V1.md",
+      "status": "prospective_empirical_revision_reserve_not_in_initial_submission",
+      "central_question": "among network transitions with similar species turnover and rewiring opportunity, does crossing a decision-equivalence boundary predict more rewiring than within-class turnover?",
+      "formal_basis": "existing target-relevant quotient / decision-equivalence result",
+      "new_theorem_family": false,
+      "primary_predictions": [
+        "low taxonomic turnover plus decision-boundary crossing predicts more rewiring among shared species than matched no-crossing transitions",
+        "within-class turnover is a structural negative control against taxonomic distance alone",
+        "loss of a final decision-class representative is predicted to be more likely to alter accessibility structure than comparable non-final loss; this direction is empirical, not guaranteed by the quotient theorem",
+        "decision-structural change can accompany rewiring even with little species turnover"
+      ],
+      "anti_circularity_rule": "freeze decision-equivalence classes independently of the observed rewiring response",
+      "negative_controls": [
+        "taxonomic-only",
+        "functional-trait-only",
+        "environment-only",
+        "class-label permutation preserving class-size distribution"
+      ],
+      "evidence_ladder": [
+        "descriptive compatibility",
+        "independent frozen decision classes",
+        "decision-structure perturbation",
+        "final-versus-non-final representative threshold perturbation"
+      ],
+      "regression_test": "tests/test_decision_rewiring_prospective_test.py",
+      "promotion_rule": "Promote only for reviewer-requested testability or a dedicated follow-up with both an independently measurable decision structure and a detection-defensible interaction response; otherwise prefer the controlled routeability experiment. Keep the initial V5 headline unchanged.",
+      "claim_boundary": "The reserve predicts a constraint on behaviorally accessible rewiring, not a third beta-diversity component, universal network-resilience metric, or unqualified causal effect.",
+      "formal_empirical_boundary": "exact result: non-final within-class loss can leave the declared contingent decision problem invariant; empirical hypothesis: final-representative loss is more likely to alter rewiring opportunity, not guaranteed to change observed rewiring",
+      "response_validity_rule": "raw binary link gain/loss is not sufficient: observational promotion requires effort-standardized interaction incidence or a repeated-detection model in which the independent decision exposure adds reproducible state-side information rather than only detection-side information."
+    },
+    {
+      "path": "manuscript/REWIRING_EMPIRICAL_DATASET_SCREEN_V1.md",
+      "status": "feasibility_screen_not_empirical_confirmation",
+      "central_result": "no Tier A public observational dataset identified; Villavicencio now serves as a response-feasibility and detection-identification boundary rather than natural rewiring confirmation",
+      "strongest_candidate": {
+        "dataset": "Villavicencio plant-pollinator network / raw Figshare visitor records",
+        "doi": "10.5061/dryad.8cz8w9gm1",
+        "admission": "Tier B response-feasibility pilot only; observed-link turnover and repeated-census detection are available, but stable detection-corrected natural rewiring is not identified",
+        "reason_not_tier_a": "independent contingent decision structure is absent, binary link states are materially detection-sensitive, the effort-standardized opportunity increment is fold-mixed, and richer detection models make latent transitions observation-model dependent"
+      },
+      "other_candidates": [
+        {
+          "dataset": "Colom et al. 2026 Catalan butterfly-plant network",
+          "doi": "10.5281/zenodo.18668204",
+          "admission": "Tier B-minus; long-term rewiring response but current public surface lacks independent decision-cue exposure"
+        },
+        {
+          "dataset": "CaraDonna et al. 2017 RMBL weekly turnover",
+          "doi": "10.5061/dryad.s91p4",
+          "admission": "Tier C for present test; public surface is aggregate turnover/simulation output"
+        },
+        {
+          "dataset": "Lazaro & Gomez-Martinez habitat-loss rewiring",
+          "doi": "10.5061/dryad.1ns1rn8x3",
+          "admission": "Tier B-minus reserve pending independent decision-cue surface"
+        }
+      ],
+      "next_gate": "stop Villavicencio observational rewiring model expansion; use the controlled routeability experiment or a new detection-defensible network with an independently frozen decision layer",
+      "anti_proxy_rule": "do not label morphology or trait clusters as decision equivalence merely because they predict rewiring",
+      "regression_test": "tests/test_rewiring_empirical_dataset_screen.py",
+      "promotion_rule": "public-data work remains feasibility/detection-boundary evidence. Natural-network routeability requires both an independently measured decision exposure and a detection-defensible ecological response.",
+      "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    },
+    {
+      "path": "manuscript/INDEPENDENT_DECISION_LAYER_SCREEN_V1.md",
+      "status": "empirical_bridge_screen_kent_cognition_source_confirmatory_no_go",
+      "central_result": "Kent Island supplies a direct independent colour-learning layer linked to a real plant-pollinator network, but the network-facing cognition contrast has only six independent pollinator species and is not confirmatory-ready for a species-level routeability claim",
+      "strongest_candidate": {
+        "system": "Kent Island pollinator cognition network",
+        "article_doi": "10.1098/rsbl.2025.0044",
+        "data_doi": "10.5061/dryad.9p8cz8wtm",
+        "admission": "A-cognition source; confirmatory NO-GO at current independent-unit count",
+        "assets": [
+          "2019/2022/2023 plant-pollinator network",
+          "plant phenology",
+          "floral reflectance",
+          "hymenopteran colour-space summaries",
+          "independent colour-learning experiment in six Hymenoptera species"
+        ],
+        "novelty_boundary": "do not repeat the published specialization-versus-learning result as a new headline",
+        "reason_not_confirmatory": "the direct learning assay spans six pollinator species; visits or dyads cannot be treated as independent replication of a species-level cognition exposure"
+      },
+      "triangulation": {
+        "network_response": "Villavicencio repeated link dynamics and frozen conventional-filter baseline",
+        "cognition_network": "Kent Island independent colour learning plus field network",
+        "decision_cost_experiment": "Austin et al. 2018 floral marketplace factorial experiment"
+      },
+      "next_gate": "prioritize a controlled routeability experiment that manipulates branch structure independently of species composition and realized network response; retain Kent as mechanistic calibration/source-design template",
+      "claim_boundary": "Kent can calibrate direct cognition and restricted colour-channel structure but cannot confirm full V5 routeability; no dyad-level pseudoreplication of a six-species cognition exposure",
+      "regression_test": "tests/test_independent_decision_layer_screen.py"
+    },
+    {
+      "path": "validation/villavicencio_filter_block_ablation_result_v1.json",
+      "status": "historical_numeric_ablation_quarantined_for_ecological_interpretation",
+      "central_result": "the historical annual ablation arithmetic is reproducible, but the published phenology support is response-conditioned for candidate gains and the binary response is materially detection-sensitive; it is not a validated ecological-filter result",
+      "primary_scope": "strict_core_2008_2011",
+      "gain": {
+        "phenology_delta_log_loss": 0.07671189331237421,
+        "phenology_positive_folds": "3/3",
+        "abundance": "positive_but_fold_unstable",
+        "plant_morphology": "no_reproducible_incremental_information",
+        "pollinator_morphology": "no_reproducible_incremental_information"
+      },
+      "loss": {
+        "phenology_delta_log_loss": 0.030255186941361423,
+        "phenology_positive_folds": "3/3",
+        "abundance": "positive_but_fold_unstable",
+        "plant_morphology": "positive_but_fold_unstable",
+        "pollinator_morphology": "no_reproducible_incremental_information"
+      },
+      "sensitivity": "phenology retains reproducible_incremental_information for both endpoints in near-core 4/4 and all-annual 5/5 folds",
+      "next_gate": "none for ecological promotion from this surface; follow validation/villavicencio_rewiring_claim_resolution_v1.json and move mechanism testing to a detection-defensible independent response or the controlled experiment",
+      "claim_boundary": "historical numerical attribution only; support leakage plus imperfect detection block ecological-filter, natural-rewiring, causal or routeability interpretation",
+      "regression_test": "tests/test_villavicencio_filter_block_ablation_result.py",
+      "final_detection_resolution": {
+        "effort_semantics": "resolved from raw 5-min censuses",
+        "census_incidence_opportunity_increment": "mixed 4/6 primary folds",
+        "latent_state_opportunity_support": "1/6 versus frozen 5/6 requirement",
+        "detection_side_support": "4/6",
+        "observation_model_stress": "beta-binomial preferred 6/6; latent state boundary 6/6",
+        "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+      }
+    },
+    {
+      "path": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
+      "status": "preferred_direct_empirical_test_frozen_not_in_initial_submission",
+      "central_test": "matched four-state cue architectures crossed with contingent versus fixed information access under a two-cue budget",
+      "exact_contrast": {
+        "routeable_costs": "C_A=2,C_F=3",
+        "bypass_control_costs": "C_A=C_F=2",
+        "matched": "four states, 2+2 targets, three unit-cost binary cues, identical per-cue outcome multiplicities",
+        "uniform_information_ceiling": {
+          "routeable_contingent": 1,
+          "routeable_fixed_terminal_pair": 0.75,
+          "control_contingent": 1,
+          "control_fixed_terminal_pair": 1,
+          "interaction": 0.25
+        }
+      },
+      "budget_ladder": {
+        "B1": {
+          "interaction": 0,
+          "interpretation": "below adaptive cost; adaptive-policy prefix q_route versus one-terminal fixed prefix"
+        },
+        "B2": {
+          "interaction": 0.25,
+          "interpretation": "routeability-sensitive window"
+        },
+        "B3": {
+          "interaction": 0,
+          "interpretation": "all cues available; above fixed cost"
+        }
+      },
+      "independent_unit": "individual forager, not trial",
+      "gate": "validation/routeability_experiment_gate_v1.json",
+      "formal_module": "adaptive_gain/ecological_routeability_experiment.py",
+      "promotion_rule": "preferred first direct empirical test because branch structure is manipulated independently of species composition and observed network response",
+      "claim_boundary": "a positive controlled experiment would establish behavioral consequences of matched cue architecture, not natural-network rewiring or ecosystem-level effects",
+      "behavioral_feasibility": "present route cue before the terminal cue but keep context visible during terminal presentation; match timing/persistence and pretest cue discriminability",
+      "pairwise_information_nonidentifiability": {
+        "status": "exact_constructive_certificate",
+        "theory": "theory/PAIRWISE_INFORMATION_ROUTEABILITY_NONIDENTIFIABILITY.md",
+        "executable": "adaptive_gain.ecological_routeability_experiment.pairwise_information_signature",
+        "result": "routeable and bypass-control tasks have identical named pairwise information signatures across target and all three cues, but C_F differs 3 versus 2 while C_A=2 in both",
+        "consequence": "strict adaptive gain is not identifiable from the pairwise mutual-information surface alone",
+        "novelty_boundary": "generic higher-order synergy and XOR-style pairwise insufficiency are prior art; the contribution is the exact minimal routeability-versus-bypass construction",
+        "experiment_value": "the symbolic control matches pairwise information strength, so the architecture-by-access contrast isolates higher-order conditional organization more tightly than cue-marginal matching alone",
+        "higher_order_localization": {
+          "terminal_pair_target_information_bits": {
+            "routeable": 0.5,
+            "bypass_control": 1
+          },
+          "context_given_terminals_information_bits": {
+            "routeable": 0.5,
+            "bypass_control": 0
+          },
+          "interpretation": "the strict-gain route cue carries target information that is absent from the fixed terminal pair; the bypass control has no such residual conditional information"
+        }
+      },
+      "schedule": {
+        "gate": "validation/routeability_experiment_schedule_gate_v1.json",
+        "status": "randomization_counterbalance_mechanics_frozen_sample_size_pending",
+        "design": "architecture x access x budget all between subjects; 12 cells",
+        "state_balance": "each four-trial block contains all four states once",
+        "terminal_position_balance": "within individual",
+        "fixed_order_balance": "within individual and state-independent",
+        "cue_symbol_counterbalance": "four orthogonal profiles within each cell",
+        "sample_size_boundary": "multiple of four per cell is a counterbalance requirement only, not the powered N"
+      },
+      "analysis_gate": {
+        "path": "validation/routeability_experiment_analysis_gate_v1.json",
+        "H1": "B2 architecture-by-access interaction",
+        "H2": "B2 interaction minus mean B1/B3 interaction",
+        "multiplicity": "hierarchical H1 then H2",
+        "model": "binomial logistic mixed model; individual and colony grouping explicit",
+        "sample_size_status": "not frozen; must use nuisance-parameter calibration rather than theoretical 0.25 ceiling"
+      },
+      "training_selection_firewall": {
+        "status": "frozen",
+        "rule": "no architecture-specific accuracy exclusion after random assignment; use fixed-dose architecture-specific training",
+        "diagnostic": "report training acquisition/completion by randomized cell",
+        "hard_criterion_boundary": "criterion-reacher analysis is per-protocol if operationally unavoidable"
+      },
+      "primary_endpoint_firewall": {
+        "status": "frozen",
+        "endpoint": "correct decision within response window",
+        "timeout": "retained and scored as primary failure",
+        "conditional_accuracy": "secondary",
+        "response_window": "pilot-calibrated before confirmatory contrast"
+      },
+      "pilot_and_power": {
+        "procedural_pilot": "manuscript/ROUTEABILITY_PROCEDURAL_PILOT_V1.md",
+        "procedural_gate": "validation/routeability_procedural_pilot_gate_v1.json",
+        "power_gate": "validation/routeability_experiment_pilot_power_gate_v1.json",
+        "screening_module": "adaptive_gain/routeability_experiment_power.py",
+        "screening_exporter": "examples/plan_routeability_experiment.py",
+        "allowed_pilot_information": "response window, pooled B3 success, timeout/dropout, repeated-trial correlation, colony heterogeneity and procedural failure",
+        "forbidden_feedback": "H1/H2 or B2 architecture-by-access effects cannot define the power target; theoretical 0.25 ceiling cannot be used as the behavioral effect size",
+        "sesoi": "must be frozen from an external biological/practical source",
+        "final_N_status": "pending final GLMM simulation after nuisance receipt and real colony allocation are frozen"
+      },
+      "operating_characteristics": {
+        "status": "code_ready_real_pilot_inputs_pending",
+        "gate": "validation/routeability_glmm_operating_characteristic_gate_v1.json",
+        "scenario_builder": "adaptive_gain/routeability_operating_characteristics.py",
+        "simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
+        "smoke_workflow": ".github/workflows/routeability-experiment-smoke.yml",
+        "scientific_rule": "final N must be chosen only after real nuisance inputs, external SESOI, colony allocation and a prespecified robustness grid are frozen",
+        "fixture_boundary": "CI synthetic fixture is software validation only and is not power evidence",
+        "final_N_status": "not frozen"
+      },
+      "relational_witness": {
+        "same_physical_cue_vectors": [
+          "000",
+          "001",
+          "011",
+          "111"
+        ],
+        "target_mapping_differences": [
+          "000",
+          "001"
+        ],
+        "interpretation": "the physical cue environment is identical across architecture groups; routeability changes through the focal target/reward mapping",
+        "apparatus_value": "the same physical stimuli can be reused across architectures"
+      },
+      "preregistration": {
+        "status": "template_ready_finalization_blocked",
+        "template": "manuscript/ROUTEABILITY_PREREGISTRATION_TEMPLATE_V1.md",
+        "finalizer": "examples/finalize_routeability_preregistration.py",
+        "gate": "validation/routeability_preregistration_gate_v1.json",
+        "external_registration_status": "not ready"
+      }
     }
   ]
 }

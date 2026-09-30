@@ -1,0 +1,140 @@
+{
+  "schema": "adaptive-gain-villavicencio-rewiring-claim-resolution-v1",
+  "date": "2026-09-29",
+  "status": "natural_rewiring_mechanism_not_identified_opportunity_signal_largely_detection_activity_side",
+  "purpose": "Resolve the ecological interpretation of the Villavicencio empirical bridge after raw-source reconstruction, support-leakage repair, sampling-effort audit, effort-standardized response analysis, and latent detection modeling.",
+  "evidence_chain": [
+    {
+      "level": 1,
+      "surface": "raw 18-subseason binary observed-link response",
+      "result": "18 periods and 12 within-year transitions reconstructed from Figshare raw dated visits; 4,581 shared-dyad rows and 853 observed binary changes (422 gains, 431 losses)",
+      "boundary": "published RData byte identity remains unverified and binary zeros are detection-sensitive",
+      "source": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json"
+    },
+    {
+      "level": 2,
+      "surface": "sampling-effort semantics and detection audit",
+      "result": "5-min census identity reconstructed; subseason effort ranges 38-424 censuses; trait-subset Chao2 observed fraction 0.314-0.654; effort-change ranks observed gain over loss at AUC 0.815 in the dated core",
+      "boundary": "matched-effort rarefaction retains original gain/loss labels only around 0.58-0.60 on average",
+      "source": "validation/villavicencio_subseason_effort_audit_result_v1.json"
+    },
+    {
+      "level": 3,
+      "surface": "annual focal-response-excluded opportunity",
+      "result": "annual gain association remains predictive after focal-plant census-count adjustment; opportunity increment beyond effort is positive in 3/3 strict-core and 4/4 near-core gain folds",
+      "boundary": "annual binary response remains detection-sensitive; loss increment is fold-unstable",
+      "source": "validation/villavicencio_opportunity_effort_control_result_v1.json"
+    },
+    {
+      "level": 4,
+      "surface": "effort-standardized 5-min census interaction incidence",
+      "result": "current focal-response-excluded opportunity has a small positive pooled increment beyond recent interaction history",
+      "boundary": "increment is positive in only 4/6 held-out subseason transitions and fails the frozen reproducibility rule",
+      "source": "validation/villavicencio_census_rate_result_v1.json"
+    },
+    {
+      "level": 5,
+      "surface": "two-season latent link detection model",
+      "result": "simple repeated-detection model passes the frozen identifiability gate in 5/6 dated-core transitions; per-census detection probabilities are about 0.05-0.18",
+      "boundary": "posterior latent transition identity differs materially from observed binary gain/loss labels; the model remains a sensitivity analysis rather than ground truth",
+      "source": "validation/villavicencio_two_season_detection_result_v1.json"
+    },
+    {
+      "level": 6,
+      "surface": "latent state versus current-detection opportunity decomposition",
+      "result": "detection-side opportunity support occurs in 4/6 transitions",
+      "boundary": "latent state-transition support occurs in only 1/6 versus a frozen 5/6 requirement; general state promotion fails",
+      "source": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json"
+    },
+    {
+      "level": 7,
+      "surface": "observation-model robustness with beta-binomial detection",
+      "result": "beta-binomial detection is preferred over the simple binomial detection model in 6/6 primary transitions, with AIC improvements of at least 13.8",
+      "boundary": "at least one latent transition parameter hits the frozen state boundary in 6/6 transitions under the richer observation model, so detection-corrected gain/loss estimates are observation-model dependent",
+      "source": "validation/villavicencio_detection_overdispersion_result_v1.json"
+    },
+    {
+      "level": 8,
+      "surface": "exact detection-effort direction identity",
+      "result": "For any two binary observations, P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1) without an independence assumption. For a persistent latent link this becomes q_current-q_previous. Using transition-specific fitted detection and dyad census counts, that detectability difference ranks observed gain over loss at AUC 0.852 across all six transitions and 0.837 across the five identified transitions.",
+      "boundary": "The fitted-q diagnostic is not independent ecological validation; q is estimated from the same repeated-census data. The general gain-minus-loss conservation identity is assumption-light, while the product and odds-ratio special cases require conditional-independence assumptions.",
+      "source": "validation/villavicencio_detection_effort_identity_result_v1.json"
+    },
+    {
+      "level": 9,
+      "surface": "exact binary-turnover latent-state nonidentifiability witness",
+      "result": "Two strictly interior dynamic latent-state/detection parameterizations generate exactly the same observed transition table (P00=3/5, P01=1/5, P10=1/10, P11=1/10) while latent link prevalence changes in opposite directions: 1/4->1/2 (+1/4) versus 1/2->3/8 (-1/8).",
+      "boundary": "Generic occupancy/detection confounding is established literature; this is an explicit network gain/loss witness showing that the full aggregated binary transition table does not identify even the sign of latent prevalence change when detection is unknown. All psi, gamma, epsilon, q_previous and q_current values in both witnesses are strictly between 0 and 1, so the failure is not a boundary artifact.",
+      "source": "validation/binary_turnover_detection_nonidentifiability_v1.json"
+    }
+  ],
+  "claim_decisions": {
+    "phenology_predicts_rewiring": "REJECT_AS_STATED: the original published-overlap gain signal is support-leaky and quarantined",
+    "current_opportunity_predicts_observed_link_turnover": "SUPPORTED_DESCRIPTIVELY: especially for annual gain, but response remains detection-sensitive",
+    "current_opportunity_predicts_effort_standardized_interaction_incidence": "MIXED: small pooled increment, positive in 4/6 subseason folds",
+    "current_opportunity_drives_latent_link_rewiring": "NOT_SUPPORTED: state-side support 1/6 under the pre-frozen latent model-comparison rule",
+    "current_opportunity_tracks_current_detectability_activity": "SUPPORTED_AS_MODEL_COMPARISON_PATTERN: detection-side support 4/6 under the frozen rule",
+    "routeability_validated": "NO",
+    "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent",
+    "observed_gain_loss_direction_identified_as_ecological": "NO: exact detection identity shows that changing period-level detectability alone is sufficient to bias gain versus loss direction, and the Villavicencio diagnostic AUC is 0.852.",
+    "observed_gain_loss_direction_explainable_by_detection_map": "SUPPORTED_MECHANISTICALLY: unequal period-level detection is sufficient to generate directional observed gain/loss under a persistent-link counterfactual; diagnostic AUC is 0.852 across six transitions",
+    "binary_transition_table_identifies_latent_turnover_direction": "NO: a strictly interior exact witness gives the same observed gain/loss/stable table under both increasing and decreasing latent link prevalence.",
+    "aggregate_gain_loss_imbalance_is_independent_process_evidence": "NO: on a fixed dyad universe, #gain-#loss equals the change in observed edge count exactly; it is not independent evidence for assembly versus disassembly mechanisms."
+  },
+  "strongest_ecological_interpretation": {
+    "statement": "At short within-season scales, current ecological opportunity is strongly entangled with encounter/detection of active pollinators and does not show a reproducible general effect on latent link-state transitions. Apparent binary network rewiring is therefore substantially observation-state dependent in this system, and even detection-corrected latent transition estimates are sensitive to the observation model.",
+    "annual_scale": "Annual focal-response-excluded opportunity still carries predictive information beyond focal-plant census counts for link gain, so observation effort alone does not exhaust the annual association. The discrepancy between annual and within-season latent analyses argues for scale-dependent integration of opportunity, activity and detection rather than a universal rewiring mechanism.",
+    "novelty_candidate": "The useful empirical finding is not that phenology causes rewiring, but that a strong apparent rewiring predictor can decompose into current ecological activity/detectability once repeated-detection information is used.",
+    "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models.",
+    "detection_direction_identity": "Binary turnover direction has an independence-free conservation law: observed gain minus observed loss equals the change in marginal observed-presence probability. On a persistent latent link this is q_current-q_previous. Thus detectability changes can create directional apparent turnover even without ecological state change; Villavicencio aligns strongly with this axis (AUC 0.852).",
+    "detection_effort_identity": "The gain/loss direction itself is strongly aligned with the exact observation-process asymmetry q_current-q_previous expected even when a latent interaction persists. This explains why effort/detection changes can mimic directional turnover without identifying any particular observed change as false.",
+    "binary_turnover_nonidentifiability": "Aggregated binary interaction turnover is not merely noisy: without detection information, the same full two-period transition table can correspond to opposite latent network changes even when all latent-transition and detection parameters are strictly interior. Repeated-detection or independent state information is therefore an identification requirement, not a cosmetic sensitivity.",
+    "finite_turnover_balance": "Aggregate excess gains or losses are algebraically identical to observed edge-count change on the same dyad universe. Mechanistic interpretation must therefore come from information beyond the gain-loss imbalance itself, especially detection-standardized state information."
+  },
+  "allowed_terms": [
+    "observed-link turnover",
+    "interaction detection incidence",
+    "current ecological opportunity association",
+    "detection/activity-side opportunity signal",
+    "latent-state sensitivity analysis"
+  ],
+  "forbidden_terms_without_new_evidence": [
+    "853 ecological rewiring events",
+    "phenology is a causal rewiring filter",
+    "current opportunity generally drives latent link gain/loss",
+    "detection-corrected true rewiring",
+    "routeability validation",
+    "detection-corrected rewiring as an identified ecological response",
+    "gain exceeds loss therefore assembly is biologically stronger than disassembly"
+  ],
+  "next_scientific_gate": "Stop adding flexible Villavicencio observation models to search for a positive rewiring mechanism. The binary transition table is formally non-identifying with respect to latent turnover direction when detection is unknown, and the Villavicencio repeated-census data further show observation-model sensitivity after detection modeling. A natural-network mechanism requires independent detection-standardized state information plus an independent decision layer, or experimental separation of ecological state from detection/encounter. The controlled routeability experiment remains the clean direct mechanism test.",
+  "claim_ceiling": "Villavicencio supports reproducible response reconstruction, sampling/detection diagnostics, and ecological opportunity/activity associations. It does not identify binary or detection-corrected ecological rewiring as a stable natural response, and it does not validate routeability.",
+  "final_status_vector": {
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_observed_link_state": "MATERIAL_DETECTION_SENSITIVITY_NOT_LATENT_TRUTH",
+    "effort_standardized_interaction_incidence": "MIXED_OPPORTUNITY_INCREMENT_4_OF_6",
+    "latent_link_state_opportunity_effect": "NOT_GENERAL_STATE_SUPPORT_1_OF_6_REQUIRED_5_OF_6",
+    "observation_model_robustness": "MODEL_SENSITIVE_BETA_BINOMIAL_PREFERRED_6_OF_6_STATE_BOUNDARY_6_OF_6",
+    "natural_ecological_rewiring": "NOT_IDENTIFIED",
+    "routeability": "NOT_VALIDATED",
+    "detection_effort_observation_map": "EXACT_IDENTITY_WITH_STRONG_DIAGNOSTIC_ALIGNMENT_AUC_0_852"
+  },
+  "resolution_sentence": "Sampling effort is no longer unresolved: its 5-min census semantics are reconstructed. What remains unresolved is the latent ecological link state. Binary turnover is materially detection-sensitive, its gain/loss direction is strongly aligned with the exact detection-effort observation map, effort-standardized incidence gives a fold-mixed opportunity increment, and latent transition inference is observation-model dependent.",
+  "observational_stop_rule": {
+    "status": "FROZEN_STOP",
+    "trigger": [
+      "binary observed-link turnover is materially detection-sensitive",
+      "effort-standardized opportunity increment is fold-mixed (4/6)",
+      "latent state-side opportunity support fails the pre-frozen rule (1/6 vs required 5/6)",
+      "beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a state boundary in 6/6",
+      "the full binary transition table is formally non-identifying for latent turnover direction under a strictly interior detection/state witness"
+    ],
+    "consequence": "Do not add further flexible Villavicencio observation models whose purpose is to search for a positive natural-rewiring mechanism. New Villavicencio work must either test a pre-specified identification remedy with genuinely new independent information or remain a robustness/identification analysis.",
+    "allowed_next_evidence": [
+      "independent repeated-detection data or externally validated observation model",
+      "independent latent-state information",
+      "experimental separation of ecological state from encounter/detection",
+      "controlled routeability experiment with an independent decision layer"
+    ]
+  }
+}

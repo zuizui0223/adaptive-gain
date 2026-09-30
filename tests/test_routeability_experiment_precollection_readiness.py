@@ -1,0 +1,83 @@
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+LEDGER = ROOT / "validation" / "routeability_experiment_precollection_readiness_v1.json"
+
+
+def _ledger():
+    return json.loads(LEDGER.read_text(encoding="utf-8"))
+
+
+def test_precollection_readiness_marks_design_gates_green_but_power_blocked():
+    data = _ledger()
+    assert data["status"] == "design_complete_pilot_and_final_power_pending"
+    assert data["frozen_v5_unchanged"] is True
+    by_item = {row["item"]: row for row in data["gates"]}
+    assert by_item["exact routeable versus bypass contrast"]["status"] == "PASS"
+    assert by_item["generic randomization/counterbalance schedule mechanics"]["status"] == "PASS"
+    assert by_item["eligible-roster treatment randomization"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["roster-to-final trial schedule linkage"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["confirmatory estimands and multiplicity"]["status"] == "PASS"
+    assert by_item["external H1/H2 SESOI"]["status"] == "PASS_FROZEN"
+    assert by_item["physical cue material qualification receipt"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["pilot nuisance GLMM bridge and robustness-grid policy"]["status"] == "PASS_CODE_ONLY"
+    assert by_item["final GLMM operating-characteristic simulation"]["status"] == "BLOCKED_REAL_INPUTS_POLICY_CODE_READY"
+    assert by_item["definitive biological sample size"]["status"] == "BLOCKED"
+
+
+def test_precollection_readiness_keeps_operational_and_human_blocks_explicit():
+    data = _ledger()
+    by_item = {row["item"]: row for row in data["gates"]}
+    assert by_item["species/husbandry/apparatus implementation"]["status"] == "BLOCKED_OPERATIONAL"
+    assert by_item["ethics and regulatory approval"]["status"] == "BLOCKED_HUMAN"
+    assert by_item["confirmatory preregistration package"]["status"] == "TEMPLATE_READY_FINALIZATION_BLOCKED"
+
+
+def test_precollection_readiness_points_to_pilot_as_next_biological_action():
+    data = _ledger()
+    assert "material pretest" in data["next_biological_action"]
+    assert "Pilot A" in data["next_biological_action"]
+    assert "Pilot B" in data["next_biological_action"]
+    assert "final operating-characteristic simulation" in data["next_machine_action"]
+    ceiling = data["claim_ceiling"].lower()
+    assert "animal work" in ceiling
+    assert "does not mean" in ceiling or "not mean" in ceiling
+
+
+def test_precollection_readiness_links_operational_runbook():
+    data = _ledger()
+    runbook = data["operational_runbook"]
+    assert runbook["status"] == "PASS_FROZEN"
+    assert runbook["manuscript"] == (
+        "manuscript/ROUTEABILITY_PRECOLLECTION_RUNBOOK_V1.md"
+    )
+    assert runbook["gate"] == (
+        "validation/routeability_precollection_runbook_gate_v1.json"
+    )
+    assert runbook["current_stop_point"] == (
+        "before real local material qualification"
+    )
+    assert runbook["confirmatory_collection_allowed"] is False
+    assert "material qualification" in data["next_biological_action"]
+
+
+def test_precollection_readiness_links_observational_stop_to_experiment():
+    data = _ledger()
+    handoff = data["observational_handoff"]
+    assert handoff["status"] == "FROZEN_STOP_TO_CONTROLLED_EXPERIMENT"
+    assert handoff["source"] == (
+        "validation/villavicencio_rewiring_claim_resolution_v1.json"
+    )
+    assert handoff["response_validity_gate"] == (
+        "validation/network_response_validity_gate_v1.json"
+    )
+    assert handoff["villavicencio_response_validity"] == (
+        "observed_link_turnover_only"
+    )
+    assert handoff["villavicencio_natural_rewiring_status"] == "NOT_IDENTIFIED"
+    assert handoff["villavicencio_routeability_status"] == "NOT_VALIDATED"
+    assert "Do not add further flexible Villavicencio observation models" in (
+        handoff["consequence"]
+    )
+    assert "controlled experiment" in handoff["consequence"]

@@ -1,0 +1,180 @@
+{
+  "schema": "adaptive-gain-villavicencio-focal-excluded-opportunity-result-v1",
+  "date": "2026-09-28",
+  "status": "retrospective_repair_green_current_state_opportunity",
+  "analysis_status": "post-leakage repair on a detection-sensitive annual binary-link response; retrospective and contemporaneous; not preregistered, causal, effort-standardized, or routeability evidence",
+  "source": {
+    "figshare_article_id": 11794503,
+    "raw_visits": "visits_2006-2011_data.csv",
+    "plant_codes": "plant_names.csv",
+    "pollinator_codes": "insect_names.csv",
+    "stage1_response": "validation/villavicencio_annual_stage1_fallback_result_v1.json",
+    "design_gate": "validation/villavicencio_focal_excluded_opportunity_gate_v1.json",
+    "superseded_support_audit": "validation/villavicencio_phenology_support_leakage_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36389888535,
+    "run_number": 350,
+    "conclusion": "success",
+    "head_sha": "2b36d35cc1722f76a4404c711f5dec746fb03ef8",
+    "artifact_id": 10955518668,
+    "artifact_digest": "sha256:63053f807599684e4595e7878048419c02db3cb22075241ba916ec690db4a267"
+  },
+  "response_integrity": {
+    "shared_dyad_rows": 7620,
+    "raw_figshare_vs_stage1_response_mismatch_count": 0,
+    "undated_positive_visit_rows_trait_subset": 26,
+    "ever_linked_dyads_without_any_dated_positive_visit": 3
+  },
+  "support_repair": {
+    "dyad_surface": 6075,
+    "ever_linked_count": 881,
+    "never_linked_count": 5194,
+    "opportunity_positive_any_year_count": 4295,
+    "opportunity_positive_ever_linked_count": 828,
+    "opportunity_positive_never_linked_count": 3467,
+    "probability_ever_linked_given_opportunity_positive": 0.19278230500582072,
+    "opportunity_support_nested_in_ever_linked": false,
+    "interpretation": "Unlike the published phenological-overlap surface used in the superseded analysis, the focal-excluded opportunity surface has broad support among never-realized dyads and therefore does not encode focal-link realization by construction."
+  },
+  "primary_scope": {
+    "name": "strict_core_2008_2011",
+    "transitions": [
+      "2008->2009",
+      "2009->2010",
+      "2010->2011"
+    ],
+    "gain": {
+      "n": 4750,
+      "events": 443,
+      "current_full": {
+        "relative_log_loss_reduction": 0.13929307446228167,
+        "brier_improvement": 0.009079492334752151,
+        "roc_auc": 0.743386402837315,
+        "all_primary_folds_positive_log_loss_skill": true
+      },
+      "current_marginal_only": {
+        "relative_log_loss_reduction": 0.13531198803936734,
+        "brier_improvement": 0.009115147507819443,
+        "roc_auc": 0.7399697379613532,
+        "all_primary_folds_positive_log_loss_skill": true
+      },
+      "current_pairwise_overlap_increment": {
+        "classification": "reproducible_incremental_information_in_primary_scope_only",
+        "delta_log_loss_drop_minus_full": 0.0012801109350666362,
+        "delta_auc_full_minus_drop": 0.0034166648759618168,
+        "delta_brier_drop_minus_full": -0.000035655173067292156,
+        "positive_log_loss_folds": "3/3",
+        "broader_sensitivity": "fold_unstable_3_of_4_and_4_of_5",
+        "interpretation": "small incremental contribution; not the main source of current-year predictive skill"
+      },
+      "lagged_full": {
+        "relative_log_loss_reduction": 0.010387722347296274,
+        "brier_improvement": 0.00014760515055162182,
+        "roc_auc": 0.527768853370622,
+        "interpretation": "near-null discrimination despite small positive aggregate log-loss skill"
+      },
+      "current_minus_lagged": {
+        "relative_log_loss_skill_difference": 0.1289053521149854,
+        "auc_difference": 0.2156175494666931,
+        "current_better_log_loss_skill_folds": "3/3"
+      },
+      "current_binary_opportunity": {
+        "gain_rate_when_positive": 0.11470755252697332,
+        "gain_rate_when_zero": 0.03175895765472313,
+        "rate_ratio": 3.611817294951878
+      }
+    },
+    "loss": {
+      "n": 692,
+      "events": 343,
+      "current_full": {
+        "relative_log_loss_reduction": 0.06824534246916754,
+        "brier_improvement": 0.023551324690628067,
+        "roc_auc": 0.6684320883490523,
+        "all_primary_folds_positive_log_loss_skill": true
+      },
+      "current_marginal_only": {
+        "relative_log_loss_reduction": 0.06268008480031009,
+        "brier_improvement": 0.0220291774533678,
+        "roc_auc": 0.6646979708788959,
+        "all_primary_folds_positive_log_loss_skill": true
+      },
+      "current_pairwise_overlap_increment": {
+        "classification": "reproducible_incremental_information_in_primary_scope_only",
+        "delta_log_loss_drop_minus_full": 0.003893836383778382,
+        "delta_auc_full_minus_drop": 0.003734117470156395,
+        "delta_brier_drop_minus_full": 0.0015221472372602685,
+        "positive_log_loss_folds": "3/3",
+        "broader_sensitivity": "fold_unstable_3_of_4_and_3_of_5",
+        "interpretation": "small and sensitivity-dependent incremental contribution"
+      },
+      "lagged_full": {
+        "relative_log_loss_reduction": -0.027121299435686023,
+        "brier_improvement": -0.00926685019459339,
+        "roc_auc": 0.4059495267611752,
+        "all_primary_folds_positive_log_loss_skill": false,
+        "interpretation": "past-only surface is worse than the null for loss"
+      },
+      "current_minus_lagged": {
+        "relative_log_loss_skill_difference": 0.09536664190485356,
+        "auc_difference": 0.26248256158787714,
+        "current_better_log_loss_skill_folds": "3/3"
+      },
+      "current_binary_opportunity": {
+        "loss_rate_when_positive": 0.4878048780487805,
+        "loss_rate_when_zero": 0.5584415584415584,
+        "rate_ratio": 0.8735110606920024
+      }
+    }
+  },
+  "sensitivity_summary": {
+    "near_core_2007_2011": {
+      "gain_current_full_relative_log_loss_reduction": 0.11492990196801531,
+      "gain_current_full_roc_auc": 0.7339439696046326,
+      "loss_current_full_relative_log_loss_reduction": 0.0640307162280492,
+      "loss_current_full_roc_auc": 0.6635789364676643,
+      "current_full_all_folds_positive_log_loss_skill_both_endpoints": true,
+      "current_better_than_lagged_log_loss_skill_both_endpoints": "4/4 folds",
+      "pairwise_overlap_increment": "positive_but_fold_unstable"
+    },
+    "all_annual_2006_2011": {
+      "gain_current_full_relative_log_loss_reduction": 0.10181294758900256,
+      "gain_current_full_roc_auc": 0.7196927145226778,
+      "loss_current_full_relative_log_loss_reduction": 0.056040422927404715,
+      "loss_current_full_roc_auc": 0.6554953027396586,
+      "current_full_all_folds_positive_log_loss_skill_both_endpoints": true,
+      "current_better_than_lagged_log_loss_skill_both_endpoints": "5/5 folds",
+      "pairwise_overlap_increment": "positive_but_fold_unstable"
+    }
+  },
+  "ecological_result": {
+    "supported": "Annual plant-pollinator link dynamics carry a reproducible current-state opportunity signal after the focal dyad response is excluded from predictor construction. The signal is dominated by plant flowering availability and pollinator activity on other plants; dyad-specific weekly overlap adds only a small, scope-sensitive increment.",
+    "formation_read": "In the primary scope, a previously absent dyad with positive current-year focal-excluded opportunity forms a link about 3.61 times as often as a zero-opportunity dyad. This is a contemporaneous opportunity association, not a causal effect.",
+    "persistence_read": "Current-year opportunity also discriminates link loss moderately, whereas the one-year-lagged surface performs worse than the null for loss.",
+    "negative_control_read": "The same variables measured one year earlier do not recover the current-state signal: gain discrimination is near chance and loss prediction is worse than null. This argues against interpreting the result as a stable dyad propensity or a useful past-only forecasting rule.",
+    "pairwise_matching_read": "The pair-specific overlap term is not the main ecological result: its incremental log-loss contribution is small and becomes fold-unstable in broader temporal sensitivities.",
+    "current_interpretation": "The annual binary-link signal is retained as a reproducible detection-sensitive association. The later raw-census effort audit shows that binary link states are materially effort-sensitive, and the effort-standardized subseason census-incidence opportunity increment is small and fold-mixed (4/6)."
+  },
+  "supersession": {
+    "published_overlap_gain_filter_claim_valid": false,
+    "reason": "the published non-zero phenological-overlap support was nested inside ever-realized focal links",
+    "replacement": "focal-response-excluded current-year availability/activity opportunity",
+    "detection_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_result": "validation/villavicencio_census_rate_result_v1.json",
+    "current_claim_status": "BINARY_ASSOCIATION_RETAINED_EFFORT_INDEPENDENT_MECHANISM_NOT_SUPPORTED"
+  },
+  "not_established": [
+    "causal effect of phenology or temporal opportunity",
+    "causal primacy of availability/activity",
+    "strict future-link forecasting from past-only data",
+    "a universal assembly-disassembly mechanism",
+    "pair-specific phenological matching as the dominant driver",
+    "reproducible effort-standardized opportunity effect",
+    "sampling-effort-corrected true rewiring",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "The repaired annual result is a retrospective detection-sensitive current-state opportunity association. It does not establish causality, strict forecasting, pair-specific matching as the dominant mechanism, sampling-effort-independent ecological rewiring, decision equivalence, or routeability. The raw-census effort audit shows material binary-state detection sensitivity, and the effort-standardized census-incidence opportunity increment is fold-mixed."
+}
