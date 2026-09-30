@@ -28,6 +28,52 @@ it necessarily changes the gain-minus-loss balance by the same amount.
 
 The probability identity below is the population analogue.
 
+
+### Multi-period telescoping corollary
+
+For observed networks at times `1,...,T`, let `G_t` and `L_t` denote
+binary gains and losses from `t` to `t+1` on the same fixed candidate-dyad
+universe. Applying the two-time identity at each transition and summing gives
+
+```text
+sum_{t=1}^{T-1} (G_t - L_t)
+= sum_{t=1}^{T-1} (E_{t+1} - E_t)
+= E_T - E_1.
+```
+
+Thus the cumulative excess of observed gains over losses across an arbitrarily
+long time series is exactly the endpoint change in observed edge count. The
+intermediate network path can change the total amount of turnover
+`sum(G_t+L_t)`, but not this net balance.
+
+This is a telescoping corollary, not a new theorem family.
+
+### Weighted-network analogue
+
+Let `w_t(d) >= 0` be an observed interaction weight for dyad `d`, and write
+
+```text
+Delta_t(d) = w_{t+1}(d) - w_t(d)
+Delta_t^+(d) = max(Delta_t(d), 0)
+Delta_t^-(d) = max(-Delta_t(d), 0).
+```
+
+Then exactly
+
+```text
+sum_d Delta_t^+(d) - sum_d Delta_t^-(d)
+= W_{t+1} - W_t,
+```
+
+where `W_t=sum_d w_t(d)`. Summing over time again telescopes to
+`W_T-W_1`.
+
+So an aggregate excess of interaction strengthening over weakening is likewise
+not independent of change in total observed interaction weight. Mechanistic
+information must come from the distribution, identity, or predictors of the
+changes, not from the signed aggregate imbalance alone.
+
+
 ## Setup
 
 For any two binary observations `Y_1,Y_2`,
