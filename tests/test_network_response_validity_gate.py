@@ -23,6 +23,9 @@ def test_frozen_villavicencio_fixture_matches_classifier():
         effort_semantics_resolved=data["effort_semantics_resolved"],
         binary_detection_audited=data["binary_detection_audited"],
         binary_detection_material=data["binary_detection_material"],
+        binary_state_detection_defensible=data[
+            "binary_state_detection_defensible"
+        ],
         true_absence_independently_supported=data[
             "true_absence_independently_supported"
         ],
