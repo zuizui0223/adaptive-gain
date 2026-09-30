@@ -33,6 +33,7 @@ class NetworkResponseEvidence:
     effort_semantics_resolved: bool
     binary_detection_audited: bool
     binary_detection_material: bool
+    binary_state_detection_defensible: bool
     true_absence_independently_supported: bool
     effort_standardized_response_available: bool
     repeated_detection_model_available: bool
@@ -103,6 +104,29 @@ def assess_network_response_validity(
                 "Describe zero/non-zero changes as observed-link turnover "
                 "until imperfect detection is audited or true absence is "
                 "independently supported."
+            ),
+        )
+
+    if (
+        evidence.binary_detection_audited
+        and not evidence.binary_detection_material
+        and not evidence.binary_state_detection_defensible
+        and not evidence.true_absence_independently_supported
+    ):
+        reasons.append(
+            "Detection was audited, but binary zero/non-zero states were not "
+            "validated as defensible latent ecological states."
+        )
+        return NetworkResponseAssessment(
+            response_validity=(
+                ResponseValidity.OBSERVED_LINK_TURNOVER_ONLY
+            ),
+            routeability_bridge_eligible=False,
+            reasons=tuple(reasons),
+            claim_ceiling=(
+                "Detection diagnostics may support descriptive robustness, "
+                "but binary turnover cannot be promoted to latent ecological "
+                "state change without an explicit state-validity argument."
             ),
         )
 
