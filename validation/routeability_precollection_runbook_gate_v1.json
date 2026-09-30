@@ -1,0 +1,44 @@
+{
+  "schema": "adaptive-gain-routeability-precollection-runbook-gate-v1",
+  "date": "2026-10-01",
+  "status": "ordered_operational_handoff_frozen",
+  "runbook": "manuscript/ROUTEABILITY_PRECOLLECTION_RUNBOOK_V1.md",
+  "authoritative_sequence": [
+    "candidate_material_set",
+    "architecture_neutral_material_pretest",
+    "pilot_A_response_window",
+    "pilot_B_pooled_B3_nuisance",
+    "freeze_real_nuisance_colony_and_operational_maximum",
+    "build_frozen_12_scenario_robustness_surface",
+    "run_final_glmm_operating_characteristics",
+    "mechanical_final_N_selection",
+    "eligible_roster_freeze_and_randomization",
+    "compile_assignment_locked_final_schedule",
+    "finalize_preregistration",
+    "begin_confirmatory_collection"
+  ],
+  "resolved_before_real_input": {
+    "routeability_task": true,
+    "H1_H2_estimands": true,
+    "SESOI_H1": 0.1,
+    "SESOI_H2": 0.1,
+    "robustness_scenarios_per_N": 12,
+    "minimum_simulations_per_scenario": 1000,
+    "minimum_fit_success_fraction": 0.95,
+    "minimum_H1_directional_rejection_fraction": 0.8,
+    "minimum_H2_hierarchical_pass_fraction": 0.8,
+    "counterbalance_multiple": 4
+  },
+  "current_blocker": "real local Bombus/material/apparatus inputs and architecture-neutral material-pretest data",
+  "next_action": "choose exact local species/colony/apparatus/material set and run the architecture-neutral material qualification before Pilot A",
+  "firewalls": [
+    "no B2 or H1/H2 contrast may be opened in Pilot A/B",
+    "theoretical 0.25 information ceiling is not a behavioral effect-size target",
+    "failed material set requires a new architecture-neutral pretest",
+    "final N is mechanically selected from the complete gapless candidate-N robustness surface",
+    "confirmatory roster is randomized only after final N is frozen",
+    "final schedule is compiled from the hash-matching assignment and is not hand-edited",
+    "confirmatory collection begins only after preregistration finalization"
+  ],
+  "claim_ceiling": "This runbook freezes execution order and stop rules only. It does not qualify a real material set, create pilot data, determine final N, grant ethics approval, or constitute empirical routeability evidence."
+}
