@@ -63,3 +63,15 @@ def test_methods_note_explicitly_positions_against_existing_literature():
     ):
         assert doi in text
     assert "No claim is made that imperfect detection or sampling-sensitive rewiring is new." in text
+
+
+def test_methods_note_has_multi_period_and_weighted_balance_corollaries():
+    data = _gate()
+    identities = " ".join(data["core_exact_results"])
+    assert "observed_edges_final-observed_edges_initial" in identities
+    assert "total positive weight change minus total negative weight change" in identities
+
+    text = _note()
+    assert "sum_t (G_t-L_t) = E_T-E_1" in text
+    assert "weighted analogue" in text.lower()
+    assert "not a separate" in text
