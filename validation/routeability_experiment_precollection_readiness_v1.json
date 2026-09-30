@@ -271,5 +271,20 @@
     "gate": "validation/routeability_precollection_runbook_gate_v1.json",
     "current_stop_point": "before real local material qualification",
     "confirmatory_collection_allowed": false
+  },
+  "observational_handoff": {
+    "status": "FROZEN_STOP_TO_CONTROLLED_EXPERIMENT",
+    "source": "validation/villavicencio_rewiring_claim_resolution_v1.json",
+    "response_validity_gate": "validation/network_response_validity_gate_v1.json",
+    "villavicencio_response_validity": "observed_link_turnover_only",
+    "villavicencio_natural_rewiring_status": "NOT_IDENTIFIED",
+    "villavicencio_routeability_status": "NOT_VALIDATED",
+    "reason": [
+      "sampling-effort semantics are resolved but binary observed link state remains materially detection-sensitive",
+      "effort-standardized opportunity increment is fold-mixed (4/6)",
+      "latent state-side opportunity support fails the frozen rule (1/6 versus required 5/6)",
+      "beta-binomial detection is preferred in 6/6 transitions and latent transition parameters hit a frozen boundary in 6/6"
+    ],
+    "consequence": "Do not add further flexible Villavicencio observation models to search for a positive natural-rewiring result. The next direct routeability mechanism evidence is the controlled experiment, subject to the real-material and pilot gates below."
   }
 }
