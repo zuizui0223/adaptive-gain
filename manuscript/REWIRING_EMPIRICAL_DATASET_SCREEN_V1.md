@@ -16,6 +16,32 @@ A dataset is confirmatory-ready only if it supports all of the following:
 
 The screen below intentionally distinguishes a good network dataset from a good decision-structure dataset. They are not the same thing.
 
+
+## Response-validity gate before dataset tiering
+
+Every future repeated-network candidate now passes a fail-closed response gate **before** it is assigned an empirical tier.
+
+The order is:
+
+1. response reconstruction and nondegeneracy;
+2. observation-effort semantics;
+3. material binary detection sensitivity and independent true-absence support;
+4. effort-standardized response availability;
+5. repeated-detection identifiability;
+6. reproducible ecological **state-side** information;
+7. robustness to observation-model choice;
+8. only then, an independent decision-structure exposure.
+
+Machine implementation:
+- `adaptive_gain/network_response_validity.py`
+- `validation/network_response_validity_gate_v1.json`
+- `tests/test_network_response_validity.py`
+
+A dataset can therefore be a technically excellent repeated network and still be classified as **observed-link turnover only**. Held-out prediction of recorded links is not enough to pass the state-response gate.
+
+Villavicencio is the frozen fixture: response reconstruction and effort semantics pass, but binary detection is material, the state-side opportunity result fails its frozen reproducibility rule, and latent conclusions are observation-model sensitive. Its machine classification is therefore `observed_link_turnover_only`, with routeability-bridge eligibility = false.
+
+
 ## Admission tiers
 
 - **Tier A — confirmatory-ready:** independent decision classes + repeated network response + opportunity controls.
