@@ -76,37 +76,42 @@ m_2 = 3/10.
 
 ```text
 psi       = 1/4
-gamma     = 7/15
-epsilon   = 0
+gamma     = 7/18
+epsilon   = 1/6
 q_1       = 4/5
-q_2       = 1/2
+q_2       = 3/5
 ```
 
 Then
 
 ```text
-psi_2 = 3/5
-Delta psi = 3/5 - 1/4 = +7/20.
+psi_2 = 1/2
+Delta psi = 1/2 - 1/4 = +1/4.
 ```
 
 ### Model B: latent prevalence decreases
 
 ```text
-psi       = 11/20
-gamma     = 1/18
-epsilon   = 1/2
-q_1       = 4/11
-q_2       = 1
+psi       = 1/2
+gamma     = 1/8
+epsilon   = 3/8
+q_1       = 2/5
+q_2       = 4/5
 ```
 
 Then
 
 ```text
-psi_2 = 3/10
-Delta psi = 3/10 - 11/20 = -1/4.
+psi_2 = 3/8
+Delta psi = 3/8 - 1/2 = -1/8.
 ```
 
 Both models generate **exactly the same observed 2 x 2 transition table**.
+
+Crucially, every parameter in both witnesses is **strictly interior**:
+`0 < psi, gamma, epsilon, q_1, q_2 < 1`. The non-identifiability is therefore
+not a boundary artifact of perfect detection, zero extinction, zero
+colonization, or deterministic state change.
 
 Thus the observed table cannot identify even the sign of latent link-prevalence
 change without additional information about detection.
