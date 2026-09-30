@@ -63,8 +63,8 @@
     {
       "level": 9,
       "surface": "exact binary-turnover latent-state nonidentifiability witness",
-      "result": "Two dynamic latent-state/detection parameterizations generate exactly the same observed transition table (P00=3/5, P01=1/5, P10=1/10, P11=1/10) while latent link prevalence changes in opposite directions: 1/4->3/5 versus 11/20->3/10.",
-      "boundary": "Generic occupancy/detection confounding is established literature; this is an explicit network gain/loss witness showing that the full aggregated binary transition table does not identify even the sign of latent prevalence change when detection is unknown.",
+      "result": "Two strictly interior dynamic latent-state/detection parameterizations generate exactly the same observed transition table (P00=3/5, P01=1/5, P10=1/10, P11=1/10) while latent link prevalence changes in opposite directions: 1/4->1/2 (+1/4) versus 1/2->3/8 (-1/8).",
+      "boundary": "Generic occupancy/detection confounding is established literature; this is an explicit network gain/loss witness showing that the full aggregated binary transition table does not identify even the sign of latent prevalence change when detection is unknown. All psi, gamma, epsilon, q_previous and q_current values in both witnesses are strictly between 0 and 1, so the failure is not a boundary artifact.",
       "source": "validation/binary_turnover_detection_nonidentifiability_v1.json"
     }
   ],
@@ -78,7 +78,7 @@
     "detection_corrected_true_rewiring_identified": "NO: richer beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a frozen state boundary in 6/6, so inferred gain/loss remains observation-model dependent",
     "observed_gain_loss_direction_identified_as_ecological": "NO: exact detection identity shows that changing period-level detectability alone is sufficient to bias gain versus loss direction, and the Villavicencio diagnostic AUC is 0.852.",
     "observed_gain_loss_direction_explainable_by_detection_map": "SUPPORTED_MECHANISTICALLY: unequal period-level detection is sufficient to generate directional observed gain/loss under a persistent-link counterfactual; diagnostic AUC is 0.852 across six transitions",
-    "binary_transition_table_identifies_latent_turnover_direction": "NO: an exact witness gives the same observed gain/loss/stable table under both increasing and decreasing latent link prevalence.",
+    "binary_transition_table_identifies_latent_turnover_direction": "NO: a strictly interior exact witness gives the same observed gain/loss/stable table under both increasing and decreasing latent link prevalence.",
     "aggregate_gain_loss_imbalance_is_independent_process_evidence": "NO: on a fixed dyad universe, #gain-#loss equals the change in observed edge count exactly; it is not independent evidence for assembly versus disassembly mechanisms."
   },
   "strongest_ecological_interpretation": {
@@ -88,7 +88,7 @@
     "observation_model_boundary": "A richer beta-binomial detection model is preferred in all 6/6 primary transitions and drives at least one latent transition parameter to the frozen boundary in all 6/6. The data therefore do not support a stable detection-corrected rewiring response under the tested observation models.",
     "detection_direction_identity": "Binary turnover direction has an independence-free conservation law: observed gain minus observed loss equals the change in marginal observed-presence probability. On a persistent latent link this is q_current-q_previous. Thus detectability changes can create directional apparent turnover even without ecological state change; Villavicencio aligns strongly with this axis (AUC 0.852).",
     "detection_effort_identity": "The gain/loss direction itself is strongly aligned with the exact observation-process asymmetry q_current-q_previous expected even when a latent interaction persists. This explains why effort/detection changes can mimic directional turnover without identifying any particular observed change as false.",
-    "binary_turnover_nonidentifiability": "Aggregated binary interaction turnover is not merely noisy: without detection information, the same full two-period transition table can correspond to opposite latent network changes. Repeated-detection or independent state information is therefore an identification requirement, not a cosmetic sensitivity.",
+    "binary_turnover_nonidentifiability": "Aggregated binary interaction turnover is not merely noisy: without detection information, the same full two-period transition table can correspond to opposite latent network changes even when all latent-transition and detection parameters are strictly interior. Repeated-detection or independent state information is therefore an identification requirement, not a cosmetic sensitivity.",
     "finite_turnover_balance": "Aggregate excess gains or losses are algebraically identical to observed edge-count change on the same dyad universe. Mechanistic interpretation must therefore come from information beyond the gain-loss imbalance itself, especially detection-standardized state information."
   },
   "allowed_terms": [
@@ -127,7 +127,7 @@
       "effort-standardized opportunity increment is fold-mixed (4/6)",
       "latent state-side opportunity support fails the pre-frozen rule (1/6 vs required 5/6)",
       "beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a state boundary in 6/6",
-      "the full binary transition table is formally non-identifying for latent turnover direction when detection is unknown"
+      "the full binary transition table is formally non-identifying for latent turnover direction under a strictly interior detection/state witness"
     ],
     "consequence": "Do not add further flexible Villavicencio observation models whose purpose is to search for a positive natural-rewiring mechanism. New Villavicencio work must either test a pre-specified identification remedy with genuinely new independent information or remain a robustness/identification analysis.",
     "allowed_next_evidence": [
