@@ -65,6 +65,7 @@ def test_gate_is_fail_closed_for_detection_sensitive_networks():
             effort_semantics_resolved=True,
             binary_detection_audited=True,
             binary_detection_material=True,
+            binary_state_detection_defensible=False,
             true_absence_independently_supported=False,
             effort_standardized_response_available=True,
             repeated_detection_model_available=True,
