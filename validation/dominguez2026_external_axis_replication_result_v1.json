@@ -69,19 +69,27 @@
     }
   },
   "cross_system_read": {
-    "supported": "The Villavicencio plant-side dominance for link loss generalizes directionally to the independent 12-site system under out-of-site validation.",
-    "not_supported": "The Villavicencio pollinator-side dominance for link gain does not generalize under the pre-frozen external measurement: external gain discrimination is more plant-phenology weighted.",
-    "revised_hypothesis": "Plant-side availability may be a more general constraint on persistence/loss, whereas the dominant opportunity axis for link formation is system- or measurement-dependent rather than universal.",
-    "importance": "This narrows the ecological claim before any routeability interpretation: opportunity is reproducibly relevant, but the internal allocation of predictive information across plant and pollinator axes is not universally asymmetric in the same direction."
+    "supported": "Within the independent 12-site binary observed-link surface, the Villavicencio plant-side loss direction reappears directionally under the focal-excluded predictor definition.",
+    "not_supported": "The Villavicencio pollinator-side gain direction does not reappear, and neither endpoint can be promoted to a detection-defensible latent-state mechanism because the external annual binary response does not pass the response-validity gate.",
+    "revised_hypothesis": "Observed-link opportunity structure can show repeatable endpoint asymmetries across systems, but the exact plant/pollinator allocation is context-dependent and latent ecological gain/loss remains unverified without detection-defensible state information.",
+    "importance": "The external test is now used as an out-of-site robustness pattern on recorded links, not as ecological-state replication."
   },
   "not_established": [
+    "cross-system replication of latent ecological gain/loss mechanisms",
     "causal plant control of link loss",
     "a universal plant-side persistence mechanism",
     "why the gain-side axis differs between systems",
-    "sampling-effort independence",
+    "dyad-level true absence for unrecorded annual links",
+    "sampling-effort-independent latent state change",
     "equivalence of measurement scales across datasets",
     "decision-equivalence classes",
     "environmental routeability"
   ],
-  "claim_ceiling": "External predictive-direction replication is mixed. The plant-side loss direction is cross-system consistent; the gain-side direction is not. Do not promote the Villavicencio gain-axis asymmetry to a universal assembly mechanism, and do not interpret either result as causal or as evidence for routeability."
+  "claim_ceiling": "External predictive-direction result on recorded annual links only. The plant-side loss direction is consistent on the observed-link surface, while the gain-side direction is not; the response-validity gate does not admit either as detection-defensible latent ecological state replication. Do not promote these patterns to causal assembly/disassembly mechanisms or routeability.",
+  "response_validity": {
+    "gate": "validation/dominguez2026_response_validity_v1.json",
+    "classification": "observed_link_turnover_only",
+    "detection_defensible_state_replication": false,
+    "interpretation": "Leave-one-site-out axis directions are predictions of recorded annual link gain/loss. The public processed surface does not identify latent link-state transitions."
+  }
 }
