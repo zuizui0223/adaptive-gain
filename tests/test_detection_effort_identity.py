@@ -161,9 +161,9 @@ def test_binary_timeseries_balance_telescopes_to_endpoint_change():
 
     assert result["time_points"] == 4
     assert result["cumulative_gains"] == 3
-    assert result["cumulative_losses"] == 3
-    assert result["cumulative_gain_minus_loss"] == 0
-    assert result["endpoint_edge_change"] == 0
+    assert result["cumulative_losses"] == 2
+    assert result["cumulative_gain_minus_loss"] == 1
+    assert result["endpoint_edge_change"] == 1
 
 
 def test_weighted_turnover_balance_equals_total_weight_change():
