@@ -66,6 +66,25 @@ Therefore aggregate excess gain over loss is not independent evidence for an
 assembly/disassembly asymmetry. It is the observed edge-count change written in
 transition language.
 
+
+The same statement extends immediately through time. For a fixed dyad universe,
+
+```text
+sum_t (G_t-L_t) = E_T-E_1.
+```
+
+Hence cumulative net gain-minus-loss over any number of observation periods is
+only the endpoint edge-count change. Intermediate transitions add information
+through total turnover and which dyads changed, not through the signed net
+balance.
+
+There is also a weighted analogue. If an observed dyad weight changes by
+`Delta w`, decompose it into positive and negative parts. Then total weight
+strengthening minus total weight weakening equals the change in total observed
+interaction weight exactly. This is again bookkeeping, not a separate
+mechanistic statistic.
+
+
 ## Identity 2 — probability-flow conservation
 
 For any two binary observations `Y_1,Y_2`,
