@@ -65,6 +65,86 @@ def finite_binary_turnover_balance(
     }
 
 
+def finite_binary_turnover_timeseries(
+    states,
+) -> dict[str, int]:
+    """Telescoping gain-loss balance across a binary network time series.
+
+    states is an iterable of adjacency vectors on one fixed dyad universe.
+    Across all adjacent transitions:
+    cumulative gains - cumulative losses == final edges - initial edges.
+    """
+    snapshots = [
+        [bool(value) for value in snapshot]
+        for snapshot in states
+    ]
+    if len(snapshots) < 2:
+        raise ValueError("states must contain at least two time points")
+
+    dyad_count = len(snapshots[0])
+    if any(len(snapshot) != dyad_count for snapshot in snapshots):
+        raise ValueError("all time points must use the same dyad universe")
+
+    cumulative_gains = 0
+    cumulative_losses = 0
+    for previous, current in zip(snapshots, snapshots[1:]):
+        receipt = finite_binary_turnover_balance(previous, current)
+        cumulative_gains += receipt["gains"]
+        cumulative_losses += receipt["losses"]
+
+    initial_edges = sum(snapshots[0])
+    final_edges = sum(snapshots[-1])
+    return {
+        "time_points": len(snapshots),
+        "dyad_count": dyad_count,
+        "cumulative_gains": cumulative_gains,
+        "cumulative_losses": cumulative_losses,
+        "cumulative_gain_minus_loss": (
+            cumulative_gains - cumulative_losses
+        ),
+        "initial_edges": initial_edges,
+        "final_edges": final_edges,
+        "endpoint_edge_change": final_edges - initial_edges,
+    }
+
+
+def finite_weighted_turnover_balance(
+    previous,
+    current,
+) -> dict[str, float]:
+    """Exact signed balance for non-negative observed interaction weights.
+
+    Total positive weight increments minus total negative weight decrements
+    equals the change in total observed interaction weight.
+    """
+    previous_values = [float(value) for value in previous]
+    current_values = [float(value) for value in current]
+    if len(previous_values) != len(current_values):
+        raise ValueError("previous and current must have the same dyad count")
+    if any(
+        not math.isfinite(value) or value < 0.0
+        for value in previous_values + current_values
+    ):
+        raise ValueError("weights must be finite and non-negative")
+
+    changes = [
+        after - before
+        for before, after in zip(previous_values, current_values)
+    ]
+    strengthening = math.fsum(max(change, 0.0) for change in changes)
+    weakening = math.fsum(max(-change, 0.0) for change in changes)
+    previous_total = math.fsum(previous_values)
+    current_total = math.fsum(current_values)
+    return {
+        "strengthening": strengthening,
+        "weakening": weakening,
+        "strengthening_minus_weakening": strengthening - weakening,
+        "previous_total_weight": previous_total,
+        "current_total_weight": current_total,
+        "total_weight_change": current_total - previous_total,
+    }
+
+
 def binary_transition_conservation(
     p00: float,
     p01: float,
