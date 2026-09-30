@@ -42,6 +42,29 @@ A dataset can therefore be a technically excellent repeated network and still be
 Villavicencio is the frozen fixture: response reconstruction and effort semantics pass, but binary detection is material, the state-side opportunity result fails its frozen reproducibility rule, and latent conclusions are observation-model sensitive. Its machine classification is therefore `observed_link_turnover_only`, with routeability-bridge eligibility = false.
 
 
+### Independent annual-link example: Domínguez-Garcia et al. 2026
+
+The 8-year × 12-site dataset provides a useful example of why the response-validity gate precedes ecological interpretation.
+
+The source study documents intensive 30-min transect rounds, uneven-effort sensitivities, singleton removal, and annual sample coverage. The public processed archive used by this project, however, exposes annual link lists and species×site×year summaries rather than round-level dyad detection histories.
+
+Accordingly:
+
+- sampling design is documented;
+- the recorded-link response is reconstructable and nondegenerate;
+- detection has been considered at the network level;
+- but unrecorded annual dyads are not independently established as latent absences;
+- no round-level repeated-detection state model can be reconstructed from the processed surface used here.
+
+The machine classification is therefore **observed_link_turnover_only**, not detection-defensible state.
+
+The external axis analysis remains useful as an out-of-site predictive robustness test on recorded links, but its 10/12 loss-direction consistency is not evidence by itself for a replicated latent ecological loss mechanism.
+
+See:
+- `validation/dominguez2026_response_validity_v1.json`
+- `validation/dominguez2026_external_axis_replication_result_v1.json`
+
+
 ## Admission tiers
 
 - **Tier A — confirmatory-ready:** independent decision classes + repeated network response + opportunity controls.
