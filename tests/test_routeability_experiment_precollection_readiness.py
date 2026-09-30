@@ -39,14 +39,14 @@ def test_precollection_readiness_points_to_pilot_as_next_biological_action():
     assert "material pretest" in data["next_biological_action"]
     assert "Pilot A" in data["next_biological_action"]
     assert "Pilot B" in data["next_biological_action"]
-    assert "GLMM operating-characteristic simulator" in data["next_machine_action"]
+    assert "final operating-characteristic simulation" in data["next_machine_action"]
     ceiling = data["claim_ceiling"].lower()
     assert "animal work" in ceiling
     assert "does not mean" in ceiling or "not mean" in ceiling
 
 
 def test_precollection_readiness_links_operational_runbook():
-    data = _readiness()
+    data = _ledger()
     runbook = data["operational_runbook"]
     assert runbook["status"] == "PASS_FROZEN"
     assert runbook["manuscript"] == (
