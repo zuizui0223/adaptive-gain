@@ -45,9 +45,10 @@ def test_abundance_sensitivity_does_not_rescue_gain_but_preserves_loss():
     assert data["loss"]["frozen_plant_minus_pollinator_contrast"] > 0
 
 
-def test_external_claim_ceiling_blocks_universal_gain_and_routeability():
+def test_external_claim_ceiling_blocks_latent_state_and_routeability_promotion():
     data = _result()
     ceiling = data["claim_ceiling"].lower()
-    assert "gain-side direction is not" in ceiling
+    assert "recorded annual links" in ceiling
+    assert "latent ecological state" in ceiling
     assert "causal" in ceiling
     assert "routeability" in ceiling
