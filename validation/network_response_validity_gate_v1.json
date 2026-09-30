@@ -7,6 +7,7 @@
     "response reconstruction and nondegeneracy",
     "observation-effort semantics",
     "binary detection sensitivity / independent true-absence information",
+    "explicit binary-detection audit status",
     "effort-standardized response availability",
     "repeated-detection identifiability",
     "reproducible state-side ecological information",
@@ -16,7 +17,7 @@
   "response_classes": {
     "not_estimable": "response itself cannot be reconstructed or is degenerate",
     "feasibility_only": "response exists but effort semantics are unresolved",
-    "observed_link_turnover_only": "binary state is materially detection-sensitive and latent-state inference does not pass the frozen response-validity gate",
+    "observed_link_turnover_only": "binary state is materially detection-sensitive OR imperfect detection has not been audited and true absence is not independently known",
     "detection_defensible_state": "the declared ecological state response passes the response-side detection gate"
   },
   "routeability_bridge_rule": "A natural-network routeability bridge is eligible only when response_validity is detection_defensible_state and the decision-structure exposure is independently measured rather than inferred from the focal network response.",
@@ -40,7 +41,8 @@
       "validation/villavicencio_two_season_detection_result_v1.json",
       "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
       "validation/villavicencio_detection_overdispersion_result_v1.json"
-    ]
+    ],
+    "binary_detection_audited": true
   },
-  "claim_ceiling": "This is a response-validity classifier, not an ecological effect estimator. Passing the gate does not establish causality; failing it prevents promotion of raw binary interaction turnover to latent ecological rewiring."
+  "claim_ceiling": "This is a response-validity classifier, not an ecological effect estimator. Passing the gate does not establish causality. Unaudited binary detection fails closed, and failing the response gate prevents promotion of raw binary interaction turnover to latent ecological rewiring."
 }
