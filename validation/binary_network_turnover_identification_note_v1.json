@@ -9,10 +9,12 @@
     "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1) without an independence assumption",
     "for a persistent latent link the probability imbalance is q_current-q_previous",
     "under conditional independence P(G)/P(L)=odds(q_current)/odds(q_previous)",
-    "an exact pair of dynamic state/detection models yields the same observed 2x2 table with opposite latent prevalence changes"
+    "an exact pair of dynamic state/detection models yields the same observed 2x2 table with opposite latent prevalence changes",
+    "sum_t(#gain_t-#loss_t)=observed_edges_final-observed_edges_initial on a fixed dyad universe",
+    "for weighted networks, total positive weight change minus total negative weight change equals the change in total observed interaction weight"
   ],
   "villavicencio_role": "worked repeated-census diagnosis showing effort sensitivity, mixed effort-standardized opportunity signal, state-side opportunity support 1/6, detection-side support 4/6, beta-binomial preference 6/6, and detection-direction diagnostic AUC 0.852",
-  "literature_position": "Existing literature establishes sampling-sensitive interaction networks and occupancy/detection confounding. The reserve contributes explicit gain/loss identities, a network-specific opposite-direction witness, and a fail-closed identification ladder.",
+  "literature_position": "Existing literature establishes sampling-sensitive interaction networks and occupancy/detection confounding. The reserve contributes explicit gain/loss conservation identities (including multi-period and weighted corollaries), a network-specific opposite-direction witness, and a fail-closed identification ladder.",
   "manuscript": "manuscript/BINARY_NETWORK_TURNOVER_IDENTIFICATION_NOTE_V1.md",
   "claim_ceiling": "Methods-note reserve only. Do not claim discovery of imperfect detection, do not call Villavicencio detection-corrected rewiring identified, and do not use this note as routeability validation."
 }
