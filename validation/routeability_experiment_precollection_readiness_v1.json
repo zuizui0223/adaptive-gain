@@ -39,6 +39,16 @@
       ]
     },
     {
+      "item": "ordered pre-collection operational runbook",
+      "status": "PASS",
+      "evidence": [
+        "manuscript/ROUTEABILITY_PRECOLLECTION_RUNBOOK_V1.md",
+        "validation/routeability_precollection_runbook_gate_v1.json",
+        "tests/test_routeability_precollection_runbook.py"
+      ],
+      "note": "material pretest -> Pilot A -> pooled B3 Pilot B -> frozen robustness surface -> mechanical final N -> roster randomization -> final schedule -> preregistration -> confirmatory collection order is explicit and regression-tested"
+    },
+    {
       "item": "physical cue architecture feasibility",
       "status": "PASS_PROTOCOL_ONLY",
       "evidence": [
@@ -252,7 +262,14 @@
       "promotion_rule": "only finalizer-generated Markdown with no unresolved placeholders and all machine/human gates resolved may be externally preregistered"
     }
   ],
-  "next_machine_action": "after the real procedural pilot, fit the already frozen pooled-B3 nuisance GLMM, freeze pre-allocation colony_count and operational maximum N, generate the fixed 12-robustness-ID grid for every multiple-of-four N from the smallest colony-feasible value (4*ceil(colony_count/4)) through that maximum, run the GLMM operating-characteristic simulator, apply the frozen final-N selector, randomize the architecture-neutral eligible roster, compile the hash-locked final schedule, then finalize the preregistration package",
-  "next_biological_action": "select the exact local cue materials/species, run the architecture-neutral material pretest and generate a PASS hash-locked material qualification receipt, then run architecture-neutral Pilot A and pooled B3 Pilot B using the frozen pilot protocol",
-  "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, material-qualification algorithm, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete."
+  "next_machine_action": "No new design expansion before real biological inputs. After a PASS material receipt and real Pilot A/B nuisance receipt, execute the already frozen nuisance-GLMM, 12-scenario robustness grid, final operating-characteristic simulation, mechanical final-N selector, roster randomization, final schedule compiler, and preregistration finalizer in the order fixed by validation/routeability_precollection_runbook_gate_v1.json.",
+  "next_biological_action": "Choose the exact local Bombus species/colony source, apparatus and physical q_route/q_left/q_right material set; run the architecture-neutral material pretest; produce a hash-locked PASS material qualification receipt; only then run Pilot A and pooled B3 Pilot B.",
+  "claim_ceiling": "Pre-collection readiness means the formal experiment, cue-architecture constraints, material-qualification algorithm, allocation and analysis logic are frozen. It does not mean the local material set has passed its cue pretest, animal work/pilot nuisance values exist, final power/N is frozen, or ethics/apparatus implementation is complete.",
+  "operational_runbook": {
+    "status": "PASS_FROZEN",
+    "manuscript": "manuscript/ROUTEABILITY_PRECOLLECTION_RUNBOOK_V1.md",
+    "gate": "validation/routeability_precollection_runbook_gate_v1.json",
+    "current_stop_point": "before real local material qualification",
+    "confirmatory_collection_allowed": false
+  }
 }
