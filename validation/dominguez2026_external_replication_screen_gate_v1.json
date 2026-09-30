@@ -25,8 +25,8 @@
     "link-level temporal states cannot be reconstructed",
     "site/year identity is lost"
   ],
-  "candidate_replication": "Test only the pre-frozen directional predictive-information asymmetry under leave-one-site-out validation: pollinator-side focal-excluded activity increment > plant-side availability increment for gains, and plant-side increment > pollinator-side increment for losses. Do not test routeability.",
-  "claim_ceiling": "External dyad-level replication of a predictive-information direction only. Even if the frozen direction replicates, this does not establish a causal assembly/disassembly mechanism, sampling-effort independence, decision equivalence, or routeability.",
+  "candidate_replication": "Test only the pre-frozen directional predictive-information asymmetry on the recorded annual-link surface under leave-one-site-out validation. Interpret any matching direction as observed-link predictive consistency, not detection-defensible latent-state replication. Do not test routeability.",
+  "claim_ceiling": "Recorded-link predictive-direction test only. The dataset-specific response-validity gate classifies the public processed annual link surface as observed_link_turnover_only, so neither a matching nor mismatching axis direction establishes a latent ecological assembly/disassembly mechanism, decision equivalence, or routeability.",
   "source_audit": {
     "plant_abundance_provenance": "Annual plant resource abundance was measured from flower counts in ten 1 m2 subplots and normalized by annual sampling effort. Plant phenology was measured as the number of days the species was present in the field.",
     "pollinator_abundance_boundary": "Published pollinator abundance counts recorded individuals and may share observation support with the interaction network, so raw Abundance is not the primary pollinator-side exposure for the focal-dyad replication.",
@@ -85,5 +85,13 @@
       "no_p_value": "leave-one-site-out folds share training data, so fold sign counts are treated as robustness rather than independent hypothesis tests"
     }
   },
-  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant phenology/flower abundance are tabulated at species x site x year independently of focal dyad identity; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response."
+  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant phenology/flower abundance are tabulated at species x site x year independently of focal dyad identity; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response.",
+  "response_validity_gate": {
+    "generic": "validation/network_response_validity_gate_v1.json",
+    "dataset_specific": "validation/dominguez2026_response_validity_v1.json",
+    "classification": "observed_link_turnover_only",
+    "detection_defensible_state_replication": false,
+    "routeability_bridge_eligible": false,
+    "consequence": "The frozen axis-direction analysis may test predictive structure of recorded annual links, but it cannot be promoted to latent ecological gain/loss replication without new detection-defensible state information."
+  }
 }
