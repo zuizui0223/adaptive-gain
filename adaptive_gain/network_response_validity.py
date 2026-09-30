@@ -31,6 +31,7 @@ class NetworkResponseEvidence:
     response_reconstructable: bool
     response_nondegenerate: bool
     effort_semantics_resolved: bool
+    binary_detection_audited: bool
     binary_detection_material: bool
     true_absence_independently_supported: bool
     effort_standardized_response_available: bool
@@ -81,6 +82,27 @@ def assess_network_response_validity(
             claim_ceiling=(
                 "Use the data only for response feasibility until observation "
                 "effort is defined and audited."
+            ),
+        )
+
+    if (
+        not evidence.binary_detection_audited
+        and not evidence.true_absence_independently_supported
+    ):
+        reasons.append(
+            "Binary interaction detection has not been audited and true "
+            "absence is not independently known."
+        )
+        return NetworkResponseAssessment(
+            response_validity=(
+                ResponseValidity.OBSERVED_LINK_TURNOVER_ONLY
+            ),
+            routeability_bridge_eligible=False,
+            reasons=tuple(reasons),
+            claim_ceiling=(
+                "Describe zero/non-zero changes as observed-link turnover "
+                "until imperfect detection is audited or true absence is "
+                "independently supported."
             ),
         )
 
