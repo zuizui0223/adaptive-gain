@@ -10,6 +10,7 @@ def _base(**changes):
         response_reconstructable=True,
         response_nondegenerate=True,
         effort_semantics_resolved=True,
+        binary_detection_audited=True,
         binary_detection_material=False,
         true_absence_independently_supported=True,
         effort_standardized_response_available=True,
@@ -75,6 +76,7 @@ def test_villavicencio_current_evidence_fails_closed():
         response_reconstructable=True,
         response_nondegenerate=True,
         effort_semantics_resolved=True,
+        binary_detection_audited=True,
         binary_detection_material=True,
         true_absence_independently_supported=False,
         effort_standardized_response_available=True,
@@ -92,3 +94,19 @@ def test_villavicencio_current_evidence_fails_closed():
     assert result.routeability_bridge_eligible is False
     assert any("state-side effect" in reason for reason in result.reasons)
     assert any("observation model" in reason for reason in result.reasons)
+
+
+def test_unaudited_binary_detection_fails_closed():
+    result = assess_network_response_validity(
+        _base(
+            binary_detection_audited=False,
+            binary_detection_material=False,
+            true_absence_independently_supported=False,
+        )
+    )
+    assert (
+        result.response_validity
+        == ResponseValidity.OBSERVED_LINK_TURNOVER_ONLY
+    )
+    assert result.routeability_bridge_eligible is False
+    assert any("has not been audited" in reason for reason in result.reasons)
