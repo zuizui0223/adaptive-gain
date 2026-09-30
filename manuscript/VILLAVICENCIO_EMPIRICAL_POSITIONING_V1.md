@@ -473,16 +473,29 @@ Files:
 ## 13. External 12-site result
 
 
-The independent Domínguez-Garcia et al. dataset remains useful as a cross-system predictive test, but it also uses observational network states and should not be treated as a latent-detection validation of Villavicencio.
+The independent Domínguez-Garcia et al. remains useful as an independent **recorded-link predictive** test, but its public processed surface does not pass the new response-validity gate for latent ecological state replication.
 
-The pre-frozen external axis test was mixed:
+The source study itself sampled intensively and reported singleton-removal and sample-coverage sensitivities. However, the public surface used here contains annual link lists and species×site×year summaries rather than round-level dyad detection histories. Thus unrecorded annual dyads are not independently validated as latent absences.
+
+The pre-frozen external axis test was mixed on the observed-link surface:
 
 - Villavicencio gain-side pollinator dominance did **not** replicate;
-- the plant-side loss direction replicated under the clean focal-excluded external definition.
+- the plant-side loss direction appeared in the same direction on recorded annual links.
 
-Measurement-mapping sensitivities showed that exact plant-versus-pollinator axis dominance changes with variable definition.
+That second result must now be phrased as **observed-link directional consistency**, not cross-system replication of a latent persistence/loss mechanism.
 
-The cross-system lesson is therefore not a universal assembly/disassembly mechanism.
+Measurement-mapping sensitivities also showed that exact plant-versus-pollinator axis dominance changes with variable definition.
+
+The response-validity classification is:
+- `observed_link_turnover_only`;
+- detection-defensible state replication: **false**;
+- routeability-bridge eligible: **false**.
+
+See:
+- `validation/dominguez2026_response_validity_v1.json`
+- `validation/dominguez2026_external_axis_replication_result_v1.json`
+
+The cross-system lesson is therefore narrower: recorded interaction surfaces can show repeatable predictive structure, but neither exact axis dominance nor latent ecological state change is established without a detection-defensible response.
 
 ## 14. Relation to routeability
 
