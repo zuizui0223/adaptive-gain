@@ -28,17 +28,17 @@ def _fraction_table(psi, gamma, epsilon, q1, q2):
 def test_exact_opposite_direction_witness_with_fractions():
     increase = _fraction_table(
         Fraction(1, 4),
-        Fraction(7, 15),
-        Fraction(0, 1),
+        Fraction(7, 18),
+        Fraction(1, 6),
         Fraction(4, 5),
-        Fraction(1, 2),
+        Fraction(3, 5),
     )
     decrease = _fraction_table(
-        Fraction(11, 20),
-        Fraction(1, 18),
         Fraction(1, 2),
-        Fraction(4, 11),
-        Fraction(1, 1),
+        Fraction(1, 8),
+        Fraction(3, 8),
+        Fraction(2, 5),
+        Fraction(4, 5),
     )
 
     expected = {
@@ -51,24 +51,28 @@ def test_exact_opposite_direction_witness_with_fractions():
         assert increase[key] == value
         assert decrease[key] == value
 
-    assert increase["latent_change"] == Fraction(7, 20)
-    assert decrease["latent_change"] == -Fraction(1, 4)
+    assert increase["latent_change"] == Fraction(1, 4)
+    assert decrease["latent_change"] == -Fraction(1, 8)
+
+    for row in (increase, decrease):
+        for key in ("latent_previous", "latent_current"):
+            assert Fraction(0, 1) < row[key] < Fraction(1, 1)
 
 
 def test_implementation_reproduces_same_observed_table_with_opposite_latent_change():
     increase = dynamic_latent_observed_transition_table(
         psi_previous=1 / 4,
-        colonization=7 / 15,
-        extinction=0,
+        colonization=7 / 18,
+        extinction=1 / 6,
         q_previous=4 / 5,
-        q_current=1 / 2,
+        q_current=3 / 5,
     )
     decrease = dynamic_latent_observed_transition_table(
-        psi_previous=11 / 20,
-        colonization=1 / 18,
-        extinction=1 / 2,
-        q_previous=4 / 11,
-        q_current=1,
+        psi_previous=1 / 2,
+        colonization=1 / 8,
+        extinction=3 / 8,
+        q_previous=2 / 5,
+        q_current=4 / 5,
     )
 
     for key, expected in (
@@ -88,17 +92,17 @@ def test_implementation_reproduces_same_observed_table_with_opposite_latent_chan
 def test_same_observed_prevalence_increase_can_hide_opposite_latent_directions():
     increase = dynamic_latent_observed_transition_table(
         psi_previous=1 / 4,
-        colonization=7 / 15,
-        extinction=0,
+        colonization=7 / 18,
+        extinction=1 / 6,
         q_previous=4 / 5,
-        q_current=1 / 2,
+        q_current=3 / 5,
     )
     decrease = dynamic_latent_observed_transition_table(
-        psi_previous=11 / 20,
-        colonization=1 / 18,
-        extinction=1 / 2,
-        q_previous=4 / 11,
-        q_current=1,
+        psi_previous=1 / 2,
+        colonization=1 / 8,
+        extinction=3 / 8,
+        q_previous=2 / 5,
+        q_current=4 / 5,
     )
 
     for row in (increase, decrease):
@@ -106,3 +110,24 @@ def test_same_observed_prevalence_increase_can_hide_opposite_latent_directions()
 
     assert increase["latent_current"] > increase["latent_previous"]
     assert decrease["latent_current"] < decrease["latent_previous"]
+
+
+def test_opposite_direction_witness_is_strictly_interior():
+    parameterizations = (
+        (
+            Fraction(1, 4),
+            Fraction(7, 18),
+            Fraction(1, 6),
+            Fraction(4, 5),
+            Fraction(3, 5),
+        ),
+        (
+            Fraction(1, 2),
+            Fraction(1, 8),
+            Fraction(3, 8),
+            Fraction(2, 5),
+            Fraction(4, 5),
+        ),
+    )
+    for params in parameterizations:
+        assert all(Fraction(0, 1) < value < Fraction(1, 1) for value in params)
