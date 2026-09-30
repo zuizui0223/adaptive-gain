@@ -141,7 +141,9 @@
       "latent true link gain/loss",
       "environmental routeability",
       "decision-structural turnover",
-      "decision-equivalence classes"
+      "decision-equivalence classes",
+      "true latent link state under imperfect detection",
+      "ecological rewiring identified from binary observed gain/loss"
     ],
     "superseded_ecological_interpretation_by": [
       "validation/villavicencio_subseason_effort_audit_result_v1.json",
@@ -153,7 +155,7 @@
     ]
   },
   "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: stop observational promotion of annual binary gain/loss as natural rewiring. Use the claim-resolution ledger; further routeability evidence requires a controlled experiment or an independent detection-defensible network with an externally defined decision layer.",
-  "claim_ceiling": "This annual fallback establishes response estimability for observed binary link states and observed-link turnover only. Raw-census effort, census-incidence, latent-detection and overdispersion audits show that those states do not identify true rewiring. Do not use the historical annual gain/loss numbers as routeability or detection-corrected rewiring evidence.",
+  "claim_ceiling": "This annual fallback establishes response estimability only. Sampling-effort semantics are now resolved from raw 5-min censuses, but binary observed link states remain materially detection-sensitive and do not identify latent ecological gain/loss. The annual fallback cannot validate routeability or true species turnover.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
@@ -205,5 +207,11 @@
   "transition_field_semantics": {
     "rewiring_count": "legacy field name retained for file compatibility; numerically this is observed shared-dyad binary link-state change, not identified ecological rewiring",
     "rewiring_opportunity_rate": "legacy field name retained for compatibility; observed binary change fraction on the detection-sensitive shared-dyad surface"
+  },
+  "current_detection_resolution": {
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "integrated_boundary": "validation/villavicencio_rewiring_identification_boundary_v1.json",
+    "consequence": "Annual binary changes remain observed-link turnover. Detection-sensitive no longer means effort semantics are unknown; it means observed zero/nonzero states do not identify latent ecological absence/presence."
   }
 }
