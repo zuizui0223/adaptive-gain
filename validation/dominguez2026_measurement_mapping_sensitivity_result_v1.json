@@ -66,15 +66,21 @@
   "diagnostic_read": {
     "gain": "Alternative pollinator measurements do not produce a stable rescue of the Villavicencio gain-side pollinator dominance. The direction ranges from plant-dominant to nearly tied to weakly pollinator-dominant depending on measurement pair.",
     "loss": "Published pollinator abundance/phenology can dominate loss prediction, opposite to the focal-excluded primary external loss result. Because these published pollinator metrics may share observational support with the focal interaction response, this does not overturn the cleaner primary result but demonstrates strong measurement sensitivity.",
-    "cross_system_implication": "The existence of a current-state ecological opportunity signal is more portable than the exact allocation of predictive information between plant and pollinator axes."
+    "cross_system_implication": "The existence of predictive structure on recorded annual links is more portable than exact plant-versus-pollinator axis dominance. Because the response is not detection-defensible for latent state, this sensitivity cannot adjudicate universal ecological assembly/disassembly mechanisms."
   },
   "not_established": [
     "a universal pollinator-side gain mechanism",
     "a universal plant-side loss mechanism independent of measurement definition",
+    "cross-system latent ecological gain/loss replication",
     "that published pollinator abundance or phenology is focal-response-independent",
     "causal assembly-disassembly asymmetry",
     "decision-equivalence classes",
     "environmental routeability"
   ],
-  "claim_ceiling": "Post-result measurement sensitivity only. The pre-frozen external gain mismatch remains the primary result. These analyses show that axis dominance is measurement-sensitive and therefore should not be promoted as a universal mechanism."
+  "claim_ceiling": "Post-result measurement sensitivity on recorded annual-link prediction only. The pre-frozen external gain mismatch remains the primary observed-link result, and the response-validity gate prevents any measurement mapping from being promoted to latent ecological mechanism or routeability evidence.",
+  "response_validity": {
+    "gate": "validation/dominguez2026_response_validity_v1.json",
+    "classification": "observed_link_turnover_only",
+    "role": "measurement-mapping sensitivity on recorded annual-link prediction, not latent ecological state"
+  }
 }
