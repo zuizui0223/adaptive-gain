@@ -21,6 +21,7 @@ def test_frozen_villavicencio_fixture_matches_classifier():
         response_reconstructable=data["response_reconstructable"],
         response_nondegenerate=data["response_nondegenerate"],
         effort_semantics_resolved=data["effort_semantics_resolved"],
+        binary_detection_audited=data["binary_detection_audited"],
         binary_detection_material=data["binary_detection_material"],
         true_absence_independently_supported=data[
             "true_absence_independently_supported"
@@ -59,6 +60,7 @@ def test_gate_is_fail_closed_for_detection_sensitive_networks():
             response_reconstructable=True,
             response_nondegenerate=True,
             effort_semantics_resolved=True,
+            binary_detection_audited=True,
             binary_detection_material=True,
             true_absence_independently_supported=False,
             effort_standardized_response_available=True,
