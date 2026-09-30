@@ -153,7 +153,7 @@
     ]
   },
   "next_gate": "OBSERVATIONAL_STOP_RULE_REACHED: stop observational promotion of annual binary gain/loss as natural rewiring. Use the claim-resolution ledger; further routeability evidence requires a controlled experiment or an independent detection-defensible network with an externally defined decision layer.",
-  "claim_ceiling": "This annual fallback establishes response estimability for observed binary link states only. Raw-census effort, census-incidence, latent-detection and overdispersion audits show that those states do not identify true ecological rewiring. Do not use the historical annual gain/loss numbers as routeability or detection-corrected rewiring evidence.",
+  "claim_ceiling": "This annual fallback establishes response estimability for observed binary link states and observed-link turnover only. Raw-census effort, census-incidence, latent-detection and overdispersion audits show that those states do not identify true rewiring. Do not use the historical annual gain/loss numbers as routeability or detection-corrected rewiring evidence.",
   "sampling_effort_resolution": {
     "status": "SEMANTICS_RESOLVED_DETECTION_SENSITIVITY_MATERIAL",
     "evidence": "validation/villavicencio_subseason_effort_audit_result_v1.json",
