@@ -43,8 +43,7 @@ Relevant examples include:
   DOI: 10.1111/2041-210X.12100 — review of occupancy models separating state
   and detection.
 
-No claim is made that imperfect detection or sampling-sensitive rewiring is
-new.
+No claim is made that imperfect detection or sampling-sensitive rewiring is new.
 
 ## Identity 1 — finite-network turnover balance
 
