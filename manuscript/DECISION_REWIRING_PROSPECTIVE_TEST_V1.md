@@ -25,6 +25,27 @@ The quantities must be defined in the following order:
 
 Decision-equivalence classes must therefore be defined independently of the observed rewiring response. Inferring them from the same link changes used as the outcome would be circular.
 
+
+## Response-side admission gate
+
+Before any decision-equivalence exposure is evaluated, the interaction response itself must pass a fail-closed validity gate.
+
+A natural-network routeability test is empirically eligible only when:
+
+- the response is reproducibly reconstructable and nondegenerate;
+- observation-effort semantics are resolved;
+- material binary detection bias is either absent, independently bounded, or explicitly modeled;
+- the declared ecological **state** response is reproducible after effort/detection handling;
+- the state conclusion is robust to the frozen observation-model sensitivity;
+- and the decision-structure exposure is measured independently of the focal response.
+
+The reusable classifier is:
+- `adaptive_gain/network_response_validity.py`
+- `validation/network_response_validity_gate_v1.json`
+
+This gate prevents a common failure mode: a model can predict whether an interaction will be **recorded** without identifying whether the latent ecological interaction state changed. Such a dataset can support response feasibility or observed-link turnover analysis, but not a Level-1 natural routeability bridge.
+
+
 ## Primary unit of analysis
 
 Use repeated ecological networks from the same system across time, space, or experimentally manipulated environments.
