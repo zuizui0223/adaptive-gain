@@ -34,6 +34,11 @@ The two tasks have:
 
 Thus low-order environmental quantity and even total available target
 information can be held fixed while conditional decision architecture differs.
+
+Moreover, at the common hard budget B=d+1, the routeable task is guaranteed
+resolvable adaptively but not by any fixed bundle, whereas the matched control
+is guaranteed resolvable by both strategies. This gives an exact matched
+architecture-by-access interaction at a shared ecological budget.
 """
 
 from __future__ import annotations
@@ -63,6 +68,13 @@ class BalancedQuantityTopologyContrastReceipt:
     control_target_multiplicities: tuple[int, int]
     same_target_entropy: bool
     same_full_vocabulary_target_information: bool
+    same_all_cue_subset_distributions: bool
+    common_budget: int
+    routeable_adaptive_guaranteed_at_budget: bool
+    routeable_fixed_guaranteed_at_budget: bool
+    control_adaptive_guaranteed_at_budget: bool
+    control_fixed_guaranteed_at_budget: bool
+    guaranteed_budget_interaction: int
     control_adaptive_cost: int
     control_fixed_cost: int
     control_exact_no_gain: bool
@@ -171,6 +183,16 @@ def balanced_quantity_topology_contrast_audit(
         # so I(T;Q_all)=H(T) is the same in both tasks.
         same_target_entropy = same_target_multiplicities
         same_full_info = same_target_multiplicities
+        same_all_cue_subset_distributions = same_query_matrix
+        common_budget = routing_depth + 1
+        routeable_adaptive_guaranteed = routeable_ca <= common_budget
+        routeable_fixed_guaranteed = routeable_cf <= common_budget
+        control_adaptive_guaranteed = control_ca <= common_budget
+        control_fixed_guaranteed = control_cf <= common_budget
+        guaranteed_budget_interaction = int(
+            (routeable_adaptive_guaranteed - routeable_fixed_guaranteed)
+            - (control_adaptive_guaranteed - control_fixed_guaranteed)
+        )
 
         theorem = (
             same_world_names
@@ -184,6 +206,12 @@ def balanced_quantity_topology_contrast_audit(
             and routeable_cf is not None
             and routeable_ca <= routing_depth + 1
             and routeable_cf >= k
+            and k > common_budget
+            and routeable_adaptive_guaranteed
+            and not routeable_fixed_guaranteed
+            and control_adaptive_guaranteed
+            and control_fixed_guaranteed
+            and guaranteed_budget_interaction == 1
         )
     else:
         same_world_names = True
@@ -194,6 +222,13 @@ def balanced_quantity_topology_contrast_audit(
         same_target_multiplicities = True
         same_target_entropy = True
         same_full_info = True
+        same_all_cue_subset_distributions = True
+        common_budget = routing_depth + 1
+        routeable_adaptive_guaranteed = True
+        routeable_fixed_guaranteed = False
+        control_adaptive_guaranteed = True
+        control_fixed_guaranteed = True
+        guaranteed_budget_interaction = 1
         control_ca = 2
         control_cf = 2
         control_exact = True
@@ -215,6 +250,13 @@ def balanced_quantity_topology_contrast_audit(
         control_target_multiplicities=control_targets,
         same_target_entropy=same_target_entropy,
         same_full_vocabulary_target_information=same_full_info,
+        same_all_cue_subset_distributions=same_all_cue_subset_distributions,
+        common_budget=common_budget,
+        routeable_adaptive_guaranteed_at_budget=routeable_adaptive_guaranteed,
+        routeable_fixed_guaranteed_at_budget=routeable_fixed_guaranteed,
+        control_adaptive_guaranteed_at_budget=control_adaptive_guaranteed,
+        control_fixed_guaranteed_at_budget=control_fixed_guaranteed,
+        guaranteed_budget_interaction=guaranteed_budget_interaction,
         control_adaptive_cost=control_ca,
         control_fixed_cost=control_cf,
         control_exact_no_gain=control_exact,
