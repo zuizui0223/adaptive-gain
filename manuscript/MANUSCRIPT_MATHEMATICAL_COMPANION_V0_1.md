@@ -18,7 +18,7 @@ We study these questions in a deterministic target-resolution model. The target 
 
 For a declared query vocabulary, let \(C_A\) be the minimum worst-case cost of an adaptive target-resolving decision tree and \(C_F\) the minimum cardinality of a fixed resolving query set. The inequality \(C_A\le C_F\) is immediate and is not our contribution. Nor do we claim novelty for adaptive versus non-adaptive search, binary decision trees, Test Cover, or the use of half-size blocks. Our focus is the extremal geometry created when these ingredients are imposed simultaneously.
 
-The first result concerns the fixed side alone. In unrestricted binary target resolution, a minimum fixed resolver can contain as many as \(n-1\) essential queries. Under exact global balance, the sharp maximum drops to \(n-3\) for every even \(n\ge6\). The proof is graph-theoretic. Every query in a minimum resolver owns a private cross-target pair. Selecting one private pair per query yields a graph in which every selected edge is the unique edge of one query cut and is therefore a bridge. The graph is a forest. Exact balance then rules out the one- and two-component forests needed to attain \(n-1\) or \(n-2\) edges.
+The first result concerns the fixed side alone. The classical Bondy bound implies that an inclusionwise minimal separating family can have at most \(n-1\) essential tests, and this bound is sharp without balance restrictions. Under exact global balance, the sharp maximum in our target-resolution setting drops to \(n-3\) for every even \(n\ge6\). The proof is graph-theoretic. Every query in a minimum resolver owns a private cross-target pair. Selecting one private pair per query yields a graph in which every selected edge is the unique edge of one query cut and is therefore a bridge. The graph is a forest. Exact balance then rules out the one- and two-component forests needed to attain \(n-1\) or \(n-2\) edges.
 
 The equality case is rigid. An \(n-3\)-query balanced family forces the private-pair forest to consist of two stars of size \(n/2-1\) and one isolated edge. This star--edge--star normal form in turn forces high adaptive depth when the declared vocabulary consists only of the saturated fixed family.
 
@@ -306,6 +306,7 @@ is attainable. Extensions to approximately balanced queries and to equal-part mu
 ## References
 
 - Aigner, M. 1988. *Combinatorial Search*. Wiley.
+- Bondy, J. A. 1972. Induced subsets. *Journal of Combinatorial Theory, Series B* 12:201–202. DOI: 10.1016/0095-8956(72)90025-1.
 - Chiarelli, J., Hatami, P. & Saks, M. 2020. An asymptotically tight bound on the number of relevant variables in a bounded degree Boolean function. *Combinatorica* 40:237–244. DOI: 10.1007/s00493-019-4136-7.
 - Damaschke, P. 2019. Combinatorial search in two and more rounds. *Theoretical Computer Science* 780:1–11. DOI: 10.1016/j.tcs.2019.02.004.
 - Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194.
