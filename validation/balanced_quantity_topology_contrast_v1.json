@@ -1,0 +1,66 @@
+{
+  "schema": "adaptive-gain-balanced-quantity-topology-contrast-v1",
+  "date": "2026-10-01",
+  "status": "PASS",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "purpose": "Validate a quantity-matched pair that holds the physical query environment fixed while changing only the target/action map.",
+  "construction": {
+    "routeable_source": "adaptive_gain/balanced_binary_extremal_family.py",
+    "matched_control": "adaptive_gain/balanced_quantity_topology_contrast.py",
+    "minimum_routing_depth": 2,
+    "parameterization": "k=2^d",
+    "world_count": "2k+2",
+    "query_count": "d+k",
+    "control_target_rule": "target 0 iff first two routing bits are equal; target 1 otherwise"
+  },
+  "matched_quantities": [
+    "same represented worlds and world identities",
+    "same query identities and query count",
+    "same unit query costs",
+    "same full binary query outcome matrix",
+    "same exact 50/50 marginal distribution for every query",
+    "same cue-only joint distribution",
+    "same target multiplicities (k+2,k)",
+    "same target entropy under uniform world prior",
+    "same full-vocabulary target information I(T;Q_all)=H(T), because the full vocabulary resolves both targets"
+  ],
+  "structural_difference": {
+    "routeable": "C_F>=2^d and C_A<=d+1, hence C_F/C_A>=2^d/(d+1)",
+    "matched_control": "C_A=C_F=2 exactly",
+    "ratio_gap_lower_bound": "2^d/(d+1)-1 -> infinity"
+  },
+  "exact_control_argument": [
+    "the first two routing bits resolve equality-versus-inequality target, giving C_A<=2 and C_F<=2",
+    "every declared query is exactly balanced with outcome classes k+1,k+1",
+    "the control target classes have sizes k+2,k",
+    "therefore no single binary query can resolve the control target",
+    "hence C_A=C_F=2"
+  ],
+  "direct_solver_checks": {
+    "depths": [
+      2,
+      3
+    ],
+    "test_file": "tests/test_balanced_quantity_topology_contrast.py",
+    "focused_workflow": ".github/workflows/quantity-topology-smoke.yml",
+    "workflow_run_id": 36802319248,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success"
+  },
+  "full_suite_boundary": {
+    "status": "unrelated_failure",
+    "failing_test": "tests/test_ecological_novelty_extension.py::test_decision_structural_turnover_rewiring_bridge",
+    "reason": "legacy manuscript phrase assertion is out of sync with manuscript/ECOLOGICAL_NOVELTY_EXTENSION_V1.md",
+    "relation_to_contrast": "none; focused quantity-topology smoke passes on all supported Python versions"
+  },
+  "claim_boundary": [
+    "The construction does not hold the full joint distribution P(T,Q_all) fixed; changing the target/action map is exactly the higher-order structural change of interest.",
+    "It therefore proves insufficiency of matched environmental cue distribution, target prevalence, target entropy, and total available target information for identifying acquisition topology.",
+    "It does not prove that every conceivable numerical summary is blind to topology; a complete action-conditioned cue table can encode the topology.",
+    "The ecological interpretation still requires a biologically meaningful acquisition budget or cost."
+  ],
+  "theorem_note": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
+  "synthesis_note": "manuscript/BALANCED_ROUTEABILITY_MATH_ECOLOGY_SYNTHESIS_V2.md",
+  "theorem_holds": true
+}
