@@ -246,7 +246,91 @@ does the behaviorally accessible subset differ?
 
 ---
 
-## 6. Nonidentifiability is the deeper bridge
+## 6. Finite pairwise-information stress tests
+
+The asymptotic matched construction holds the full cue-only environment fixed but does not match every target-cue pairwise profile.
+
+At finite scopes, stronger registered controls are available.
+
+### Routing depth 2
+
+The routeable task and control share:
+- the same physical query matrix;
+- the same target multiplicities;
+- the same multiset of canonical target-query \(2\times2\) contingency profiles.
+
+The control has
+
+\[
+\boxed{C_A=C_F=2.}
+\]
+
+Thus even the distribution of pairwise target-information strengths can be matched while strict adaptive gain disappears.
+
+### Routing depth 3
+
+The same pairwise-profile multiset can again be matched.
+
+The control has
+
+\[
+\boxed{C_A=C_F=3.}
+\]
+
+while the routeable family retains its substantially larger fixed burden.
+
+These finite controls sharpen the interpretation:
+
+> pairwise target-cue informativeness is still not sufficient to identify conditional acquisition topology.
+
+The pairwise match is intentionally a **multiset** match, not a name-by-name cue match. No asymptotic pairwise-matched control family is currently claimed.
+
+Validation:
+
+- \`validation/balanced_pairwise_information_controls_v1.json\`
+- focused CI run 36804026071: Python 3.10 / 3.11 / 3.12 PASS.
+
+## 7. Which ecological principles are actually reached
+
+The current theory does not support equally strong claims for every ecological principle.
+
+### Information amount / fitness value
+
+**Direct structural distinction.**
+
+The current construction shows that equal target entropy, equal total available target information and matched cue distributions do not determine sequential acquisition architecture.
+
+It does not refute information-fitness theory; it identifies an additional acquisition-architecture coordinate.
+
+### Specialist-generalist information-processing cost
+
+**Direct for processing burden; modifier for evolution.**
+
+Nominally equal niche breadth can impose different decision burdens.
+
+Predicting evolved niche breadth still requires fitness and evolutionary dynamics.
+
+### Environmental heterogeneity and niche breadth
+
+**Modifier only.**
+
+Routeability adds conditional decision topology to existing dimensions such as amount, spatial/temporal pattern and grain.
+
+It does not replace those dimensions.
+
+### Diversity-stability
+
+**Not yet reached.**
+
+The current finite decision model has no population-abundance dynamics or stability functional.
+
+Any claim about biodiversity-stability requires a separate model linking routeability to interaction strengths and then to community dynamics.
+
+See:
+
+- \`manuscript/ECOLOGICAL_PRINCIPLE_BLINDNESS_AUDIT_V1.md\`
+
+## 8. Nonidentifiability is the deeper bridge
 
 The quantity/topology contrast implies an identification statement.
 
@@ -309,7 +393,7 @@ The matched constructions instead show something sharper and safer:
 
 The missing information is precisely the higher-order **action-conditioned arrangement** of cue states.
 
-## 7. What the current V5 should claim
+## 9. What the current V5 should claim
 
 The present V5 does not need stochastic expected-loss theory.
 
@@ -325,7 +409,7 @@ This is enough for the current paper.
 
 ---
 
-## 8. What belongs to the next theory paper
+## 10. What belongs to the next theory paper
 
 The deterministic theory asks for guaranteed exact resolution.
 
@@ -367,7 +451,7 @@ That is a separate paper and should not delay V5.
 
 ---
 
-## 9. Experimental consequence
+## 11. Experimental consequence
 
 The existing four-state experiment is the minimal causal version.
 
@@ -400,7 +484,7 @@ This is the direct experimental implementation of the orthogonality theorem.
 
 ---
 
-## 10. Paper portfolio
+## 12. Paper portfolio
 
 ### V5 — ecology theory
 
