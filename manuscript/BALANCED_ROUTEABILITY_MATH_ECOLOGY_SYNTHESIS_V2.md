@@ -393,7 +393,33 @@ The matched constructions instead show something sharper and safer:
 
 The missing information is precisely the higher-order **action-conditioned arrangement** of cue states.
 
-## 9. What the current V5 should claim
+## 9. Reality claims versus model claims
+
+Routeability is most useful as a diagnostic of when an ecological summary is sufficient for the mechanism being claimed.
+
+### Reality claim
+
+A statement about the biological system itself, for example:
+
+> environmental heterogeneity increases the realized cost of generalism.
+
+Such a claim requires the data to identify the relevant decision structure or downstream outcome.
+
+### Model claim
+
+A statement conditional on a chosen summary representation, for example:
+
+> under an environment represented by variance \(V\), predicted niche breadth increases with \(V\).
+
+If multiple hidden decision topologies share the same \(V\) but imply different feasible behavior, the scalar principle is not thereby false. It is incomplete for the stronger mechanistic interpretation.
+
+Thus the role of routeability is often:
+
+> **to identify when a quantitative ecological summary is insufficient for the mechanistic claim attached to it.**
+
+This is stronger and safer than claiming existing ecological principles are wrong.
+
+## 10. What the current V5 should claim
 
 The present V5 does not need stochastic expected-loss theory.
 
@@ -409,7 +435,7 @@ This is enough for the current paper.
 
 ---
 
-## 10. What belongs to the next theory paper
+## 11. What belongs to the next theory paper
 
 The deterministic theory asks for guaranteed exact resolution.
 
@@ -451,7 +477,7 @@ That is a separate paper and should not delay V5.
 
 ---
 
-## 11. Experimental consequence
+## 12. Experimental consequence
 
 The existing four-state experiment is the minimal causal version.
 
@@ -484,7 +510,7 @@ This is the direct experimental implementation of the orthogonality theorem.
 
 ---
 
-## 12. Paper portfolio
+## 13. Paper portfolio
 
 ### V5 — ecology theory
 
