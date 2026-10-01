@@ -140,8 +140,8 @@ def pairwise_matched_control_audit(routing_depth: int) -> PairwiseMatchedControl
     registered_bundle_is_optimal = (
         fixed.minimum_cost == expected_fixed
         and any(
-            frozenset(q.name for q in candidate) == bundle
-            for candidate in fixed.optimal_query_sets
+            frozenset(candidate) == bundle
+            for candidate in fixed.optimal_bundles
         )
     )
 
