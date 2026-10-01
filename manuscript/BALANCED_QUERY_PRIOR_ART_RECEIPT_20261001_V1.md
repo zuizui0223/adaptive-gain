@@ -47,13 +47,15 @@ Consequence:
 - the private-pair forest proof should be presented as a convenient model-native proof, not as the novelty claim;
 - the candidate new content begins with the improvement to (n-3) under exact half-balance and the associated equality structure.
 
-### Uniform half-size separating systems
+### Cardinality-constrained and uniform separating systems
 
-Ling, Li & van Rees (2004), *Splitting systems and separating systems*, define uniform separating systems using blocks of size exactly half the even ground set.
+Katona (1966) and Wegener (1979) study separating systems under cardinality restrictions on the tests. Ahlswede (2008) develops ratewise-optimal non-sequential search under such test-size constraints and includes the k-uniform separating formulation. Ling, Li & van Rees (2004) define uniform separating systems using blocks of size exactly half the even ground set.
 
 Consequence:
 - exact half-size binary tests are an established combinatorial restriction;
-- the paper must not claim novelty for imposing 50/50 balance itself.
+- minimum-size non-adaptive search with cardinality-constrained or uniform tests is prior art;
+- the paper must not claim novelty for imposing 50/50 balance itself;
+- the candidate contribution is instead about maximum irredundant fixed burden and its interaction with bounded adaptive depth inside a declared balanced vocabulary.
 
 ### Complete read-once tree geometry
 
@@ -139,6 +141,7 @@ Avoid:
 ## References
 
 - J. A. Bondy. 1972. Induced subsets. Journal of Combinatorial Theory, Series B 12:201-202. DOI: 10.1016/0095-8956(72)90025-1.
+- R. Ahlswede. 2008. Ratewise-optimal non-sequential search strategies under constraints on the tests. Discrete Applied Mathematics 156(9):1431-1443. DOI: 10.1016/j.dam.2006.06.013.
 - G. Wiener. 2009. Rounds in Combinatorial Search. Dagstuhl Seminar Proceedings 09281. DOI: 10.4230/DagSemProc.09281.6.
 - P. Damaschke. 2019. Combinatorial search in two and more rounds. Theoretical Computer Science 780:1-11. DOI: 10.1016/j.tcs.2019.02.004.
 - A. C. H. Ling, P. C. Li & G. H. J. van Rees. 2004. Splitting systems and separating systems. Discrete Mathematics 279:355-368. DOI: 10.1016/S0012-365X(03)00280-2.
