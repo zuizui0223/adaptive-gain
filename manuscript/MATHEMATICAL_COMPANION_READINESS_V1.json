@@ -1,0 +1,72 @@
+{
+  "schema": "adaptive-gain-mathematical-companion-readiness-v1",
+  "date": "2026-10-01",
+  "branch": "companion/math-priority-audit-v2",
+  "status": "balanced_query_companion_draft_v0_2_priority_audit_open",
+  "working_title": "Adaptive target resolution under exactly balanced binary queries",
+  "canonical_assets": {
+    "manuscript": "manuscript/MANUSCRIPT_MATHEMATICAL_COMPANION_V0_2.md",
+    "outline": "manuscript/MATHEMATICAL_COMPANION_OUTLINE_V3.md",
+    "priority_audit": "manuscript/MATHEMATICAL_COMPANION_PRIORITY_AUDIT_V3.md",
+    "prior_art_receipt": "manuscript/BALANCED_QUERY_PRIOR_ART_RECEIPT_20261001_V1.md",
+    "finite_profile_table": "manuscript/MATHEMATICAL_COMPANION_FINITE_PROFILE_TABLE_V2.md"
+  },
+  "headline_results": [
+    {
+      "result": "balanced_fixed_cost_cap",
+      "statement": "For even n>=6, max C_F=n-3 under globally exact 50/50 binary unit-cost queries.",
+      "status": "proved",
+      "novelty_status": "candidate_independent_result_priority_not_proved",
+      "prior_art_boundary": "Generic inclusionwise-minimal separating-family cap n-1 is classical via Bondy; cardinality-constrained and uniform separating systems are prior art."
+    },
+    {
+      "result": "cap_equality_normal_form",
+      "statement": "Every cap-saturating minimum resolver has star-edge-star private-pair normal form; rows are forced up to relabeling/complementation.",
+      "status": "proved",
+      "novelty_status": "strongest_finite_structural_candidate_no_exact_predecessor_located"
+    },
+    {
+      "result": "balanced_adaptive_depth_envelopes",
+      "statement": "D_h(n)=max{C_F:C_A<=h}; D3 is fully closed, D4 is closed through saturation, selected D5 rows are sharp.",
+      "status": "mixed_analytic_and_exact_finite_computational",
+      "novelty_status": "strong_candidate_program_no_exact_predecessor_located"
+    },
+    {
+      "result": "balanced_unbounded_adaptive_advantage",
+      "statement": "Every query may be globally exactly 50/50 balanced while C_F/C_A >= 2^d/(d+1) -> infinity.",
+      "status": "proved_constructively",
+      "novelty_status": "strong_asymptotic_candidate_generic_adaptivity_gaps_are_prior_art"
+    }
+  ],
+  "demoted_results": [
+    "generic C_A<=C_F containment",
+    "generic C_F<=2^C_A-1 flattening/tree bound",
+    "generic sharp fixed-(n,m) binary ratio",
+    "prescribed-gap inverse architecture",
+    "target-relevant kernels and LP/certificate machinery",
+    "eco-evolutionary nonlinear and spectral compositions"
+  ],
+  "confirmed_prior_art": [
+    "Bondy 1972: generic n-1 cap for inclusionwise minimal separating families",
+    "Katona 1966 and Wegener 1979: separating systems with test-size constraints",
+    "Ahlswede 2008: ratewise-optimal non-sequential search under test cardinality constraints and k-uniform formulation",
+    "Ling, Li & van Rees 2004: uniform half-size separating systems",
+    "Wiener 2009 and Damaschke 2019: adaptive/non-adaptive/multi-round combinatorial search",
+    "read-once depth-d decision-tree 2^d-1 variable/resource geometry is classical"
+  ],
+  "remaining_blockers": [
+    "deeper bibliographic search for maximum-cardinality inclusionwise-minimal uniform separating families",
+    "search equality cases of uniform separating systems for star-edge-star equivalent",
+    "search restricted-question Twenty Questions/combinatorial search for exact D_h(n)-type balanced envelopes",
+    "compress full proofs and clearly label analytic versus exhaustive-computational claims"
+  ],
+  "not_blockers": [
+    "new theorem discovery",
+    "eco-evolutionary extension",
+    "additional finite D5 rows",
+    "complete general D_h(n) formula",
+    "complete exact-balanced fixed-(n,m) formula"
+  ],
+  "stop_rule": "Do not add a new theorem family. Resolve priority for the balanced theorem family, compress proofs, and write the companion.",
+  "v5_surface_untouched": true
+}
