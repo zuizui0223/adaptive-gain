@@ -9,6 +9,8 @@ on:
       - "adaptive_gain/balanced_pairwise_information_controls.py"
       - "tests/test_balanced_quantity_topology_contrast.py"
       - "tests/test_balanced_pairwise_information_controls.py"
+      - "adaptive_gain/exact_balanced_routeability_stress_test.py"
+      - "tests/test_exact_balanced_routeability_stress_test.py"
       - ".github/workflows/quantity-topology-smoke.yml"
   workflow_dispatch:
 
@@ -25,4 +27,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e . pytest
-      - run: python -m pytest -q tests/test_balanced_quantity_topology_contrast.py tests/test_balanced_pairwise_information_controls.py
+      - run: python -m pytest -q tests/test_balanced_quantity_topology_contrast.py tests/test_balanced_pairwise_information_controls.py tests/test_exact_balanced_routeability_stress_test.py
