@@ -1,0 +1,68 @@
+{
+  "schema": "adaptive-gain-balanced-pairwise-information-controls-v1",
+  "date": "2026-10-01",
+  "status": "PASS",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "purpose": "Strengthen quantity/topology separation by matching the multiset of all canonical target-query 2x2 contingency profiles at finite exact-balanced scopes.",
+  "matching_definition": "Canonical binary target-query contingency profiles are compared up to independent 0/1 relabeling. Equality therefore implies equal pairwise mutual information/association strength profiles as a multiset, not name-by-name equality.",
+  "depth_2": {
+    "worlds": 10,
+    "queries": 6,
+    "routeable_target_multiplicities": [
+      6,
+      4
+    ],
+    "control_target_multiplicities": [
+      6,
+      4
+    ],
+    "same_physical_query_matrix": true,
+    "same_pairwise_target_query_signature_multiset": true,
+    "control_adaptive_cost": 2,
+    "control_fixed_cost": 2,
+    "registered_fixed_resolver": [
+      "terminal_1",
+      "terminal_2"
+    ],
+    "interpretation": "Pairwise target-information strength distribution can be held fixed while strict adaptive gain is removed."
+  },
+  "depth_3": {
+    "worlds": 18,
+    "queries": 11,
+    "routeable_target_multiplicities": [
+      10,
+      8
+    ],
+    "control_target_multiplicities": [
+      10,
+      8
+    ],
+    "same_physical_query_matrix": true,
+    "same_pairwise_target_query_signature_multiset": true,
+    "control_adaptive_cost": 3,
+    "control_fixed_cost": 3,
+    "registered_fixed_resolver": [
+      "route_bit_0",
+      "terminal_1",
+      "terminal_6"
+    ],
+    "interpretation": "Pairwise target-information strength distribution remains matched while the control becomes a three-query no-gain task, versus the routeable family's much larger fixed burden."
+  },
+  "focused_ci": {
+    "workflow": ".github/workflows/quantity-topology-smoke.yml",
+    "run_id": 36804026071,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success"
+  },
+  "source": [
+    "adaptive_gain/balanced_pairwise_information_controls.py",
+    "tests/test_balanced_pairwise_information_controls.py"
+  ],
+  "claim_boundary": [
+    "The pairwise match is a multiset match, not a name-by-name target-query match.",
+    "These are finite registered controls at routing depths 2 and 3; no asymptotic pairwise-matched control family is claimed.",
+    "The stronger asymptotic quantity/topology theorem instead matches the full cue-only environment, target prevalence/entropy, and total full-vocabulary target information."
+  ],
+  "theorem_holds": true
+}
