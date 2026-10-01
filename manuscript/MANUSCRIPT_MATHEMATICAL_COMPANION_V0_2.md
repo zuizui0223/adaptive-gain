@@ -10,7 +10,7 @@ Adaptive and non-adaptive finite search are classical, as are separating systems
 
 A finite search problem can be asked in two extreme ways. In the adaptive version, the next query may depend on previous answers. In the non-adaptive version, all queries must be selected before any answer is observed. This distinction is classical in combinatorial search, decision-tree theory, Test Cover and related identification problems. More generally, \(k\)-round search interpolates between the two extremes by allowing batches of parallel questions.
 
-A different classical restriction concerns the sizes of the query sets themselves. Separating-system theory asks for set families that distinguish elements or prescribed subsets, and uniform separating systems constrain each block to have the same cardinality. When the ground set has even size \(n\), an especially symmetric case requires each binary query to split the represented states exactly \(n/2:n/2\).
+A different classical restriction concerns the sizes of the query sets themselves. Katona, Wegener and Ahlswede study non-adaptive separating systems under cardinality constraints on the available tests, while uniform separating-system theory constrains each block to have the same cardinality. When the ground set has even size \(n\), an especially symmetric case requires each binary query to split the represented states exactly \(n/2:n/2\).
 
 These two themes suggest a natural finite extremal question. Suppose every available question is globally perfectly balanced. How large can the cost of a fixed resolving set be if an adaptive strategy is shallow? Does perfect balance make adaptive and non-adaptive resolution comparable, or can branch-dependent querying remain arbitrarily valuable?
 
@@ -307,6 +307,7 @@ is attainable. Extensions to approximately balanced queries and to equal-part mu
 
 - Aigner, M. 1988. *Combinatorial Search*. Wiley.
 - Bondy, J. A. 1972. Induced subsets. *Journal of Combinatorial Theory, Series B* 12:201–202. DOI: 10.1016/0095-8956(72)90025-1.
+- Ahlswede, R. 2008. Ratewise-optimal non-sequential search strategies under constraints on the tests. *Discrete Applied Mathematics* 156:1431–1443. DOI: 10.1016/j.dam.2006.06.013.
 - Chiarelli, J., Hatami, P. & Saks, M. 2020. An asymptotically tight bound on the number of relevant variables in a bounded degree Boolean function. *Combinatorica* 40:237–244. DOI: 10.1007/s00493-019-4136-7.
 - Damaschke, P. 2019. Combinatorial search in two and more rounds. *Theoretical Computer Science* 780:1–11. DOI: 10.1016/j.tcs.2019.02.004.
 - Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194.
