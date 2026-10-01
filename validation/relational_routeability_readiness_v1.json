@@ -12,7 +12,8 @@
     "prior_art_audit": "manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md",
     "measurement_protocol": "manuscript/ROUTEABILITY_MEASUREMENT_PROTOCOL_V1.md",
     "minimal_experiment": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
-    "balanced_stress_test": "manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md"
+    "balanced_stress_test": "manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md",
+    "canonical_index": "manuscript/RELATIONAL_ROUTEABILITY_CANONICAL_INDEX_V1.md"
   },
   "exact_results": {
     "relational_theorem": "same physical cue matrix + same target prevalence/entropy + same I(T;Q_all), yet routeable ratio lower bound diverges while matched control has C_A=C_F=2",
@@ -24,8 +25,8 @@
     "quantity_topology": "validation/balanced_quantity_topology_contrast_v1.json",
     "pairwise_controls": "validation/balanced_pairwise_information_controls_v1.json",
     "ten_state_stress_test": "validation/exact_balanced_routeability_stress_test_v1.json",
-    "integration": "validation/math_ecology_integration_readiness_v1.json",
-    "focused_ci": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and stress-test suite"
+    "focused_ci": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and stress-test suite",
+    "focused_ci_latest": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and ten-state stress-test suite"
   },
   "prior_art_boundary": [
     "adaptive feature acquisition is prior art",
@@ -63,5 +64,5 @@
     "claiming diversity-stability consequence without community dynamics",
     "claiming novelty for adaptive acquisition itself"
   ],
-  "stop_rule": "The deterministic routeability integration is sufficient. Do not add more theorem families. Move to writing/experiment; stochastic expected-loss theory is a separate paper."
+  "stop_rule": "The deterministic routeability integration is sufficient. Use the canonical index and theorem spine; do not add more deterministic theorem families. Move to writing/experiment; stochastic expected-loss theory is a separate paper."
 }
