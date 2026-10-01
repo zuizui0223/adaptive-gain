@@ -22,7 +22,8 @@
     "same cue-only joint distribution",
     "same target multiplicities (k+2,k)",
     "same target entropy under uniform world prior",
-    "same full-vocabulary target information I(T;Q_all)=H(T), because the full vocabulary resolves both targets"
+    "same full-vocabulary target information I(T;Q_all)=H(T), because the full vocabulary resolves both targets",
+    "same distribution for every subset of cue variables because the full query outcome matrix is identical"
   ],
   "structural_difference": {
     "routeable": "C_F>=2^d and C_A<=d+1, hence C_F/C_A>=2^d/(d+1)",
@@ -58,9 +59,22 @@
     "The construction does not hold the full joint distribution P(T,Q_all) fixed; changing the target/action map is exactly the higher-order structural change of interest.",
     "It therefore proves insufficiency of matched environmental cue distribution, target prevalence, target entropy, and total available target information for identifying acquisition topology.",
     "It does not prove that every conceivable numerical summary is blind to topology; a complete action-conditioned cue table can encode the topology.",
-    "The ecological interpretation still requires a biologically meaningful acquisition budget or cost."
+    "The ecological interpretation still requires a biologically meaningful acquisition budget or cost.",
+    "The exact budget interaction is a guaranteed-resolution contrast, not a prediction that real organisms will show a one-unit behavioral effect."
   ],
   "theorem_note": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
   "synthesis_note": "manuscript/BALANCED_ROUTEABILITY_MATH_ECOLOGY_SYNTHESIS_V2.md",
-  "theorem_holds": true
+  "theorem_holds": true,
+  "common_budget_corollary": {
+    "budget": "B=d+1",
+    "routeable": "adaptive guaranteed; fixed not guaranteed because C_A<=d+1<2^d<=C_F",
+    "control": "adaptive and fixed both guaranteed because C_A=C_F=2<=d+1",
+    "guaranteed_success_cells": {
+      "routeable_adaptive": 1,
+      "routeable_fixed": 0,
+      "control_adaptive": 1,
+      "control_fixed": 1
+    },
+    "architecture_by_access_interaction": 1
+  }
 }
