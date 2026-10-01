@@ -6,7 +6,9 @@ on:
       - synthesis/balanced-routeability-ecology-v1
     paths:
       - "adaptive_gain/balanced_quantity_topology_contrast.py"
+      - "adaptive_gain/balanced_pairwise_information_controls.py"
       - "tests/test_balanced_quantity_topology_contrast.py"
+      - "tests/test_balanced_pairwise_information_controls.py"
       - ".github/workflows/quantity-topology-smoke.yml"
   workflow_dispatch:
 
@@ -23,4 +25,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e . pytest
-      - run: python -m pytest -q tests/test_balanced_quantity_topology_contrast.py
+      - run: python -m pytest -q tests/test_balanced_quantity_topology_contrast.py tests/test_balanced_pairwise_information_controls.py
