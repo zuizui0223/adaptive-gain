@@ -23,6 +23,13 @@ def test_quantity_matched_control_is_exact_no_gain_at_small_depths():
         assert receipt.control_target_multiplicities == (k + 2, k)
         assert receipt.same_target_entropy
         assert receipt.same_full_vocabulary_target_information
+        assert receipt.same_all_cue_subset_distributions
+        assert receipt.common_budget == depth + 1
+        assert receipt.routeable_adaptive_guaranteed_at_budget
+        assert not receipt.routeable_fixed_guaranteed_at_budget
+        assert receipt.control_adaptive_guaranteed_at_budget
+        assert receipt.control_fixed_guaranteed_at_budget
+        assert receipt.guaranteed_budget_interaction == 1
 
         assert receipt.control_adaptive_cost == 2
         assert receipt.control_fixed_cost == 2
@@ -90,5 +97,12 @@ def test_matched_quantities_hold_analytically_beyond_solver_cap():
     assert receipt.same_target_multiplicities
     assert receipt.same_target_entropy
     assert receipt.same_full_vocabulary_target_information
+    assert receipt.same_all_cue_subset_distributions
+    assert receipt.common_budget == 9
+    assert receipt.routeable_adaptive_guaranteed_at_budget
+    assert not receipt.routeable_fixed_guaranteed_at_budget
+    assert receipt.control_adaptive_guaranteed_at_budget
+    assert receipt.control_fixed_guaranteed_at_budget
+    assert receipt.guaranteed_budget_interaction == 1
     assert receipt.control_adaptive_cost == 2
     assert receipt.control_fixed_cost == 2
