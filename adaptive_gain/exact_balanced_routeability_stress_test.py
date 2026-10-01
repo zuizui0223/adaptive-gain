@@ -30,6 +30,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+from fractions import Fraction
 from itertools import combinations
 
 from .balanced_binary_extremal_family import balanced_binary_extremal_task
@@ -53,11 +54,11 @@ class ExactBalancedStressTestReceipt:
     control_adaptive_cost: int
     control_fixed_cost: int
     common_budget: int
-    routeable_contingent_accuracy_ceiling: float
-    routeable_best_fixed_accuracy_ceiling: float
-    control_contingent_accuracy_ceiling: float
-    control_best_fixed_accuracy_ceiling: float
-    architecture_access_interaction_ceiling: float
+    routeable_contingent_accuracy_ceiling: Fraction
+    routeable_best_fixed_accuracy_ceiling: Fraction
+    control_contingent_accuracy_ceiling: Fraction
+    control_best_fixed_accuracy_ceiling: Fraction
+    architecture_access_interaction_ceiling: Fraction
     routeable_best_fixed_bundles: tuple[tuple[str, ...], ...]
     control_best_fixed_bundles: tuple[tuple[str, ...], ...]
     theorem_holds: bool
@@ -75,7 +76,7 @@ def exact_balanced_control_stress_task() -> FiniteTask:
 def uniform_target_accuracy_for_bundle(
     task: FiniteTask,
     query_names: tuple[str, ...],
-) -> float:
+) -> Fraction:
     lookup = {query.name: query for query in task.queries}
     grouped: dict[tuple[object, ...], list[object]] = defaultdict(list)
     for i, world in enumerate(task.worlds):
@@ -88,20 +89,20 @@ def uniform_target_accuracy_for_bundle(
         for target in targets:
             counts[target] = counts.get(target, 0) + 1
         correct += max(counts.values())
-    return correct / len(task.worlds)
+    return Fraction(correct, len(task.worlds))
 
 
 def best_fixed_bundle_accuracy(
     task: FiniteTask,
     budget: int,
-) -> tuple[float, tuple[tuple[str, ...], ...]]:
+) -> tuple[Fraction, tuple[tuple[str, ...], ...]]:
     if type(budget) is not int or budget < 0:
         raise ValueError("budget must be a nonnegative integer")
     names = tuple(query.name for query in task.queries)
     if budget > len(names):
         budget = len(names)
 
-    best = -1.0
+    best = Fraction(-1, 1)
     bundles: list[tuple[str, ...]] = []
     for bundle in combinations(names, budget):
         accuracy = uniform_target_accuracy_for_bundle(task, bundle)
@@ -113,7 +114,7 @@ def best_fixed_bundle_accuracy(
     return best, tuple(bundles)
 
 
-def routed_depth_two_accuracy(task: FiniteTask) -> float:
+def routed_depth_two_accuracy(task: FiniteTask) -> Fraction:
     """Uniform accuracy of r0 -> r1 -> branch-specific terminal."""
     lookup = {query.name: query for query in task.queries}
     r0 = lookup["route_bit_0"]
@@ -132,7 +133,7 @@ def routed_depth_two_accuracy(task: FiniteTask) -> float:
         for target in targets:
             counts[target] = counts.get(target, 0) + 1
         correct += max(counts.values())
-    return correct / len(task.worlds)
+    return Fraction(correct, len(task.worlds))
 
 
 def exact_balanced_stress_test_audit() -> ExactBalancedStressTestReceipt:
@@ -182,11 +183,11 @@ def exact_balanced_stress_test_audit() -> ExactBalancedStressTestReceipt:
         and route_f == 4
         and control_a == 2
         and control_f == 2
-        and route_cont == 1.0
-        and route_fixed == 0.8
-        and control_cont == 1.0
-        and control_fixed == 1.0
-        and interaction == 0.2
+        and route_cont == Fraction(1, 1)
+        and route_fixed == Fraction(4, 5)
+        and control_cont == Fraction(1, 1)
+        and control_fixed == Fraction(1, 1)
+        and interaction == Fraction(1, 5)
     )
     if not theorem:
         raise ArithmeticError("exact-balanced stress-test audit failed")
