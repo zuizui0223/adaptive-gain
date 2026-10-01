@@ -151,25 +151,19 @@ def balanced_quantity_topology_contrast_audit(
         routeable_ca = adaptive_minimum_resolution(routeable).minimum_worst_path_cost
         routeable_cf = fixed_minimum_resolution(routeable).minimum_cost
 
-        no_single_query_resolves = all(
-            len(
-                {
-                    world.target
-                    for i, world in enumerate(control.worlds)
-                    if query.outcomes[i] == outcome
-                }
-            )
-            <= 1
-            for query in ()
-            for outcome in ()
+        # Every declared query has two balanced outcome classes of size k+1,
+        # whereas the two target classes have sizes k+2 and k. Therefore no
+        # single query can resolve the binary target. The first two routing bits
+        # do resolve it by construction, so the exact control costs are 2.
+        no_single_query_can_resolve = all(
+            _query_marginals(control)[i] == (k + 1, k + 1)
+            for i in range(len(control.queries))
         )
-        # The comprehension above is intentionally vacuous; exactness is proved
-        # instead from class sizes. Every declared query has balanced outcome
-        # classes of size k+1, while target multiplicities are k+2 and k, so no
-        # one query can resolve the binary target.
-        del no_single_query_resolves
-
-        control_exact = control_ca == 2 and control_cf == 2
+        control_exact = (
+            no_single_query_can_resolve
+            and control_ca == 2
+            and control_cf == 2
+        )
 
         # The physical query matrix is identical. Under a uniform prior the
         # cue-only joint distribution is therefore identical exactly. Both full
