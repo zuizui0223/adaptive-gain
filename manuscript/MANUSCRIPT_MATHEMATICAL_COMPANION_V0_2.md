@@ -139,16 +139,16 @@ This equality classification is the fixed-side structural backbone of the adapti
 
 ### Corollary 2.1 — adaptive cost of the saturated bundle
 
-If the declared vocabulary is exactly such a cap-saturating minimum resolver (B), with no additional queries available, then
-[
-C_Age h-1=n/2-1.
-]
+If the declared vocabulary is exactly such a cap-saturating minimum resolver \(B\), with no additional queries available, then
+\[
+C_A\ge h-1=n/2-1.
+\]
 
 The bound is attained.
 
-The key point is that the two star arms contain many private obligations. Whichever queries are asked before the middle-edge query, one branch must retain the unqueried obligations of one large star. The optimal worst-case schedule has depth (h-1).
+The key point is that the two star arms contain many private obligations. Whichever queries are asked before the middle-edge query, one branch must retain the unqueried obligations of one large star. The optimal worst-case schedule has depth \(h-1\).
 
-Thus maximal exact-balanced fixed irredundance is incompatible with shallow adaptivity **inside the saturated bundle**. Extra balanced queries may reduce (C_A), but only if they do not simultaneously create a cheaper fixed resolver; this is the compatibility problem measured by (D_h(n)).
+Thus maximal exact-balanced fixed irredundance is incompatible with shallow adaptivity **inside the saturated bundle**. Extra balanced queries may reduce \(C_A\), but only if they do not simultaneously create a cheaper fixed resolver; this is the compatibility problem measured by \(D_h(n)\).
 
 ## 5. Adaptive-depth envelopes
 
