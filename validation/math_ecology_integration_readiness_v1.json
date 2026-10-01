@@ -1,0 +1,64 @@
+{
+  "schema": "adaptive-gain-math-ecology-integration-readiness-v1",
+  "date": "2026-10-01",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "status": "PASS_POST_FREEZE_INTEGRATION",
+  "central_object": "outcome-contingent decision topology",
+  "central_distinction": "amount/distribution and conditional decision topology are distinct coordinates",
+  "exact_theorem": {
+    "note": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
+    "matched_environment": "same worlds, query identities, costs, and full query outcome matrix",
+    "matched_quantity": [
+      "same cue-only distributions of every order",
+      "same target multiplicities",
+      "same target entropy",
+      "same full-vocabulary target information I(T;Q_all)=H(T)"
+    ],
+    "routeable": "C_F>=2^d, C_A<=d+1",
+    "control": "C_A=C_F=2",
+    "ratio_gap": "2^d/(d+1)-1 -> infinity",
+    "common_budget_corollary": "At B=d+1, routeable is adaptive-only guaranteed; control succeeds under both adaptive and fixed access; guaranteed architecture-by-access interaction = 1."
+  },
+  "finite_pairwise_stress_tests": {
+    "receipt": "validation/balanced_pairwise_information_controls_v1.json",
+    "depth_2": "same pairwise target-query profile multiset; control C_A=C_F=2",
+    "depth_3": "same pairwise target-query profile multiset; control C_A=C_F=3",
+    "claim_boundary": "finite multiset match only; no asymptotic named-cue pairwise matching claimed"
+  },
+  "sufficiency_ladder": "theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md",
+  "measurement_protocol": "manuscript/ROUTEABILITY_MEASUREMENT_PROTOCOL_V1.md",
+  "ecological_principle_audit": "manuscript/ECOLOGICAL_PRINCIPLE_BLINDNESS_AUDIT_V1.md",
+  "direct_ecological_reach": {
+    "information_amount": "DIRECT structural distinction",
+    "specialist_generalist_information_cost": "DIRECT processing burden; evolutionary breadth is a MODIFIER claim",
+    "heterogeneity_niche_breadth": "MODIFIER only",
+    "interaction_accessibility": "DIRECT for behavioral accessibility",
+    "diversity_stability": "NOT_YET_REACHED"
+  },
+  "identification_rule": "Aggregate ecological summaries support routeability claims only if the action-conditioned cue structure required by the claim is identified or independently measured.",
+  "current_v5_safe_claims": [
+    "conditional decision topology is a relational ecological axis",
+    "it is not determined by strong marginal/aggregate heterogeneity or information summaries",
+    "it changes exact finite decision cost",
+    "a biologically meaningful budget B connects structure to performance through C_A<=B<C_F",
+    "the direct experiment can test this causal budget-localized prediction"
+  ],
+  "future_theory_boundary": {
+    "next_model": "stochastic expected-loss routeability",
+    "objective": "J(pi)=E[cost]+lambda E[decision loss]",
+    "unresolved_question": "Does amount/topology orthogonality survive stochastic cues, error, and expected loss?"
+  },
+  "validation": {
+    "quantity_topology_focused_ci_run": 36805283842,
+    "quantity_topology_python_3_10": "success",
+    "quantity_topology_python_3_11": "success",
+    "quantity_topology_python_3_12": "success",
+    "pairwise_focused_ci_run": 36804026071,
+    "pairwise_python_3_10": "success",
+    "pairwise_python_3_11": "success",
+    "pairwise_python_3_12": "success",
+    "full_suite_status": "unrelated legacy manuscript phrase assertion remains failing"
+  },
+  "v5_initial_submission_surface_modified": false,
+  "stop_rule": "Do not reopen frozen V5 or add another theorem family. Use this integration to sharpen interpretation, measurement, and the existing direct experiment. Reserve stochastic expected-loss theory and diversity-stability dynamics for separate papers."
+}
