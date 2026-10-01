@@ -1,0 +1,60 @@
+{
+  "schema": "adaptive-gain-exact-balanced-routeability-stress-test-v1",
+  "date": "2026-10-01",
+  "status": "PASS",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "scope": "ten_state_six_cue_exact_balanced_matched_architecture_stress_test",
+  "physical_environment": {
+    "world_count": 10,
+    "query_count": 6,
+    "every_query": "exactly 5/5 balanced",
+    "same_query_matrix_between_architectures": true,
+    "same_target_multiplicities": [
+      6,
+      4
+    ]
+  },
+  "routeable": {
+    "adaptive_cost": 3,
+    "fixed_cost": 4,
+    "contingent_schedule": [
+      "route_bit_0",
+      "route_bit_1",
+      "branch_terminal"
+    ],
+    "contingent_accuracy_ceiling": "1",
+    "best_fixed_budget3_accuracy_ceiling": "4/5"
+  },
+  "control": {
+    "adaptive_cost": 2,
+    "fixed_cost": 2,
+    "contingent_accuracy_ceiling": "1",
+    "best_fixed_budget3_accuracy_ceiling": "1"
+  },
+  "common_budget": 3,
+  "exact_architecture_by_access_ceiling_interaction": "1/5",
+  "canonical_fixed_access_bundle": [
+    "terminal_0",
+    "terminal_1",
+    "terminal_2"
+  ],
+  "interpretation": "The same ten physical cue states and six exactly-balanced cue channels yield a 1/5 information-ceiling interaction when only the target/action map changes.",
+  "source": [
+    "adaptive_gain/exact_balanced_routeability_stress_test.py",
+    "tests/test_exact_balanced_routeability_stress_test.py",
+    "manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md"
+  ],
+  "focused_ci": {
+    "workflow": ".github/workflows/quantity-topology-smoke.yml",
+    "run_id": 36806224894,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success"
+  },
+  "claim_boundary": [
+    "The 1/5 interaction is a deterministic decision/information ceiling, not a behavioral effect-size expectation.",
+    "This is a prospective follow-up stress test, not a prerequisite for the simpler four-state causal experiment.",
+    "The design does not establish natural prevalence of exact-balanced architectures."
+  ],
+  "theorem_holds": true
+}
