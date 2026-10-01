@@ -1,0 +1,67 @@
+{
+  "schema": "adaptive-gain-relational-routeability-readiness-v1",
+  "date": "2026-10-01",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "status": "DETERMINISTIC_MATH_ECOLOGY_INTEGRATION_FROZEN_FOR_SYNTHESIS",
+  "canonical_assets": {
+    "theorem_spine": "theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md",
+    "orthogonality_theorem": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
+    "sufficiency_ladder": "theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md",
+    "canonical_synthesis": "manuscript/BALANCED_ROUTEABILITY_MATH_ECOLOGY_SYNTHESIS_V2.md",
+    "principle_audit": "manuscript/ECOLOGICAL_PRINCIPLE_BLINDNESS_AUDIT_V1.md",
+    "prior_art_audit": "manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md",
+    "measurement_protocol": "manuscript/ROUTEABILITY_MEASUREMENT_PROTOCOL_V1.md",
+    "minimal_experiment": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
+    "balanced_stress_test": "manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md"
+  },
+  "exact_results": {
+    "relational_theorem": "same physical cue matrix + same target prevalence/entropy + same I(T;Q_all), yet routeable ratio lower bound diverges while matched control has C_A=C_F=2",
+    "common_budget": "B=d+1 gives guaranteed architecture-by-access interaction 1",
+    "finite_pairwise_controls": "depth 2 control C_A=C_F=2 and depth 3 control C_A=C_F=3 with matched pairwise target-cue signature multiset",
+    "ten_state_stress_test": "routeable (3,4), control (2,2), B=3 exact uniform ceiling interaction 1/5"
+  },
+  "validation": {
+    "quantity_topology": "validation/balanced_quantity_topology_contrast_v1.json",
+    "pairwise_controls": "validation/balanced_pairwise_information_controls_v1.json",
+    "ten_state_stress_test": "validation/exact_balanced_routeability_stress_test_v1.json",
+    "integration": "validation/math_ecology_integration_readiness_v1.json",
+    "focused_ci": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and stress-test suite"
+  },
+  "prior_art_boundary": [
+    "adaptive feature acquisition is prior art",
+    "costly sequential information acquisition / value of information are prior art",
+    "uniform separating systems and generic adaptivity gaps are prior art",
+    "entropy not being a complete operational invariant has prior mathematical analogues",
+    "novelty should be claimed for the exact ecological composition, not generic adaptive acquisition"
+  ],
+  "ecological_reach": {
+    "direct": [
+      "information amount versus acquisition architecture",
+      "processing burden at fixed nominal niche breadth",
+      "behaviorally accessible interaction set under finite budgets"
+    ],
+    "modifier_only": [
+      "heterogeneity to evolved niche breadth",
+      "specialist-generalist evolutionary outcome"
+    ],
+    "not_yet_reached": [
+      "diversity-stability",
+      "community resilience",
+      "ecosystem-function stability"
+    ]
+  },
+  "v5_surface_modified": false,
+  "next_allowed_work": [
+    "write/polish synthesis manuscript around theorem spine",
+    "tighten prior-art wording",
+    "execute four-state experiment before ten-state stress test",
+    "start separate stochastic expected-loss project if desired"
+  ],
+  "prohibited_on_current_path": [
+    "new deterministic theorem family",
+    "reopening frozen V5 for these post-freeze results",
+    "claiming diversity-stability consequence without community dynamics",
+    "claiming novelty for adaptive acquisition itself"
+  ],
+  "stop_rule": "The deterministic routeability integration is sufficient. Do not add more theorem families. Move to writing/experiment; stochastic expected-loss theory is a separate paper."
+}
