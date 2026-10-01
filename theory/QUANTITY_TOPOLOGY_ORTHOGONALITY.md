@@ -131,6 +131,128 @@ The executable construction is in:
 - adaptive_gain/balanced_quantity_topology_contrast.py
 - tests/test_balanced_quantity_topology_contrast.py
 
+## 2.1 Relational routeability theorem
+
+For every integer routing depth \(d\ge2\), there exists one common finite cue environment
+
+\[
+\mathcal E_d=(W_d,Q_d,c)
+\]
+
+and two target/action maps on that same environment,
+
+\[
+T_R,\qquad T_K,
+\]
+
+such that:
+
+1. the represented worlds are identical;
+2. the declared query vocabulary is identical;
+3. the entire query-outcome matrix is identical;
+4. every binary query is exactly 50/50 balanced;
+5. every cue-only marginal and every cue-only joint distribution is therefore identical;
+6. the two target maps have identical class multiplicities \((2^d+2,2^d)\);
+7. target entropy is identical;
+8. the full query vocabulary resolves both targets, so
+   \[
+   I(T_R;Q_{\mathrm{all}})
+   =
+   I(T_K;Q_{\mathrm{all}})
+   =
+   H(T).
+   \]
+
+Yet their decision architectures differ:
+
+\[
+C_F(T_R)\ge2^d,
+\qquad
+C_A(T_R)\le d+1,
+\]
+
+whereas
+
+\[
+\boxed{
+C_A(T_K)=C_F(T_K)=2.
+}
+\]
+
+Hence
+
+\[
+\boxed{
+\frac{C_F(T_R)}{C_A(T_R)}
+-
+\frac{C_F(T_K)}{C_A(T_K)}
+\ge
+\frac{2^d}{d+1}-1
+\to\infty.
+}
+\]
+
+This proves a precise relational statement:
+
+> **routeability is not an intrinsic property of the physical cue environment. It is a property of the relation among environmental alternatives, available cues, cue costs, and the focal action map.**
+
+The same environment can therefore be easy or highly routeable for one ecological task and effectively non-routeable for another.
+
+### Corollary — exact common-budget interaction
+
+Set one common hard ecological budget
+
+\[
+B=d+1.
+\]
+
+For every \(d\ge2\),
+
+\[
+2^d>d+1.
+\]
+
+Therefore, in the routeable task,
+
+\[
+C_A(T_R)\le B<C_F(T_R),
+\]
+
+so contingent resolution is guaranteed while fixed resolution is not.
+
+In the matched control,
+
+\[
+C_A(T_K)=C_F(T_K)=2\le B,
+\]
+
+so both contingent and fixed resolution are guaranteed.
+
+Using binary guaranteed success indicators,
+
+\[
+S_{R,A}=1,\quad
+S_{R,F}=0,\quad
+S_{K,A}=1,\quad
+S_{K,F}=1.
+\]
+
+Thus the matched architecture-by-access contrast is exactly
+
+\[
+\boxed{
+(S_{R,A}-S_{R,F})
+-
+(S_{K,A}-S_{K,F})
+=
+1.
+}
+\]
+
+This is the cleanest exact mathematics-to-ecology bridge in the current theory:
+
+> **with physical environment, target prevalence and information amount matched, the same ecological budget produces a performance difference solely because the action-conditioned decision topology differs.**
+
 ## 3. What this does and does not say about ecological information theory
 
 This result does **not** refute information-fitness theory.
