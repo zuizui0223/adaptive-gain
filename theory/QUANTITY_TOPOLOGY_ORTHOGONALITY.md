@@ -423,6 +423,26 @@ The key future question is whether the quantity/topology orthogonality survives 
 
 That is a distinct paper.
 
+## Claim precision — topology is not invisible to complete structural data
+
+The orthogonality claim concerns aggregate, marginal, low-order, and total-information summaries that omit the complete action-conditioned cue structure.
+
+It must **not** be stated as "no amount of measurement can recover topology."
+
+If one observes the complete joint mapping
+
+\[
+(w,\ T(w),\ q_1(w),\ldots,q_m(w))
+\]
+
+together with cue costs, then the deterministic finite decision problem is specified and \(C_A\) and \(C_F\) can in principle be computed.
+
+The matched constructions instead show something sharper and safer:
+
+> even very strong quantity matching — including the entire cue-only distribution, target prevalence, target entropy and total full-vocabulary target information — does not determine sequential acquisition topology.
+
+The missing information is precisely the higher-order **action-conditioned arrangement** of cue states.
+
 ## 10. Current-paper ceiling
 
 The present V5 need establish only:
