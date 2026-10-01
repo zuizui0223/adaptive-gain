@@ -1,0 +1,64 @@
+{
+  "schema": "adaptive-gain-relational-routeability-manuscript-readiness-v1",
+  "date": "2026-10-01",
+  "branch": "synthesis/balanced-routeability-ecology-v1",
+  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_1.md",
+  "status": "DRAFT_READY_FOR_PRIOR_ART_AND_EDITORIAL_POLISH",
+  "working_title": "Conditional decision topology separates information amount from ecological accessibility",
+  "approximate_main_words": 2859,
+  "structure": [
+    "ecological motivation",
+    "finite decision model",
+    "relational routeability theorem",
+    "common-budget ecological corollary",
+    "finite pairwise-information controls",
+    "summary-sufficiency ladder",
+    "ecological principle boundary",
+    "measurement protocol",
+    "four-state and ten-state experimental realizations",
+    "prior-art boundary",
+    "deterministic scope and stochastic next-paper boundary"
+  ],
+  "core_claims": [
+    "same physical cue environment and matched target amount/information can support sharply different adaptive/fixed acquisition geometry",
+    "routeability is relational to the focal action map rather than intrinsic to the physical cue environment",
+    "a common ecological budget B exposes an exact difference in feasible access regime",
+    "rich quantitative summaries can remain insufficient until the action-conditioned cue structure is measured"
+  ],
+  "validated_support": [
+    "validation/balanced_quantity_topology_contrast_v1.json",
+    "validation/balanced_pairwise_information_controls_v1.json",
+    "validation/exact_balanced_routeability_stress_test_v1.json",
+    "theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md"
+  ],
+  "prior_art_must_remain_explicit": [
+    "adaptive/costly feature acquisition",
+    "sequential value of information",
+    "uniform separating systems and generic adaptivity gaps",
+    "extra-entropic operational structure in information theory"
+  ],
+  "direct_ecological_reach": [
+    "information accessibility under finite acquisition budgets",
+    "information-processing burden at fixed nominal niche breadth",
+    "behaviorally accessible interactions"
+  ],
+  "modifier_only": [
+    "heterogeneity to evolved niche breadth",
+    "specialist-generalist evolutionary outcome"
+  ],
+  "excluded_from_headline": [
+    "diversity-stability",
+    "community resilience",
+    "ecosystem-function stability",
+    "natural prevalence of exact-balanced architectures"
+  ],
+  "remaining_work": [
+    "full reference verification and formatting",
+    "tighten novelty paragraph against adaptive feature acquisition and extra-entropic structure",
+    "compress theorem proof sketches for target journal",
+    "decide target journal only after the novelty boundary is stable",
+    "do not add another deterministic theorem family"
+  ],
+  "v5_initial_submission_surface_modified": false,
+  "stop_rule": "The relational-routeability synthesis now has a complete draft. Further deterministic work must be editorial, prior-art, proof-compression, or experimental implementation; new theorem families are off the critical path."
+}
