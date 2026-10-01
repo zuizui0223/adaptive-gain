@@ -116,13 +116,13 @@ The proof of Theorem 1 leaves open many possible three-component forests. Exact 
 
 ### Theorem 2 — star--edge--star saturation
 
-Let \(n=2h\ge8\). Suppose the entire declared query family has \(n-3\) exact-balanced binary queries and every one is fixed-mandatory, so \(C_F=n-3\). Then, up to relabeling, the selected private-pair forest has component sizes
+Let \(n=2h\ge8\) and suppose \(C_F=n-3\). Choose any minimum fixed resolver \(B\). Then, up to relabeling, a selected private-pair forest for \(B\) has component sizes
 \[
 \{h-1,2,h-1\},
 \]
 and both \((h-1)\)-vertex components are stars.
 
-Moreover the balanced query rows are forced, up to outcome complementation, by the selected private edge.
+Moreover the balanced query rows of \(B\) are forced, up to outcome complementation, by the selected private edge.
 
 ### Proof sketch
 
@@ -139,16 +139,16 @@ This equality classification is the fixed-side structural backbone of the adapti
 
 ### Corollary 2.1 — adaptive cost of the saturated bundle
 
-Under the assumptions of Theorem 2,
-\[
-C_A\ge h-1=n/2-1.
-\]
+If the declared vocabulary is exactly such a cap-saturating minimum resolver (B), with no additional queries available, then
+[
+C_Age h-1=n/2-1.
+]
 
 The bound is attained.
 
-The key point is that the two star arms contain many private obligations. Whichever queries are asked before the middle-edge query, one branch must retain the unqueried obligations of one large star. The optimal worst-case schedule has depth \(h-1\).
+The key point is that the two star arms contain many private obligations. Whichever queries are asked before the middle-edge query, one branch must retain the unqueried obligations of one large star. The optimal worst-case schedule has depth (h-1).
 
-Thus maximal exact-balanced fixed irredundance is incompatible with shallow adaptivity when no additional query resources are available.
+Thus maximal exact-balanced fixed irredundance is incompatible with shallow adaptivity **inside the saturated bundle**. Extra balanced queries may reduce (C_A), but only if they do not simultaneously create a cheaper fixed resolver; this is the compatibility problem measured by (D_h(n)).
 
 ## 5. Adaptive-depth envelopes
 
