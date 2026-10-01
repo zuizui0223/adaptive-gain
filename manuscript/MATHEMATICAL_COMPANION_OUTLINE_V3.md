@@ -77,17 +77,17 @@ This should be the first true theorem of the paper.
 
 ### Theorem 2 — cap saturation normal form
 
-For n=2h>=8, if the declared exact-balanced family contains exactly n-3 queries and all are fixed-mandatory, then its private-pair forest has component sizes
+For n=2h>=8, if C_F=n-3, then every minimum fixed resolver B can be normalized to a private-pair forest with component sizes
 
 {h-1, 2, h-1}
 
 and the large components are stars.
 
-The balanced rows are then forced up to world relabeling and outcome complementation.
+The balanced rows of B are then forced up to world relabeling and outcome complementation.
 
 ### Theorem 3 — adaptive depth forced by saturation
 
-Inside the saturated family:
+If the declared vocabulary is exactly the saturated minimum resolver B, with no external balanced queries, then:
 
 C_A >= h-1 = n/2-1,
 
