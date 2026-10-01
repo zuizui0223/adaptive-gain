@@ -35,7 +35,7 @@ def test_depth_three_pairwise_matched_control_has_fixed_cost_three():
         "terminal_1",
         "terminal_6",
     )
-    assert receipt.control_adaptive_cost <= 3
+    assert receipt.control_adaptive_cost == 3
 
 
 def test_pairwise_match_is_multiset_not_named_identity():
