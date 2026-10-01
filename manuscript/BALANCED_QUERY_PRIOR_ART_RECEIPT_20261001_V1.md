@@ -38,6 +38,15 @@ Consequence for claims:
 - a common declared test vocabulary is prior art;
 - generic adaptivity gaps are prior art.
 
+### General irredundant separating-family cap
+
+Bondy's 1972 induced-subsets theorem implies the classical sharp bound that an inclusionwise minimal separating family on an (n)-element ground set has size at most (n-1). Later separating-family literature states this consequence explicitly.
+
+Consequence:
+- the unrestricted (C_F\le n-1) cap is prior art;
+- the private-pair forest proof should be presented as a convenient model-native proof, not as the novelty claim;
+- the candidate new content begins with the improvement to (n-3) under exact half-balance and the associated equality structure.
+
 ### Uniform half-size separating systems
 
 Ling, Li & van Rees (2004), *Splitting systems and separating systems*, define uniform separating systems using blocks of size exactly half the even ground set.
@@ -129,6 +138,7 @@ Avoid:
 
 ## References
 
+- J. A. Bondy. 1972. Induced subsets. Journal of Combinatorial Theory, Series B 12:201-202. DOI: 10.1016/0095-8956(72)90025-1.
 - G. Wiener. 2009. Rounds in Combinatorial Search. Dagstuhl Seminar Proceedings 09281. DOI: 10.4230/DagSemProc.09281.6.
 - P. Damaschke. 2019. Combinatorial search in two and more rounds. Theoretical Computer Science 780:1-11. DOI: 10.1016/j.tcs.2019.02.004.
 - A. C. H. Ling, P. C. Li & G. H. J. van Rees. 2004. Splitting systems and separating systems. Discrete Mathematics 279:355-368. DOI: 10.1016/S0012-365X(03)00280-2.
