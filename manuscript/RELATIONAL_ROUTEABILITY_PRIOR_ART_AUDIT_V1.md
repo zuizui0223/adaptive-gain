@@ -75,7 +75,48 @@ The safe distinction is narrower:
 
 ---
 
-## 4. What remains specific in the current synthesis
+## 4. PID-guided active feature acquisition is direct prior art
+
+Li, Dhali & Bouma (2026, arXiv:2609.32301) is a particularly close recent
+neighbor. It asks when synergy helps active feature acquisition using a
+state-dependent policy that combines pairwise joint information with
+conditional information evaluated at realized feature values. Its controlled
+analyses include synergy--budget sweeps and a fixed-total-pair-information
+control.
+
+This closes an important novelty route. The present manuscript must not claim:
+- that PID has not been connected to active feature acquisition;
+- that realized feature values have not been used to change subsequent
+  acquisition scores;
+- that fixed-information controls are unique to this program;
+- that synergy versus redundancy under acquisition budgets is unexplored.
+
+The boundary that remains is sharper and theorem-level. The repository now has
+two deterministic tasks on one exactly balanced physical cue matrix with:
+
+- the same target multiplicities;
+- the same \(I(T;Q_S)\) for every named cue subset;
+- therefore the same complete Shannon entropy vector over
+  \((T,Q_0,Q_1,Q_2,Q_3)\);
+- the same fixed exact-resolution cost \(C_F=4\);
+
+but different optimal worst-case adaptive costs,
+
+\[
+C_A=4
+\qquad\text{versus}\qquad
+C_A=3.
+\]
+
+Li et al. study algorithmic and predictive acquisition behavior from pairwise
+and conditional information. The current result instead gives an exact
+**entropic-equivalence / adaptive-inequivalence** witness and embeds it in a
+relational ecological action-map framework. No exact predecessor for that
+specific statement was located in this audit.
+
+---
+
+## 5. What remains specific in the current synthesis
 
 The targeted audit has not located an exact predecessor combining all of the following:
 
@@ -96,7 +137,7 @@ The novelty claim should therefore concern the **composition** and the **ecologi
 
 ---
 
-## 5. Strongest safe theorem positioning
+## 6. Strongest safe theorem positioning
 
 Use wording close to:
 
@@ -116,7 +157,7 @@ Avoid:
 
 ---
 
-## 6. Relation to adaptive feature acquisition
+## 7. Relation to adaptive feature acquisition
 
 The closest operational comparison is adaptive feature acquisition.
 
@@ -137,7 +178,7 @@ The expected-loss extension would move the program closer to adaptive-feature-ac
 
 ---
 
-## 7. Implication for the next expected-loss paper
+## 8. Implication for the next expected-loss paper
 
 The stochastic extension cannot be positioned as simply "adding noisy cues."
 
@@ -155,7 +196,7 @@ That is the appropriate novelty target for the next theory paper.
 
 ---
 
-## 8. V5 claim boundary
+## 9. V5 claim boundary
 
 V5 can safely use the deterministic result to establish:
 
@@ -169,6 +210,7 @@ V5 should not make broad priority claims against information theory or machine l
 
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
 - Nan, F. et al. 2017. Adaptive Classification for Prediction Under a Budget. NeurIPS 2017.
+- Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
 - Howard, R. A. 1966. Information Value Theory. IEEE Transactions on Systems Science and Cybernetics.
 
