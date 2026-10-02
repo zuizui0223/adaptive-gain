@@ -2,7 +2,7 @@
   "schema": "adaptive-gain-relational-routeability-readiness-v1",
   "date": "2026-10-02",
   "branch": "synthesis/information-accessibility-public-data-v1",
-  "status": "INFORMATION_ACCESSIBILITY_THEORY_CLOSED_WITH_ENTROPIC_EQUIVALENCE",
+  "status": "INTEGRATED_INFORMATION_ACCESSIBILITY_PLUS_EVOLUTIONARY_NO_GO_CLOSED",
   "canonical_assets": {
     "theorem_spine": "theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md",
     "orthogonality_theorem": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
@@ -18,7 +18,9 @@
     "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
     "public_data_audit": "manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md",
     "bombus_empirical_bridge": "manuscript/BUMBLEBEE_PUBLIC_DATA_ROUTEABILITY_BRIDGE_V1.md",
-    "bombus_panel_receipt": "validation/bombus_empirical_convergence_panel_v1.json"
+    "bombus_panel_receipt": "validation/bombus_empirical_convergence_panel_v1.json",
+    "independent_section5_audit": "validation/independent_section5_audit_v1.json",
+    "nonlinear_no_go": "theory/NONLINEAR_LIFT_NO_GO_V2.md"
   },
   "exact_results": {
     "relational_theorem": "same physical cue matrix + same target prevalence/entropy + same I(T;Q_all), yet routeable ratio lower bound diverges while matched control has C_A=C_F=2",
@@ -28,7 +30,8 @@
     "static_fixed_characterization": "C_F = min{c(S): H(T|Q_S)=0}; the complete static subset-information function determines fixed exact-resolution cost",
     "entropic_twins": "same 12-state physical 4-cue matrix, exact 6/6 cue balance, same target prevalence, same complete Shannon entropy vector; twin A (C_A,C_F)=(4,4), twin B=(3,4)",
     "direct_product_amplification": "r-fold products preserve complete Shannon entropy-vector equivalence and give (4r,4r) versus (3r,4r), so the adaptive-cost and routeability-gap differences equal r and are unbounded additively",
-    "stronger_ratio_boundary": "unbounded multiplicative C_F/C_A remains established only for the separate exact-balanced routing family under weaker information matching"
+    "stronger_ratio_boundary": "unbounded multiplicative C_F/C_A remains established only for the separate exact-balanced routing family under weaker information matching",
+    "nonlinear_no_go": "For state gaps g_i=C_F(i)-C_A(i), any monotone L-Lipschitz sensing-to-selection lift gives G<=B L Delta_g; stable oscillatory return requires Delta_g>G_osc/(B L), so classes with B L q_max<=G_osc are excluded."
   },
   "validation": {
     "quantity_topology": "validation/balanced_quantity_topology_contrast_v1.json",
@@ -38,7 +41,8 @@
     "focused_ci_latest": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and ten-state stress-test suite",
     "full_entropy_vector": "exact prime-log fingerprints over all 32 subsets of (T,q0,q1,q2,q3)",
     "two_copy_product": "144 worlds, 8 cues, all 512 target/cue entropy subsets matched exactly; C_F=8 in both, C_A=8 versus 6",
-    "full_ci": "PASS on Python 3.10/3.11/3.12 at commit 816ec40bc0032448e55ddc2c5191e94fbccde4bd after restoring pre-existing ecological-novelty document contract"
+    "full_ci": "PASS on Python 3.10/3.11/3.12 at commit 816ec40bc0032448e55ddc2c5191e94fbccde4bd after restoring pre-existing ecological-novelty document contract",
+    "independent_section5": "independent implementation reproduces one-copy full entropy-vector match with C_F=(4,4), C_A=(4,3), and two-copy match with C_F=(8,8), C_A=(8,6)"
   },
   "prior_art_boundary": [
     "Forre 1990 entropy profiles already scan conditional entropy of a Boolean target across all input subsets",
@@ -66,10 +70,10 @@
   },
   "v5_surface_modified": false,
   "next_allowed_work": [
-    "render the frozen Bombus empirical-convergence panel from validation/bombus_empirical_convergence_panel_v1.json",
-    "editorially compress v0.4 around entropic equivalence, fixed characterization, adaptive recursion, direct-product amplification and ecological budget",
-    "submission packaging for Ecology Letters first, American Naturalist fallback",
-    "prospective Bombus experiment for the full relational theorem",
+    "final figure rendering and verification",
+    "final repository-wide CI",
+    "Ecology Letters submission packaging",
+    "prospective Bombus full relational experiment after theory submission",
     "separate stochastic expected-loss extension if pursued"
   ],
   "prohibited_on_current_path": [
@@ -77,9 +81,11 @@
     "claiming the all-subset entropy profile itself is novel",
     "claiming PID or realized-value conditional acquisition is novel",
     "claiming public datasets directly validate routeability",
-    "claiming an unbounded multiplicative separation under complete entropy-vector matching"
+    "claiming an unbounded multiplicative separation under complete entropy-vector matching",
+    "submitting frozen V5 as a separate overlapping manuscript",
+    "restoring recurrence, identifiability, or mathematical-companion geometry as coequal main-text headlines"
   ],
-  "stop_rule": "Deterministic information-accessibility theory is sufficient for submission. Full Shannon entropic equivalence with different adaptive cost and unbounded additive amplification are closed; multiplicative amplification under the strongest matching condition remains explicitly open. Move to figures, compression and submission rather than further theorem hunting.",
+  "stop_rule": "The integrated deterministic theory is closed: complete Shannon entropic equivalence fails to identify adaptive accessibility; direct products amplify the difference; a finite budget exposes ecology; and one nonlinear no-go connects routeability contrast to evolutionary reachability. Move to figures/packaging, not theorem hunting.",
   "public_data_status": {
     "direct_full_relational_validation": "NO_SINGLE_PUBLIC_DATASET",
     "componentwise_public_validation": "YES_BOMBUS",
