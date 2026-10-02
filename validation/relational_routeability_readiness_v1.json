@@ -31,7 +31,7 @@
     "entropic_twins": "same 12-state physical 4-cue matrix, exact 6/6 cue balance, same target prevalence, same complete Shannon entropy vector; twin A (C_A,C_F)=(4,4), twin B=(3,4)",
     "direct_product_amplification": "r-fold products preserve complete Shannon entropy-vector equivalence and give (4r,4r) versus (3r,4r), so the adaptive-cost and routeability-gap differences equal r and are unbounded additively",
     "stronger_ratio_boundary": "unbounded multiplicative C_F/C_A remains established only for the separate exact-balanced routing family under weaker information matching",
-    "nonlinear_no_go": "For state gaps g_i=C_F(i)-C_A(i), any monotone L-Lipschitz sensing-to-selection lift gives G<=B L Delta_g; stable oscillatory return requires Delta_g>G_osc/(B L), so classes with B L q_max<=G_osc are excluded."
+    "nonlinear_no_go": "For state gaps g_i=C_F(i)-C_A(i), any monotone L-Lipschitz sensing-to-selection lift gives G<=B_f L Delta_g in the integrated notation; stable oscillatory return requires Delta_g>G_osc/(B_f L), so classes with B_f L q_max<=G_osc are excluded."
   },
   "validation": {
     "quantity_topology": "validation/balanced_quantity_topology_contrast_v1.json",
