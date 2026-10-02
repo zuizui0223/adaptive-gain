@@ -268,6 +268,110 @@ Executable certificate:
   \`adaptive_gain/static_information_adaptive_separation.py\`;
 - \`test_complete_shannon_entropy_vector_matches_exactly\`.
 
+### Corollary 2.2 — entropic equivalence supports an unbounded additive adaptive separation
+
+The finite twin is not an isolated one-unit phenomenon.
+
+Form the \(r\)-fold Cartesian product of either twin. A represented world is an
+\(r\)-tuple of base worlds, the focal target is the \(r\)-tuple of coordinate
+targets, and each declared cue belongs to exactly one coordinate. Use the
+uniform product prior.
+
+For every \(r\ge1\), the two product tasks share:
+
+- the same \(12^r\) represented worlds;
+- the same \(4r\) coordinate-local binary unit-cost cues;
+- exact 50/50 balance of every cue;
+- the same complete physical cue matrix;
+- the same target distribution;
+- the same complete Shannon entropy vector over the composite target and all
+  \(4r\) cues.
+
+The entropy-vector claim follows by factorization. If a cue subset \(S\) is
+decomposed into coordinate subsets \(S_1,\ldots,S_r\), then
+
+\[
+H(Q_S)=\sum_{i=1}^r H(Q_{S_i}),
+\]
+
+and, writing the composite target as
+\(\mathbf T=(T_1,\ldots,T_r)\),
+
+\[
+H(\mathbf T,Q_S)
+=
+\sum_{i=1}^r H(T_i,Q_{S_i}).
+\]
+
+The one-copy entropy vectors are identical, so every product entropy is
+identical as well.
+
+The exact resolution costs are additive under this product:
+
+\[
+C_F(X\otimes Y)=C_F(X)+C_F(Y),
+\]
+
+\[
+C_A(X\otimes Y)=C_A(X)+C_A(Y).
+\]
+
+For \(C_F\), any fixed resolver of the product must resolve each coordinate
+after the other coordinate is held fixed, while the union of coordinate-wise
+optimal bundles attains the sum.
+
+For \(C_A\), every realized history leaves a rectangular support because each
+query acts on only one coordinate. The Bellman continuation value on a
+rectangle is the sum of the coordinate continuation values: a query in one
+coordinate changes only that coordinate's term, and the worst-child recursion
+therefore preserves additivity. Induction on the remaining query set gives the
+identity above.
+
+Consequently the \(r\)-copy twins satisfy
+
+\[
+(C_A,C_F)_{A^{\otimes r}}=(4r,4r),
+\]
+
+\[
+(C_A,C_F)_{B^{\otimes r}}=(3r,4r).
+\]
+
+Hence
+
+\[
+\boxed{
+C_A(A^{\otimes r})-C_A(B^{\otimes r})=r\to\infty
+}
+\]
+
+while the complete Shannon entropy vector remains matched.
+
+Equivalently, with \(g=C_F-C_A\),
+
+\[
+g(A^{\otimes r})=0,
+\qquad
+g(B^{\otimes r})=r.
+\]
+
+At the common budget \(B_r=3r\), the \(B\)-product is adaptively resolvable but
+not fixed-resolvable, whereas the \(A\)-product is not resolvable under either
+access mode.
+
+This is an **unbounded additive** separation under complete entropic
+equivalence. It does not establish an unbounded multiplicative
+\(C_F/C_A\) ratio under that strongest matching condition; the separate
+exact-balanced routing family supplies an unbounded ratio under weaker
+information matching.
+
+Executable two-copy check:
+
+- \`static_information_twin_product_task\`;
+- \`test_two_copy_product_amplifies_adaptive_gap_under_entropic_equivalence\`.
+
+---
+
 ### Why the adaptive costs differ
 
 For target map \(T_A\), the optimal residual adaptive depths after each possible
