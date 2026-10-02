@@ -1,0 +1,39 @@
+{
+  "schema": "adaptive-gain-ecology-letters-routeability-submission-readiness-v1",
+  "date": "2026-10-02",
+  "target": "Ecology Letters",
+  "article_type": "Letter",
+  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+  "limits": {
+    "abstract_words_max": 150,
+    "main_text_words_max": 5000,
+    "combined_figures_tables_boxes_max": 6
+  },
+  "current_counts": {
+    "abstract_words_approx": 142,
+    "main_text_words_approx": 4659,
+    "references": 21,
+    "figures": 2,
+    "tables": 0,
+    "text_boxes": 0
+  },
+  "figures": [
+    "manuscript/figures/figure_routeability_entropy_access_v1.svg",
+    "manuscript/figures/figure_routeability_bombus_bridge_v1.svg"
+  ],
+  "required_submission_files": [
+    "manuscript/SUBMISSION_METADATA_ECOLOGY_LETTERS_ROUTEABILITY_V1.md",
+    "manuscript/FIGURE_LEGENDS_RELATIONAL_ROUTEABILITY_V1.md",
+    "manuscript/NOVELTY_STATEMENT_ECOLOGY_LETTERS_ROUTEABILITY_V1.md",
+    "manuscript/COVER_LETTER_ECOLOGY_LETTERS_ROUTEABILITY_V1.md",
+    "manuscript/DATA_ACCESSIBILITY_ECOLOGY_LETTERS_ROUTEABILITY_V1.md"
+  ],
+  "unresolved_before_upload": [
+    "permanent DOI for exact submitted adaptive-gain code state",
+    "author list/order and title-page affiliations",
+    "corresponding-author fields",
+    "funding, competing interests, ORCIDs and author contributions",
+    "final rendered PDF inspection"
+  ],
+  "status": "TEXT_AND_SUBMISSION_SURFACE_READY_FIGURE_CI_PENDING"
+}
