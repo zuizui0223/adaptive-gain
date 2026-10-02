@@ -24,9 +24,9 @@ impose different information costs when the focal action changes which later
 cue is relevant after each realized outcome. A finite ecological budget
 exposes this distinction when (C_A\le B<C_F).
 
-We also independently reanalyse public bumblebee data that support the
-mechanistic ingredients rather than treating the theory as biologically
-unanchored. In 19,200 public trials from 192 *Bombus terrestris*, costly
+We also use *Bombus* as a single-system empirical anchor rather than treating
+the theory as biologically ungrounded or assembling examples across unrelated
+taxa. In 19,200 public trials from 192 *Bombus terrestris*, costly
 information-seeking rises strongly with difficulty when platform landing is
 required to obtain the cue, but the difficulty gradient reverses when the cue
 is supplied independently of landing. Separate public data show strong
