@@ -34,7 +34,7 @@ This distinction also has mathematical precedent outside ecology. Information th
 
 We answer yes. For a declared ecological task, let \(C_A\) denote the minimum worst-case cue cost when later cues may depend on earlier outcomes, and let \(C_F\) denote the minimum cost of a fixed resolving cue set. We construct paired tasks on the same physical cue environment. Only the map from cue-defined states to the focal action changes. Nevertheless, the fixed-to-contingent acquisition geometry separates without bound as the construction grows, whereas the matched control requires only two fixed cues.
 
-The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
+The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. Recent bumble-bee experiments also show that animals can voluntarily pay a reward cost to obtain predictive information when uncertain (Yuan et al. 2026), supporting the biological plausibility of treating information acquisition as costly without constituting a test of routeability itself. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
 
 \[
 C_A\le B<C_F.
@@ -729,8 +729,10 @@ The present contribution is narrower:
 > complete Shannon entropy vector over target and cues can be held fixed while
 > the focal action map changes optimal worst-case adaptive accessibility.
 
-The separate asymptotic construction then shows that the ecological consequence
-can grow without bound under weaker information matching.
+Under the strongest matching condition, direct products make the adaptive-cost
+difference grow without bound additively. A separate exactly balanced routing
+family gives the stronger unbounded multiplicative (C_F/C_A) separation
+under weaker information matching.
 
 ---
 
@@ -829,4 +831,5 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
 - Forré, R. 1990. Methods and instruments for designing S-boxes. *Journal of Cryptology* 2:115–130. DOI: 10.1007/BF00190799.
 - Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
+- Yuan, L., He, Y., Ye, Q., Lin, L., Yuan, R., Wang, Q. & Chen, S. 2026. Uncertainty-Guided Decision-Making in Bumble Bees. bioRxiv. DOI: 10.64898/2026.09.15.751944.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
