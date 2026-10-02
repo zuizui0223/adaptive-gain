@@ -136,6 +136,21 @@ F(\cdot)\not\Rightarrow C_A.
 }
 \]
 
+The separation is not bounded in absolute size. Taking \(r\) independent
+coordinate copies preserves the complete Shannon entropy vector but gives
+
+\[
+(C_A,C_F)_A=(4r,4r),
+\qquad
+(C_A,C_F)_B=(3r,4r).
+\]
+
+Thus the adaptive-cost difference and the routeability-gap difference both
+equal \(r\) and grow without bound. The matched construction does **not**
+currently give an unbounded multiplicative \(C_F/C_A\) ratio; that stronger
+ratio result uses the separate asymptotic family under weaker information
+matching.
+
 However, Level 6 has a new positive result.
 
 For deterministic finite exact resolution under any strictly positive
