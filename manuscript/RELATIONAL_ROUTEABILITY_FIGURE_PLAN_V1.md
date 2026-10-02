@@ -198,25 +198,38 @@ bumble bees can voluntarily pay a reward cost to obtain information. It is
 
 Use two quantitative mini-panels and one qualitative icon row.
 
-#### B1 — costly information acquisition (Yuan et al. 2026)
+#### B1 — costly information acquisition depends on access mode (Yuan et al. 2026)
 
-Plot from the independently reaggregated 19,200 public trials:
+Plot **platform-landing probability** against difficulty as two connected
+series from the independently reaggregated 19,200 public trials:
 
-| Difficulty | request probability | unaided accuracy |
+| Difficulty | Regular: landing obtains cue | Random Free-Cue: cue supplied independently |
 |---|---:|---:|
-| Easy | 0.096 | 0.750 |
-| Hard | 0.469 | 0.494 |
-| Impossible | 0.716 | 0.207 |
+| Easy | 0.096 | 0.617 |
+| Hard | 0.469 | 0.588 |
+| Impossible | 0.716 | 0.210 |
 
-Optionally overlay post-request accuracy as a near-flat reference around
-\(0.93\).
+The two gradients cross.
+
+Add the individual-level interaction certificate:
+
+\[
+\Delta\Delta_{\rm Impossible-Easy}=1.018,
+\]
+
+positive in **191/192 bees**,
+exact one-sided sign-test \(p=3.1\times10^{-56}\).
 
 Main annotation:
 
-**information need rises → costly acquisition rises**
+**difficulty increases landing only when landing is needed to obtain information**
 
-Add a small Free-Cue control symbol indicating that cue receipt can be
-experimentally separated from platform landing.
+A small inset may show that unaided accuracy falls
+\(0.750\to0.494\to0.207\), whereas post-acquisition accuracy remains near
+\(0.93\).
+
+Do not label Free-Cue platform landing as an information request: the cue is
+already delivered independently in that condition.
 
 #### B2 — recruitment of a second cue (Spaethe et al. 2026)
 
