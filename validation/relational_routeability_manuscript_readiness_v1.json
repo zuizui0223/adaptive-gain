@@ -5,20 +5,12 @@
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
   "working_title": "Conditional decision topology separates information content from ecological accessibility",
-  "approximate_main_words": 4639,
+  "approximate_main_words": 4827,
   "structure": [
-    "ecological motivation and established acquisition/decision-tree prior art",
-    "finite decision model and relational routeability theorem",
-    "common-budget ecological corollary",
-    "complete-Shannon-entropic matched twins with different adaptive cost",
-    "direct-product unbounded additive amplification",
-    "static fixed-information characterization and outcome-resolved Bellman recursion",
-    "nonlinear accessibility-to-feedback no-go theorem",
-    "compressed ecological scope and measurement protocol",
-    "single-system Bombus empirical anchor",
-    "prospective matched Bombus routeability test in Supplement",
-    "prior-art boundary: decision trees/separating systems, entropy profiles, PID/AFA",
-    "deterministic scope"
+    "Introduction",
+    "Material and methods: finite task plus public Bombus reanalysis protocol",
+    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, nonlinear no-go, Bombus empirical anchor",
+    "Discussion: ecological scope, measurement, prospective direct test, prior-art boundary, deterministic limits and conclusion"
   ],
   "core_claims": [
     "fixed exact-resolution burden is determined by which cue subsets reach H(T)",
@@ -89,7 +81,7 @@
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 146,
-  "current_approx_main_words": 4639,
+  "current_approx_main_words": 4827,
   "reference_count": 26,
   "empirical_carrier": {
     "taxon": "Bombus spp.",
