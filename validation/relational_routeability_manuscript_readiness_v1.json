@@ -53,15 +53,20 @@
     "natural prevalence of exact-balanced architectures"
   ],
   "remaining_work": [
-    "compress theorem proof sketches into main-text essentials plus supplement",
-    "build the two conceptual figures",
-    "verify any new references introduced during final editing",
-    "draft an American Naturalist cover letter only after figures and proof compression are stable"
+    "build the two planned figures",
+    "compress any remaining proof detail from main text into the supplement where helpful",
+    "final reference-style formatting",
+    "draft The American Naturalist cover letter after figures are stable"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "V0.3 is the current journal-oriented deterministic synthesis draft. No new theorem families; remaining work is proof compression, figures, final references, and submission packaging.",
+  "stop_rule": "The deterministic theory, prior-art boundary, bibliography audit, proof supplement, journal fit, and figure plan are now in place. No new theorem families; remaining work is figures, editorial compression, and submission packaging.",
   "abstract_words": 155,
   "preferred_first_target": "The American Naturalist",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
-  "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md"
+  "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md",
+  "proof_supplement": "manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md",
+  "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
+  "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md",
+  "current_abstract_words": 155,
+  "current_approx_main_words": 2685
 }
