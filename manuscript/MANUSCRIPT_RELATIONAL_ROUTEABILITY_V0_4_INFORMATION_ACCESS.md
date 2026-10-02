@@ -16,6 +16,8 @@ environmental heterogeneity; ecological information; sequential decision making;
 
 ---
 
+---
+
 ## 1. Introduction
 
 Environmental heterogeneity is a central ecological explanatory variable, but ecology does not reduce it to a single scalar. Classical and modern theory distinguish not only how much variation exists but also its spatial or temporal pattern and grain. Likewise, information ecology and information-fitness theory ask how environmental information changes decisions, growth and selection (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011). The starting point of this paper is therefore not that ecology has ignored structure.
@@ -52,7 +54,13 @@ We develop four consequences. First, information amount and information accessib
 
 ---
 
-## 2. Finite ecological decision tasks
+---
+
+## 2. Materials and methods
+
+---
+
+### 2.1 Finite ecological decision tasks
 
 Let \(W\) be a finite set of ecological alternatives. A world \(w\in W\) may represent a resource, host, partner, habitat condition or other state relevant to a focal decision.
 
@@ -88,7 +96,28 @@ Neither \(C_A\) nor \(C_F\) is intrinsically fitness. They are exact properties 
 
 ---
 
-## 3. Relational routeability theorem
+---
+
+### 2.2 Public *Bombus* data and bridge quantities
+
+We used public *Bombus* datasets only for preregisterable component tests, not
+to estimate the exact deterministic theorem. For Yuan et al. (2026), we
+independently reaggregated all 19,200 trial records from the immutable public
+source commit, calculating information-request rates by difficulty and
+within-bee directional contrasts. For Spaethe et al. (2026), before extracting
+the public individual conflict-test values we defined secondary-cue recruitment
+as \(R=1-p_{\rm colour}\) and compared easy versus difficult primary-colour
+conditions. Other *Bombus* studies are used only as mechanistic support for
+sequential sampling and context-conditioned action. Source hashes, code and
+claim ceilings are given in the Data Accessibility statement and Supplement.
+
+---
+
+## 3. Results
+
+---
+
+### 3.1 Relational routeability theorem
 
 For every integer \(d\ge2\), set
 
@@ -194,7 +223,9 @@ The source of the separation is the action-conditioned arrangement of cue states
 
 ---
 
-## 4. Exact common-budget ecological corollary
+---
+
+### 3.2 Exact common-budget ecological corollary
 
 The relational theorem becomes ecological when a shared observation budget is imposed.
 
@@ -244,11 +275,13 @@ Hence the architecture-by-access contrast is
 }
 \]
 
-This is an exact feasibility contrast, not a claim that real animals will exhibit a one-unit behavioral effect. Its biological role is to localize where topology can matter: under extremely small budgets both strategies may fail; under large budgets both may succeed; the topology-sensitive region lies between the adaptive and fixed requirements.
+This is an exact feasibility contrast, not a claim that real animals will exhibit a one-unit behavioral effect (Fig. 2a). Its biological role is to localize where topology can matter: under extremely small budgets both strategies may fail; under large budgets both may succeed; the topology-sensitive region lies between the adaptive and fixed requirements.
 
 ---
 
-## 5. Complete static subset information can still miss adaptive accessibility
+---
+
+### 3.3 Complete static information can miss adaptive accessibility
 
 The asymptotic construction proves an unbounded routeability separation while
 holding the physical cue environment, target prevalence, target entropy and
@@ -368,9 +401,14 @@ weaker information matching.
 
 ---
 
-## 6. Fixed information and adaptive information are different mathematical objects
+The matched finite witness, continuation trees and direct-product amplification
+are summarized in Fig. 1.
 
-### 6.1 Fixed resolution is exactly a static subset-information optimization
+---
+
+### 3.4 Fixed and adaptive information are different mathematical objects
+
+#### 3.4.1 Fixed resolution is exactly a static subset-information optimization
 
 Give every represented world strictly positive probability. For any fixed cue
 bundle \(S\),
@@ -404,7 +442,7 @@ has target-pure signatures.
 Thus the complete named subset-information function is sufficient for
 \(C_F\).
 
-### 6.2 Adaptive resolution requires realized outcomes
+#### 3.4.2 Adaptive resolution requires realized outcomes
 
 Let
 
@@ -480,7 +518,7 @@ I(T;\mathrm{assay1}\mid \mathrm{context}=1)=1.
 The routing cue need not reveal the target directly. It can reveal **where the
 target information is**.
 
-### 6.3 Corrected sufficiency ladder
+#### 3.4.3 Corrected sufficiency ladder
 
 The new construction fills the previous gap between pairwise information and
 the complete action-conditioned table.
@@ -511,7 +549,9 @@ operational property.
 
 ---
 
-## 7. Conditional accessibility can bound evolutionary reachability
+---
+
+### 3.5 Conditional accessibility can bound evolutionary reachability
 
 The structural distinction becomes evolutionarily consequential only after a
 biological lift is specified. Let the state-specific routeability gap be
@@ -566,7 +606,105 @@ space once a state-dependent ecological feedback is specified.
 
 ---
 
-## 8. Ecological scope
+---
+
+### 3.6 *Bombus* as a single-system empirical anchor
+
+The deterministic theorem is intentionally stronger than any one public
+behavioural dataset located so far. We therefore use *Bombus* not as an
+anecdotal example, but as a single-system empirical anchor. The primary
+published anchor is the cue-allocation experiment of Spaethe et al. (2026);
+the recent Yuan et al. (2026) preprint supplies a separate, provisional test
+of costly active acquisition. Across these and other experiments in the same
+genus, the evidence tests distinct operational ingredients rather than the
+full theorem.
+
+#### 3.6.1 Secondary cues are recruited when primary information is insufficient
+
+Spaethe et al. (2026) trained *B. terrestris* on combined colour and
+pattern/shape cues and then used cue-conflict tests to separate their
+contributions. We prospectively defined a secondary-cue recruitment index
+
+\[
+R=1-p_{\rm colour}.
+\]
+
+Using individual values in the authors' public analysis repository,
+secondary-cue recruitment increased from (R_{m easy}=0.026) to
+(R_{m hard}=0.374), a difference of 0.349; pattern and shape experiments
+showed the same direction independently.
+
+This result directly supports the narrower prediction that the same nominal
+cue vocabulary need not impose the same acquired information burden: bees
+largely ignore a secondary attribute when the primary cue is sufficient and
+recruit it when primary information is insufficient. The attributes were
+simultaneously available, however, so this is not a within-encounter
+branch-specific next-cue policy.
+
+#### 3.6.2 Costly contingent acquisition
+
+The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
+could voluntarily land on an information-request platform before a mandatory
+discrimination. A correct choice without requesting information earned 30%
+sucrose, whereas a correct post-request choice earned only 15%, so information
+acquisition carried an explicit reward cost.
+
+We independently reaggregated all 19,200 public trials from 192 bees.
+Information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
+(Impossible); all 192 bees requested more information on Hard than Easy trials,
+and 181/192 increased again from Hard to Impossible. Post-request accuracy
+remained near 0.93. Random Free-Cue trials, in which predictive information
+was supplied independently of platform landing, reversed the Easy-to-Impossible
+landing gradient for 191/192 bees. Thus the effect is specifically tied to
+obtaining information rather than a generic motor response to difficulty.
+
+We exclude the raw non-request accuracy of the Impossible subset from
+inference because its coded value (0.207) is unexpectedly below chance for two
+physically identical stimuli and is not yet reconciled with the source data
+pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
+remaining result as a reproducible but provisional component test of
+**need-dependent costly information acquisition**, not as identification of
+the exact \(C_A<C_F\) theorem.
+
+#### 3.6.3 Sequential sensory access is biologically real
+
+MaBouDi et al. (2025) provide public high-speed trajectories showing that
+bumblebees inspect restricted diagnostic regions of visual patterns before
+accepting or rejecting them. The scanned regions differ between patterns,
+demonstrating selective sequential sensory sampling rather than mandatory
+parallel access to the whole stimulus. The pattern-specific scanning strategy
+also persists when reward and punishment valence are reversed, providing a
+useful negative control: a simple relabelling of outcomes does not by itself
+force a new acquisition architecture.
+
+Public match-to-sample data provide the relational action-map component:
+in Chow et al. (2022), platform/sample colour determines which subsequently
+available ball is the rewarding action. Essenberg et al. (2015) provide the
+closest biological precedent for branch-specific cue relevance: flower size
+predicts reward in one flower-type branch but is uninformative in another, and
+bees learn to use size only where it carries value.
+
+Together these studies let one biological system carry the theory from
+abstraction to mechanism: bumblebees can pay for information, recruit
+additional cues according to information need, sample sensory information
+sequentially, and switch later actions according to earlier context. They do
+**not** constitute a single direct test of the exact relational theorem.
+Instead, they show that every major biological operation required by the
+theory already exists within *Bombus*. The remaining experiment is therefore
+a narrow composition test rather than a leap from mathematics to biology.
+
+---
+
+The two quantitative public-data contrasts and their mechanistic context are
+shown in Fig. 2b.
+
+---
+
+## 4. Discussion
+
+---
+
+### 4.1 Ecological scope
 
 The immediate ecological consequence concerns **processing burden and
 accessibility**, not evolved niche breadth by itself. Equal nominal niche
@@ -588,7 +726,9 @@ functional from which those conclusions could follow.
 
 ---
 
-## 9. Measurement: recover structure before summarizing it
+---
+
+### 4.2 Measurement: recover structure before summarizing it
 
 A routeability analysis must begin with a focal action.
 
@@ -627,107 +767,26 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 
 ---
 
-## 10. Bombus as a single-system empirical anchor
-
-The deterministic theorem is intentionally stronger than any one public
-behavioural dataset located so far. We therefore use *Bombus* not as an
-anecdotal example, but as a single-system empirical anchor. The primary
-published anchor is the cue-allocation experiment of Spaethe et al. (2026);
-the recent Yuan et al. (2026) preprint supplies a separate, provisional test
-of costly active acquisition. Across these and other experiments in the same
-genus, the evidence tests distinct operational ingredients rather than the
-full theorem.
-
-### 10.1 Secondary cues are recruited when primary information is insufficient
-
-Spaethe et al. (2026) trained *B. terrestris* on combined colour and
-pattern/shape cues and then used cue-conflict tests to separate their
-contributions. We prospectively defined a secondary-cue recruitment index
-
-\[
-R=1-p_{\rm colour}.
-\]
-
-Using individual values in the authors' public analysis repository,
-secondary-cue recruitment increased from (R_{m easy}=0.026) to
-(R_{m hard}=0.374), a difference of 0.349; pattern and shape experiments
-showed the same direction independently.
-
-This result directly supports the narrower prediction that the same nominal
-cue vocabulary need not impose the same acquired information burden: bees
-largely ignore a secondary attribute when the primary cue is sufficient and
-recruit it when primary information is insufficient. The attributes were
-simultaneously available, however, so this is not a within-encounter
-branch-specific next-cue policy.
-
-### 10.2 Costly contingent acquisition
-
-The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
-could voluntarily land on an information-request platform before a mandatory
-discrimination. A correct choice without requesting information earned 30%
-sucrose, whereas a correct post-request choice earned only 15%, so information
-acquisition carried an explicit reward cost.
-
-We independently reaggregated all 19,200 public trials from 192 bees.
-Information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
-(Impossible); all 192 bees requested more information on Hard than Easy trials,
-and 181/192 increased again from Hard to Impossible. Post-request accuracy
-remained near 0.93. Random Free-Cue trials, in which predictive information
-was supplied independently of platform landing, reversed the Easy-to-Impossible
-landing gradient for 191/192 bees. Thus the effect is specifically tied to
-obtaining information rather than a generic motor response to difficulty.
-
-We exclude the raw non-request accuracy of the Impossible subset from
-inference because its coded value (0.207) is unexpectedly below chance for two
-physically identical stimuli and is not yet reconciled with the source data
-pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
-remaining result as a reproducible but provisional component test of
-**need-dependent costly information acquisition**, not as identification of
-the exact \(C_A<C_F\) theorem.
-
-### 10.3 Sequential sensory access is biologically real
-
-MaBouDi et al. (2025) provide public high-speed trajectories showing that
-bumblebees inspect restricted diagnostic regions of visual patterns before
-accepting or rejecting them. The scanned regions differ between patterns,
-demonstrating selective sequential sensory sampling rather than mandatory
-parallel access to the whole stimulus. The pattern-specific scanning strategy
-also persists when reward and punishment valence are reversed, providing a
-useful negative control: a simple relabelling of outcomes does not by itself
-force a new acquisition architecture.
-
-Public match-to-sample data provide the relational action-map component:
-in Chow et al. (2022), platform/sample colour determines which subsequently
-available ball is the rewarding action. Essenberg et al. (2015) provide the
-closest biological precedent for branch-specific cue relevance: flower size
-predicts reward in one flower-type branch but is uninformative in another, and
-bees learn to use size only where it carries value.
-
-Together these studies let one biological system carry the theory from
-abstraction to mechanism: bumblebees can pay for information, recruit
-additional cues according to information need, sample sensory information
-sequentially, and switch later actions according to earlier context. They do
-**not** constitute a single direct test of the exact relational theorem.
-Instead, they show that every major biological operation required by the
-theory already exists within *Bombus*. The remaining experiment is therefore
-a narrow composition test rather than a leap from mathematics to biology.
+This action-first measurement pipeline is summarized in Fig. 2d.
 
 ---
 
-## 11. Prospective direct test
+### 4.3 Prospective direct test
 
 The remaining causal test is narrow: hold one physical cue matrix fixed, alter
 the focal action map so that different early outcomes make different later cues
 relevant, impose costly cue acquisition under a shared finite budget, and test
-the predicted architecture-by-access interaction. The preregisterable
+the predicted architecture-by-access interaction. The predicted design is summarized in Fig. 2c. The preregisterable
 four-state design and the stronger exact-balanced ten-state stress test are
 specified in the Supplement.
 
 ---
 
-## 12. Prior-art boundary
+---
 
-### 12.1 Decision trees and separating systems
+### 4.4 Prior-art boundary
+
+#### 4.4.1 Decision trees and separating systems
 
 Fixed separating systems and adaptive identification trees are established
 theory (Katona 1966; Garey 1972; Hyafil & Rivest 1976; Chakaravarthy et al.
@@ -736,7 +795,7 @@ operational primitives. Our claim is instead that complete static Shannon
 information can determine the fixed burden while failing to determine the
 adaptive worst-case burden in the same ecological cue environment.
 
-### 12.2 Static entropy profiles
+#### 4.4.2 Static entropy profiles
 
 The complete static subset-information function is not itself a new object.
 Forré (1990) defined an entropy profile for Boolean functions using the
@@ -751,7 +810,7 @@ show that even the complete Shannon entropy vector over target and cues does
 not identify optimal adaptive worst-case resolution cost; the direct-product
 construction makes that adaptive-cost difference arbitrarily large.
 
-### 12.3 Partial information decomposition and synergy
+#### 4.4.3 Partial information decomposition and synergy
 
 Multivariate information theory already distinguishes unique, redundant and
 synergistic information. Williams and Beer (2010) introduced partial
@@ -786,7 +845,7 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 > among sources; routeability asks how realized source outcomes reorganize the
 > future acquisition problem under cost.
 
-### 12.4 Active feature acquisition
+#### 4.4.4 Active feature acquisition
 
 Costly sequential feature acquisition, conditional information gain,
 value-of-information policies and generic adaptive-versus-fixed search are all
@@ -800,7 +859,9 @@ multiplicative \(C_F/C_A\) ratio under weaker information matching.
 
 ---
 
-## 13. Deterministic scope and next theory
+---
+
+### 4.5 Deterministic scope and next theory
 
 The current model assumes:
 
@@ -834,7 +895,9 @@ This is a separate paper.
 
 ---
 
-## 14. Conclusion
+---
+
+### 4.6 Conclusion
 
 Environmental information has two operational layers that are easy to
 conflate.
@@ -867,7 +930,9 @@ The resulting principle is:
 \text{Static information tells us what can be known together; routeability tells us what must be learned together.}
 \]
 
-## Claim boundary
+---
+
+### 4.7 Claim boundary
 
 This paper does not claim:
 - a new theory of adaptive feature acquisition;
@@ -877,6 +942,8 @@ This paper does not claim:
 - quantitative validity under noisy natural cues.
 
 It claims an exact relational ecological axis and a measurement/experimental program for testing its consequences.
+
+---
 
 ## References
 
