@@ -3,21 +3,21 @@
   "date": "2026-10-02",
   "branch": "synthesis/information-accessibility-public-data-v1",
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
-  "status": "V0_4_THEORY_PLUS_SINGLE_SYSTEM_BOMBUS_ANCHOR_READY_FOR_SUBMISSION_PACKAGING",
+  "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
   "working_title": "Conditional decision topology separates information content from ecological accessibility",
-  "approximate_main_words": 4659,
+  "approximate_main_words": 4805,
   "structure": [
-    "ecological motivation and costly-information premise",
-    "finite decision model",
-    "static information theorem for fixed cost",
+    "ecological motivation and established acquisition/decision-tree prior art",
+    "finite decision model and relational routeability theorem",
+    "common-budget ecological corollary",
     "complete-Shannon-entropic matched twins with different adaptive cost",
     "direct-product unbounded additive amplification",
-    "exact-balanced unbounded multiplicative family under weaker matching",
-    "common-budget ecological consequence",
-    "measurement protocol",
-    "public Bombus empirical convergence: costly acquisition, secondary-cue recruitment, sequential sampling and context-conditioned action",
-    "prospective matched Bombus routeability experiment",
-    "prior-art boundary: entropy profiles, PID/AFA, adaptive search",
+    "static fixed-information characterization and outcome-resolved Bellman recursion",
+    "nonlinear accessibility-to-feedback no-go theorem",
+    "compressed ecological scope and measurement protocol",
+    "single-system Bombus empirical anchor",
+    "prospective matched Bombus routeability test in Supplement",
+    "prior-art boundary: decision trees/separating systems, entropy profiles, PID/AFA",
     "deterministic scope"
   ],
   "core_claims": [
@@ -25,7 +25,8 @@
     "the complete Shannon entropy vector does not determine optimal adaptive worst-case accessibility",
     "the matched adaptive-cost difference can grow without bound additively under direct products",
     "routeability is relational to the focal action map and realized cue outcomes rather than an intrinsic scalar of the physical environment",
-    "finite ecological budgets expose the operational consequence"
+    "finite ecological budgets expose the operational consequence",
+    "under a monotone L-Lipschitz sensing-to-selection lift, insufficient between-state routeability contrast imposes an exact local eco-evolutionary no-go"
   ],
   "validated_support": [
     "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
@@ -37,14 +38,23 @@
     "validation/balanced_quantity_topology_contrast_v1.json",
     "validation/balanced_pairwise_information_controls_v1.json",
     "validation/exact_balanced_routeability_stress_test_v1.json",
-    "repository-wide CI PASS on Python 3.10/3.11/3.12 after commit b293d1eb976827b3796ac0d17a33d8d0c662ac26; subsequent Bombus bridge commits also pass"
+    "repository-wide CI PASS on Python 3.10/3.11/3.12 after commit b293d1eb976827b3796ac0d17a33d8d0c662ac26; subsequent Bombus bridge commits also pass",
+    "validation/independent_section5_audit_v1.json",
+    "adaptive_gain/independent_section5_audit.py",
+    "tests/test_independent_section5_audit.py",
+    "validation/nonlinear_lipschitz_no_go_v2.json",
+    "tests/test_nonlinear_feedback_reachability.py"
   ],
   "prior_art_must_remain_explicit": [
+    "Katona 1966 separating systems",
+    "Garey 1972 optimal binary identification",
+    "Hyafil & Rivest 1976 optimal binary decision-tree hardness",
+    "Chakaravarthy et al. 2009 multiway decision trees",
+    "Moshkov & Zielosko 2011 test/decision-tree framework",
     "Forre 1990 all-subset Boolean-function entropy profiles",
     "Youssef & Tavares 2004 decision trees plus entropy profiles",
     "PID/synergy and Li et al. 2026 PID-guided active feature acquisition",
     "adaptive/costly feature acquisition and sequential value of information",
-    "uniform separating systems and generic adaptivity gaps",
     "extra-entropic operational structure in information theory"
   ],
   "direct_ecological_reach": [
@@ -63,27 +73,34 @@
     "natural prevalence of exact-balanced architectures"
   ],
   "remaining_work": [
-    "render the two canonical main figures from the updated figure plan and frozen Bombus panel receipt",
-    "final reference verification and Ecology Letters formatting",
-    "prepare Ecology Letters title page, novelty statement, cover letter and data-accessibility statement",
+    "render and verify the two canonical main figures",
+    "run final repository-wide CI after integrated no-go/prior-art/supplement edits",
+    "final Ecology Letters reference/style check",
+    "prepare title page, novelty statement, cover letter and data-accessibility statement",
     "preserve American Naturalist fallback"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "The text is within Ecology Letters Letter limits (abstract 142 <=150; main text approximately 4659 <=5000, excluding abstract as required). No new deterministic theorem or broad public-data search is required before submission. Remaining work is final figure verification, data accessibility, and submission packaging.",
-  "abstract_words": 142,
+  "stop_rule": "Integrated manuscript now contains the entropic non-identification theorem, unbounded additive amplification, common-budget ecology, one nonlinear eco-evolutionary no-go, and a single-system Bombus empirical anchor. V5 is retired as a standalone submission because its central budget/no-go results are incorporated here. No new deterministic theorem family is required before submission.",
+  "abstract_words": 141,
   "preferred_first_target": "Ecology Letters",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
   "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md",
   "proof_supplement": "manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md",
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
-  "current_abstract_words": 142,
-  "current_approx_main_words": 4714,
+  "current_abstract_words": 141,
+  "current_approx_main_words": 4805,
   "reference_count": 21,
   "empirical_carrier": {
     "taxon": "Bombus spp.",
     "rationale": "Independent public experiments within one genus instantiate the main biological operations required by routeability, avoiding a cross-taxon example collage.",
     "manuscript_label": "single-system empirical anchor",
     "full_theorem_status": "not yet directly validated in one experiment"
+  },
+  "portfolio_decision": {
+    "v5_standalone": "RETIRED_DO_NOT_SUBMIT",
+    "reason": "The integrated manuscript now incorporates V5's budget-window and nonlinear no-go content; submitting V5 separately would create substantial theorem/claim overlap.",
+    "mathematical_companion": "SUPPLEMENTARY_MATH_RESERVOIR_NOT_SEPARATE_INITIAL_SUBMISSION",
+    "villavicencio_rewiring": "KEEP_SEPARATE_UNTIL_OBSERVATION_EFFORT_UNRESOLVED_ISSUE_IS_CLOSED"
   }
 }
