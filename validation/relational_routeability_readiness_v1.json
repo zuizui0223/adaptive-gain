@@ -16,7 +16,9 @@
     "canonical_index": "manuscript/RELATIONAL_ROUTEABILITY_CANONICAL_INDEX_V1.md",
     "static_information_theorem": "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
     "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
-    "public_data_audit": "manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md"
+    "public_data_audit": "manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md",
+    "bombus_empirical_bridge": "manuscript/BUMBLEBEE_PUBLIC_DATA_ROUTEABILITY_BRIDGE_V1.md",
+    "bombus_panel_receipt": "validation/bombus_empirical_convergence_panel_v1.json"
   },
   "exact_results": {
     "relational_theorem": "same physical cue matrix + same target prevalence/entropy + same I(T;Q_all), yet routeable ratio lower bound diverges while matched control has C_A=C_F=2",
@@ -64,7 +66,7 @@
   },
   "v5_surface_modified": false,
   "next_allowed_work": [
-    "build a compact Bombus empirical-convergence panel/subsection from the frozen public-data receipt",
+    "render the frozen Bombus empirical-convergence panel from validation/bombus_empirical_convergence_panel_v1.json",
     "editorially compress v0.4 around entropic equivalence, fixed characterization, adaptive recursion, direct-product amplification and ecological budget",
     "submission packaging for Ecology Letters first, American Naturalist fallback",
     "prospective Bombus experiment for the full relational theorem",
@@ -83,11 +85,13 @@
     "componentwise_public_validation": "YES_BOMBUS",
     "validation_receipt": "validation/bombus_public_data_component_receipt_v1.json",
     "strongest_components": [
-      "Yuan et al. 2026: 19,200 public Bombus trials directly show costly state-dependent active information acquisition and accuracy restoration",
-      "MaBouDi et al. 2025: public Bombus trajectories directly show selective sequential visual sampling",
-      "Spaethe et al. 2026: public Bombus data directly show information-content-dependent allocation to secondary cues"
+      "Yuan et al. 2026: independently reaggregated 19,200 public trials; all 192 bees request more information on Hard than Easy trials, costly acquisition restores ~0.93 accuracy",
+      "Spaethe et al. 2026: prospectively defined secondary-cue recruitment rises from 0.026 to 0.374; pooled Cliff's delta 0.980",
+      "MaBouDi et al. 2025: public trajectories show selective sequential visual sampling",
+      "Chow et al. 2022: public match-to-sample data show early context switches the later correct action",
+      "Essenberg et al. 2015: closest branch-specific cue-relevance precedent, but no reusable raw table located"
     ],
-    "interpretation": "Use as convergent empirical grounding of the theory's operational components, not as a claim that one existing dataset identifies C_A<C_F or the same-environment alternate-action-map theorem.",
+    "interpretation": "A compact Bombus empirical-convergence panel is now justified. Public data directly validate costly need-dependent acquisition, secondary-cue recruitment, sequential sampling, and context-conditioned action mapping. No single dataset yet combines these into the exact same-environment branch-specific C_A<C_F test.",
     "remaining_direct_test": "One unchanged physical cue matrix, alternate focal action maps, early outcomes selecting different costly later cues, and a finite shared acquisition budget."
   }
 }
