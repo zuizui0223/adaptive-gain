@@ -5,7 +5,7 @@
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_ECOLOGY_LETTERS_LETTER_TEXT_READY_FIGURES_PENDING",
   "working_title": "Conditional decision topology separates information content from ecological accessibility",
-  "approximate_main_words": 4915,
+  "approximate_main_words": 4659,
   "structure": [
     "ecological motivation and costly-information premise",
     "finite decision model",
@@ -69,7 +69,7 @@
     "preserve American Naturalist fallback"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "The text is within Ecology Letters Letter limits (abstract 142 <=150; main text approximately 4915 <=5000). No new deterministic theorem or broad public-data search is required before submission. Remaining work is figures and submission packaging.",
+  "stop_rule": "The text is within Ecology Letters Letter limits (abstract 142 <=150; main text approximately 4659 <=5000, excluding abstract as required). No new deterministic theorem or broad public-data search is required before submission. Remaining work is final figure verification, data accessibility, and submission packaging.",
   "abstract_words": 142,
   "preferred_first_target": "Ecology Letters",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
@@ -78,5 +78,6 @@
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 142,
-  "current_approx_main_words": 4915
+  "current_approx_main_words": 4659,
+  "reference_count": 21
 }
