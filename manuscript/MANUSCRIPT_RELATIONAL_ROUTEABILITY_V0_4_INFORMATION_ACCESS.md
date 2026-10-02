@@ -24,7 +24,7 @@ A second established literature makes the acquisition problem explicit. Sequenti
 
 A particularly close recent neighbor makes the information-theoretic overlap explicit. Li, Dhali & Bouma (2026) use partial information decomposition to study when pairwise synergy helps active feature acquisition, combine pairwise joint information with conditional information evaluated at realized feature values, and include controlled fixed-information comparisons. Thus neither synergy-aware acquisition nor outcome-conditioned information scores are novelty claims here. The unresolved issue we isolate is stricter: whether two tasks can be statically indistinguishable to the entire Shannon entropy vector yet differ in the exact optimal cost of adaptive resolution.
 
-The unresolved ecological issue is different. Most empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
+The ecological consequence of that mathematical distinction is especially relevant because many empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
 
 > after one cue outcome is observed, which distinctions remain necessary before the organism can act?
 
@@ -652,7 +652,22 @@ The value \(1/5\) is a task ceiling, not a behavioral effect-size assumption.
 
 ## 10. Prior-art boundary
 
-### 10.1 Partial information decomposition and synergy
+### 10.1 Static entropy profiles and decision trees
+
+The complete static subset-information function is not itself a new object.
+Forré (1990) defined an entropy profile for Boolean functions using the
+conditional entropy of a function output given subsets of its input variables.
+With fixed target entropy, that family is equivalent to scanning
+\(I(T;Q_S)\) across cue subsets. Youssef & Tavares (2004) subsequently studied
+decision-tree complexity of cryptographic Boolean functions while also
+considering Boolean-function entropy profiles.
+
+Our claim therefore begins **after** those objects are fixed. The matched twins
+show that even the complete Shannon entropy vector over target and cues does
+not identify optimal adaptive worst-case resolution cost; the direct-product
+construction makes that adaptive-cost difference arbitrarily large.
+
+### 10.2 Partial information decomposition and synergy
 
 Multivariate information theory already distinguishes unique, redundant and
 synergistic information. Williams and Beer (2010) introduced partial
@@ -687,7 +702,7 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 > among sources; routeability asks how realized source outcomes reorganize the
 > future acquisition problem under cost.
 
-### 10.2 Active feature acquisition
+### 10.3 Active feature acquisition
 
 Adaptive feature acquisition is established in machine learning. EDDI, for
 example, selects additional measurements using expected information gain
@@ -812,4 +827,6 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Rivoire, O. & Leibler, S. 2011. The Value of Information for Populations in Varying Environments. *Journal of Statistical Physics* 142:1124–1166. DOI: 10.1007/s10955-011-0166-2.
 - Silva, R. & Clarke, A. R. 2020. The sequential cues hypothesis: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. DOI: 10.1111/1744-7917.12719.
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
+- Forré, R. 1990. Methods and instruments for designing S-boxes. *Journal of Cryptology* 2:115–130. DOI: 10.1007/BF00190799.
+- Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
