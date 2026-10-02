@@ -686,12 +686,12 @@ also persists when reward and punishment valence are reversed, providing a
 useful negative control: a simple relabelling of outcomes does not by itself
 force a new acquisition architecture.
 
-Finally, Essenberg et al. (2015) provide the closest biological precedent for
-the missing branch-specific step. In one artificial-flower type, flower size
-predicted reward; in another simultaneously available flower type, size was
-uninformative. Bees learned to use size only in the branch where it carried
-value. Earlier contextual-learning experiments likewise show that an earlier
-cue can determine which later target is correct (Dale et al. 2005).
+Public match-to-sample data provide the relational action-map component:
+in Chow et al. (2022), platform/sample colour determines which subsequently
+available ball is the rewarding action. Essenberg et al. (2015) provide the
+closest biological precedent for branch-specific cue relevance: flower size
+predicts reward in one flower-type branch but is uninformative in another, and
+bees learn to use size only where it carries value.
 
 Together these studies establish that bumblebees can pay for information,
 allocate additional cues according to information need, sample sensory
@@ -940,6 +940,7 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Yuan, L., He, Y., Ye, Q., Lin, L., Yuan, R., Wang, Q. & Chen, S. 2026. Uncertainty-Guided Decision-Making in Bumble Bees. bioRxiv. DOI: 10.64898/2026.09.15.751944.
 - Spaethe, J. et al. 2026. Bees flexibly adjust decision strategies to information content in a foraging task. *Science Advances*. DOI: 10.1126/sciadv.adw9320.
 - MaBouDi, H., Richter, J., Guiraud, M.-G., Roper, M., Marshall, J. A. R. & Chittka, L. 2025. Active vision of bees in a simple pattern discrimination task. *eLife* 14:e106332. DOI: 10.7554/eLife.106332.
+- Chow, P. K. Y., Lehtonen, T. K., Näreaho, V. & Loukola, O. J. 2022. Prior associations affect bumblebees' generalization performance in a tool-selection task. *iScience* 25:105466. DOI: 10.1016/j.isci.2022.105466.
 - Essenberg, C. J. et al. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
 - Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
