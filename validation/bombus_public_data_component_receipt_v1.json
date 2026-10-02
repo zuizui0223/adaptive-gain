@@ -94,6 +94,31 @@
       "regular": "The predictive cue is obtained only if the bee lands on the Zone-1 information-request platform; a correct post-request choice is paid at a discounted reward, so acquisition is voluntary and costly.",
       "random_free_cue": "The predictive cue is presented automatically upon entering the front half of Zone 1, independent of platform landing. Platform landing therefore becomes separable from cue receipt.",
       "relevance_to_routeability": "This is a causal manipulation of the necessity/cost of information acquisition and is substantially closer to contingent-versus-unconditional access than a simple cue-preference study, but it still offers only one optional information source rather than branch-specific alternative next cues."
+    },
+    "individual_level_reaggregation": {
+      "bees_with_all_three_regular_difficulties": 192,
+      "mean_request_rate": {
+        "Easy": 0.09620976256579251,
+        "Hard": 0.46935606568905847,
+        "Impossible": 0.7146150231392343
+      },
+      "paired_difference_mean": {
+        "Hard_minus_Easy": 0.37314630312326597,
+        "Impossible_minus_Hard": 0.2452589574501762,
+        "Impossible_minus_Easy": 0.6184052605734423
+      },
+      "direction_counts": {
+        "Hard_gt_Easy": "192/192",
+        "Impossible_gt_Hard": "181/192",
+        "Impossible_gt_Easy": "192/192",
+        "strictly_increasing_all_three": "181/192"
+      },
+      "one_sided_exact_sign_test_p": {
+        "Hard_gt_Easy": 1.5930919111324523e-58,
+        "Impossible_gt_Hard": 4.145385014121999e-41,
+        "Impossible_gt_Easy": 1.5930919111324523e-58
+      },
+      "interpretation": "The difficulty gradient is present within individuals and is not an artefact of treating trials as independent replicates."
     }
   },
   "maboudi_2025": {
@@ -149,6 +174,20 @@
   "empirical_program": {
     "theory_paper_use": "One compact empirical-convergence/biological-grounding panel or subsection, explicitly labelled componentwise rather than full theorem validation.",
     "strongest_public_bridge": "Yuan 2026 raw public trials for costly contingent information acquisition; Spaethe 2026 for secondary-cue recruitment; MaBouDi 2025 for selective sequential sensing.",
-    "remaining_direct_experiment": "Hold the physical cue matrix fixed, alter the focal action mapping so different early outcomes make different later cues relevant, allow costly cue acquisition under a finite budget, and test the predicted architecture-by-access interaction."
+    "remaining_direct_experiment": "Hold the physical cue matrix fixed, alter the focal action mapping so different early outcomes make different later cues relevant, allow costly cue acquisition under a finite budget, and test the predicted architecture-by-access interaction.",
+    "component_map": {
+      "costly_state_dependent_acquisition": "Yuan et al. 2026",
+      "need_dependent_secondary_cue_recruitment": "Spaethe et al. 2026",
+      "selective_sequential_sensory_sampling": "MaBouDi et al. 2025",
+      "public_context_conditioned_action_mapping": "Chow et al. 2022",
+      "closest_branch_specific_cue_relevance_without_reusable_raw": "Essenberg et al. 2015"
+    }
+  },
+  "chow_2022": {
+    "role": "public_context_conditioned_action_mapping",
+    "data_doi": "10.5061/dryad.tqjq2bw36",
+    "design": "Match-to-sample tool-selection task. Platform/sample colour is presented before the action; the rewarding action is to roll the ball whose colour matches the current platform colour. The physical candidate ball set is held within each training context while the early sample/context determines which later action is correct.",
+    "subjects": "Bombus terrestris; 28 trained bees reported in the dataset methods",
+    "claim_ceiling": "Direct public evidence that an earlier cue can switch the later target/action rule. It does not measure costly acquisition or choose among alternative later cue resources."
   }
 }
