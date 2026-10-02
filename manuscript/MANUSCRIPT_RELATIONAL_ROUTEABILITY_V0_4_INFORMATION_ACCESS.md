@@ -347,7 +347,11 @@ The earlier depth-two and depth-three controls matching pairwise
 target-cue information remain useful finite stress tests, but they are now
 supporting results rather than the strongest information-matching theorem.
 
-The finite separation amplifies. Take \(r\) independent coordinate copies,
+The finite separation amplifies. This amplification uses the composite target
+\(\mathbf T=(T_1,\ldots,T_r)\), so it establishes an unbounded additive
+separation under complete entropic equivalence as the action alphabet grows;
+it does not establish an unbounded separation for a fixed binary action
+alphabet. Take \(r\) independent coordinate copies,
 use the \(r\)-tuple of coordinate targets as the focal action, and retain
 coordinate-local cue sets. Entropies factor across coordinates, so the complete
 Shannon entropy vector remains identical between the two product tasks.
