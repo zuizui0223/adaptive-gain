@@ -209,6 +209,65 @@ Executable certificate:
 - \`adaptive_gain/static_information_adaptive_separation.py\`
 - \`tests/test_static_information_adaptive_separation.py\`
 
+### Corollary 2.1 — the complete Shannon entropy vector can be identical
+
+The same twins are stronger than an all-subset mutual-information match.
+
+For every cue subset (S\subseteq Q), the physical cue matrix is common, so
+
+[
+H_A(Q_S)=H_B(Q_S).
+]
+
+The exact conditional-entropy certificate above gives
+
+[
+H_A(T\mid Q_S)=H_B(T\mid Q_S)
+]
+
+for every named subset. Therefore
+
+[
+H_A(T,Q_S)
+=
+H_A(Q_S)+H_A(T\mid Q_S)
+=
+H_B(Q_S)+H_B(T\mid Q_S)
+=
+H_B(T,Q_S).
+]
+
+Every subset of the five variables ((T,q_0,q_1,q_2,q_3)) either contains
+(T) and has the form ((T,Q_S)), or is cue-only. Hence
+
+[
+oxed{
+H_A(U)=H_B(U)
+qquad
+\forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
+}
+]
+
+Thus the two tasks have the **same complete Shannon entropy vector** while
+
+[
+C_A(T_A)=4
+\neq
+3=C_A(T_B).
+]
+
+This is an operational inequivalence under exact entropic equivalence. It does
+not establish that entropy vectors are generally insufficient for all decision
+problems; extra-entropic operational distinctions are known elsewhere in
+information theory. The present point is the exact finite acquisition
+consequence in a common ecological cue environment.
+
+Executable certificate:
+
+- `joint_entropy_log_fingerprint` in
+  `adaptive_gain/static_information_adaptive_separation.py`;
+- `test_complete_shannon_entropy_vector_matches_exactly`.
+
 ### Why the adaptive costs differ
 
 For target map \(T_A\), the optimal residual adaptive depths after each possible
@@ -390,7 +449,7 @@ finite problem.
 
 ---
 
-## Relation to PID and synergy
+## Relation to PID, synergy and active feature acquisition
 
 Williams & Beer (2010) introduced partial information decomposition to separate
 unique, redundant and synergistic contributions of multiple sources to a
@@ -417,7 +476,19 @@ subset-information set function can be identical while adaptive cost differs.
 This does **not** imply that every possible PID construction is identical for
 the two twins. PID definitions may use finer distributional information than
 the scalar subset-MI function, and multivariate PID itself has multiple
-competing definitions. The safe claim is narrower:
+competing definitions. A particularly close 2026 preprint by Li, Dhali & Bouma explicitly studies when
+pairwise synergy helps active feature acquisition. Their SynAFA policy combines
+pairwise joint information with conditional information evaluated at realized
+feature values, and their synthetic analyses include approximately
+fixed-information controls. This is direct prior art for connecting synergy,
+realized-value conditioning and budgeted sequential acquisition.
+
+The present exact theorem therefore must not be positioned as the first
+synergy-to-acquisition bridge. Its narrower distinction is that two deterministic
+tasks on one physical cue matrix can have the same **complete Shannon entropy
+vector** and still have different optimal worst-case adaptive resolution depth.
+
+The safe claim is narrower:
 
 > static Shannon information content, even at all subset orders, does not
 > determine exact sequential accessibility.
