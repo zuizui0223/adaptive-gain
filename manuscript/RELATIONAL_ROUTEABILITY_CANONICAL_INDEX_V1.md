@@ -192,7 +192,8 @@ This is a stronger follow-up, not a prerequisite for Experiment 1.
 - \`validation/balanced_quantity_topology_contrast_v1.json\`
 - \`validation/balanced_pairwise_information_controls_v1.json\`
 - \`validation/exact_balanced_routeability_stress_test_v1.json\`
-- \`validation/relational_routeability_readiness_v1.json\`
+- `validation/relational_routeability_readiness_v1.json`
+- `validation/static_information_adaptive_separation_v1.json`
 
 Focused quantity/topology tests pass on Python 3.10 / 3.11 / 3.12.
 
