@@ -766,15 +766,21 @@ specified in the Supplement.
 
 ### 12.1 Decision trees and separating systems
 
-The finite identification problem itself is established theory. Garey (1972)
-formulated optimal binary identification with costly tests; Hyafil & Rivest
-(1976) established the computational hardness of optimal binary decision trees;
-Katona (1966) developed separating systems; Chakaravarthy et al. (2009)
-treated multiway decision trees; and Moshkov & Zielosko (2011) give a broader
-test/decision-tree framework. These works are direct prior art for the
-adaptive and fixed primitives. Our claim is not a new decision-tree problem,
-but a non-identification result relating those operational costs to static
-Shannon summaries and an ecological action map.
+The finite identification problem itself is established theory. Katona (1966)
+developed separating systems for fixed collections of tests. Garey (1972)
+formulated binary identification with test costs and gave a dynamic-programming
+solution for minimum expected testing cost; Hyafil & Rivest (1976) established
+NP-completeness for constructing an expected-test-optimal binary decision tree.
+Chakaravarthy et al. (2009) likewise studied entity identification from an
+attribute table under an average-test objective, while Moshkov & Zielosko
+(2011) develop a broader framework of tests, decision rules and trees,
+including complexity bounds. These works are direct prior art for fixed
+separating systems and adaptive decision trees, but their objectives are not
+identical to our minimum worst-case exact-resolution costs. Our claim is not a
+new decision-tree problem. It is the non-identification result that even the
+complete Shannon entropy vector can determine the fixed exact-resolution
+burden while failing to determine the adaptive worst-case burden, together
+with the ecological interpretation through an action-conditioned cue map.
 
 ### 12.2 Static entropy profiles
 
