@@ -29,18 +29,22 @@ be learned jointly before action. This distinction becomes behaviorally
 consequential under finite time, exposure, handling, or acquisition budgets,
 specifically when (C_A\le B<C_F).
 
-We pair the theorem with convergent public evidence from bumblebees. We
-independently reaggregated 19,200 trial-level records from 192
-*Bombus terrestris* in an active information-seeking experiment. Information
+We pair the theorem with *Bombus* as a single-system empirical anchor rather
+than assembling illustrative examples across taxa. Across independent
+bumblebee experiments, public data instantiate the distinct biological
+operations required by the theory. We independently reaggregated 19,200
+trial-level records from 192 *Bombus terrestris* in an active
+information-seeking experiment. Information
 acquisition rises sharply with task difficulty when bees must land on a
 platform to obtain the cue, but this difficulty gradient reverses when the
 predictive cue is supplied independently of platform landing. In a separate
 public dataset, secondary-cue recruitment increases from approximately 0.026
-to 0.374 when the primary colour cue becomes difficult. Additional bumblebee
-studies establish selective sequential sensory sampling and
-context-conditioned action rules. We present these as componentwise empirical
-validation, not as a claim that an existing dataset already measures the exact
-deterministic (C_A<C_F) theorem.
+to 0.374 when the primary colour cue becomes difficult. Additional bumblebee studies establish selective sequential sensory sampling
+and context-conditioned action rules. Thus one biological lineage carries the
+theory from costly information acquisition through conditional cue use to
+action selection. We present this as componentwise empirical validation, not
+as a claim that an existing dataset already measures the exact deterministic
+(C_A<C_F) theorem.
 
 We believe the manuscript is suitable for *Ecology Letters* because it
 introduces a general ecological distinction, provides an exact and falsifiable
