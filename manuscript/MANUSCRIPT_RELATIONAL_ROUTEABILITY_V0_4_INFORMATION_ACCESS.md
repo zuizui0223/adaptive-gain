@@ -630,7 +630,9 @@ on Hard trials and
 0.716
 \]
 
-on Impossible trials. At the same time, accuracy without requesting fell from
+on Impossible trials. The gradient was also within-individual: all 192 bees
+requested more information on Hard than Easy trials, and 181/192 increased
+again from Hard to Impossible. At the same time, accuracy without requesting fell from
 \(0.750\) to \(0.494\) and \(0.207\), whereas post-request accuracy remained
 near \(0.93\) at all three difficulty levels.
 
