@@ -32,6 +32,14 @@ Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONA
 
 ---
 
+## Proof supplement
+
+`manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md`
+
+Formal analytic proof of the relational theorem/common-budget corollary plus the exact finite verification scope for pairwise controls and the ten-state stress test.
+
+---
+
 ## Mathematical support
 
 ### Relational orthogonality theorem
@@ -76,6 +84,19 @@ Separates:
 - NOT-YET-REACHED downstream claims such as diversity–stability.
 
 ### Prior-art boundary
+`manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md`
+
+### Bibliography verification
+`manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md`
+
+Core ecology, information-fitness, adaptive-acquisition and extra-entropic references verified against primary/authoritative sources.
+
+### Journal fit
+`manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md`
+
+Preferred deterministic-theory target: The American Naturalist. Ecology Letters reserved as a more ambitious theory+behavioral-validation route; Theoretical Ecology as fallback.
+
+
 \`manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md\`
 
 Treats as prior art:
