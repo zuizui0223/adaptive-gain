@@ -24,9 +24,9 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 ## Current synthesis manuscript
 
-`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md`
+`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
 
-Current American Naturalist-oriented draft. Abstract is within the current 200-word Major Article limit. Use this manuscript for prose-level review; use the theorem spine for claim-level review.
+Current information-accessibility synthesis draft. It adds the exact characterization of fixed cost by static subset information and the 12-state exact-balanced twins with identical named subset-information profiles but different adaptive costs. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
 
 Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`.
 
@@ -48,22 +48,29 @@ Formal analytic proof of the relational theorem/common-budget corollary plus the
 Core result:
 same physical cue matrix, target prevalence/entropy and total full-vocabulary target information can coexist with sharply different adaptive/fixed resolution geometry.
 
-### Summary sufficiency ladder
-\`theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md\`
+### Static-information / adaptive-access theorem
+`theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md`
 
-Tracks which increasingly rich summaries still fail to identify conditional decision topology.
+Core strengthening: the full named static subset-information function exactly determines `C_F` but does not determine `C_A`.
+
+### Summary sufficiency ladder
+`theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md`
+
+Now includes the missing all-subset-information level and the outcome-resolved Bellman level.
 
 ### Executable constructions
 
 - \`adaptive_gain/balanced_quantity_topology_contrast.py\`
 - \`adaptive_gain/balanced_pairwise_information_controls.py\`
-- \`adaptive_gain/exact_balanced_routeability_stress_test.py\`
+- `adaptive_gain/exact_balanced_routeability_stress_test.py`
+- `adaptive_gain/static_information_adaptive_separation.py`
 
 ### Focused tests
 
 - \`tests/test_balanced_quantity_topology_contrast.py\`
 - \`tests/test_balanced_pairwise_information_controls.py\`
-- \`tests/test_exact_balanced_routeability_stress_test.py\`
+- `tests/test_exact_balanced_routeability_stress_test.py`
+- `tests/test_static_information_adaptive_separation.py`
 
 Focused CI:
 \`.github/workflows/quantity-topology-smoke.yml\`
@@ -85,6 +92,11 @@ Separates:
 
 ### Prior-art boundary
 `manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md`
+
+### Public-data eligibility audit
+`manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md`
+
+Current result: no located public dataset directly identifies the full routeability contrast; Wilmsen 2017, Kawaguchi 2026 and Brzozowski 2020 are classified as staged-cue concordance / ecological precedent rather than theorem validation.
 
 ### Bibliography verification
 `manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md`
