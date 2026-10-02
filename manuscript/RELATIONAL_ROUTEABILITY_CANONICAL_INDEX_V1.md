@@ -32,6 +32,36 @@ Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONA
 
 ---
 
+## Ecology Letters submission surface
+
+Canonical target: **Ecology Letters — Letter**.
+
+- manuscript:
+  `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
+- submission metadata:
+  `manuscript/SUBMISSION_METADATA_ECOLOGY_LETTERS_ROUTEABILITY_V1.md`
+- figure legends:
+  `manuscript/FIGURE_LEGENDS_RELATIONAL_ROUTEABILITY_V1.md`
+- novelty statement:
+  `manuscript/NOVELTY_STATEMENT_ECOLOGY_LETTERS_ROUTEABILITY_V1.md`
+- cover letter:
+  `manuscript/COVER_LETTER_ECOLOGY_LETTERS_ROUTEABILITY_V1.md`
+- data accessibility:
+  `manuscript/DATA_ACCESSIBILITY_ECOLOGY_LETTERS_ROUTEABILITY_V1.md`
+- submission readiness:
+  `validation/ecology_letters_routeability_submission_readiness_v1.json`
+
+Current controlled counts:
+- abstract: 142 words;
+- main text: approximately 4,659 words under the journal definition;
+- references: 21;
+- main figures: 2.
+
+Do not use the older generic/Theoretical Ecology `SUBMISSION_METADATA_V1.md` for
+this submission.
+
+---
+
 ## Proof supplement
 
 `manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md`
@@ -140,9 +170,12 @@ The candidate contribution is the exact ecological composition, not those compon
 
 `manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md`
 
-Two-main-figure plan:
-1. complete Shannon entropic equivalence -> different adaptive accessibility;
-2. finite ecological budget + public *Bombus* convergence -> prospective matched routeability experiment.
+Implemented main figures:
+1. `manuscript/figures/figure_routeability_entropy_access_v1.svg` — complete Shannon entropic equivalence -> different adaptive accessibility;
+2. `manuscript/figures/figure_routeability_bombus_bridge_v1.svg` — finite ecological budget + public *Bombus* convergence -> prospective matched routeability experiment.
+
+Figure integrity/value receipt:
+`validation/routeability_main_figures_v1.json`.
 
 ---
 
