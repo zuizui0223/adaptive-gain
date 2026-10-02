@@ -2,10 +2,10 @@
   "schema": "adaptive-gain-relational-routeability-manuscript-readiness-v1",
   "date": "2026-10-01",
   "branch": "synthesis/balanced-routeability-ecology-v1",
-  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_1.md",
-  "status": "DRAFT_READY_FOR_PRIOR_ART_AND_EDITORIAL_POLISH",
+  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md",
+  "status": "V0_2_PRIOR_ART_POSITIONED_READY_FOR_PROOF_COMPRESSION",
   "working_title": "Conditional decision topology separates information amount from ecological accessibility",
-  "approximate_main_words": 2859,
+  "approximate_main_words": 2916,
   "structure": [
     "ecological motivation",
     "finite decision model",
@@ -53,12 +53,11 @@
     "natural prevalence of exact-balanced architectures"
   ],
   "remaining_work": [
-    "full reference verification and formatting",
-    "tighten novelty paragraph against adaptive feature acquisition and extra-entropic structure",
+    "verify every bibliography entry against primary/authoritative source",
     "compress theorem proof sketches for target journal",
-    "decide target journal only after the novelty boundary is stable",
+    "decide whether the follow-up is best framed as theoretical ecology or interdisciplinary information/ecology paper",
     "do not add another deterministic theorem family"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "The relational-routeability synthesis now has a complete draft. Further deterministic work must be editorial, prior-art, proof-compression, or experimental implementation; new theorem families are off the critical path."
+  "stop_rule": "V0.2 is the canonical deterministic synthesis draft. Further work is limited to source verification, proof compression, editorial positioning, and experimental implementation."
 }
