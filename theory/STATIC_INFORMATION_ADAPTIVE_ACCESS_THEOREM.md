@@ -640,13 +640,23 @@ The ecological contribution is instead the exact composition:
 Combined with the existing asymptotic theorem, the paper now has two
 complementary results:
 
-1. **strong matching, finite magnitude:** all static subset information can be
-   matched while \(C_A\) changes;
-2. **weaker information matching, unbounded magnitude:** the exact-balanced
-   relational family has \(C_F/C_A\to\infty\).
+1. **strongest matching, unbounded additive magnitude:** the complete Shannon
+   entropy vector can be matched while direct products give
+   \[
+   (C_A,C_F)=(4r,4r)
+   \quad\text{versus}\quad
+   (3r,4r),
+   \]
+   so both the adaptive-cost difference and the routeability-gap difference
+   grow as \(r\);
+2. **weaker information matching, unbounded multiplicative magnitude:** the
+   exact-balanced relational family has
+   \[
+   C_F/C_A\to\infty.
+   \]
 
-Do not conflate the two. No unbounded separation under a matched complete
-subset-information profile is currently claimed.
+Do not conflate the two. An unbounded **multiplicative** \(C_F/C_A\) separation
+under complete Shannon entropy-vector matching is not currently claimed.
 
 ---
 
