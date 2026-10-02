@@ -34,6 +34,23 @@ manuscript are recorded in:
 - `validation/yuan_free_cue_acquisition_interaction_v1.json`;
 - `validation/bombus_empirical_convergence_panel_v1.json`.
 
+## Independent theorem verification
+
+The complete-Shannon-equivalence theorem was also reimplemented independently
+of the repository's main finite-task solver and information helpers. The
+separate audit rebuilds the literal one-copy and two-copy tasks and recomputes
+the exact entropy fingerprints and minimax costs:
+
+- `adaptive_gain/independent_section5_audit.py`;
+- `tests/test_independent_section5_audit.py`;
+- `validation/independent_section5_audit_v1.json`.
+
+The nonlinear eco-evolutionary no-go is separately executable and certified in:
+
+- `adaptive_gain/nonlinear_feedback_reachability.py`;
+- `tests/test_nonlinear_feedback_reachability.py`;
+- `validation/nonlinear_lipschitz_no_go_v2.json`.
+
 ## Spaethe et al. 2026
 
 Individual cue-conflict values were reconstructed from the authors' public
