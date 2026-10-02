@@ -100,6 +100,26 @@ The new 12-state, four-cue twins match:
 - target multiplicities \((8,4)\);
 - **every named value** \(F(S)\) for all \(2^4=16\) cue subsets.
 
+They also match the stronger object
+
+\[
+\boxed{
+H_A(U)=H_B(U)
+\qquad
+\forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
+}
+\]
+
+Thus the complete Shannon entropy vector of the target and all four cues is
+identical. Cue-only entropies match because the physical cue matrix is common;
+target-containing entropies match because
+
+\[
+H(T,Q_S)=H(Q_S)+H(T\mid Q_S)
+\]
+
+and the conditional-entropy fingerprints match exactly.
+
 Yet
 
 \[
@@ -272,12 +292,18 @@ C_A=C_F=2.
 \]
 
 The new Level-6 theorem goes further than pairwise synergy language: even the
-entire static Shannon subset-MI set function can be identical while adaptive
-cost differs.
+complete Shannon entropy vector of the target and all cues can be identical
+while adaptive cost differs.
 
 This does **not** prove that every PID construction is identical for the matched
-twins. PID measures can use finer aspects of the joint distribution than the
-subset-MI scalars.
+twins. PID measures can depend on structure not fixed by an entropy vector, and
+multivariate PID definitions are not unique.
+
+A 2026 active-feature-acquisition study by Li, Dhali & Bouma is direct prior
+art for combining pairwise PID, realized-value conditional information and
+budgeted sequential acquisition. The novelty boundary is therefore not
+"synergy becomes useful sequentially"; it is the exact entropic-equivalence
+counterexample and its ecological action-map interpretation.
 
 Safe statement:
 
