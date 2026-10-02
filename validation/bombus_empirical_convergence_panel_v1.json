@@ -31,7 +31,14 @@
       "Impossible_gt_Hard": "181/192",
       "Impossible_gt_Easy": "192/192"
     },
-    "panel_message": "As unaided discrimination collapses, bees increasingly pay for predictive information while post-request accuracy stays near 0.93."
+    "panel_message": "Difficulty increases acquisition behaviour when landing is required to obtain information, but the gradient reverses when the cue is supplied independently of landing.",
+    "primary_panel": "difficulty × access-mode platform-landing interaction, using Regular versus Random_Free_Cue trials",
+    "interaction_receipt": "validation/yuan_free_cue_acquisition_interaction_v1.json",
+    "key_interaction": {
+      "Impossible_vs_Easy_mean_DID": 1.0183755882781458,
+      "positive_bees": "191/192",
+      "exact_one_sided_sign_test_p": 3.074667388485633e-56
+    }
   },
   "spaethe_2026": {
     "source_repository": "stoeckl-lab/Spaethe_et_al_2024_beeDecisions",
