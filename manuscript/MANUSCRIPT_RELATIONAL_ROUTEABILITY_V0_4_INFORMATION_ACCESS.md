@@ -8,7 +8,7 @@ Environmental heterogeneity has amount, grain and pattern, but ecological decisi
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
-so fixed resolution is a static subset-information problem. Adaptive resolution is instead an outcome-resolved Bellman problem. We construct two target maps on the same 12-state, four-cue physical environment in which every binary cue is exactly 50/50 balanced. The tasks have identical target prevalence and, more strongly, the same complete Shannon entropy vector over the target and all four cues; equivalently, every named cue subset has identical mutual information \(I(T;Q_S)\). Both have \(C_F=4\), yet one has \(C_A=4\) and the other \(C_A=3\). Thus even complete static Shannon entropic structure does not determine adaptive accessibility. A separate exactly balanced family shows that the fixed-to-adaptive cost ratio can grow without bound when weaker information summaries are matched. A finite ecological budget \(B\) converts these structural differences into predicted feasibility differences when \(C_A\le B<C_F\). Routeability is therefore relational: information content describes what can be known jointly, whereas conditional decision topology determines what must be learned jointly before action.
+so fixed resolution is a static subset-information problem. Adaptive resolution is instead an outcome-resolved Bellman problem. We construct two target maps on the same 12-state, four-cue physical environment in which every binary cue is exactly 50/50 balanced. The tasks have identical target prevalence and, more strongly, the same complete Shannon entropy vector over the target and all four cues; equivalently, every named cue subset has identical mutual information \(I(T;Q_S)\). Both have \(C_F=4\), yet one has \(C_A=4\) and the other \(C_A=3\). Their \(r\)-fold products preserve complete Shannon entropic equivalence while giving \(C_F=4r\) in both tasks and \(C_A=4r\) versus \(3r\), so the adaptive-cost difference grows without bound. A separate exactly balanced family shows that the fixed-to-adaptive cost ratio itself can grow without bound when weaker information summaries are matched. A finite ecological budget \(B\) converts these structural differences into predicted feasibility differences when \(C_A\le B<C_F\). Routeability is therefore relational: information content describes what can be known jointly, whereas conditional decision topology determines what must be learned jointly before action.
 
 ## Keywords
 
@@ -337,10 +337,24 @@ The earlier depth-two and depth-three controls matching pairwise
 target-cue information remain useful finite stress tests, but they are now
 supporting results rather than the strongest information-matching theorem.
 
-We do not claim an unbounded \(C_A\) separation while the complete static
-subset-information profile is matched. The finite all-subset theorem and the
-asymptotic unbounded theorem establish different strengths and should remain
-separate.
+The finite separation amplifies. Take \(r\) independent coordinate copies,
+use the \(r\)-tuple of coordinate targets as the focal action, and retain
+coordinate-local cue sets. Entropies factor across coordinates, so the complete
+Shannon entropy vector remains identical between the two product tasks.
+Worst-case exact fixed and adaptive costs are additive under this Cartesian
+product, giving
+
+\[
+(C_A,C_F)_{A^{\otimes r}}=(4r,4r),
+\qquad
+(C_A,C_F)_{B^{\otimes r}}=(3r,4r).
+\]
+
+Therefore the adaptive-cost difference and the routeability-gap difference both
+grow as \(r\). This is an unbounded **additive** separation under complete
+entropic equivalence. It is distinct from the separate asymptotic routing
+family, which yields an unbounded **multiplicative** \(C_F/C_A\) ratio under
+weaker information matching.
 
 ---
 
