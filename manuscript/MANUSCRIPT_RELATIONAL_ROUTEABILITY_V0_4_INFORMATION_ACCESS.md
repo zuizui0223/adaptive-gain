@@ -596,12 +596,14 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 
 ---
 
-## 9. Public Bombus evidence for the operational ingredients
+## 9. Bombus as a single-system empirical anchor
 
 The deterministic theorem is intentionally stronger than any one public
-behavioural dataset located so far. Nevertheless, several public *Bombus*
-datasets directly test distinct operational ingredients rather than merely
-illustrating that bees can use multiple cues.
+behavioural dataset located so far. We therefore use *Bombus* not as an
+anecdotal example, but as a single-system empirical anchor. Across independent
+experiments in the same genus, public data directly test distinct operational
+ingredients of the theory rather than merely illustrating that animals can use
+multiple cues.
 
 ### 9.1 Costly contingent acquisition
 
@@ -700,12 +702,14 @@ closest biological precedent for branch-specific cue relevance: flower size
 predicts reward in one flower-type branch but is uninformative in another, and
 bees learn to use size only where it carries value.
 
-Together these studies establish that bumblebees can pay for information,
-allocate additional cues according to information need, sample sensory
-information sequentially, and learn context-dependent cue relevance. They do
+Together these studies let one biological system carry the theory from
+abstraction to mechanism: bumblebees can pay for information, recruit
+additional cues according to information need, sample sensory information
+sequentially, and switch later actions according to earlier context. They do
 **not** constitute a single direct test of the exact relational theorem.
-The remaining experiment is therefore sharply defined rather than
-biologically speculative.
+Instead, they show that every major biological operation required by the
+theory already exists within *Bombus*. The remaining experiment is therefore
+a narrow composition test rather than a leap from mathematics to biology.
 
 ---
 
