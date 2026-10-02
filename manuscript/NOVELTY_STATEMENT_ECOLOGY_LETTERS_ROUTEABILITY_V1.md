@@ -7,14 +7,14 @@ the cost of accessing information sequentially.
 Our deterministic result separates the fixed and adaptive problems exactly.
 Fixed target resolution satisfies
 
-[
+\[
 C_F=\min_{S:I(T;Q_S)=H(T)}c(S),
-]
+\]
 
-so the complete subset-information function determines (C_F). Yet we
+so the complete subset-information function determines \(C_F\). Yet we
 construct two ecological decision tasks on one identical physical cue matrix
 with the same **complete Shannon entropy vector** and the same
-(C_F=4), but different optimal adaptive costs, (C_A=4) versus (3).
+\(C_F=4\), but different optimal adaptive costs, \(C_A=4\) versus 3.
 Cartesian products preserve complete entropic equivalence while making the
 adaptive-cost difference arbitrarily large. Thus static information content
 and outcome-conditioned accessibility are distinct operational coordinates.
@@ -22,7 +22,12 @@ and outcome-conditioned accessibility are distinct operational coordinates.
 The biological contribution is relational: the same physical environment can
 impose different information costs when the focal action changes which later
 cue is relevant after each realized outcome. A finite ecological budget
-exposes this distinction when (C_A\le B<C_F).
+exposes this distinction when \(C_A\le B<C_F\). A second theorem gives an
+evolutionary consequence without assuming a linear fitness lift: if
+state-specific selection is any nondecreasing \(L\)-Lipschitz function of
+routeability gap, then \(G\le BL\Delta g\), so insufficient between-state
+routeability contrast makes a requested local oscillatory feedback regime
+unreachable.
 
 We also use *Bombus* as a single-system empirical anchor rather than treating
 the theory as biologically ungrounded or assembling examples across unrelated
