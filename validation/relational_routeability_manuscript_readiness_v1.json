@@ -1,39 +1,43 @@
 {
   "schema": "adaptive-gain-relational-routeability-manuscript-readiness-v1",
-  "date": "2026-10-01",
-  "branch": "synthesis/balanced-routeability-ecology-v1",
-  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md",
-  "status": "V0_3_AMNAT_ORIENTED_READY_FOR_PROOF_COMPRESSION_AND_FIGURES",
-  "working_title": "Conditional decision topology separates information amount from ecological accessibility",
+  "date": "2026-10-02",
+  "branch": "synthesis/information-accessibility-public-data-v1",
+  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+  "status": "V0_4_INFORMATION_ACCESS_READY_FOR_FIGURES_AND_EDITORIAL_COMPRESSION",
+  "working_title": "Conditional decision topology separates information content from ecological accessibility",
   "approximate_main_words": 2685,
   "structure": [
-    "ecological motivation",
+    "ecological motivation and costly-information premise",
     "finite decision model",
-    "relational routeability theorem",
-    "common-budget ecological corollary",
-    "finite pairwise-information controls",
-    "summary-sufficiency ladder",
-    "ecological principle boundary",
-    "measurement protocol",
-    "four-state and ten-state experimental realizations",
-    "prior-art boundary",
-    "deterministic scope and stochastic next-paper boundary"
+    "static information theorem for fixed cost",
+    "complete-Shannon-entropic matched twins with different adaptive cost",
+    "direct-product unbounded additive amplification",
+    "exact-balanced unbounded multiplicative family under weaker matching",
+    "common-budget ecological consequence",
+    "sufficiency ladder and measurement protocol",
+    "prior-art boundary: entropy profiles, PID/AFA, adaptive search",
+    "prospective experiments and deterministic scope"
   ],
   "core_claims": [
-    "same physical cue environment and matched target amount/information can support sharply different adaptive/fixed acquisition geometry",
-    "routeability is relational to the focal action map rather than intrinsic to the physical cue environment",
-    "a common ecological budget B exposes an exact difference in feasible access regime",
-    "rich quantitative summaries can remain insufficient until the action-conditioned cue structure is measured"
+    "fixed exact-resolution burden is determined by which cue subsets reach H(T)",
+    "the complete Shannon entropy vector does not determine optimal adaptive worst-case accessibility",
+    "the matched adaptive-cost difference can grow without bound additively under direct products",
+    "routeability is relational to the focal action map and realized cue outcomes rather than an intrinsic scalar of the physical environment",
+    "finite ecological budgets expose the operational consequence"
   ],
   "validated_support": [
+    "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
+    "tests/test_static_information_adaptive_separation.py",
     "validation/balanced_quantity_topology_contrast_v1.json",
     "validation/balanced_pairwise_information_controls_v1.json",
     "validation/exact_balanced_routeability_stress_test_v1.json",
-    "theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md"
+    "CI PASS on Python 3.10/3.11/3.12 through 816ec40bc0032448e55ddc2c5191e94fbccde4bd"
   ],
   "prior_art_must_remain_explicit": [
-    "adaptive/costly feature acquisition",
-    "sequential value of information",
+    "Forre 1990 all-subset Boolean-function entropy profiles",
+    "Youssef & Tavares 2004 decision trees plus entropy profiles",
+    "PID/synergy and Li et al. 2026 PID-guided active feature acquisition",
+    "adaptive/costly feature acquisition and sequential value of information",
     "uniform separating systems and generic adaptivity gaps",
     "extra-entropic operational structure in information theory"
   ],
@@ -53,20 +57,21 @@
     "natural prevalence of exact-balanced architectures"
   ],
   "remaining_work": [
-    "build the two planned figures",
-    "compress any remaining proof detail from main text into the supplement where helpful",
-    "final reference-style formatting",
-    "draft The American Naturalist cover letter after figures are stable"
+    "replace earlier quantity-topology figures with one static-entropic-equivalence versus adaptive-accessibility figure",
+    "compress proof detail and finite balanced geometry into supplement",
+    "tighten abstract/introduction around one headline claim",
+    "final reference verification and journal formatting",
+    "prepare Ecology Letters submission package; preserve American Naturalist fallback"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "The deterministic theory, prior-art boundary, bibliography audit, proof supplement, journal fit, and figure plan are now in place. No new theorem families; remaining work is figures, editorial compression, and submission packaging.",
+  "stop_rule": "No additional deterministic theorem family is required. The strongest current theorem is complete Shannon entropic equivalence with different optimal adaptive cost plus unbounded additive direct-product amplification. Remaining work is presentation and submission.",
   "abstract_words": 155,
-  "preferred_first_target": "The American Naturalist",
+  "preferred_first_target": "Ecology Letters",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
   "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md",
   "proof_supplement": "manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md",
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
-  "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md",
+  "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 155,
   "current_approx_main_words": 2685
 }
