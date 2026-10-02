@@ -26,7 +26,7 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
 
-Current information-accessibility synthesis draft. It adds the exact characterization of fixed cost by static subset information and the 12-state exact-balanced twins with identical named subset-information profiles but different adaptive costs. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
+Current information-accessibility synthesis draft. It contains the exact characterization of fixed cost by static subset information, the 12-state twins with identical complete Shannon entropy vectors but different adaptive costs, unbounded additive direct-product amplification, and the public *Bombus* empirical-convergence section. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
 
 Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`.
 
@@ -51,7 +51,7 @@ same physical cue matrix, target prevalence/entropy and total full-vocabulary ta
 ### Static-information / adaptive-access theorem
 `theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md`
 
-Core strengthening: the full named static subset-information function exactly determines `C_F` but does not determine `C_A`.
+Core strengthening: the full named static subset-information function exactly determines `C_F`, yet even the complete Shannon entropy vector does not determine `C_A`. Direct products preserve complete entropic equivalence while amplifying the adaptive-cost difference without bound additively.
 
 ### Summary sufficiency ladder
 `theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md`
@@ -93,10 +93,24 @@ Separates:
 ### Prior-art boundary
 `manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md`
 
-### Public-data eligibility audit
-`manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md`
+### Public Bombus empirical bridge
+`manuscript/BUMBLEBEE_PUBLIC_DATA_ROUTEABILITY_BRIDGE_V1.md`
 
-Current result: no located public dataset directly identifies the full routeability contrast; Wilmsen 2017, Kawaguchi 2026 and Brzozowski 2020 are classified as staged-cue concordance / ecological precedent rather than theorem validation.
+Canonical quantitative receipt:
+`validation/bombus_empirical_convergence_panel_v1.json`
+
+Access-mode interaction:
+`validation/yuan_free_cue_acquisition_interaction_v1.json`
+
+Current result: no **single** public dataset identifies the full same-environment branch-specific (C_A<C_F) theorem, but public *Bombus* data directly validate nonredundant operational components:
+
+- Yuan et al. 2026: 19,200 raw trials; costly need-dependent information acquisition, with a strong difficulty × free-information access-mode interaction;
+- Spaethe et al. 2026: secondary-cue recruitment rises from about 0.026 to 0.374 when the primary cue becomes difficult;
+- MaBouDi et al. 2025: selective sequential visual sampling;
+- Chow et al. 2022: early context switches the later correct action;
+- Essenberg et al. 2015: closest branch-specific cue-relevance precedent.
+
+Use these as **componentwise public validation / empirical convergence**, not as a claim that one existing dataset directly estimates (C_A) and (C_F).
 
 ### Bibliography verification
 `manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md`
@@ -106,7 +120,7 @@ Core ecology, information-fitness, adaptive-acquisition and extra-entropic refer
 ### Journal fit
 `manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md`
 
-Preferred deterministic-theory target: The American Naturalist. Ecology Letters reserved as a more ambitious theory+behavioral-validation route; Theoretical Ecology as fallback.
+Preferred first target: **Ecology Letters (Letter)**, now that the deterministic theorem is paired with a compact public *Bombus* empirical-convergence analysis. **The American Naturalist** remains the natural fallback; Theoretical Ecology remains a lower fallback.
 
 
 \`manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md\`
@@ -127,8 +141,8 @@ The candidate contribution is the exact ecological composition, not those compon
 `manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md`
 
 Two-main-figure plan:
-1. same physical cue environment -> different action-conditioned topology;
-2. common ecological budget -> different feasible access regime.
+1. complete Shannon entropic equivalence -> different adaptive accessibility;
+2. finite ecological budget + public *Bombus* convergence -> prospective matched routeability experiment.
 
 ---
 
@@ -194,10 +208,11 @@ This is a stronger follow-up, not a prerequisite for Experiment 1.
 - \`validation/exact_balanced_routeability_stress_test_v1.json\`
 - `validation/relational_routeability_readiness_v1.json`
 - `validation/static_information_adaptive_separation_v1.json`
+- `validation/bombus_public_data_component_receipt_v1.json`
+- `validation/bombus_empirical_convergence_panel_v1.json`
+- `validation/yuan_free_cue_acquisition_interaction_v1.json`
 
-Focused quantity/topology tests pass on Python 3.10 / 3.11 / 3.12.
-
-The repository-wide test workflow still has an unrelated legacy manuscript phrase assertion failure; it is not evidence against the matched constructions.
+Repository-wide CI passes on Python 3.10 / 3.11 / 3.12 after restoration of the earlier ecological-novelty document contract. The static-information twins, direct-product checks and Bombus bridge tests are green.
 
 ---
 
@@ -277,8 +292,8 @@ This is not required for the deterministic paper.
 No new deterministic theorem family.
 
 Allowed work now:
-- write/polish;
-- tighten prior art;
-- execute the four-state experiment;
+- editorial compression and Ecology Letters packaging;
+- render the two canonical figures, including the frozen Bombus public-data panel;
+- execute the prospective four-state Bombus routeability experiment as the next empirical paper;
 - only then consider the ten-state stress test;
 - develop stochastic expected-loss theory as a separate project.
