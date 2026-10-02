@@ -24,9 +24,11 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 ## Current synthesis manuscript
 
-`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`
+`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md`
 
-Current prior-art-positioned draft. Use this manuscript for prose-level review; use the theorem spine for claim-level review.
+Current American Naturalist-oriented draft. Abstract is within the current 200-word Major Article limit. Use this manuscript for prose-level review; use the theorem spine for claim-level review.
+
+Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`.
 
 ---
 
@@ -84,6 +86,16 @@ Treats as prior art:
 - entropy not being a complete operational invariant.
 
 The candidate contribution is the exact ecological composition, not those components.
+
+---
+
+## Figure architecture
+
+`manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md`
+
+Two-main-figure plan:
+1. same physical cue environment -> different action-conditioned topology;
+2. common ecological budget -> different feasible access regime.
 
 ---
 
