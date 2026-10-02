@@ -1,0 +1,71 @@
+{
+  "schema": "adaptive-gain-integrated-ecology-letters-preflight-v1",
+  "date": "2026-10-02",
+  "branch": "synthesis/information-accessibility-public-data-v1",
+  "head_sha": "aa5427d414fd96422d567108294a95c01e8dddf0",
+  "target": "Ecology Letters",
+  "article_type": "Letter",
+  "canonical_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+  "counts": {
+    "abstract_words": 146,
+    "main_text_words": 4827,
+    "references": 26,
+    "main_figures": 2
+  },
+  "journal_structure": {
+    "introduction": true,
+    "material_and_methods": true,
+    "results": true,
+    "discussion": true,
+    "figure_1_cited": true,
+    "figure_2_panels_cited": [
+      "2a",
+      "2b",
+      "2c",
+      "2d"
+    ]
+  },
+  "theorem_gates": {
+    "independent_section5": "PASS: complete entropy-vector match, C_F=(4,4), C_A=(4,3); two-copy C_F=(8,8), C_A=(8,6)",
+    "nonlinear_no_go": "PASS: G<=B_f L Delta_g and Delta_g>G_osc/(B_f L) required for local complex-pair regime",
+    "claim_boundary": "PASS: no multiplicative strong-matching claim; no fixed-binary-action unbounded claim"
+  },
+  "prior_art_gates": {
+    "classical_identification": [
+      "Katona 1966",
+      "Garey 1972",
+      "Hyafil & Rivest 1976",
+      "Chakaravarthy et al. 2009",
+      "Moshkov & Zielosko 2011"
+    ],
+    "entropy_profile": [
+      "Forre 1990",
+      "Youssef & Tavares 2004"
+    ],
+    "pid_afa": [
+      "Williams & Beer 2010",
+      "Li, Dhali & Bouma 2026"
+    ],
+    "status": "PASS"
+  },
+  "bombus_gates": {
+    "yuan_preprint_labeled": true,
+    "impossible_nonrequest_0207_excluded": true,
+    "componentwise_not_full_theorem": true,
+    "status": "PASS"
+  },
+  "portfolio": {
+    "v5_frozen_status_preserved": true,
+    "v5_portfolio_status": "RETIRED_DO_NOT_SUBMIT_STANDALONE",
+    "mathematical_companion": "SUPPLEMENTARY_MATH_RESERVOIR",
+    "villavicencio_rewiring": "SEPARATE_PROJECT"
+  },
+  "remaining_before_upload": [
+    "latest-head GitHub Actions completion",
+    "final rendered figure/PDF inspection",
+    "permanent archive DOI",
+    "author-controlled title-page metadata",
+    "record submitted commit/tree"
+  ],
+  "status": "STATIC_PREFLIGHT_PASS_CI_PENDING"
+}
