@@ -24,15 +24,11 @@ A second established literature makes the acquisition problem explicit. Sequenti
 
 A particularly close recent neighbor makes the information-theoretic overlap explicit. Li, Dhali & Bouma (2026) use partial information decomposition to study when pairwise synergy helps active feature acquisition, combine pairwise joint information with conditional information evaluated at realized feature values, and include controlled fixed-information comparisons. Thus neither synergy-aware acquisition nor outcome-conditioned information scores are novelty claims here. The unresolved issue we isolate is stricter: whether two tasks can be statically indistinguishable to the entire Shannon entropy vector yet differ in the exact optimal cost of adaptive resolution.
 
-The exact-resolution primitives are also classical. Adaptive identification by
-binary or multiway decision trees and fixed identification by separating/test
-systems have long-standing theories (Garey 1972; Katona 1966; Hyafil & Rivest
-1976; Chakaravarthy et al. 2009; Moshkov & Zielosko 2011). We therefore do not
-claim novelty for \(C_A\), \(C_F\), optimal decision trees, separating systems,
-or generic adaptive-versus-fixed gaps. The new question is what remains
-unidentified when these classical operational costs are compared with complete
-static information summaries in an ecological task.
-
+The exact-resolution primitives are classical as well: fixed separating
+systems and adaptive decision trees are established theory (Katona 1966;
+Garey 1972; Hyafil & Rivest 1976). Our novelty claim begins only after those
+operational costs are compared with complete static information summaries in
+an ecological task.
 
 The ecological consequence of that mathematical distinction is especially relevant because many empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
 
@@ -652,21 +648,10 @@ contributions. We prospectively defined a secondary-cue recruitment index
 R=1-p_{\rm colour}.
 \]
 
-Using the individual values in the authors' public analysis repository,
-secondary-cue recruitment was approximately
-
-\[
-R_{\rm easy}=0.026
-\]
-
-when the primary colour discrimination was easy, but
-
-\[
-R_{\rm hard}=0.374
-\]
-
-when the colour discrimination was difficult, a difference of about 0.349.
-Pattern and shape experiments showed the same direction independently.
+Using individual values in the authors' public analysis repository,
+secondary-cue recruitment increased from (R_{m easy}=0.026) to
+(R_{m hard}=0.374), a difference of 0.349; pattern and shape experiments
+showed the same direction independently.
 
 This result directly supports the narrower prediction that the same nominal
 cue vocabulary need not impose the same acquired information burden: bees
@@ -683,48 +668,22 @@ discrimination. A correct choice without requesting information earned 30%
 sucrose, whereas a correct post-request choice earned only 15%, so information
 acquisition carried an explicit reward cost.
 
-We independently reaggregated all 19,200 public trial records from 192 bees.
-On Regular trials, the probability of requesting information increased from
+We independently reaggregated all 19,200 public trials from 192 bees.
+Information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
+(Impossible); all 192 bees requested more information on Hard than Easy trials,
+and 181/192 increased again from Hard to Impossible. Post-request accuracy
+remained near 0.93. Random Free-Cue trials, in which predictive information
+was supplied independently of platform landing, reversed the Easy-to-Impossible
+landing gradient for 191/192 bees. Thus the effect is specifically tied to
+obtaining information rather than a generic motor response to difficulty.
 
-\[
-0.096
-\]
-
-on Easy trials to
-
-\[
-0.469
-\]
-
-on Hard trials and
-
-\[
-0.716
-\]
-
-on Impossible trials. The gradient was also within-individual: all 192 bees
-requested more information on Hard than Easy trials, and 181/192 increased
-again from Hard to Impossible. Post-request accuracy remained near \(0.93\) at all three difficulty levels.
-The public CSV also reports non-request accuracy of \(0.750\), \(0.494\) and
-\(0.207\) from Easy to Impossible. We do not use the final value as biological
-evidence: the 0.207 Impossible value is unexpectedly below chance for a binary
-choice and is not presently reconciled with the task description. The robust
-bridge used here is therefore the difficulty-dependent decision to pay for
-information, not an inferred 0.207-to-0.93 accuracy rescue.
-
-The experiment also contains Random Free-Cue trials in which the predictive
-cue is supplied independently of platform landing. This produces a strong
-access-mode interaction. Across the same 192 bees, the Easy-to-Impossible
-increase in landing probability on Regular trials is reversed when information
-is supplied freely; the within-bee difference-in-differences is 1.018 on
-average and is positive for 191/192 bees (exact one-sided sign test
-\(p=3.1\times10^{-56}\)). Thus the Regular-trial difficulty gradient is not
-a generic motor response to difficulty: it appears specifically when landing
-is required to obtain information. Because Yuan et al. (2026) is a bioRxiv preprint, we treat this result as a
-reproducible but provisional component test. The dataset directly supports
-**need-dependent costly information acquisition**, although only one optional
-predictive cue is available and the experiment does not identify the exact
-\(C_A<C_F\) theorem.
+We exclude the raw non-request accuracy of the Impossible subset from
+inference because its coded value (0.207) is unexpectedly below chance for two
+physically identical stimuli and is not yet reconciled with the source data
+pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
+remaining result as a reproducible but provisional component test of
+**need-dependent costly information acquisition**, not as identification of
+the exact (C_A<C_F) theorem.
 
 ### 10.3 Sequential sensory access is biologically real
 
