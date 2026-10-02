@@ -3,7 +3,7 @@
   "date": "2026-10-02",
   "branch": "synthesis/information-accessibility-public-data-v1",
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
-  "status": "V0_4_ECOLOGY_LETTERS_LETTER_TEXT_READY_FIGURES_PENDING",
+  "status": "V0_4_THEORY_PLUS_SINGLE_SYSTEM_BOMBUS_ANCHOR_READY_FOR_SUBMISSION_PACKAGING",
   "working_title": "Conditional decision topology separates information content from ecological accessibility",
   "approximate_main_words": 4659,
   "structure": [
@@ -78,6 +78,12 @@
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 142,
-  "current_approx_main_words": 4659,
-  "reference_count": 21
+  "current_approx_main_words": 4714,
+  "reference_count": 21,
+  "empirical_carrier": {
+    "taxon": "Bombus spp.",
+    "rationale": "Independent public experiments within one genus instantiate the main biological operations required by routeability, avoiding a cross-taxon example collage.",
+    "manuscript_label": "single-system empirical anchor",
+    "full_theorem_status": "not yet directly validated in one experiment"
+  }
 }
