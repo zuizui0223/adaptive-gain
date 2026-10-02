@@ -56,7 +56,7 @@ We develop four consequences. First, information amount and information accessib
 
 ---
 
-## 2. Materials and methods
+## 2. Material and methods
 
 ---
 
@@ -129,7 +129,7 @@ Use the existing exactly-balanced binary cue environment with \(2k+2\) represent
 
 We define two target maps on this **same cue environment**.
 
-### 3.1 Routeable target map
+#### 3.1.1 Routeable target map
 
 There are \(k\) mixed target pairs \((a_i,b_i)\), with opposite targets inside each pair, plus two target-0 dummy states.
 
@@ -147,7 +147,7 @@ Every branch terminal is uniquely required by one cross-target pair, so any fixe
 C_F(T_R)\ge k=2^d.
 \]
 
-### 3.2 Matched control target map
+#### 3.1.2 Matched control target map
 
 Keep every represented state and every cue outcome unchanged.
 
@@ -175,7 +175,7 @@ C_A(T_K)=C_F(T_K)=2.
 }
 \]
 
-### 3.3 Quantities held fixed
+#### 3.1.3 Quantities held fixed
 
 The two tasks share exactly:
 
