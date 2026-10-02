@@ -2,10 +2,10 @@
   "schema": "adaptive-gain-relational-routeability-manuscript-readiness-v1",
   "date": "2026-10-01",
   "branch": "synthesis/balanced-routeability-ecology-v1",
-  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md",
-  "status": "V0_2_PRIOR_ART_POSITIONED_READY_FOR_PROOF_COMPRESSION",
+  "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md",
+  "status": "V0_3_AMNAT_ORIENTED_READY_FOR_PROOF_COMPRESSION_AND_FIGURES",
   "working_title": "Conditional decision topology separates information amount from ecological accessibility",
-  "approximate_main_words": 2916,
+  "approximate_main_words": 2685,
   "structure": [
     "ecological motivation",
     "finite decision model",
@@ -53,11 +53,15 @@
     "natural prevalence of exact-balanced architectures"
   ],
   "remaining_work": [
-    "verify every bibliography entry against primary/authoritative source",
-    "compress theorem proof sketches for target journal",
-    "decide whether the follow-up is best framed as theoretical ecology or interdisciplinary information/ecology paper",
-    "do not add another deterministic theorem family"
+    "compress theorem proof sketches into main-text essentials plus supplement",
+    "build the two conceptual figures",
+    "verify any new references introduced during final editing",
+    "draft an American Naturalist cover letter only after figures and proof compression are stable"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "V0.2 is the canonical deterministic synthesis draft. Further work is limited to source verification, proof compression, editorial positioning, and experimental implementation."
+  "stop_rule": "V0.3 is the current journal-oriented deterministic synthesis draft. No new theorem families; remaining work is proof compression, figures, final references, and submission packaging.",
+  "abstract_words": 155,
+  "preferred_first_target": "The American Naturalist",
+  "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
+  "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md"
 }
