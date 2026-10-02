@@ -677,18 +677,26 @@ also persists when reward and punishment valence are reversed, providing a
 useful negative control: a simple relabelling of outcomes does not by itself
 force a new acquisition architecture.
 
-Public match-to-sample data provide the relational action-map component:
-in Chow et al. (2022), platform/sample colour determines which subsequently
-available ball is the rewarding action. Essenberg et al. (2015) provide the
-closest biological precedent for branch-specific cue relevance: flower size
-predicts reward in one flower-type branch but is uninformative in another, and
-bees learn to use size only where it carries value.
+Two older *Bombus* experiments make the relational component more direct.
+Essenberg et al. (2015) exposed the same *B. impatiens* foragers to two flower
+types with distinct colour/scent identities. Flower size predicted reward in
+one type but was uninformative in the other; bees learned to respond to size
+only in the branch where size carried value. Thus the relevance of the same
+later cue was gated by flower context. Lotto & Chittka (2005) trained
+*B. terrestris* to use illumination context to choose different target colours,
+including reversals in which the correct colour changed with context. Dale et
+al. (2005) further showed sequential priming: a cue presented seconds earlier
+could bias which later visual target was selected when reinforced by additional
+spatial structure. These results establish context-conditioned action maps and
+conditional cue relevance, although they do not measure acquisition costs.
 
-Together these studies let one biological system carry the theory from
-abstraction to mechanism: bumblebees can pay for information, recruit
-additional cues according to information need, sample sensory information
-sequentially, and switch later actions according to earlier context. They do
-**not** constitute a single direct test of the exact relational theorem.
+Together these studies reveal a coherent information strategy within
+bumblebees: they do not automatically learn every available attribute; they
+recruit secondary attributes when primary discrimination is difficult; the
+same cue can be learned as relevant in one floral context and ignored in
+another; earlier context can reverse the later correct action; and costly
+information can be actively requested when needed. They do **not** constitute
+a single direct test of the exact relational theorem.
 Instead, they show that every major biological operation required by the
 theory already exists within *Bombus*. The remaining experiment is therefore
 a narrow composition test rather than a leap from mathematics to biology.
@@ -951,7 +959,9 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Chow, P. K. Y., Lehtonen, T. K., Näreaho, V. & Loukola, O. J. 2022. Prior associations affect bumblebees' generalization performance in a tool-selection task. *iScience* 25:105466. DOI: 10.1016/j.isci.2022.105466.
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
 - Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119:219–230. DOI: 10.1111/j.1600-0706.2009.17781.x.
-- Essenberg, C. J. et al. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
+- Essenberg, C. J., Easter, R. A., Simmons, R. A. & Papaj, D. R. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
+- Lotto, R. B. & Chittka, L. 2005. Seeing the light: illumination as a contextual cue to color choice behavior in bumblebees. *Proceedings of the National Academy of Sciences USA* 102:3852–3856. DOI: 10.1073/pnas.0500681102.
+- Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
 - Forré, R. 1990. Methods and instruments for designing S-boxes. *Journal of Cryptology* 2:115–130. DOI: 10.1007/BF00190799.
 - Garey, M. R. 1972. Optimal Binary Identification Procedures. *SIAM Journal on Applied Mathematics* 23:173–186. DOI: 10.1137/0123019.
 - Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17. DOI: 10.1016/0020-0190(76)90095-8.
