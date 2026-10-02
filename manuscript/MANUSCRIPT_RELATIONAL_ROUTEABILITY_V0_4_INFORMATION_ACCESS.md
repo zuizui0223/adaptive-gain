@@ -637,12 +637,17 @@ again from Hard to Impossible. At the same time, accuracy without requesting fel
 near \(0.93\) at all three difficulty levels.
 
 The experiment also contains Random Free-Cue trials in which the predictive
-cue is supplied independently of platform landing. This separates receiving
-the information from performing the acquisition action and provides a causal
-control against interpreting platform landing as a generic location
-preference. Thus the dataset directly establishes **state-dependent costly
-information acquisition**, although only one optional predictive cue is
-available and the experiment does not identify the exact \(C_A<C_F\) theorem.
+cue is supplied independently of platform landing. This produces a strong
+access-mode interaction. Across the same 192 bees, the Easy-to-Impossible
+increase in landing probability on Regular trials is reversed when information
+is supplied freely; the within-bee difference-in-differences is 1.018 on
+average and is positive for 191/192 bees (exact one-sided sign test
+\(p=3.1\times10^{-56}\)). Thus the Regular-trial difficulty gradient is not
+a generic motor response to difficulty: it appears specifically when landing
+is required to obtain information. The dataset therefore directly establishes
+**need-dependent costly information acquisition**, although only one optional
+predictive cue is available and the experiment does not identify the exact
+\(C_A<C_F\) theorem.
 
 ### 9.2 Secondary cues are recruited when primary information is insufficient
 
