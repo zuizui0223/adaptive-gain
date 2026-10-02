@@ -1,9 +1,11 @@
+from adaptive_gain.core import adaptive_minimum_resolution, fixed_minimum_resolution
 from adaptive_gain.static_information_adaptive_separation import (
     conditional_entropy_log_fingerprint,
     joint_entropy_log_fingerprint,
     static_information_adaptive_separation_audit,
     static_information_twin_a_task,
     static_information_twin_b_task,
+    static_information_twin_product_task,
 )
 
 
@@ -43,3 +45,35 @@ def test_complete_shannon_entropy_vector_matches_exactly():
             ) == joint_entropy_log_fingerprint(
                 b, subset, include_target=include_target
             )
+
+
+def test_two_copy_product_amplifies_adaptive_gap_under_entropic_equivalence():
+    a = static_information_twin_product_task("A", 2)
+    b = static_information_twin_product_task("B", 2)
+
+    assert len(a.worlds) == len(b.worlds) == 144
+    assert len(a.queries) == len(b.queries) == 8
+    assert all(
+        sum(value == 0 for value in q.outcomes) == 72
+        and sum(value == 1 for value in q.outcomes) == 72
+        for q in a.queries
+    )
+    assert all(
+        qa.name == qb.name and qa.outcomes == qb.outcomes and qa.cost == qb.cost
+        for qa, qb in zip(a.queries, b.queries)
+    )
+
+    names = tuple(q.name for q in a.queries)
+    for mask in range(1 << len(names)):
+        subset = tuple(names[j] for j in range(len(names)) if mask & (1 << j))
+        for include_target in (False, True):
+            assert joint_entropy_log_fingerprint(
+                a, subset, include_target=include_target
+            ) == joint_entropy_log_fingerprint(
+                b, subset, include_target=include_target
+            )
+
+    assert fixed_minimum_resolution(a).minimum_cost == 8
+    assert fixed_minimum_resolution(b).minimum_cost == 8
+    assert adaptive_minimum_resolution(a).minimum_worst_path_cost == 8
+    assert adaptive_minimum_resolution(b).minimum_worst_path_cost == 6
