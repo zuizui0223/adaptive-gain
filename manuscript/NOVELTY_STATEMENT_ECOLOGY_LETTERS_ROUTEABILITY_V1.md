@@ -25,7 +25,7 @@ cue is relevant after each realized outcome. A finite ecological budget
 exposes this distinction when \(C_A\le B<C_F\). A second theorem gives an
 evolutionary consequence without assuming a linear fitness lift: if
 state-specific selection is any nondecreasing \(L\)-Lipschitz function of
-routeability gap, then \(G\le BL\Delta g\), so insufficient between-state
+routeability gap, then \(G\le B_fL\Delta g\), so insufficient between-state
 routeability contrast makes a requested local oscillatory feedback regime
 unreachable.
 
