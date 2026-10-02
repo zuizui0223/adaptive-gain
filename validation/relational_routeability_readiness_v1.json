@@ -1,8 +1,8 @@
 {
   "schema": "adaptive-gain-relational-routeability-readiness-v1",
-  "date": "2026-10-01",
-  "branch": "synthesis/balanced-routeability-ecology-v1",
-  "status": "DETERMINISTIC_MATH_ECOLOGY_INTEGRATION_FROZEN_FOR_SYNTHESIS",
+  "date": "2026-10-02",
+  "branch": "synthesis/information-accessibility-public-data-v1",
+  "status": "INFORMATION_ACCESSIBILITY_THEORY_CLOSED_WITH_ENTROPIC_EQUIVALENCE",
   "canonical_assets": {
     "theorem_spine": "theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md",
     "orthogonality_theorem": "theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md",
@@ -13,27 +13,38 @@
     "measurement_protocol": "manuscript/ROUTEABILITY_MEASUREMENT_PROTOCOL_V1.md",
     "minimal_experiment": "manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md",
     "balanced_stress_test": "manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md",
-    "canonical_index": "manuscript/RELATIONAL_ROUTEABILITY_CANONICAL_INDEX_V1.md"
+    "canonical_index": "manuscript/RELATIONAL_ROUTEABILITY_CANONICAL_INDEX_V1.md",
+    "static_information_theorem": "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
+    "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+    "public_data_audit": "manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md"
   },
   "exact_results": {
     "relational_theorem": "same physical cue matrix + same target prevalence/entropy + same I(T;Q_all), yet routeable ratio lower bound diverges while matched control has C_A=C_F=2",
     "common_budget": "B=d+1 gives guaranteed architecture-by-access interaction 1",
     "finite_pairwise_controls": "depth 2 control C_A=C_F=2 and depth 3 control C_A=C_F=3 with matched pairwise target-cue signature multiset",
-    "ten_state_stress_test": "routeable (3,4), control (2,2), B=3 exact uniform ceiling interaction 1/5"
+    "ten_state_stress_test": "routeable (3,4), control (2,2), B=3 exact uniform ceiling interaction 1/5",
+    "static_fixed_characterization": "C_F = min{c(S): H(T|Q_S)=0}; the complete static subset-information function determines fixed exact-resolution cost",
+    "entropic_twins": "same 12-state physical 4-cue matrix, exact 6/6 cue balance, same target prevalence, same complete Shannon entropy vector; twin A (C_A,C_F)=(4,4), twin B=(3,4)",
+    "direct_product_amplification": "r-fold products preserve complete Shannon entropy-vector equivalence and give (4r,4r) versus (3r,4r), so the adaptive-cost and routeability-gap differences equal r and are unbounded additively",
+    "stronger_ratio_boundary": "unbounded multiplicative C_F/C_A remains established only for the separate exact-balanced routing family under weaker information matching"
   },
   "validation": {
     "quantity_topology": "validation/balanced_quantity_topology_contrast_v1.json",
     "pairwise_controls": "validation/balanced_pairwise_information_controls_v1.json",
     "ten_state_stress_test": "validation/exact_balanced_routeability_stress_test_v1.json",
     "focused_ci": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and stress-test suite",
-    "focused_ci_latest": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and ten-state stress-test suite"
+    "focused_ci_latest": "PASS on Python 3.10/3.11/3.12 for quantity-topology, pairwise controls, and ten-state stress-test suite",
+    "full_entropy_vector": "exact prime-log fingerprints over all 32 subsets of (T,q0,q1,q2,q3)",
+    "two_copy_product": "144 worlds, 8 cues, all 512 target/cue entropy subsets matched exactly; C_F=8 in both, C_A=8 versus 6",
+    "full_ci": "PASS on Python 3.10/3.11/3.12 at commit 816ec40bc0032448e55ddc2c5191e94fbccde4bd after restoring pre-existing ecological-novelty document contract"
   },
   "prior_art_boundary": [
-    "adaptive feature acquisition is prior art",
-    "costly sequential information acquisition / value of information are prior art",
-    "uniform separating systems and generic adaptivity gaps are prior art",
-    "entropy not being a complete operational invariant has prior mathematical analogues",
-    "novelty should be claimed for the exact ecological composition, not generic adaptive acquisition"
+    "Forre 1990 entropy profiles already scan conditional entropy of a Boolean target across all input subsets",
+    "Youssef & Tavares 2004 place Boolean-function entropy profiles and decision-tree complexity in the same literature",
+    "adaptive/costly feature acquisition and sequential value of information are prior art",
+    "Li, Dhali & Bouma 2026 directly connect PID/synergy, realized-value conditional information and active feature acquisition",
+    "same entropy vector can fail to determine other operational quantities in information theory; do not claim generic extra-entropic novelty",
+    "safe novelty: exact same-cue ecological construction with complete Shannon entropic equivalence but different optimal worst-case adaptive resolution cost, plus unbounded additive direct-product amplification"
   ],
   "ecological_reach": {
     "direct": [
@@ -53,16 +64,24 @@
   },
   "v5_surface_modified": false,
   "next_allowed_work": [
-    "write/polish synthesis manuscript around theorem spine",
-    "tighten prior-art wording",
-    "execute four-state experiment before ten-state stress test",
-    "start separate stochastic expected-loss project if desired"
+    "editorially compress v0.4 around entropic equivalence, fixed characterization, adaptive recursion, direct-product amplification and ecological budget",
+    "update figures to show static entropic equivalence versus outcome-conditioned accessibility",
+    "submission packaging for Ecology Letters first, American Naturalist fallback",
+    "prospective biological routeability experiment as the next empirical paper",
+    "separate stochastic expected-loss extension if pursued"
   ],
   "prohibited_on_current_path": [
-    "new deterministic theorem family",
-    "reopening frozen V5 for these post-freeze results",
-    "claiming diversity-stability consequence without community dynamics",
-    "claiming novelty for adaptive acquisition itself"
+    "new deterministic theorem hunting before submission",
+    "claiming the all-subset entropy profile itself is novel",
+    "claiming PID or realized-value conditional acquisition is novel",
+    "claiming public datasets directly validate routeability",
+    "claiming an unbounded multiplicative separation under complete entropy-vector matching"
   ],
-  "stop_rule": "The deterministic routeability integration is sufficient. Use the canonical index and theorem spine; do not add more deterministic theorem families. Move to writing/experiment; stochastic expected-loss theory is a separate paper."
+  "stop_rule": "Deterministic information-accessibility theory is sufficient for submission. Full Shannon entropic equivalence with different adaptive cost and unbounded additive amplification are closed; multiplicative amplification under the strongest matching condition remains explicitly open. Move to figures, compression and submission rather than further theorem hunting.",
+  "public_data_status": {
+    "direct_routeability_validation": "NO QUALIFYING PUBLIC DATASET LOCATED",
+    "strongest_costly_information_precedent": "Yuan et al. 2026 bumble-bee active information seeking: voluntary information acquisition with explicit reward cost; supports costly-information premise but not branch-specific routeability",
+    "strongest_stage_relevance_precedent": "Chapman et al. 2023 / related multimodal flower datasets: stage-dependent cue relevance, but no outcome-contingent cue acquisition",
+    "decision": "Do not force a public-data validation into the theory paper; cite empirical precedents as support for ingredients and reserve direct routeability validation for a dedicated prospective experiment"
+  }
 }
