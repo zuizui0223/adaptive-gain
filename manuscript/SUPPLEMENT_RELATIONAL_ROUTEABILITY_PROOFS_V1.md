@@ -648,7 +648,7 @@ Combining the two inequalities gives the necessary condition
 \[
 \boxed{
 \Delta g>
-\frac{G_{\rm osc}}{BL}.
+\frac{G_{\rm osc}}{B_fL}.
 }
 \]
 
@@ -661,14 +661,14 @@ If a declared architecture class has
 for every state and
 
 \[
-BLq_{\max}\le G_{\rm osc},
+B_fLq_{\max}\le G_{\rm osc},
 \]
 
 then stable oscillatory feedback is unreachable for the entire class.
 
 Crossing the contrast threshold is not sufficient for oscillation. The result
 is local to the declared eco-evolutionary response model and does not estimate
-\(B,L,\alpha,\phi\) empirically.
+\(B_f,L,\alpha,\phi\) empirically.
 
 Executable sources:
 
