@@ -64,10 +64,10 @@
   },
   "v5_surface_modified": false,
   "next_allowed_work": [
+    "build a compact Bombus empirical-convergence panel/subsection from the frozen public-data receipt",
     "editorially compress v0.4 around entropic equivalence, fixed characterization, adaptive recursion, direct-product amplification and ecological budget",
-    "update figures to show static entropic equivalence versus outcome-conditioned accessibility",
     "submission packaging for Ecology Letters first, American Naturalist fallback",
-    "prospective biological routeability experiment as the next empirical paper",
+    "prospective Bombus experiment for the full relational theorem",
     "separate stochastic expected-loss extension if pursued"
   ],
   "prohibited_on_current_path": [
@@ -79,9 +79,15 @@
   ],
   "stop_rule": "Deterministic information-accessibility theory is sufficient for submission. Full Shannon entropic equivalence with different adaptive cost and unbounded additive amplification are closed; multiplicative amplification under the strongest matching condition remains explicitly open. Move to figures, compression and submission rather than further theorem hunting.",
   "public_data_status": {
-    "direct_routeability_validation": "NO QUALIFYING PUBLIC DATASET LOCATED",
-    "strongest_costly_information_precedent": "Yuan et al. 2026 bumble-bee active information seeking: voluntary information acquisition with explicit reward cost; supports costly-information premise but not branch-specific routeability",
-    "strongest_stage_relevance_precedent": "Chapman et al. 2023 / related multimodal flower datasets: stage-dependent cue relevance, but no outcome-contingent cue acquisition",
-    "decision": "Do not force a public-data validation into the theory paper; cite empirical precedents as support for ingredients and reserve direct routeability validation for a dedicated prospective experiment"
+    "direct_full_relational_validation": "NO_SINGLE_PUBLIC_DATASET",
+    "componentwise_public_validation": "YES_BOMBUS",
+    "validation_receipt": "validation/bombus_public_data_component_receipt_v1.json",
+    "strongest_components": [
+      "Yuan et al. 2026: 19,200 public Bombus trials directly show costly state-dependent active information acquisition and accuracy restoration",
+      "MaBouDi et al. 2025: public Bombus trajectories directly show selective sequential visual sampling",
+      "Spaethe et al. 2026: public Bombus data directly show information-content-dependent allocation to secondary cues"
+    ],
+    "interpretation": "Use as convergent empirical grounding of the theory's operational components, not as a claim that one existing dataset identifies C_A<C_F or the same-environment alternate-action-map theorem.",
+    "remaining_direct_test": "One unchanged physical cue matrix, alternate focal action maps, early outcomes selecting different costly later cues, and a finite shared acquisition budget."
   }
 }
