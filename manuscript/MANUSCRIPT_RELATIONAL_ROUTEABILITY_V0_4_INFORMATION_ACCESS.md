@@ -505,7 +505,7 @@ operational property.
 
 ### 7.1 Information amount and information accessibility
 
-Information-fitness theory establishes that environmental information can affect fitness and can be quantified relative to environmental states and responses. Our theorem concerns a different operational layer.
+Information-fitness theory establishes that environmental information can affect fitness and can be quantified relative to environmental states and responses (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011). Our theorem concerns a different operational layer.
 
 Two tasks can contain the same total target information yet differ in how much information must be acquired together before action.
 
@@ -531,7 +531,7 @@ The direct claim concerns processing burden. Predicting evolved niche breadth ad
 
 ### 7.3 Environmental heterogeneity and niche breadth
 
-Heterogeneity theory already distinguishes amount, grain and spatial/temporal pattern. Conditional decision topology is not a substitute for these dimensions.
+Heterogeneity theory already distinguishes amount, grain and spatial/temporal pattern (Kassen 2002). Conditional decision topology is not a substitute for these dimensions.
 
 It is a relational addition: even when environmental distributions and schedules are matched, different mappings from state to action can produce different decision geometry.
 
@@ -949,5 +949,4 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - MaBouDi, H., Richter, J., Guiraud, M.-G., Roper, M., Marshall, J. A. R. & Chittka, L. 2025. Active vision of bees in a simple pattern discrimination task. *eLife* 14:e106332. DOI: 10.7554/eLife.106332.
 - Chow, P. K. Y., Lehtonen, T. K., Näreaho, V. & Loukola, O. J. 2022. Prior associations affect bumblebees' generalization performance in a tool-selection task. *iScience* 25:105466. DOI: 10.1016/j.isci.2022.105466.
 - Essenberg, C. J. et al. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
-- Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
