@@ -1,0 +1,130 @@
+# Relational routeability bibliography audit v1
+
+Date: 2026-10-02
+Status: source-verification receipt for manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md.
+
+## Verified core ecology references
+
+### Bernays & Wcislo 1994
+Elizabeth A. Bernays & William T. Wcislo.
+"Sensory Capabilities, Information Processing, and Resource Specialization."
+The Quarterly Review of Biology 69(2):187–204.
+DOI: 10.1086/418539.
+
+Role:
+Established precursor for information-processing costs, decision time, host/resource specialization, and ecological risk.
+
+### Bernays 2001
+E. A. Bernays.
+"Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation."
+Annual Review of Entomology 46:703–727.
+DOI: 10.1146/annurev.ento.46.1.703.
+
+Role:
+Established precursor for neural/information-processing constraints on generalists versus specialists.
+
+### Silva & Clarke 2020
+Rehan Silva & Anthony R. Clarke.
+"The sequential cues hypothesis: a conceptual model to explain host location and ranking by polyphagous herbivores."
+Insect Science 27:1136–1147.
+DOI: 10.1111/1744-7917.12719.
+
+Role:
+Direct ecological precursor for sequential common/specific cue use in host location.
+The present manuscript must not claim novelty for sequential cue use itself.
+
+### Kassen 2002
+R. Kassen.
+"The experimental evolution of specialists, generalists, and the maintenance of diversity."
+Journal of Evolutionary Biology 15:173–190.
+DOI: 10.1046/j.1420-9101.2002.00377.x.
+
+Role:
+Anchor for environmental heterogeneity, niche breadth, specialists/generalists and the importance of amount/pattern of environmental variation.
+
+## Verified information-fitness references
+
+### Donaldson-Matasci, Bergstrom & Lachmann 2010
+Matina C. Donaldson-Matasci, Carl T. Bergstrom & Michael Lachmann.
+"The fitness value of information."
+Oikos 119:219–230.
+DOI: 10.1111/j.1600-0706.2009.17781.x.
+
+Role:
+Established formal fitness value of environmental information.
+
+### Rivoire & Leibler 2011
+Olivier Rivoire & Stanislas Leibler.
+"The Value of Information for Populations in Varying Environments."
+Journal of Statistical Physics 142(6):1124–1166.
+DOI: 10.1007/s10955-011-0166-2.
+
+Role:
+Established information-fitness relations in fluctuating environments; manuscript uses it as prior art, not novelty target.
+
+## Verified adaptive-acquisition references
+
+### Contardo, Denoyer & Artières 2016
+Gabriella Contardo, Ludovic Denoyer & Thierry Artières.
+"Recurrent Neural Networks for Adaptive Feature Acquisition."
+Neural Information Processing, ICONIP 2016, pp. 591–599.
+DOI: 10.1007/978-3-319-46675-0_65.
+
+Role:
+Established adaptive acquisition of features with feature-specific costs.
+
+### Janisch, Pevný & Lisý 2020
+Jaromír Janisch, Tomáš Pevný & Viliam Lisý.
+"Classification with Costly Features as a Sequential Decision-Making Problem."
+Machine Learning 109(8):1587–1615.
+DOI: 10.1007/s10994-020-05874-8.
+
+Role:
+Especially close operational precursor.
+Information about a sample is acquired at a cost under average/hard per-sample budgets and framed as sequential decision making.
+
+### Nan & Saligrama 2017
+Feng Nan & Venkatesh Saligrama.
+"Adaptive Classification for Prediction Under a Budget."
+Advances in Neural Information Processing Systems 30.
+
+Role:
+Established budget-constrained adaptive prediction.
+Use as prior art for adaptive resource allocation, not as an exact structural predecessor.
+
+## Verified extra-entropic analogue
+
+### Sun & Jafar 2019
+Hua Sun & Syed A. Jafar.
+"On the Capacity of Computation Broadcast."
+arXiv:1903.07597.
+
+Role:
+Provides explicit examples where problems with the same entropy for all subsets can have different operational capacities.
+This blocks broad claims that the present theory is the first to show that entropy can miss operationally relevant structure.
+
+## Novelty boundary after verification
+
+The manuscript must treat as prior art:
+
+- information-processing constraints on niche breadth;
+- sequential ecological cue use;
+- information-fitness theory;
+- adaptive/costly feature acquisition;
+- budget-constrained prediction;
+- the general possibility that equal entropic structure does not determine an operational quantity.
+
+The candidate contribution remains the exact ecological composition:
+
+same physical cue environment
++ same target prevalence/entropy
++ same total available target information
++ different focal action map
+-> sharply different adaptive/fixed guaranteed-resolution geometry
+-> exact difference in feasible access regime under one common ecological budget.
+
+## Remaining bibliography work
+
+- verify any additional citations introduced during target-journal polishing;
+- if Sun & Jafar is cited in the final manuscript, decide whether to cite the arXiv paper or a later archival version if one exists;
+- preserve conservative wording around priority.
