@@ -64,7 +64,7 @@ different optimal adaptive accessibility on one physical cue environment, and
 finite ecological budgets turn that difference into a predicted feasibility
 contrast.
 
-The manuscript is within the journal's Letter limits: the abstract is 150
+The manuscript is within the journal's Letter limits: the abstract is 146
 words, the main text is approximately 4,630 words by the repository's
 submission counter, and there are two main figures.
 
