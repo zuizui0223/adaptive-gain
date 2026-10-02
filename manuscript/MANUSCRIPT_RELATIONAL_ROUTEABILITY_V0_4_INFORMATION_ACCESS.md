@@ -24,6 +24,16 @@ A second established literature makes the acquisition problem explicit. Sequenti
 
 A particularly close recent neighbor makes the information-theoretic overlap explicit. Li, Dhali & Bouma (2026) use partial information decomposition to study when pairwise synergy helps active feature acquisition, combine pairwise joint information with conditional information evaluated at realized feature values, and include controlled fixed-information comparisons. Thus neither synergy-aware acquisition nor outcome-conditioned information scores are novelty claims here. The unresolved issue we isolate is stricter: whether two tasks can be statically indistinguishable to the entire Shannon entropy vector yet differ in the exact optimal cost of adaptive resolution.
 
+The exact-resolution primitives are also classical. Adaptive identification by
+binary or multiway decision trees and fixed identification by separating/test
+systems have long-standing theories (Garey 1972; Katona 1966; Hyafil & Rivest
+1976; Chakaravarthy et al. 2009; Moshkov & Zielosko 2011). We therefore do not
+claim novelty for \(C_A\), \(C_F\), optimal decision trees, separating systems,
+or generic adaptive-versus-fixed gaps. The new question is what remains
+unidentified when these classical operational costs are compared with complete
+static information summaries in an ecological task.
+
+
 The ecological consequence of that mathematical distinction is especially relevant because many empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
 
 > after one cue outcome is observed, which distinctions remain necessary before the organism can act?
@@ -501,63 +511,83 @@ operational property.
 
 ---
 
-## 7. Relation to existing ecological principles
+## 7. Conditional accessibility can bound evolutionary reachability
 
-### 7.1 Information amount and information accessibility
+The structural distinction becomes evolutionarily consequential only after a
+biological lift is specified. Let the state-specific routeability gap be
 
-Information-fitness theory establishes that environmental information can affect fitness and can be quantified relative to environmental states and responses (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011). Our theorem concerns a different operational layer.
+\[
+g_i=C_F(i)-C_A(i)\ge0
+\]
 
-Two tasks can contain the same total target information yet differ in how much information must be acquired together before action.
+and consider two ecological states with ordered contrast
+\(\Delta g=g_2-g_1\ge0\). Suppose the local selection contribution is
+\(s_i=f(g_i)-\kappa\), where \(f\) is nondecreasing and \(L\)-Lipschitz on the
+relevant domain. Then
 
-Thus
+\[
+0\le\Delta s\le L\Delta g.
+\]
+
+For a local eco-evolutionary feedback with positive conversion scale
+\(B=-\beta e>0\), the loop gain therefore satisfies
+
+\[
+\boxed{G\le BL\Delta g.}
+\]
+
+In the generalized two-dimensional local response used here, evolutionary
+persistence \(\alpha\) and ecological memory \(\phi\) give the exact
+complex-eigenpair threshold
+
+\[
+G_{\rm osc}
+=
+\frac{(\alpha-\phi)^2}{4(1-\phi)}.
+\]
+
+Hence a stable oscillatory response is possible only if
 
 \[
 \boxed{
-\text{information amount}
-\neq
-\text{information accessibility under sequential cost}.
+\Delta g>
+\frac{G_{\rm osc}}{BL}.
 }
 \]
 
-This is a complement to, not a rejection of, information-fitness theory.
-
-### 7.2 Specialist-generalist information-processing costs
-
-Information-processing limits have long been proposed as constraints on broad diet breadth.
-
-Routeability sharpens that idea. Equal nominal niche breadth does not imply equal decision burden. A consumer using many resources may need few observations per encounter when early cues route encounters into small branch-specific subproblems. Another consumer with the same number and frequency of usable resources may require many distinctions to remain simultaneously provisioned.
-
-The direct claim concerns processing burden. Predicting evolved niche breadth additionally requires fitness, trade-offs and evolutionary dynamics.
-
-### 7.3 Environmental heterogeneity and niche breadth
-
-Heterogeneity theory already distinguishes amount, grain and spatial/temporal pattern (Kassen 2002). Conditional decision topology is not a substitute for these dimensions.
-
-It is a relational addition: even when environmental distributions and schedules are matched, different mappings from state to action can produce different decision geometry.
-
-A safe prediction is therefore conditional:
-
-> broad ecological use should be less constrained by information acquisition when relevant alternatives are routeable within the organism's observation budget.
-
-### 7.4 Interaction accessibility
-
-Morphology, phenology and encounter opportunity can define a set of compatible potential interactions. Conditional decision topology can act downstream of those filters.
-
-An interaction can be biologically compatible yet behaviorally inaccessible if its discrimination burden exceeds the available observation budget.
-
-This supplies a direct prediction about **accessibility**, not yet about equilibrium network topology or stability.
-
-### 7.5 Diversity-stability is downstream
-
-The present finite model contains no species abundance dynamics, synchrony process, community Jacobian, resilience metric or ecosystem-function variance.
-
-Therefore no diversity-stability conclusion follows directly.
-
-A future theory would need to map routeability into realized interaction strengths and then into an explicit community dynamical model.
+More strongly, if an entire architecture class satisfies \(0\le g_i\le
+q_{\max}\) and \(BLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
+unreachable for that class. This is a **no-go theorem**, not a sufficiency
+claim: crossing the structural threshold does not guarantee oscillation, and
+\(B,L,\alpha,\phi\) are not estimated from the public bee data. Its role is to
+show that information accessibility can delimit an evolutionary possibility
+space once a state-dependent ecological feedback is specified.
 
 ---
 
-## 8. Measurement: recover structure before summarizing it
+## 8. Ecological scope
+
+The immediate ecological consequence concerns **processing burden and
+accessibility**, not evolved niche breadth by itself. Equal nominal niche
+breadth can impose different information costs when early cues route encounters
+into small branch-specific problems. Thus broader resource use should be less
+constrained by information acquisition when relevant alternatives are routeable
+within the organism's observation budget. Morphology, phenology and encounter
+opportunity still define upstream compatibility; routeability can act as an
+additional filter on which compatible interactions are behaviorally accessible.
+
+This framework complements rather than replaces established heterogeneity
+dimensions such as amount, grain and spatial or temporal pattern (Kassen
+2002). Predicting evolved specialist/generalist outcomes still requires
+fitness trade-offs and evolutionary dynamics; the no-go result above supplies
+one explicit bridge when such dynamics are specified. Diversity-stability,
+community resilience and ecosystem-function stability remain downstream:
+the present model contains no abundance dynamics or community stability
+functional from which those conclusions could follow.
+
+---
+
+## 9. Measurement: recover structure before summarizing it
 
 A routeability analysis must begin with a focal action.
 
@@ -596,7 +626,7 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 
 ---
 
-## 9. Bombus as a single-system empirical anchor
+## 10. Bombus as a single-system empirical anchor
 
 The deterministic theorem is intentionally stronger than any one public
 behavioural dataset located so far. We therefore use *Bombus* not as an
@@ -605,9 +635,9 @@ experiments in the same genus, public data directly test distinct operational
 ingredients of the theory rather than merely illustrating that animals can use
 multiple cues.
 
-### 9.1 Costly contingent acquisition
+### 10.1 Costly contingent acquisition
 
-Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
+The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
 could voluntarily land on an information-request platform before a mandatory
 discrimination. A correct choice without requesting information earned 30%
 sucrose, whereas a correct post-request choice earned only 15%, so information
@@ -651,7 +681,7 @@ is required to obtain information. The dataset therefore directly establishes
 predictive cue is available and the experiment does not identify the exact
 \(C_A<C_F\) theorem.
 
-### 9.2 Secondary cues are recruited when primary information is insufficient
+### 10.2 Secondary cues are recruited when primary information is insufficient
 
 Spaethe et al. (2026) trained *B. terrestris* on combined colour and
 pattern/shape cues and then used cue-conflict tests to separate their
@@ -684,7 +714,7 @@ recruit it when primary information is insufficient. The attributes were
 simultaneously available, however, so this is not a within-encounter
 branch-specific next-cue policy.
 
-### 9.3 Sequential sensory access is biologically real
+### 10.3 Sequential sensory access is biologically real
 
 MaBouDi et al. (2025) provide public high-speed trajectories showing that
 bumblebees inspect restricted diagnostic regions of visual patterns before
@@ -713,63 +743,32 @@ a narrow composition test rather than a leap from mathematics to biology.
 
 ---
 
-## 10. Two direct experiments
+## 11. Prospective direct test
 
-### 10.1 Minimal four-state causal experiment
-
-The first experiment uses four physical cue vectors and three cue channels.
-
-Routeable and bypass-control architectures share the cue environment but differ in target mapping.
-
-The budget ladder is designed so that the architecture-by-access contrast is predicted to be absent below and above the routeability-sensitive window and positive only inside it.
-
-This is the preferred first behavioral test because it minimizes training and apparatus burden.
-
-### 10.2 Exact-balanced ten-state stress test
-
-A stronger follow-up uses ten states and six cue channels. Every cue is exactly 5/5 balanced, and routeable/control groups use the identical physical cue matrix.
-
-Exact costs are
-
-\[
-(C_A,C_F)_R=(3,4),
-\]
-
-\[
-(C_A,C_F)_K=(2,2).
-\]
-
-At common budget \(B=3\), a routed three-cue schedule reaches exact uniform-state accuracy 1 in both architectures.
-
-The best fixed three-cue ceiling is
-
-\[
-4/5
-\]
-
-in the routeable architecture and
-
-\[
-1
-\]
-
-in the control.
-
-Thus the exact deterministic ceiling interaction is
-
-\[
-\boxed{
-(1-4/5)-(1-1)=1/5.
-}
-\]
-
-The value \(1/5\) is a task ceiling, not a behavioral effect-size assumption.
+The remaining causal test is narrow: hold one physical cue matrix fixed, alter
+the focal action map so that different early outcomes make different later cues
+relevant, impose costly cue acquisition under a shared finite budget, and test
+the predicted architecture-by-access interaction. The preregisterable
+four-state design and the stronger exact-balanced ten-state stress test are
+specified in the Supplement.
 
 ---
 
-## 11. Prior-art boundary
+## 12. Prior-art boundary
 
-### 11.1 Static entropy profiles and decision trees
+### 12.1 Decision trees and separating systems
+
+The finite identification problem itself is established theory. Garey (1972)
+formulated optimal binary identification with costly tests; Hyafil & Rivest
+(1976) established the computational hardness of optimal binary decision trees;
+Katona (1966) developed separating systems; Chakaravarthy et al. (2009)
+treated multiway decision trees; and Moshkov & Zielosko (2011) give a broader
+test/decision-tree framework. These works are direct prior art for the
+adaptive and fixed primitives. Our claim is not a new decision-tree problem,
+but a non-identification result relating those operational costs to static
+Shannon summaries and an ecological action map.
+
+### 12.2 Static entropy profiles
 
 The complete static subset-information function is not itself a new object.
 Forré (1990) defined an entropy profile for Boolean functions using the
@@ -784,7 +783,7 @@ show that even the complete Shannon entropy vector over target and cues does
 not identify optimal adaptive worst-case resolution cost; the direct-product
 construction makes that adaptive-cost difference arbitrarily large.
 
-### 11.2 Partial information decomposition and synergy
+### 12.3 Partial information decomposition and synergy
 
 Multivariate information theory already distinguishes unique, redundant and
 synergistic information. Williams and Beer (2010) introduced partial
@@ -819,7 +818,7 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 > among sources; routeability asks how realized source outcomes reorganize the
 > future acquisition problem under cost.
 
-### 11.3 Active feature acquisition
+### 12.4 Active feature acquisition
 
 Adaptive feature acquisition is established in machine learning. EDDI, for
 example, selects additional measurements using expected information gain
@@ -853,7 +852,7 @@ under weaker information matching.
 
 ---
 
-## 12. Deterministic scope and next theory
+## 13. Deterministic scope and next theory
 
 The current model assumes:
 
@@ -887,7 +886,7 @@ This is a separate paper.
 
 ---
 
-## 13. Conclusion
+## 14. Conclusion
 
 Environmental information has two operational layers that are easy to
 conflate.
@@ -938,6 +937,11 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
 - Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119:219–230. DOI: 10.1111/j.1600-0706.2009.17781.x.
 - Janisch, J., Pevný, T. & Lisý, V. 2020. Classification with Costly Features as a Sequential Decision-Making Problem. *Machine Learning* 109:1587–1615. DOI: 10.1007/s10994-020-05874-8.
+- Garey, M. R. 1972. Optimal Binary Identification Procedures. *SIAM Journal on Applied Mathematics* 23:173–186. DOI: 10.1137/0123019.
+- Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17. DOI: 10.1016/0020-0190(76)90095-8.
+- Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194. DOI: 10.1016/S0021-9800(66)80024-8.
+- Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating Decision Trees with Multiway Branches. In *Automata, Languages and Programming*, Part I, LNCS 5555:210–221. DOI: 10.1007/978-3-642-02927-1_19.
+- Moshkov, M. & Zielosko, B. 2011. *Combinatorial Machine Learning: A Rough Set Approach*. Springer. DOI: 10.1007/978-3-642-20995-6.
 - Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. DOI: 10.1046/j.1420-9101.2002.00377.x.
 - Ma, C., Tschiatschek, S., Palla, K., Hernandez-Lobato, J. M., Nowozin, S. & Zhang, C. 2019. EDDI: Efficient Dynamic Discovery of High-Value Information with Partial VAE. *Proceedings of Machine Learning Research* 97:4234–4243.
