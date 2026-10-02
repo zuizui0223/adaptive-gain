@@ -27,8 +27,8 @@ Verified journal limits at preparation:
 ## Counts
 
 - abstract: **142 words**
-- main text: **approximately 4,915 words**
-- references: **22**
+- main text: **approximately 4,659 words**
+- references: **21**
 - main figures: **2**
 - main tables: **0**
 - text boxes: **0**
