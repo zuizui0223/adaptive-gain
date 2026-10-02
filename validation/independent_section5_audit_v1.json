@@ -1,0 +1,37 @@
+{
+  "schema": "adaptive-gain-independent-section5-audit-v1",
+  "date": "2026-10-02",
+  "status": "INDEPENDENT_IMPLEMENTATION_MATCHES_SECTION5",
+  "independence": "Does not import adaptive_gain.core, information.py, or static_information_adaptive_separation.py; rebuilds literal tasks and uses separate fixed/adaptive solvers plus separate exact prime-log entropy fingerprints.",
+  "one_copy": {
+    "worlds": 12,
+    "cues": 4,
+    "complete_shannon_entropy_vector_match": true,
+    "fixed_costs": {
+      "A": 4,
+      "B": 4
+    },
+    "adaptive_costs": {
+      "A": 4,
+      "B": 3
+    }
+  },
+  "two_copy": {
+    "worlds": 144,
+    "cues": 8,
+    "complete_shannon_entropy_vector_match": true,
+    "fixed_costs": {
+      "A": 8,
+      "B": 8
+    },
+    "adaptive_costs": {
+      "A": 8,
+      "B": 6
+    }
+  },
+  "generalization": {
+    "statement": "For r independent coordinate copies, entropy vectors factor and Bellman continuation values add, giving (C_A,C_F)=(4r,4r) versus (3r,4r).",
+    "consequence": "The adaptive-cost and routeability-gap differences equal r and are unbounded additively.",
+    "boundary": "No unbounded multiplicative C_F/C_A separation under complete entropy-vector matching is claimed."
+  }
+}
