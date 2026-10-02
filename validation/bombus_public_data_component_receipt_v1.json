@@ -1,0 +1,135 @@
+{
+  "schema": "adaptive-gain-bombus-public-data-component-receipt-v1",
+  "date": "2026-10-02",
+  "status": "COMPONENTWISE_PUBLIC_VALIDATION_AVAILABLE_FULL_RELATIONAL_TEST_NOT_YET_AVAILABLE",
+  "focal_taxon": "Bombus spp.",
+  "full_theorem_gate": {
+    "passed": false,
+    "missing": "No single located public dataset holds one physical cue matrix fixed while changing the focal action map so that realized early outcomes select among different costly later cues, with fixed-versus-contingent access under a common finite budget."
+  },
+  "yuan_2026": {
+    "role": "direct_public_test_of_state_dependent_costly_information_acquisition",
+    "source_repository": "Cuixiaojian21/bee_metacognition",
+    "source_commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "raw_file": "data/4_active_information_seeking_trials.csv",
+    "rows": 19200,
+    "bees": 192,
+    "regular_trials": {
+      "Easy": {
+        "n": 6140,
+        "requests": 591,
+        "request_rate": 0.09625407166123778,
+        "post_request_correct": 555,
+        "post_request_n": 591,
+        "post_request_accuracy": 0.9390862944162437,
+        "no_request_correct": 4163,
+        "no_request_n": 5549,
+        "no_request_accuracy": 0.7502252658136601
+      },
+      "Hard": {
+        "n": 6108,
+        "requests": 2866,
+        "request_rate": 0.46922069417157825,
+        "post_request_correct": 2662,
+        "post_request_n": 2866,
+        "post_request_accuracy": 0.9288206559665039,
+        "no_request_correct": 1600,
+        "no_request_n": 3242,
+        "no_request_accuracy": 0.4935225169648365
+      },
+      "Impossible": {
+        "n": 3112,
+        "requests": 2229,
+        "request_rate": 0.7162596401028277,
+        "post_request_correct": 2073,
+        "post_request_n": 2229,
+        "post_request_accuracy": 0.9300134589502019,
+        "no_request_correct": 183,
+        "no_request_n": 883,
+        "no_request_accuracy": 0.2072480181200453
+      }
+    },
+    "derived_signature": {
+      "request_rate_order": "Easy < Hard < Impossible",
+      "unaided_accuracy_order": "Easy > Hard > Impossible",
+      "post_acquisition_accuracy": "approximately 0.93-0.94 across all three difficulty levels",
+      "interpretation": "Bees increasingly pay for information as unaided accuracy collapses, and acquisition restores high accuracy."
+    },
+    "random_free_cue": {
+      "Easy": {
+        "n": 1540,
+        "actual_platform_landings": 950,
+        "landing_rate": 0.6168831168831169,
+        "post_cue_accuracy": 0.9487012987012987
+      },
+      "Hard": {
+        "n": 1572,
+        "actual_platform_landings": 925,
+        "landing_rate": 0.5884223918575063,
+        "post_cue_accuracy": 0.943384223918575
+      },
+      "Impossible": {
+        "n": 728,
+        "actual_platform_landings": 153,
+        "landing_rate": 0.21016483516483517,
+        "post_cue_accuracy": 0.9258241758241759
+      }
+    },
+    "claim_ceiling": "Directly validates costly, state-dependent active information acquisition and performance recovery, but not branch-specific choice among different next cues or C_A<C_F in the deterministic theorem."
+  },
+  "maboudi_2025": {
+    "role": "direct_public_test_of_selective_sequential_sensory_sampling",
+    "data": "Figshare DOI 10.15131/shef.data.14185865.v1",
+    "claim_ceiling": "Supports active sequential sampling and a topology-preserving reciprocal reward-label negative control; not a positive same-environment action-topology manipulation."
+  },
+  "spaethe_2026": {
+    "role": "direct_public_test_of_information_content_dependent_cue_allocation",
+    "source_repository": "stoeckl-lab/Spaethe_et_al_2024_beeDecisions",
+    "source_release": "v1.0.0",
+    "archive_doi": "10.5281/zenodo.15911965",
+    "claim_ceiling": "Shows bees allocate/learn secondary visual attributes when the primary colour cue is hard, but cues are simultaneously available and physical colour discriminability changes."
+  },
+  "smolla_2016": {
+    "role": "public_sequential_choices_uncertainty_dependent_social_information_use",
+    "data_doi": "10.5061/dryad.3jb68",
+    "claim_ceiling": "Supports uncertainty-dependent information-source use, not explicit alternative next-cue acquisition."
+  },
+  "near_topology_examples_without_reusable_public_raw_data": [
+    {
+      "study": "Essenberg et al. 2015",
+      "signature": "flower type determines whether flower size predicts reward"
+    },
+    {
+      "study": "Dale et al. 2005",
+      "signature": "earlier priming cue determines which later target is correct"
+    },
+    {
+      "study": "Lotto & Chittka 2005",
+      "signature": "illumination context reverses the correct target colour"
+    }
+  ],
+  "prospective_history_check": {
+    "source": "Yuan 2026 raw trial order",
+    "result": "Previous-trial correctness adds little predictive signal for the next Regular-trial request after stratifying by current difficulty.",
+    "rates": {
+      "Easy": {
+        "previous_incorrect": 0.0981,
+        "previous_correct": 0.095
+      },
+      "Hard": {
+        "previous_incorrect": 0.4525,
+        "previous_correct": 0.4758
+      },
+      "Impossible": {
+        "previous_incorrect": 0.7286,
+        "previous_correct": 0.7118
+      }
+    },
+    "decision": "Do not use one-step reward history as evidence for routeability; the supported conditioning variable is current evidence quality/difficulty."
+  },
+  "empirical_program": {
+    "theory_paper_use": "One compact empirical-convergence/biological-grounding panel or subsection, explicitly labelled componentwise rather than full theorem validation.",
+    "strongest_public_bridge": "Yuan 2026",
+    "remaining_direct_experiment": "Hold the physical cue matrix fixed, alter the focal action mapping so different early outcomes make different later cues relevant, allow costly cue acquisition under a finite budget, and test the predicted architecture-by-access interaction."
+  }
+}
