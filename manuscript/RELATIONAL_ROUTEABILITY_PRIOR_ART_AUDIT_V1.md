@@ -75,7 +75,43 @@ The safe distinction is narrower:
 
 ---
 
-## 4. PID-guided active feature acquisition is direct prior art
+## 4. Complete static conditional-entropy profiles are old prior art
+
+Forré (1990) introduced an **entropy profile** for Boolean functions that
+compares conditional entropies of the output given subsets of input variables.
+In modern notation, for a Boolean target \(T=f(Q_1,\ldots,Q_m)\), this is
+essentially the family
+
+\[
+H(T\mid Q_S)
+\qquad
+S\subseteq Q,
+\]
+
+and therefore contains the same static information as
+\(I(T;Q_S)\) once \(H(T)\) is fixed. Preneel's 1993 review explicitly describes
+the profile as the values of \(H(f(X))\) and
+\(H(f(X)\mid X_{i_1},\ldots,X_{i_k})\) over all input subsets.
+
+Youssef & Tavares (2004) later studied decision-tree complexity of
+cryptographic Boolean functions and, in the same work, introduced/used an
+entropy-profile concept for those functions.
+
+These papers close another novelty route. The manuscript must not claim:
+- that scanning all cue subsets with conditional entropy is new;
+- that the static function \(S\mapsto I(T;Q_S)\) is a new information object;
+- that entropy profiles and decision trees have never appeared in the same
+  literature.
+
+The current theorem-level distinction is instead a **non-identification**
+result: two tasks can have the same complete static profile—and in fact the
+same complete Shannon entropy vector—while having different optimal adaptive
+worst-case resolution cost. The targeted search in this audit did not locate
+an earlier theorem giving that exact adaptive-cost separation.
+
+---
+
+## 5. PID-guided active feature acquisition is direct prior art
 
 Li, Dhali & Bouma (2026, arXiv:2609.32301) is a particularly close recent
 neighbor. It asks when synergy helps active feature acquisition using a
@@ -116,7 +152,7 @@ specific statement was located in this audit.
 
 ---
 
-## 5. What remains specific in the current synthesis
+## 6. What remains specific in the current synthesis
 
 The targeted audit has not located an exact predecessor combining all of the following:
 
@@ -137,11 +173,11 @@ The novelty claim should therefore concern the **composition** and the **ecologi
 
 ---
 
-## 6. Strongest safe theorem positioning
+## 7. Strongest safe theorem positioning
 
 Use wording close to:
 
-> We formalize a relational property of ecological cue environments: two tasks can share the same physical cue matrix, target prevalence, target entropy and total available target information, yet differ sharply in the cost of resolving the focal action because earlier cue outcomes change which later distinctions remain relevant.
+> We formalize a relational property of ecological cue environments: two tasks can share the same physical cue matrix and the same complete Shannon entropy vector, yet have different optimal adaptive resolution costs because realized cue outcomes change which later distinctions remain relevant. Direct products amplify this adaptive-cost difference without bound additively.
 
 Then:
 
@@ -157,7 +193,7 @@ Avoid:
 
 ---
 
-## 7. Relation to adaptive feature acquisition
+## 8. Relation to adaptive feature acquisition
 
 The closest operational comparison is adaptive feature acquisition.
 
@@ -178,7 +214,7 @@ The expected-loss extension would move the program closer to adaptive-feature-ac
 
 ---
 
-## 8. Implication for the next expected-loss paper
+## 9. Implication for the next expected-loss paper
 
 The stochastic extension cannot be positioned as simply "adding noisy cues."
 
@@ -196,7 +232,7 @@ That is the appropriate novelty target for the next theory paper.
 
 ---
 
-## 9. V5 claim boundary
+## 10. V5 claim boundary
 
 V5 can safely use the deterministic result to establish:
 
@@ -211,6 +247,8 @@ V5 should not make broad priority claims against information theory or machine l
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
 - Nan, F. et al. 2017. Adaptive Classification for Prediction Under a Budget. NeurIPS 2017.
 - Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
+- Forré, R. 1990. Methods and instruments for designing S-boxes. Journal of Cryptology 2:115–130. DOI: 10.1007/BF00190799.
+- Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. Canadian Conference on Electrical and Computer Engineering 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
 - Howard, R. A. 1966. Information Value Theory. IEEE Transactions on Systems Science and Cybernetics.
 
