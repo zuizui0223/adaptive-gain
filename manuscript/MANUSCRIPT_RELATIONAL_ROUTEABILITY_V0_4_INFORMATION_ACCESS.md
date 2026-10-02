@@ -8,7 +8,7 @@ Environmental heterogeneity has amount, grain and pattern, but ecological decisi
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
-so fixed resolution is a static subset-information problem. Adaptive resolution is instead an outcome-resolved Bellman problem. We construct two target maps on the same 12-state, four-cue physical environment in which every binary cue is exactly 50/50 balanced. The tasks have identical target prevalence and, for every named cue subset \(S\), identical mutual information \(I(T;Q_S)\). Both have \(C_F=4\), yet one has \(C_A=4\) and the other \(C_A=3\). Thus even the complete static Shannon subset-information function does not determine adaptive accessibility. A separate exactly balanced family shows that the fixed-to-adaptive cost ratio can grow without bound when weaker information summaries are matched. A finite ecological budget \(B\) converts these structural differences into predicted feasibility differences when \(C_A\le B<C_F\). Routeability is therefore relational: information content describes what can be known jointly, whereas conditional decision topology determines what must be learned jointly before action.
+so fixed resolution is a static subset-information problem. Adaptive resolution is instead an outcome-resolved Bellman problem. We construct two target maps on the same 12-state, four-cue physical environment in which every binary cue is exactly 50/50 balanced. The tasks have identical target prevalence and, more strongly, the same complete Shannon entropy vector over the target and all four cues; equivalently, every named cue subset has identical mutual information \(I(T;Q_S)\). Both have \(C_F=4\), yet one has \(C_A=4\) and the other \(C_A=3\). Thus even complete static Shannon entropic structure does not determine adaptive accessibility. A separate exactly balanced family shows that the fixed-to-adaptive cost ratio can grow without bound when weaker information summaries are matched. A finite ecological budget \(B\) converts these structural differences into predicted feasibility differences when \(C_A\le B<C_F\). Routeability is therefore relational: information content describes what can be known jointly, whereas conditional decision topology determines what must be learned jointly before action.
 
 ## Keywords
 
@@ -21,6 +21,8 @@ environmental heterogeneity; ecological information; sequential decision making;
 Environmental heterogeneity is a central ecological explanatory variable, but ecology does not reduce it to a single scalar. Classical and modern theory distinguish not only how much variation exists but also its spatial or temporal pattern and grain. Likewise, information ecology and information-fitness theory ask how environmental information changes decisions, growth and selection. The starting point of this paper is therefore not that ecology has ignored structure.
 
 A second established literature makes the acquisition problem explicit. Sequential host-location models propose that organisms can use broad and specific cues in stages, and costly-feature classification formalizes prediction in which different features are acquired for different samples, in different orders, under acquisition costs or budgets. Adaptive feature acquisition is therefore prior art, as is the general value of collecting information before action. Our contribution is not the observation that conditional sampling can be useful. Bernays and Wcislo linked resource specialization to information-processing costs, Silva and Clarke proposed sequential cue use in polyphagous host location, and modern costly-feature methods explicitly choose later measurements from earlier observations (Bernays & Wcislo 1994; Silva & Clarke 2020; Contardo et al. 2016; Janisch et al. 2020; Nan & Saligrama 2017).
+
+A particularly close recent neighbor makes the information-theoretic overlap explicit. Li, Dhali & Bouma (2026) use partial information decomposition to study when pairwise synergy helps active feature acquisition, combine pairwise joint information with conditional information evaluated at realized feature values, and include controlled fixed-information comparisons. Thus neither synergy-aware acquisition nor outcome-conditioned information scores are novelty claims here. The unresolved issue we isolate is stricter: whether two tasks can be statically indistinguishable to the entire Shannon entropy vector yet differ in the exact optimal cost of adaptive resolution.
 
 The unresolved ecological issue is different. Most empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
 
@@ -302,11 +304,34 @@ Therefore
 }
 \]
 
+Because the physical cue matrix is identical, every cue-only entropy \(H(Q_S)\)
+also matches. Combining that fact with the exact equality of
+\(H(T\mid Q_S)\) gives
+
+\[
+H_A(T,Q_S)=H_B(T,Q_S)
+\qquad
+\forall S\subseteq Q.
+\]
+
+Every subset of \((T,q_0,q_1,q_2,q_3)\) is either cue-only or has the form
+\((T,Q_S)\). Therefore the stronger equality holds:
+
+\[
+\boxed{
+H_A(U)=H_B(U)
+\qquad
+\forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
+}
+\]
+
+The twins are thus **Shannon-entropically equivalent** across all 32 variable
+subsets but adaptively inequivalent.
+
 This result sharpens the paper's information claim. The distinction is not
-merely between low-order information and higher-order information. The complete
-static Shannon subset-information set function is enough to determine the
-fixed burden, but it can still average over the outcome-specific arrangement
-that determines adaptive burden.
+merely between low-order information and higher-order information. The complete Shannon entropy vector is enough to recover the static subset
+information and therefore the fixed burden, but it can still average over the
+outcome-specific arrangement that determines adaptive burden.
 
 The earlier depth-two and depth-three controls matching pairwise
 target-cue information remain useful finite stress tests, but they are now
@@ -445,7 +470,9 @@ the complete action-conditioned table.
    \[
    F(S)=I(T;Q_S)
    \]
-   is sufficient for \(C_F\), but insufficient for \(C_A\).
+   is sufficient for \(C_F\), but insufficient for \(C_A\). The matched
+   twins satisfy the stronger condition that the complete Shannon entropy
+   vector over target and cues is identical.
 6. Outcome-resolved conditional continuation geometry retains the realized
    histories needed for the Bellman recursion for \(C_A\).
 7. The complete table
@@ -618,6 +645,13 @@ synergistic information. Williams and Beer (2010) introduced partial
 information decomposition, with XOR as the canonical case in which neither
 source alone contains target information but the pair does.
 
+Li, Dhali & Bouma (2026) directly connect this language to active feature
+acquisition. Their state-dependent SynAFA policy uses pairwise joint
+information and conditional information evaluated at realized feature values,
+and their synthetic analyses include a fixed-total-pair-information control.
+Accordingly, this manuscript does not claim that PID, synergy or
+realized-value conditioning are new ingredients in sequential acquisition.
+
 Routeability is not a synonym for synergy.
 
 A two-cue XOR/XNOR task can contain purely joint target information while still
@@ -662,9 +696,9 @@ The manuscript therefore does **not** claim novelty for:
 The present contribution is narrower:
 
 > an exact ecological decision construction in which the physical cue
-> environment is held fixed, every cue can be perfectly balanced, and even the
-> complete static Shannon subset-information profile can be held fixed while
-> the focal action map changes adaptive accessibility.
+> environment is held fixed, every cue can be perfectly balanced, and the
+> complete Shannon entropy vector over target and cues can be held fixed while
+> the focal action map changes optimal worst-case adaptive accessibility.
 
 The separate asymptotic construction then shows that the ecological consequence
 can grow without bound under weaker information matching.
@@ -725,8 +759,7 @@ object.
 
 The two layers are not equivalent. We constructed two tasks with the same
 physical cue matrix, exact balance of every cue, the same target prevalence and
-the same mutual information for every named cue subset, yet different adaptive
-costs. A separate family shows that routeability advantages can become
+the same complete Shannon entropy vector, yet different adaptive costs. A separate family shows that routeability advantages can become
 arbitrarily large.
 
 A finite ecological budget converts this structural distinction into a
@@ -757,6 +790,7 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
 - Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119:219–230. DOI: 10.1111/j.1600-0706.2009.17781.x.
 - Janisch, J., Pevný, T. & Lisý, V. 2020. Classification with Costly Features as a Sequential Decision-Making Problem. *Machine Learning* 109:1587–1615. DOI: 10.1007/s10994-020-05874-8.
+- Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
 - Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. DOI: 10.1046/j.1420-9101.2002.00377.x.
 - Ma, C., Tschiatschek, S., Palla, K., Hernandez-Lobato, J. M., Nowozin, S. & Zhang, C. 2019. EDDI: Efficient Dynamic Discovery of High-Value Information with Partial VAE. *Proceedings of Machine Learning Research* 97:4234–4243.
 - Nan, F. & Saligrama, V. 2017. Adaptive Classification for Prediction Under a Budget. *Advances in Neural Information Processing Systems* 30.
