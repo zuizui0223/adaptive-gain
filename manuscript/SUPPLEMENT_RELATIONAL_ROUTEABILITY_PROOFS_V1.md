@@ -1,6 +1,6 @@
 # Supplementary proofs for relational routeability v1
 
-Status: formal proof companion for manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md.
+Status: formal proof companion for manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md.
 
 ## S1. Finite deterministic task
 
@@ -406,48 +406,446 @@ Executable sources:
 
 ---
 
-## S6. Scope of computational claims
+## S6. Static information exactly characterizes fixed resolution
 
-The theorem in S2 and corollary in S3 are analytic.
+Give every represented state strictly positive probability.
 
-The finite pairwise controls in S4 and ten-state ceiling in S5 are constructive finite results checked by exact enumeration/solvers.
+For any fixed cue bundle \(S\),
 
-Focused CI covers:
+\[
+S\text{ resolves }T
+\iff
+H(T\mid Q_S)=0
+\iff
+I(T;Q_S)=H(T).
+\]
 
-- Python 3.10;
-- Python 3.11;
-- Python 3.12.
+Therefore
 
-The dedicated workflow is:
+\[
+\boxed{
+C_F=
+\min_{S\subseteq Q}
+\left\{
+c(S):I(T;Q_S)=H(T)
+\right\}.
+}
+\]
 
-- .github/workflows/quantity-topology-smoke.yml
+The equivalence is structural rather than prior-dependent: under any
+full-support prior, a nonresolving bundle leaves at least one observed cue
+signature containing two different targets with positive conditional mass.
 
-The repository-wide workflow currently contains an unrelated legacy manuscript phrase assertion failure. This does not invalidate the focused mathematical checks.
+Executable source:
+
+- adaptive_gain/information.py::fixed_information_minimum_cost
 
 ---
 
-## S7. Claim boundaries
+## S7. Complete Shannon entropic equivalence does not determine adaptive cost
 
-The supplement does not establish:
+Use the common 12-state, four-cue physical environment encoded in
+\`adaptive_gain/static_information_adaptive_separation.py\`.
+
+Every cue is exactly 6/6 balanced. Two target maps \(T_A,T_B\) have identical
+target multiplicities \((8,4)\).
+
+For every named cue subset \(S\),
+
+\[
+I(T_A;Q_S)=I(T_B;Q_S).
+\]
+
+Because the cue-only distribution is physically identical,
+
+\[
+H_A(Q_S)=H_B(Q_S),
+\]
+
+and the exact conditional-entropy fingerprints also match. Hence for every
+subset \(U\) of the five variables \((T,q_0,q_1,q_2,q_3)\),
+
+\[
+\boxed{
+H_A(U)=H_B(U).
+}
+\]
+
+Nevertheless exact optimization gives
+
+\[
+(C_A,C_F)_A=(4,4),
+\qquad
+(C_A,C_F)_B=(3,4).
+\]
+
+The entropy equalities are certified without floating point by expressing
+\(12H(T\mid Q_S)\) and the relevant joint entropies as integer combinations of
+\(\log_2 p\) over prime \(p\).
+
+### Direct-product amplification
+
+Take \(r\) independent coordinate copies. Queries act only within one
+coordinate and the composite target is the tuple of coordinate targets.
+
+Entropy is additive across coordinates, so complete Shannon entropic
+equivalence is preserved.
+
+Fixed and adaptive exact-resolution costs are additive:
+
+\[
+C_F(X\otimes Y)=C_F(X)+C_F(Y),
+\]
+
+\[
+C_A(X\otimes Y)=C_A(X)+C_A(Y).
+\]
+
+For \(C_F\), each coordinate must remain resolved after all other coordinates
+are held fixed.
+
+For \(C_A\), every query preserves rectangular support across coordinates.
+Induction in the Bellman recursion therefore gives a continuation value equal
+to the sum of coordinate continuation values.
+
+Thus
+
+\[
+(C_A,C_F)_{A^{\otimes r}}=(4r,4r),
+\]
+
+\[
+(C_A,C_F)_{B^{\otimes r}}=(3r,4r),
+\]
+
+and
+
+\[
+\boxed{
+C_A(A^{\otimes r})-C_A(B^{\otimes r})=r\to\infty.
+}
+\]
+
+This is an unbounded **additive** separation under complete Shannon
+entropy-vector matching. The exact-balanced family in S2 supplies an unbounded
+**multiplicative** \(C_F/C_A\) ratio under weaker information matching.
+
+Executable sources:
+
+- adaptive_gain/static_information_adaptive_separation.py
+- tests/test_static_information_adaptive_separation.py
+- validation/static_information_adaptive_separation_v1.json
+
+---
+
+## S8. Outcome-resolved Bellman object for adaptive accessibility
+
+For a realized history
+
+\[
+h=(q_1=a_1,\ldots,q_r=a_r),
+\]
+
+let \(V(h)\) be the minimum remaining worst-case cost.
+
+If the history is target-pure,
+
+\[
+V(h)=0.
+\]
+
+Otherwise
+
+\[
+\boxed{
+V(h)=
+\min_{q\notin h}
+\left[
+c(q)+
+\max_{a:P(q=a\mid h)>0}
+V(h,q=a)
+\right].
+}
+\]
+
+Thus \(C_A=V(\varnothing)\).
+
+Conditional mutual information \(I(T;q\mid h)\) is an average immediate
+entropy reduction. It does not, by itself, retain the worst child history or
+which future cue becomes useful in each realized child. This is why a complete
+static entropy vector can fail to identify exact adaptive cost.
+
+---
+
+## S9. Nonlinear accessibility-to-feedback no-go theorem
+
+For ecological state \(i\), define the state-specific routeability gap
+
+\[
+g_i=C_F(i)-C_A(i)\ge0.
+\]
+
+For an ordered pair of states define
+
+\[
+\Delta g=g_2-g_1\ge0.
+\]
+
+Let the local selection contribution be
+
+\[
+s_i=f(g_i)-\kappa,
+\]
+
+where \(f\) is nondecreasing and \(L\)-Lipschitz over the relevant domain.
+Then
+
+\[
+0\le\Delta s\le L\Delta g.
+\]
+
+Let
+
+\[
+B=-\beta e>0
+\]
+
+be the local feedback-per-selection scale. The loop gain obeys
+
+\[
+\boxed{G\le BL\Delta g.}
+\]
+
+For the generalized local Jacobian
+
+\[
+J=
+\begin{pmatrix}
+\alpha & \beta\Delta s\\
+(1-\phi)e & \phi
+\end{pmatrix},
+\]
+
+the discriminant is
+
+\[
+\Delta_J
+=
+(\alpha-\phi)^2-4(1-\phi)G.
+\]
+
+Hence complex eigenvalues require
+
+\[
+G>
+G_{\rm osc}
+=
+\frac{(\alpha-\phi)^2}{4(1-\phi)}.
+\]
+
+Combining the two inequalities gives the necessary condition
+
+\[
+\boxed{
+\Delta g>
+\frac{G_{\rm osc}}{BL}.
+}
+\]
+
+If a declared architecture class has
+
+\[
+0\le g_i\le q_{\max}
+\]
+
+for every state and
+
+\[
+BLq_{\max}\le G_{\rm osc},
+\]
+
+then stable oscillatory feedback is unreachable for the entire class.
+
+Crossing the contrast threshold is not sufficient for oscillation. The result
+is local to the declared eco-evolutionary response model and does not estimate
+\(B,L,\alpha,\phi\) empirically.
+
+Executable sources:
+
+- adaptive_gain/nonlinear_feedback_reachability.py
+- tests/test_nonlinear_feedback_reachability.py
+- validation/nonlinear_lipschitz_no_go_v2.json
+
+---
+
+## S10. Prospective direct Bombus experiments
+
+### S10.1 Minimal four-state causal design
+
+Use four physical cue vectors and three cue channels.
+
+Routeable and matched-control groups share the physical cue environment but
+differ in the focal target/action map.
+
+Manipulate a hard acquisition budget
+
+\[
+B=1,2,3.
+\]
+
+The discriminating qualitative prediction is
+
+\[
+\Delta_{B=1}=0,
+\qquad
+\Delta_{B=2}>0,
+\qquad
+\Delta_{B=3}=0.
+\]
+
+Thus the routeability effect is predicted only in the intermediate budget
+window rather than as a generic main effect.
+
+### S10.2 Exact-balanced ten-state stress test
+
+Use the S5 ten-state, six-cue environment with every cue exactly 5/5 balanced.
+
+The exact costs are
+
+\[
+(C_A,C_F)_R=(3,4),
+\qquad
+(C_A,C_F)_K=(2,2).
+\]
+
+At common budget \(B=3\), the routed contingent schedule resolves both tasks
+exactly. The best fixed three-cue ceiling is \(4/5\) in the routeable task and
+1 in the control, giving deterministic ceiling interaction
+
+\[
+\boxed{
+(1-4/5)-(1-1)=1/5.
+}
+\]
+
+The value \(1/5\) is a task ceiling, not an assumed behavioral effect size.
+
+Canonical design files:
+
+- manuscript/ROUTEABILITY_EXPERIMENT_DESIGN_V1.md
+- manuscript/EXACT_BALANCED_ROUTEABILITY_STRESS_TEST_DESIGN_V1.md
+
+---
+
+## S11. Additional theory retained outside the main narrative
+
+The integrated paper uses one theorem spine. Several valid results are retained
+as supporting or supplementary theory rather than competing headlines.
+
+### S11.1 Temporal recurrence and spectral filtering
+
+Community recurrence determines which structurally generated reward modes
+persist through time. The formal spectral treatment is retained in:
+
+- theory/COMMUNITY_SPECTRAL_EVOLUTIONARY_TIMESCALE.md
+- theory/STRUCTURAL_SPECTRAL_JOINT_BOUND.md
+- adaptive_gain/community_spectral_timescale.py
+- adaptive_gain/structural_spectral_joint_bounds.py
+
+These results support temporal interpretation but are not required for the
+static-information non-identification theorem.
+
+### S11.2 Identifiability limits
+
+Local transient geometry generally identifies characteristic invariants rather
+than a unique decomposition into evolutionary persistence, ecological memory
+and loop gain.
+
+Canonical files:
+
+- theory/GENERAL_RESPONSE_IDENTIFIABILITY.md
+- adaptive_gain/general_response_identifiability.py
+- validation/general_response_identifiability_v1.json
+
+These results remain supporting diagnostics rather than a main-paper headline.
+
+### S11.3 Exact-balanced extremal geometry
+
+The mathematical companion results remain useful as finite geometry behind the
+routeability coordinate. In particular:
+
+- for even \(n\ge6\), exact 50/50 balance gives the sharp fixed-cost cap
+  \[
+  C_F\le n-3;
+  \]
+- cap saturation has a rigid star--edge--star private-pair geometry;
+- the depth-constrained envelopes \(D_h(n)\) have finite compatibility defects;
+- despite those finite restrictions, exact balance does not uniformly bound
+  the adaptive/fixed ratio.
+
+Canonical files include:
+
+- theory/EXACT_BALANCED_BINARY_FIXED_COST_CAP.md
+- theory/EXACT_BALANCED_BINARY_CAP_SATURATION_DEPTH.md
+- theory/EXACT_BALANCED_BINARY_DEPTH_THREE_CAP.md
+- theory/EXACT_BALANCED_BINARY_DEPTH_FOUR_SHARP.md
+- theory/EXACT_BALANCED_BINARY_DEPTH_FIVE_FRONTIER.md
+
+These details belong in the Supplement/math appendix, not in the ecological
+headline.
+
+---
+
+## S12. Scope of computational claims
+
+The relational theorem, fixed-information characterization, direct-product
+amplification and nonlinear no-go are analytic.
+
+Finite matched controls and exact-balanced stress tests are constructive
+finite results checked by exact solvers/enumeration.
+
+Repository CI covers Python 3.10, 3.11 and 3.12. The current integrated branch
+also contains dedicated machine-readable receipts for the entropy-vector,
+nonlinear no-go and public Bombus bridge calculations.
+
+---
+
+## S13. Claim boundaries
+
+The integrated supplement does not establish:
 
 - stochastic optimality under noisy cues;
 - expected-loss optimality;
-- empirical behavioral effect sizes;
-- natural prevalence of exact-balanced cue systems;
-- evolved niche breadth;
-- diversity-stability consequences;
-- community resilience or ecosystem-function stability.
+- an unbounded multiplicative \(C_F/C_A\) ratio under complete Shannon
+  entropy-vector matching;
+- a one-dataset empirical measurement of the exact relational theorem;
+- evolved niche breadth without an explicit evolutionary lift;
+- diversity-stability, community resilience or ecosystem-function stability.
 
-Those claims require additional biological or stochastic models.
+Those require additional biological or stochastic models.
+
+---
 
 ## Reproducibility map
 
-Headline theorem:
+Strong static-information theorem:
+- theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md
+- adaptive_gain/static_information_adaptive_separation.py
+- tests/test_static_information_adaptive_separation.py
+- validation/static_information_adaptive_separation_v1.json
+
+Relational asymptotic theorem:
 - theory/RELATIONAL_ROUTEABILITY_THEOREM_SPINE_V1.md
 - theory/QUANTITY_TOPOLOGY_ORTHOGONALITY.md
 - adaptive_gain/balanced_quantity_topology_contrast.py
 - tests/test_balanced_quantity_topology_contrast.py
 - validation/balanced_quantity_topology_contrast_v1.json
+
+Nonlinear no-go:
+- theory/NONLINEAR_LIFT_NO_GO_V2.md
+- adaptive_gain/nonlinear_feedback_reachability.py
+- tests/test_nonlinear_feedback_reachability.py
+- validation/nonlinear_lipschitz_no_go_v2.json
 
 Pairwise controls:
 - adaptive_gain/balanced_pairwise_information_controls.py
@@ -458,3 +856,9 @@ Ten-state stress test:
 - adaptive_gain/exact_balanced_routeability_stress_test.py
 - tests/test_exact_balanced_routeability_stress_test.py
 - validation/exact_balanced_routeability_stress_test_v1.json
+
+Bombus empirical bridge:
+- adaptive_gain/bumblebee_public_bridge.py
+- tests/test_bumblebee_public_bridge.py
+- validation/bombus_public_data_component_receipt_v1.json
+- validation/bombus_empirical_convergence_panel_v1.json
