@@ -22,6 +22,14 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 ---
 
+## Current synthesis manuscript
+
+`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`
+
+Current prior-art-positioned draft. Use this manuscript for prose-level review; use the theorem spine for claim-level review.
+
+---
+
 ## Mathematical support
 
 ### Relational orthogonality theorem
