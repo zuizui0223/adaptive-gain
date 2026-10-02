@@ -4,11 +4,11 @@ Draft v0.4 — information-accessibility synthesis candidate
 
 ## Abstract
 
-Environmental heterogeneity has amount, grain and pattern, but ecological decisions also have **conditional topology**: the result of an early observation can change which later distinction matters. We separate two operational objects. For a finite deterministic task, the minimum fixed cue cost satisfies exactly
+Ecological information is often summarized by amount, but accessibility depends on how observations reorganize what must be learned next. For a deterministic task, fixed resolution satisfies
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
-so fixed resolution is a static subset-information problem. Adaptive resolution is instead an outcome-resolved Bellman problem. We construct two target maps on the same 12-state, four-cue physical environment in which every binary cue is exactly 50/50 balanced. The tasks have identical target prevalence and, more strongly, the same complete Shannon entropy vector over the target and all four cues; equivalently, every named cue subset has identical mutual information \(I(T;Q_S)\). Both have \(C_F=4\), yet one has \(C_A=4\) and the other \(C_A=3\). Their \(r\)-fold products preserve complete Shannon entropic equivalence while giving \(C_F=4r\) in both tasks and \(C_A=4r\) versus \(3r\), so the adaptive-cost difference grows without bound. A separate exactly balanced family shows that the fixed-to-adaptive cost ratio itself can grow without bound when weaker information summaries are matched. A finite ecological budget \(B\) converts these structural differences into predicted feasibility differences when \(C_A\le B<C_F\). Routeability is therefore relational: information content describes what can be known jointly, whereas conditional decision topology determines what must be learned jointly before action.
+whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Reanalysis of public *Bombus* data shows costly information acquisition increases when unaided decisions are difficult, while secondary cues are recruited when primary cues are insufficient. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility.
 
 ## Keywords
 
