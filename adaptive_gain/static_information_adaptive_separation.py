@@ -26,6 +26,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+from itertools import product
 from typing import Hashable, Sequence
 
 from .core import FiniteTask, Query, World, adaptive_minimum_resolution, fixed_minimum_resolution
@@ -74,6 +75,48 @@ def static_information_twin_a_task() -> FiniteTask:
 def static_information_twin_b_task() -> FiniteTask:
     """Exact-balanced twin with C_A=3 and C_F=4."""
     return _task(_TWIN_B_TARGETS)
+
+
+def static_information_twin_product_task(twin: str, copies: int) -> FiniteTask:
+    """Cartesian product of the entropically matched twin tasks.
+
+    The target is the tuple of coordinate targets.  Queries are coordinate-local,
+    so the physical cue environment is the same for twin A and twin B at every
+    copy count.  This constructor is an executable finite witness for the
+    direct-product amplification theorem; the theorem itself holds for every
+    positive number of copies.
+    """
+    if twin not in {"A", "B"}:
+        raise ValueError("twin must be 'A' or 'B'")
+    if type(copies) is not int or copies < 1:
+        raise ValueError("copies must be a positive integer")
+    if 4 * copies > 20:
+        raise ValueError("product exceeds the exact solver's 20-query limit")
+
+    targets = _TWIN_A_TARGETS if twin == "A" else _TWIN_B_TARGETS
+    coordinate_rows = tuple(product(range(len(_WORLD_SIGNATURES)), repeat=copies))
+
+    worlds = tuple(
+        World(
+            "w_" + "_".join(f"{i:02d}" for i in row),
+            tuple(targets[i] for i in row),
+        )
+        for row in coordinate_rows
+    )
+    queries = []
+    for coordinate in range(copies):
+        for j in range(4):
+            queries.append(
+                Query(
+                    f"c{coordinate}_q{j}",
+                    1,
+                    tuple(
+                        _WORLD_SIGNATURES[row[coordinate]][j]
+                        for row in coordinate_rows
+                    ),
+                )
+            )
+    return FiniteTask(worlds, tuple(queries))
 
 
 def _prime_factorization(n: int) -> dict[int, int]:
