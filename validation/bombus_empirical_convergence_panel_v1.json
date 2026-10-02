@@ -1,0 +1,64 @@
+{
+  "schema": "adaptive-gain-bombus-empirical-convergence-panel-v1",
+  "date": "2026-10-02",
+  "status": "READY_FOR_FIGURE_2_PUBLIC_BOMBUS_PANEL",
+  "claim_ceiling": "Componentwise public validation of operational ingredients; not a one-dataset estimate of C_A, C_F, or the full same-environment relational theorem.",
+  "yuan_2026": {
+    "source_repository": "Cuixiaojian21/bee_metacognition",
+    "source_commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "raw_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "rows": 19200,
+    "bees": 192,
+    "regular": {
+      "Easy": {
+        "request_rate": 0.09625407166123778,
+        "no_request_accuracy": 0.7502252658136601,
+        "post_request_accuracy": 0.9390862944162437
+      },
+      "Hard": {
+        "request_rate": 0.46922069417157825,
+        "no_request_accuracy": 0.4935225169648365,
+        "post_request_accuracy": 0.9288206559665039
+      },
+      "Impossible": {
+        "request_rate": 0.7162596401028277,
+        "no_request_accuracy": 0.2072480181200453,
+        "post_request_accuracy": 0.9300134589502019
+      }
+    },
+    "within_bee": {
+      "Hard_gt_Easy": "192/192",
+      "Impossible_gt_Hard": "181/192",
+      "Impossible_gt_Easy": "192/192"
+    },
+    "panel_message": "As unaided discrimination collapses, bees increasingly pay for predictive information while post-request accuracy stays near 0.93."
+  },
+  "spaethe_2026": {
+    "source_repository": "stoeckl-lab/Spaethe_et_al_2024_beeDecisions",
+    "source_file": "bayesianModel.m",
+    "index_definition": "R = 1 - p_colour in public conflict-test values",
+    "easy_mean": 0.0257142857142857,
+    "hard_mean": 0.3742857142857143,
+    "difference": 0.3485714285714286,
+    "cliffs_delta": {
+      "pattern": 0.9875,
+      "shape": 0.9688888888888889,
+      "pooled": 0.9795918367346939
+    },
+    "panel_message": "A secondary visual attribute is largely ignored when colour is sufficient and strongly recruited when colour is difficult."
+  },
+  "maboudi_2025": {
+    "public_data_doi": "10.15131/shef.data.14185865.v1",
+    "panel_role": "qualitative/mechanistic icon: selective sequential inspection of restricted visual regions before commitment"
+  },
+  "chow_2022": {
+    "public_data_doi": "10.5061/dryad.tqjq2bw36",
+    "panel_role": "qualitative/mechanistic icon: early sample/platform colour switches which later ball-moving action is correct"
+  },
+  "essenberg_2015": {
+    "doi": "10.1093/beheco/arv061",
+    "panel_role": "closest biological branch-relevance precedent: flower type determines whether size is reward-informative",
+    "raw_public_reanalysis": false
+  },
+  "plotting_rule": "Quantitatively plot only Yuan and Spaethe. Use MaBouDi/Chow/Essenberg as labelled mechanistic support; do not meta-analyse heterogeneous effect sizes."
+}
