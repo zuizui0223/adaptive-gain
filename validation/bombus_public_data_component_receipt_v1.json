@@ -75,7 +75,26 @@
         "post_cue_accuracy": 0.9258241758241759
       }
     },
-    "claim_ceiling": "Directly validates costly, state-dependent active information acquisition and performance recovery, but not branch-specific choice among different next cues or C_A<C_F in the deterministic theorem."
+    "claim_ceiling": "Directly validates costly, state-dependent active information acquisition and performance recovery, but not branch-specific choice among different next cues or C_A<C_F in the deterministic theorem.",
+    "raw_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "independent_reaggregation": {
+      "status": "PASS",
+      "method": "Fetched the public CSV in four non-overlapping line ranges from source commit 7f886394b4de872ecdb19ca4ea214ec321d5dce9 and recomputed counts directly from all 19,200 rows; no published summary or repository-derived aggregate was used.",
+      "verified_rows": 19200,
+      "verified_bees": 192,
+      "regular_counts_match": true,
+      "random_free_cue_counts_match": true,
+      "regular_request_odds_ratio_vs_easy": {
+        "Hard": 8.30023559228443,
+        "Impossible": 23.70154238837374
+      },
+      "interpretation": "Raw trial counts independently confirm a monotonic rise in costly information acquisition as unaided discrimination collapses, while post-acquisition accuracy remains approximately 0.93 across difficulty."
+    },
+    "access_mode_interpretation": {
+      "regular": "The predictive cue is obtained only if the bee lands on the Zone-1 information-request platform; a correct post-request choice is paid at a discounted reward, so acquisition is voluntary and costly.",
+      "random_free_cue": "The predictive cue is presented automatically upon entering the front half of Zone 1, independent of platform landing. Platform landing therefore becomes separable from cue receipt.",
+      "relevance_to_routeability": "This is a causal manipulation of the necessity/cost of information acquisition and is substantially closer to contingent-versus-unconditional access than a simple cue-preference study, but it still offers only one optional information source rather than branch-specific alternative next cues."
+    }
   },
   "maboudi_2025": {
     "role": "direct_public_test_of_selective_sequential_sensory_sampling",
@@ -129,7 +148,7 @@
   },
   "empirical_program": {
     "theory_paper_use": "One compact empirical-convergence/biological-grounding panel or subsection, explicitly labelled componentwise rather than full theorem validation.",
-    "strongest_public_bridge": "Yuan 2026",
+    "strongest_public_bridge": "Yuan 2026 raw public trials for costly contingent information acquisition; Spaethe 2026 for secondary-cue recruitment; MaBouDi 2025 for selective sequential sensing.",
     "remaining_direct_experiment": "Hold the physical cue matrix fixed, alter the focal action mapping so different early outcomes make different later cues relevant, allow costly cue acquisition under a finite budget, and test the predicted architecture-by-access interaction."
   }
 }
