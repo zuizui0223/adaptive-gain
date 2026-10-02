@@ -21,8 +21,9 @@ equivalence is preserved while
 
 **A**, Routeability changes guaranteed feasibility only in the intermediate
 budget window (C_A\le B<C_F); below (C_A) neither access mode is sufficient,
-whereas above (C_F) both are sufficient. **B**, Convergent public *Bombus*
-evidence for the operational ingredients of the theory. In Yuan et al. (2026),
+whereas above (C_F) both are sufficient. **B**, *Bombus* as a single-system empirical anchor. Independent public
+datasets from the same genus instantiate complementary operational ingredients
+of the theory. In Yuan et al. (2026),
 platform landing increases with decision difficulty when landing is required to
 obtain a predictive cue (Regular trials), but the gradient reverses when the cue
 is supplied independently of landing (Random Free-Cue trials). The within-bee
