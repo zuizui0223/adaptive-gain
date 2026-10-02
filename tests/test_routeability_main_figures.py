@@ -22,9 +22,10 @@ def test_routeability_main_figures_are_well_formed_svg():
 def test_routeability_main_figures_keep_their_claim_labels():
     receipt = _receipt()
     for row in receipt["figures"].values():
-        text = (ROOT / row["path"]).read_text()
+        root = ET.parse(ROOT / row["path"]).getroot()
+        visible_text = " ".join("".join(root.itertext()).split())
         for phrase in row["required_labels"]:
-            assert phrase in text
+            assert phrase in visible_text
 
 
 def test_figure2_values_match_frozen_bombus_receipts():
