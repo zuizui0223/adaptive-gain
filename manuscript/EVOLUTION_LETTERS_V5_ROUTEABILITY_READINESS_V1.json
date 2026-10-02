@@ -1,9 +1,9 @@
 {
   "schema": "adaptive-gain-evolution-letters-v5-routeability-readiness-v1",
-  "date": "2026-09-25",
+  "date": "2026-10-02",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "v5_machine_submission_bundle_frozen_human_metadata_pending",
+  "status": "RETIRED_AS_STANDALONE_INTEGRATED_INTO_INFORMATION_ACCESS_MANUSCRIPT",
   "headline": "environmental routeability determines the ecological cost of heterogeneity",
   "preserved_v4_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json",
@@ -72,10 +72,8 @@
     "abstract_words": 271,
     "main_text_words": 3347
   },
-  "remaining_machine_work": [
-    "add a permanent archive DOI if one is minted before submission"
-  ],
-  "promotion_rule": "V5 is the preferred environment-centered submission candidate. Its machine submission bundle is frozen and checksum-verified. V4 remains preserved as fallback. Submission remains blocked only on author-controlled metadata, approvals, simultaneous-submission confirmation, and any archive DOI.",
+  "remaining_machine_work": [],
+  "promotion_rule": "DO NOT SUBMIT V5 AS A SEPARATE MANUSCRIPT. Its budget-window, routeability and nonlinear no-go content is incorporated into manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md. Preserve the frozen V5 bundle only as provenance/revision reserve.",
   "submission_bundle": {
     "name": "EVOLUTION_LETTERS_V5_FINAL_STAGING_V1.zip",
     "scientific_source_commit": "0a8d6d8bdc8b9b756b19444ead8616bd06bb1b70",
@@ -106,16 +104,7 @@
     "note": "The repository reproducibly freezes the V5 Markdown/SVG source surface. The line-numbered DOCX, rendered PDFs and checksum-frozen staging ZIP are machine-side validated export artifacts; byte-for-byte reconstruction of those exported binaries from the repository alone is not claimed."
   },
   "remaining_human_work": [
-    "final author list and order",
-    "affiliations",
-    "corresponding-author metadata",
-    "CRediT author contributions",
-    "funding declaration",
-    "conflict-of-interest declaration",
-    "acknowledgements if applicable",
-    "all-author approval",
-    "confirmation that the manuscript is not under consideration elsewhere",
-    "permanent archive DOI if available"
+    "none for standalone submission; V5 is retained only as archived provenance"
   ],
   "post_freeze_extensions": [
     {
@@ -151,5 +140,11 @@
         "certificate_audit": "success"
       }
     }
-  ]
+  ],
+  "integration_record": {
+    "canonical_integrated_branch": "synthesis/information-accessibility-public-data-v1",
+    "canonical_integrated_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+    "overlap_reason": "budget-window and nonlinear no-go theorems plus routeability ecology are now part of the integrated manuscript",
+    "duplicate_submission_rule": "standalone V5 submission prohibited while integrated manuscript is the active submission surface"
+  }
 }
