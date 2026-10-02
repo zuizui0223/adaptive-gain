@@ -1,25 +1,24 @@
 # Summary sufficiency ladder for ecological routeability
 
-Status: post-freeze synthesis. This note organizes the existing counterexamples by how much quantitative information is matched before conditional decision topology becomes identifiable.
+Status: post-freeze synthesis, revised after complete static-information matching.
 
 The question is:
 
-> how rich must an ecological summary be before it determines the finite routeability problem?
+> how rich must an ecological information summary be before it determines fixed
+> and adaptive routeability costs?
 
-The answer in the current deterministic model is hierarchical.
+The answer is now sharper than a simple "summaries versus full table" divide.
 
 ---
 
 ## Level 0 — raw ecological counts
 
 Matched:
-- number of represented states;
-- number of query/cue resources;
-- unit costs.
+- represented-state count;
+- cue count;
+- cue costs.
 
-Not sufficient.
-
-Routeable and control tasks can have the same \(n\) and \(m\) but different \((C_A,C_F)\).
+Not sufficient for \(C_F\) or \(C_A\).
 
 ---
 
@@ -27,148 +26,213 @@ Routeable and control tasks can have the same \(n\) and \(m\) but different \((C
 
 Matched:
 - Level 0;
-- every query outcome frequency.
+- every cue outcome frequency.
 
-The exact-balanced family goes further: every binary query is exactly 50/50.
+The exact-balanced families make every binary cue exactly 50/50.
 
 Not sufficient.
-
-\[
-\frac{C_F}{C_A}
-\]
-
-can still diverge.
 
 ---
 
-## Level 2 — the complete cue-only joint distribution
+## Level 2 — complete cue-only joint distribution
 
 Matched:
-- Level 1;
-- the entire physical query-outcome matrix;
-- therefore every cue-only marginal and every cue-only joint distribution of every order.
-
-The quantity-matched routeable/control pair uses the **same physical cue matrix**.
+- the entire physical state-by-cue matrix;
+- therefore every cue-only marginal and every cue-only joint distribution of
+  every order.
 
 Not sufficient.
 
-The action map changes while the cue environment is literally unchanged.
+Changing only the target/action map can change \((C_A,C_F)\).
 
 ---
 
 ## Level 3 — target amount
 
-Matched:
-- Level 2;
+Additionally matched:
 - target multiplicities;
 - target entropy under the uniform world prior.
 
 Not sufficient.
 
-For routing depth \(d\), both tasks have target multiplicities
-
-\[
-(2^d+2,\ 2^d).
-\]
-
-Yet the matched control has
-
-\[
-C_A=C_F=2,
-\]
-
-while the routeable task satisfies
-
-\[
-C_F\ge2^d,\qquad C_A\le d+1.
-\]
-
 ---
 
-## Level 4 — total available target information
+## Level 4 — total full-vocabulary target information
 
-Matched:
-- Level 3;
-- full-vocabulary target information.
-
-Because the full query vocabulary resolves the target in both tasks,
+Additionally matched:
 
 \[
-I(T;Q_{\mathrm{all}})=H(T)
+I(T;Q_{\rm all})=H(T).
 \]
-
-is identical.
 
 Still not sufficient.
 
-Thus:
+The asymptotic relational family has an unbounded fixed-to-adaptive ratio
+separation under Levels 0–4.
+
+---
+
+## Level 5 — pairwise target-cue information profile
+
+At finite registered scopes, the repository additionally matches the multiset of
+canonical target-query \(2\times2\) profiles.
+
+Still not sufficient.
+
+These controls are finite and the pairwise match is a multiset match rather
+than a name-by-name match.
+
+---
+
+## Level 6 — complete named static subset-information function
+
+Define
+
+\[
+F(S)=I(T;Q_S),
+\qquad
+S\subseteq Q.
+\]
+
+The new 12-state, four-cue twins match:
+- the same physical cue matrix;
+- exact 6/6 balance of every cue;
+- target multiplicities \((8,4)\);
+- **every named value** \(F(S)\) for all \(2^4=16\) cue subsets.
+
+Yet
+
+\[
+(C_A,C_F)_A=(4,4),
+\qquad
+(C_A,C_F)_B=(3,4).
+\]
+
+Therefore
 
 \[
 \boxed{
-\text{total information available}
-\neq
-\text{architecture required to acquire it}.
+F(\cdot)\not\Rightarrow C_A.
 }
 \]
 
-The asymptotic separation remains unbounded.
+However, Level 6 has a new positive result.
+
+For deterministic finite exact resolution under any strictly positive
+full-support prior,
+
+\[
+S\text{ resolves }T
+\iff
+I(T;Q_S)=H(T).
+\]
+
+Hence
+
+\[
+\boxed{
+C_F=
+\min_{S:F(S)=H(T)}
+c(S).
+}
+\]
+
+So the complete static subset-information function is:
+
+- **sufficient for \(C_F\)**;
+- **insufficient for \(C_A\)**.
+
+This is the key boundary that was missing from the previous ladder.
+
+Executable witness:
+
+- \`adaptive_gain/static_information_adaptive_separation.py\`
+- \`tests/test_static_information_adaptive_separation.py\`
+
+Formal statement:
+
+- \`theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md\`
 
 ---
 
-## Level 5 — pairwise target-cue information-strength profile
+## Level 7 — outcome-resolved conditional continuation geometry
 
-At registered finite scopes, matched:
-- Level 2;
-- target multiplicities;
-- the multiset of canonical target-query \(2\times2\) contingency profiles.
+A static subset average does not retain which particular result occurred.
 
-This implies the same multiset of pairwise target-cue information strengths up to binary relabeling.
-
-### Depth 2
-
-Matched control:
+For a realized history
 
 \[
-C_A=C_F=2.
+h=(q_1=a_1,\ldots,q_r=a_r),
 \]
 
-### Depth 3
-
-Matched control:
+the adaptive value obeys
 
 \[
-C_A=C_F=3.
+V(h)=0
+\quad\text{if}\quad
+H(T\mid h)=0,
 \]
 
-The routeable tasks on the same physical cue matrices retain substantially larger fixed burden.
+and otherwise
 
-Therefore even pairwise target-cue information-strength summaries can fail to identify decision topology.
+\[
+V(h)
+=
+\min_{q\notin h}
+\left[
+c(q)+
+\max_{a:P(q=a\mid h)>0}
+V(h,q=a)
+\right].
+\]
 
-Claim ceiling:
+The relevant information object is therefore outcome-resolved: each child
+history is retained separately.
 
-- this is a finite registered result;
-- the pairwise match is a multiset match, not cue-name-by-cue-name identity;
-- no asymptotic Level-5 family is currently claimed.
+Conditional mutual information
+
+\[
+I(T;q\mid h)
+\]
+
+is an average immediate entropy reduction. A single CMI scalar does not retain
+the worst child or which later cue becomes relevant there.
+
+The MROD witness gives the simplest example:
+
+\[
+I(T;\mathrm{context})=0,
+\]
+
+but after context outcome 0,
+
+\[
+I(T;\mathrm{assay0}\mid \mathrm{context}=0)=1,
+\qquad
+I(T;\mathrm{assay1}\mid \mathrm{context}=0)=0,
+\]
+
+whereas after context outcome 1 the two values reverse.
+
+Thus the routing observation can reveal no target information directly while
+revealing **which later observation contains the target information**.
 
 ---
 
-## Level 6 — complete action-conditioned cue table
+## Level 8 — complete action-conditioned cue table
 
 Observed:
-- represented state identity;
+- world/state identity;
 - target/action \(T(w)\);
 - every cue outcome \(q_j(w)\);
 - cue costs.
 
-In the deterministic finite model this is sufficient to define the optimization problem.
+This representation directly specifies the deterministic finite problem and
+therefore both \(C_A\) and \(C_F\).
 
-Then \(C_A\) and \(C_F\) can in principle be computed exactly.
+The theory does not claim topology is fundamentally hidden.
 
-Thus the theory does **not** say topology is fundamentally unobservable.
-
-It says:
-
-> summaries below the complete action-conditioned structure can remain insufficient even when they are quantitatively very rich.
+It identifies the exact point at which static averaging remains insufficient.
 
 ---
 
@@ -176,99 +240,102 @@ It says:
 
 \[
 \begin{array}{rcl}
-\text{counts} &\not\Rightarrow& \text{routeability}\\
-\text{marginals} &\not\Rightarrow& \text{routeability}\\
-\text{full cue-only distribution} &\not\Rightarrow& \text{routeability}\\
-\text{target entropy} &\not\Rightarrow& \text{routeability}\\
-I(T;Q_{\rm all}) &\not\Rightarrow& \text{routeability}\\
-\text{pairwise target-cue profile} &\not\Rightarrow& \text{routeability}\quad\text{(finite witnesses)}\\
-\text{complete action-conditioned cue table} &\Rightarrow& \text{deterministic routeability problem specified.}
+\text{counts} &\not\Rightarrow& (C_A,C_F)\\
+\text{cue marginals} &\not\Rightarrow& (C_A,C_F)\\
+\text{cue-only joint distribution} &\not\Rightarrow& (C_A,C_F)\\
+H(T),I(T;Q_{\rm all}) &\not\Rightarrow& (C_A,C_F)\\
+\text{pairwise target-cue profile} &\not\Rightarrow& (C_A,C_F)\\
+F(S)=I(T;Q_S)\ \forall S
+&\Rightarrow& C_F\\
+F(S)=I(T;Q_S)\ \forall S
+&\not\Rightarrow& C_A\\
+\text{outcome-resolved continuation geometry}
+&\Rightarrow& C_A\text{ by Bellman recursion.}
 \end{array}
 \]
 
 ---
 
-## Ecological consequence
+## Relation to synergy and PID
 
-This ladder changes the measurement question.
+Partial information decomposition asks how multiple sources contribute unique,
+redundant and synergistic information to a target. That literature is relevant
+and must be acknowledged.
 
-Instead of asking only:
+But routeability is not defined as synergy.
 
-- how many species?
-- how variable is the environment?
-- how informative is each cue?
-- how much total information is available?
+An XOR/XNOR target provides the canonical case in which two cues jointly carry
+information absent from either cue alone, yet if both cues are always required,
 
-a routeability test must eventually recover:
+\[
+C_A=C_F=2.
+\]
 
-- what action each state requires;
-- which alternatives remain confusable after each observation;
-- which cue becomes relevant on each branch;
-- the cost/timing of acquiring that cue.
+The new Level-6 theorem goes further than pairwise synergy language: even the
+entire static Shannon subset-MI set function can be identical while adaptive
+cost differs.
 
-The missing coordinate is not "more information" in the same scalar sense.
+This does **not** prove that every PID construction is identical for the matched
+twins. PID measures can use finer aspects of the joint distribution than the
+subset-MI scalars.
 
-It is **action-conditioned conditional structure**.
+Safe statement:
+
+> static multivariate information content and sequential accessibility are
+> distinct operational objects.
 
 ---
 
-## Relation to nonidentifiability
+## Ecological consequence
 
-The ladder supplies a constructive form of nonidentifiability.
+The measurement question becomes:
 
-At Levels 0–4, there are matched tasks with the same summary but different routeability.
+1. What target/action is being resolved?
+2. Which fixed cue subsets contain enough information to resolve it?
+3. After each **realized** cue outcome, which distinctions remain?
+4. Which later cue becomes relevant on that branch?
+5. What does acquiring that cue cost relative to the ecological budget?
 
-At Level 5, finite matched controls show the same phenomenon for pairwise target-cue information-strength profiles.
-
-Only when the complete deterministic action-conditioned table is available is the present routeability object identified by construction.
-
-This yields a reusable methodological rule:
-
-> before interpreting an ecological summary mechanistically, determine whether the latent structure required by the mechanism is identifiable from that summary.
+Richness, entropy and even a complete static subset-information scan answer
+questions 1–2 incompletely and question 3 not at all.
 
 ---
 
 ## Experimental implication
 
-The hierarchy suggests escalating controls.
+The strongest direct empirical test should manipulate:
+- one common physical cue environment;
+- target/action mapping or decision topology;
+- contingent versus fixed access;
+- a finite ecological budget.
 
-### Minimal direct experiment
+Existing public datasets with staged cue use can provide concordant biological
+signatures, but they should not be called direct validation unless they identify
+the branchwise acquisition object.
 
-Match:
-- physical cue support;
-- cue frequencies;
-- pairwise information signatures;
-- cue-only joint distribution.
+See:
 
-### Exact-balanced stress test
-
-Match:
-- full physical cue matrix;
-- target prevalence;
-- target entropy;
-- total full-vocabulary target information.
-
-### Strong finite pairwise stress test
-
-Additionally match:
-- pairwise target-cue information-strength profile.
-
-The experiment need not begin at the strongest level. The ladder clarifies what each design rules out.
+- \`manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md\`
 
 ---
 
 ## Current claim boundary
 
-The current deterministic theory supports a **summary-insufficiency hierarchy**, not a universal theorem that all scalar ecological metrics fail.
+Established:
+- static subset information exactly characterizes \(C_F\);
+- complete static subset information can fail to identify \(C_A\);
+- exact cue balance does not remove that failure;
+- weaker information matching permits an unbounded adaptive/fixed separation.
 
-A statistic computed from the complete action-conditioned table can of course encode routeability.
-
-The novel point is that several natural and unusually strong quantitative summaries still do not.
+Not established:
+- unbounded \(C_A\) separation under a fully matched static subset-information
+  function;
+- equivalence or non-equivalence to every possible PID definition;
+- noisy expected-loss analogues.
 
 ## One-line result
 
 \[
 \boxed{
-\text{More complete measurement of amount does not become measurement of conditional structure until the action-conditioned mapping itself is observed.}
-}
+\text{Static information identifies what must be available together; realized outcomes identify what must be acquired next.}
 \]
