@@ -92,6 +92,40 @@ Role:
 Established budget-constrained adaptive prediction.
 Use as prior art for adaptive resource allocation, not as an exact structural predecessor.
 
+## Verified Boolean-function entropy-profile prior art
+
+### Forré 1990
+Réjane Forré.
+"Methods and instruments for designing S-boxes."
+*Journal of Cryptology* 2:115–130.
+DOI: 10.1007/BF00190799.
+
+Role:
+Defines an entropy profile for Boolean functions from conditional entropies of
+the output given subsets of input variables. This is direct prior art for the
+static all-subset conditional-entropy object. It blocks any novelty claim for
+\(S\mapsto H(T\mid Q_S)\) or, with fixed \(H(T)\),
+\(S\mapsto I(T;Q_S)\) itself.
+
+### Youssef & Tavares 2004
+A. M. Youssef & Stafford E. Tavares.
+"Decision trees of cryptographic Boolean functions."
+*Canadian Conference on Electrical and Computer Engineering* 1:401–404.
+DOI: 10.1109/CCECE.2004.1345040.
+
+Role:
+Studies univariate and multivariate linear decision trees as cryptographic
+complexity measures and also discusses an entropy profile of Boolean
+functions. This blocks rhetoric suggesting that entropy profiles and decision
+trees have never been considered together.
+
+Boundary:
+The current targeted search did not locate an earlier result showing that two
+tasks with the same complete Shannon entropy vector have different **optimal
+adaptive worst-case query costs**, nor the direct-product amplification of
+that difference. This remains a conservative "no exact predecessor located"
+statement, not a categorical priority proof.
+
 ## Verified PID / active-acquisition collision
 
 ### Li, Dhali & Bouma 2026
@@ -130,6 +164,9 @@ The manuscript must treat as prior art:
 - sequential ecological cue use;
 - information-fitness theory;
 - adaptive/costly feature acquisition;
+- complete static conditional-entropy / mutual-information profiles of Boolean
+  functions;
+- decision-tree analyses adjacent to Boolean-function entropy profiles;
 - PID/synergy-guided active feature acquisition;
 - realized-value conditional acquisition scores;
 - budget-constrained prediction;
