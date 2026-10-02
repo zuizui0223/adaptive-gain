@@ -530,10 +530,11 @@ relevant domain. Then
 \]
 
 For a local eco-evolutionary feedback with positive conversion scale
-\(B=-\beta e>0\), the loop gain therefore satisfies
+\(B_f=-\beta e>0\), distinguished from the ecological observation budget
+\(B\), the loop gain therefore satisfies
 
 \[
-\boxed{G\le BL\Delta g.}
+\boxed{G\le B_fL\Delta g.}
 \]
 
 In the generalized two-dimensional local response used here, evolutionary
@@ -551,15 +552,15 @@ Hence a stable oscillatory response is possible only if
 \[
 \boxed{
 \Delta g>
-\frac{G_{\rm osc}}{BL}.
+\frac{G_{\rm osc}}{B_fL}.
 }
 \]
 
 More strongly, if an entire architecture class satisfies \(0\le g_i\le
-q_{\max}\) and \(BLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
+q_{\max}\) and \(B_fLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
 unreachable for that class. This is a **no-go theorem**, not a sufficiency
 claim: crossing the structural threshold does not guarantee oscillation, and
-\(B,L,\alpha,\phi\) are not estimated from the public bee data. Its role is to
+\(B_f,L,\alpha,\phi\) are not estimated from the public bee data. Its role is to
 show that information accessibility can delimit an evolutionary possibility
 space once a state-dependent ecological feedback is specified.
 
@@ -630,58 +631,14 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 
 The deterministic theorem is intentionally stronger than any one public
 behavioural dataset located so far. We therefore use *Bombus* not as an
-anecdotal example, but as a single-system empirical anchor. Across independent
-experiments in the same genus, public data directly test distinct operational
-ingredients of the theory rather than merely illustrating that animals can use
-multiple cues.
+anecdotal example, but as a single-system empirical anchor. The primary
+published anchor is the cue-allocation experiment of Spaethe et al. (2026);
+the recent Yuan et al. (2026) preprint supplies a separate, provisional test
+of costly active acquisition. Across these and other experiments in the same
+genus, the evidence tests distinct operational ingredients rather than the
+full theorem.
 
-### 10.1 Costly contingent acquisition
-
-The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
-could voluntarily land on an information-request platform before a mandatory
-discrimination. A correct choice without requesting information earned 30%
-sucrose, whereas a correct post-request choice earned only 15%, so information
-acquisition carried an explicit reward cost.
-
-We independently reaggregated all 19,200 public trial records from 192 bees.
-On Regular trials, the probability of requesting information increased from
-
-\[
-0.096
-\]
-
-on Easy trials to
-
-\[
-0.469
-\]
-
-on Hard trials and
-
-\[
-0.716
-\]
-
-on Impossible trials. The gradient was also within-individual: all 192 bees
-requested more information on Hard than Easy trials, and 181/192 increased
-again from Hard to Impossible. At the same time, accuracy without requesting fell from
-\(0.750\) to \(0.494\) and \(0.207\), whereas post-request accuracy remained
-near \(0.93\) at all three difficulty levels.
-
-The experiment also contains Random Free-Cue trials in which the predictive
-cue is supplied independently of platform landing. This produces a strong
-access-mode interaction. Across the same 192 bees, the Easy-to-Impossible
-increase in landing probability on Regular trials is reversed when information
-is supplied freely; the within-bee difference-in-differences is 1.018 on
-average and is positive for 191/192 bees (exact one-sided sign test
-\(p=3.1\times10^{-56}\)). Thus the Regular-trial difficulty gradient is not
-a generic motor response to difficulty: it appears specifically when landing
-is required to obtain information. The dataset therefore directly establishes
-**need-dependent costly information acquisition**, although only one optional
-predictive cue is available and the experiment does not identify the exact
-\(C_A<C_F\) theorem.
-
-### 10.2 Secondary cues are recruited when primary information is insufficient
+### 10.1 Secondary cues are recruited when primary information is insufficient
 
 Spaethe et al. (2026) trained *B. terrestris* on combined colour and
 pattern/shape cues and then used cue-conflict tests to separate their
@@ -713,6 +670,57 @@ largely ignore a secondary attribute when the primary cue is sufficient and
 recruit it when primary information is insufficient. The attributes were
 simultaneously available, however, so this is not a within-encounter
 branch-specific next-cue policy.
+
+### 10.2 Costly contingent acquisition
+
+The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
+could voluntarily land on an information-request platform before a mandatory
+discrimination. A correct choice without requesting information earned 30%
+sucrose, whereas a correct post-request choice earned only 15%, so information
+acquisition carried an explicit reward cost.
+
+We independently reaggregated all 19,200 public trial records from 192 bees.
+On Regular trials, the probability of requesting information increased from
+
+\[
+0.096
+\]
+
+on Easy trials to
+
+\[
+0.469
+\]
+
+on Hard trials and
+
+\[
+0.716
+\]
+
+on Impossible trials. The gradient was also within-individual: all 192 bees
+requested more information on Hard than Easy trials, and 181/192 increased
+again from Hard to Impossible. Post-request accuracy remained near \(0.93\) at all three difficulty levels.
+The public CSV also reports non-request accuracy of \(0.750\), \(0.494\) and
+\(0.207\) from Easy to Impossible. We do not use the final value as biological
+evidence: the 0.207 Impossible value is unexpectedly below chance for a binary
+choice and is not presently reconciled with the task description. The robust
+bridge used here is therefore the difficulty-dependent decision to pay for
+information, not an inferred 0.207-to-0.93 accuracy rescue.
+
+The experiment also contains Random Free-Cue trials in which the predictive
+cue is supplied independently of platform landing. This produces a strong
+access-mode interaction. Across the same 192 bees, the Easy-to-Impossible
+increase in landing probability on Regular trials is reversed when information
+is supplied freely; the within-bee difference-in-differences is 1.018 on
+average and is positive for 191/192 bees (exact one-sided sign test
+\(p=3.1\times10^{-56}\)). Thus the Regular-trial difficulty gradient is not
+a generic motor response to difficulty: it appears specifically when landing
+is required to obtain information. Because Yuan et al. (2026) is a bioRxiv preprint, we treat this result as a
+reproducible but provisional component test. The dataset directly supports
+**need-dependent costly information acquisition**, although only one optional
+predictive cue is available and the experiment does not identify the exact
+\(C_A<C_F\) theorem.
 
 ### 10.3 Sequential sensory access is biologically real
 
