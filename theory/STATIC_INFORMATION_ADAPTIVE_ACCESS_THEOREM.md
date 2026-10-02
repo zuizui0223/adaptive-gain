@@ -213,21 +213,21 @@ Executable certificate:
 
 The same twins are stronger than an all-subset mutual-information match.
 
-For every cue subset (S\subseteq Q), the physical cue matrix is common, so
+For every cue subset \(S\subseteq Q\), the physical cue matrix is common, so
 
-[
+\[
 H_A(Q_S)=H_B(Q_S).
-]
+\]
 
 The exact conditional-entropy certificate above gives
 
-[
+\[
 H_A(T\mid Q_S)=H_B(T\mid Q_S)
-]
+\]
 
 for every named subset. Therefore
 
-[
+\[
 H_A(T,Q_S)
 =
 H_A(Q_S)+H_A(T\mid Q_S)
@@ -235,26 +235,26 @@ H_A(Q_S)+H_A(T\mid Q_S)
 H_B(Q_S)+H_B(T\mid Q_S)
 =
 H_B(T,Q_S).
-]
+\]
 
-Every subset of the five variables ((T,q_0,q_1,q_2,q_3)) either contains
-(T) and has the form ((T,Q_S)), or is cue-only. Hence
+Every subset of the five variables \((T,q_0,q_1,q_2,q_3)\) either contains
+\(T\) and has the form \((T,Q_S)\), or is cue-only. Hence
 
-[
-oxed{
+\[
+\boxed{
 H_A(U)=H_B(U)
-qquad
+\qquad
 \forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
 }
-]
+\]
 
 Thus the two tasks have the **same complete Shannon entropy vector** while
 
-[
+\[
 C_A(T_A)=4
 \neq
 3=C_A(T_B).
-]
+\]
 
 This is an operational inequivalence under exact entropic equivalence. It does
 not establish that entropy vectors are generally insufficient for all decision
@@ -264,9 +264,9 @@ consequence in a common ecological cue environment.
 
 Executable certificate:
 
-- `joint_entropy_log_fingerprint` in
-  `adaptive_gain/static_information_adaptive_separation.py`;
-- `test_complete_shannon_entropy_vector_matches_exactly`.
+- \`joint_entropy_log_fingerprint\` in
+  \`adaptive_gain/static_information_adaptive_separation.py\`;
+- \`test_complete_shannon_entropy_vector_matches_exactly\`.
 
 ### Why the adaptive costs differ
 
