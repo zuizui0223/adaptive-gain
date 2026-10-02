@@ -40,6 +40,10 @@
 <text x="1035" y="244" font-size="13" font-weight="normal" text-anchor="#555555" fill="#111111">landing obtains cue</text>
 <text x="1035" y="275" font-size="14" font-weight="bold" text-anchor="#666666" fill="#111111">Free-Cue:</text>
 <text x="1035" y="294" font-size="13" font-weight="normal" text-anchor="#666666" fill="#111111">cue supplied independently</text>
+<text x="770" y="405" font-size="13" font-weight="bold" text-anchor="end" fill="#111111">0.096</text>
+<text x="1060" y="265" font-size="13" font-weight="bold" text-anchor="start" fill="#111111">0.716</text>
+<text x="770" y="288" font-size="13" font-weight="bold" text-anchor="end" fill="#666666">0.617</text>
+<text x="1060" y="390" font-size="13" font-weight="bold" text-anchor="start" fill="#666666">0.210</text>
 <text x="910" y="458" font-size="14" font-weight="normal" text-anchor="middle" fill="#555555">platform-landing probability</text>
 <text x="910" y="485" font-size="15" font-weight="bold" text-anchor="middle" fill="#111111">ΔΔ Impossible–Easy = 1.018; 191/192 bees &gt; 0</text>
 <text x="1140" y="175" font-size="18" font-weight="bold" text-anchor="start" fill="#111111">B2  Spaethe et al. 2026</text>
