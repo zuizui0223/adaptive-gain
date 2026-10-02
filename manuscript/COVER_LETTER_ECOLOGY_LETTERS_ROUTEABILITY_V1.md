@@ -18,7 +18,7 @@ resolution, the minimum fixed cue cost is characterized by the smallest cue set
 that contains all target information. We then construct two tasks on the same
 12-state, four-cue physical environment that have the same complete Shannon
 entropy vector and the same fixed cost, yet different optimal adaptive costs:
-((C_A,C_F)=(4,4)) versus ((3,4)). Direct products preserve complete
+\((C_A,C_F)=(4,4)\) versus \((3,4)\). Direct products preserve complete
 entropic equivalence while making the adaptive-cost difference arbitrarily
 large. A separate exactly balanced family establishes an unbounded
 fixed-to-adaptive ratio under weaker information matching.
@@ -27,7 +27,11 @@ The ecological consequence is simple: information content describes what can
 be known jointly, whereas conditional decision topology determines what must
 be learned jointly before action. This distinction becomes behaviorally
 consequential under finite time, exposure, handling, or acquisition budgets,
-specifically when (C_A\le B<C_F).
+specifically when \(C_A\le B<C_F\). We then connect this structural
+coordinate to evolution with one deliberately bounded result: for any
+nondecreasing Lipschitz sensing-to-selection lift, insufficient between-state
+routeability contrast imposes a no-go on a requested local oscillatory
+eco-evolutionary regime. Crossing the bound is necessary, not sufficient.
 
 We pair the theorem with *Bombus* as a single-system empirical anchor rather
 than assembling illustrative examples across taxa. Across independent
@@ -43,8 +47,7 @@ to 0.374 when the primary colour cue becomes difficult. Additional bumblebee stu
 and context-conditioned action rules. Thus one biological lineage carries the
 theory from costly information acquisition through conditional cue use to
 action selection. We present this as componentwise empirical validation, not
-as a claim that an existing dataset already measures the exact deterministic
-(C_A<C_F) theorem.
+as a claim that an existing dataset already measures the exact deterministic \(C_A<C_F\) theorem.
 
 We believe the manuscript is suitable for *Ecology Letters* because it
 introduces a general ecological distinction, provides an exact and falsifiable
@@ -61,8 +64,8 @@ finite ecological budgets turn that difference into a predicted feasibility
 contrast.
 
 The manuscript is within the journal's Letter limits: the abstract is 142
-words, the main text is approximately 4,714 words, and there are two main
-figures.
+words, the main text is approximately 4,630 words by the repository's
+submission counter, and there are two main figures.
 
 Thank you for considering the manuscript.
 
