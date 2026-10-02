@@ -57,7 +57,7 @@ finite ecological budgets turn that difference into a predicted feasibility
 contrast.
 
 The manuscript is within the journal's Letter limits: the abstract is 142
-words, the main text is approximately 4,915 words, and there are two main
+words, the main text is approximately 4,659 words, and there are two main
 figures.
 
 Thank you for considering the manuscript.
