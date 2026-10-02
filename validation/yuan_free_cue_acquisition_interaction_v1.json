@@ -1,0 +1,57 @@
+{
+  "schema": "adaptive-gain-yuan-free-cue-acquisition-interaction-v1",
+  "date": "2026-10-02",
+  "source": {
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "file": "data/4_active_information_seeking_trials.csv",
+    "blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "rows": 19200,
+    "bees": 192
+  },
+  "response": "Actually_Landed_On_Platform",
+  "interpretation_of_access_modes": {
+    "Regular": "landing is the action required to obtain the predictive cue",
+    "Random_Free_Cue": "the predictive cue is supplied independently of landing, so landing is no longer required for information"
+  },
+  "aggregate_rates": {
+    "Regular": {
+      "Easy": 0.09625407166123778,
+      "Hard": 0.46922069417157825,
+      "Impossible": 0.7162596401028277
+    },
+    "Random_Free_Cue": {
+      "Easy": 0.6168831168831169,
+      "Hard": 0.5884223918575063,
+      "Impossible": 0.21016483516483517
+    }
+  },
+  "within_bee_difference_in_differences": {
+    "Hard_vs_Easy": {
+      "mean": 0.3956669104094981,
+      "median": 0.3805147058823529,
+      "positive": 174,
+      "zero": 0,
+      "negative": 18,
+      "exact_one_sided_sign_test_p": 1.5311536397163127e-33
+    },
+    "Impossible_vs_Hard": {
+      "mean": 0.6227086778686464,
+      "median": 0.6594982078853047,
+      "positive": 182,
+      "zero": 1,
+      "negative": 9,
+      "exact_one_sided_sign_test_p": 2.5791612007155796e-43
+    },
+    "Impossible_vs_Easy": {
+      "mean": 1.0183755882781458,
+      "median": 1.0784313725490198,
+      "positive": 191,
+      "zero": 0,
+      "negative": 1,
+      "exact_one_sided_sign_test_p": 3.074667388485633e-56
+    }
+  },
+  "conclusion": "The effect of decision difficulty on platform landing depends strongly on whether landing is necessary to obtain information. The regular-trial difficulty gradient is not a generic motor/difficulty response: it changes sign when the cue is supplied independently of the acquisition action.",
+  "claim_ceiling": "Direct causal component validation of need-dependent costly acquisition versus unconditional/free information access; not a full test of branch-specific alternative next-cue routeability or deterministic C_A<C_F."
+}
