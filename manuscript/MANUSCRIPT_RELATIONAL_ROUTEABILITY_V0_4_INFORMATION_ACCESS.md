@@ -782,15 +782,13 @@ specified in the Supplement.
 
 ---
 
----
-
 ### 4.4 Prior-art boundary
 
 #### 4.4.1 Decision trees and separating systems
 
 Fixed separating systems and adaptive identification trees are established
-theory (Katona 1966; Garey 1972; Hyafil & Rivest 1976; Chakaravarthy et al.
-2009; Moshkov & Zielosko 2011). These works are direct prior art for the
+theory (Katona 1966; Garey 1972; Hyafil & Rivest 1976; Chakaravarthy et al. 2009;
+Moshkov & Zielosko 2011). These works are direct prior art for the
 operational primitives. Our claim is instead that complete static Shannon
 information can determine the fixed burden while failing to determine the
 adaptive worst-case burden in the same ecological cue environment.
