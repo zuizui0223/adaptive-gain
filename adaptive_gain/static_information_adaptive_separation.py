@@ -99,6 +99,50 @@ def _add_log_integer(coefficients: dict[int, int], multiplier: int, n: int) -> N
         coefficients[prime] = coefficients.get(prime, 0) + multiplier * exponent
 
 
+def joint_entropy_log_fingerprint(
+    task: FiniteTask,
+    bundle: Sequence[str],
+    *,
+    include_target: bool = False,
+) -> tuple[tuple[int, int], ...]:
+    """Exact fingerprint for N*H(Q_bundle) or N*H(T,Q_bundle).
+
+    The common denominator N is the represented-world count under the uniform
+    prior.  For observation-cell sizes n_x,
+
+        N H(X) = N log2(N) - sum_x n_x log2(n_x).
+
+    Factoring integers into primes makes equality exact rather than numerical.
+    When include_target=True, the target label is prepended to the cue
+    signature.  Comparing all cue subsets with and without the target certifies
+    equality of the complete Shannon entropy vector over (T,Q_0,...,Q_m).
+    """
+    lookup = {q.name: q for q in task.queries}
+    names = tuple(bundle)
+    if len(set(names)) != len(names) or any(name not in lookup for name in names):
+        raise ValueError("bundle must contain unique declared query names")
+
+    counts: dict[tuple[Hashable, ...], int] = {}
+    for i, world in enumerate(task.worlds):
+        signature = tuple(lookup[name].outcomes[i] for name in names)
+        if include_target:
+            signature = (world.target,) + signature
+        counts[signature] = counts.get(signature, 0) + 1
+
+    total = len(task.worlds)
+    coefficients: dict[int, int] = {}
+    _add_log_integer(coefficients, total, total)
+    for count in counts.values():
+        _add_log_integer(coefficients, -count, count)
+    return tuple(
+        sorted(
+            (prime, coefficient)
+            for prime, coefficient in coefficients.items()
+            if coefficient
+        )
+    )
+
+
 def conditional_entropy_log_fingerprint(
     task: FiniteTask,
     bundle: Sequence[str],
@@ -162,6 +206,7 @@ class StaticInformationAdaptiveSeparationReceipt:
     target_multiplicities: tuple[int, ...]
     same_target_entropy: bool
     same_named_subset_information_profile_exactly: bool
+    same_full_shannon_entropy_vector_exactly: bool
     subset_information_profile_bits: tuple[tuple[tuple[str, ...], float], ...]
     twin_a_adaptive_cost: int
     twin_a_fixed_cost: int
@@ -197,6 +242,12 @@ def static_information_adaptive_separation_audit() -> StaticInformationAdaptiveS
         == conditional_entropy_log_fingerprint(b, subset)
         for subset in subsets
     )
+    full_entropy_vector_match = all(
+        joint_entropy_log_fingerprint(a, subset, include_target=include_target)
+        == joint_entropy_log_fingerprint(b, subset, include_target=include_target)
+        for subset in subsets
+        for include_target in (False, True)
+    )
     profile = tuple((subset, bundle_information_bits(a, subset)) for subset in subsets)
     numerical_profile_match = all(
         abs(bundle_information_bits(a, subset) - bundle_information_bits(b, subset)) <= 1e-12
@@ -218,6 +269,7 @@ def static_information_adaptive_separation_audit() -> StaticInformationAdaptiveS
         and mult_a == (8, 4)
         and same_target_entropy
         and exact_profile_match
+        and full_entropy_vector_match
         and numerical_profile_match
         and a_ca == 4
         and a_cf == 4
@@ -237,6 +289,7 @@ def static_information_adaptive_separation_audit() -> StaticInformationAdaptiveS
         target_multiplicities=mult_a,
         same_target_entropy=same_target_entropy,
         same_named_subset_information_profile_exactly=exact_profile_match,
+        same_full_shannon_entropy_vector_exactly=full_entropy_vector_match,
         subset_information_profile_bits=profile,
         twin_a_adaptive_cost=a_ca,
         twin_a_fixed_cost=a_cf,
