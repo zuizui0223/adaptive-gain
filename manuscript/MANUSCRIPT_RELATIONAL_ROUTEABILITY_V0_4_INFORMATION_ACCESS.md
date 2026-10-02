@@ -4,7 +4,7 @@ Draft v0.4 — information-accessibility synthesis candidate
 
 ## Abstract
 
-Ecological information is often summarized by amount, but accessibility depends on how observations reorganize what must be learned next. For a deterministic task, fixed resolution satisfies
+Ecological information is summarized by amount, but accessibility depends on how observations reorganize subsequent learning. For a deterministic task, fixed resolution satisfies
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
