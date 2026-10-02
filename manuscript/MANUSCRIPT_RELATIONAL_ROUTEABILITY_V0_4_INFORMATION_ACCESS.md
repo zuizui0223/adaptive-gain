@@ -557,7 +557,7 @@ Hence a stable oscillatory response is possible only if
 \]
 
 More strongly, if an entire architecture class satisfies \(0\le g_i\le
-q_{\max}\) and \(BLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
+q_{\max}\) and \(B_fLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
 unreachable for that class. This is a **no-go theorem**, not a sufficiency
 claim: crossing the structural threshold does not guarantee oscillation, and
 \(B_f,L,\alpha,\phi\) are not estimated from the public bee data. Its role is to
