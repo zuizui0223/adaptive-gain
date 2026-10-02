@@ -596,9 +596,115 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 
 ---
 
-## 9. Two direct experiments
+## 9. Public Bombus evidence for the operational ingredients
 
-### 9.1 Minimal four-state causal experiment
+The deterministic theorem is intentionally stronger than any one public
+behavioural dataset located so far. Nevertheless, several public *Bombus*
+datasets directly test distinct operational ingredients rather than merely
+illustrating that bees can use multiple cues.
+
+### 9.1 Costly contingent acquisition
+
+Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
+could voluntarily land on an information-request platform before a mandatory
+discrimination. A correct choice without requesting information earned 30%
+sucrose, whereas a correct post-request choice earned only 15%, so information
+acquisition carried an explicit reward cost.
+
+We independently reaggregated all 19,200 public trial records from 192 bees.
+On Regular trials, the probability of requesting information increased from
+
+\[
+0.096
+\]
+
+on Easy trials to
+
+\[
+0.469
+\]
+
+on Hard trials and
+
+\[
+0.716
+\]
+
+on Impossible trials. At the same time, accuracy without requesting fell from
+\(0.750\) to \(0.494\) and \(0.207\), whereas post-request accuracy remained
+near \(0.93\) at all three difficulty levels.
+
+The experiment also contains Random Free-Cue trials in which the predictive
+cue is supplied independently of platform landing. This separates receiving
+the information from performing the acquisition action and provides a causal
+control against interpreting platform landing as a generic location
+preference. Thus the dataset directly establishes **state-dependent costly
+information acquisition**, although only one optional predictive cue is
+available and the experiment does not identify the exact \(C_A<C_F\) theorem.
+
+### 9.2 Secondary cues are recruited when primary information is insufficient
+
+Spaethe et al. (2026) trained *B. terrestris* on combined colour and
+pattern/shape cues and then used cue-conflict tests to separate their
+contributions. We prospectively defined a secondary-cue recruitment index
+
+\[
+R=1-p_{\rm colour}.
+\]
+
+Using the individual values in the authors' public analysis repository,
+secondary-cue recruitment was approximately
+
+\[
+R_{\rm easy}=0.026
+\]
+
+when the primary colour discrimination was easy, but
+
+\[
+R_{\rm hard}=0.374
+\]
+
+when the colour discrimination was difficult, a difference of about 0.349.
+Pattern and shape experiments showed the same direction independently.
+
+This result directly supports the narrower prediction that the same nominal
+cue vocabulary need not impose the same acquired information burden: bees
+largely ignore a secondary attribute when the primary cue is sufficient and
+recruit it when primary information is insufficient. The attributes were
+simultaneously available, however, so this is not a within-encounter
+branch-specific next-cue policy.
+
+### 9.3 Sequential sensory access is biologically real
+
+MaBouDi et al. (2025) provide public high-speed trajectories showing that
+bumblebees inspect restricted diagnostic regions of visual patterns before
+accepting or rejecting them. The scanned regions differ between patterns,
+demonstrating selective sequential sensory sampling rather than mandatory
+parallel access to the whole stimulus. The pattern-specific scanning strategy
+also persists when reward and punishment valence are reversed, providing a
+useful negative control: a simple relabelling of outcomes does not by itself
+force a new acquisition architecture.
+
+Finally, Essenberg et al. (2015) provide the closest biological precedent for
+the missing branch-specific step. In one artificial-flower type, flower size
+predicted reward; in another simultaneously available flower type, size was
+uninformative. Bees learned to use size only in the branch where it carried
+value. Earlier contextual-learning experiments likewise show that an earlier
+cue can determine which later target is correct (Dale et al. 2005).
+
+Together these studies establish that bumblebees can pay for information,
+allocate additional cues according to information need, sample sensory
+information sequentially, and learn context-dependent cue relevance. They do
+**not** constitute a single direct test of the exact relational theorem.
+The remaining experiment is therefore sharply defined rather than
+biologically speculative.
+
+---
+
+## 10. Two direct experiments
+
+### 10.1 Minimal four-state causal experiment
 
 The first experiment uses four physical cue vectors and three cue channels.
 
@@ -608,7 +714,7 @@ The budget ladder is designed so that the architecture-by-access contrast is pre
 
 This is the preferred first behavioral test because it minimizes training and apparatus burden.
 
-### 9.2 Exact-balanced ten-state stress test
+### 10.2 Exact-balanced ten-state stress test
 
 A stronger follow-up uses ten states and six cue channels. Every cue is exactly 5/5 balanced, and routeable/control groups use the identical physical cue matrix.
 
@@ -650,9 +756,9 @@ The value \(1/5\) is a task ceiling, not a behavioral effect-size assumption.
 
 ---
 
-## 10. Prior-art boundary
+## 11. Prior-art boundary
 
-### 10.1 Static entropy profiles and decision trees
+### 11.1 Static entropy profiles and decision trees
 
 The complete static subset-information function is not itself a new object.
 Forré (1990) defined an entropy profile for Boolean functions using the
@@ -667,7 +773,7 @@ show that even the complete Shannon entropy vector over target and cues does
 not identify optimal adaptive worst-case resolution cost; the direct-product
 construction makes that adaptive-cost difference arbitrarily large.
 
-### 10.2 Partial information decomposition and synergy
+### 11.2 Partial information decomposition and synergy
 
 Multivariate information theory already distinguishes unique, redundant and
 synergistic information. Williams and Beer (2010) introduced partial
@@ -702,7 +808,7 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 > among sources; routeability asks how realized source outcomes reorganize the
 > future acquisition problem under cost.
 
-### 10.3 Active feature acquisition
+### 11.3 Active feature acquisition
 
 Adaptive feature acquisition is established in machine learning. EDDI, for
 example, selects additional measurements using expected information gain
@@ -736,7 +842,7 @@ under weaker information matching.
 
 ---
 
-## 11. Deterministic scope and next theory
+## 12. Deterministic scope and next theory
 
 The current model assumes:
 
@@ -770,7 +876,7 @@ This is a separate paper.
 
 ---
 
-## 12. Conclusion
+## 13. Conclusion
 
 Environmental information has two operational layers that are easy to
 conflate.
@@ -832,4 +938,8 @@ It claims an exact relational ecological axis and a measurement/experimental pro
 - Forré, R. 1990. Methods and instruments for designing S-boxes. *Journal of Cryptology* 2:115–130. DOI: 10.1007/BF00190799.
 - Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
 - Yuan, L., He, Y., Ye, Q., Lin, L., Yuan, R., Wang, Q. & Chen, S. 2026. Uncertainty-Guided Decision-Making in Bumble Bees. bioRxiv. DOI: 10.64898/2026.09.15.751944.
+- Spaethe, J. et al. 2026. Bees flexibly adjust decision strategies to information content in a foraging task. *Science Advances*. DOI: 10.1126/sciadv.adw9320.
+- MaBouDi, H., Richter, J., Guiraud, M.-G., Roper, M., Marshall, J. A. R. & Chittka, L. 2025. Active vision of bees in a simple pattern discrimination task. *eLife* 14:e106332. DOI: 10.7554/eLife.106332.
+- Essenberg, C. J. et al. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
+- Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
