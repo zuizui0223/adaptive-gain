@@ -3,7 +3,7 @@
   "date": "2026-10-02",
   "target": "Evolution Letters",
   "article_type": "Letter",
-  "status": "RETIRED_AS_STANDALONE_INTEGRATED_INTO_INFORMATION_ACCESS_MANUSCRIPT",
+  "status": "v5_machine_submission_bundle_frozen_human_metadata_pending",
   "headline": "environmental routeability determines the ecological cost of heterogeneity",
   "preserved_v4_freeze": {
     "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V4_ECOLOGY_READINESS_V1.json",
@@ -146,5 +146,7 @@
     "canonical_integrated_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
     "overlap_reason": "budget-window and nonlinear no-go theorems plus routeability ecology are now part of the integrated manuscript",
     "duplicate_submission_rule": "standalone V5 submission prohibited while integrated manuscript is the active submission surface"
-  }
+  },
+  "portfolio_status": "RETIRED_DO_NOT_SUBMIT_STANDALONE",
+  "portfolio_reason": "The frozen V5 artifact remains immutable provenance, but its budget-window, routeability and nonlinear no-go claims are incorporated into the active integrated manuscript."
 }
