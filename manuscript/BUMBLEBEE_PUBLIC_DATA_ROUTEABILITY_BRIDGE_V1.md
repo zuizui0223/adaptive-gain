@@ -134,6 +134,14 @@ The descriptive pattern is therefore unusually clean:
 
 while post-acquisition accuracy stays near \(0.93\).
 
+The result is also fully within-individual. All 192 bees requested information
+more often on Hard than Easy Regular trials, and all 192 did so more often on
+Impossible than Easy trials. For Impossible versus Hard, 181/192 bees increased
+their request rate. Exact one-sided sign-test probabilities are
+\(1.6\times10^{-58}\), \(1.6\times10^{-58}\), and
+\(4.1\times10^{-41}\), respectively. Thus the effect is not a
+trial-level pseudoreplication artefact.
+
 ### Random Free-Cue control
 
 Twenty percent of trials provide the predictive cue automatically when the bee
@@ -382,7 +390,57 @@ been located.
 
 ---
 
-## 7. Secondary public datasets
+## 7. Chow et al. 2022 — public context-conditioned action mapping
+
+Paper:
+**Prior associations affect bumblebees' generalization performance in a
+tool-selection task**, *iScience*,
+DOI 10.1016/j.isci.2022.105466.
+
+Species: *Bombus terrestris*.
+
+Public raw data:
+Dryad DOI **10.5061/dryad.tqjq2bw36**.
+
+The training task is explicitly match-to-sample. A coloured platform/sample is
+presented before the action. Two differently coloured balls are then available,
+and the rewarding action is to roll the ball whose colour matches the current
+platform.
+
+Thus the early sample changes the later action rule:
+
+\[
+\text{platform = blue}
+\Longrightarrow
+\text{blue ball is correct},
+\]
+
+\[
+\text{platform = yellow}
+\Longrightarrow
+\text{yellow ball is correct}.
+\]
+
+Across training, platform colour switches between the two values while the
+candidate action set remains the same.
+
+### What Chow validates
+
+Direct public evidence that:
+
+> an earlier context cue can change which later action is correct.
+
+This is the relational **action-map** component of routeability.
+
+### Claim ceiling
+
+The bee does not pay to acquire alternative later cue resources, and both balls
+are simultaneously visible. Therefore the dataset validates context-conditioned
+action mapping, not costly branch-specific information acquisition.
+
+---
+
+## 8. Secondary public datasets
 
 Useful corroboration, but not needed for the main empirical bridge:
 
@@ -403,7 +461,7 @@ Do not pool these heterogeneous studies into a meta-analysis.
 
 ---
 
-## 8. The public Bombus evidence now forms one coherent chain
+## 9. The public Bombus evidence now forms one coherent chain
 
 The empirical mapping to the theory is:
 
@@ -416,10 +474,10 @@ The empirical mapping to the theory is:
 \text{secondary cues are recruited when primary information is insufficient}\\
 \text{MaBouDi 2025} &
 \text{sensory access is selective and sequential}\\
+\text{Chow 2022} &
+\text{early context switches the later action rule}\\
 \text{Essenberg 2015} &
-\text{context determines whether a later cue is relevant}\\
-\text{Dale 2005} &
-\text{earlier context can determine the later action rule}
+\text{context determines whether a later cue is relevant}
 \end{array}
 }
 \]
@@ -429,7 +487,7 @@ biological objections to routeability.
 
 ---
 
-## 9. Recommended use in the theory paper
+## 10. Recommended use in the theory paper
 
 Use one compact **Bombus empirical-convergence panel** rather than claiming a
 single observational validation.
@@ -480,7 +538,7 @@ This is strong biological grounding without overclaiming.
 
 ---
 
-## 10. Remaining direct experiment
+## 11. Remaining direct experiment
 
 What is still missing is now extremely specific:
 
