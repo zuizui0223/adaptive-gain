@@ -29,8 +29,9 @@ be learned jointly before action. This distinction becomes behaviorally
 consequential under finite time, exposure, handling, or acquisition budgets,
 specifically when \(C_A\le B<C_F\). We then connect this structural
 coordinate to evolution with one deliberately bounded result: for any
-nondecreasing Lipschitz sensing-to-selection lift, insufficient between-state
-routeability contrast imposes a no-go on a requested local oscillatory
+nondecreasing Lipschitz sensing-to-selection lift, the distinct
+feedback scale (B_f=-eta e) gives (Gle B_fLDelta g), so insufficient
+between-state routeability contrast imposes a no-go on a requested local oscillatory
 eco-evolutionary regime. Crossing the bound is necessary, not sufficient.
 
 We pair the theorem with *Bombus* as a single-system empirical anchor rather
