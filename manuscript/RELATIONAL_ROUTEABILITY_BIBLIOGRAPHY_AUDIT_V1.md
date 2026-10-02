@@ -92,6 +92,25 @@ Role:
 Established budget-constrained adaptive prediction.
 Use as prior art for adaptive resource allocation, not as an exact structural predecessor.
 
+## Verified PID / active-acquisition collision
+
+### Li, Dhali & Bouma 2026
+Jie Li, Maruf A. Dhali & Hjalmar R. Bouma.
+"When Does Synergy Help Active Feature Acquisition? A PID-Based Study."
+arXiv:2609.32301, submitted 26 September 2026.
+
+Role:
+Direct current prior art for connecting pairwise PID/synergy, realized-value
+conditional information, state-dependent active feature acquisition and hard
+budgets. The paper also includes a controlled fixed-total-pair-information
+analysis. It blocks any claim that the present program is the first to connect
+synergy or realized-value conditional information to sequential acquisition.
+
+Boundary:
+The repository's distinct theorem-level claim is narrower: identical physical
+cue matrices and identical complete Shannon entropy vectors can coexist with
+different exact optimal worst-case adaptive resolution costs.
+
 ## Verified extra-entropic analogue
 
 ### Sun & Jafar 2019
@@ -111,6 +130,8 @@ The manuscript must treat as prior art:
 - sequential ecological cue use;
 - information-fitness theory;
 - adaptive/costly feature acquisition;
+- PID/synergy-guided active feature acquisition;
+- realized-value conditional acquisition scores;
 - budget-constrained prediction;
 - the general possibility that equal entropic structure does not determine an operational quantity.
 
