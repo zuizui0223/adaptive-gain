@@ -131,7 +131,19 @@
     "source_repository": "stoeckl-lab/Spaethe_et_al_2024_beeDecisions",
     "source_release": "v1.0.0",
     "archive_doi": "10.5281/zenodo.15911965",
-    "claim_ceiling": "Shows bees allocate/learn secondary visual attributes when the primary colour cue is hard, but cues are simultaneously available and physical colour discriminability changes."
+    "claim_ceiling": "Shows bees allocate/learn secondary visual attributes when the primary colour cue is hard, but cues are simultaneously available and physical colour discriminability changes.",
+    "public_reconstruction": {
+      "registered_secondary_recruitment_index": "R = 1 - p_colour in public conflict-test individual values",
+      "easy_mean": 0.0257142857142857,
+      "hard_mean": 0.3742857142857143,
+      "mean_difference": 0.3485714285714286,
+      "cliffs_delta": {
+        "pattern": 0.9875,
+        "shape": 0.9688888888888889,
+        "pooled": 0.9795918367346939
+      },
+      "interpretation": "The prospectively defined secondary-cue recruitment contrast is large and independently concordant for pattern and shape."
+    }
   },
   "smolla_2016": {
     "role": "public_sequential_choices_uncertainty_dependent_social_information_use",
