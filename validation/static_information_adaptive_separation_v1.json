@@ -1,0 +1,69 @@
+{
+  "schema": "adaptive-gain-static-information-adaptive-separation-v1",
+  "date": "2026-10-02",
+  "branch": "synthesis/information-accessibility-public-data-v1",
+  "status": "PASS_EXACT_FINITE_WITNESS",
+  "theorem": {
+    "statement": "The complete named static subset-information function F(S)=I(T;Q_S) can be identical for every cue subset while exact adaptive cost C_A differs; in deterministic full-support exact resolution F(S) does determine C_F.",
+    "fixed_characterization": "C_F = min_{S: I(T;Q_S)=H(T)} c(S)",
+    "adaptive_characterization": "C_A = V(empty), V(h)=min_q[c(q)+max_a V(h,q=a)] with V(h)=0 on target-pure histories"
+  },
+  "witness": {
+    "world_count": 12,
+    "query_count": 4,
+    "query_costs": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "every_query_exact_balance": "6/6",
+    "target_multiplicities": [
+      8,
+      4
+    ],
+    "same_world_names": true,
+    "same_physical_query_matrix": true,
+    "same_target_entropy": true,
+    "same_named_subset_information_for_all_16_subsets": true,
+    "equality_certificate": "exact prime-log coefficient fingerprint of 12*H(T|Q_S), not rounded floating-point matching",
+    "twin_a": {
+      "adaptive_cost": 4,
+      "fixed_cost": 4
+    },
+    "twin_b": {
+      "adaptive_cost": 3,
+      "fixed_cost": 4
+    }
+  },
+  "assets": {
+    "implementation": "adaptive_gain/static_information_adaptive_separation.py",
+    "tests": "tests/test_static_information_adaptive_separation.py",
+    "information_api": "adaptive_gain/information.py",
+    "theorem_note": "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
+    "sufficiency_ladder": "theory/ROUTEABILITY_SUMMARY_SUFFICIENCY_LADDER.md",
+    "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
+    "public_data_audit": "manuscript/PUBLIC_DATA_ROUTEABILITY_ELIGIBILITY_AUDIT_V1.md"
+  },
+  "claim_boundary": {
+    "established": [
+      "complete static subset mutual-information profile is sufficient for C_F in deterministic exact resolution with full-support weights",
+      "complete static subset mutual-information profile is not sufficient for C_A",
+      "the non-sufficiency witness can keep the physical cue matrix fixed and every binary cue exactly balanced",
+      "outcome-resolved histories, rather than a scalar conditional mutual information average, enter the exact worst-case Bellman recursion"
+    ],
+    "not_established": [
+      "unbounded C_A separation under a fully matched complete subset-information profile",
+      "identity of all possible PID decompositions for the two twins",
+      "noisy-cue or expected-loss analogue",
+      "direct empirical validation in a natural system"
+    ]
+  },
+  "ci": {
+    "observed_full_suite_run": 36952947677,
+    "result": "ONE_FAILURE_PREEXISTING_LEGACY_ASSERTION",
+    "failing_test": "tests/test_ecological_novelty_extension.py::test_decision_structural_turnover_rewiring_bridge",
+    "failure_reason": "existing manuscript phrase assertion; no new static-information or information.py tests failed in the full-suite run",
+    "base_branch_also_has_same_workflow_failure": true
+  }
+}
