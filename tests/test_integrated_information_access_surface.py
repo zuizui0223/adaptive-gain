@@ -67,5 +67,6 @@ def test_independent_section5_receipt_and_v5_retirement():
     assert section5["two_copy"]["adaptive_costs"] == {"A": 8, "B": 6}
 
     v5 = json.loads(V5.read_text())
-    assert v5["status"] == "RETIRED_AS_STANDALONE_INTEGRATED_INTO_INFORMATION_ACCESS_MANUSCRIPT"
+    assert v5["status"] == "v5_machine_submission_bundle_frozen_human_metadata_pending"
+    assert v5["portfolio_status"] == "RETIRED_DO_NOT_SUBMIT_STANDALONE"
     assert "DO NOT SUBMIT V5 AS A SEPARATE MANUSCRIPT" in v5["promotion_rule"]
