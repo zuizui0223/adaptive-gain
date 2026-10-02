@@ -194,25 +194,70 @@ Yuan et al. (2026) can be cited in the legend as empirical precedent that
 bumble bees can voluntarily pay a reward cost to obtain information. It is
 **not** plotted as routeability validation.
 
-### Panel B — same environment, different focal action
+### Panel B — public Bombus convergence
 
-Return to the relational ecological interpretation.
+Use two quantitative mini-panels and one qualitative icon row.
 
-Use one stylized resource/cue environment and two focal tasks, for example:
+#### B1 — costly information acquisition (Yuan et al. 2026)
 
-- nectar decision;
-- pollen decision.
+Plot from the independently reaggregated 19,200 public trials:
 
-Keep the physical cues identical.
+| Difficulty | request probability | unaided accuracy |
+|---|---:|---:|
+| Easy | 0.096 | 0.750 |
+| Hard | 0.469 | 0.494 |
+| Impossible | 0.716 | 0.207 |
 
-Show that different action maps induce different continuation trees.
+Optionally overlay post-request accuracy as a near-flat reference around
+\(0.93\).
 
-Do not imply that nectar versus pollen has already been empirically measured in
-this exact way. Label it **schematic prediction**.
+Main annotation:
 
-Message:
+**information need rises → costly acquisition rises**
 
-> routeability is a property of environment × cues × costs × focal action.
+Add a small Free-Cue control symbol indicating that cue receipt can be
+experimentally separated from platform landing.
+
+#### B2 — recruitment of a second cue (Spaethe et al. 2026)
+
+Plot the prospectively defined secondary-cue recruitment index
+
+\[
+R=1-p_{\rm colour}.
+\]
+
+Show only the pooled public result:
+
+\[
+R_{\rm easy}=0.026,
+\qquad
+R_{\rm hard}=0.374.
+\]
+
+Add a thin indication that pattern and shape experiments independently share
+the same direction.
+
+Main annotation:
+
+**primary cue sufficient → secondary cue mostly ignored**
+
+**primary cue difficult → secondary cue recruited**
+
+#### B3 — sequential access exists
+
+Use a small schematic/citation rather than another numerical axis:
+
+- MaBouDi et al. 2025: selective high-speed visual scanning of restricted
+  pattern regions;
+- Essenberg et al. 2015: flower type determines whether size is a useful reward
+  cue.
+
+Caption firewall:
+
+> These public data validate operational ingredients of routeability, not the
+> exact matched \(C_A<C_F\) theorem.
+
+Do not combine effect sizes across studies.
 
 ### Panel C — prospective causal test
 
@@ -362,7 +407,7 @@ Do not include:
 - diversity--stability speculation;
 - community-resilience claims;
 - stochastic expected-loss extensions;
-- public-data analyses that do not satisfy the routeability eligibility gate.
+- additional public-data examples beyond the frozen Bombus convergence panel.
 
 Those belong in the mathematical supplement, future work or a separate
 empirical paper.
