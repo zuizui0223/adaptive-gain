@@ -1,14 +1,14 @@
-# Ecology Letters routeability submission metadata v1
+# Ecology Letters routeability submission metadata v2
 
 Date: 2026-10-02  
-Status: text-ready; figures and final submission packaging pending.
+Status: integrated text and figures ready; author metadata, permanent archive DOI and final rendered preflight remain.
 
 ## Target
 
 **Journal:** Ecology Letters  
 **Article type:** Letter
 
-Verified journal limits at preparation:
+Current journal limits verified on 2026-10-02:
 - abstract: maximum 150 words;
 - main text: maximum 5,000 words, excluding abstract, acknowledgements,
   references and figure/table/box legends;
@@ -26,16 +26,18 @@ Verified journal limits at preparation:
 
 ## Counts
 
-- abstract: **142 words**
-- main text: **approximately 4,659 words**
-- references: **21**
+Using the same repository counter as the submission-surface test:
+
+- abstract: **146 words**
+- main text: **4,630 words**
+- references: **26**
 - main figures: **2**
 - main tables: **0**
 - text boxes: **0**
 
 Canonical manuscript:
 
-`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
+\`manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md\`
 
 ## Keywords
 
@@ -52,85 +54,159 @@ Canonical manuscript:
 
 Two ecological decision tasks can share one physical cue environment and the
 same complete Shannon entropy vector yet have different optimal adaptive
-information-acquisition costs; public *Bombus* data independently support the
-costly, need-dependent and sequential acquisition mechanisms required for this
-distinction to matter biologically.
+information-acquisition costs; a finite ecological budget exposes that
+difference, a nonlinear no-go links insufficient routeability contrast to
+unreachable local eco-evolutionary regimes, and public *Bombus* data support
+the required biological operations.
 
-## Headline theorem
+## Main theorem spine
 
-For deterministic exact resolution,
+### Static fixed resolution
 
-[
+For deterministic exact resolution under any full-support prior,
+
+\[
 C_F=
-min_{S:I(T;Q_S)=H(T)} c(S).
-]
+\min_{S:I(T;Q_S)=H(T)} c(S).
+\]
 
-The 12-state matched twins have the same complete Shannon entropy vector but
+### Complete entropic equivalence does not identify adaptive accessibility
 
-[
+The matched 12-state twins have the same physical cue matrix and the same
+complete Shannon entropy vector but
+
+\[
 (C_A,C_F)_A=(4,4),
-qquad
+\qquad
 (C_A,C_F)_B=(3,4).
-]
+\]
 
-Their (r)-fold products preserve complete entropic equivalence and give
+Their \(r\)-fold products preserve complete entropic equivalence and give
 
-[
+\[
 (4r,4r)
-qquad	ext{versus}qquad
+\qquad\text{versus}\qquad
 (3r,4r),
-]
+\]
 
-so the adaptive-cost difference is unbounded additively.
+so the adaptive-cost difference is unbounded additively as the composite action
+alphabet grows.
 
 A separate exactly-balanced family gives an unbounded multiplicative
-(C_F/C_A) separation under weaker information matching.
+\(C_F/C_A\) separation under weaker information matching.
 
-## Public Bombus empirical convergence
+### Ecological budget
 
-Canonical receipt:
+Conditional accessibility changes guaranteed feasibility in the intermediate
+window
 
-`validation/bombus_empirical_convergence_panel_v1.json`
+\[
+C_A\le B<C_F.
+\]
 
-### Yuan et al. 2026
+### Nonlinear evolutionary no-go
+
+Let
+
+\[
+g_i=C_F(i)-C_A(i),
+\qquad
+\Delta g=g_2-g_1\ge0.
+\]
+
+For a nondecreasing \(L\)-Lipschitz sensing-to-selection lift, define the
+selection-to-feedback scale
+
+\[
+B_f=-\beta e>0.
+\]
+
+Then
+
+\[
+G\le B_fL\Delta g.
+\]
+
+The local complex-eigenpair threshold is
+
+\[
+G_{\rm osc}
+=
+\frac{(\alpha-\phi)^2}{4(1-\phi)}.
+\]
+
+Therefore a stable oscillatory response is possible only if
+
+\[
+\Delta g>
+\frac{G_{\rm osc}}{B_fL}.
+\]
+
+This is a necessary-condition/no-go result, not a sufficiency theorem.
+
+## Independent theorem verification
+
+The strongest Section-5 claim is verified twice:
+
+1. by the canonical finite-task/information implementation; and
+2. by an independent audit that does not import the repository's main solver,
+   information helpers or static-information witness.
+
+Independent assets:
+
+- \`adaptive_gain/independent_section5_audit.py\`
+- \`tests/test_independent_section5_audit.py\`
+- \`validation/independent_section5_audit_v1.json\`
+
+The independent implementation reproduces:
+
+- one-copy complete entropy-vector equality,
+  \(C_F=(4,4)\), \(C_A=(4,3)\);
+- two-copy 144-world equality,
+  \(C_F=(8,8)\), \(C_A=(8,6)\).
+
+## Public *Bombus* empirical convergence
+
+Canonical receipts:
+
+- \`validation/bombus_public_data_component_receipt_v1.json\`
+- \`validation/bombus_empirical_convergence_panel_v1.json\`
+
+### Yuan et al. 2026 — provisional preprint component
 
 Public source:
-`Cuixiaojian21/bee_metacognition`,
-commit `7f886394b4de872ecdb19ca4ea214ec321d5dce9`,
-raw blob `26259c9071c6d73141d56b9bedd396cab1a04491`.
+\`Cuixiaojian21/bee_metacognition\`,
+commit \`7f886394b4de872ecdb19ca4ea214ec321d5dce9\`,
+raw blob \`26259c9071c6d73141d56b9bedd396cab1a04491\`.
 
 Independent reaggregation:
 - 19,200 trials;
 - 192 bees;
-- Regular information-request/landing rates:
-  0.096, 0.469, 0.716 for Easy, Hard, Impossible;
-- Random Free-Cue landing rates:
-  0.617, 0.588, 0.210;
-- within-bee Impossible-versus-Easy difficulty × access-mode interaction:
-  mean (1.018), positive for 191/192 bees,
-  exact one-sided sign-test (p=3.1	imes10^{-56}).
+- Regular information-request rates:
+  0.096, 0.469, 0.716 for Easy, Hard and Impossible;
+- all 192 bees show Hard > Easy request rates;
+- 181/192 show Impossible > Hard;
+- post-request accuracy remains approximately 0.93.
 
-Interpretation:
-difficulty drives platform landing specifically when landing is required to
-obtain information.
+Random Free-Cue trials separate information receipt from the acquisition action.
+The raw non-request accuracy coded for the Impossible subset is not used as
+biological evidence because its below-chance value is not reconciled with the
+identical-stimulus task description.
 
 ### Spaethe et al. 2026
 
 Public analysis repository:
-`stoeckl-lab/Spaethe_et_al_2024_beeDecisions`.
+\`stoeckl-lab/Spaethe_et_al_2024_beeDecisions\`.
 
 Prospectively defined secondary-cue recruitment:
 
-[
-R_{m easy}=0.026,
-qquad
-R_{m hard}=0.374,
-]
+\[
+R_{\rm easy}=0.026,
+\qquad
+R_{\rm hard}=0.374,
+\]
 
-difference (0.349), pooled Cliff's (delta=0.980).
-
-Interpretation:
-secondary cues are recruited when primary information is insufficient.
+difference 0.349; pooled Cliff's \(\delta=0.980\).
 
 ### Additional public/mechanistic support
 
@@ -140,7 +216,7 @@ secondary cues are recruited when primary information is insufficient.
 
 Claim ceiling:
 these studies provide **componentwise public validation**, not one direct
-estimate of the exact deterministic (C_A<C_F) theorem.
+estimate of the exact deterministic \(C_A<C_F\) theorem.
 
 ## Main figures
 
@@ -151,61 +227,88 @@ estimate of the exact deterministic (C_A<C_F) theorem.
 Panels:
 - common 12-state/four-cue environment and two target maps;
 - all 32 Shannon entropies exactly matched;
-- (C_F=4) in both, (C_A=4) versus 3;
-- direct-product amplification.
+- \(C_F=4\) in both, \(C_A=4\) versus 3;
+- direct-product additive amplification.
 
 ### Figure 2
 
 **When information accessibility becomes ecological**
 
 Panels:
-- ecological budget window (C_Ale B<C_F);
-- public *Bombus* convergence:
-  Yuan access-mode interaction and Spaethe secondary-cue recruitment;
-- prospective matched four-state causal test;
+- ecological budget window \(C_A\le B<C_F\);
+- public *Bombus* convergence;
+- prospective matched causal test;
 - measurement pipeline.
 
 Canonical plan:
 
-`manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md`
+\`manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md\`
 
 ## Supplement
 
-Formal proof and finite verification material:
+Canonical integrated supplement:
 
-`manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md`
+\`manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md\`
 
-Mathematical-companion extremal material should remain supplementary or
-separate; do not load the Letter with star--edge--star and (D_h(n)) tables.
+It contains:
+- formal relational proofs;
+- static-information theorem and complete-entropy matched twins;
+- outcome-resolved Bellman recursion;
+- nonlinear no-go proof;
+- exact-balanced stress tests;
+- prospective direct experiment designs;
+- temporal recurrence/spectral filtering as supporting theory;
+- identifiability limits;
+- exact-balanced extremal geometry from the mathematical companion.
 
-## Data accessibility statement — draft content
+The mathematical companion is therefore a supplementary proof reservoir for
+the initial submission, not a separate simultaneous manuscript.
 
-The mathematical constructions, exact verification code and analysis tests are
-maintained in the `adaptive-gain` repository. The empirical-convergence
-analyses use previously public data from the cited repositories/DOIs, including
-the Yuan et al. trial-level repository and the Spaethe et al. public analysis
-repository. Before submission, archive the exact submitted code state in a
-permanent repository and insert its DOI here.
+## Portfolio rule
 
-Do not claim ownership of the external public datasets.
+**Do not submit frozen V5 separately.**
+
+V5 is retained only as provenance/revision reserve because its routeability,
+budget-window and nonlinear no-go content is now incorporated into the
+integrated manuscript. A separate V5 submission would create substantial
+theorem/claim overlap.
+
+Villavicencio rewiring remains a separate project because its
+sampling/detection-effort issue is unresolved and should not be imported into
+this manuscript.
+
+## Data accessibility
+
+Canonical draft:
+
+\`manuscript/DATA_ACCESSIBILITY_ECOLOGY_LETTERS_ROUTEABILITY_V1.md\`
+
+Before submission:
+1. archive the exact submitted repository state in a permanent repository;
+2. insert the permanent DOI;
+3. record the submitted Git commit SHA.
+
+Do not claim ownership of external public datasets.
 
 ## Novelty firewall
 
 Do not claim novelty for:
+- decision trees or separating systems;
 - all-subset entropy profiles;
 - entropy-vector insufficiency as a generic information-theory phenomenon;
 - adaptive feature acquisition;
 - conditional mutual information;
 - PID/synergy;
 - sequential value of information;
-- generic adaptive-versus-fixed decision trees.
+- generic adaptive-versus-fixed search.
 
 The manuscript-specific contribution is:
 
 > complete Shannon entropic equivalence can coexist with different optimal
 > adaptive worst-case ecological resolution costs on one physical cue
-> environment, with unbounded additive amplification and a finite-budget
-> ecological consequence.
+> environment; this difference can be amplified additively, becomes
+> ecologically consequential under finite acquisition budgets, and can bound
+> evolutionary reachability under a specified nonlinear lift.
 
 ## Author-controlled title-page fields — unresolved
 
@@ -214,7 +317,7 @@ Verify deliberately before upload:
 - publication spelling of names;
 - affiliations;
 - corresponding author;
-- correspondence address/e-mail;
+- complete correspondence address/e-mail/telephone;
 - ORCIDs;
 - funding statement;
 - competing interests;
@@ -222,11 +325,11 @@ Verify deliberately before upload:
 
 ## Remaining submission work
 
-1. render and verify the two main figures;
-2. final reference and citation audit;
-3. archive the exact code/data-analysis state and insert DOI;
-4. prepare cover letter and novelty statement;
-5. final PDF/math-symbol inspection;
+1. final repository-wide CI;
+2. final rendered figure/PDF inspection;
+3. final citation/reference audit;
+4. archive exact code/data-analysis state and insert DOI;
+5. fill author-controlled title-page fields;
 6. record submitted commit/tree.
 
 ## Stop rule
