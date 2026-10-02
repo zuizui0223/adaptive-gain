@@ -11,8 +11,8 @@
   },
   "current_counts": {
     "abstract_words_approx": 142,
-    "main_text_words_approx": 4714,
-    "references": 21,
+    "main_text_words_approx": 4630,
+    "references": 26,
     "figures": 2,
     "tables": 0,
     "text_boxes": 0
@@ -35,7 +35,7 @@
     "funding, competing interests, ORCIDs and author contributions",
     "final rendered PDF inspection"
   ],
-  "status": "TEXT_FIGURES_AND_SINGLE_SYSTEM_BOMBUS_ANCHOR_READY_PENDING_METADATA_AND_ARCHIVE",
+  "status": "INTEGRATED_TEXT_AND_FIGURES_READY_PENDING_METADATA_ARCHIVE_AND_FINAL_PREFLIGHT",
   "empirical_anchor": {
     "taxon": "Bombus spp.",
     "role": "single-system empirical anchor / carrier of the theory's biological operations",
