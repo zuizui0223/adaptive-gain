@@ -104,12 +104,18 @@ from .individualization_refinement import (
     individualization_refined_canonical_signature,
 )
 from .information import (
+    OutcomeResolvedQueryInformationReceipt,
+    QueryOutcomeInformationRow,
     RoutingInformationReceipt,
     best_fixed_information_bits,
     bundle_information_bits,
+    conditional_bundle_information_bits,
+    fixed_information_minimum_cost,
+    outcome_resolved_query_information,
     policy_information_bits,
     routing_information_receipt,
     target_entropy_bits,
+    target_entropy_given_history_bits,
 )
 from .integer_cover_proof import (
     CoverProofBranch,
@@ -259,8 +265,12 @@ __all__ = [
     "exact_fractional_pair_packing", "selected_policy_fractional_pair_packing_gain_certificate",
     "IndividualizationRefinementLimitError", "IndividualizationRefinementSignature",
     "individualization_refined_canonical_signature",
+    "OutcomeResolvedQueryInformationReceipt", "QueryOutcomeInformationRow",
     "RoutingInformationReceipt", "best_fixed_information_bits", "bundle_information_bits",
-    "policy_information_bits", "routing_information_receipt", "target_entropy_bits",
+    "conditional_bundle_information_bits", "fixed_information_minimum_cost",
+    "outcome_resolved_query_information", "policy_information_bits",
+    "routing_information_receipt", "target_entropy_bits",
+    "target_entropy_given_history_bits",
     "CoverProofBranch", "CoverProofNode", "FixedBudgetDecisionCertificate",
     "IntegerCoverAdaptiveGainCertificate", "IntegerCoverProofLimitError",
     "fixed_budget_cover_decision", "selected_policy_integer_cover_gain_certificate",
