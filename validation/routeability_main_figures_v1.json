@@ -1,0 +1,40 @@
+{
+  "schema": "adaptive-gain-routeability-main-figures-v1",
+  "date": "2026-10-02",
+  "status": "TWO_MAIN_FIGURES_IMPLEMENTED",
+  "figures": {
+    "figure1": {
+      "path": "manuscript/figures/figure_routeability_entropy_access_v1.svg",
+      "role": "complete Shannon entropic equivalence versus adaptive accessibility",
+      "required_labels": [
+        "all 32 Shannon entropies match exactly",
+        "C_F(A)=C_F(B)=4",
+        "C_A = 4",
+        "C_A = 3",
+        "ΔC_A = r → ∞"
+      ]
+    },
+    "figure2": {
+      "path": "manuscript/figures/figure_routeability_bombus_bridge_v1.svg",
+      "role": "ecological budget, public Bombus convergence, and prospective causal test",
+      "required_labels": [
+        "C_A ≤ B < C_F",
+        "0.096",
+        "0.716",
+        "0.617",
+        "0.210",
+        "ΔΔ Impossible–Easy = 1.018",
+        "191/192 bees > 0",
+        "R = 0.026",
+        "R = 0.374",
+        "Cliff's δ = 0.980"
+      ]
+    }
+  },
+  "numeric_sources": {
+    "theory": "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
+    "bombus_panel": "validation/bombus_empirical_convergence_panel_v1.json",
+    "yuan_interaction": "validation/yuan_free_cue_acquisition_interaction_v1.json"
+  },
+  "claim_firewall": "Figure 2 labels the public Bombus evidence as componentwise validation; it does not call any existing dataset a direct estimate of C_A or C_F."
+}
