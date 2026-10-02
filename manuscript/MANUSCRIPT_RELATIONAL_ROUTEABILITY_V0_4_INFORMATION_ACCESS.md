@@ -683,7 +683,7 @@ physically identical stimuli and is not yet reconciled with the source data
 pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
 remaining result as a reproducible but provisional component test of
 **need-dependent costly information acquisition**, not as identification of
-the exact (C_A<C_F) theorem.
+the exact \(C_A<C_F\) theorem.
 
 ### 10.3 Sequential sensory access is biologically real
 
@@ -729,21 +729,12 @@ specified in the Supplement.
 
 ### 12.1 Decision trees and separating systems
 
-The finite identification problem itself is established theory. Katona (1966)
-developed separating systems for fixed collections of tests. Garey (1972)
-formulated binary identification with test costs and gave a dynamic-programming
-solution for minimum expected testing cost; Hyafil & Rivest (1976) established
-NP-completeness for constructing an expected-test-optimal binary decision tree.
-Chakaravarthy et al. (2009) likewise studied entity identification from an
-attribute table under an average-test objective, while Moshkov & Zielosko
-(2011) develop a broader framework of tests, decision rules and trees,
-including complexity bounds. These works are direct prior art for fixed
-separating systems and adaptive decision trees, but their objectives are not
-identical to our minimum worst-case exact-resolution costs. Our claim is not a
-new decision-tree problem. It is the non-identification result that even the
-complete Shannon entropy vector can determine the fixed exact-resolution
-burden while failing to determine the adaptive worst-case burden, together
-with the ecological interpretation through an action-conditioned cue map.
+Fixed separating systems and adaptive identification trees are established
+theory (Katona 1966; Garey 1972; Hyafil & Rivest 1976; Chakaravarthy et al.
+2009; Moshkov & Zielosko 2011). These works are direct prior art for the
+operational primitives. Our claim is instead that complete static Shannon
+information can determine the fixed burden while failing to determine the
+adaptive worst-case burden in the same ecological cue environment.
 
 ### 12.2 Static entropy profiles
 
@@ -797,35 +788,15 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 
 ### 12.4 Active feature acquisition
 
-Adaptive feature acquisition is established in machine learning. EDDI, for
-example, selects additional measurements using expected information gain
-(Ma et al. 2019). Recent work explicitly describes active feature acquisition
-as instance-wise sequential measurement and identifies greedy conditional
-mutual information as an established, but potentially myopic, acquisition rule
-(Norcliffe et al. 2025).
-
-Sequential value-of-information problems are likewise established in decision
-analysis. Uniform separating systems and generic adaptive-versus-non-adaptive
-search are established in combinatorics.
-
-The manuscript therefore does **not** claim novelty for:
-- sequentially selecting observations;
-- conditional mutual information;
-- costly feature acquisition;
-- adaptive versus fixed search;
-- synergy or multivariate information decomposition.
-
-The present contribution is narrower:
-
-> an exact ecological decision construction in which the physical cue
-> environment is held fixed, every cue can be perfectly balanced, and the
-> complete Shannon entropy vector over target and cues can be held fixed while
-> the focal action map changes optimal worst-case adaptive accessibility.
-
-Under the strongest matching condition, direct products make the adaptive-cost
-difference grow without bound additively. A separate exactly balanced routing
-family gives the stronger unbounded multiplicative (C_F/C_A) separation
-under weaker information matching.
+Costly sequential feature acquisition, conditional information gain,
+value-of-information policies and generic adaptive-versus-fixed search are all
+prior art (Contardo et al. 2016; Nan & Saligrama 2017; Ma et al. 2019; Janisch
+et al. 2020; Norcliffe et al. 2025). The present contribution is narrower:
+one physical ecological cue environment can retain the same complete Shannon
+entropy vector while different action maps produce different optimal
+worst-case adaptive accessibility. Direct products make that difference
+unbounded additively; the separate exact-balanced family gives an unbounded
+multiplicative \(C_F/C_A\) ratio under weaker information matching.
 
 ---
 
