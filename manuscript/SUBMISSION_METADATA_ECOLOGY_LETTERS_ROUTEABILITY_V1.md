@@ -16,7 +16,7 @@ Current journal limits verified on 2026-10-02:
 
 ## Title
 
-**Conditional decision topology separates information content from ecological accessibility**
+**Conditional decision topology separates ecological diversity from decision complexity**
 
 ## Running title
 
@@ -28,9 +28,9 @@ Current journal limits verified on 2026-10-02:
 
 Using the same repository counter as the submission-surface test:
 
-- abstract: **146 words**
-- main text: **4,827 words**
-- references: **26**
+- abstract: **150 words**
+- main text: **4,421 words**
+- references: **34**
 - main figures: **2**
 - main tables: **0**
 - text boxes: **0**
@@ -41,23 +41,21 @@ Canonical manuscript:
 
 ## Keywords
 
-1. environmental heterogeneity
-2. ecological information
-3. sequential decision making
-4. adaptive feature acquisition
-5. niche breadth
-6. routeability
-7. information processing
-8. cue acquisition
+1. behavioural ecology
+2. decision ecology
+3. generalism
+4. sequential decision making
+5. information processing
+6. foraging
+7. cue acquisition
+8. routeability
 
 ## One-sentence contribution
 
-Two ecological decision tasks can share one physical cue environment and the
-same complete Shannon entropy vector yet have different optimal adaptive
-information-acquisition costs; a finite ecological budget exposes that
-difference, a nonlinear no-go links insufficient routeability contrast to
-unreachable local eco-evolutionary regimes, and public *Bombus* data support
-the required biological operations.
+Ecological diversity does not determine decision complexity: two tasks can
+share one physical cue environment and the same complete Shannon entropy vector
+yet have different optimal adaptive resolution costs, and a finite observation
+budget exposes that difference behaviorally.
 
 ## Main theorem spine
 
@@ -165,7 +163,7 @@ The independent implementation reproduces:
 - two-copy 144-world equality,
   \(C_F=(8,8)\), \(C_A=(8,6)\).
 
-## Public *Bombus* empirical convergence
+## *Bombus* as a flexible-generalist model
 
 Canonical receipts:
 
@@ -208,15 +206,14 @@ R_{\rm hard}=0.374,
 
 difference 0.349; pooled Cliff's \(\delta=0.980\).
 
-### Additional public/mechanistic support
+### Additional mechanistic support
 
 - MaBouDi et al. 2025: selective sequential visual sampling;
 - Chow et al. 2022: early context switches the later correct action;
 - Essenberg et al. 2015: closest branch-specific cue-relevance precedent.
 
 Claim ceiling:
-these studies provide **componentwise public validation**, not one direct
-estimate of the exact deterministic \(C_A<C_F\) theorem.
+these studies document biological operations relevant to conditional decision structure; they are not direct validation or estimation of the exact deterministic \(C_A<C_F\) theorem.
 
 ## Main figures
 
