@@ -41,20 +41,6 @@ acquires qualitatively different information about predation risk at successive
 stages (Hemmi & Pfeil 2010). Sequential ecological decisions are therefore not
 a special property of one taxon or sensory modality.
 
-Generalist bumblebees provide a particularly tractable model of the same
-problem. They forage across diverse flowers carrying multiple visual,
-olfactory and mechanical attributes, yet behavioural burden does not scale
-trivially with the number of available alternatives. Flower constancy increases
-when flower types differ in multiple traits rather than merely in more colours
-(Gegear & Laverty 2005), while *Bombus impatiens* can forage efficiently across
-diverse pollen resources by switching between a small number of cue-regulated
-collection routines (Russell et al. 2017). Recent experiments likewise show
-that *B. terrestris* recruits secondary visual cues when a primary colour cue
-is difficult but largely ignores those secondary attributes when colour alone
-is sufficient (Spaethe et al. 2026). These observations suggest that the
-processing burden of generalism depends not only on resource richness or cue
-number, but on how the decision can be decomposed.
-
 What is missing is an exact way to separate **nominal ecological diversity**
 from the distinctions that must actually be resolved together. We call the
 latter dependency structure **conditional decision topology**. For a declared
@@ -142,17 +128,18 @@ Neither \(C_A\) nor \(C_F\) is intrinsically fitness. They are exact properties 
 
 ---
 
-### 2.2 *Bombus* evidence synthesis
+### 2.2 Biological evidence synthesis
 
-We used *Bombus* studies to evaluate whether the biological operations assumed
-by the theory are independently documented within one genus. Evidence was
-classified by operation: selective recruitment of secondary cues, active
-costly information acquisition, sequential sensory sampling, conditional cue
-relevance and context-conditioned action. These studies provide biological
-grounding rather than estimates of \(C_A\) or \(C_F\). A reproducible
-reaggregation of the recent Yuan et al. (2026) public trials is retained in the
-Supplement as a provisional component check because that study is a preprint
-and one raw accuracy field remains unresolved.
+We used published animal-behaviour studies only to ask whether the operations
+assumed by the theory occur in real ecological decisions. Evidence was grouped
+by operation rather than taxon: sequential or hierarchical sampling,
+conditional cue relevance, context-conditioned action, and costly information
+acquisition. Bumblebees, parasitoids, fiddler crabs and patch-foraging animals
+provide examples from pollination, host finding, predator avoidance and
+resource exploitation. None of these studies estimates \(C_A\) or \(C_F\).
+A reproducible reaggregation of the Yuan et al. (2026) bumblebee preprint is
+retained in the Supplement as one provisional component check because one raw
+accuracy field remains unresolved.
 
 
 ---
@@ -731,69 +718,47 @@ This action-first measurement pipeline is summarized in Fig. 2d.
 
 ---
 
-### 4.3 *Bombus* reveals the biological operations behind routeability
+### 4.3 Examples across ecological decision systems
 
-No single *Bombus* dataset directly measures \(C_A<C_F\), but experiments
-within the genus independently document the operations required by the theory.
-Spaethe et al. (2026) found that *B. terrestris* relied almost entirely on
-colour when colour discrimination was easy but recruited pattern or shape when
-colour became difficult; in the public individual-level values, our
+The operations required by conditional decision topology already occur in
+ecological decisions with very different sensory and fitness consequences.
+None of the following systems directly measures \(C_A<C_F\); their role is
+to establish biological plausibility and scope.
+
+In bumblebees, Spaethe et al. (2026) found that *B. terrestris* relied almost
+entirely on colour when colour discrimination was easy but recruited pattern or
+shape when colour became difficult; in public individual-level values, the
 predefined secondary-cue index \(R=1-p_{\rm colour}\) increased from 0.026
-to 0.374. Thus an available secondary attribute need not be used when a
-primary cue is sufficient.
+to 0.374. MaBouDi et al. (2025) showed selective sequential scanning of
+diagnostic pattern regions; Essenberg et al. (2015) showed that the same size
+cue could be informative in one flower context and ignored in another; and
+Lotto & Chittka (2005) and Dale et al. (2005) showed context-conditioned later
+choices. These results make *Bombus* one well-resolved example of a flexible
+generalist in which cue relevance and information use depend on decision
+state. The Yuan et al. (2026) preprint additionally suggests need-dependent
+costly acquisition, but its quantitative reaggregation remains Supplementary
+because the study is a preprint and one raw-field anomaly remains unresolved
+(Fig. 2b).
 
-Costly acquisition is supported provisionally by the Yuan et al. (2026)
-bioRxiv dataset. Across 19,200 public trials from 192 *B. terrestris*,
-information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
-(Impossible), with the Hard>Easy direction in all 192 bees. We retain the full
-reaggregation only in the Supplement because the study is a preprint and an
-unresolved raw-field anomaly (Impossible non-request accuracy 0.207) prevents
-using the accuracy contrast. The defensible component result is
-need-dependent costly acquisition, not a test of the routeability theorem.
-
-Other experiments supply the relational operations. MaBouDi et al. (2025)
-show selective sequential scanning of diagnostic pattern regions. Essenberg
-et al. (2015) showed that *B. impatiens* learned flower size as informative in
-one flower context but ignored the same cue in another. Lotto & Chittka (2005)
-showed that illumination context can reverse the subsequently correct colour,
-and Dale et al. (2005) showed sequential contextual priming of later visual
-choice. Together these results show that secondary-cue recruitment, sequential
-sampling, conditional cue relevance, context-conditioned action and costly
-information acquisition all occur within *Bombus* (Fig. 2b). They motivate the
-operational distinction measured by routeability but do not constitute a
-single direct theorem test.
-
----
+Comparable staged structure occurs outside pollination. Fruit-fly parasitoids
+first locate host habitat and only then localize and assess hosts, using
+different cues at successive stages (Quilici & Rousse 2012). Fiddler crabs
+acquire qualitatively different information about predation risk during
+successive stages of escape (Hemmi & Pfeil 2010). Patch foraging is naturally
+formulated as repeated stay-or-leave decisions rather than a simultaneous
+comparison among all future patches (Stephens 2008). Together, these systems
+show that hierarchical information acquisition is not specific to one taxon,
+sensory modality or ecological interaction.
 
 A direct causal test would hold the physical cue matrix fixed while changing
 only the action-conditioned branch structure and costly cue access under a
-shared budget (Fig. 2c).
-
----
-
-### 4.4 Sequential structure is not pollinator-specific
-
-The same logic appears in ecological decisions with very different sensory and
-fitness consequences. Fruit-fly parasitoids first locate host habitat and only
-then localize and assess hosts, using different chemical, visual and mechanical
-cues at successive stages (Quilici & Rousse 2012). Fiddler crabs gather
-qualitatively different information about an approaching predator during
-successive stages of escape, so behavioural sequence changes the information
-available for risk assessment (Hemmi & Pfeil 2010). Patch foraging across
-animals is likewise naturally formulated as repeated stay-or-leave decisions
-rather than one simultaneous comparison among all possible future patches
-(Stephens 2008).
-
-These examples do not measure (C_A) or (C_F). Their role is narrower and
-more important for scope: they show that hierarchical information acquisition
-occurs in host finding, anti-predator behaviour and patch exploitation, not
-only in flower choice. Conditional decision topology should therefore be
+shared budget (Fig. 2c). Conditional decision topology should therefore be
 testable wherever early observations or actions determine which later
 distinctions remain relevant.
 
 ---
 
-### 4.5 Prior-art boundary
+### 4.4 Prior-art boundary
 
 #### 4.4.1 Decision trees and separating systems
 
@@ -870,7 +835,7 @@ multiplicative \(C_F/C_A\) ratio under weaker information matching.
 
 ---
 
-### 4.6 Deterministic scope and next theory
+### 4.5 Deterministic scope and next theory
 
 The model is a structural limit: alternatives and cue outcomes are finite and
 deterministic, cue costs are positive and additive, and the objective is
@@ -880,7 +845,7 @@ feature acquisition; we do not claim that extension here.
 
 ---
 
-### 4.7 Conclusion
+### 4.6 Conclusion
 
 Environmental information has two operational layers that are easy to
 conflate.
