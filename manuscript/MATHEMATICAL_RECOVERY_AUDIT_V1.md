@@ -796,3 +796,43 @@ The recovery status is therefore:
 
 The only unresolved scientific recovery decision is therefore the role of the
 temporal/noisy routing theorem family.
+
+
+## 22. Recovery actions completed in this audit
+
+The repository map was repaired in four concrete ways.
+
+1. The exact two-sided structural factorization is present in
+   \`SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md\` as S11.4. Its LaTeX
+   escape corruption was repaired in commit
+   \`68e8cdcf3ca87af335bc235d0dbad033f3ea6606\`.
+
+2. The divergent temporal/predictive-routing line is now indexed on the active
+   synthesis branch in
+   \`manuscript/TEMPORAL_ROUTING_RECOVERY_NOTE_V1.md\`.
+
+3. The routing mutation / mesoscopic / origin-fixation / stationary-
+   nonidentifiability stack is now indexed in
+   \`manuscript/ROUTING_POPULATION_SIDE_THEORY_INDEX_V1.md\`.
+
+4. The old broad mathematical-companion outline now explicitly points to the
+   later exact-balanced companion manuscript on
+   \`companion/math-priority-audit-v2\`, preventing the older generic
+   kernel/extremal outline from being mistaken for the current mathematical
+   priority.
+
+After checking the active theory tree, the complete visible commit history,
+the major divergent theory branches, the exact-balanced companion branch,
+the OU/evoTS branch, the rewiring/detection branch and the biological
+qualification branches, no further independent theorem family was found that
+lacks a disposition in this audit.
+
+The one remaining scientific choice is not a recovery problem but a paper-design
+decision:
+
+> Should the temporal/predictive-routing theorem remain the next
+> decision-ecology paper, or should it replace the current Letter's secondary
+> eco-evolutionary no-go result?
+
+That choice should be made from biological narrative and journal fit, not from
+fear that a mathematical result has been lost.
