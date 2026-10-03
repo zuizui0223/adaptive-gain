@@ -799,52 +799,52 @@ headline.
 
 The adaptive and fixed costs admit different exact structural reductions.
 
-Let (K_A) denote the cost-labelled recursive continuation structure used by
-the adaptive Bellman problem, and let (mathcal H_{min}) denote the minimal
+Let \(K_A\) denote the cost-labelled recursive continuation structure used by
+the adaptive Bellman problem, and let \(\mathcal H_{\min}\) denote the minimal
 productive frontier with physical query costs. The continuation-preservation
 theorem gives
 
-[
+\[
 C_A=V_A(K_A),
-]
+\]
 
 whereas productive-frontier sufficiency gives
 
-[
-C_F=	au_c(mathcal H_{min}),
-]
+\[
+C_F=\tau_c(\mathcal H_{\min}),
+\]
 
 the minimum-cost transversal of the frontier. Therefore the routeability gap
 factors exactly as
 
-[
-oxed{
+\[
+\boxed{
 g=C_F-C_A
 =
-	au_c(mathcal H_{min})-V_A(K_A).
+\tau_c(\mathcal H_{\min})-V_A(K_A).
 }
-]
+\]
 
-Neither factor alone determines (g). The registered
-continuation/fixed-cost collision holds (K_A) fixed and has
-((C_A,C_F)=(2,3)) versus ((2,2)), so equal adaptive continuation structure
+Neither factor alone determines \(g\). The registered
+continuation/fixed-cost collision holds \(K_A\) fixed and has
+\((C_A,C_F)=(2,3)\) versus \((2,2)\), so equal adaptive continuation structure
 can coexist with different gaps. A separate registered collision holds
-(mathcal H_{min}) fixed with (C_F=3) while (C_A=3) versus 2, so equal
+\(\mathcal H_{\min}\) fixed with \(C_F=3\) while \(C_A=3\) versus 2, so equal
 fixed obligation structure can also coexist with different gaps.
 
 Thus effective sequential decision complexity has two irreducible structural
 sides in the present exact representation: outcome-contingent continuation
 geometry and globally unavoidable fixed cue obligations. This statement does
-not claim that ((K_A,mathcal H_{min})) is a universally minimal categorical
+not claim that \((K_A,\mathcal H_{\min})\) is a universally minimal categorical
 representation; it is the smallest joint scalar-cost representation currently
 proved in the repository.
 
 Canonical supporting files:
 
-- theory/CONTINUATION_BISIMULATION.md
-- theory/PRODUCTIVE_FRONTIER_SUFFICIENCY.md
-- branch theory/reachability-admissibility-synthesis:
-  theory/TWO_SIDED_GAP_FACTORIZATION.md
+- \`theory/CONTINUATION_BISIMULATION.md\`
+- \`theory/PRODUCTIVE_FRONTIER_SUFFICIENCY.md\`
+- branch \`theory/reachability-admissibility-synthesis\`:
+  \`theory/TWO_SIDED_GAP_FACTORIZATION.md\`
 
 
 ---
