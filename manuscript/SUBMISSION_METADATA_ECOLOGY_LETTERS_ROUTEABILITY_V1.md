@@ -29,7 +29,7 @@ Current journal limits verified on 2026-10-02:
 Using the same repository counter as the submission-surface test:
 
 - abstract: **150 words**
-- main text: **4,421 words**
+- main text: **4,449 words**
 - references: **34**
 - main figures: **2**
 - main tables: **0**
@@ -102,45 +102,49 @@ window
 C_A\le B<C_F.
 \]
 
-### Nonlinear evolutionary no-go
+### Temporal predictive routing
 
-Let
+For the minimal two-step routing model with
 
 \[
-g_i=C_F(i)-C_A(i),
-\qquad
-\Delta g=g_2-g_1\ge0.
+P(C_1=C_0)=\rho,
 \]
 
-For a nondecreasing \(L\)-Lipschitz sensing-to-selection lift, define the
-selection-to-feedback scale
+the best fixed two-query policy has
 
 \[
-B_f=-\beta e>0.
+A_F^{(2)}=\frac34,
 \]
 
-Then
+while the best contingent policy has
 
 \[
-G\le B_fL\Delta g.
+A_A^{(2)}=
+\frac34+\frac{|2\rho-1|}{4}.
 \]
 
-The local complex-eigenpair threshold is
+Hence
 
 \[
-G_{\rm osc}
+G_{\rm time}=\frac{|2\rho-1|}{4},
+\]
+
+with zero routing value exactly at temporal independence. Under symmetric cue
+noise,
+
+\[
+G_{\rm noisy}
 =
-\frac{(\alpha-\phi)^2}{4(1-\phi)}.
+\frac{|2\rho-1|(2a-1)(2b-1)}{4}.
 \]
 
-Therefore a stable oscillatory response is possible only if
-
-\[
-\Delta g>
-\frac{G_{\rm osc}}{B_fL}.
-\]
-
-This is a necessary-condition/no-go result, not a sufficiency theorem.
+Canonical assets:
+- \`adaptive_gain/temporal_routing.py\`;
+- \`adaptive_gain/noisy_temporal_routing.py\`;
+- \`tests/test_temporal_routing.py\`;
+- \`tests/test_noisy_temporal_routing.py\`;
+- \`validation/temporal_routing_threshold_v1.json\`;
+- \`validation/noisy_temporal_routing_factorization_v1.json\`.
 
 ## Independent theorem verification
 
@@ -252,7 +256,8 @@ It contains:
 - formal relational proofs;
 - static-information theorem and complete-entropy matched twins;
 - outcome-resolved Bellman recursion;
-- nonlinear no-go proof;
+- nonlinear eco-evolutionary no-go retained as additional mathematical theory, not a main-text result;
+- temporal and noisy routing derivations;
 - exact-balanced stress tests;
 - prospective direct experiment designs;
 - temporal recurrence/spectral filtering as supporting theory;
@@ -266,10 +271,10 @@ the initial submission, not a separate simultaneous manuscript.
 
 **Do not submit frozen V5 separately.**
 
-V5 is retained only as provenance/revision reserve because its routeability,
-budget-window and nonlinear no-go content is now incorporated into the
-integrated manuscript. A separate V5 submission would create substantial
-theorem/claim overlap.
+V5 is retained only as provenance/revision reserve. Its routeability and
+budget-window content is incorporated into the main manuscript, while its
+nonlinear no-go is retained in the integrated Supplement. A separate V5
+submission would therefore create substantial theorem/claim overlap.
 
 Villavicencio rewiring remains a separate project because its
 sampling/detection-effort issue is unresolved and should not be imported into
@@ -304,9 +309,9 @@ The manuscript-specific contribution is:
 
 > complete Shannon entropic equivalence can coexist with different optimal
 > adaptive worst-case ecological resolution costs on one physical cue
-> environment; this difference can be amplified additively, becomes
-> ecologically consequential under finite acquisition budgets, and can bound
-> evolutionary reachability under a specified nonlinear lift.
+> environment; finite budgets make that difference behaviorally consequential,
+> and temporal predictability can give a target-uninformative cue value by
+> identifying which later cue should be sampled.
 
 ## Author-controlled title-page fields — unresolved
 
