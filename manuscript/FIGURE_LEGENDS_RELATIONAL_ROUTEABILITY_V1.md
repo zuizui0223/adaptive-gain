@@ -21,9 +21,8 @@ equivalence is preserved while
 
 **A**, Routeability changes guaranteed feasibility only in the intermediate
 budget window \(C_A\le B<C_F\); below \(C_A\) neither access mode is sufficient,
-whereas above \(C_F\) both are sufficient. **B**, *Bombus* as a single-system empirical anchor. Independent public
-datasets from the same genus instantiate complementary operational ingredients
-of the theory. In the bioRxiv preprint by Yuan et al. (2026),
+whereas above \(C_F\) both are sufficient. **B**, One quantified biological example. Public *Bombus* datasets instantiate
+several operational ingredients of the theory within a flexible generalist. In the bioRxiv preprint by Yuan et al. (2026),
 platform landing increases with decision difficulty when landing is required to
 obtain a predictive cue (Regular trials), but the gradient reverses when the cue
 is supplied independently of landing (Random Free-Cue trials). The within-bee
@@ -34,8 +33,10 @@ recruitment index rises from \(R=0.026\) when the primary colour cue is easy to
 \(\delta=0.980\)). MaBouDi et al. (2025), Chow et al. (2022), and Essenberg et
 al. (2015) provide complementary evidence for selective sequential sampling,
 context-conditioned action mapping, and branch-specific cue relevance,
-respectively. These datasets validate operational components of routeability;
-none alone estimates the exact deterministic \(C_A<C_F\) contrast. **C**, The
+respectively. These datasets illustrate operational components relevant to routeability;
+none estimates the exact deterministic \(C_A<C_F\) contrast. Parasitoid host
+finding, multi-stage predator avoidance and patch foraging provide parallel
+staged-decision examples discussed in the text. **C**, The
 prospective causal test holds one physical cue matrix fixed, changes only the
 action-conditioned branch structure, manipulates costly cue access under a
 shared budget, and predicts no architecture-by-access effect below or above the
