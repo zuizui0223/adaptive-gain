@@ -44,13 +44,13 @@ a special property of one taxon or sensory modality.
 What is missing is an exact way to separate **nominal ecological diversity**
 from the distinctions that must actually be resolved together. We call the
 latter dependency structure **conditional decision topology**. For a declared
-ecological action, let (C_F) be the minimum cost of a fixed cue bundle that
-resolves the action in every represented state, and let (C_A) be the minimum
+ecological action, let \(C_F\) be the minimum cost of a fixed cue bundle that
+resolves the action in every represented state, and let \(C_A\) be the minimum
 worst-case cost when later cues may depend on earlier outcomes. Their
 difference
-[
+\[
 g=C_F-C_A
-]
+\]
 measures the burden avoided by contingent acquisition. This is not a claim
 that sequential decision making is new. Fixed separating systems, adaptive
 decision trees and costly active feature acquisition are established theories
@@ -70,19 +70,20 @@ under weaker information matching. Thus resource diversity, cue diversity and
 even complete static Shannon information do not determine sequential decision
 burden.
 
-A finite natural-history budget (B)—time before a host departs, exposure to
+A finite natural-history budget \(B\)—time before a host departs, exposure to
 predation, handling opportunity or another hard constraint—turns this
 structural distinction into ecology. When
-[
-C_Ale B<C_F,
-]
+\[
+C_A\le B<C_F,
+\]
 contingent sensing can guarantee a resolved action when fixed acquisition
 cannot. The primary contribution of the paper is therefore a theory of when
-ecological diversity becomes effective decision complexity. A secondary result
-shows how insufficient between-state routeability contrast can also bound a
-specified local eco-evolutionary feedback regime. *Bombus* and other systems
-serve as biological evidence that the required sequential operations occur in
-nature; none is treated as a direct validation of the exact theorem.
+ecological diversity becomes effective decision complexity. A temporal
+extension then asks when present context can make later information acquisition
+easier: routing value appears when current information predicts which later cue
+will be useful, and vanishes at temporal independence. Published animal
+systems provide biological evidence that the required sequential operations
+occur in nature; none is treated as a direct validation of the exact theorem.
 
 ---
 
