@@ -4,11 +4,7 @@ Draft v0.4 — information-accessibility synthesis candidate
 
 ## Abstract
 
-Ecological information is summarized by amount, but accessibility depends on how observations reorganize subsequent learning. For a deterministic task, fixed resolution satisfies
-\[
-C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
-\]
-whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Across *Bombus* studies, costly acquisition, selective secondary-cue use, sequential sampling and context-conditioned cue relevance provide biological evidence for operations required by the theory without constituting a direct theorem test. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility and can constrain evolutionary reachability under bounded selection.
+Generalist animals often face many resources, yet sequential decisions may spare them from distinguishing all alternatives at once. What, then, determines effective decision complexity? For a deterministic choice, let (C_F) be the minimum cost of a fixed resolving cue set and (C_A) the minimum worst-case cost when later cues may depend on earlier outcomes. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: ((C_A,C_F)=(4,4)) versus ((3,4)). Thus resource diversity, cue diversity and even complete static information do not determine sequential decision burden. Cartesian products amplify the adaptive-cost difference, while a separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. A finite observation budget makes this difference ecological when (C_Ale B<C_F). Bumblebee, parasitoid, anti-predator and patch-foraging studies show that staged information use is widespread. Conditional decision topology therefore separates ecological diversity from effective decision complexity.
 
 ## Keywords
 
