@@ -27,13 +27,14 @@ def test_integrated_ecology_letters_structure_and_figures():
         assert figure_ref in text
 
 
-def test_integrated_notation_and_claim_firewalls():
+def test_integrated_temporal_routing_and_claim_firewalls():
     text = _text()
-    assert r"\(B_f=-\beta e>0\)" in text
-    assert r"\(B_fLq_{\max}\le G_{\rm osc}\)" in text
-    assert r"\(BLq_{\max}\le G_{\rm osc}\)" not in text
-    assert "not a sufficiency" in text
-    assert "does not guarantee oscillation" in text
+    assert "### 3.5 Routing value can come from predicting which cue will matter next" in text
+    assert r"G_{\rm time}" in text
+    assert r"\rho=1/2" in text
+    assert r"G_{\rm noisy}" in text
+    assert "which later cue will be useful" in text
+    assert r"\(B_f=-\beta e>0\)" not in text
     assert "it does not establish an unbounded separation for a fixed binary action" in text
 
 
