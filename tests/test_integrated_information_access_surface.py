@@ -37,13 +37,13 @@ def test_integrated_notation_and_claim_firewalls():
     assert "it does not establish an unbounded separation for a fixed binary action" in text
 
 
-def test_bombus_claim_ceiling_is_preserved():
+def test_cross_system_biological_claim_ceiling_is_preserved():
     text = _text()
-    assert "bioRxiv preprint" in text
     assert "Yuan et al. (2026)" in text
-    assert "0.207" in text
-    assert "unresolved raw-field anomaly" in text
-    assert "not a test of the routeability theorem" in text
+    assert "preprint" in text
+    assert "one raw-field anomaly remains unresolved" in text
+    assert "None of the following systems directly measures" in text
+    assert "Bumblebees, parasitoids, fiddler crabs and patch-foraging animals" in text
 
 
 def test_classical_identification_prior_art_is_present():
