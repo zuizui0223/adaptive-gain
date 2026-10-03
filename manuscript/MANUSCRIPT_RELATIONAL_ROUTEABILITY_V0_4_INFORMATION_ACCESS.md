@@ -20,52 +20,87 @@ environmental heterogeneity; ecological information; sequential decision making;
 
 ## 1. Introduction
 
-Environmental heterogeneity is a central ecological explanatory variable, but ecology does not reduce it to a single scalar. Classical and modern theory distinguish not only how much variation exists but also its spatial or temporal pattern and grain. Likewise, information ecology and information-fitness theory ask how environmental information changes decisions, growth and selection (Donaldson-Matasci et al. 2010; Rivoire & Leibler 2011). The starting point of this paper is therefore not that ecology has ignored structure.
+A long-standing problem in behavioural ecology is how animals make effective
+choices when many resources, hosts or patches are available. This problem is
+especially acute for generalists. The neural-constraints hypothesis predicts
+that broad diet breadth can slow or degrade choice because more potential
+resources must be discriminated in limited time; specialist aphids, for
+example, make host-associated decisions faster than closely related
+generalists (Bernays & Funk 1999). Yet natural foraging is rarely a single
+simultaneous comparison among all alternatives. Decision ecology instead
+emphasizes sequential and hierarchical choices, from habitat and patch
+selection to the acceptance or rejection of particular resources (Stephens
+2008).
 
-A second established literature makes the acquisition problem explicit. Sequential host-location models propose that organisms can use broad and specific cues in stages, and costly-feature classification formalizes prediction in which different features are acquired for different samples, in different orders, under acquisition costs or budgets. Adaptive feature acquisition is therefore prior art, as is the general value of collecting information before action. Our contribution is not the observation that conditional sampling can be useful. Bernays and Wcislo linked resource specialization to information-processing costs, Silva and Clarke proposed sequential cue use in polyphagous host location, and modern costly-feature methods explicitly choose later measurements from earlier observations (Bernays & Wcislo 1994; Bernays 2001; Silva & Clarke 2020; Contardo et al. 2016; Janisch et al. 2020; Nan & Saligrama 2017).
+This creates a basic unresolved question: **when does ecological diversity
+actually become decision complexity?** If early observations eliminate most
+alternatives or determine which cue matters next, a generalist need not
+distinguish every resource and every attribute at once. The sequential-cues
+hypothesis makes this idea explicit for polyphagous herbivores: broad cues can
+first locate a host habitat, after which more specific cues rank a much smaller
+set of candidates (Silva & Clarke 2020). Comparable staged information use is
+widespread. Parasitoids commonly locate host habitat before host and host
+suitability (Quilici & Rousse 2012), and multi-stage escape in fiddler crabs
+acquires qualitatively different information about predation risk at successive
+stages (Hemmi & Pfeil 2010). Sequential ecological decisions are therefore not
+a special property of one taxon or sensory modality.
 
-A particularly close recent neighbor makes the information-theoretic overlap explicit. Li, Dhali & Bouma (2026) use partial information decomposition to study when pairwise synergy helps active feature acquisition, combine pairwise joint information with conditional information evaluated at realized feature values, and include controlled fixed-information comparisons. Thus neither synergy-aware acquisition nor outcome-conditioned information scores are novelty claims here. The unresolved issue we isolate is stricter: whether two tasks can be statically indistinguishable to the entire Shannon entropy vector yet differ in the exact optimal cost of adaptive resolution.
+Generalist bumblebees provide a particularly tractable model of the same
+problem. They forage across diverse flowers carrying multiple visual,
+olfactory and mechanical attributes, yet behavioural burden does not scale
+trivially with the number of available alternatives. Flower constancy increases
+when flower types differ in multiple traits rather than merely in more colours
+(Gegear & Laverty 2005), while *Bombus impatiens* can forage efficiently across
+diverse pollen resources by switching between a small number of cue-regulated
+collection routines (Russell et al. 2017). Recent experiments likewise show
+that *B. terrestris* recruits secondary visual cues when a primary colour cue
+is difficult but largely ignores those secondary attributes when colour alone
+is sufficient (Spaethe et al. 2026). These observations suggest that the
+processing burden of generalism depends not only on resource richness or cue
+number, but on how the decision can be decomposed.
 
-The exact-resolution primitives are classical as well: fixed separating
-systems and adaptive decision trees are established theory (Katona 1966;
-Garey 1972; Hyafil & Rivest 1976). Our novelty claim begins only after those
-operational costs are compared with complete static information summaries in
-an ecological task.
+What is missing is an exact way to separate **nominal ecological diversity**
+from the distinctions that must actually be resolved together. We call the
+latter dependency structure **conditional decision topology**. For a declared
+ecological action, let (C_F) be the minimum cost of a fixed cue bundle that
+resolves the action in every represented state, and let (C_A) be the minimum
+worst-case cost when later cues may depend on earlier outcomes. Their
+difference
+[
+g=C_F-C_A
+]
+measures the burden avoided by contingent acquisition. This is not a claim
+that sequential decision making is new. Fixed separating systems, adaptive
+decision trees and costly active feature acquisition are established theories
+(Katona 1966; Garey 1972; Hyafil & Rivest 1976; Contardo et al. 2016; Janisch
+et al. 2020; Nan & Saligrama 2017). Nor is it a claim that synergy,
+conditional information or extra-entropic operational structure are new
+(Williams & Beer 2010; Sun & Jafar 2019; Li, Dhali & Bouma 2026).
 
-The ecological consequence of that mathematical distinction is especially relevant because many empirical summaries of environmental information are **distributional**: richness, frequencies, variance, cue entropy, pairwise association or the total target information available in a cue set. Even when such summaries are rich, they need not answer an operational question:
+The unresolved theoretical question is narrower: **can two ecological decision
+problems contain the same static information, yet impose different optimal
+costs when information may be acquired conditionally?** We show that they can.
+Two tasks on one identical physical cue matrix can have the same complete
+Shannon entropy vector and the same fixed resolution cost, yet different
+adaptive costs. Cartesian products amplify that additive difference, while a
+separate exactly balanced family gives an unbounded fixed-to-adaptive ratio
+under weaker information matching. Thus resource diversity, cue diversity and
+even complete static Shannon information do not determine sequential decision
+burden.
 
-> after one cue outcome is observed, which distinctions remain necessary before the organism can act?
-
-We call this dependency structure **conditional decision topology**. The term does not mean temporal order alone. A fixed sequence of observations and an outcome-contingent decision tree are different objects: topology concerns which later distinction becomes relevant on each branch. The same physical environment can therefore induce different topologies for different focal actions.
-
-This distinction also has mathematical precedent outside ecology. Information theory contains examples in which two problems share the same entropy for every subset of their variables yet have different operational capacities, showing that entropic structure need not be a complete operational invariant. We therefore do not claim that this paper is the first theory in which entropy misses consequential structure (Sun & Jafar 2019). The ecological question is narrower and constructive: **can environmental states, the complete physical cue matrix, target prevalence, target entropy and total available target information all be held fixed while the acquisition cost of the focal action changes sharply?**
-
-We answer yes. For a declared ecological task, let \(C_A\) denote the minimum worst-case cue cost when later cues may depend on earlier outcomes, and let \(C_F\) denote the minimum cost of a fixed resolving cue set. We construct paired tasks on the same physical cue environment. Only the map
-from cue-defined states to the focal action changes. Complete Shannon
-equivalence can nevertheless coexist with different adaptive costs, and
-Cartesian products amplify that additive difference. A separate exactly
-balanced family shows an unbounded fixed-to-adaptive ratio under weaker
-information matching.
-
-The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. The recent bioRxiv preprint by Yuan et al. (2026) also reports that bumblebees can voluntarily pay a reward cost to obtain predictive information when uncertain, supporting the biological plausibility of treating information acquisition as costly without constituting a test of routeability itself. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
-
-\[
-C_A\le B<C_F.
-\]
-
-This factorization keeps the mathematics and the ecology distinct. The action-conditioned cue structure determines \((C_A,C_F)\); natural history determines \(B\); their intersection determines whether routeability changes feasible behavior.
-
-We develop four consequences. First, static information content and adaptive
-accessibility are distinct coordinates. Second, routeability is relational:
-the same physical cue environment can differ in accessibility when the focal
-action map changes. Third, a finite observation budget converts that structural
-difference into a feasibility prediction, and bounded sensing-to-selection
-lifts can turn insufficient routeability contrast into an evolutionary no-go.
-Fourth, *Bombus* studies independently document the biological operations that
-make this distinction relevant—conditional cue use, sequential sampling and
-costly acquisition—without constituting a direct test of the theorem.
-
----
+A finite natural-history budget (B)—time before a host departs, exposure to
+predation, handling opportunity or another hard constraint—turns this
+structural distinction into ecology. When
+[
+C_Ale B<C_F,
+]
+contingent sensing can guarantee a resolved action when fixed acquisition
+cannot. The primary contribution of the paper is therefore a theory of when
+ecological diversity becomes effective decision complexity. A secondary result
+shows how insufficient between-state routeability contrast can also bound a
+specified local eco-evolutionary feedback regime. *Bombus* and other systems
+serve as biological evidence that the required sequential operations occur in
+nature; none is treated as a direct validation of the exact theorem.
 
 ---
 
@@ -628,27 +663,32 @@ space once a state-dependent ecological feedback is specified.
 
 ---
 
-### 4.1 Ecological scope
+### 4.1 From ecological diversity to effective decision complexity
 
-The immediate ecological consequence concerns **processing burden and
-accessibility**, not evolved niche breadth by itself. Equal nominal niche
-breadth can impose different information costs when early cues route encounters
-into small branch-specific problems. Thus broader resource use should be less
-constrained by information acquisition when relevant alternatives are routeable
-within the organism's observation budget. Morphology, phenology and encounter
-opportunity still define upstream compatibility; routeability can act as an
-additional filter on which compatible interactions are behaviorally accessible.
+The immediate ecological prediction is that **resource diversity and decision
+complexity need not covary**. A broad diet can be cheap to manage when early
+cues route encounters into small branch-specific problems, whereas a much
+smaller resource set can remain costly if several distinctions must be
+maintained simultaneously. Routeability therefore refines, rather than rejects,
+the information-processing hypothesis of ecological specialization: the burden
+relevant to generalism is not niche breadth itself but the structure of the
+choice problem imposed by that breadth.
 
-This framework complements rather than replaces established heterogeneity
-dimensions such as amount, grain and spatial or temporal pattern (Kassen
-2002). Predicting evolved specialist/generalist outcomes still requires
-fitness trade-offs and evolutionary dynamics; the no-go result above supplies
-one explicit bridge when such dynamics are specified. Diversity-stability,
-community resilience and ecosystem-function stability remain downstream:
-the present model contains no abundance dynamics or community stability
-functional from which those conclusions could follow.
+This distinction also changes how behavioural specialization should be read.
+Flower constancy, host fidelity or repeated patch use can reduce processing
+cost, but switching between nominal resource categories need not be costly when
+the same decision route can be reused. Conversely, alternatives that look
+similar in richness or Shannon diversity can impose different burdens when
+their cue relevance is arranged differently across outcomes. The theory thus
+predicts that behavioural costs should track route changes more closely than
+taxonomic switches or option counts alone.
 
----
+Morphology, phenology, encounter opportunity and physiological compatibility
+still determine which interactions are possible upstream. Routeability acts
+only after those constraints, by filtering which compatible alternatives are
+behaviourally accessible within the available observation budget. Predicting
+evolved niche breadth still requires fitness trade-offs and evolutionary
+dynamics.
 
 ---
 
@@ -735,7 +775,29 @@ shared budget (Fig. 2c).
 
 ---
 
-### 4.4 Prior-art boundary
+### 4.4 Sequential structure is not pollinator-specific
+
+The same logic appears in ecological decisions with very different sensory and
+fitness consequences. Fruit-fly parasitoids first locate host habitat and only
+then localize and assess hosts, using different chemical, visual and mechanical
+cues at successive stages (Quilici & Rousse 2012). Fiddler crabs gather
+qualitatively different information about an approaching predator during
+successive stages of escape, so behavioural sequence changes the information
+available for risk assessment (Hemmi & Pfeil 2010). Patch foraging across
+animals is likewise naturally formulated as repeated stay-or-leave decisions
+rather than one simultaneous comparison among all possible future patches
+(Stephens 2008).
+
+These examples do not measure (C_A) or (C_F). Their role is narrower and
+more important for scope: they show that hierarchical information acquisition
+occurs in host finding, anti-predator behaviour and patch exploitation, not
+only in flower choice. Conditional decision topology should therefore be
+testable wherever early observations or actions determine which later
+distinctions remain relevant.
+
+---
+
+### 4.5 Prior-art boundary
 
 #### 4.4.1 Decision trees and separating systems
 
@@ -812,7 +874,7 @@ multiplicative \(C_F/C_A\) ratio under weaker information matching.
 
 ---
 
-### 4.5 Deterministic scope and next theory
+### 4.6 Deterministic scope and next theory
 
 The model is a structural limit: alternatives and cue outcomes are finite and
 deterministic, cue costs are positive and additive, and the objective is
@@ -822,7 +884,7 @@ feature acquisition; we do not claim that extension here.
 
 ---
 
-### 4.6 Conclusion
+### 4.7 Conclusion
 
 Environmental information has two operational layers that are easy to
 conflate.
@@ -870,6 +932,13 @@ value-of-information theory.
 ---
 
 ## References
+
+- Bernays, E. A. & Funk, D. J. 1999. Specialists make faster decisions than generalists: experiments with aphids. *Proceedings of the Royal Society B* 266:151–156. DOI: 10.1098/rspb.1999.0615.
+- Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. DOI: 10.3758/CABN.8.4.475.
+- Gegear, R. J. & Laverty, T. M. 2005. Flower constancy in bumblebees: a test of the trait variability hypothesis. *Animal Behaviour* 69:939–949. DOI: 10.1016/j.anbehav.2004.06.029.
+- Russell, A. L., Buchmann, S. L. & Papaj, D. R. 2017. How a generalist bee achieves high efficiency of pollen collection on diverse floral resources. *Behavioral Ecology* 28:991–1003. DOI: 10.1093/beheco/arx058.
+- Quilici, S. & Rousse, P. 2012. Location of host and host habitat by fruit fly parasitoids. *Insects* 3:1220–1235. DOI: 10.3390/insects3041220.
+- Hemmi, J. M. & Pfeil, A. 2010. A multi-stage anti-predator response increases information on predation risk. *Journal of Experimental Biology* 213:1484–1489. DOI: 10.1242/jeb.039925.
 
 - Bernays, E. A. & Wcislo, W. T. 1994. Sensory capabilities, information processing, and resource specialization. *Quarterly Review of Biology* 69:187–204. DOI: 10.1086/418539.
 - Bernays, E. A. 2001. Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation. *Annual Review of Entomology* 46:703–727. DOI: 10.1146/annurev.ento.46.1.703.
