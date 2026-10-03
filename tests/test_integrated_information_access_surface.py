@@ -39,7 +39,8 @@ def test_integrated_notation_and_claim_firewalls():
 
 def test_bombus_claim_ceiling_is_preserved():
     text = _text()
-    assert "bioRxiv preprint" in text\n    assert "Yuan et al. (2026)" in text
+    assert "bioRxiv preprint" in text
+    assert "Yuan et al. (2026)" in text
     assert "0.207" in text
     assert "unresolved raw-field anomaly" in text
     assert "not a test of the routeability theorem" in text
