@@ -4,7 +4,7 @@
   "branch": "synthesis/information-accessibility-public-data-v1",
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
-  "working_title": "Conditional decision topology separates information content from ecological accessibility",
+  "working_title": "Conditional decision topology separates ecological diversity from decision complexity",
   "approximate_main_words": 4421,
   "structure": [
     "Introduction: decision ecology, generalist choice, and the diversity-to-complexity problem",
@@ -86,7 +86,7 @@
   "empirical_carrier": {
     "taxon": "Bombus spp.",
     "rationale": "Bombus provides a cognitively flexible generalist model; parasitoid host search, multi-stage predator avoidance and patch foraging establish that staged information acquisition is not pollinator-specific.",
-    "manuscript_label": "single-system biological synthesis",
+    "manuscript_label": "flexible-generalist model plus cross-system sequential-decision grounding",
     "full_theorem_status": "not yet directly validated in one experiment"
   },
   "portfolio_decision": {
