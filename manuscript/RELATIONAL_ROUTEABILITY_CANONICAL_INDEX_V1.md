@@ -26,7 +26,7 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
 
-Current information-accessibility synthesis draft. It contains the exact characterization of fixed cost by static subset information, the 12-state twins with identical complete Shannon entropy vectors but different adaptive costs, unbounded additive direct-product amplification, and the public *Bombus* empirical-convergence section. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
+Current decision-ecology synthesis draft. It contains the exact characterization of fixed cost by static subset information, the 12-state twins with identical complete Shannon entropy vectors but different adaptive costs, unbounded additive direct-product amplification, and cross-system biological grounding for staged ecological decision making. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
 
 Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`.
 
@@ -52,9 +52,9 @@ Canonical target: **Ecology Letters — Letter**.
   `validation/ecology_letters_routeability_submission_readiness_v1.json`
 
 Current controlled counts:
-- abstract: 142 words;
-- main text: approximately 4,659 words under the journal definition;
-- references: 21;
+- abstract: 150 words;
+- main text: approximately 4,135 words under the journal definition;
+- references: 34;
 - main figures: 2.
 
 Do not use the older generic/Theoretical Ecology `SUBMISSION_METADATA_V1.md` for
@@ -67,6 +67,17 @@ this submission.
 `manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md`
 
 Formal analytic proof of the relational theorem/common-budget corollary plus the exact finite verification scope for pairwise controls and the ten-state stress test.
+
+## Mathematical recovery audit
+
+manuscript/MATHEMATICAL_RECOVERY_AUDIT_V1.md
+
+Repository-wide audit from the initial finite-resolution theory through the
+exact-balanced companion, temporal/noisy routing, routing-population side line,
+eco-evolutionary identifiability, and OU congruence program. The audit records
+which results belong in the current paper, Supplement, mathematical companion,
+separate papers, or archive. It identifies temporal/noisy routing as the only
+remaining scientific disposition decision.
 
 ---
 
@@ -123,7 +134,7 @@ Separates:
 ### Prior-art boundary
 `manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md`
 
-### Public Bombus empirical bridge
+### Cross-system biological grounding
 `manuscript/BUMBLEBEE_PUBLIC_DATA_ROUTEABILITY_BRIDGE_V1.md`
 
 Canonical quantitative receipt:
@@ -140,7 +151,7 @@ Current result: no **single** public dataset identifies the full same-environmen
 - Chow et al. 2022: early context switches the later correct action;
 - Essenberg et al. 2015: closest branch-specific cue-relevance precedent.
 
-Use these as **componentwise public validation / empirical convergence**, not as a claim that one existing dataset directly estimates (C_A) and (C_F).
+Use the *Bombus* datasets as one quantified example within a broader cross-system biological grounding, not as direct validation of the exact deterministic (C_A,C_F) theorem.
 
 ### Bibliography verification
 `manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md`
