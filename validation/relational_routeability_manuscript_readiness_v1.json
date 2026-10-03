@@ -5,20 +5,21 @@
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
   "working_title": "Conditional decision topology separates ecological diversity from decision complexity",
-  "approximate_main_words": 4135,
+  "approximate_main_words": 4449,
   "structure": [
-    "Introduction: decision ecology, generalist choice, and the diversity-to-complexity problem",
-    "Material and methods: finite task plus Bombus evidence-synthesis protocol",
-    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, nonlinear no-go",
-    "Discussion: diversity versus effective decision complexity, measurement, Bombus as a flexible-generalist model, cross-system generality, prior-art boundary and deterministic limits"
+    "Introduction: decision ecology, generalism, and the diversity-to-complexity problem",
+    "Material and methods: finite deterministic task, minimal temporal-routing extension, and cross-system evidence synthesis",
+    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, exact decision redundancy, and temporal predictive routing",
+    "Discussion: diversity versus effective decision complexity, measurement, cross-system examples, prior-art boundary and deterministic limits"
   ],
   "core_claims": [
     "fixed exact-resolution burden is determined by which cue subsets reach H(T)",
     "the complete Shannon entropy vector does not determine optimal adaptive worst-case accessibility",
     "the matched adaptive-cost difference can grow without bound additively under direct products",
     "routeability is relational to the focal action map and realized cue outcomes rather than an intrinsic scalar of the physical environment",
+    "target-relevant state and cue reductions can remove nominal diversity without changing the exact decision burden",
     "finite ecological budgets expose the operational consequence",
-    "under a monotone L-Lipschitz sensing-to-selection lift, insufficient between-state routeability contrast imposes an exact local eco-evolutionary no-go"
+    "in the minimal temporal model, a target-uninformative routing cue has value exactly when present context predicts which later cue will be useful; symmetric noise produces a multiplicative routing gate"
   ],
   "validated_support": [
     "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
@@ -35,7 +36,11 @@
     "adaptive_gain/independent_section5_audit.py",
     "tests/test_independent_section5_audit.py",
     "validation/nonlinear_lipschitz_no_go_v2.json",
-    "tests/test_nonlinear_feedback_reachability.py"
+    "tests/test_nonlinear_feedback_reachability.py",
+    "validation/temporal_routing_threshold_v1.json",
+    "validation/noisy_temporal_routing_factorization_v1.json",
+    "tests/test_temporal_routing.py",
+    "tests/test_noisy_temporal_routing.py"
   ],
   "prior_art_must_remain_explicit": [
     "Katona 1966 separating systems",
@@ -72,7 +77,7 @@
     "preserve American Naturalist fallback"
   ],
   "v5_initial_submission_surface_modified": false,
-  "stop_rule": "Integrated manuscript now contains the entropic non-identification theorem, unbounded additive amplification, common-budget ecology, one nonlinear eco-evolutionary no-go, and a single-system Bombus empirical anchor. V5 is retired as a standalone submission because its central budget/no-go results are incorporated here. No new deterministic theorem family is required before submission.",
+  "stop_rule": "The integrated manuscript now contains the entropic non-identification theorem, additive amplification, common-budget ecology, exact target-relevant redundancy, and a temporal predictive-routing extension. The nonlinear eco-evolutionary no-go remains in the Supplement. V5 is retired as a standalone submission because its central routeability/budget claims and no-go mathematics overlap this integrated package. No new theorem family is required before submission.",
   "abstract_words": 150,
   "preferred_first_target": "Ecology Letters",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
@@ -81,7 +86,7 @@
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 150,
-  "current_approx_main_words": 4135,
+  "current_approx_main_words": 4449,
   "reference_count": 34,
   "empirical_carrier": {
     "taxon": "cross-system animal decision examples",
@@ -91,7 +96,7 @@
   },
   "portfolio_decision": {
     "v5_standalone": "RETIRED_DO_NOT_SUBMIT",
-    "reason": "The integrated manuscript now incorporates V5's budget-window and nonlinear no-go content; submitting V5 separately would create substantial theorem/claim overlap.",
+    "reason": "The integrated manuscript incorporates V5's routeability and budget-window claims, while the nonlinear no-go remains in the integrated Supplement; submitting V5 separately would create substantial theorem/claim overlap.",
     "mathematical_companion": "SUPPLEMENTARY_MATH_RESERVOIR_NOT_SEPARATE_INITIAL_SUBMISSION",
     "villavicencio_rewiring": "KEEP_SEPARATE_UNTIL_OBSERVATION_EFFORT_UNRESOLVED_ISSUE_IS_CLOSED"
   }
