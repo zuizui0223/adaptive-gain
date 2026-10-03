@@ -682,7 +682,7 @@ This action-first measurement pipeline is summarized in Fig. 2d.
 
 ---
 
-### 4.2 *Bombus* reveals the biological operations behind routeability
+### 4.3 *Bombus* reveals the biological operations behind routeability
 
 The deterministic theorem is intentionally stronger than any one public
 behavioural dataset located so far. We therefore use *Bombus* not as an
