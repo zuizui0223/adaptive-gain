@@ -549,7 +549,32 @@ I(T;\mathrm{assay1}\mid \mathrm{context}=1)=1.
 The routing cue need not reveal the target directly. It can reveal **where the
 target information is**.
 
-#### 3.4.3 Corrected sufficiency ladder
+#### 3.4.3 Raw ecological diversity can contain exact decision redundancy
+
+The finite theory also gives an exact sense in which descriptively different
+states or cues need not add decision complexity. At any unresolved state
+\(A\), let \(S_A(q)\) be the set of remaining cross-target world pairs
+separated by cue \(q\). If
+
+\[
+S_A(q)\supseteq S_A(r)
+\qquad\text{and}\qquad
+c(q)\le c(r),
+\]
+
+then \(q\) safely dominates \(r\): removing \(r\) at that state leaves the
+optimal adaptive cost unchanged. On the world side, same-target worlds with
+identical separation profiles against every remaining opposite-target world
+can likewise be quotient-collapsed without changing \(C_A\) or \(C_F\).
+
+Thus raw state richness and raw cue richness can strictly exceed
+**decision-relevant richness** for the focal action. This is an exact
+deterministic reduction, not a claim that taxonomically or phenotypically
+distinct resources are generally interchangeable. It says only that
+differences which never change a remaining target-relevant distinction are
+irrelevant to the declared decision problem.
+
+#### 3.4.4 Corrected sufficiency ladder
 
 The new construction fills the previous gap between pairwise information and
 the complete action-conditioned table.
