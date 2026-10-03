@@ -652,3 +652,147 @@ The most valuable unrecovered biological-mathematical result is the
 temporal/noisy routing line.
 
 Everything else is now accounted for and has an explicit destination.
+
+
+## 19. Final branch sweep: additional mathematical lines
+
+### 19.1 Sharp routing-population modal and majority thresholds
+
+The later routing-population branches sharpen the origin-fixation side model.
+
+On branch theory/routing-sharp-modal-corollaries,
+the exact gain-layer multiplicities are combined with a global degeneracy bound
+to give a three-regime aggregate-layer modality theorem:
+
+- below the threshold, the full-gain layer is not modal;
+- at the threshold, exactly the full layer and the adjacent lower layer tie;
+- above the threshold, the full-gain layer is uniquely modal.
+
+For k routing branches the sharp threshold is
+
+theta_c = 2^k - 1.
+
+Branch theory/routing-stationary-majority-threshold then separates modality from
+majority occupancy. The exact majority threshold is the unique positive solution
+of the full-mass equation and lies in the sharp bracket
+
+2^k-1 <= theta_1/2 <= 2(2^k-1).
+
+For the canonical twofold-fitness parameterization, the first stationary
+majority occurs one population-size step after the first unique aggregate mode
+for q>=2.
+
+Sources:
+theory/ROUTING_SHARP_MODAL_COROLLARIES_V1.md
+theory/ROUTING_STATIONARY_MAJORITY_THRESHOLD_V1.md
+theory/ROUTING_SECOND_PAPER_NOVELTY_BOUNDARY_V1.md
+
+Disposition: SEPARATE SECOND-PAPER CANDIDATE within the routing-population line.
+The branch's own novelty audit correctly treats Moran/origin-fixation and generic
+selection-versus-degeneracy as prior art; the candidate-specific content is the
+finite routing layer geometry and its sharp architecture-dependent threshold.
+
+### 19.2 Restricted feedback inverse diagnostics
+
+Branch theory/feedback-inverse-diagnostics contains exact inversion formulas
+for the earlier restricted local feedback parameterization.
+
+Within that declared model, local eigenvalues, damped-transient summaries, or
+phenotype AR(2) coefficients identify closed-loop invariants including the
+community-memory coordinate and loop-gain product. Exact perturbation identities
+then show that the inverse becomes badly conditioned as community memory
+approaches its singular boundary.
+
+Sources:
+theory/INVERSE_FEEDBACK_DIAGNOSTICS.md
+theory/INVERSE_FEEDBACK_SENSITIVITY.md
+
+Disposition: HISTORICAL/SEPARATE.
+
+Reason: these are exact inside the earlier restricted parameterization, but the
+later GENERAL_RESPONSE_IDENTIFIABILITY line gives the more important claim
+boundary once intrinsic evolutionary persistence is freed. They should not be
+reintroduced as if they were the most general identifiability result.
+
+### 19.3 Rewiring / detection side mathematics
+
+Branch revision/rewiring-prospective-test-v1 contains three exact side results.
+
+PAIRWISE_INFORMATION_ROUTEABILITY_NONIDENTIFIABILITY.md constructs a minimal
+four-state/three-cue pair with the same named pairwise information surface and
+the same C_A=2 but different C_F. This was valuable historically, but it is now
+strictly superseded in strength by the 12-state complete-Shannon-equivalence
+theorem in the current paper.
+
+DETECTION_EFFORT_GAIN_LOSS_IDENTITY.md proves the binary conservation identity
+
+observed gains - observed losses
+=
+endpoint change in observed edge count,
+
+with a telescoping multi-period analogue and an effort/detection interpretation.
+
+BINARY_TURNOVER_DETECTION_NONIDENTIFIABILITY.md gives exact observation models
+with the same observed 2x2 transition table but opposite latent prevalence
+directions.
+
+Disposition:
+
+- pairwise routeability result: ARCHIVE / minimal experimental-design support,
+  because the current Shannon theorem is stronger;
+- detection gain/loss identity and latent-turnover nonidentifiability:
+  SEPARATE Villavicencio/rewiring observation-process line.
+
+### 19.4 Biological qualification branches
+
+The Aedes and C. elegans qualification branches were checked for independent
+theory files. They contain biological qualification/planning assets rather than
+a new mathematical theorem family. No additional mathematical line needs
+recovery from those branches.
+
+## 20. Supersession map
+
+Several earlier results are not missing; they have been strengthened later.
+
+- pairwise-information routeability nonidentifiability
+  -> superseded by complete named subset-information / complete Shannon
+     nonidentifiability of C_A;
+- linear sensing-to-selection lift
+  -> superseded by monotone Lipschitz nonlinear no-go;
+- restricted feedback inverse
+  -> bounded by the later general-response identifiability result;
+- generic balanced-binary unboundedness
+  -> retained as the asymptotic capstone of the stronger exact-balanced finite
+     geometry companion;
+- early marginal/quantity-matched routeability controls
+  -> strengthened by the 12-state complete-entropic twins.
+
+This distinction matters: a theorem that disappeared from the current main text
+is not necessarily lost if a later theorem strictly dominates its scientific
+claim.
+
+## 21. Audit closure
+
+After the final branch sweep, no additional independent mathematical theorem
+family was found outside the categories recorded above.
+
+The recovery status is therefore:
+
+- central deterministic decision-complexity mathematics: recovered;
+- complete information/accessibility separation: recovered;
+- exact structural factorization: recovered into the current Supplement during
+  this audit;
+- exact-balanced finite geometry: preserved as a coherent companion paper;
+- temporal/noisy routing: located but not yet dispositioned between the current
+  paper and a second decision-ecology paper;
+- routing mutation/population theory: preserved as a separate representation-
+  dependent research line;
+- eco-evolutionary response/identifiability: preserved, with only the bounded
+  no-go retained in the current main narrative;
+- OU and perturbation-observability theory: preserved as a separate inference
+  program;
+- rewiring/detection mathematics: preserved in the separate observation-process
+  project.
+
+The only unresolved scientific recovery decision is therefore the role of the
+temporal/noisy routing theorem family.
