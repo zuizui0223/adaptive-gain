@@ -163,14 +163,14 @@ The independent implementation reproduces:
 - two-copy 144-world equality,
   \(C_F=(8,8)\), \(C_A=(8,6)\).
 
-## *Bombus* as a flexible-generalist model
+## Cross-system biological examples
 
 Canonical receipts:
 
 - \`validation/bombus_public_data_component_receipt_v1.json\`
 - \`validation/bombus_empirical_convergence_panel_v1.json\`
 
-### Yuan et al. 2026 — provisional preprint component
+### Bumblebee costly-acquisition component — provisional preprint
 
 Public source:
 \`Cuixiaojian21/bee_metacognition\`,
@@ -191,7 +191,7 @@ The raw non-request accuracy coded for the Impossible subset is not used as
 biological evidence because its below-chance value is not reconciled with the
 identical-stimulus task description.
 
-### Spaethe et al. 2026
+### Bumblebee conditional cue recruitment
 
 Public analysis repository:
 \`stoeckl-lab/Spaethe_et_al_2024_beeDecisions\`.
@@ -206,11 +206,12 @@ R_{\rm hard}=0.374,
 
 difference 0.349; pooled Cliff's \(\delta=0.980\).
 
-### Additional mechanistic support
+### Other staged decision systems and mechanisms
 
-- MaBouDi et al. 2025: selective sequential visual sampling;
-- Chow et al. 2022: early context switches the later correct action;
-- Essenberg et al. 2015: closest branch-specific cue-relevance precedent.
+- MaBouDi et al. 2025 and Essenberg et al. 2015: sequential sampling and conditional cue relevance in bumblebees;
+- Quilici & Rousse 2012: staged parasitoid host finding;
+- Hemmi & Pfeil 2010: multi-stage predator-risk information;
+- Stephens 2008: hierarchical and repeated patch-foraging decisions.
 
 Claim ceiling:
 these studies document biological operations relevant to conditional decision structure; they are not direct validation or estimation of the exact deterministic \(C_A<C_F\) theorem.
