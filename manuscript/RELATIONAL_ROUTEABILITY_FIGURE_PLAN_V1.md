@@ -194,7 +194,7 @@ Yuan et al. (2026) can be cited in the legend as empirical precedent that
 bumble bees can voluntarily pay a reward cost to obtain information. It is
 **not** plotted as routeability validation.
 
-### Panel B — public Bombus convergence
+### Panel B — one quantified biological example: *Bombus*
 
 Use two quantitative mini-panels and one qualitative icon row.
 
@@ -267,8 +267,7 @@ Use a small schematic/citation rather than another numerical axis:
 
 Caption firewall:
 
-> These public data validate operational ingredients of routeability, not the
-> exact matched \(C_A<C_F\) theorem.
+> These data illustrate operational ingredients relevant to conditional cue routing; they do not validate or estimate the exact matched \(C_A<C_F\) theorem.
 
 Do not combine effect sizes across studies.
 
@@ -420,7 +419,7 @@ Do not include:
 - diversity--stability speculation;
 - community-resilience claims;
 - stochastic expected-loss extensions;
-- additional public-data examples beyond the frozen Bombus convergence panel.
+- additional quantitative taxon panels added only to make the theory look general.
 
 Those belong in the mathematical supplement, future work or a separate
 empirical paper.
