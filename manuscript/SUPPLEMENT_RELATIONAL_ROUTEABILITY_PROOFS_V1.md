@@ -678,9 +678,176 @@ Executable sources:
 
 ---
 
-## S10. Prospective direct Bombus experiments
+## S10. Temporal predictive routing
 
-### S10.1 Minimal four-state causal design
+The main deterministic theory asks which cues must be acquired to guarantee an
+exact action. The temporal extension changes the objective deliberately: it
+asks for Bayes-optimal target accuracy under a two-query budget when the
+context controlling specialist-cue usefulness can change between observations.
+
+### S10.1 Minimal four-world temporal core
+
+Represent states as
+
+\[
+(T,C)\in\{0,1\}\times\{0,1\},
+\]
+
+where \(T\) is the focal target and \(C\) determines which specialist cue is
+diagnostic. The three cues are
+
+\[
+q_{\rm route}=C,
+\]
+
+\[
+q_{\rm left}(T,C)=
+\begin{cases}
+T,&C=1,\\
+0,&C=0,
+\end{cases}
+\qquad
+q_{\rm right}(T,C)=
+\begin{cases}
+T,&C=0,\\
+1,&C=1.
+\end{cases}
+\]
+
+Under the uniform four-state prior,
+
+\[
+I(T;q_{\rm route})=0.
+\]
+
+Thus the early cue has no direct target information; its only possible value
+is to route later acquisition.
+
+Let the target remain fixed during one sensing episode and let context change
+according to
+
+\[
+P(C_1=C_0)=\rho,
+\qquad
+P(C_1\ne C_0)=1-\rho,
+\]
+
+with \(T\) and \(C_0\) independent fair bits.
+
+### S10.2 Fixed and contingent two-query accuracies
+
+The three possible fixed two-query bundles are
+\(\{q_{\rm route},q_{\rm left}\}\),
+\(\{q_{\rm route},q_{\rm right}\}\), and
+\(\{q_{\rm left},q_{\rm right}\}\).
+Exact Bayes decoding gives
+
+\[
+\boxed{
+A_F^{(2)}(\rho)=\frac34
+}
+\qquad
+\forall\rho\in[0,1].
+\]
+
+After observing \(C_0\), a contingent policy can follow expected persistence,
+
+\[
+C_0=0\to q_{\rm right},
+\qquad
+C_0=1\to q_{\rm left},
+\]
+
+with accuracy
+
+\[
+A_{\rm same}(\rho)=\frac{1+\rho}{2},
+\]
+
+or expected alternation,
+
+\[
+C_0=0\to q_{\rm left},
+\qquad
+C_0=1\to q_{\rm right},
+\]
+
+with accuracy
+
+\[
+A_{\rm flip}(\rho)=1-\frac{\rho}{2}.
+\]
+
+Therefore
+
+\[
+\boxed{
+A_A^{(2)}(\rho)
+=
+\frac34+\frac{|2\rho-1|}{4},
+}
+\]
+
+and
+
+\[
+\boxed{
+G_{\rm time}
+=
+A_A^{(2)}-A_F^{(2)}
+=
+\frac{|2\rho-1|}{4}.
+}
+\]
+
+Routing value is exactly zero at temporal independence and positive under both
+predictable persistence and predictable alternation.
+
+### S10.3 Symmetric noisy factorization
+
+Let the routing observation have reliability \(a\ge1/2\) and the specialist
+observation reliability \(b\ge1/2\). Direct latent-state enumeration and the
+closed-form derivation agree on
+
+\[
+\boxed{
+G_{\rm noisy}
+=
+\frac{|2\rho-1|(2a-1)(2b-1)}{4}.
+}
+\]
+
+Thus temporal predictability, usable routing information and usable downstream
+specialist information are multiplicative gates in this symmetric model.
+
+The arbitrary-binary-transition extension sharpens the interpretation:
+temporal dependence alone need not create routing value. If the same
+specialist cue is optimal after every current context, conditioning acquisition
+on current context gives no advantage. The relevant quantity is therefore
+predictability of **future cue usefulness**.
+
+Canonical assets:
+
+- \`theory/TEMPORAL_ROUTING_THRESHOLD.md\`
+- \`theory/NOISY_TEMPORAL_ROUTING_FACTORIZATION.md\`
+- \`theory/PREDICTIVE_CUE_USEFULNESS_THEOREM.md\`
+- \`adaptive_gain/temporal_routing.py\`
+- \`adaptive_gain/noisy_temporal_routing.py\`
+- \`tests/test_temporal_routing.py\`
+- \`tests/test_noisy_temporal_routing.py\`
+- \`validation/temporal_routing_threshold_v1.json\`
+- \`validation/noisy_temporal_routing_factorization_v1.json\`
+
+This extension does not claim a general noisy counterpart of the deterministic
+worst-case theorem.
+
+---
+
+## S11. Prospective direct experiments
+
+These designs can be implemented in *Bombus* or another experimentally tractable choice system; the mathematical prediction is taxon-independent.
+
+### S11.1 Minimal four-state causal design
 
 Use four physical cue vectors and three cue channels.
 
@@ -706,7 +873,7 @@ The discriminating qualitative prediction is
 Thus the routeability effect is predicted only in the intermediate budget
 window rather than as a generic main effect.
 
-### S10.2 Exact-balanced ten-state stress test
+### S11.2 Exact-balanced ten-state stress test
 
 Use the S5 ten-state, six-cue environment with every cue exactly 5/5 balanced.
 
@@ -737,12 +904,12 @@ Canonical design files:
 
 ---
 
-## S11. Additional theory retained outside the main narrative
+## S12. Additional theory retained outside the main narrative
 
 The integrated paper uses one theorem spine. Several valid results are retained
 as supporting or supplementary theory rather than competing headlines.
 
-### S11.1 Temporal recurrence and spectral filtering
+### S12.1 Temporal recurrence and spectral filtering
 
 Community recurrence determines which structurally generated reward modes
 persist through time. The formal spectral treatment is retained in:
@@ -755,7 +922,7 @@ persist through time. The formal spectral treatment is retained in:
 These results support temporal interpretation but are not required for the
 static-information non-identification theorem.
 
-### S11.2 Identifiability limits
+### S12.2 Identifiability limits
 
 Local transient geometry generally identifies characteristic invariants rather
 than a unique decomposition into evolutionary persistence, ecological memory
@@ -769,7 +936,7 @@ Canonical files:
 
 These results remain supporting diagnostics rather than a main-paper headline.
 
-### S11.3 Exact-balanced extremal geometry
+### S12.3 Exact-balanced extremal geometry
 
 The mathematical companion results remain useful as finite geometry behind the
 routeability coordinate. In particular:
@@ -795,7 +962,7 @@ These details belong in the Supplement/math appendix, not in the ecological
 headline.
 
 
-### S11.4 Exact two-sided structural factorization
+### S12.4 Exact two-sided structural factorization
 
 The adaptive and fixed costs admit different exact structural reductions.
 
@@ -849,7 +1016,7 @@ Canonical supporting files:
 
 ---
 
-## S12. Scope of computational claims
+## S13. Scope of computational claims
 
 The relational theorem, fixed-information characterization, direct-product
 amplification and nonlinear no-go are analytic.
@@ -863,7 +1030,7 @@ nonlinear no-go and public Bombus bridge calculations.
 
 ---
 
-## S13. Claim boundaries
+## S14. Claim boundaries
 
 The integrated supplement does not establish:
 
