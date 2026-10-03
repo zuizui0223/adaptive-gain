@@ -8,7 +8,7 @@ Ecological information is summarized by amount, but accessibility depends on how
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
-whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Across *Bombus* studies, costly acquisition, selective secondary-cue use, sequential sampling and context-conditioned cue relevance provide a biological synthesis of the operations required by the theory without constituting a direct theorem test. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility and can constrain evolutionary reachability under bounded selection.
+whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Across *Bombus* studies, costly acquisition, selective secondary-cue use, sequential sampling and context-conditioned cue relevance provide biological evidence for operations required by the theory without constituting a direct theorem test. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility and can constrain evolutionary reachability under bounded selection.
 
 ## Keywords
 
@@ -42,7 +42,7 @@ This distinction also has mathematical precedent outside ecology. Information th
 
 We answer yes. For a declared ecological task, let \(C_A\) denote the minimum worst-case cue cost when later cues may depend on earlier outcomes, and let \(C_F\) denote the minimum cost of a fixed resolving cue set. We construct paired tasks on the same physical cue environment. Only the map from cue-defined states to the focal action changes. Nevertheless, the fixed-to-contingent acquisition geometry separates without bound as the construction grows, whereas the matched control requires only two fixed cues.
 
-The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. Recent bumble-bee experiments also show that animals can voluntarily pay a reward cost to obtain predictive information when uncertain (Yuan et al. 2026), supporting the biological plausibility of treating information acquisition as costly without constituting a test of routeability itself. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
+The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. The recent bioRxiv preprint by Yuan et al. (2026) also reports that bumblebees can voluntarily pay a reward cost to obtain predictive information when uncertain, supporting the biological plausibility of treating information acquisition as costly without constituting a test of routeability itself. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
 
 \[
 C_A\le B<C_F.
@@ -710,9 +710,15 @@ showed that illumination context can reverse the subsequently correct colour,
 and Dale et al. (2005) showed sequential contextual priming of later visual
 choice. Together these results show that secondary-cue recruitment, sequential
 sampling, conditional cue relevance, context-conditioned action and costly
-information acquisition all occur within *Bombus*. They motivate the
+information acquisition all occur within *Bombus* (Fig. 2b). They motivate the
 operational distinction measured by routeability but do not constitute a
 single direct theorem test.
+
+---
+
+A direct causal test would hold the physical cue matrix fixed while changing
+only the action-conditioned branch structure and costly cue access under a
+shared budget (Fig. 2c).
 
 ---
 
