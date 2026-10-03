@@ -33,13 +33,12 @@ budget makes this distinction operational when (C_A\le B<C_F): contingent
 sensing can then guarantee a resolved action when fixed acquisition cannot.
 
 We ground the theory in established animal behaviour without treating any
-existing dataset as a direct theorem test. Bumblebees provide a model flexible
-generalist: experiments show selective recruitment of secondary cues,
-context-dependent cue relevance, sequential sensory sampling and switching
-between cue-regulated foraging routines. The same staged structure occurs in
-parasitoid host finding, multi-stage predator avoidance in fiddler crabs and
-patch foraging across animals. These systems motivate the theory's scope; they
-do not estimate (C_A) or (C_F).
+existing dataset as a direct theorem test. Bumblebees are one flexible-
+generalist example of conditional cue recruitment and context-dependent
+sampling. Parasitoid host finding, multi-stage predator avoidance in fiddler
+crabs and patch foraging provide parallel examples in other ecological
+settings. Together these systems motivate the theory's scope; none estimates
+(C_A) or (C_F).
 
 A secondary result shows how the structural distinction can propagate beyond
 immediate behaviour. For any nondecreasing Lipschitz sensing-to-selection
