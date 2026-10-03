@@ -4,7 +4,7 @@ Draft v0.4 — information-accessibility synthesis candidate
 
 ## Abstract
 
-Generalist animals face many resources, yet sequential decisions may spare them from distinguishing all alternatives at once. What, then, determines effective decision complexity? For a deterministic choice, let (C_F) be the minimum cost of a fixed resolving cue set and (C_A) the minimum worst-case cost when later cues may depend on earlier outcomes. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: ((C_A,C_F)=(4,4)) versus ((3,4)). Thus resource diversity, cue diversity and even complete static information do not determine sequential decision burden. Cartesian products amplify the adaptive-cost difference, while a separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. A finite observation budget makes this difference ecological when (C_Ale B<C_F). Bumblebee, parasitoid, anti-predator and patch-foraging studies show that staged information use is widespread. Conditional decision topology therefore separates ecological diversity from effective decision complexity.
+Generalist animals face many resources, yet sequential decisions can avoid simultaneous comparison. What determines effective decision complexity? For a deterministic choice, let \(C_F\) be the minimum cost of a fixed resolving cue set and \(C_A\) the minimum worst-case cost when later cues may depend on earlier outcomes. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Thus resource diversity, cue diversity and complete static information do not determine sequential decision burden. A finite observation budget makes this difference ecological when \(C_A\le B<C_F\). In a temporal extension, a cue with no direct target information gains value when it predicts which later cue will be useful; the gain vanishes at temporal independence. Staged information use occurs across pollination, host finding, predator avoidance and patch foraging. Conditional decision topology separates ecological diversity from effective decision complexity.
 
 ## Keywords
 
@@ -128,7 +128,25 @@ Neither \(C_A\) nor \(C_F\) is intrinsically fitness. They are exact properties 
 
 ---
 
-### 2.2 Biological evidence synthesis
+### 2.2 Minimal temporal routing extension
+
+To ask whether routing value survives beyond static exact resolution, we use the
+repository's minimal four-world strict-gain core as a two-step decision problem.
+A binary context \(C_t\) determines which of two specialist cues is diagnostic
+for the target at the next step. In the symmetric temporal model,
+
+\[
+P(C_1=C_0)=\rho.
+\]
+
+The early routing cue reports the current context but has zero direct mutual
+information with the final target. Policies are compared under a two-query
+budget by exact Bayes accuracy. A noisy extension gives the routing cue
+reliability \(a\ge1/2\) and each specialist cue reliability \(b\ge1/2\).
+All temporal and noisy expressions are checked both by closed form and direct
+latent-state enumeration.
+
+### 2.3 Biological evidence synthesis
 
 We used published animal-behaviour studies only to ask whether the operations
 assumed by the theory occur in real ecological decisions. Evidence was grouped
@@ -607,65 +625,67 @@ operational property.
 
 ---
 
-### 3.5 Conditional accessibility can bound evolutionary reachability
+### 3.5 Routing value can come from predicting which cue will matter next
 
-The structural distinction becomes evolutionarily consequential only after a
-biological lift is specified. Let the state-specific routeability gap be
+The deterministic results show that a cue can be useful by routing later
+acquisition even when it does not itself resolve the target. The minimal
+temporal model makes that distinction quantitative.
+
+At a two-query budget, every fixed cue pair has optimal accuracy
 
 \[
-g_i=C_F(i)-C_A(i)\ge0
+A_F^{(2)}=\frac34.
 \]
 
-and consider two ecological states with ordered contrast
-\(\Delta g=g_2-g_1\ge0\). Suppose the local selection contribution is
-\(s_i=f(g_i)-\kappa\), where \(f\) is nondecreasing and \(L\)-Lipschitz on the
-relevant domain. Then
+If the first observation is used to choose which specialist cue to acquire
+next, optimal contingent accuracy is
 
 \[
-0\le\Delta s\le L\Delta g.
-\]
-
-For a local eco-evolutionary feedback with positive conversion scale
-\(B_f=-\beta e>0\), distinguished from the ecological observation budget
-\(B\), the loop gain therefore satisfies
-
-\[
-\boxed{G\le B_fL\Delta g.}
-\]
-
-In the generalized two-dimensional local response used here, evolutionary
-persistence \(\alpha\) and ecological memory \(\phi\) give the exact
-complex-eigenpair threshold
-
-\[
-G_{\rm osc}
+A_A^{(2)}
 =
-\frac{(\alpha-\phi)^2}{4(1-\phi)}.
+\frac34+\frac{|2\rho-1|}{4}.
 \]
 
-Hence a stable oscillatory response is possible only if
+Therefore the temporal routing advantage is
 
 \[
 \boxed{
-\Delta g>
-\frac{G_{\rm osc}}{B_fL}.
+G_{\rm time}
+=
+A_A^{(2)}-A_F^{(2)}
+=
+\frac{|2\rho-1|}{4}.
 }
 \]
 
-More strongly, if an entire architecture class satisfies \(0\le g_i\le
-q_{\max}\) and \(B_fLq_{\max}\le G_{\rm osc}\), oscillatory feedback is
-unreachable for that class. This is a **no-go theorem**, not a sufficiency
-claim: crossing the structural threshold does not guarantee oscillation, and
-\(B_f,L,\alpha,\phi\) are not estimated from the public bee data. Its role is to
-show that information accessibility can delimit an evolutionary possibility
-space once a state-dependent ecological feedback is specified.
+The gain vanishes exactly at temporal independence, \(\rho=1/2\). Predictable
+persistence and predictable alternation both create routing value; they simply
+require opposite continuation rules. The relevant quantity is therefore not
+persistence itself, but whether present information predicts **which later cue
+will be useful**.
+
+With symmetric observation noise, the same result factorizes exactly. If the
+routing cue has reliability \(a\) and the specialist cues have reliability
+\(b\),
+
+\[
+\boxed{
+G_{\rm noisy}
+=
+\frac{|2\rho-1|(2a-1)(2b-1)}{4}.
+}
+\]
+
+Temporal predictability, usable routing information and usable downstream
+specialist information are thus multiplicative gates in this minimal model.
+This is an expected-accuracy extension of the deterministic theory, not an
+equivalence theorem for arbitrary noisy decision problems. Under a general
+binary transition kernel, temporal dependence alone is also insufficient:
+routing value is zero whenever the same specialist cue remains optimal after
+every current context.
 
 ---
 
----
-
-
----
 
 ## 4. Discussion
 
@@ -894,12 +914,12 @@ the same complete Shannon entropy vector, yet different adaptive costs. A separa
 arbitrarily large.
 
 A finite ecological budget converts this structural distinction into a
-feasibility prediction, while the nonlinear bound shows how insufficient
-between-state routeability contrast can exclude a specified local
-eco-evolutionary feedback regime. Independent *Bombus* experiments document
-the conditional cue use, sequential sampling and costly acquisition that make
-this distinction biologically plausible, while leaving the exact theorem for
-direct future tests.
+feasibility prediction. The temporal extension then shows that an early cue
+need not predict the final target directly: it can be valuable because it
+predicts which later cue will be useful. Published examples from pollination,
+host finding, predator avoidance and patch foraging show that staged
+information use is biologically widespread, while leaving the exact
+routeability contrasts for direct future tests.
 
 The resulting principle is:
 
