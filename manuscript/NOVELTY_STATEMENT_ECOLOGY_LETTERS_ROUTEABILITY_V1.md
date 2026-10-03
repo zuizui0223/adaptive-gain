@@ -31,12 +31,12 @@ operational dimension not identified by option count or static information
 content. A finite natural-history budget exposes this dimension when
 \(C_A\le B<C_F\).
 
-*Bombus* is used as a model flexible generalist rather than as a direct
-validation of the theorem. Bumblebee studies show selective recruitment of
-secondary cues, context-dependent cue relevance, sequential sampling and
-flexible foraging routines. Parasitoid host search, multi-stage predator
-avoidance and patch foraging establish that staged information acquisition is
-not pollinator-specific.
+Biological examples are deliberately cross-system rather than centered on one
+model organism. Bumblebees provide one flexible-generalist example of
+conditional cue recruitment and context-dependent action; parasitoid host
+search, multi-stage predator avoidance and patch foraging provide parallel
+examples of staged information acquisition in different ecological settings.
+None is treated as a direct validation of the theorem.
 
 The paper therefore contributes a theory of **when ecological diversity
 becomes decision complexity**, an exact non-identification theorem separating
