@@ -337,10 +337,9 @@ new behavioural-ecology framing;
 spectral/identifiability = SUPPLEMENT or SEPARATE;
 full phase/transient/stasis stack = SEPARATE/ARCHIVE for this paper.
 
-## 9. Temporal and noisy routing — high-value unrecovered decision-ecology line
+## 9. Temporal and noisy routing — recovered decision-ecology extension
 
-This line lives on branch theory/ecological-state-observability and is not
-adequately represented in the current synthesis manuscript.
+This line originated on branch `theory/ecological-state-observability`. Its core theory, implementations, tests and validation receipts are now recovered onto the active synthesis branch, and the temporal/noisy routing result is a secondary result in the current manuscript.
 
 ### Minimal temporal theorem
 
@@ -398,8 +397,7 @@ theory/PREDICTIVE_CUE_USEFULNESS_THEOREM.md
 theory/NOISY_TEMPORAL_ROUTING_FACTORIZATION.md
 theory/EVOLUTIONARY_INFORMATION_ROUTING.md
 
-Disposition: REASSESS FOR CURRENT PAPER, otherwise a natural second
-decision-ecology paper.
+Disposition: SECONDARY MAIN RESULT with derivation in the integrated Supplement. The broader temporal-routing programme remains available for a future dedicated paper.
 
 This line is now unusually relevant because the current manuscript asks what
 makes ecological decisions difficult. It gives the exact biological statement:
@@ -566,24 +564,16 @@ nor the paired counterexamples proving that either side alone is insufficient.
 
 Recommendation: add to the proof supplement, not the main Results.
 
-### Gap B — temporal/noisy routing
+### Gap B — temporal/noisy routing — RESOLVED
 
-The current manuscript discusses sequential decisions biologically but omits
-the repository's exact dynamic result that a routing cue can have zero direct
-target information while gaining value entirely from predicting which future
-cue is useful.
+The temporal/noisy routing line has now been recovered into the active synthesis
+branch and replaces the eco-evolutionary no-go as the main manuscript's
+secondary extension. The exact temporal and noisy formulas are stated in the
+main Results and derived in the integrated Supplement.
 
-Recommendation: scientific reassessment before submission.
-
-Two defensible options:
-
-1. keep the current paper purely deterministic and freeze temporal/noisy routing
-   as the next decision-ecology paper; or
-2. replace/demote the eco-evolutionary no-go secondary result with one compact
-   temporal-routing result because it is more directly connected to animal
-   decision-making.
-
-Do not add both merely to maximize theorem count.
+The nonlinear eco-evolutionary no-go remains preserved in the Supplement and
+its theory/validation assets. It is no longer part of the main behavioural-
+ecology narrative.
 
 ## 16. Results intentionally outside the current paper
 
@@ -612,14 +602,14 @@ These are not failures of recovery; they are separate mathematical programs.
 | Complete Shannon vector does not determine C_A | MAIN |
 | Entropic twin product amplification | MAIN |
 | Relational routeability | MAIN |
-| Nonlinear feedback no-go | secondary MAIN; reconsider priority |
+| Nonlinear feedback no-go | SUPPLEMENT / preserved theory |
 | Continuation/frontier two-sided factorization | SUPPLEMENT — recover |
 | Productive-frontier / Bellman kernels | COMPANION / selected SUPPLEMENT |
 | Bypass/certificate/proof-compression machinery | ARCHIVE / COMPANION |
 | Minimal normal forms | COMPANION / experimental-design support |
 | Generic sharp ratios / bounded arity | COMPANION |
 | Exact-balanced finite geometry | COMPANION |
-| Temporal/noisy routing | REASSESS — high relevance to current framing |
+| Temporal/noisy routing | secondary MAIN + SUPPLEMENT |
 | Local mutation / neutral plateau / mesoscopic waiting | SEPARATE |
 | Origin-fixation / stationary routing evolution | SEPARATE |
 | Representation / mutation-bias / rate-scale no-go | SEPARATE |
@@ -645,13 +635,7 @@ When does ecological diversity become effective decision complexity?
 
 the complete-static-information theorem is the main mathematical result.
 
-The most valuable unrecovered structural result is the two-sided
-continuation/frontier factorization.
-
-The most valuable unrecovered biological-mathematical result is the
-temporal/noisy routing line.
-
-Everything else is now accounted for and has an explicit destination.
+The two-sided continuation/frontier factorization is now recovered in the integrated Supplement, and the temporal/noisy routing line is now recovered into the main decision-ecology narrative. Everything else is accounted for and has an explicit destination.
 
 
 ## 19. Final branch sweep: additional mathematical lines
@@ -783,19 +767,16 @@ The recovery status is therefore:
 - exact structural factorization: recovered into the current Supplement during
   this audit;
 - exact-balanced finite geometry: preserved as a coherent companion paper;
-- temporal/noisy routing: located but not yet dispositioned between the current
-  paper and a second decision-ecology paper;
+- temporal/noisy routing: recovered onto the active branch and integrated as the current paper's secondary decision-ecology result;
 - routing mutation/population theory: preserved as a separate representation-
   dependent research line;
-- eco-evolutionary response/identifiability: preserved, with only the bounded
-  no-go retained in the current main narrative;
+- eco-evolutionary response/identifiability: preserved; the nonlinear no-go is retained in the integrated Supplement rather than the main narrative;
 - OU and perturbation-observability theory: preserved as a separate inference
   program;
 - rewiring/detection mathematics: preserved in the separate observation-process
   project.
 
-The only unresolved scientific recovery decision is therefore the role of the
-temporal/noisy routing theorem family.
+No independent mathematical theorem family remains without an explicit publication or archive disposition.
 
 
 ## 22. Recovery actions completed in this audit
@@ -807,9 +788,7 @@ The repository map was repaired in four concrete ways.
    escape corruption was repaired in commit
    \`68e8cdcf3ca87af335bc235d0dbad033f3ea6606\`.
 
-2. The divergent temporal/predictive-routing line is now indexed on the active
-   synthesis branch in
-   \`manuscript/TEMPORAL_ROUTING_RECOVERY_NOTE_V1.md\`.
+2. The temporal/predictive-routing line is now indexed on the active synthesis branch, and its theory files, implementations, tests and validation receipts have been copied from `theory/ecological-state-observability`. The main manuscript now contains the temporal routing result and the Supplement contains its derivation.
 
 3. The routing mutation / mesoscopic / origin-fixation / stationary-
    nonidentifiability stack is now indexed in
@@ -827,12 +806,4 @@ the OU/evoTS branch, the rewiring/detection branch and the biological
 qualification branches, no further independent theorem family was found that
 lacks a disposition in this audit.
 
-The one remaining scientific choice is not a recovery problem but a paper-design
-decision:
-
-> Should the temporal/predictive-routing theorem remain the next
-> decision-ecology paper, or should it replace the current Letter's secondary
-> eco-evolutionary no-go result?
-
-That choice should be made from biological narrative and journal fit, not from
-fear that a mathematical result has been lost.
+The paper-design decision is now closed: temporal/predictive routing replaces the eco-evolutionary no-go as the main manuscript's secondary extension because it is directly aligned with the behavioural/decision-ecology question. The nonlinear no-go remains preserved in the Supplement.
