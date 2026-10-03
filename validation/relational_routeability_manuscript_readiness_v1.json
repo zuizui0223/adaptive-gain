@@ -84,9 +84,9 @@
   "current_approx_main_words": 4421,
   "reference_count": 34,
   "empirical_carrier": {
-    "taxon": "Bombus spp.",
-    "rationale": "Bombus provides a cognitively flexible generalist model; parasitoid host search, multi-stage predator avoidance and patch foraging establish that staged information acquisition is not pollinator-specific.",
-    "manuscript_label": "flexible-generalist model plus cross-system sequential-decision grounding",
+    "taxon": "cross-system animal decision examples",
+    "rationale": "Bumblebees, parasitoids, fiddler crabs and patch-foraging animals illustrate staged information acquisition across distinct ecological settings; none is a direct theorem validation.",
+    "manuscript_label": "cross-system biological grounding",
     "full_theorem_status": "not yet directly validated in one experiment"
   },
   "portfolio_decision": {
