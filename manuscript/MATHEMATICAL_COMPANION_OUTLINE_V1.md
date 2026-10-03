@@ -1,5 +1,15 @@
 # Mathematical companion outline v1 — exact finite adaptive resolution
 
+> **Status update (2026-10-03).** This outline records the broad finite-resolution
+> companion architecture, but it is no longer the preferred standalone paper
+> identity. The later branch `companion/math-priority-audit-v2` contains
+> `MANUSCRIPT_MATHEMATICAL_COMPANION_V0_2.md`, which pivots the companion to
+> the more distinctive exact-balanced binary geometry: the sharp (n-3)
+> fixed-cost cap, star--edge--star equality structure, bounded-depth envelopes,
+> finite compatibility defects, and unbounded asymptotic adaptivity despite
+> exact 50/50 query balance. Kernel, bypass, certificate and symmetry results
+> remain reusable supporting mathematics rather than the headline.
+>
 Status: companion-paper architecture for mathematical results that are substantial but would dilute the single biological headline of the Evolution Letters V3 manuscript. No new theorem family is introduced here.
 
 ## Working title
