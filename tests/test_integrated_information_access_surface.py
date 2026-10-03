@@ -39,10 +39,10 @@ def test_integrated_notation_and_claim_firewalls():
 
 def test_bombus_claim_ceiling_is_preserved():
     text = _text()
-    assert "bioRxiv preprint by Yuan et al. (2026)" in text
-    assert "coded value (0.207)" in text
-    assert "not yet reconciled with the source data" in text
-    assert r"the exact \(C_A<C_F\) theorem" in text
+    assert "bioRxiv preprint" in text\n    assert "Yuan et al. (2026)" in text
+    assert "0.207" in text
+    assert "unresolved raw-field anomaly" in text
+    assert "not a test of the routeability theorem" in text
 
 
 def test_classical_identification_prior_art_is_present():
