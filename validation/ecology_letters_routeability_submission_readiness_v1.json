@@ -11,7 +11,7 @@
   },
   "current_counts": {
     "abstract_words_approx": 150,
-    "main_text_words_approx": 4421,
+    "main_text_words_approx": 4135,
     "references": 34,
     "figures": 2,
     "tables": 0,
@@ -37,14 +37,15 @@
   ],
   "status": "INTEGRATED_TEXT_AND_FIGURES_READY_PENDING_METADATA_ARCHIVE_AND_FINAL_PREFLIGHT",
   "empirical_anchor": {
-    "taxon": "Bombus spp.",
-    "role": "Bombus model flexible-generalist synthesis plus cross-system sequential-decision grounding",
+    "taxon": "cross-system animal decision examples",
+    "role": "biological grounding for staged and conditional information use",
     "direct_public_components": [
-      "costly need-dependent information acquisition",
-      "secondary-cue recruitment when primary information is insufficient",
-      "selective sequential sensory sampling",
-      "context-conditioned action mapping"
+      "conditional cue recruitment in bumblebees",
+      "sequential sensory sampling in bumblebees",
+      "staged parasitoid host finding",
+      "multi-stage predator-risk information",
+      "hierarchical and repeated patch-foraging decisions"
     ],
-    "full_theorem_status": "prospective: no single public dataset yet directly tests the complete routeability theorem"
+    "full_theorem_status": "prospective: no cited natural system directly estimates the complete deterministic routeability contrast"
   }
 }
