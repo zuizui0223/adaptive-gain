@@ -1,4 +1,4 @@
-# Conditional decision topology separates information content from ecological accessibility
+# Conditional decision topology separates ecological diversity from decision complexity
 
 Draft v0.4 — information-accessibility synthesis candidate
 
