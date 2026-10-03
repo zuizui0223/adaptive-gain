@@ -11,8 +11,8 @@
   },
   "current_counts": {
     "abstract_words_approx": 150,
-    "main_text_words_approx": 4900,
-    "references": 28,
+    "main_text_words_approx": 4421,
+    "references": 34,
     "figures": 2,
     "tables": 0,
     "text_boxes": 0
@@ -38,7 +38,7 @@
   "status": "INTEGRATED_TEXT_AND_FIGURES_READY_PENDING_METADATA_ARCHIVE_AND_FINAL_PREFLIGHT",
   "empirical_anchor": {
     "taxon": "Bombus spp.",
-    "role": "single-system biological synthesis / carrier of the theory's biological operations",
+    "role": "Bombus model flexible-generalist synthesis plus cross-system sequential-decision grounding",
     "direct_public_components": [
       "costly need-dependent information acquisition",
       "secondary-cue recruitment when primary information is insufficient",
