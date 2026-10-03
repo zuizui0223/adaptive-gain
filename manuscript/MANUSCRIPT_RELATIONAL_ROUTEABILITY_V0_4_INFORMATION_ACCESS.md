@@ -8,7 +8,7 @@ Ecological information is summarized by amount, but accessibility depends on how
 \[
 C_F=\min_{S:I(T;Q_S)=H(T)} c(S),
 \]
-whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Reanalysis of public *Bombus* data shows costly information acquisition increases when unaided decisions are difficult, while secondary cues are recruited when primary cues are insufficient. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility and can constrain evolutionary reachability under bounded selection.
+whereas adaptive resolution is an outcome-resolved Bellman problem. We construct paired 12-state tasks with identical physical cue matrices and complete Shannon entropy vectors but different costs: \((C_A,C_F)=(4,4)\) versus \((3,4)\). Their \(r\)-fold products preserve entropic equivalence while the adaptive-cost difference grows as \(r\). A separate balanced family gives an unbounded fixed-to-adaptive ratio under weaker matching. Across *Bombus* studies, costly acquisition, selective secondary-cue use, sequential sampling and context-conditioned cue relevance provide a biological synthesis of the operations required by the theory without constituting a direct theorem test. A finite budget exposes the ecological consequence when \(C_A\le B<C_F\). Routeability therefore separates static information content from sequential accessibility and can constrain evolutionary reachability under bounded selection.
 
 ## Keywords
 
@@ -98,18 +98,18 @@ Neither \(C_A\) nor \(C_F\) is intrinsically fitness. They are exact properties 
 
 ---
 
-### 2.2 Public *Bombus* data and bridge quantities
+### 2.2 *Bombus* evidence synthesis
 
-We used public *Bombus* datasets only for preregisterable component tests, not
-to estimate the exact deterministic theorem. For Yuan et al. (2026), we
-independently reaggregated all 19,200 trial records from the immutable public
-source commit, calculating information-request rates by difficulty and
-within-bee directional contrasts. For Spaethe et al. (2026), before extracting
-the public individual conflict-test values we defined secondary-cue recruitment
-as \(R=1-p_{\rm colour}\) and compared easy versus difficult primary-colour
-conditions. Other *Bombus* studies are used only as mechanistic support for
-sequential sampling and context-conditioned action. Source hashes, code and
-claim ceilings are given in the Data Accessibility statement and Supplement.
+We used *Bombus* studies to evaluate whether the biological operations assumed
+by the theory are independently documented within one genus. Evidence was
+classified by operation: selective recruitment of secondary cues, active
+costly information acquisition, sequential sensory sampling, conditional cue
+relevance and context-conditioned action. These studies provide biological
+grounding rather than estimates of \(C_A\) or \(C_F\). A reproducible
+reaggregation of the recent Yuan et al. (2026) public trials is retained in the
+Supplement as a provisional component check because that study is a preprint
+and one raw accuracy field remains unresolved.
+
 
 ---
 
@@ -608,103 +608,6 @@ space once a state-dependent ecological feedback is specified.
 
 ---
 
-### 3.6 *Bombus* as a single-system empirical anchor
-
-The deterministic theorem is intentionally stronger than any one public
-behavioural dataset located so far. We therefore use *Bombus* not as an
-anecdotal example, but as a single-system empirical anchor. The primary
-published anchor is the cue-allocation experiment of Spaethe et al. (2026);
-the recent Yuan et al. (2026) preprint supplies a separate, provisional test
-of costly active acquisition. Across these and other experiments in the same
-genus, the evidence tests distinct operational ingredients rather than the
-full theorem.
-
-#### 3.6.1 Secondary cues are recruited when primary information is insufficient
-
-Spaethe et al. (2026) trained *B. terrestris* on combined colour and
-pattern/shape cues and then used cue-conflict tests to separate their
-contributions. We prospectively defined a secondary-cue recruitment index
-
-\[
-R=1-p_{\rm colour}.
-\]
-
-Using individual values in the authors' public analysis repository,
-secondary-cue recruitment increased from (R_{m easy}=0.026) to
-(R_{m hard}=0.374), a difference of 0.349; pattern and shape experiments
-showed the same direction independently.
-
-This result directly supports the narrower prediction that the same nominal
-cue vocabulary need not impose the same acquired information burden: bees
-largely ignore a secondary attribute when the primary cue is sufficient and
-recruit it when primary information is insufficient. The attributes were
-simultaneously available, however, so this is not a within-encounter
-branch-specific next-cue policy.
-
-#### 3.6.2 Costly contingent acquisition
-
-The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
-could voluntarily land on an information-request platform before a mandatory
-discrimination. A correct choice without requesting information earned 30%
-sucrose, whereas a correct post-request choice earned only 15%, so information
-acquisition carried an explicit reward cost.
-
-We independently reaggregated all 19,200 public trials from 192 bees.
-Information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
-(Impossible); all 192 bees requested more information on Hard than Easy trials,
-and 181/192 increased again from Hard to Impossible. Post-request accuracy
-remained near 0.93. Random Free-Cue trials, in which predictive information
-was supplied independently of platform landing, reversed the Easy-to-Impossible
-landing gradient for 191/192 bees. Thus the effect is specifically tied to
-obtaining information rather than a generic motor response to difficulty.
-
-We exclude the raw non-request accuracy of the Impossible subset from
-inference because its coded value (0.207) is unexpectedly below chance for two
-physically identical stimuli and is not yet reconciled with the source data
-pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
-remaining result as a reproducible but provisional component test of
-**need-dependent costly information acquisition**, not as identification of
-the exact \(C_A<C_F\) theorem.
-
-#### 3.6.3 Sequential sensory access is biologically real
-
-MaBouDi et al. (2025) provide public high-speed trajectories showing that
-bumblebees inspect restricted diagnostic regions of visual patterns before
-accepting or rejecting them. The scanned regions differ between patterns,
-demonstrating selective sequential sensory sampling rather than mandatory
-parallel access to the whole stimulus. The pattern-specific scanning strategy
-also persists when reward and punishment valence are reversed, providing a
-useful negative control: a simple relabelling of outcomes does not by itself
-force a new acquisition architecture.
-
-Two older *Bombus* experiments make the relational component more direct.
-Essenberg et al. (2015) exposed the same *B. impatiens* foragers to two flower
-types with distinct colour/scent identities. Flower size predicted reward in
-one type but was uninformative in the other; bees learned to respond to size
-only in the branch where size carried value. Thus the relevance of the same
-later cue was gated by flower context. Lotto & Chittka (2005) trained
-*B. terrestris* to use illumination context to choose different target colours,
-including reversals in which the correct colour changed with context. Dale et
-al. (2005) further showed sequential priming: a cue presented seconds earlier
-could bias which later visual target was selected when reinforced by additional
-spatial structure. These results establish context-conditioned action maps and
-conditional cue relevance, although they do not measure acquisition costs.
-
-Together these studies reveal a coherent information strategy within
-bumblebees: they do not automatically learn every available attribute; they
-recruit secondary attributes when primary discrimination is difficult; the
-same cue can be learned as relevant in one floral context and ignored in
-another; earlier context can reverse the later correct action; and costly
-information can be actively requested when needed. They do **not** constitute
-a single direct test of the exact relational theorem.
-Instead, they show that every major biological operation required by the
-theory already exists within *Bombus*. The remaining experiment is therefore
-a narrow composition test rather than a leap from mathematics to biology.
-
----
-
-The two quantitative public-data contrasts and their mechanistic context are
-shown in Fig. 2b.
 
 ---
 
@@ -776,6 +679,103 @@ Natural systems lacking the action map, state-by-cue incidence or defensible acq
 ---
 
 This action-first measurement pipeline is summarized in Fig. 2d.
+
+---
+
+### 4.2 *Bombus* reveals the biological operations behind routeability
+
+The deterministic theorem is intentionally stronger than any one public
+behavioural dataset located so far. We therefore use *Bombus* not as an
+anecdotal example, but as a single-system empirical anchor. The primary
+published anchor is the cue-allocation experiment of Spaethe et al. (2026);
+the recent Yuan et al. (2026) preprint supplies a separate, provisional test
+of costly active acquisition. Across these and other experiments in the same
+genus, the evidence tests distinct operational ingredients rather than the
+full theorem.
+
+#### Secondary-cue recruitment: Secondary cues are recruited when primary information is insufficient
+
+Spaethe et al. (2026) trained *B. terrestris* on combined colour and
+pattern/shape cues and then used cue-conflict tests to separate their
+contributions. We prospectively defined a secondary-cue recruitment index
+
+\[
+R=1-p_{\rm colour}.
+\]
+
+Using individual values in the authors' public analysis repository,
+secondary-cue recruitment increased from \(R_{\rm easy}=0.026\) to
+\(R_{\rm hard}=0.374\), a difference of 0.349; pattern and shape experiments
+showed the same direction independently.
+
+This result directly supports the narrower prediction that the same nominal
+cue vocabulary need not impose the same acquired information burden: bees
+largely ignore a secondary attribute when the primary cue is sufficient and
+recruit it when primary information is insufficient. The attributes were
+simultaneously available, however, so this is not a within-encounter
+branch-specific next-cue policy.
+
+#### Costly information acquisition: Costly contingent acquisition
+
+The bioRxiv preprint by Yuan et al. (2026) gave *Bombus terrestris* a two-stage task in which bees
+could voluntarily land on an information-request platform before a mandatory
+discrimination. A correct choice without requesting information earned 30%
+sucrose, whereas a correct post-request choice earned only 15%, so information
+acquisition carried an explicit reward cost.
+
+We independently reaggregated all 19,200 public trials from 192 bees.
+Information requests increased from 0.096 (Easy) to 0.469 (Hard) and 0.716
+(Impossible); all 192 bees requested more information on Hard than Easy trials,
+and 181/192 increased again from Hard to Impossible. Post-request accuracy
+remained near 0.93. Random Free-Cue trials, in which predictive information
+was supplied independently of platform landing, reversed the Easy-to-Impossible
+landing gradient for 191/192 bees. Thus the effect is specifically tied to
+obtaining information rather than a generic motor response to difficulty.
+
+We exclude the raw non-request accuracy of the Impossible subset from
+inference because its coded value (0.207) is unexpectedly below chance for two
+physically identical stimuli and is not yet reconciled with the source data
+pipeline. Because Yuan et al. (2026) is a bioRxiv preprint, we treat the
+remaining result as a reproducible but provisional component test of
+**need-dependent costly information acquisition**, not as identification of
+the exact \(C_A<C_F\) theorem.
+
+#### Sequential and context-conditioned information use: Sequential sensory access is biologically real
+
+MaBouDi et al. (2025) provide public high-speed trajectories showing that
+bumblebees inspect restricted diagnostic regions of visual patterns before
+accepting or rejecting them. The scanned regions differ between patterns,
+demonstrating selective sequential sensory sampling rather than mandatory
+parallel access to the whole stimulus. The pattern-specific scanning strategy
+also persists when reward and punishment valence are reversed, providing a
+useful negative control: a simple relabelling of outcomes does not by itself
+force a new acquisition architecture.
+
+Two older *Bombus* experiments make the relational component more direct.
+Essenberg et al. (2015) exposed the same *B. impatiens* foragers to two flower
+types with distinct colour/scent identities. Flower size predicted reward in
+one type but was uninformative in the other; bees learned to respond to size
+only in the branch where size carried value. Thus the relevance of the same
+later cue was gated by flower context. Lotto & Chittka (2005) trained
+*B. terrestris* to use illumination context to choose different target colours,
+including reversals in which the correct colour changed with context. Dale et
+al. (2005) further showed sequential priming: a cue presented seconds earlier
+could bias which later visual target was selected when reinforced by additional
+spatial structure. These results establish context-conditioned action maps and
+conditional cue relevance, although they do not measure acquisition costs.
+
+Together these studies reveal a coherent information strategy within
+bumblebees: they do not automatically learn every available attribute; they
+recruit secondary attributes when primary discrimination is difficult; the
+same cue can be learned as relevant in one floral context and ignored in
+another; earlier context can reverse the later correct action; and costly
+information can be actively requested when needed. They do **not** constitute
+a single direct test of the exact relational theorem.
+Instead, they show that every major biological operation required by the
+theory already exists within *Bombus*. The remaining experiment is therefore
+a narrow composition test rather than a leap from mathematics to biology.
+
+---
 
 ---
 
