@@ -5,12 +5,12 @@
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
   "working_title": "Conditional decision topology separates information content from ecological accessibility",
-  "approximate_main_words": 4827,
+  "approximate_main_words": 4900,
   "structure": [
     "Introduction",
-    "Material and methods: finite task plus public Bombus reanalysis protocol",
-    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, nonlinear no-go, Bombus empirical anchor",
-    "Discussion: ecological scope, measurement, prospective direct test, prior-art boundary, deterministic limits and conclusion"
+    "Material and methods: finite task plus Bombus evidence-synthesis protocol",
+    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, nonlinear no-go",
+    "Discussion: ecological scope, measurement, Bombus biological synthesis, prior-art boundary, deterministic limits and conclusion"
   ],
   "core_claims": [
     "fixed exact-resolution burden is determined by which cue subsets reach H(T)",
@@ -73,20 +73,20 @@
   ],
   "v5_initial_submission_surface_modified": false,
   "stop_rule": "Integrated manuscript now contains the entropic non-identification theorem, unbounded additive amplification, common-budget ecology, one nonlinear eco-evolutionary no-go, and a single-system Bombus empirical anchor. V5 is retired as a standalone submission because its central budget/no-go results are incorporated here. No new deterministic theorem family is required before submission.",
-  "abstract_words": 146,
+  "abstract_words": 150,
   "preferred_first_target": "Ecology Letters",
   "journal_fit_audit": "manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md",
   "figure_plan": "manuscript/RELATIONAL_ROUTEABILITY_FIGURE_PLAN_V1.md",
   "proof_supplement": "manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md",
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
-  "current_abstract_words": 146,
-  "current_approx_main_words": 4827,
-  "reference_count": 26,
+  "current_abstract_words": 150,
+  "current_approx_main_words": 4900,
+  "reference_count": 28,
   "empirical_carrier": {
     "taxon": "Bombus spp.",
     "rationale": "Independent public experiments within one genus instantiate the main biological operations required by routeability, avoiding a cross-taxon example collage.",
-    "manuscript_label": "single-system empirical anchor",
+    "manuscript_label": "single-system biological synthesis",
     "full_theorem_status": "not yet directly validated in one experiment"
   },
   "portfolio_decision": {
