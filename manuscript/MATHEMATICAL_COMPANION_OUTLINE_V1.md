@@ -10,7 +10,7 @@
 > exact 50/50 query balance. Kernel, bypass, certificate and symmetry results
 > remain reusable supporting mathematics rather than the headline.
 >
-Status: companion-paper architecture for mathematical results that are substantial but would dilute the single biological headline of the Evolution Letters V3 manuscript. No new theorem family is introduced here.
+Status: historical broad companion architecture. The current Ecology Letters decision-complexity manuscript owns the ecological application; the preferred mathematical companion identity is the later exact-balanced binary paper on `companion/math-priority-audit-v2`. No new theorem family is introduced here.
 
 ## Working title
 
@@ -214,31 +214,39 @@ Also exclude unless separately proved:
 - Bayesian experiment comparison;
 - empirical prevalence claims.
 
-## Relationship to Evolution Letters V3
+## Relationship to the current decision-complexity manuscript
 
-The two papers should own different claims.
+The current Ecology Letters manuscript owns:
 
-**Evolution Letters V3 owns:**
+\[
+\text{ecological diversity}
+\to
+\text{fixed versus contingent resolution}
+\to
+\text{static-information nonidentification}
+\to
+\text{finite-budget consequence}
+\to
+\text{temporal predictive routing}.
+\]
 
-```text
-finite architecture
--> ecological budget/selection exposure
--> structural contrast
--> feedback reachability
--> temporal filtering.
-```
+The mathematical companion owns the deeper finite combinatorics:
 
-**Mathematical companion owns:**
+\[
+\text{raw finite task}
+\to
+\text{exact target-relevant reductions}
+\to
+\text{fixed/adaptive geometry}
+\to
+\text{exact-balanced finite extrema}.
+\]
 
-```text
-raw finite decision problem
--> exact target-relevant kernels
--> exact C_A and C_F geometry
--> sharp/Pareto gap extremals
--> counterexamples to naive structural summaries.
-```
-
-Cross-citation is legitimate because the companion supplies the reusable mathematical engine while the Letter supplies the evolutionary composition.
+The preferred standalone mathematical identity is now the exact-balanced
+binary programme on \`companion/math-priority-audit-v2\`, centered on the sharp
+\(n-3\) fixed-cost cap, star--edge--star equality structure, bounded-depth
+envelopes and unbounded asymptotic adaptivity under exact 50/50 balance.
+Kernel, bypass, certificate and symmetry results remain supporting mathematics.
 
 ## Current readiness
 
