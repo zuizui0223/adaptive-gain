@@ -1,0 +1,29 @@
+{
+  "model": "minimal_temporal_routing_v1",
+  "source_core": "four_world_three_query_unique_strict_gain_normal_form",
+  "target_dynamics": "target fixed within two-step sensing episode",
+  "context_dynamics": "binary Markov context with P(C1=C0)=rho",
+  "closed_form": {
+    "best_fixed_two_query_accuracy": "3/4",
+    "persistence_routing_accuracy": "(1+rho)/2",
+    "alternation_routing_accuracy": "1-rho/2",
+    "optimal_adaptive_two_query_accuracy": "3/4 + abs(2*rho-1)/4",
+    "temporal_adaptive_gain": "abs(2*rho-1)/4",
+    "strict_gain_iff": "rho != 1/2"
+  },
+  "interpretation": "routing value is controlled by temporal predictability magnitude; autocorrelation sign selects same-branch versus reversed routing",
+  "focused_regression": {
+    "tests": 18,
+    "passed": 18,
+    "failed": 0,
+    "execution": "independent local focused test run before commit"
+  },
+  "grid_receipts": [
+    {"rho": 0.0, "phi": -1.0, "fixed": 0.75, "adaptive": 1.0, "gain": 0.25, "rule": "alternation"},
+    {"rho": 0.25, "phi": -0.5, "fixed": 0.75, "adaptive": 0.875, "gain": 0.125, "rule": "alternation"},
+    {"rho": 0.5, "phi": 0.0, "fixed": 0.75, "adaptive": 0.75, "gain": 0.0, "rule": "indifferent"},
+    {"rho": 0.75, "phi": 0.5, "fixed": 0.75, "adaptive": 0.875, "gain": 0.125, "rule": "persistence"},
+    {"rho": 1.0, "phi": 1.0, "fixed": 0.75, "adaptive": 1.0, "gain": 0.25, "rule": "persistence"}
+  ],
+  "claim_boundary": "This receipt validates the minimal two-step binary-context model only; it does not establish general noisy-cue, arbitrary-state, or population-genetic results."
+}
