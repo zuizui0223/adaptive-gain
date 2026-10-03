@@ -40,7 +40,12 @@ We call this dependency structure **conditional decision topology**. The term do
 
 This distinction also has mathematical precedent outside ecology. Information theory contains examples in which two problems share the same entropy for every subset of their variables yet have different operational capacities, showing that entropic structure need not be a complete operational invariant. We therefore do not claim that this paper is the first theory in which entropy misses consequential structure (Sun & Jafar 2019). The ecological question is narrower and constructive: **can environmental states, the complete physical cue matrix, target prevalence, target entropy and total available target information all be held fixed while the acquisition cost of the focal action changes sharply?**
 
-We answer yes. For a declared ecological task, let \(C_A\) denote the minimum worst-case cue cost when later cues may depend on earlier outcomes, and let \(C_F\) denote the minimum cost of a fixed resolving cue set. We construct paired tasks on the same physical cue environment. Only the map from cue-defined states to the focal action changes. Nevertheless, the fixed-to-contingent acquisition geometry separates without bound as the construction grows, whereas the matched control requires only two fixed cues.
+We answer yes. For a declared ecological task, let \(C_A\) denote the minimum worst-case cue cost when later cues may depend on earlier outcomes, and let \(C_F\) denote the minimum cost of a fixed resolving cue set. We construct paired tasks on the same physical cue environment. Only the map
+from cue-defined states to the focal action changes. Complete Shannon
+equivalence can nevertheless coexist with different adaptive costs, and
+Cartesian products amplify that additive difference. A separate exactly
+balanced family shows an unbounded fixed-to-adaptive ratio under weaker
+information matching.
 
 The biological coupling is supplied by a separate natural-history quantity: an observation budget \(B\). This budget may represent time before a host departs, handling opportunity, predator exposure, attention or another hard or effectively hard ceiling. The recent bioRxiv preprint by Yuan et al. (2026) also reports that bumblebees can voluntarily pay a reward cost to obtain predictive information when uncertain, supporting the biological plausibility of treating information acquisition as costly without constituting a test of routeability itself. Conditional topology changes guaranteed performance precisely when the budget lies between the two structural requirements,
 
@@ -50,7 +55,15 @@ C_A\le B<C_F.
 
 This factorization keeps the mathematics and the ecology distinct. The action-conditioned cue structure determines \((C_A,C_F)\); natural history determines \(B\); their intersection determines whether routeability changes feasible behavior.
 
-We develop four consequences. First, information amount and information accessibility are distinct coordinates. Second, routeability is relational rather than intrinsic to a habitat or community: the same physical environment can be routeable for one focal action and non-routeable for another. Third, several common ecological summaries can be insufficient for routeability-sensitive mechanistic claims even when they are quantitatively strong. Fourth, the theory specifies what must be measured and produces matched experimental designs, rather than asking routeability to be inferred from richness, entropy or network turnover alone.
+We develop four consequences. First, static information content and adaptive
+accessibility are distinct coordinates. Second, routeability is relational:
+the same physical cue environment can differ in accessibility when the focal
+action map changes. Third, a finite observation budget converts that structural
+difference into a feasibility prediction, and bounded sensing-to-selection
+lifts can turn insufficient routeability contrast into an evolutionary no-go.
+Fourth, *Bombus* studies independently document the biological operations that
+make this distinction relevant—conditional cue use, sequential sampling and
+costly acquisition—without constituting a direct test of the theorem.
 
 ---
 
@@ -833,7 +846,12 @@ the same complete Shannon entropy vector, yet different adaptive costs. A separa
 arbitrarily large.
 
 A finite ecological budget converts this structural distinction into a
-feasibility prediction.
+feasibility prediction, while the nonlinear bound shows how insufficient
+between-state routeability contrast can exclude a specified local
+eco-evolutionary feedback regime. Independent *Bombus* experiments document
+the conditional cue use, sequential sampling and costly acquisition that make
+this distinction biologically plausible, while leaving the exact theorem for
+direct future tests.
 
 The resulting principle is:
 
