@@ -1,0 +1,41 @@
+{
+  "schema": "adaptive-gain-independent-temporal-routing-audit-v1",
+  "status": "INDEPENDENT_ENUMERATION_MATCHES_TEMPORAL_ROUTING_THEOREMS",
+  "independence": "Does not import adaptive_gain.temporal_routing or adaptive_gain.noisy_temporal_routing; reconstructs latent states, observation channels and Bayes decoding directly with exact Fraction arithmetic.",
+  "perfect_cue": {
+    "rho_grid": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "fixed_pair_accuracy": "3/4 for all three fixed pairs at every rho",
+    "adaptive_formula": "3/4 + |2 rho - 1|/4",
+    "gain_formula": "|2 rho - 1|/4"
+  },
+  "noisy": {
+    "rho_grid": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "routing_reliability_grid": [
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "specialist_reliability_grid": [
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "parameter_triples_checked": 45,
+    "fixed_formula": "1/2 + (2b-1)/4",
+    "gain_formula": "|2rho-1|(2a-1)(2b-1)/4",
+    "mismatches": 0
+  },
+  "canonical_test": "tests/test_independent_temporal_routing_audit.py"
+}
