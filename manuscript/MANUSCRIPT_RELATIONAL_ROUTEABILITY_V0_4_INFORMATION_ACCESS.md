@@ -20,9 +20,9 @@ A long-standing problem in behavioural ecology is how animals make effective
 choices when many resources, hosts or patches are available. This problem is
 especially acute for generalists. The neural-constraints hypothesis predicts
 that broad diet breadth can slow or degrade choice because more potential
-resources must be discriminated in limited time; specialist aphids, for
-example, make host-associated decisions faster than closely related
-generalists (Bernays & Funk 1999). Yet natural foraging is rarely a single
+resources must be discriminated in limited time (Bernays & Wcislo 1994;
+Bernays 2001); specialist aphids, for example, make host-associated decisions
+faster than closely related generalists (Bernays & Funk 1999). Yet natural foraging is rarely a single
 simultaneous comparison among all alternatives. Decision ecology instead
 emphasizes sequential and hierarchical choices, from habitat and patch
 selection to the acceptance or rejection of particular resources (Stephens
@@ -781,7 +781,10 @@ cue could be informative in one flower context and ignored in another; and
 Lotto & Chittka (2005) and Dale et al. (2005) showed context-conditioned later
 choices. These results make *Bombus* one well-resolved example of a flexible
 generalist in which cue relevance and information use depend on decision
-state. The Yuan et al. (2026) preprint additionally suggests need-dependent
+state. At the broader foraging scale, flower constancy responds to multi-trait
+variation and *B. impatiens* can switch among cue-regulated pollen-collection
+routines across diverse floral resources (Gegear & Laverty 2005; Russell et
+al. 2017). The Yuan et al. (2026) preprint additionally suggests need-dependent
 costly acquisition, but its quantitative reaggregation remains Supplementary
 because the study is a preprint and one raw-field anomaly remains unresolved
 (Fig. 2b).
@@ -950,9 +953,7 @@ value-of-information theory.
 - Bernays, E. A. & Wcislo, W. T. 1994. Sensory capabilities, information processing, and resource specialization. *Quarterly Review of Biology* 69:187–204. DOI: 10.1086/418539.
 - Bernays, E. A. 2001. Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation. *Annual Review of Entomology* 46:703–727. DOI: 10.1146/annurev.ento.46.1.703.
 - Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating Decision Trees with Multiway Branches. In *Automata, Languages and Programming*, Part I, LNCS 5555:210–221. DOI: 10.1007/978-3-642-02927-1_19.
-- Chow, P. K. Y., Lehtonen, T. K., Näreaho, V. & Loukola, O. J. 2022. Prior associations affect bumblebees' generalization performance in a tool-selection task. *iScience* 25:105466. DOI: 10.1016/j.isci.2022.105466.
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
-- Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness value of information. *Oikos* 119:219–230. DOI: 10.1111/j.1600-0706.2009.17781.x.
 - Essenberg, C. J., Easter, R. A., Simmons, R. A. & Papaj, D. R. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
 - Lotto, R. B. & Chittka, L. 2005. Seeing the light: illumination as a contextual cue to color choice behavior in bumblebees. *Proceedings of the National Academy of Sciences USA* 102:3852–3856. DOI: 10.1073/pnas.0500681102.
 - Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
@@ -960,7 +961,6 @@ value-of-information theory.
 - Garey, M. R. 1972. Optimal Binary Identification Procedures. *SIAM Journal on Applied Mathematics* 23:173–186. DOI: 10.1137/0123019.
 - Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17. DOI: 10.1016/0020-0190(76)90095-8.
 - Janisch, J., Pevný, T. & Lisý, V. 2020. Classification with Costly Features as a Sequential Decision-Making Problem. *Machine Learning* 109:1587–1615. DOI: 10.1007/s10994-020-05874-8.
-- Kassen, R. 2002. The experimental evolution of specialists, generalists, and the maintenance of diversity. *Journal of Evolutionary Biology* 15:173–190. DOI: 10.1046/j.1420-9101.2002.00377.x.
 - Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194. DOI: 10.1016/S0021-9800(66)80024-8.
 - Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
 - Ma, C., Tschiatschek, S., Palla, K., Hernandez-Lobato, J. M., Nowozin, S. & Zhang, C. 2019. EDDI: Efficient Dynamic Discovery of High-Value Information with Partial VAE. *Proceedings of Machine Learning Research* 97:4234–4243.
@@ -968,7 +968,6 @@ value-of-information theory.
 - Moshkov, M. & Zielosko, B. 2011. *Combinatorial Machine Learning: A Rough Set Approach*. Springer. DOI: 10.1007/978-3-642-20995-6.
 - Nan, F. & Saligrama, V. 2017. Adaptive Classification for Prediction Under a Budget. *Advances in Neural Information Processing Systems* 30.
 - Norcliffe, A. L. I., Lee, C., Imrie, F., van der Schaar, M. & Lio, P. 2025. Stochastic Encodings for Active Feature Acquisition. *Proceedings of Machine Learning Research* 267:46784–46814.
-- Rivoire, O. & Leibler, S. 2011. The Value of Information for Populations in Varying Environments. *Journal of Statistical Physics* 142:1124–1166. DOI: 10.1007/s10955-011-0166-2.
 - Silva, R. & Clarke, A. R. 2020. The sequential cues hypothesis: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. DOI: 10.1111/1744-7917.12719.
 - Spaethe, J. et al. 2026. Bees flexibly adjust decision strategies to information content in a foraging task. *Science Advances*. DOI: 10.1126/sciadv.adw9320.
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
