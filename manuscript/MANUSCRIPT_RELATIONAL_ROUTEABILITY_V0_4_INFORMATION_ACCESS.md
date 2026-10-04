@@ -156,10 +156,6 @@ conditional cue relevance, context-conditioned action, and costly information
 acquisition. Bumblebees, parasitoids, fiddler crabs and patch-foraging animals
 provide examples from pollination, host finding, predator avoidance and
 resource exploitation. None of these studies estimates \(C_A\) or \(C_F\).
-A reproducible reaggregation of the Yuan et al. (2026) bumblebee preprint is
-retained in the Supplement as one provisional component check because one raw
-accuracy field remains unresolved.
-
 
 ---
 
@@ -784,12 +780,7 @@ generalist in which cue relevance and information use depend on decision
 state. At the broader foraging scale, flower constancy responds to multi-trait
 variation and *B. impatiens* can switch among cue-regulated pollen-collection
 routines across diverse floral resources (Gegear & Laverty 2005; Russell et
-al. 2017). The Yuan et al. (2026) preprint additionally suggests need-dependent
-costly acquisition, but its quantitative reaggregation remains Supplementary
-because the study is a preprint and one raw-field anomaly remains unresolved
-(Fig. 2b).
-
-Comparable staged structure occurs outside pollination. Fruit-fly parasitoids
+al. 2017). Comparable staged structure occurs outside pollination. Fruit-fly parasitoids
 first locate host habitat and only then localize and assess hosts, using
 different cues at successive stages (Quilici & Rousse 2012). Fiddler crabs
 acquire qualitatively different information about predation risk during
@@ -973,4 +964,3 @@ value-of-information theory.
 - Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
 - Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
-- Yuan, L., He, Y., Ye, Q., Lin, L., Yuan, R., Wang, Q. & Chen, S. 2026. Uncertainty-Guided Decision-Making in Bumble Bees. bioRxiv. DOI: 10.64898/2026.09.15.751944.
