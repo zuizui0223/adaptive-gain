@@ -31,9 +31,9 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 ## Controlled counts
 
 - [x] Abstract: 150 words.
-- [x] Main text: approximately 4,485 words.
-- [x] References: 30.
-- [x] Every reference in the bibliography is cited in the manuscript.
+- [x] Main text: approximately 4,426 words.
+- [x] Main-text references: 29.
+- [x] Every main bibliography reference is cited in the main manuscript; Yuan et al. 2026 is Supplementary-only with a local full citation.
 - [x] Main figures: 2.
 - [x] Main tables: 0.
 - [x] Text boxes: 0.
@@ -65,8 +65,8 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 ## Figures and rendering
 
 - [x] Figure 1: complete Shannon equivalence versus adaptive accessibility.
-- [x] Figure 2: finite budget + one quantified *Bombus* example + prospective causal test + measurement rule.
-- [x] Figure 2 does not label *Bombus* as the unique empirical anchor.
+- [x] Figure 2: finite budget + temporal predictive routing + peer-reviewed Spaethe example + cross-system scope + prospective causal test + measurement rule.
+- [x] Figure 2 does not label *Bombus* as the unique empirical anchor and contains no Yuan preprint panel.
 - [ ] Render final manuscript PDF and inspect equations, line breaks, figure legibility and legend consistency.
 - [ ] Inspect both SVG figures at publication-size rendering.
 
