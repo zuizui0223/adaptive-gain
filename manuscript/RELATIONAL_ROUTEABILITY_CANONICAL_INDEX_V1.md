@@ -26,7 +26,7 @@ This branch does **not** modify the frozen Evolution Letters V5 initial-submissi
 
 `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`
 
-Current decision-ecology synthesis draft. It contains the exact characterization of fixed cost by static subset information, the 12-state twins with identical complete Shannon entropy vectors but different adaptive costs, unbounded additive direct-product amplification, and cross-system biological grounding for staged ecological decision making. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
+Current decision-ecology synthesis draft. It contains the exact characterization of fixed cost by static subset information, the 12-state twins with identical complete Shannon entropy vectors but different adaptive costs, unbounded additive direct-product amplification, exact target-relevant decision redundancy, a finite-budget ecological consequence, a temporal predictive-routing extension, and cross-system biological grounding for staged ecological decision making. Retain `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_3_AMNAT.md` as the pre-strengthening baseline.
 
 Baseline prior-art-positioned draft retained as `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md`.
 
@@ -53,7 +53,7 @@ Canonical target: **Ecology Letters — Letter**.
 
 Current controlled counts:
 - abstract: 150 words;
-- main text: approximately 4,135 words under the journal definition;
+- main text: approximately 4,449 words under the journal definition;
 - references: 34;
 - main figures: 2.
 
@@ -76,8 +76,7 @@ Repository-wide audit from the initial finite-resolution theory through the
 exact-balanced companion, temporal/noisy routing, routing-population side line,
 eco-evolutionary identifiability, and OU congruence program. The audit records
 which results belong in the current paper, Supplement, mathematical companion,
-separate papers, or archive. It identifies temporal/noisy routing as the only
-remaining scientific disposition decision.
+separate papers, or archive. It records temporal/noisy routing as recovered into the current paper's secondary decision-ecology result and assigns every other independent theorem family to Supplement, companion, separate paper, or archive.
 
 ---
 
@@ -143,7 +142,7 @@ Canonical quantitative receipt:
 Access-mode interaction:
 `validation/yuan_free_cue_acquisition_interaction_v1.json`
 
-Current result: no **single** public dataset identifies the full same-environment branch-specific (C_A<C_F) theorem, but public *Bombus* data directly validate nonredundant operational components:
+Current result: no **single** public dataset identifies the full same-environment branch-specific \(C_A<C_F\) theorem. Public *Bombus* data provide one quantified example of several operations relevant to conditional information use:
 
 - Yuan et al. 2026: 19,200 raw trials; costly need-dependent information acquisition, with a strong difficulty × free-information access-mode interaction;
 - Spaethe et al. 2026: secondary-cue recruitment rises from about 0.026 to 0.374 when the primary cue becomes difficult;
@@ -183,7 +182,7 @@ The candidate contribution is the exact ecological composition, not those compon
 
 Implemented main figures:
 1. `manuscript/figures/figure_routeability_entropy_access_v1.svg` — complete Shannon entropic equivalence -> different adaptive accessibility;
-2. `manuscript/figures/figure_routeability_bombus_bridge_v1.svg` — finite ecological budget + public *Bombus* convergence -> prospective matched routeability experiment.
+2. `manuscript/figures/figure_routeability_bombus_bridge_v1.svg` — finite ecological budget + one quantified *Bombus* example -> prospective matched routeability experiment.
 
 Figure integrity/value receipt:
 `validation/routeability_main_figures_v1.json`.
@@ -256,7 +255,7 @@ This is a stronger follow-up, not a prerequisite for Experiment 1.
 - `validation/bombus_empirical_convergence_panel_v1.json`
 - `validation/yuan_free_cue_acquisition_interaction_v1.json`
 
-Repository-wide CI passes on Python 3.10 / 3.11 / 3.12 after restoration of the earlier ecological-novelty document contract. The static-information twins, direct-product checks and Bombus bridge tests are green.
+Repository-wide CI is green on Python 3.10 / 3.11 / 3.12 for the integrated decision-ecology branch, including the static-information twins, direct-product checks, temporal/noisy routing tests, witness audit and certificate-ladder audit.
 
 ---
 
@@ -315,7 +314,7 @@ The safe V5-level interpretation is:
 
 ## Next-paper boundary
 
-Separate stochastic expected-loss project:
+General stochastic expected-loss project beyond the recovered minimal noisy temporal model:
 
 \[
 J(\pi)
