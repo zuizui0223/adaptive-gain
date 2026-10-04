@@ -1,7 +1,7 @@
 # Relational routeability bibliography audit v1
 
 Date: 2026-10-02
-Status: current source-verification receipt for `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`. The current manuscript contains 30 references; all 30 are cited in the main text.
+Status: current source-verification receipt for `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`. The current main manuscript contains 29 references; all 29 are cited in the main text. Yuan et al. (2026) is cited only in the Supplement, where its full bibliographic information is given locally.
 
 ## Verified core ecology references
 
@@ -158,6 +158,6 @@ same physical cue environment
 
 ## Remaining bibliography work
 
-- all current 30 references are cited; verify any additional citations introduced during later target-journal polishing;
+- all current 29 main-text references are cited; verify any additional citations introduced during later target-journal polishing;
 - if Sun & Jafar is cited in the final manuscript, decide whether to cite the arXiv paper or a later archival version if one exists;
 - preserve conservative wording around priority.
