@@ -11,15 +11,15 @@
   },
   "current_counts": {
     "abstract_words_approx": 150,
-    "main_text_words_approx": 4485,
-    "references": 30,
+    "main_text_words_approx": 4426,
+    "references": 29,
     "figures": 2,
     "tables": 0,
     "text_boxes": 0
   },
   "figures": [
     "manuscript/figures/figure_routeability_entropy_access_v1.svg",
-    "manuscript/figures/figure_routeability_bombus_bridge_v1.svg"
+    "manuscript/figures/figure_routeability_decision_ecology_v2.svg"
   ],
   "required_submission_files": [
     "manuscript/SUBMISSION_METADATA_ECOLOGY_LETTERS_ROUTEABILITY_V1.md",
@@ -40,12 +40,13 @@
     "taxon": "cross-system animal decision examples",
     "role": "biological grounding for staged and conditional information use",
     "direct_public_components": [
-      "conditional cue recruitment in bumblebees",
-      "sequential sensory sampling in bumblebees",
+      "peer-reviewed conditional secondary-cue recruitment in bumblebees",
+      "peer-reviewed sequential sensory sampling and conditional cue relevance in bumblebees",
       "staged parasitoid host finding",
       "multi-stage predator-risk information",
       "hierarchical and repeated patch-foraging decisions"
     ],
+    "supplementary_only": "Yuan et al. 2026 preprint costly-information reaggregation",
     "full_theorem_status": "prospective: no cited natural system directly estimates the complete deterministic routeability contrast"
   }
 }
