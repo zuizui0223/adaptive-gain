@@ -29,8 +29,8 @@ Current journal limits verified on 2026-10-02:
 Using the same repository counter as the submission-surface test:
 
 - abstract: **150 words**
-- main text: **4,485 words**
-- references: **30**
+- main text: **4,426 words**
+- references: **29**
 - main figures: **2**
 - main tables: **0**
 - text boxes: **0**
@@ -174,26 +174,13 @@ Canonical receipts:
 - \`validation/bombus_public_data_component_receipt_v1.json\`
 - \`validation/bombus_empirical_convergence_panel_v1.json\`
 
-### Bumblebee costly-acquisition component — provisional preprint
+### Supplementary provisional costly-information component
 
-Public source:
-\`Cuixiaojian21/bee_metacognition\`,
-commit \`7f886394b4de872ecdb19ca4ea214ec321d5dce9\`,
-raw blob \`26259c9071c6d73141d56b9bedd396cab1a04491\`.
-
-Independent reaggregation:
-- 19,200 trials;
-- 192 bees;
-- Regular information-request rates:
-  0.096, 0.469, 0.716 for Easy, Hard and Impossible;
-- all 192 bees show Hard > Easy request rates;
-- 181/192 show Impossible > Hard;
-- post-request accuracy remains approximately 0.93.
-
-Random Free-Cue trials separate information receipt from the acquisition action.
-The raw non-request accuracy coded for the Impossible subset is not used as
-biological evidence because its below-chance value is not reconciled with the
-identical-stimulus task description.
+Yuan et al. (2026) is retained only in the Supplement. Its public reaggregation
+is not plotted in the main figure and is not used as direct evidence for the
+routeability theorem. Provenance remains frozen in
+`validation/bombus_public_data_component_receipt_v1.json` and
+`validation/yuan_free_cue_acquisition_interaction_v1.json`.
 
 ### Bumblebee conditional cue recruitment
 
