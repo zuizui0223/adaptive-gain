@@ -904,6 +904,42 @@ Canonical design files:
 
 ---
 
+### S11.3 Provisional costly-information component: Yuan et al. 2026
+
+The recent bumblebee preprint by Yuan et al. is retained only as a
+Supplementary component check for need-dependent costly information
+acquisition:
+
+Yuan, L., He, Y., Ye, Q., Lin, L., Yuan, R., Wang, Q. & Chen, S. 2026.
+*Uncertainty-Guided Decision-Making in Bumble Bees*. bioRxiv.
+DOI: 10.64898/2026.09.15.751944.
+
+From the public trial file, the frozen reaggregation contains 19,200 trials
+from 192 bees. In Regular trials, where landing is required to obtain the cue,
+information-request rates are
+
+\[
+0.096,\qquad 0.469,\qquad 0.716
+\]
+
+for Easy, Hard and Impossible conditions, respectively. All 192 bees have a
+higher request rate in Hard than Easy, and 181/192 have a higher request rate
+in Impossible than Hard.
+
+These values are **not** used as direct evidence for routeability. The study is
+a preprint, and the raw Impossible/non-request accuracy field is unresolved:
+the coded accuracy is approximately 0.207 despite a binary-choice task
+description. The manuscript therefore does not use that accuracy contrast and
+does not present the Yuan dataset in the main figure.
+
+Canonical receipts:
+
+- \`validation/bombus_public_data_component_receipt_v1.json\`
+- \`validation/yuan_free_cue_acquisition_interaction_v1.json\`
+- \`validation/bombus_empirical_convergence_panel_v1.json\`
+
+---
+
 ## S12. Additional theory retained outside the main narrative
 
 The integrated paper uses one theorem spine. Several valid results are retained
