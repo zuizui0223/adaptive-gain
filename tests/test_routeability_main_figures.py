@@ -28,15 +28,16 @@ def test_routeability_main_figures_keep_their_claim_labels():
             assert phrase in visible_text
 
 
-def test_figure2_values_match_frozen_bombus_receipts():
+def test_figure2_values_match_temporal_and_spaethe_receipts():
+    temporal = json.loads((ROOT / "validation/temporal_routing_threshold_v1.json").read_text())
     panel = json.loads((ROOT / "validation/bombus_empirical_convergence_panel_v1.json").read_text())
-    yuan = json.loads((ROOT / "validation/yuan_free_cue_acquisition_interaction_v1.json").read_text())
-    svg = (ROOT / "manuscript/figures/figure_routeability_bombus_bridge_v1.svg").read_text()
+    svg = (ROOT / "manuscript/figures/figure_routeability_decision_ecology_v2.svg").read_text()
 
-    assert f'{panel["yuan_2026"]["regular"]["Easy"]["request_rate"]:.3f}' in svg
-    assert f'{panel["yuan_2026"]["regular"]["Impossible"]["request_rate"]:.3f}' in svg
+    assert temporal["closed_form"]["temporal_adaptive_gain"] == "abs(2*rho-1)/4"
+    assert "G_time = |2rho - 1| / 4" in svg
+    assert "rho=0.5" in svg
     assert f'{panel["spaethe_2026"]["easy_mean"]:.3f}' in svg
     assert f'{panel["spaethe_2026"]["hard_mean"]:.3f}' in svg
     assert f'{panel["spaethe_2026"]["cliffs_delta"]["pooled"]:.3f}' in svg
-    did = yuan["within_bee_difference_in_differences"]["Impossible_vs_Easy"]["mean"]
-    assert f'{did:.3f}' in svg
+    assert "Yuan et al." not in svg
+    assert "Chow 2022" not in svg
