@@ -246,6 +246,10 @@ This is a stronger follow-up, not a prerequisite for Experiment 1.
 
 ## Validation receipts
 
+- `validation/independent_section5_audit_v1.json`
+- `validation/independent_temporal_routing_audit_v1.json`
+- `validation/temporal_routing_threshold_v1.json`
+- `validation/noisy_temporal_routing_factorization_v1.json`
 - \`validation/balanced_quantity_topology_contrast_v1.json\`
 - \`validation/balanced_pairwise_information_controls_v1.json\`
 - \`validation/exact_balanced_routeability_stress_test_v1.json\`
@@ -337,6 +341,6 @@ No new deterministic theorem family.
 Allowed work now:
 - editorial compression and Ecology Letters packaging;
 - render the two canonical figures, including the frozen Bombus public-data panel;
-- execute the prospective four-state Bombus routeability experiment as the next empirical paper;
+- execute the prospective four-state routeability experiment in an experimentally tractable decision system; *Bombus* is one candidate, not a required taxon;
 - only then consider the ten-state stress test;
 - develop stochastic expected-loss theory as a separate project.
