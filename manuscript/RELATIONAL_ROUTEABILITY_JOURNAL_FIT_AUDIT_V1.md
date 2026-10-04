@@ -1,85 +1,141 @@
-# Relational routeability journal-fit audit v1
+# Relational routeability journal-fit audit v2
 
-Date: 2026-10-02
-Status: editorial-positioning audit for manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md.
+Date: 2026-10-04  
+Status: current editorial-positioning audit for the integrated decision-ecology manuscript.
 
-## 1. The American Naturalist — preferred first target for deterministic theory
+## Current paper identity
 
-Current guidance:
-- Major Articles may contain new theory, new data and/or new analysis;
-- papers should advance a general conceptual issue;
-- usual length <=7500 words;
-- abstract <=200 words;
-- supplementary material can carry technical proof detail.
+Working title:
 
-Why the manuscript fits:
-- the central result is a general ecological theorem rather than a taxon-specific result;
-- it explicitly connects to niche breadth, information processing and ecological decision making;
-- it provides testable experimental predictions without requiring empirical data in the current paper;
-- current main text (~2900 words) leaves ample room for ecological interpretation and proof clarification.
+**Conditional decision topology separates ecological diversity from decision complexity**
 
-Main editorial risk:
-- the editors may view the finite deterministic construction as too abstract unless the biological significance of the common-budget corollary and the measurement protocol is made visually obvious.
+The paper is no longer a deterministic theorem with a taxon-specific empirical
+anchor. Its primary field is behavioural ecology / decision ecology.
 
-Recommended adaptation:
-- keep theorem statement in main text;
-- compress proof details into supplement;
-- give one figure showing same cue environment -> different action maps -> different decision trees -> common-budget consequence;
-- keep four-state and ten-state experiments as explicit Predictions/Tests rather than as a large methods section.
+The biological question is:
 
-## 2. Ecology Letters — ambitious alternative, especially after behavioral validation
+> When does ecological diversity actually become decision complexity?
 
-Current guidance:
-- Letter <=5000 main-text words;
+The main mathematical result is the exact separation between static
+information and adaptive accessibility. The secondary extension is temporal
+predictive routing: an early cue can have no direct target information yet have
+positive value because it predicts which later cue will be useful.
+
+Cross-system examples from pollination, parasitoid host finding, predator
+avoidance and patch foraging establish scope but are not direct validations of
+the exact routeability theorem.
+
+## 1. Ecology Letters — preferred first target
+
+Current controlled limits in the submission package:
+- Letter;
 - abstract <=150 words;
-- priority to highly novel, general, concise ecological research;
-- strong emphasis on clearly stated hypotheses and broad ecological relevance;
-- Perspective/Synthesis require invitation or approved proposal.
+- main text <=5000 words;
+- no more than six combined figures/tables/boxes.
 
-Why it could fit:
-- the quantity/topology distinction is general;
-- the exact matched construction is concise and counterintuitive;
-- the theory generates a direct architecture x access x budget experiment.
+Current manuscript surface:
+- abstract: 150 words;
+- main text: approximately 4449 words;
+- references: 34;
+- main figures: 2.
 
-Why current deterministic-only version is riskier:
-- Ecology Letters expects a substantial nexus with general ecology and urgent originality;
-- a purely theoretical Letter would need an especially crisp ecological payoff and standard research-paper structure;
-- the four-state causal experiment would materially strengthen fit.
+Why the paper now fits substantially better than the earlier deterministic-only
+version:
 
-Recommended use:
-- do not redirect the current theory paper here solely for prestige;
-- reconsider Ecology Letters for the theory + direct behavioral test package, or send a Perspective proposal only if the framework becomes broader than the theorem itself.
+1. The question is a long-standing behavioural-ecology problem rather than an
+   information-theory gap.
+2. The 12-state theorem gives a sharp and counterintuitive general result:
+   complete Shannon equivalence does not identify adaptive decision burden.
+3. Exact target-relevant compression supplies the complementary positive
+   result that nominal state/cue diversity can contain strict decision
+   redundancy.
+4. The finite-budget window converts structural difference into behavioural
+   feasibility.
+5. The temporal result gives an explicit animal-decision prediction:
+   contingent cue acquisition has value when present context predicts future
+   cue usefulness, with exact collapse at temporal independence in the minimal
+   model.
+6. Biological examples are cross-system rather than dependent on one species.
 
-## 3. Theoretical Ecology — strong fallback / specialist theory home
+Primary editorial risk:
+- the paper could still look like several mathematical results assembled under
+  ecology unless the headline remains the diversity-to-decision-complexity
+  problem.
+
+Required discipline:
+- complete-Shannon nonidentification is the main theorem;
+- target-relevant compression supports the same claim rather than becoming a
+  second paper inside the paper;
+- temporal predictive routing is the only secondary main-text extension;
+- nonlinear eco-evolutionary no-go remains Supplementary;
+- exact-balanced extremal geometry remains companion mathematics;
+- *Bombus* remains one quantified example rather than an empirical anchor.
+
+Verdict: **Ecology Letters remains the preferred first submission.**
+
+## 2. The American Naturalist — strong conceptual fallback
 
 Why it fits:
-- explicit mathematical ecology is central to the journal;
-- the theorem, extremal construction and ecological translation can be presented without forcing empirical validation;
-- technical proof details and finite decision structure are within expected scope.
+- general behavioural/ecological theory is central;
+- the paper connects generalism, information-processing burden and sequential
+  ecological choice;
+- deterministic proofs and the temporal extension can be presented with more
+  conceptual space;
+- the journal can accommodate a somewhat longer explanation of the natural-
+  history meaning of the decision structures.
+
+If Ecology Letters rejects for fit or compression rather than correctness,
+The American Naturalist is the natural next target.
+
+Adaptation for this route:
+- retain the same mathematics;
+- expand the relationship to neural constraints, sequential cues and
+  generalist/specialist decision costs;
+- make the measurement programme more explicit;
+- do not restore population-genetic or broad eco-evolutionary side theory merely
+  because more space is available.
+
+## 3. Theoretical Ecology — specialist theory fallback
+
+Why it fits:
+- exact finite decision theory and ecological interpretation are comfortably in
+  scope;
+- technical proofs, reductions and finite constructions require less
+  compression.
 
 Trade-off:
-- lower broad-ecology visibility than The American Naturalist or Ecology Letters;
-- less pressure to demonstrate immediate empirical reach, but also less leverage from the framework's general ecological claim.
+- lower behavioural/ecology visibility;
+- the current manuscript now has a sufficiently direct behavioural question
+  that starting here would undersell its broader contribution.
 
-## Recommended sequence
+## Journal sequence
 
-1. The American Naturalist — deterministic relational-routeability theory.
-2. Theoretical Ecology — if rejected primarily for breadth/fit rather than correctness.
-3. Ecology Letters — reserve for a later theory + behavioral validation version or approved Perspective route.
+1. **Ecology Letters**
+2. **The American Naturalist**
+3. **Theoretical Ecology**
 
-## Manuscript changes for The American Naturalist
+## Submission firewall
 
-Required next edits:
-- abstract <=200 words;
-- introduce "routeability" only after defining conditional decision topology;
-- make the common-budget corollary the ecological headline after the theorem;
-- move finite pairwise-matched controls to a concise supporting paragraph / supplement;
-- add one conceptual figure and one prediction figure at most;
-- retain explicit prior-art boundary against adaptive feature acquisition and extra-entropic structure;
-- retain diversity-stability exclusion.
+Do not change the mathematics merely to target a higher journal.
+
+Do not reintroduce:
+- routing-population genetics;
+- OU/evoTS identifiability;
+- stasis / critical-slowing theory;
+- the exact-balanced companion catalogue;
+- additional taxon examples without a distinct logical role.
+
+Do retain:
+- exact complete-Shannon separation;
+- exact target-relevant redundancy;
+- common finite-budget consequence;
+- temporal predictive routing;
+- cross-system biological scope;
+- explicit prior-art boundaries.
 
 ## Stop rule
 
-Do not change the mathematics to fit a journal.
-
-Adapt exposition only.
+Journal-fit work is closed unless an editor or reviewer identifies a specific
+scope problem. Remaining work is submission production: final citation check,
+rendered PDF/figure inspection, permanent archive DOI and author-controlled
+metadata.
