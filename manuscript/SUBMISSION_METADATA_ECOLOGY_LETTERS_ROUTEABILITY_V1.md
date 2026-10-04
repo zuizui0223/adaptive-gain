@@ -328,12 +328,17 @@ Verify deliberately before upload:
 
 ## Remaining submission work
 
-1. final repository-wide CI;
+Completed:
+- manuscript citation/reference audit: 30 references, all cited;
+- abstract/main-text/reference count synchronization;
+- independent verification of complete-Shannon and temporal-routing results.
+
+Still required:
+1. final repository-wide CI for the final content head;
 2. final rendered figure/PDF inspection;
-3. final citation/reference audit;
-4. archive exact code/data-analysis state and insert DOI;
-5. fill author-controlled title-page fields;
-6. record submitted commit/tree.
+3. archive the exact code/data-analysis state and insert the permanent DOI;
+4. fill author-controlled title-page fields;
+5. record the submitted commit/tree.
 
 ## Stop rule
 
