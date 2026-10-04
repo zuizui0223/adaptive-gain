@@ -31,7 +31,7 @@
     "validation/balanced_quantity_topology_contrast_v1.json",
     "validation/balanced_pairwise_information_controls_v1.json",
     "validation/exact_balanced_routeability_stress_test_v1.json",
-    "repository-wide CI PASS on Python 3.10/3.11/3.12 after commit b293d1eb976827b3796ac0d17a33d8d0c662ac26; subsequent Bombus bridge commits also pass",
+    "repository-wide CI PASS on Python 3.10/3.11/3.12 for integrated decision-ecology branch, including temporal-routing integration and exact audits",
     "validation/independent_section5_audit_v1.json",
     "adaptive_gain/independent_section5_audit.py",
     "tests/test_independent_section5_audit.py",
@@ -40,7 +40,9 @@
     "validation/temporal_routing_threshold_v1.json",
     "validation/noisy_temporal_routing_factorization_v1.json",
     "tests/test_temporal_routing.py",
-    "tests/test_noisy_temporal_routing.py"
+    "tests/test_noisy_temporal_routing.py",
+    "tests/test_independent_temporal_routing_audit.py",
+    "validation/independent_temporal_routing_audit_v1.json"
   ],
   "prior_art_must_remain_explicit": [
     "Katona 1966 separating systems",
