@@ -1026,7 +1026,7 @@ finite results checked by exact solvers/enumeration.
 
 Repository CI covers Python 3.10, 3.11 and 3.12. The current integrated branch
 also contains dedicated machine-readable receipts for the entropy-vector,
-nonlinear no-go and public Bombus bridge calculations.
+temporal/noisy routing, nonlinear no-go and the quantified *Bombus* example.
 
 ---
 
@@ -1034,7 +1034,7 @@ nonlinear no-go and public Bombus bridge calculations.
 
 The integrated supplement does not establish:
 
-- stochastic optimality under noisy cues;
+- general stochastic optimality beyond the declared symmetric temporal/noisy core;
 - expected-loss optimality;
 - an unbounded multiplicative \(C_F/C_A\) ratio under complete Shannon
   entropy-vector matching;
@@ -1060,6 +1060,19 @@ Relational asymptotic theorem:
 - adaptive_gain/balanced_quantity_topology_contrast.py
 - tests/test_balanced_quantity_topology_contrast.py
 - validation/balanced_quantity_topology_contrast_v1.json
+
+Temporal predictive routing:
+- theory/TEMPORAL_ROUTING_THRESHOLD.md
+- theory/NOISY_TEMPORAL_ROUTING_FACTORIZATION.md
+- theory/PREDICTIVE_CUE_USEFULNESS_THEOREM.md
+- adaptive_gain/temporal_routing.py
+- adaptive_gain/noisy_temporal_routing.py
+- tests/test_temporal_routing.py
+- tests/test_noisy_temporal_routing.py
+- tests/test_independent_temporal_routing_audit.py
+- validation/temporal_routing_threshold_v1.json
+- validation/noisy_temporal_routing_factorization_v1.json
+- validation/independent_temporal_routing_audit_v1.json
 
 Nonlinear no-go:
 - theory/NONLINEAR_LIFT_NO_GO_V2.md
