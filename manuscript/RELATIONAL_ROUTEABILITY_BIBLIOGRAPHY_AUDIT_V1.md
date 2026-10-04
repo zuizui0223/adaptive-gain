@@ -1,7 +1,7 @@
 # Relational routeability bibliography audit v1
 
 Date: 2026-10-02
-Status: source-verification receipt for manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_2.md.
+Status: current source-verification receipt for `MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md`. The current manuscript contains 30 references; all 30 are cited in the main text.
 
 ## Verified core ecology references
 
@@ -33,34 +33,9 @@ Role:
 Direct ecological precursor for sequential common/specific cue use in host location.
 The present manuscript must not claim novelty for sequential cue use itself.
 
-### Kassen 2002
-R. Kassen.
-"The experimental evolution of specialists, generalists, and the maintenance of diversity."
-Journal of Evolutionary Biology 15:173–190.
-DOI: 10.1046/j.1420-9101.2002.00377.x.
+## Earlier information-fitness references verified but not cited in the current manuscript
 
-Role:
-Anchor for environmental heterogeneity, niche breadth, specialists/generalists and the importance of amount/pattern of environmental variation.
-
-## Verified information-fitness references
-
-### Donaldson-Matasci, Bergstrom & Lachmann 2010
-Matina C. Donaldson-Matasci, Carl T. Bergstrom & Michael Lachmann.
-"The fitness value of information."
-Oikos 119:219–230.
-DOI: 10.1111/j.1600-0706.2009.17781.x.
-
-Role:
-Established formal fitness value of environmental information.
-
-### Rivoire & Leibler 2011
-Olivier Rivoire & Stanislas Leibler.
-"The Value of Information for Populations in Varying Environments."
-Journal of Statistical Physics 142(6):1124–1166.
-DOI: 10.1007/s10955-011-0166-2.
-
-Role:
-Established information-fitness relations in fluctuating environments; manuscript uses it as prior art, not novelty target.
+Donaldson-Matasci et al. (2010) and Rivoire & Leibler (2011) were verified during earlier framings but are not cited in the current decision-ecology manuscript. They remain background provenance, not part of the 30-reference submission bibliography.
 
 ## Verified adaptive-acquisition references
 
@@ -183,6 +158,6 @@ same physical cue environment
 
 ## Remaining bibliography work
 
-- verify any additional citations introduced during target-journal polishing;
+- all current 30 references are cited; verify any additional citations introduced during later target-journal polishing;
 - if Sun & Jafar is cited in the final manuscript, decide whether to cite the arXiv paper or a later archival version if one exists;
 - preserve conservative wording around priority.
