@@ -657,9 +657,9 @@ A_A^{(2)}-A_F^{(2)}
 
 The gain vanishes exactly at temporal independence, \(\rho=1/2\). Predictable
 persistence and predictable alternation both create routing value; they simply
-require opposite continuation rules. The relevant quantity is therefore not
-persistence itself, but whether present information predicts **which later cue
-will be useful**.
+require opposite continuation rules (Fig. 2b). The relevant quantity is
+therefore not persistence itself, but whether present information predicts
+**which later cue will be useful**.
 
 With symmetric observation noise, the same result factorizes exactly. If the
 routing cue has reliability \(a\) and the specialist cues have reliability
