@@ -4,6 +4,7 @@ import json
 
 ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT = ROOT / "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md"
+SUPPLEMENT = ROOT / "manuscript/SUPPLEMENT_RELATIONAL_ROUTEABILITY_PROOFS_V1.md"
 V5 = ROOT / "manuscript/EVOLUTION_LETTERS_V5_ROUTEABILITY_READINESS_V1.json"
 SECTION5 = ROOT / "validation/independent_section5_audit_v1.json"
 
@@ -40,9 +41,12 @@ def test_integrated_temporal_routing_and_claim_firewalls():
 
 def test_cross_system_biological_claim_ceiling_is_preserved():
     text = _text()
-    assert "Yuan et al. (2026)" in text
-    assert "preprint" in text
-    assert "one raw-field anomaly remains unresolved" in text
+    supplement = SUPPLEMENT.read_text()
+    assert "Yuan et al." not in text
+    assert "Yuan et al. 2026" in supplement
+    assert "preprint" in supplement
+    assert "0.207" in supplement
+    assert "raw Impossible/non-request accuracy field is unresolved" in supplement
     assert "None of the following systems directly measures" in text
     assert "Bumblebees, parasitoids, fiddler crabs and patch-foraging animals" in text
 
