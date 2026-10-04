@@ -51,48 +51,72 @@ Target prevalence is 8:4 in both.
 
 The visual point is that only the action map changes.
 
-### Panel B — static information is exactly matched
+### Panel B — temporal routing plus cross-system scope
 
-Use a compact subset lattice or four-layer summary rather than plotting 16
-nearly arbitrary numbers.
+Use the upper-right half to connect the static theorem to a dynamic decision
+prediction without making any taxon the subject of the paper.
 
-Show:
+#### B1 — temporal predictive routing
 
-\[
-I_A(T;Q_S)=I_B(T;Q_S)
-\qquad
-\forall S\subseteq Q
-\]
+Plot
 
-and, more strongly,
+[
+G_{m time}=rac{|2ho-1|}{4}
+]
 
-\[
-\boxed{
-H_A(U)=H_B(U)
-\qquad
-\forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
-}
-\]
+against (hoin[0,1]). Show the V-shaped values:
 
-Annotate:
+- (ho=0): gain (=0.25), predictable alternation;
+- (ho=0.5): gain (=0), temporal independence;
+- (ho=1): gain (=0.25), predictable persistence.
 
-**all 32 Shannon entropies match exactly**
+Main annotation:
 
-Then show the fixed-cost characterization:
+**present context matters when it predicts which later cue will be useful**
 
-\[
-C_F=
-\min_{S:\,H(T\mid Q_S)=0}|S|.
-\]
+Do not describe positive persistence as uniquely favorable; predictable
+alternation has the same gain with the opposite continuation rule.
 
-Both twins therefore have
+#### B2 — one quantified biological example: Spaethe et al. 2026
 
-\[
-C_F=4.
-\]
+Plot the peer-reviewed secondary-cue recruitment index
 
-Do not call the subset-information function new; static entropy profiles have
-cryptographic prior art.
+[
+R=1-p_{m colour}.
+]
+
+Show
+
+[
+R_{m easy}=0.026,
+qquad
+R_{m hard}=0.374,
+]
+
+with pooled Cliff's (delta=0.980).
+
+Main annotation:
+
+**primary cue sufficient -> secondary cue mostly ignored**
+
+**primary cue difficult -> secondary cue recruited**
+
+This is one flexible-generalist example, not a direct routeability estimate.
+
+#### B3 — parallel staged ecological decisions
+
+Use three small schematic boxes:
+
+- parasitoid host finding: host habitat -> host assessment;
+- fiddler-crab predator assessment: information changes across escape stages;
+- patch foraging: repeated stay/leave decisions.
+
+These establish scope across ecological interactions and taxa. They do not
+estimate (C_A) or (C_F).
+
+Yuan et al. (2026) is **not** part of the main figure. Its public reaggregation
+is retained only as a Supplementary provisional costly-information component
+because the study is a preprint and one raw accuracy field remains unresolved.
 
 ### Panel C — realized outcomes create different continuation problems
 
