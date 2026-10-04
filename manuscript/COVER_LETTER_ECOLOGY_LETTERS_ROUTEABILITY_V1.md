@@ -63,7 +63,7 @@ ecological information and adaptive resolution cost, together with its
 finite-budget and predictive-routing consequences.
 
 The manuscript is within the journal's Letter limits: the abstract is 150
-words, the main text is approximately 4,485 words by the repository submission
+words, the main text is approximately 4,426 words by the repository submission
 counter, and there are two main figures.
 
 Thank you for considering the manuscript.
