@@ -53,8 +53,8 @@ Canonical target: **Ecology Letters — Letter**.
 
 Current controlled counts:
 - abstract: 150 words;
-- main text: approximately 4,485 words under the journal definition;
-- references: 30;
+- main text: approximately 4,426 words under the journal definition;
+- references: 29;
 - main figures: 2.
 
 Do not use the older generic/Theoretical Ecology `SUBMISSION_METADATA_V1.md` for
@@ -142,15 +142,13 @@ Canonical quantitative receipt:
 Access-mode interaction:
 `validation/yuan_free_cue_acquisition_interaction_v1.json`
 
-Current result: no **single** public dataset identifies the full same-environment branch-specific \(C_A<C_F\) theorem. Public *Bombus* data provide one quantified example of several operations relevant to conditional information use:
+Current result: no **single** public dataset identifies the full same-environment branch-specific \(C_A<C_F\) theorem. Peer-reviewed *Bombus* studies provide one quantified example of conditional cue recruitment and related operations:
 
-- Yuan et al. 2026: 19,200 raw trials; costly need-dependent information acquisition, with a strong difficulty × free-information access-mode interaction;
 - Spaethe et al. 2026: secondary-cue recruitment rises from about 0.026 to 0.374 when the primary cue becomes difficult;
 - MaBouDi et al. 2025: selective sequential visual sampling;
-- Chow et al. 2022: early context switches the later correct action;
 - Essenberg et al. 2015: closest branch-specific cue-relevance precedent.
 
-Use the *Bombus* datasets as one quantified example within a broader cross-system biological grounding, not as direct validation of the exact deterministic (C_A,C_F) theorem.
+Use peer-reviewed *Bombus* work as one quantified example within broader cross-system biological grounding, not as direct validation of the exact deterministic \((C_A,C_F)\) theorem. Yuan et al. (2026) remains Supplementary only.
 
 ### Bibliography verification
 `manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md`
@@ -182,7 +180,7 @@ The candidate contribution is the exact ecological composition, not those compon
 
 Implemented main figures:
 1. `manuscript/figures/figure_routeability_entropy_access_v1.svg` — complete Shannon entropic equivalence -> different adaptive accessibility;
-2. `manuscript/figures/figure_routeability_bombus_bridge_v1.svg` — finite ecological budget + one quantified *Bombus* example -> prospective matched routeability experiment.
+2. `manuscript/figures/figure_routeability_decision_ecology_v2.svg` — finite ecological budget + temporal predictive routing + peer-reviewed Spaethe example + cross-system scope -> prospective matched routeability experiment.
 
 Figure integrity/value receipt:
 `validation/routeability_main_figures_v1.json`.
