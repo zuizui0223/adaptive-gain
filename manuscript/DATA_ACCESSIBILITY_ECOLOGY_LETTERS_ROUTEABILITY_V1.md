@@ -6,8 +6,7 @@ contained in the `adaptive-gain` repository. Before final submission, the
 exact submitted repository state will be deposited in a permanent archive and
 the resulting DOI will be inserted here.
 
-The empirical-convergence section reanalyses or summarizes previously public
-*Bombus* data. No new animal data were collected for this study.
+The quantified *Bombus* example reanalyses or summarizes previously public data. No new animal data were collected for this study.
 
 ## Yuan et al. 2026
 
@@ -45,7 +44,20 @@ the exact entropy fingerprints and minimax costs:
 - `tests/test_independent_section5_audit.py`;
 - `validation/independent_section5_audit_v1.json`.
 
-The nonlinear eco-evolutionary no-go is separately executable and certified in:
+The temporal-routing result is implemented independently of the deterministic
+finite-task solver and has a separate exact-enumeration audit:
+
+- `adaptive_gain/temporal_routing.py`;
+- `adaptive_gain/noisy_temporal_routing.py`;
+- `tests/test_temporal_routing.py`;
+- `tests/test_noisy_temporal_routing.py`;
+- `tests/test_independent_temporal_routing_audit.py`;
+- `validation/temporal_routing_threshold_v1.json`;
+- `validation/noisy_temporal_routing_factorization_v1.json`;
+- `validation/independent_temporal_routing_audit_v1.json`.
+
+The nonlinear eco-evolutionary no-go retained in the Supplement is separately
+executable and certified in:
 
 - `adaptive_gain/nonlinear_feedback_reachability.py`;
 - `tests/test_nonlinear_feedback_reachability.py`;
@@ -74,13 +86,6 @@ Figshare DOI **10.15131/shef.data.14185865.v1**.
 These data are used as external mechanistic support for selective sequential
 sensory sampling; no new pooled effect size is computed in the main
 quantitative panel.
-
-## Chow et al. 2022
-
-Public match-to-sample/tool-selection data are archived at
-Dryad DOI **10.5061/dryad.tqjq2bw36**.
-
-These data are used as external support for context-conditioned action mapping.
 
 ## Essenberg et al. 2015
 
