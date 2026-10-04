@@ -15,26 +15,25 @@
       ]
     },
     "figure2": {
-      "path": "manuscript/figures/figure_routeability_bombus_bridge_v1.svg",
-      "role": "finite ecological budget, one quantified Bombus example, prospective causal test, and measurement rule",
+      "path": "manuscript/figures/figure_routeability_decision_ecology_v2.svg",
+      "role": "finite ecological budget, temporal predictive routing, one peer-reviewed Bombus example, cross-system staged decisions, prospective causal test, and measurement rule",
       "required_labels": [
         "C_A ≤ B < C_F",
-        "0.096",
-        "0.716",
-        "0.617",
-        "0.210",
-        "ΔΔ Impossible–Easy = 1.018",
-        "191/192 bees > 0",
+        "G_time = |2rho - 1| / 4",
+        "rho=0.5",
         "R = 0.026",
         "R = 0.374",
-        "Cliff's δ = 0.980"
+        "Cliff's δ = 0.980",
+        "Parasitoid host finding",
+        "Fiddler crab",
+        "Patch foraging"
       ]
     }
   },
   "numeric_sources": {
     "theory": "theory/STATIC_INFORMATION_ADAPTIVE_ACCESS_THEOREM.md",
-    "bombus_panel": "validation/bombus_empirical_convergence_panel_v1.json",
-    "yuan_interaction": "validation/yuan_free_cue_acquisition_interaction_v1.json"
+    "temporal_routing": "validation/temporal_routing_threshold_v1.json",
+    "spaethe_panel": "validation/bombus_empirical_convergence_panel_v1.json"
   },
-  "claim_firewall": "Figure 2 presents Bombus as one quantified example of staged/conditional information use; it does not call Bombus a unique empirical anchor or treat any existing dataset as a direct estimate or validation of C_A or C_F."
+  "claim_firewall": "Figure 2 presents the temporal theorem, one peer-reviewed Bombus quantitative example, and cross-system staged-decision examples. Yuan et al. 2026 is Supplementary only; no existing dataset is described as a direct estimate or validation of C_A or C_F."
 }
