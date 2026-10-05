@@ -807,3 +807,57 @@ qualification branches, no further independent theorem family was found that
 lacks a disposition in this audit.
 
 The paper-design decision is now closed: temporal/predictive routing replaces the eco-evolutionary no-go as the main manuscript's secondary extension because it is directly aligned with the behavioural/decision-ecology question. The nonlinear no-go remains preserved in the Supplement.
+
+## 23. Cross-repository correction: PAYOFF was audited separately
+
+The closure above is **repository-local to adaptive-gain**. It must not be read
+as a claim that all mathematics in the separate `zuizui0223/payoff` repository
+had already been audited.
+
+A direct PAYOFF audit on 2026-10-05 identified several independent theorem
+families that are not merely provenance for adaptive-gain:
+
+- architecture compromise and continuous differentiation;
+- exact architecture games and topology-to-PAYOFF reductions;
+- hard-cutoff local accessibility and bounded-interaction mesoscopic dynamics;
+- rare-mutation topology accessibility versus stationary abundance;
+- anti-phase / Floquet migration optima and spatial-temporal tracking results;
+- information-deadline thresholds;
+- endogenous information timing and coordination wedges;
+- dual-use information value and cue-dependent effective deadline costs;
+- later full-annual-cycle timing / correction / fitness bookkeeping.
+
+Canonical PAYOFF sources inspected directly include:
+
+- `theory/THEOREMS.md`
+- `theory/HARD_CUTOFF_ESCAPE_THEOREM.md`
+- `theory/MESOSCOPIC_ARCHITECTURE_DYNAMICS.md`
+- `theory/BOUNDED_INTERACTION_PHASE_ATLAS.md`
+- `theory/TOPOLOGY_PAYOFF_GAME.md`
+- `theory/TOPOLOGY_RARE_MUTATION.md`
+- `theory/INFORMATION_DEADLINE_THEOREM.md`
+- `theory/DUAL_USE_INFORMATION_VALUE.md`
+- `theory/ENDOGENOUS_INFORMATION_TIMING.md`
+- `docs/PUBLICATION_STATUS.md`
+
+These results should **not** be mechanically imported into the current
+adaptive-gain Ecology Letters manuscript. Their role is cross-repository
+context and boundary checking. In particular:
+
+1. PAYOFF's hard-cutoff and mesoscopic results support the distinction between
+   global structural possibility and local accessibility, but they live in a
+   different state space from finite cue-routing cost.
+2. PAYOFF topology/rare-mutation theory already separates architecture value,
+   mutational accessibility and stationary occupancy; this strengthens the
+   decision to keep adaptive-gain's routing-population side theory out of the
+   current behavioural-ecology Letter.
+3. PAYOFF-B information-deadline and dual-use-information theorems are close
+   neighbouring prior work for temporal information use, but address
+   wait-versus-act timing and downstream compensation rather than the present
+   fixed-versus-contingent choice of **which cue to acquire next**.
+
+Therefore the corrected audit statement is:
+
+> all independent theorem families **inside adaptive-gain** now have an explicit
+> publication/archive disposition; PAYOFF is a separate mathematical programme
+> that has now been directly audited for overlap and claim boundaries.
