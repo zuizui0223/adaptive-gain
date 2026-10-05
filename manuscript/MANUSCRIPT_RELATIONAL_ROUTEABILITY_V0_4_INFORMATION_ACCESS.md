@@ -41,49 +41,42 @@ acquires qualitatively different information about predation risk at successive
 stages (Hemmi & Pfeil 2010). Sequential ecological decisions are therefore not
 a special property of one taxon or sensory modality.
 
-What is missing is an exact way to separate **nominal ecological diversity**
-from the distinctions that must actually be resolved together. We call the
-latter dependency structure **conditional decision topology**. For a declared
-ecological action, let \(C_F\) be the minimum cost of a fixed cue bundle that
-resolves the action in every represented state, and let \(C_A\) be the minimum
-worst-case cost when later cues may depend on earlier outcomes. Their
-difference
+These examples point to a distinction between the number of alternatives in a
+choice set and the comparisons an animal must actually make before acting. We
+call the dependency among those comparisons **conditional decision topology**.
+For a declared ecological action, let \(C_F\) be the minimum cost of a fixed
+cue bundle that resolves the action in every represented state, and let
+\(C_A\) be the minimum worst-case cost when later cues may depend on earlier
+outcomes. Their difference
 \[
 g=C_F-C_A
 \]
-measures the burden avoided by contingent acquisition. This is not a claim
-that sequential decision making is new. Fixed separating systems, adaptive
-decision trees and costly active feature acquisition are established theories
-(Katona 1966; Garey 1972; Hyafil & Rivest 1976; Contardo et al. 2016; Janisch
-et al. 2020; Nan & Saligrama 2017). Nor is it a claim that synergy,
-conditional information or extra-entropic operational structure are new
-(Williams & Beer 2010; Sun & Jafar 2019; Li, Dhali & Bouma 2026).
+is the processing burden that contingent acquisition can avoid. The underlying
+decision-tree and separating-system primitives are classical; the ecological
+question is whether familiar descriptions of the choice environment determine
+this burden.
 
-The unresolved theoretical question is narrower: **can two ecological decision
-problems contain the same static information, yet impose different optimal
-costs when information may be acquired conditionally?** We show that they can.
-Two tasks on one identical physical cue matrix can have the same complete
-Shannon entropy vector and the same fixed resolution cost, yet different
-adaptive costs. Cartesian products amplify that additive difference, while a
-separate exactly balanced family gives an unbounded fixed-to-adaptive ratio
-under weaker information matching. Thus resource diversity, cue diversity and
-even complete static Shannon information do not determine sequential decision
-burden.
+We first ask whether two ecological decision problems can contain the same
+static information but differ in adaptive cost. They can. Two tasks on one
+identical physical cue matrix can have the same complete Shannon entropy vector
+and the same fixed resolution cost, yet different adaptive costs. Cartesian
+products amplify that additive difference, while a separate exactly balanced
+family gives an unbounded fixed-to-adaptive ratio under weaker information
+matching. Resource diversity, cue diversity and even complete static Shannon
+information therefore do not determine sequential decision burden.
 
 A finite natural-history budget \(B\)—time before a host departs, exposure to
-predation, handling opportunity or another hard constraint—turns this
-structural distinction into ecology. When
+predation, handling opportunity or another hard constraint—makes the
+difference consequential. When
 \[
 C_A\le B<C_F,
 \]
 contingent sensing can guarantee a resolved action when fixed acquisition
-cannot. The primary contribution of the paper is therefore a theory of when
-ecological diversity becomes effective decision complexity. A temporal
-extension then asks when present context can make later information acquisition
-easier: routing value appears when current information predicts which later cue
-will be useful, and vanishes at temporal independence. Published animal
-systems provide biological evidence that the required sequential operations
-occur in nature; none is treated as a direct validation of the exact theorem.
+cannot. We then ask the same question through time. In the minimal temporal
+model, current context is useful when it predicts which later cue will be
+useful, and routing value disappears at temporal independence. Published animal
+systems show that the staged decisions assumed by these models occur in nature,
+without serving as direct tests of the exact theorem.
 
 ---
 
@@ -752,7 +745,9 @@ The protocol is therefore:
 }
 \]
 
-Natural systems lacking the action map, state-by-cue incidence or defensible acquisition costs should be labeled unevaluable rather than rescued with richness or entropy proxies.
+Without an action map, state-by-cue incidence or defensible acquisition costs,
+a natural system cannot support a direct routeability estimate; richness or
+entropy alone should not be substituted for the missing decision structure.
 
 ---
 
@@ -762,10 +757,10 @@ This action-first measurement pipeline is summarized in Fig. 2d.
 
 ### 4.3 Examples across ecological decision systems
 
-The operations required by conditional decision topology already occur in
-ecological decisions with very different sensory and fitness consequences.
-None of the following systems directly measures \(C_A<C_F\); their role is
-to establish biological plausibility and scope.
+Natural histories in several systems already have the staged form represented
+by the model. None of the following systems directly measures \(C_A<C_F\);
+they show instead that early observations can change which distinctions matter
+later.
 
 In bumblebees, Spaethe et al. (2026) found that *B. terrestris* relied almost
 entirely on colour when colour discrimination was easy but recruited pattern or
@@ -790,11 +785,11 @@ comparison among all future patches (Stephens 2008). Together, these systems
 show that hierarchical information acquisition is not specific to one taxon,
 sensory modality or ecological interaction.
 
-A direct causal test would hold the physical cue matrix fixed while changing
-only the action-conditioned branch structure and costly cue access under a
-shared budget (Fig. 2c). Conditional decision topology should therefore be
-testable wherever early observations or actions determine which later
-distinctions remain relevant.
+These examples motivate a direct causal test: hold the physical cue matrix
+fixed, change only the action-conditioned branch structure, and manipulate
+costly cue access under a shared budget (Fig. 2c). The test is applicable
+wherever early observations or actions determine which later distinctions
+remain relevant.
 
 ---
 
