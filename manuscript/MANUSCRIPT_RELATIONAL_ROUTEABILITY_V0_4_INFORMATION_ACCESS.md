@@ -897,6 +897,7 @@ The resulting principle is:
 \[
 \boxed{
 \text{Static information tells us what can be known together; routeability tells us what must be learned together.}
+}
 \]
 
 
