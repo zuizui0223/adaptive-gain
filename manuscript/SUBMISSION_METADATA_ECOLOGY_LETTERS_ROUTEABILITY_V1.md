@@ -225,7 +225,7 @@ Panels:
 
 Panels:
 - ecological budget window \(C_A\le B<C_F\);
-- public *Bombus* convergence;
+- temporal predictive routing, one peer-reviewed *Bombus* quantitative example, and cross-system staged-decision scope;
 - prospective matched causal test;
 - measurement pipeline.
 
