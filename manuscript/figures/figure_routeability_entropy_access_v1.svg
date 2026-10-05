@@ -172,7 +172,7 @@
 <text x="815" y="605" font-size="28" font-weight="bold" text-anchor="middle" fill="#111111">≠</text>
 <text x="815" y="635" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111">same adaptive accessibility</text>
 <text x="1080" y="135" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">C</text>
-<text x="1120" y="135" font-size="24" font-weight="bold" text-anchor="start" fill="#111111">Realized outcomes change continuation cost</text>
+<text x="1120" y="135" font-size="20" font-weight="bold" text-anchor="start" fill="#111111">Realized outcomes change continuation cost</text>
 <rect x="1085" y="190" width="210" height="135" rx="10" fill="#ffffff" stroke="#222222" stroke-width="2"/>
 <rect x="1320" y="190" width="210" height="135" rx="10" fill="#ffffff" stroke="#222222" stroke-width="2"/>
 <text x="1190" y="225" font-size="21" font-weight="bold" text-anchor="middle" fill="#111111">Twin A</text>
@@ -216,7 +216,7 @@
 <circle cx="1500" cy="485" r="8" fill="#f3f3f3" stroke="#111111" stroke-width="2"/>
 <text x="1425" y="525" font-size="16" font-weight="bold" text-anchor="middle" fill="#111111">worst path = 3</text>
 <text x="1080" y="665" font-size="28" font-weight="bold" text-anchor="start" fill="#111111">D</text>
-<text x="1120" y="665" font-size="24" font-weight="bold" text-anchor="start" fill="#111111">Difference amplifies under direct products</text>
+<text x="1120" y="665" font-size="20" font-weight="bold" text-anchor="start" fill="#111111">Difference amplifies under direct products</text>
 <line x1="1120" y1="890" x2="1510" y2="890" stroke="#222222" stroke-width="2"/>
 <line x1="1120" y1="890" x2="1120" y2="710" stroke="#222222" stroke-width="2"/>
 <text x="1315" y="925" font-size="16" font-weight="normal" text-anchor="middle" fill="#555555">number of independent copies r</text>
@@ -234,7 +234,7 @@
 <polyline points="1120,854 1217.5,818 1315,782 1412.5,746 1510,710" fill="none" stroke="#111111" stroke-width="3"/>
 <polyline points="1120,863 1217.5,836 1315,809 1412.5,782 1510,755" fill="none" stroke="#777777" stroke-width="3" stroke-dasharray="7 5"/>
 <text x="1460" y="735" font-size="16" font-weight="bold" text-anchor="start" fill="#111111">A: C_A=4r</text>
-<text x="1460" y="785" font-size="16" font-weight="bold" text-anchor="#666666" fill="#111111">B: C_A=3r</text>
+<text x="1460" y="785" font-size="16" font-weight="bold" text-anchor="start" fill="#666666">B: C_A=3r</text>
 <text x="1295" y="865" font-size="16" font-weight="normal" text-anchor="middle" fill="#555555">C_F=4r for both</text>
 <text x="1295" y="700" font-size="22" font-weight="bold" text-anchor="middle" fill="#111111">ΔC_A = r → ∞</text>
 <text x="800" y="938" font-size="20" font-weight="bold" text-anchor="middle" fill="#111111">Static information can be identical while the cost of accessing it adaptively differs.</text>
