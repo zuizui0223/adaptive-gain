@@ -29,7 +29,7 @@ Current journal limits verified on 2026-10-02:
 Using the same repository counter as the submission-surface test:
 
 - abstract: **150 words**
-- main text: **4,363 words**
+- main text: **4,434 words**
 - references: **29**
 - main figures: **2**
 - main tables: **0**
