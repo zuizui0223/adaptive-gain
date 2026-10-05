@@ -307,6 +307,91 @@ W(\pi)
 
 This makes explicit what additional natural-history measurements are required beyond the finite guarantee theory.
 
+
+## 6b. Theorem OF5 — even (C_A,C_F) does not identify realized expected fitness
+
+The guarantee pair is enough for the lower bound in OF4, but it does not determine the exact pathwise opportunity benefit.
+
+There exist two unit-cost finite deterministic tasks with all of the following held fixed:
+
+- five represented worlds;
+- three declared queries;
+- target counts 3 versus 2;
+- C_A=2;
+- C_F=3;
+- the same two terminal-query outcome vectors.
+
+They differ only in the routing outcome of one target-0 world.
+
+In Task A that world joins an already mixed routing branch. The selected optimal contingent tree therefore uses two acquisitions on every represented world:
+
+\[
+T_A(x)=2\quad\forall x.
+\]
+
+In Task B the same world receives its own root outcome, which is already target-pure. The selected optimal contingent tree therefore has path-cost multiset
+
+\[
+\{1,2,2,2,2\}.
+\]
+
+Under a uniform world distribution and any strictly decreasing opportunity survival function S_B,
+
+\[
+R_{\rm path}^{(A)}
+=
+v[S_B(2)-S_B(3)],
+\]
+
+whereas
+
+\[
+R_{\rm path}^{(B)}
+=
+v\left[
+\frac15S_B(1)+\frac45S_B(2)-S_B(3)
+\right].
+\]
+
+Hence
+
+\[
+\boxed{
+R_{\rm path}^{(B)}-R_{\rm path}^{(A)}
+=
+\frac{v}{5}[S_B(1)-S_B(2)]
+>0.
+}
+\]
+
+Therefore
+
+\[
+\boxed{
+(C_A,C_F)
+\text{ does not identify realized expected fitness.}
+}
+\]
+
+The hierarchy is now:
+
+\[
+g=C_F-C_A
+\]
+
+is insufficient even for the guarantee-level opportunity value;
+
+\[
+(C_A,C_F)
+\]
+
+determines an exact guarantee-level lower bound but not exact realized expected fitness;
+
+the branchwise distribution of completion costs, together with state probabilities, state values, and opportunity survival, determines the pathwise process.
+
+This is not a defect of the worst-case theory. It clarifies its biological role: worst-case routeability provides a guaranteed performance floor, while evolutionary fitness generally depends on how often each branch is encountered and how quickly that branch terminates.
+
+
 ## 7. Process interpretation
 
 The causal chain is:
