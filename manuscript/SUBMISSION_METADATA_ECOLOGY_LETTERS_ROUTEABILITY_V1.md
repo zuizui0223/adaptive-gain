@@ -316,7 +316,7 @@ Verify deliberately before upload:
 ## Remaining submission work
 
 Completed:
-- manuscript citation/reference audit: 30 references, all cited;
+- manuscript citation/reference audit: 29 main-text references, all cited; Yuan et al. 2026 is Supplementary-only with a local full citation;
 - abstract/main-text/reference count synchronization;
 - independent verification of complete-Shannon and temporal-routing results.
 
