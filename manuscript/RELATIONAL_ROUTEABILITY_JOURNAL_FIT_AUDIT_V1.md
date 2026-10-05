@@ -35,7 +35,7 @@ Current controlled limits in the submission package:
 
 Current manuscript surface:
 - abstract: 150 words;
-- main text: approximately 4428 words;
+- main text: approximately 4363 words;
 - references: 29;
 - main figures: 2.
 
