@@ -187,8 +187,8 @@ Do not imply an unbounded multiplicative ratio here.
 
 ### Purpose
 
-Translate the theorem into an ecological measurement and causal prediction
-without pretending that current public data directly validate routeability.
+Translate the theory into behavioural consequences without treating any
+existing taxon as the unique empirical anchor.
 
 ### Panel A — finite ecological budget
 
@@ -214,48 +214,29 @@ Examples beneath the axis:
 - predator exposure;
 - energetic or reward cost of additional sampling.
 
-Yuan et al. (2026) can be cited in the legend as empirical precedent that
-bumble bees can voluntarily pay a reward cost to obtain information. It is
-**not** plotted as routeability validation.
+### Panel B — temporal routing and biological scope
 
-### Panel B — one quantified biological example: *Bombus*
+#### B1 — temporal predictive routing
 
-Use two quantitative mini-panels and one qualitative icon row.
-
-#### B1 — costly information acquisition depends on access mode (Yuan et al. 2026)
-
-Plot **platform-landing probability** against difficulty as two connected
-series from the independently reaggregated 19,200 public trials:
-
-| Difficulty | Regular: landing obtains cue | Random Free-Cue: cue supplied independently |
-|---|---:|---:|
-| Easy | 0.096 | 0.617 |
-| Hard | 0.469 | 0.588 |
-| Impossible | 0.716 | 0.210 |
-
-The two gradients cross.
-
-Add the individual-level interaction certificate:
+Plot the exact minimal-model gain
 
 \[
-\Delta\Delta_{\rm Impossible-Easy}=1.018,
+G_{\rm time}=\frac{|2\rho-1|}{4}
 \]
 
-positive in **191/192 bees**,
-exact one-sided sign-test \(p=3.1\times10^{-56}\).
+at three anchor points:
+
+- \(\rho=0\): gain \(=0.25\), predictable alternation;
+- \(\rho=0.5\): gain \(=0\), temporal independence;
+- \(\rho=1\): gain \(=0.25\), predictable persistence.
 
 Main annotation:
 
-**difficulty increases landing only when landing is needed to obtain information**
+**routing value tracks predictability of future cue usefulness, not persistence alone**
 
-A small inset may show that unaided accuracy falls
-\(0.750\to0.494\to0.207\), whereas post-acquisition accuracy remains near
-\(0.93\).
+#### B2 — one peer-reviewed quantitative example: *Bombus*
 
-Do not label Free-Cue platform landing as an information request: the cue is
-already delivered independently in that condition.
-
-#### B2 — recruitment of a second cue (Spaethe et al. 2026)
+Use Spaethe et al. (2026) only.
 
 Plot the prospectively defined secondary-cue recruitment index
 
@@ -263,37 +244,34 @@ Plot the prospectively defined secondary-cue recruitment index
 R=1-p_{\rm colour}.
 \]
 
-Show only the pooled public result:
+Show
 
 \[
 R_{\rm easy}=0.026,
 \qquad
-R_{\rm hard}=0.374.
+R_{\rm hard}=0.374,
 \]
 
-Add a thin indication that pattern and shape experiments independently share
-the same direction.
+with pooled Cliff's \(\delta=0.980\).
 
 Main annotation:
 
-**primary cue sufficient → secondary cue mostly ignored**
+**primary cue sufficient -> secondary cue mostly ignored**
 
-**primary cue difficult → secondary cue recruited**
+**primary cue difficult -> secondary cue recruited**
 
-#### B3 — sequential access exists
+Yuan et al. (2026) remains Supplementary because it is a preprint and one raw
+accuracy field is unresolved. It is not plotted in the main figure.
 
-Use a small schematic/citation rather than another numerical axis:
+#### B3 — parallel staged decisions
 
-- MaBouDi et al. 2025: selective high-speed visual scanning of restricted
-  pattern regions;
-- Essenberg et al. 2015: flower type determines whether size is a useful reward
-  cue.
+Use three compact qualitative boxes:
 
-Caption firewall:
+- parasitoid host finding: host habitat -> host localization/assessment;
+- fiddler-crab predator response: multi-stage risk assessment;
+- patch foraging: repeated stay/leave decisions.
 
-> These data illustrate operational ingredients relevant to conditional cue routing; they do not validate or estimate the exact matched \(C_A<C_F\) theorem.
-
-Do not combine effect sizes across studies.
+These establish biological scope only. They do not estimate \(C_A\) or \(C_F\).
 
 ### Panel C — prospective causal test
 
@@ -317,25 +295,9 @@ Primary qualitative interaction:
 
 The middle-budget effect is the discriminating prediction.
 
-Beside it, optionally show the ten-state exact-balanced stress test:
-
-\[
-(C_A,C_F)_R=(3,4),
-\qquad
-(C_A,C_F)_K=(2,2),
-\]
-
-with every cue exactly 5:5 balanced.
-
-At \(B=3\), the deterministic ceiling interaction is \(1/5\).
-
-Label clearly:
-
-**task ceiling, not assumed behavioral effect size**
-
 ### Panel D — measurement rule
 
-Use a small pipeline:
+Use the pipeline
 
 \[
 \text{focal action}
@@ -351,17 +313,15 @@ Use a small pipeline:
 B.
 \]
 
-Add the rule:
+Add:
 
 > **measure the action-conditioned cue table first; summarize it second.**
 
-This panel turns the theory into an empirical protocol.
-
 ### Figure 2 message
 
-The theory predicts an ecological effect only when organisms face finite
-information-acquisition constraints and can condition later acquisition on
-earlier outcomes.
+Finite budgets expose conditional accessibility; temporal predictability
+determines when an early routing cue has value; staged information use occurs
+across distinct ecological decision systems.
 
 ---
 
