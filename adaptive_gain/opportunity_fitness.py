@@ -75,6 +75,61 @@ def opportunity_selection_margin(
 
 
 
+
+def architecture_log_fitness(
+    completion_cost: float,
+    survival: Callable[[float], float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    maintenance_log_cost: float = 0.0,
+) -> float:
+    """Log expected fitness for one architecture with deterministic completion cost."""
+    if not math.isfinite(completion_cost) or completion_cost < 0:
+        raise ValueError("completion_cost must be finite and nonnegative")
+    if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value < 0:
+        raise ValueError("resolution_value must be finite and nonnegative")
+    if not math.isfinite(maintenance_log_cost) or maintenance_log_cost < 0:
+        raise ValueError("maintenance_log_cost must be finite and nonnegative")
+
+    success = float(survival(completion_cost))
+    if not math.isfinite(success) or not (0.0 <= success <= 1.0):
+        raise ValueError("survival values must lie in [0, 1]")
+    return (
+        math.log(baseline_fitness + resolution_value * success)
+        - maintenance_log_cost
+    )
+
+
+def pairwise_architecture_log_selection(
+    focal_cost: float,
+    comparator_cost: float,
+    survival: Callable[[float], float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    focal_maintenance_log_cost: float = 0.0,
+    comparator_maintenance_log_cost: float = 0.0,
+) -> float:
+    """Log-fitness advantage of a focal architecture over any comparator."""
+    focal = architecture_log_fitness(
+        focal_cost,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+        maintenance_log_cost=focal_maintenance_log_cost,
+    )
+    comparator = architecture_log_fitness(
+        comparator_cost,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+        maintenance_log_cost=comparator_maintenance_log_cost,
+    )
+    return focal - comparator
+
 def opportunity_log_selection(
     c_a: float,
     c_f: float,
@@ -102,9 +157,15 @@ def opportunity_log_selection(
     if s_a < s_f:
         raise ValueError("survival function must be nonincreasing")
 
-    adaptive = baseline_fitness + resolution_value * s_a
-    fixed = baseline_fitness + resolution_value * s_f
-    return math.log(adaptive / fixed) - maintenance_log_cost
+    return pairwise_architecture_log_selection(
+        c_a,
+        c_f,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+        focal_maintenance_log_cost=maintenance_log_cost,
+        comparator_maintenance_log_cost=0.0,
+    )
 
 
 def hard_budget_log_selection(
