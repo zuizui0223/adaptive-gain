@@ -1,7 +1,7 @@
 {
   "schema": "adaptive-gain-routeability-main-figures-v1",
   "date": "2026-10-02",
-  "status": "TWO_MAIN_FIGURES_IMPLEMENTED",
+  "status": "TWO_MAIN_FIGURES_IMPLEMENTED_AND_RENDER_PREFLIGHTED",
   "figures": {
     "figure1": {
       "path": "manuscript/figures/figure_routeability_entropy_access_v1.svg",
@@ -35,5 +35,6 @@
     "temporal_routing": "validation/temporal_routing_threshold_v1.json",
     "spaethe_panel": "validation/bombus_empirical_convergence_panel_v1.json"
   },
-  "claim_firewall": "Figure 2 presents the temporal theorem, one peer-reviewed Bombus quantitative example, and cross-system staged-decision examples. Yuan et al. 2026 is Supplementary only; no existing dataset is described as a direct estimate or validation of C_A or C_F."
+  "claim_firewall": "Figure 2 presents the temporal theorem, one peer-reviewed Bombus quantitative example, and cross-system staged-decision examples. Yuan et al. 2026 is Supplementary only; no existing dataset is described as a direct estimate or validation of C_A or C_F.",
+  "render_preflight": "validation/figure_render_preflight_v1.json"
 }
