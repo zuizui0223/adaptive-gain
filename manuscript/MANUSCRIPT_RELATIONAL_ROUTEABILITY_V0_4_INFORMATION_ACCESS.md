@@ -909,32 +909,31 @@ value-of-information theory.
 
 ## References
 
-- Bernays, E. A. & Funk, D. J. 1999. Specialists make faster decisions than generalists: experiments with aphids. *Proceedings of the Royal Society B* 266:151–156. DOI: 10.1098/rspb.1999.0615.
-- Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. DOI: 10.3758/CABN.8.4.475.
-- Gegear, R. J. & Laverty, T. M. 2005. Flower constancy in bumblebees: a test of the trait variability hypothesis. *Animal Behaviour* 69:939–949. DOI: 10.1016/j.anbehav.2004.06.029.
-- Russell, A. L., Buchmann, S. L. & Papaj, D. R. 2017. How a generalist bee achieves high efficiency of pollen collection on diverse floral resources. *Behavioral Ecology* 28:991–1003. DOI: 10.1093/beheco/arx058.
-- Quilici, S. & Rousse, P. 2012. Location of host and host habitat by fruit fly parasitoids. *Insects* 3:1220–1235. DOI: 10.3390/insects3041220.
-- Hemmi, J. M. & Pfeil, A. 2010. A multi-stage anti-predator response increases information on predation risk. *Journal of Experimental Biology* 213:1484–1489. DOI: 10.1242/jeb.039925.
-
 - Bernays, E. A. & Wcislo, W. T. 1994. Sensory capabilities, information processing, and resource specialization. *Quarterly Review of Biology* 69:187–204. DOI: 10.1086/418539.
+- Bernays, E. A. & Funk, D. J. 1999. Specialists make faster decisions than generalists: experiments with aphids. *Proceedings of the Royal Society B* 266:151–156. DOI: 10.1098/rspb.1999.0615.
 - Bernays, E. A. 2001. Neural limitations in phytophagous insects: implications for diet breadth and evolution of host affiliation. *Annual Review of Entomology* 46:703–727. DOI: 10.1146/annurev.ento.46.1.703.
 - Chakaravarthy, V. T., Pandit, V., Roy, S. & Sabharwal, Y. 2009. Approximating Decision Trees with Multiway Branches. In *Automata, Languages and Programming*, Part I, LNCS 5555:210–221. DOI: 10.1007/978-3-642-02927-1_19.
 - Contardo, G., Denoyer, L. & Artières, T. 2016. Recurrent Neural Networks for Adaptive Feature Acquisition. ICONIP 2016. DOI: 10.1007/978-3-319-46675-0_65.
-- Essenberg, C. J., Easter, R. A., Simmons, R. A. & Papaj, D. R. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
-- Lotto, R. B. & Chittka, L. 2005. Seeing the light: illumination as a contextual cue to color choice behavior in bumblebees. *Proceedings of the National Academy of Sciences USA* 102:3852–3856. DOI: 10.1073/pnas.0500681102.
 - Dale, K., Harland, D. P., Manning-Jones, A. & Collett, T. S. 2005. Weak and strong priming cues in bumblebee contextual learning. *Journal of Experimental Biology* 208:65–74. DOI: 10.1242/jeb.01370.
+- Essenberg, C. J., Easter, R. A., Simmons, R. A. & Papaj, D. R. 2015. The value of information in floral cues: bumblebee learning of floral size cues. *Behavioral Ecology* 26:1335–1344. DOI: 10.1093/beheco/arv061.
 - Forré, R. 1990. Methods and instruments for designing S-boxes. *Journal of Cryptology* 2:115–130. DOI: 10.1007/BF00190799.
 - Garey, M. R. 1972. Optimal Binary Identification Procedures. *SIAM Journal on Applied Mathematics* 23:173–186. DOI: 10.1137/0123019.
+- Gegear, R. J. & Laverty, T. M. 2005. Flower constancy in bumblebees: a test of the trait variability hypothesis. *Animal Behaviour* 69:939–949. DOI: 10.1016/j.anbehav.2004.06.029.
+- Hemmi, J. M. & Pfeil, A. 2010. A multi-stage anti-predator response increases information on predation risk. *Journal of Experimental Biology* 213:1484–1489. DOI: 10.1242/jeb.039925.
 - Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is NP-complete. *Information Processing Letters* 5:15–17. DOI: 10.1016/0020-0190(76)90095-8.
 - Janisch, J., Pevný, T. & Lisý, V. 2020. Classification with Costly Features as a Sequential Decision-Making Problem. *Machine Learning* 109:1587–1615. DOI: 10.1007/s10994-020-05874-8.
 - Katona, G. O. H. 1966. On separating systems of a finite set. *Journal of Combinatorial Theory* 1:174–194. DOI: 10.1016/S0021-9800(66)80024-8.
 - Li, J., Dhali, M. A. & Bouma, H. R. 2026. When Does Synergy Help Active Feature Acquisition? A PID-Based Study. arXiv:2609.32301.
+- Lotto, R. B. & Chittka, L. 2005. Seeing the light: illumination as a contextual cue to color choice behavior in bumblebees. *Proceedings of the National Academy of Sciences USA* 102:3852–3856. DOI: 10.1073/pnas.0500681102.
 - Ma, C., Tschiatschek, S., Palla, K., Hernandez-Lobato, J. M., Nowozin, S. & Zhang, C. 2019. EDDI: Efficient Dynamic Discovery of High-Value Information with Partial VAE. *Proceedings of Machine Learning Research* 97:4234–4243.
 - MaBouDi, H., Richter, J., Guiraud, M.-G., Roper, M., Marshall, J. A. R. & Chittka, L. 2025. Active vision of bees in a simple pattern discrimination task. *eLife* 14:e106332. DOI: 10.7554/eLife.106332.
 - Moshkov, M. & Zielosko, B. 2011. *Combinatorial Machine Learning: A Rough Set Approach*. Springer. DOI: 10.1007/978-3-642-20995-6.
 - Nan, F. & Saligrama, V. 2017. Adaptive Classification for Prediction Under a Budget. *Advances in Neural Information Processing Systems* 30.
 - Norcliffe, A. L. I., Lee, C., Imrie, F., van der Schaar, M. & Lio, P. 2025. Stochastic Encodings for Active Feature Acquisition. *Proceedings of Machine Learning Research* 267:46784–46814.
+- Quilici, S. & Rousse, P. 2012. Location of host and host habitat by fruit fly parasitoids. *Insects* 3:1220–1235. DOI: 10.3390/insects3041220.
+- Russell, A. L., Buchmann, S. L. & Papaj, D. R. 2017. How a generalist bee achieves high efficiency of pollen collection on diverse floral resources. *Behavioral Ecology* 28:991–1003. DOI: 10.1093/beheco/arx058.
 - Silva, R. & Clarke, A. R. 2020. The sequential cues hypothesis: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. DOI: 10.1111/1744-7917.12719.
 - Spaethe, J. et al. 2026. Bees flexibly adjust decision strategies to information content in a foraging task. *Science Advances*. DOI: 10.1126/sciadv.adw9320.
+- Stephens, D. W. 2008. Decision ecology: foraging and the ecology of animal decision making. *Cognitive, Affective, & Behavioral Neuroscience* 8:475–484. DOI: 10.3758/CABN.8.4.475.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
 - Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
