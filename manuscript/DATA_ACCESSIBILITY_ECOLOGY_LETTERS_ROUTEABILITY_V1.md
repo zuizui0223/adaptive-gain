@@ -6,9 +6,9 @@ contained in the `adaptive-gain` repository. Before final submission, the
 exact submitted repository state will be deposited in a permanent archive and
 the resulting DOI will be inserted here.
 
-The quantified *Bombus* example reanalyses or summarizes previously public data. No new animal data were collected for this study.
+The main quantified *Bombus* example uses peer-reviewed public Spaethe et al. data; the Yuan et al. preprint reaggregation is retained only in the Supplement. No new animal data were collected for this study.
 
-## Yuan et al. 2026
+## Yuan et al. 2026 — Supplementary only
 
 Active-information-seeking trial data were obtained from the public repository
 
