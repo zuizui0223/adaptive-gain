@@ -1,0 +1,50 @@
+{
+  "schema": "adaptive-gain-figure-render-preflight-v1",
+  "date": "2026-10-05",
+  "source_branch": "synthesis/information-accessibility-public-data-v1",
+  "source_figure_commit": "12f8d9a8f93a306506bed4a4dcca93efa0f8b0fc",
+  "workflow_run": {
+    "id": 37251871760,
+    "run_number": 2,
+    "conclusion": "success",
+    "artifact_id": 11321078230,
+    "artifact_name": "routeability-figure-preflight",
+    "artifact_digest": "sha256:90a75fcd2c1516895827ccd5b9032938024f8904516598d2795d98379a8cdcfb"
+  },
+  "figures": [
+    {
+      "path": "manuscript/figures/figure_routeability_entropy_access_v1.svg",
+      "rendered": [
+        "figure1_full.png",
+        "figure1_1000px.png"
+      ],
+      "full_size_px": [
+        1600,
+        950
+      ],
+      "visual_preflight": "PASS",
+      "notes": "No clipping, overlaps or broken glyphs. Panel C heading shortened; invalid SVG text-anchor repaired. 1000px proxy remains legible."
+    },
+    {
+      "path": "manuscript/figures/figure_routeability_decision_ecology_v2.svg",
+      "rendered": [
+        "figure2_full.png",
+        "figure2_1000px.png"
+      ],
+      "full_size_px": [
+        1600,
+        950
+      ],
+      "visual_preflight": "PASS",
+      "notes": "B1 temporal routing, B2 Spaethe, B3 cross-system examples match legend. No Yuan/Chow/empirical-anchor labels. No clipping, overlaps or broken glyphs."
+    }
+  ],
+  "static_checks": {
+    "invalid_text_anchor_count": 0,
+    "stale_main_figure_labels": [
+      "none"
+    ],
+    "estimated_viewbox_overflow_count": 0
+  },
+  "overall": "PASS"
+}
