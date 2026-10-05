@@ -74,6 +74,61 @@ def opportunity_selection_margin(
     )
 
 
+
+def opportunity_log_selection(
+    c_a: float,
+    c_f: float,
+    survival: Callable[[float], float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    maintenance_log_cost: float = 0.0,
+) -> float:
+    """Exact log-fitness ratio for stochastic opportunity closure."""
+    _validate_cost_pair(c_a, c_f)
+    if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value < 0:
+        raise ValueError("resolution_value must be finite and nonnegative")
+    if not math.isfinite(maintenance_log_cost) or maintenance_log_cost < 0:
+        raise ValueError("maintenance_log_cost must be finite and nonnegative")
+
+    s_a = float(survival(c_a))
+    s_f = float(survival(c_f))
+    if not (math.isfinite(s_a) and math.isfinite(s_f)):
+        raise ValueError("survival values must be finite")
+    if not (0.0 <= s_a <= 1.0 and 0.0 <= s_f <= 1.0):
+        raise ValueError("survival values must lie in [0, 1]")
+    if s_a < s_f:
+        raise ValueError("survival function must be nonincreasing")
+
+    adaptive = baseline_fitness + resolution_value * s_a
+    fixed = baseline_fitness + resolution_value * s_f
+    return math.log(adaptive / fixed) - maintenance_log_cost
+
+
+def hard_budget_log_selection(
+    c_a: float,
+    c_f: float,
+    budget: float,
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    maintenance_log_cost: float = 0.0,
+) -> float:
+    """Degenerate-opportunity special case with a deterministic hard budget."""
+    if not math.isfinite(budget) or budget < 0:
+        raise ValueError("budget must be finite and nonnegative")
+    survival = lambda c: 1.0 if budget >= c else 0.0
+    return opportunity_log_selection(
+        c_a,
+        c_f,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+        maintenance_log_cost=maintenance_log_cost,
+    )
+
 def exponential_optimal_closure_rate(c_a: float, c_f: float) -> float:
     """Unique closure rate maximizing exponential opportunity-window mass."""
     _validate_cost_pair(c_a, c_f)
