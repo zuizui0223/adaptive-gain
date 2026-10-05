@@ -17,6 +17,7 @@ from adaptive_gain.opportunity_fitness import (
     opportunity_selection_margin,
     opportunity_log_selection,
     hard_budget_log_selection,
+    pairwise_architecture_log_selection,
     opportunity_window_mass,
     pathwise_advantage_over_fixed,
 )
@@ -246,3 +247,44 @@ def test_weak_value_limit_recovers_window_mass_coefficient():
     first_order = epsilon * opportunity_window_mass(c_a, c_f, surv)
 
     assert exact == pytest.approx(first_order, rel=1e-6, abs=1e-14)
+
+
+def test_comparator_semantics_can_reverse_pairwise_selection():
+    surv = exp_survival(0.5)
+
+    # Canonical r=a=b=1 two-branch runtime costs:
+    # preindexed P = 1, contingent A = 2, universal fixed U = 3.
+    s_a_vs_u = pairwise_architecture_log_selection(
+        2.0,
+        3.0,
+        surv,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    s_a_vs_p = pairwise_architecture_log_selection(
+        2.0,
+        1.0,
+        surv,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+
+    assert s_a_vs_u > 0.0
+    assert s_a_vs_p < 0.0
+
+
+def test_architecture_overhead_can_reverse_runtime_ordering():
+    surv = exp_survival(0.5)
+
+    # P is faster at runtime, but sufficiently larger constitutive overhead
+    # can make the contingent architecture fitter overall.
+    s_a_vs_p = pairwise_architecture_log_selection(
+        2.0,
+        1.0,
+        surv,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+        focal_maintenance_log_cost=0.0,
+        comparator_maintenance_log_cost=1.0,
+    )
+    assert s_a_vs_p > 0.0
