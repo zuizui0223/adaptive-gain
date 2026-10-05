@@ -11,7 +11,7 @@
   },
   "current_counts": {
     "abstract_words_approx": 150,
-    "main_text_words_approx": 4426,
+    "main_text_words_approx": 4428,
     "references": 29,
     "figures": 2,
     "tables": 0,
@@ -48,5 +48,6 @@
     ],
     "supplementary_only": "Yuan et al. 2026 preprint costly-information reaggregation",
     "full_theorem_status": "prospective: no cited natural system directly estimates the complete deterministic routeability contrast"
-  }
+  },
+  "figure_render_preflight": "validation/figure_render_preflight_v1.json"
 }
