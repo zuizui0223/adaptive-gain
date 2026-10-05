@@ -51,72 +51,48 @@ Target prevalence is 8:4 in both.
 
 The visual point is that only the action map changes.
 
-### Panel B — temporal routing plus cross-system scope
+### Panel B — static information is exactly matched
 
-Use the upper-right half to connect the static theorem to a dynamic decision
-prediction without making any taxon the subject of the paper.
-
-#### B1 — temporal predictive routing
-
-Plot
-
-[
-G_{m time}=rac{|2ho-1|}{4}
-]
-
-against (hoin[0,1]). Show the V-shaped values:
-
-- (ho=0): gain (=0.25), predictable alternation;
-- (ho=0.5): gain (=0), temporal independence;
-- (ho=1): gain (=0.25), predictable persistence.
-
-Main annotation:
-
-**present context matters when it predicts which later cue will be useful**
-
-Do not describe positive persistence as uniquely favorable; predictable
-alternation has the same gain with the opposite continuation rule.
-
-#### B2 — one quantified biological example: Spaethe et al. 2026
-
-Plot the peer-reviewed secondary-cue recruitment index
-
-[
-R=1-p_{m colour}.
-]
+Use a compact subset-information summary rather than plotting 16 arbitrary
+numbers.
 
 Show
 
-[
-R_{m easy}=0.026,
-qquad
-R_{m hard}=0.374,
-]
+\[
+I_A(T;Q_S)=I_B(T;Q_S)
+\qquad
+\forall S\subseteq Q
+\]
 
-with pooled Cliff's (delta=0.980).
+and, more strongly,
 
-Main annotation:
+\[
+\boxed{
+H_A(U)=H_B(U)
+\qquad
+\forall U\subseteq\{T,q_0,q_1,q_2,q_3\}.
+}
+\]
 
-**primary cue sufficient -> secondary cue mostly ignored**
+Annotate:
 
-**primary cue difficult -> secondary cue recruited**
+**all 32 Shannon entropies match exactly**
 
-This is one flexible-generalist example, not a direct routeability estimate.
+Then show the fixed-cost characterization
 
-#### B3 — parallel staged ecological decisions
+\[
+C_F=
+\min_{S:\,H(T\mid Q_S)=0}|S|.
+\]
 
-Use three small schematic boxes:
+Both twins therefore have
 
-- parasitoid host finding: host habitat -> host assessment;
-- fiddler-crab predator assessment: information changes across escape stages;
-- patch foraging: repeated stay/leave decisions.
+\[
+C_F=4.
+\]
 
-These establish scope across ecological interactions and taxa. They do not
-estimate (C_A) or (C_F).
-
-Yuan et al. (2026) is **not** part of the main figure. Its public reaggregation
-is retained only as a Supplementary provisional costly-information component
-because the study is a preprint and one raw accuracy field remains unresolved.
+Do not call the subset-information function new; static entropy profiles have
+prior art.
 
 ### Panel C — realized outcomes create different continuation problems
 
