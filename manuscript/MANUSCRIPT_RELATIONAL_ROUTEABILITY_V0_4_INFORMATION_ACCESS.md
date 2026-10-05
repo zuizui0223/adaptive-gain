@@ -842,8 +842,8 @@ multivariate PID definitions remain non-unique. The defensible distinction is:
 
 Costly sequential feature acquisition, conditional information gain,
 value-of-information policies and generic adaptive-versus-fixed search are all
-prior art (Contardo et al. 2016; Nan & Saligrama 2017; Ma et al. 2019; Janisch
-et al. 2020; Norcliffe et al. 2025). The present contribution is narrower:
+prior art (Contardo et al. 2016; Janisch et al. 2020; Ma et al. 2019; Nan &
+Saligrama 2017; Norcliffe et al. 2025). The present contribution is narrower:
 one physical ecological cue environment can retain the same complete Shannon
 entropy vector while different action maps produce different optimal
 worst-case adaptive accessibility. Direct products make that difference
