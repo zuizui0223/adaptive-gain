@@ -5,101 +5,81 @@ on:
     branches:
       - synthesis/information-accessibility-public-data-v1
     paths:
-      - "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md"
-      - "manuscript/FIGURE_LEGENDS_RELATIONAL_ROUTEABILITY_V1.md"
-      - "manuscript/figures/figure_routeability_entropy_access_v1.svg"
-      - "manuscript/figures/figure_routeability_decision_ecology_v2.svg"
       - ".github/workflows/manuscript-pdf-preflight.yml"
   workflow_dispatch:
 
 jobs:
-  render-pdf:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Render canonical figures to PNG
+      - name: Install render dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended
           python -m pip install --upgrade pip
           python -m pip install cairosvg
+      - name: Prepare figures and preflight source
+        run: |
           mkdir -p preflight
           python - <<'PY'
+          from pathlib import Path
           import cairosvg
+
           cairosvg.svg2png(
               url="manuscript/figures/figure_routeability_entropy_access_v1.svg",
               write_to="preflight/figure1.png",
-              output_width=1600,
-              output_height=950,
+              output_width=1800,
           )
           cairosvg.svg2png(
               url="manuscript/figures/figure_routeability_decision_ecology_v2.svg",
               write_to="preflight/figure2.png",
-              output_width=1600,
-              output_height=950,
+              output_width=1800,
           )
-          PY
 
-      - name: Assemble preflight markdown
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          main = Path("manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md").read_text()
+          manuscript = Path("manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md").read_text()
           legends = Path("manuscript/FIGURE_LEGENDS_RELATIONAL_ROUTEABILITY_V1.md").read_text()
 
-          out = [
-              "---",
-              "title: Conditional decision topology separates ecological diversity from decision complexity",
-              "documentclass: article",
-              "geometry: margin=1in",
-              "fontsize: 10pt",
-              "header-includes:",
-              "  - |",
-              "    \\usepackage{graphicx}",
-              "    \\usepackage{microtype}",
-              "---",
-              "",
-              main,
-              "",
-              "\\newpage",
-              "",
-              "# Main figures",
-              "",
-              "![Figure 1](preflight/figure1.png){ width=0.96\\textwidth }",
-              "",
-              "![Figure 2](preflight/figure2.png){ width=0.96\\textwidth }",
-              "",
-              "\\newpage",
-              "",
-              legends,
-              "",
-          ]
-          Path("preflight/manuscript_for_render.md").write_text("\n".join(out))
+          source = manuscript + r"""
+
+\newpage
+
+# Canonical main figures
+
+## Figure 1
+
+![](preflight/figure1.png){ width=100% }
+
+\newpage
+
+## Figure 2
+
+![](preflight/figure2.png){ width=100% }
+
+\newpage
+
+""" + legends
+          Path("preflight/manuscript_preflight.md").write_text(source)
           PY
-
-      - name: Render PDF with Pandoc LaTeX image
+      - name: Build PDF
         run: |
-          docker run --rm \
-            -v "$PWD:/data" \
-            -w /data \
-            pandoc/latex:latest \
-            preflight/manuscript_for_render.md \
-            -o preflight/manuscript_preflight.pdf \
+          pandoc preflight/manuscript_preflight.md \
+            --from=markdown+tex_math_dollars \
             --pdf-engine=xelatex \
-            --standalone
-
-      - name: Sanity check PDF
-        run: |
-          test -s preflight/manuscript_preflight.pdf
-          ls -lh preflight/manuscript_preflight.pdf
-
+            --resource-path=.:preflight \
+            -V geometry:margin=0.75in \
+            -V fontsize=10pt \
+            -V papersize=a4 \
+            -V mainfont="DejaVu Serif" \
+            -V sansfont="DejaVu Sans" \
+            -V monofont="DejaVu Sans Mono" \
+            -o preflight/routeability_manuscript_preflight.pdf
+          test -s preflight/routeability_manuscript_preflight.pdf
       - uses: actions/upload-artifact@v4
         with:
           name: routeability-manuscript-pdf-preflight
-          path: |
-            preflight/manuscript_preflight.pdf
-            preflight/manuscript_for_render.md
+          path: preflight/routeability_manuscript_preflight.pdf
           if-no-files-found: error
