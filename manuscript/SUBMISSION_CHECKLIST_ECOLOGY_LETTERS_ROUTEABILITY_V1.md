@@ -31,7 +31,7 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 ## Controlled counts
 
 - [x] Abstract: 150 words.
-- [x] Main text: approximately 4,426 words.
+- [x] Main text: approximately 4,428 words.
 - [x] Main-text references: 29.
 - [x] Every main bibliography reference is cited in the main manuscript; Yuan et al. 2026 is Supplementary-only with a local full citation.
 - [x] Main figures: 2.
@@ -68,7 +68,8 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 - [x] Figure 2: finite budget + temporal predictive routing + peer-reviewed Spaethe example + cross-system scope + prospective causal test + measurement rule.
 - [x] Figure 2 does not label *Bombus* as the unique empirical anchor and contains no Yuan preprint panel.
 - [ ] Render final manuscript PDF and inspect equations, line breaks, figure legibility and legend consistency.
-- [ ] Inspect both SVG figures at publication-size rendering.
+- [x] Canonical SVGs rendered at 1600×950 and 1000px proxy; no clipping, overlaps, broken glyphs or stale Yuan/Chow/empirical-anchor labels detected.
+- [x] Inspect both SVG figures at publication-size rendering.
 
 ## Data and code accessibility
 
@@ -79,6 +80,15 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 - [ ] Create permanent archive / DOI for that state.
 - [ ] Replace `[PERMANENT DOI]` in Data Accessibility.
 - [ ] Replace `[SUBMITTED COMMIT SHA]` in Data Accessibility.
+
+## Journal submission fields
+
+- [x] Running title is under 45 characters.
+- [x] Eight keywords are supplied (journal permits up to 10).
+- [ ] Supply e-mail address for every author.
+- [ ] Prepare recommended and opposed reviewer list.
+- [ ] Prepare recommended/opposed editorial-board conflict list with reasons for conflicts.
+- [ ] Graphical abstract is deferred: Wiley requires it at major/minor revision rather than initial submission.
 
 ## Author-controlled fields
 
