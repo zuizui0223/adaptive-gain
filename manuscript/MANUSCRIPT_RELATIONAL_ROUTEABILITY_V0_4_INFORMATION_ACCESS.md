@@ -964,6 +964,5 @@ value-of-information theory.
 - Norcliffe, A. L. I., Lee, C., Imrie, F., van der Schaar, M. & Lio, P. 2025. Stochastic Encodings for Active Feature Acquisition. *Proceedings of Machine Learning Research* 267:46784–46814.
 - Silva, R. & Clarke, A. R. 2020. The sequential cues hypothesis: a conceptual model to explain host location and ranking by polyphagous herbivores. *Insect Science* 27:1136–1147. DOI: 10.1111/1744-7917.12719.
 - Spaethe, J. et al. 2026. Bees flexibly adjust decision strategies to information content in a foraging task. *Science Advances*. DOI: 10.1126/sciadv.adw9320.
-- Sun, H. & Jafar, S. A. 2019. On the Capacity of Computation Broadcast. arXiv:1903.07597.
 - Williams, P. L. & Beer, R. D. 2010. Nonnegative Decomposition of Multivariate Information. arXiv:1004.2515.
 - Youssef, A. M. & Tavares, S. E. 2004. Decision trees of cryptographic Boolean functions. *Canadian Conference on Electrical and Computer Engineering* 1:401–404. DOI: 10.1109/CCECE.2004.1345040.
