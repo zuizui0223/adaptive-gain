@@ -47,27 +47,8 @@ jobs:
 
           manuscript = Path("manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md").read_text()
           legends = Path("manuscript/FIGURE_LEGENDS_RELATIONAL_ROUTEABILITY_V1.md").read_text()
-
-          source = manuscript + r"""
-
-\newpage
-
-# Canonical main figures
-
-## Figure 1
-
-![](preflight/figure1.png){ width=100% }
-
-\newpage
-
-## Figure 2
-
-![](preflight/figure2.png){ width=100% }
-
-\newpage
-
-""" + legends
-          Path("preflight/manuscript_preflight.md").write_text(source)
+          appendix = "\\n\\n\\\\newpage\\n\\n# Canonical main figures\\n\\n![Figure 1](preflight/figure1.png){ width=100% }\\n\\n\\\\newpage\\n\\n![Figure 2](preflight/figure2.png){ width=100% }\\n\\n\\\\newpage\\n\\n"
+          Path("preflight/manuscript_preflight.md").write_text(manuscript + appendix + legends)
           PY
       - name: Build PDF
         run: |
