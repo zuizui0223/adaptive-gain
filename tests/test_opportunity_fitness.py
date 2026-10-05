@@ -15,6 +15,8 @@ from adaptive_gain.opportunity_fitness import (
     exponential_optimal_closure_rate,
     exponential_window_mass,
     opportunity_selection_margin,
+    opportunity_log_selection,
+    hard_budget_log_selection,
     opportunity_window_mass,
     pathwise_advantage_over_fixed,
 )
@@ -178,3 +180,69 @@ def test_same_guarantee_pair_can_have_different_pathwise_fitness():
     expected_difference = 0.2 * (surv(1.0) - surv(2.0))
     assert fit_b - fit_a == pytest.approx(expected_difference)
     assert fit_b > fit_a
+
+
+def test_stochastic_log_selection_recovers_hard_budget_three_regions():
+    c_a, c_f = 2.0, 3.0
+    w0, value, kappa = 1.0, 1.0, 0.2
+
+    below = hard_budget_log_selection(
+        c_a,
+        c_f,
+        1.0,
+        baseline_fitness=w0,
+        resolution_value=value,
+        maintenance_log_cost=kappa,
+    )
+    middle = hard_budget_log_selection(
+        c_a,
+        c_f,
+        2.0,
+        baseline_fitness=w0,
+        resolution_value=value,
+        maintenance_log_cost=kappa,
+    )
+    above = hard_budget_log_selection(
+        c_a,
+        c_f,
+        3.0,
+        baseline_fitness=w0,
+        resolution_value=value,
+        maintenance_log_cost=kappa,
+    )
+
+    assert below == pytest.approx(-kappa)
+    assert middle == pytest.approx(math.log(2.0) - kappa)
+    assert above == pytest.approx(-kappa)
+
+
+def test_soft_opportunity_selection_is_positive_without_maintenance_when_strict():
+    rate = 0.5
+    s = opportunity_log_selection(
+        2.0,
+        3.0,
+        exp_survival(rate),
+        baseline_fitness=1.0,
+        resolution_value=2.0,
+        maintenance_log_cost=0.0,
+    )
+    assert s > 0.0
+
+
+def test_weak_value_limit_recovers_window_mass_coefficient():
+    c_a, c_f = 2.0, 3.0
+    rate = 0.4
+    surv = exp_survival(rate)
+    epsilon = 1e-7
+
+    exact = opportunity_log_selection(
+        c_a,
+        c_f,
+        surv,
+        baseline_fitness=1.0,
+        resolution_value=epsilon,
+        maintenance_log_cost=0.0,
+    )
+    first_order = epsilon * opportunity_window_mass(c_a, c_f, surv)
+
+    assert exact == pytest.approx(first_order, rel=1e-6, abs=1e-14)
