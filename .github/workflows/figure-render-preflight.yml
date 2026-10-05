@@ -1,0 +1,53 @@
+name: figure-render-preflight
+
+on:
+  push:
+    branches:
+      - synthesis/information-accessibility-public-data-v1
+    paths:
+      - "manuscript/figures/figure_routeability_entropy_access_v1.svg"
+      - "manuscript/figures/figure_routeability_decision_ecology_v2.svg"
+      - ".github/workflows/figure-render-preflight.yml"
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install cairosvg pillow
+      - name: Render canonical figures
+        run: |
+          mkdir -p preflight
+          python - <<'PY'
+          from pathlib import Path
+          import cairosvg
+          from PIL import Image
+
+          figures = [
+              ("manuscript/figures/figure_routeability_entropy_access_v1.svg",
+               "preflight/figure1_full.png"),
+              ("manuscript/figures/figure_routeability_decision_ecology_v2.svg",
+               "preflight/figure2_full.png"),
+          ]
+
+          for src, out in figures:
+              cairosvg.svg2png(url=src, write_to=out, output_width=1600, output_height=950)
+              im = Image.open(out).convert("RGB")
+              assert im.size == (1600, 950), (out, im.size)
+              extrema = im.getextrema()
+              assert any(lo < 250 for lo, hi in extrema), (out, extrema)
+              thumb = im.resize((1000, 594))
+              thumb.save(out.replace("_full.png", "_1000px.png"))
+
+          print("rendered:", [p for _, p in figures])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: routeability-figure-preflight
+          path: preflight/*.png
+          if-no-files-found: error
