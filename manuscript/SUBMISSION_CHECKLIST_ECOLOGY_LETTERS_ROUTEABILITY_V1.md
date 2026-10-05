@@ -31,7 +31,7 @@ Canonical manuscript: `manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORM
 ## Controlled counts
 
 - [x] Abstract: 150 words.
-- [x] Main text: approximately 4,428 words.
+- [x] Main text: approximately 4,363 words.
 - [x] Main-text references: 29.
 - [x] Every main bibliography reference is cited in the main manuscript; Yuan et al. 2026 is Supplementary-only with a local full citation.
 - [x] Main figures: 2.
