@@ -186,6 +186,44 @@ Hence selection for contingent sensing is band-pass with respect to ecological c
 
 A constitutive cost K shifts this curve downward. Positive selection exists only if K is below the maximum opportunity benefit.
 
+
+### Corollary OF2.1 — maintenance cost creates two ecological selection boundaries
+
+Let the contingent architecture pay a constitutive expected-fitness cost K with
+
+\[
+0<K<R_{\rm opp}(\mu^*).
+\]
+
+Because R_opp(mu) is continuous, tends to zero at both ecological extremes, and has one strict interior maximum, the equation
+
+\[
+R_{\rm opp}(\mu)=K
+\]
+
+has exactly two positive solutions
+
+\[
+\mu_-<\mu^*<\mu_+.
+\]
+
+Therefore
+
+\[
+\boxed{
+\Phi_{\rm opp}(\mu)>0
+\iff
+\mu_-<\mu<\mu_+.
+}
+\]
+
+So increasing ecological closure pressure can reverse selection twice without changing cue topology:
+
+fixed favored -> contingent favored -> fixed favored.
+
+The first reversal occurs when opportunities become tight enough that routeability begins to rescue otherwise-lost decisions. The second occurs when opportunities become so short that even the contingent architecture usually fails, leaving only its constitutive cost.
+
+
 ## 5. Theorem OF3 — equal structural gaps can have ordered fitness values
 
 Write
