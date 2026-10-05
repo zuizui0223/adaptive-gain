@@ -142,13 +142,21 @@ latent-state enumeration.
 
 ### 2.3 Biological evidence synthesis
 
-We used published animal-behaviour studies only to ask whether the operations
-assumed by the theory occur in real ecological decisions. Evidence was grouped
-by operation rather than taxon: sequential or hierarchical sampling,
-conditional cue relevance, context-conditioned action, and costly information
-acquisition. Bumblebees, parasitoids, fiddler crabs and patch-foraging animals
-provide examples from pollination, host finding, predator avoidance and
-resource exploitation. None of these studies estimates \(C_A\) or \(C_F\).
+We used published animal-behaviour studies only to ask whether staged and
+conditional information use occurs in real ecological decisions. Evidence was
+grouped by operation rather than taxon: sequential or hierarchical sampling,
+conditional cue relevance and context-conditioned action. Bumblebees,
+parasitoids, fiddler crabs and patch-foraging animals provide examples from
+pollination, host finding, predator avoidance and resource exploitation. None
+of these studies estimates \(C_A\) or \(C_F\).
+
+Spaethe et al. (2026) is the only external study used quantitatively in the
+main text. From the public conflict-test values we defined secondary-cue
+recruitment prospectively as \(R=1-p_{\rm colour}\), and report pooled
+easy- versus hard-primary-colour means and pooled Cliff's \(\delta\).
+Effect sizes are not combined across studies. The separate Yuan et al. (2026)
+costly-information reaggregation is retained only in the Supplement because
+the study is a preprint and one raw accuracy field remains unresolved.
 
 ---
 
