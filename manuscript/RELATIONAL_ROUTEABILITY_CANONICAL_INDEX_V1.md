@@ -158,7 +158,7 @@ Core ecology, information-fitness, adaptive-acquisition and extra-entropic refer
 ### Journal fit
 `manuscript/RELATIONAL_ROUTEABILITY_JOURNAL_FIT_AUDIT_V1.md`
 
-Preferred first target: **Ecology Letters (Letter)**, now that the deterministic theorem is paired with a compact public *Bombus* empirical-convergence analysis. **The American Naturalist** remains the natural fallback; Theoretical Ecology remains a lower fallback.
+Preferred first target: **Ecology Letters (Letter)**, now that the deterministic theorem is paired with a compact temporal-routing extension and cross-system behavioural grounding. **The American Naturalist** remains the natural fallback; Theoretical Ecology remains a lower fallback.
 
 
 \`manuscript/RELATIONAL_ROUTEABILITY_PRIOR_ART_AUDIT_V1.md\`
@@ -338,7 +338,7 @@ No new deterministic theorem family.
 
 Allowed work now:
 - editorial compression and Ecology Letters packaging;
-- render the two canonical figures, including the frozen Bombus public-data panel;
+- render the two canonical figures, including the temporal-routing / Spaethe / cross-system Figure 2 panel;
 - execute the prospective four-state routeability experiment in an experimentally tractable decision system; *Bombus* is one candidate, not a required taxon;
 - only then consider the ten-state stress test;
 - develop stochastic expected-loss theory as a separate project.
