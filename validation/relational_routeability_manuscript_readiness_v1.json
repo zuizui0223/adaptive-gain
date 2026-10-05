@@ -5,11 +5,11 @@
   "manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "status": "V0_4_INTEGRATED_INFORMATION_ACCESS_PLUS_NO_GO_READY_FOR_FINAL_PACKAGING",
   "working_title": "Conditional decision topology separates ecological diversity from decision complexity",
-  "approximate_main_words": 4363,
+  "approximate_main_words": 4434,
   "structure": [
     "Introduction: decision ecology, generalism, and the diversity-to-complexity problem",
     "Material and methods: finite deterministic task, minimal temporal-routing extension, and cross-system evidence synthesis",
-    "Results: relational theorem, budget window, entropic twins, Bellman accessibility, exact decision redundancy, and temporal predictive routing",
+    "Results: complete-Shannon nonidentification, fixed/adaptive information split and exact redundancy, relational asymptotic theorem, common-budget ecology, and temporal predictive routing",
     "Discussion: diversity versus effective decision complexity, measurement, cross-system examples, prior-art boundary and deterministic limits"
   ],
   "core_claims": [
@@ -88,8 +88,8 @@
   "bibliography_audit": "manuscript/RELATIONAL_ROUTEABILITY_BIBLIOGRAPHY_AUDIT_V1.md",
   "current_manuscript": "manuscript/MANUSCRIPT_RELATIONAL_ROUTEABILITY_V0_4_INFORMATION_ACCESS.md",
   "current_abstract_words": 150,
-  "current_approx_main_words": 4363,
-  "reference_count": 29,
+  "current_approx_main_words": 4434,
+  "reference_count": 28,
   "empirical_carrier": {
     "taxon": "cross-system animal decision examples",
     "rationale": "Peer-reviewed bumblebee work, parasitoids, fiddler crabs and patch-foraging animals illustrate staged information acquisition across distinct ecological settings; none is a direct theorem validation. Yuan et al. 2026 remains Supplementary-only.",

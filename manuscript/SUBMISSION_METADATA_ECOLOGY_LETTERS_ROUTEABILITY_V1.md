@@ -30,7 +30,7 @@ Using the same repository counter as the submission-surface test:
 
 - abstract: **150 words**
 - main text: **4,434 words**
-- references: **29**
+- references: **28**
 - main figures: **2**
 - main tables: **0**
 - text boxes: **0**

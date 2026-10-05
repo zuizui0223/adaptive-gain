@@ -53,8 +53,8 @@ Canonical target: **Ecology Letters — Letter**.
 
 Current controlled counts:
 - abstract: 150 words;
-- main text: approximately 4,363 words under the journal definition;
-- references: 29;
+- main text: approximately 4,434 words under the journal definition;
+- references: 28;
 - main figures: 2.
 
 Do not use the older generic/Theoretical Ecology `SUBMISSION_METADATA_V1.md` for
