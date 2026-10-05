@@ -1,4 +1,5 @@
 name: manuscript-pdf-preflight
+# preflight workflow trigger
 
 on:
   push:
