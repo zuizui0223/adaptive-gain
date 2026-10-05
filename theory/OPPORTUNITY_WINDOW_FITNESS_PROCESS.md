@@ -113,6 +113,140 @@ Thus a local linear lift exists, but its coefficient is natural-history dependen
 
 not a universal constant.
 
+
+## 3b. Theorem OF1.1 — exact stochastic-opportunity selection coefficient
+
+The opportunity-window mass is an expected performance difference. To connect it directly to allele- or architecture-frequency change, let baseline fitness be w0>0 and let timely correct resolution add value v>=0.
+
+Define
+
+\[
+W_A
+=
+e^{-\kappa}[w_0+vS_B(C_A)]
+\]
+
+for the contingent architecture and
+
+\[
+W_F
+=
+w_0+vS_B(C_F)
+\]
+
+for the fixed architecture, where kappa>=0 is the log maintenance cost of contingent control.
+
+The exact log-fitness selection coefficient is
+
+\[
+\boxed{
+s_{\rm opp}
+=
+\log\frac{W_A}{W_F}
+=
+\log
+\frac{w_0+vS_B(C_A)}
+{w_0+vS_B(C_F)}
+-\kappa.
+}
+\]
+
+Therefore contingent control is favored exactly when
+
+\[
+\boxed{
+\kappa
+<
+\log
+\frac{w_0+vS_B(C_A)}
+{w_0+vS_B(C_F)}.
+}
+\]
+
+For a deterministic hard budget B=b, use
+
+\[
+S_B(c)=\mathbf 1\{b\ge c\}.
+\]
+
+The formula then recovers the repository's existing three-region result exactly:
+
+\[
+b<C_A
+\quad\Rightarrow\quad
+s_{\rm opp}=-\kappa,
+\]
+
+\[
+C_A\le b<C_F
+\quad\Rightarrow\quad
+s_{\rm opp}
+=
+\log\frac{w_0+v}{w_0}-\kappa,
+\]
+
+and
+
+\[
+b\ge C_F
+\quad\Rightarrow\quad
+s_{\rm opp}=-\kappa.
+\]
+
+Thus the hard-budget model is not a separate fitness construction. It is the degenerate-opportunity special case of the stochastic process.
+
+For weak performance value relative to baseline, r=v/w0 -> 0,
+
+\[
+s_{\rm opp}
+=
+r[S_B(C_A)-S_B(C_F)]
+-\kappa
++O(r^2).
+\]
+
+If the strict structural gap g=C_F-C_A is also small and B has density f_B, then
+
+\[
+S_B(C_A)-S_B(C_F)
+=
+f_B(C_A)g+o(g),
+\]
+
+so
+
+\[
+\boxed{
+s_{\rm opp}
+=
+\frac{v}{w_0}f_B(C_A)g-\kappa
++o(g)+O((v/w_0)^2).
+}
+\]
+
+This gives a biological interpretation to the old linear coefficient:
+
+\[
+\boxed{
+\lambda_{\rm local}
+=
+\frac{v}{w_0}f_B(C_A).
+}
+\]
+
+It combines the value of timely resolution with the density of ecological opportunity limits exactly where contingent routing saves time. It is therefore system- and context-dependent rather than a universal conversion from structural gap to fitness.
+
+Under haploid viability selection the frequency process is then
+
+\[
+\operatorname{logit}(p_{t+1})
+=
+\operatorname{logit}(p_t)+s_{\rm opp},
+\]
+
+so the natural-history timing layer plugs directly into the repository's existing evolutionary-response machinery without positing s=lambda g-kappa as a primitive assumption.
+
+
 ## 4. Theorem OF2 — exponential opportunity closure gives a unique intermediate optimum
 
 Assume opportunities close at constant hazard mu>0:
