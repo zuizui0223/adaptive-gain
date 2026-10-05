@@ -1,6 +1,5 @@
 # Conditional decision topology separates ecological diversity from decision complexity
 
-Draft v0.4 — information-accessibility synthesis candidate
 
 ## Abstract
 
@@ -8,11 +7,9 @@ Generalist animals face resources, yet sequential decisions can avoid simultaneo
 
 ## Keywords
 
-environmental heterogeneity; ecological information; sequential decision making; adaptive feature acquisition; niche breadth; routeability; information processing; cue acquisition
+behavioural ecology; decision ecology; generalism; sequential decision making; information processing; foraging; cue acquisition; routeability
 
----
 
----
 
 ## 1. Introduction
 
@@ -78,11 +75,9 @@ useful, and routing value disappears at temporal independence. Published animal
 systems show that the staged decisions assumed by these models occur in nature,
 without serving as direct tests of the exact theorem.
 
----
 
 ## 2. Material and methods
 
----
 
 ### 2.1 Finite ecological decision tasks
 
@@ -118,9 +113,7 @@ measures the structural burden avoided by contingent acquisition.
 
 Neither \(C_A\) nor \(C_F\) is intrinsically fitness. They are exact properties of a declared finite decision problem.
 
----
 
----
 
 ### 2.2 Minimal temporal routing extension
 
@@ -158,11 +151,9 @@ Effect sizes are not combined across studies. The separate Yuan et al. (2026)
 costly-information reaggregation is retained only in the Supplement because
 the study is a preprint and one raw accuracy field remains unresolved.
 
----
 
 ## 3. Results
 
----
 
 ### 3.1 Complete static information can miss adaptive accessibility
 
@@ -282,12 +273,10 @@ entropic equivalence. It is distinct from the separate asymptotic routing
 family, which yields an unbounded **multiplicative** \(C_F/C_A\) ratio under
 weaker information matching.
 
----
 
 The matched finite witness, continuation trees and direct-product amplification
 are summarized in Fig. 1.
 
----
 
 ### 3.2 Fixed and adaptive information are different mathematical objects
 
@@ -455,9 +444,7 @@ The theory therefore does not claim that topology is hidden in principle. It
 identifies exactly where averaging across unrealized branches loses an
 operational property.
 
----
 
----
 
 ### 3.3 Relational routeability theorem
 
@@ -563,9 +550,7 @@ Yet
 
 The source of the separation is the action-conditioned arrangement of cue states.
 
----
 
----
 
 ### 3.4 Exact common-budget ecological corollary
 
@@ -619,9 +604,7 @@ Hence the architecture-by-access contrast is
 
 This is an exact feasibility contrast, not a claim that real animals will exhibit a one-unit behavioral effect (Fig. 2a). Its biological role is to localize where topology can matter: under extremely small budgets both strategies may fail; under large budgets both may succeed; the topology-sensitive region lies between the adaptive and fixed requirements.
 
----
 
----
 
 ### 3.5 Routing value can come from predicting which cue will matter next
 
@@ -682,12 +665,10 @@ binary transition kernel, temporal dependence alone is also insufficient:
 routing value is zero whenever the same specialist cue remains optimal after
 every current context.
 
----
 
 
 ## 4. Discussion
 
----
 
 ### 4.1 From ecological diversity to effective decision complexity
 
@@ -716,7 +697,6 @@ behaviourally accessible within the available observation budget. Predicting
 evolved niche breadth still requires fitness trade-offs and evolutionary
 dynamics.
 
----
 
 ### 4.2 Measurement: recover structure before summarizing it
 
@@ -757,11 +737,9 @@ Without an action map, state-by-cue incidence or defensible acquisition costs,
 a natural system cannot support a direct routeability estimate; richness or
 entropy alone should not be substituted for the missing decision structure.
 
----
 
 This action-first measurement pipeline is summarized in Fig. 2d.
 
----
 
 ### 4.3 Examples across ecological decision systems
 
@@ -799,7 +777,6 @@ costly cue access under a shared budget (Fig. 2c). The test is applicable
 wherever early observations or actions determine which later distinctions
 remain relevant.
 
----
 
 ### 4.4 Prior-art boundary
 
@@ -874,9 +851,7 @@ worst-case adaptive accessibility. Direct products make that difference
 unbounded additively; the separate exact-balanced family gives an unbounded
 multiplicative \(C_F/C_A\) ratio under weaker information matching.
 
----
 
----
 
 ### 4.5 Deterministic scope and next theory
 
@@ -886,7 +861,6 @@ worst-case exact resolution. Extending the quantity-topology separation to
 noisy cues and expected loss is a distinct problem closely adjacent to active
 feature acquisition; we do not claim that extension here.
 
----
 
 ### 4.6 Conclusion
 
@@ -926,14 +900,12 @@ The resulting principle is:
 \text{Static information tells us what can be known together; routeability tells us what must be learned together.}
 \]
 
----
 
 The claim is therefore deliberately narrow: routeability is an exact
 relational ecological axis for deterministic resolution, not a replacement
 for entropy, environmental grain, network topology or stochastic
 value-of-information theory.
 
----
 
 ## References
 
