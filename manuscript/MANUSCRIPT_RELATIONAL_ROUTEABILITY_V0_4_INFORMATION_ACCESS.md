@@ -164,171 +164,7 @@ the study is a preprint and one raw accuracy field remains unresolved.
 
 ---
 
-### 3.1 Relational routeability theorem
-
-For every integer \(d\ge2\), set
-
-\[
-k=2^d.
-\]
-
-Use the existing exactly-balanced binary cue environment with \(2k+2\) represented states and \(d+k\) unit-cost binary cues. Every cue divides the state set exactly in half.
-
-We define two target maps on this **same cue environment**.
-
-#### 3.1.1 Routeable target map
-
-There are \(k\) mixed target pairs \((a_i,b_i)\), with opposite targets inside each pair, plus two target-0 dummy states.
-
-The first \(d\) cues encode the branch index. Each branch has a terminal cue that uniquely separates its mixed pair.
-
-A contingent policy asks the \(d\) routing cues and then only the terminal cue for the realized branch. Hence
-
-\[
-C_A(T_R)\le d+1.
-\]
-
-Every branch terminal is uniquely required by one cross-target pair, so any fixed resolver must contain at least all \(k\) terminals:
-
-\[
-C_F(T_R)\ge k=2^d.
-\]
-
-#### 3.1.2 Matched control target map
-
-Keep every represented state and every cue outcome unchanged.
-
-Define the control target using equality of the first two routing bits:
-
-\[
-T_K(w)=
-\begin{cases}
-0,&q_0(w)=q_1(w),\\
-1,&q_0(w)\ne q_1(w).
-\end{cases}
-\]
-
-The first two routing cues resolve this target, so
-
-\[
-C_A(T_K)\le2,\qquad C_F(T_K)\le2.
-\]
-
-No single cue resolves the target. Every declared cue partitions the \(2k+2\) states into two sets of size \(k+1\), whereas the two control target classes have sizes \(k+2\) and \(k\). Thus
-
-\[
-\boxed{
-C_A(T_K)=C_F(T_K)=2.
-}
-\]
-
-#### 3.1.3 Quantities held fixed
-
-The two tasks share exactly:
-
-- represented states and state count;
-- cue identities and cue count;
-- cue costs;
-- the complete state-by-cue outcome matrix;
-- all one-cue marginals;
-- every cue-only joint distribution of every order.
-
-They also have identical target class multiplicities:
-
-\[
-(k+2,k).
-\]
-
-Therefore target entropy is identical under a uniform prior on represented states.
-
-Because the full cue vocabulary resolves both targets,
-
-\[
-I(T_R;Q_{\mathrm{all}})
-=
-I(T_K;Q_{\mathrm{all}})
-=
-H(T).
-\]
-
-Thus neither the physical cue environment nor the amount of full-vocabulary target information distinguishes the two tasks.
-
-Yet
-
-\[
-\boxed{
-\frac{C_F(T_R)}{C_A(T_R)}
--
-\frac{C_F(T_K)}{C_A(T_K)}
-\ge
-\frac{2^d}{d+1}-1
-\to\infty.
-}
-\]
-
-The source of the separation is the action-conditioned arrangement of cue states.
-
----
-
----
-
-### 3.2 Exact common-budget ecological corollary
-
-The relational theorem becomes ecological when a shared observation budget is imposed.
-
-Set
-
-\[
-B=d+1.
-\]
-
-For every \(d\ge2\),
-
-\[
-2^d>d+1.
-\]
-
-Therefore the routeable task satisfies
-
-\[
-C_A(T_R)\le B<C_F(T_R),
-\]
-
-whereas the control satisfies
-
-\[
-C_A(T_K)=C_F(T_K)=2\le B.
-\]
-
-Let \(S_{X,Y}\) be the indicator that architecture \(X\in\{R,K\}\) is guaranteed resolvable under access mode \(Y\in\{A,F\}\) at the common budget.
-
-Then
-
-\[
-(S_{R,A},S_{R,F},S_{K,A},S_{K,F})
-=
-(1,0,1,1).
-\]
-
-Hence the architecture-by-access contrast is
-
-\[
-\boxed{
-(S_{R,A}-S_{R,F})
--
-(S_{K,A}-S_{K,F})
-=
-1.
-}
-\]
-
-This is an exact feasibility contrast, not a claim that real animals will exhibit a one-unit behavioral effect (Fig. 2a). Its biological role is to localize where topology can matter: under extremely small budgets both strategies may fail; under large budgets both may succeed; the topology-sensitive region lies between the adaptive and fixed requirements.
-
----
-
----
-
-### 3.3 Complete static information can miss adaptive accessibility
+### 3.1 Complete static information can miss adaptive accessibility
 
 The asymptotic construction proves an unbounded routeability separation while
 holding the physical cue environment, target prevalence, target entropy and
@@ -453,9 +289,9 @@ are summarized in Fig. 1.
 
 ---
 
-### 3.4 Fixed and adaptive information are different mathematical objects
+### 3.2 Fixed and adaptive information are different mathematical objects
 
-#### 3.4.1 Fixed resolution is exactly a static subset-information optimization
+#### 3.2.1 Fixed resolution is exactly a static subset-information optimization
 
 Give every represented world strictly positive probability. For any fixed cue
 bundle \(S\),
@@ -489,7 +325,7 @@ has target-pure signatures.
 Thus the complete named subset-information function is sufficient for
 \(C_F\).
 
-#### 3.4.2 Adaptive resolution requires realized outcomes
+#### 3.2.2 Adaptive resolution requires realized outcomes
 
 Let
 
@@ -565,7 +401,7 @@ I(T;\mathrm{assay1}\mid \mathrm{context}=1)=1.
 The routing cue need not reveal the target directly. It can reveal **where the
 target information is**.
 
-#### 3.4.3 Raw ecological diversity can contain exact decision redundancy
+#### 3.2.3 Raw ecological diversity can contain exact decision redundancy
 
 The finite theory also gives an exact sense in which descriptively different
 states or cues need not add decision complexity. At any unresolved state
@@ -590,7 +426,7 @@ distinct resources are generally interchangeable. It says only that
 differences which never change a remaining target-relevant distinction are
 irrelevant to the declared decision problem.
 
-#### 3.4.4 Corrected sufficiency ladder
+#### 3.2.4 Corrected sufficiency ladder
 
 The new construction fills the previous gap between pairwise information and
 the complete action-conditioned table.
@@ -618,6 +454,170 @@ the complete action-conditioned table.
 The theory therefore does not claim that topology is hidden in principle. It
 identifies exactly where averaging across unrealized branches loses an
 operational property.
+
+---
+
+---
+
+### 3.3 Relational routeability theorem
+
+For every integer \(d\ge2\), set
+
+\[
+k=2^d.
+\]
+
+Use the existing exactly-balanced binary cue environment with \(2k+2\) represented states and \(d+k\) unit-cost binary cues. Every cue divides the state set exactly in half.
+
+We define two target maps on this **same cue environment**.
+
+#### 3.3.1 Routeable target map
+
+There are \(k\) mixed target pairs \((a_i,b_i)\), with opposite targets inside each pair, plus two target-0 dummy states.
+
+The first \(d\) cues encode the branch index. Each branch has a terminal cue that uniquely separates its mixed pair.
+
+A contingent policy asks the \(d\) routing cues and then only the terminal cue for the realized branch. Hence
+
+\[
+C_A(T_R)\le d+1.
+\]
+
+Every branch terminal is uniquely required by one cross-target pair, so any fixed resolver must contain at least all \(k\) terminals:
+
+\[
+C_F(T_R)\ge k=2^d.
+\]
+
+#### 3.3.2 Matched control target map
+
+Keep every represented state and every cue outcome unchanged.
+
+Define the control target using equality of the first two routing bits:
+
+\[
+T_K(w)=
+\begin{cases}
+0,&q_0(w)=q_1(w),\\
+1,&q_0(w)\ne q_1(w).
+\end{cases}
+\]
+
+The first two routing cues resolve this target, so
+
+\[
+C_A(T_K)\le2,\qquad C_F(T_K)\le2.
+\]
+
+No single cue resolves the target. Every declared cue partitions the \(2k+2\) states into two sets of size \(k+1\), whereas the two control target classes have sizes \(k+2\) and \(k\). Thus
+
+\[
+\boxed{
+C_A(T_K)=C_F(T_K)=2.
+}
+\]
+
+#### 3.3.3 Quantities held fixed
+
+The two tasks share exactly:
+
+- represented states and state count;
+- cue identities and cue count;
+- cue costs;
+- the complete state-by-cue outcome matrix;
+- all one-cue marginals;
+- every cue-only joint distribution of every order.
+
+They also have identical target class multiplicities:
+
+\[
+(k+2,k).
+\]
+
+Therefore target entropy is identical under a uniform prior on represented states.
+
+Because the full cue vocabulary resolves both targets,
+
+\[
+I(T_R;Q_{\mathrm{all}})
+=
+I(T_K;Q_{\mathrm{all}})
+=
+H(T).
+\]
+
+Thus neither the physical cue environment nor the amount of full-vocabulary target information distinguishes the two tasks.
+
+Yet
+
+\[
+\boxed{
+\frac{C_F(T_R)}{C_A(T_R)}
+-
+\frac{C_F(T_K)}{C_A(T_K)}
+\ge
+\frac{2^d}{d+1}-1
+\to\infty.
+}
+\]
+
+The source of the separation is the action-conditioned arrangement of cue states.
+
+---
+
+---
+
+### 3.4 Exact common-budget ecological corollary
+
+The relational theorem becomes ecological when a shared observation budget is imposed.
+
+Set
+
+\[
+B=d+1.
+\]
+
+For every \(d\ge2\),
+
+\[
+2^d>d+1.
+\]
+
+Therefore the routeable task satisfies
+
+\[
+C_A(T_R)\le B<C_F(T_R),
+\]
+
+whereas the control satisfies
+
+\[
+C_A(T_K)=C_F(T_K)=2\le B.
+\]
+
+Let \(S_{X,Y}\) be the indicator that architecture \(X\in\{R,K\}\) is guaranteed resolvable under access mode \(Y\in\{A,F\}\) at the common budget.
+
+Then
+
+\[
+(S_{R,A},S_{R,F},S_{K,A},S_{K,F})
+=
+(1,0,1,1).
+\]
+
+Hence the architecture-by-access contrast is
+
+\[
+\boxed{
+(S_{R,A}-S_{R,F})
+-
+(S_{K,A}-S_{K,F})
+=
+1.
+}
+\]
+
+This is an exact feasibility contrast, not a claim that real animals will exhibit a one-unit behavioral effect (Fig. 2a). Its biological role is to localize where topology can matter: under extremely small budgets both strategies may fail; under large budgets both may succeed; the topology-sensitive region lies between the adaptive and fixed requirements.
 
 ---
 
