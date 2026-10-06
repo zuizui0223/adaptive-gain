@@ -806,6 +806,207 @@ So failure of adaptive sensing can arise at three distinct levels:
   adaptive decision depth.
 
 
+
+## 9c. Theorem RF3 — finite-scope and scalable-scope low-urgency limits differ
+
+For one fixed finite structural scope \((n,m,b)\), exponential opportunity value
+
+\[
+U_\mu(c)=v e^{-\mu c}
+\]
+
+gives
+
+\[
+R_{\max}(n,m,b;\mu)\to0
+\qquad
+\text{as}
+\qquad
+\mu\to0^+.
+\]
+
+This is because all relevant completion costs remain finite, so both adaptive
+and fixed resolution eventually occur before appreciable value is lost.
+
+The conclusion changes if task size is allowed to scale while cue arity remains
+fixed.
+
+Let
+
+\[
+K_{\rm crit}^{(b)}(\mu)
+=
+v
+\max_{h\ge2}
+\left[
+e^{-\mu h}
+-
+e^{-\mu J_b(h)}
+\right].
+\]
+
+Then for every fixed
+
+\[
+b\ge2,
+\]
+
+\[
+\boxed{
+K_{\rm crit}^{(b)}(\mu)\to v
+\qquad
+\text{as}
+\qquad
+\mu\to0^+.
+}
+\]
+
+### Proof
+
+The upper bound
+
+\[
+K_{\rm crit}^{(b)}(\mu)\le v
+\]
+
+is immediate.
+
+For a lower bound, choose any integer depth sequence satisfying
+
+\[
+h(\mu)
+=
+\left\lceil
+2\log_b\frac1\mu
+\right\rceil
+\]
+
+for sufficiently small \(\mu\).
+
+Then
+
+\[
+\mu h(\mu)\to0,
+\]
+
+so
+
+\[
+e^{-\mu h(\mu)}\to1.
+\]
+
+Also
+
+\[
+b^{h(\mu)}
+\ge
+\mu^{-2},
+\]
+
+hence
+
+\[
+\mu J_b(h(\mu))
+\ge
+\frac{\mu(\mu^{-2}-1)}{b-1}
+\to\infty.
+\]
+
+Therefore
+
+\[
+e^{-\mu J_b(h(\mu))}\to0.
+\]
+
+The attainable value along this sequence tends to \(v\), proving the result.
+
+## Corollary RF3.1 — the low-urgency and large-complexity limits do not commute
+
+For every fixed finite \(n,m\),
+
+\[
+\lim_{\mu\to0^+}
+R_{\max}(n,m,b;\mu)
+=
+0.
+\]
+
+Therefore
+
+\[
+\sup_{n,m}
+\lim_{\mu\to0^+}
+R_{\max}(n,m,b;\mu)
+=
+0.
+\]
+
+But RF3 gives
+
+\[
+\boxed{
+\lim_{\mu\to0^+}
+\sup_{n,m}
+R_{\max}(n,m,b;\mu)
+=
+v.
+}
+\]
+
+Thus
+
+\[
+\boxed{
+\sup_{n,m}\lim_{\mu\to0}R_{\max}
+\neq
+\lim_{\mu\to0}\sup_{n,m}R_{\max}.
+}
+\]
+
+### Biological interpretation
+
+Weak time pressure does not intrinsically eliminate the value of adaptivity.
+
+It eliminates that value in a **fixed finite task**.
+
+If ecological decision complexity itself scales with the available time
+horizon, an adaptive architecture can use deeper routing while forcing fixed
+resolution to provision an exponentially larger set of branch-specific
+resources.
+
+Even binary cues can then recover nearly the full value \(v\).
+
+This is an asymptotic capacity result, not a claim that real ecological systems
+increase task complexity without bound as opportunities become longer.
+
+## Corollary RF3.2 — high urgency always destroys the arity-limited ceiling
+
+For fixed \(b\),
+
+\[
+K_{\rm crit}^{(b)}(\mu)
+\le
+v e^{-2\mu},
+\]
+
+because every strict adaptive advantage requires \(h\ge2\).
+
+Therefore
+
+\[
+\boxed{
+K_{\rm crit}^{(b)}(\mu)\to0
+\qquad
+\text{as}
+\qquad
+\mu\to\infty.
+}
+\]
+
+So unlimited task complexity can rescue adaptive value under arbitrarily weak
+urgency, but not under arbitrarily severe urgency.
+
+
 ## 10. Relation to PAYOFF
 
 The forward interface is
