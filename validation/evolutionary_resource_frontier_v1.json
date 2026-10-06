@@ -135,10 +135,44 @@
     "earlier_frontier_solver_grid_cases": 279,
     "latest_arity_extensions": "pending latest queued CI at time of receipt creation"
   },
-  "claim_ceiling": "Numeric examples instantiate the exact robust theorem family; they do not provide no-go theorems for frequency-specific expected selection, nor estimate natural Aedes opportunity survival or architecture cost.",
+  "claim_ceiling": "Robust ceilings are distribution-free statewise guarantees. Expected ceilings additionally optimize over encounter frequencies; neither supplies an empirical Aedes fitness estimate without natural opportunity and architecture-cost measurements.",
   "robust_expected_boundary": {
     "robust": "U(C_A)-U(C_F) is the exact worst-state/frequency-free margin.",
     "expected": "sum_x p_x U[T_pi(x)]-U(C_F) can exceed the robust margin when common branches finish earlier.",
     "implication": "Robust viability implies expected viability for every world distribution; failure of robust viability does not imply expected-selection failure."
+  },
+  "minimum_robust_cue_arity_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.3,
+    "binary_ceiling": 0.2900852153739598,
+    "ternary_ceiling": 0.38632774829479477,
+    "b_min_robust": 3,
+    "interpretation": "Binary finite routing cannot guarantee repayment at K=0.30, while ternary routing can."
+  },
+  "robust_expected_global_capacity": {
+    "U": "exp(-0.3*c)",
+    "robust_supremum": 0.5488116360940264,
+    "expected_supremum": 0.7408182206817179,
+    "frequency_assisted_band": [
+      0.5488116360940264,
+      0.7408182206817179
+    ],
+    "example_K": 0.6,
+    "example_one_step_mass_asymptotic_threshold": 0.26659691914156886,
+    "interpretation": "K=0.60 is impossible to repay robustly for any finite information architecture, but can be repaid in expectation by a binary task under sufficiently concentrated one-step encounters."
+  },
+  "scaling_example": {
+    "max_arity": 2,
+    "mu": 0.001,
+    "epsilon": 0.1,
+    "witness_adaptive_depth": 12,
+    "witness_fixed_cost": 4095,
+    "witness_world_count": 4096,
+    "witness_query_count": 4095,
+    "witness_value_fraction": 0.9714159665790219,
+    "asymptotic_orders": {
+      "minimum_adaptive_depth": "Theta(log(1/mu))",
+      "minimum_fixed_world_query_scale": "Theta(1/mu)"
+    }
   }
 }
