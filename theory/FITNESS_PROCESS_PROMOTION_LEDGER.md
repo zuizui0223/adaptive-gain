@@ -301,6 +301,45 @@ one-step state exceeds the threshold
 
 This distinction must appear before any use of the word "fitness."
 
+
+### A1.75. Frequency-assisted evolvability band
+
+Retain the scalable robust-versus-expected ceiling distinction:
+
+\[
+\sup R_{\rm robust}=U(2)-U_\infty,
+\]
+
+\[
+\sup R_{\rm expected}=U(1)-U_\infty.
+\]
+
+Thus architecture costs in
+
+\[
+U(2)-U_\infty
+\le K
+<
+U(1)-U_\infty
+\]
+
+cannot be repaid robustly by any finite information architecture, but can be
+repaid in expectation when ecological encounter frequencies strongly favor an
+early-terminating branch.
+
+For exponential opportunity value the band is
+
+\[
+ve^{-2\mu}
+\le K
+<
+ve^{-\mu}.
+\]
+
+Use this to make the robust/expected distinction biologically concrete. Do not
+present it as a new generic adaptivity-gap theorem.
+
+
 ### A2. Expected-value extension above the robust floor
 
 Promote the general kernel form:
