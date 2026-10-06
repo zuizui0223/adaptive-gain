@@ -25,6 +25,8 @@ from adaptive_gain.evolutionary_resource_frontier import (
     minimum_one_step_mass_for_expected_repayment,
     exponential_minimum_one_step_mass_for_expected_repayment,
     exponential_near_max_value_scaling,
+    finite_scope_expected_value_ceiling,
+    finite_scope_one_step_mass_threshold,
 )
 
 
@@ -572,3 +574,54 @@ def test_asymptotic_one_step_threshold_is_below_finite_depth_three_requirement()
     )
     assert asymptotic == pytest.approx(0.26659691914156886)
     assert asymptotic < 0.65
+
+
+
+def test_finite_scope_expected_ceiling_is_exact_and_arity_free():
+    mu = 0.3
+    value = lambda t: math.exp(-mu * t)
+
+    ceiling = finite_scope_expected_value_ceiling(
+        10,
+        9,
+        value,
+    )
+    assert ceiling == pytest.approx(
+        math.exp(-0.3) - math.exp(-2.7)
+    )
+
+
+def test_finite_scope_one_step_threshold_canonical_example():
+    mu = 0.3
+    value = lambda t: math.exp(-mu * t)
+
+    threshold = finite_scope_one_step_mass_threshold(
+        10,
+        9,
+        0.60,
+        value,
+    )
+    expected = (
+        0.60 - (math.exp(-0.6) - math.exp(-2.7))
+    ) / (
+        math.exp(-0.3) - math.exp(-0.6)
+    )
+    assert threshold == pytest.approx(expected)
+    assert 0.0 < threshold < 1.0
+
+
+def test_finite_scope_expected_ceiling_converges_to_unrestricted_with_large_budgets():
+    mu = 0.3
+    value = lambda t: math.exp(-mu * t)
+
+    finite = finite_scope_expected_value_ceiling(
+        100,
+        99,
+        value,
+    )
+    unrestricted = exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=mu,
+        resolution_value=1.0,
+    )
+    assert finite < unrestricted
+    assert unrestricted - finite < 1e-12
