@@ -1,0 +1,138 @@
+{
+  "status": "SHARP_EVOLUTIONARY_FRONTIER_NUMERIC_RECEIPT",
+  "structural_scope": {
+    "unit_query_cost": true,
+    "deterministic_queries": true,
+    "guaranteed_target_resolution": true
+  },
+  "finite_binary_example": {
+    "n": 10,
+    "m": 9,
+    "b": 2,
+    "frontier": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        9
+      ]
+    ],
+    "ratio_optimal_depth": 3,
+    "exponential_opportunity": [
+      {
+        "mu": 0.1,
+        "values": {
+          "h2": 0.07791253239626394,
+          "h3": 0.2442329168903084,
+          "h4": 0.2637503862950402
+        },
+        "optimum_h": 4
+      },
+      {
+        "mu": 0.3,
+        "values": {
+          "h2": 0.14224197635342722,
+          "h3": 0.28411323148761725,
+          "h4": 0.23398869917245235
+        },
+        "optimum_h": 3
+      },
+      {
+        "mu": 1,
+        "values": {
+          "h2": 0.08554821486874875,
+          "h3": 0.04887518640230943,
+          "h4": 0.018192229084647498
+        },
+        "optimum_h": 2
+      }
+    ],
+    "analytic_crossings": {
+      "h4_to_h3_mu": 0.15469679775892664,
+      "h3_to_h2_mu": 0.6562559792369758
+    }
+  },
+  "arity_limited_global_ceiling_mu03_v1": [
+    {
+      "b": 2,
+      "optimum_h": 4,
+      "sharp_fixed_cost": 15,
+      "Kcrit": 0.2900852153739598
+    },
+    {
+      "b": 3,
+      "optimum_h": 3,
+      "sharp_fixed_cost": 13,
+      "Kcrit": 0.38632774829479477
+    },
+    {
+      "b": 4,
+      "optimum_h": 3,
+      "sharp_fixed_cost": 21,
+      "Kcrit": 0.40473335496357027
+    },
+    {
+      "b": 10,
+      "optimum_h": 2,
+      "sharp_fixed_cost": 11,
+      "Kcrit": 0.5119284686927864
+    }
+  ],
+  "unrestricted_information_supremum_mu03_v1": 0.5488116360940264,
+  "canonical_minimum_architecture": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.25,
+    "binary": {
+      "first_viable_depth": 3,
+      "minimum_world_count": 8,
+      "minimum_query_count": 7,
+      "required_fixed_cost": 7
+    },
+    "ternary": {
+      "first_viable_depth": 3,
+      "minimum_world_count": 8,
+      "minimum_query_count": 7,
+      "required_fixed_cost": 7
+    },
+    "quaternary": {
+      "first_viable_depth": 2,
+      "minimum_world_count": 8,
+      "minimum_query_count": 5,
+      "required_fixed_cost": 5
+    }
+  },
+  "binary_global_no_go_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.3,
+    "binary_arity_ceiling": 0.2900852153739598,
+    "conclusion": "No finite deterministic binary task can pay K=0.30 through this completion-value mechanism."
+  },
+  "exact_extremal_ratio_value_reversal": {
+    "mu": 0.3,
+    "d4": {
+      "C_A": 5,
+      "C_F": 16,
+      "ratio": 3.2,
+      "opportunity_value": 0.2149004130994098
+    },
+    "d5": {
+      "C_A": 6,
+      "C_F": 32,
+      "ratio": 5.333333333333333,
+      "opportunity_value": 0.1652311594850957
+    },
+    "conclusion": "The structural ratio increases while ecological value decreases."
+  },
+  "validation": {
+    "focused_ci_run_37475355329": "26 tests passed",
+    "earlier_frontier_solver_grid_cases": 279,
+    "latest_arity_extensions": "pending latest queued CI at time of receipt creation"
+  },
+  "claim_ceiling": "Numeric examples instantiate the exact theorem family; they do not estimate natural Aedes opportunity survival or architecture cost."
+}
