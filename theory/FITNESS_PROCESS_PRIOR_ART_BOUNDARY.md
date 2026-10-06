@@ -245,6 +245,36 @@ That absence is not a priority proof. It defines the current defensible novelty
 boundary.
 
 
+
+### Log-depth adaptive versus near-linear nonadaptive burden is not new by itself
+
+Adaptivity-gap results for stochastic Boolean function evaluation already
+contain address-function and formula families in which adaptive evaluation uses
+a short routing sequence while nonadaptive evaluation pays a much larger
+testing burden. Hellerstein et al. study gaps reaching order \(n/\log n\) in
+general formula settings.
+
+Therefore RF4 must not be sold as the discovery that routing can replace a
+large simultaneous burden by logarithmic adaptive depth.
+
+The narrower ecological statement is:
+
+- exponential opportunity value introduces an external natural-history
+  timescale \(1/\mu\);
+- retaining any fixed fraction \(1-\varepsilon\) of the full timely-resolution
+  value forces
+  \[
+  C_A=\Theta(\log(1/\mu)),
+  \qquad
+  C_F,n,m=\Theta(1/\mu);
+  \]
+- these orders are derived from the same exact finite routing frontier and are
+  both necessary and constructively sufficient.
+
+So the candidate contribution is a **natural-history-dependent complexity
+requirement**, not the generic existence of logarithmic adaptive routing.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
