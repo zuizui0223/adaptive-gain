@@ -588,6 +588,51 @@ def shallow_leaf_expected_value_witness(
         raise ArithmeticError("shallow-leaf witness lost private-pair necessity")
     return task
 
+
+def two_shallow_leaf_expected_value_witness(
+    rare_depth: int,
+    max_arity: int = 2,
+) -> FiniteTask:
+    """Construct depth-1 and depth-2 pure leaves plus a rare deep subtree.
+
+    The root child 0 is a one-query leaf. Root child 1 is an internal node
+    whose child 0 is a two-query leaf and whose child 1 contains a full
+    max_arity-ary subtree of height rare_depth. The private-pair target
+    construction makes all internal queries fixed-mandatory.
+
+    This family witnesses the conditional one-step-mass bound in RF6.
+    """
+    if type(rare_depth) is not int or rare_depth < 1:
+        raise ValueError("rare_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+
+    def full(depth: int) -> BoundedArityTree:
+        if depth == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            tuple(full(depth - 1) for _ in range(max_arity))
+        )
+
+    second = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            full(rare_depth),
+        )
+    )
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            second,
+        )
+    )
+    world_count = _leaf_count(tree)
+    query_count = _internal_count(tree)
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != query_count:
+        raise ArithmeticError("two-shallow-leaf witness lost private-pair necessity")
+    return task
+
 def sharp_bounded_arity_unit_cost_witness(
     world_count: int,
     query_count: int,
