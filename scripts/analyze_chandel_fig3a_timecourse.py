@@ -20,6 +20,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 from statistics import mean, median
 
@@ -104,6 +105,56 @@ def _centered_rolling(values, window):
         if hi - lo >= window // 2:
             out[i] = mean(values[lo:hi])
     return out
+
+
+VALUE_KERNEL_TAUS_S = (5.0, 10.0, 20.0, 30.0, 60.0, 120.0)
+CUMULATIVE_CUTS_S = (5.0, 10.0, 20.0, 30.0, 45.0, 60.0, 75.0, 90.0)
+
+
+def _postpulse_timing_metrics(rows, start, end):
+    block = [r for r in rows if start <= r["time_s"] < end]
+    rel_time = [r["time_s"] - start for r in block]
+    delta = [r["ir"] - r["no_ir"] for r in block]
+    dt = 1.0 / FRAME_RATE_HZ
+
+    signed_mass = sum(delta) * dt
+    positive = [max(x, 0.0) for x in delta]
+    positive_mass = sum(positive) * dt
+    negative_mass = sum(max(-x, 0.0) for x in delta) * dt
+
+    positive_centroid = (
+        sum(t * x for t, x in zip(rel_time, positive)) / sum(positive)
+        if sum(positive) > 0
+        else None
+    )
+
+    cumulative_fraction = {}
+    for cut in CUMULATIVE_CUTS_S:
+        partial = sum(
+            x for t, x in zip(rel_time, delta)
+            if t < cut
+        ) * dt
+        cumulative_fraction[str(cut)] = (
+            partial / signed_mass
+            if signed_mass != 0
+            else None
+        )
+
+    exponential_weighted_mean_delta = {}
+    for tau in VALUE_KERNEL_TAUS_S:
+        weights = [math.exp(-t / tau) for t in rel_time]
+        exponential_weighted_mean_delta[str(tau)] = (
+            sum(x * w for x, w in zip(delta, weights)) / sum(weights)
+        )
+
+    return {
+        "signed_advantage_auc": signed_mass,
+        "positive_advantage_auc": positive_mass,
+        "negative_advantage_auc": negative_mass,
+        "positive_advantage_centroid_s_after_pulse": positive_centroid,
+        "cumulative_signed_advantage_fraction_by_s": cumulative_fraction,
+        "exponential_value_kernel_weighted_mean_delta": exponential_weighted_mean_delta,
+    }
 
 
 def analyze(path: Path):
@@ -212,6 +263,14 @@ def analyze(path: Path):
         "epochs": epochs,
         "smoothed_peaks": smooth_peaks,
         "contrasts": contrasts,
+        "postpulse_value_kernel_sensitivity": {
+            "post_first_pulse": _postpulse_timing_metrics(rows, 90.0, 180.0),
+            "post_second_pulse": _postpulse_timing_metrics(rows, 210.0, 300.0),
+            "interpretation": (
+                "These are descriptive weightings of the aggregate IR-minus-no-IR "
+                "IHSI trajectory. They are not completion-time CDFs or fitness estimates."
+            ),
+        },
         "interpretation": {
             "primary": (
                 "The +IR effect is much larger after each CO2 pulse than "
