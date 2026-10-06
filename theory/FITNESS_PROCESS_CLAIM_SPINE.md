@@ -2,6 +2,80 @@
 
 Status: synthesis note for PR #67. This is a proposed biological spine, not a frozen manuscript replacement.
 
+
+## Principal theorem — sharp evolutionary frontier
+
+Fix finite deterministic unit-cost tasks with \(n\) represented worlds, \(m\)
+declared query resources, and maximum query arity \(b\).
+
+For each feasible adaptive depth \(h\), define
+
+\[
+I_h=\min\{m,F_b(n,h)\}.
+\]
+
+The bounded-arity construction now attains the exact pair
+
+\[
+\boxed{(C_A,C_F)=(h,I_h)}
+\]
+
+for every feasible \(h\).
+
+Therefore for any finite nonincreasing biological completion value \(U(c)\),
+
+\[
+\boxed{
+\max
+\left[
+U(C_A)-U(C_F)
+\right]
+=
+\max_h
+\left[
+U(h)-U(I_h)
+\right].
+}
+\]
+
+This is the current principal cross-layer theorem.
+
+It says that natural history does not merely scale one structural
+adaptive-gain score. It **re-ranks an exact finite structural frontier**.
+
+For opportunity survival \(S(c)\) and timely-resolution value \(v\),
+
+\[
+R_{\max}
+=
+v\max_h[S(h)-S(I_h)].
+\]
+
+With baseline fitness \(w_0\), define
+
+\[
+\kappa_{\rm crit}
+=
+\max_h
+\log
+\frac{w_0+vS(h)}
+{w_0+vS(I_h)}.
+\]
+
+Then, relative to the declared universal fixed comparator,
+
+\[
+\boxed{
+\text{positive selection is possible somewhere in the scope}
+\iff
+\kappa<\kappa_{\rm crit}.
+}
+\]
+
+So the finite information constraints impose an exact ceiling on the
+constitutive control cost that natural selection can support.
+
+
 ## Central biological question
 
 Why does environmental heterogeneity sometimes select for contingent sensing or behavioral flexibility, but sometimes not?
@@ -118,7 +192,7 @@ m(t)\,dt.
 }
 \]
 
-This is the process-level core of the proposed paper.
+This is a useful process interface, but deadline-weighted utility profiles are established prior theory; it is no longer the novelty core of the paper.
 
 The organism supplies the completion-time difference
 
@@ -366,11 +440,15 @@ All have strong precedents.
 
 ## Proposed headline claim
 
-> Environmental heterogeneity selects particular sensing policies through the interaction of feasible decision topology, encounter frequencies, the ecological value of decision time, and the alternative architectures available to evolution.
+> Natural history selects among an exact finite frontier of information
+> architectures: the structure that maximizes adaptive efficiency need not
+> maximize fitness, and finite ecological constraints impose a sharp ceiling on
+> the control cost that selection can support.
 
 A shorter version:
 
-> The fitness value of routeability is the overlap between where a decision architecture changes completion probability through time and where ecology assigns value to being faster.
+> Structural adaptive gain is potential; natural history determines which part
+> of that potential is evolvable.
 
 ## Empirical measurement ladder
 
