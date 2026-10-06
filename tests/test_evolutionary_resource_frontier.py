@@ -24,6 +24,8 @@ from adaptive_gain.evolutionary_resource_frontier import (
     exponential_robust_expected_cost_regime,
     exponential_minimum_robust_cue_arity,
     required_fixed_cost_for_value,
+    minimum_one_step_mass_for_expected_repayment,
+    exponential_minimum_one_step_mass_for_expected_repayment,
     exponential_near_max_value_scaling,
 )
 
@@ -499,3 +501,41 @@ def test_binary_frequency_skew_can_pay_cost_above_absolute_robust_ceiling():
 
     assert expected_advantage > cost
     assert cost > robust_absolute
+
+
+
+def test_expected_rescue_one_step_mass_threshold_canonical_value():
+    threshold = exponential_minimum_one_step_mass_for_expected_repayment(
+        0.60,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    )
+    assert threshold == pytest.approx(0.26659691914156886)
+
+
+def test_one_step_mass_threshold_has_robust_and_impossible_endpoints():
+    mu = 0.3
+    robust = math.exp(-2.0 * mu)
+    expected = math.exp(-mu)
+
+    assert exponential_minimum_one_step_mass_for_expected_repayment(
+        robust - 0.01,
+        closure_rate=mu,
+    ) == pytest.approx(0.0)
+
+    assert exponential_minimum_one_step_mass_for_expected_repayment(
+        expected,
+        closure_rate=mu,
+    ) is None
+
+
+def test_generic_one_step_mass_threshold_interpolates_linearly_in_band():
+    threshold = minimum_one_step_mass_for_expected_repayment(
+        0.5,
+        value_at_one=0.8,
+        value_at_two=0.4,
+        asymptotic_value=0.1,
+    )
+    # robust ceiling = 0.3, expected ceiling = 0.7
+    # threshold = (0.5-0.3)/(0.8-0.4) = 0.5
+    assert threshold == pytest.approx(0.5)
