@@ -735,6 +735,138 @@ under the joint process for architecture j.
 The overlap integral using separate marginal distributions is licensed only when conditional independence, external deadline randomization, or another justified decomposition applies.
 
 
+
+## 6d. Theorem OF7 — universal opportunity advantage is exactly stochastic dominance
+
+Let two architectures \(i\) and \(j\) have completion-time CDFs
+
+\[
+F_i(t)=\Pr(T_i\le t),
+\qquad
+F_j(t)=\Pr(T_j\le t).
+\]
+
+For any independent ecological opportunity distribution \(G\),
+
+\[
+q_i-q_j
+=
+\int [F_i(b)-F_j(b)]\,dG(b).
+\]
+
+Then the following are equivalent:
+
+1. \(q_i\ge q_j\) for **every** ecological opportunity distribution \(G\);
+2. \(F_i(t)\ge F_j(t)\) for every \(t\ge0\).
+
+Thus
+
+\[
+\boxed{
+\text{opportunity-uniform performance superiority}
+\iff
+\text{first-order stochastic dominance of completion time}.
+}
+\]
+
+### Proof
+
+If \(F_i(t)\ge F_j(t)\) for all \(t\), then the integrand is nonnegative for every \(b\), so its expectation under any \(G\) is nonnegative.
+
+Conversely, suppose there exists \(b_0\) such that
+
+\[
+F_i(b_0)<F_j(b_0).
+\]
+
+Choose the degenerate opportunity distribution
+
+\[
+B=b_0
+\]
+
+with probability one. Then
+
+\[
+q_i-q_j
+=
+F_i(b_0)-F_j(b_0)<0,
+\]
+
+contradicting opportunity-uniform superiority. QED.
+
+### Corollary OF7.1 — crossing completion curves imply ecological contingency
+
+If the CDFs cross, so there exist \(b_1,b_2\) with
+
+\[
+F_i(b_1)>F_j(b_1)
+\]
+
+and
+
+\[
+F_i(b_2)<F_j(b_2),
+\]
+
+then there exist ecological opportunity distributions under which \(i\) has higher timely performance and others under which \(j\) has higher timely performance.
+
+With equal architecture costs,
+
+\[
+\boxed{
+\text{crossing completion curves}
+\Longrightarrow
+\text{no environment-independent sign of selection}.
+}
+\]
+
+The equal-mean example in OF6.1 is one explicit witness.
+
+### Corollary OF7.2 — deterministic adaptive gain is a special dominance case
+
+For deterministic completion times with
+
+\[
+C_A<C_F,
+\]
+
+the completion CDFs are step functions:
+
+\[
+F_A(t)=\mathbf 1\{t\ge C_A\},
+\qquad
+F_F(t)=\mathbf 1\{t\ge C_F\}.
+\]
+
+Therefore
+
+\[
+F_A(t)\ge F_F(t)
+\quad\forall t.
+\]
+
+So the original deterministic inequality \(C_A\le C_F\) is exactly the degenerate-completion special case of stochastic dominance.
+
+The stochastic extension does not discard the core theorem; it identifies its process-level generalization.
+
+### Corollary OF7.3 — architecture cost can break performance dominance
+
+Even if \(F_i(t)\ge F_j(t)\) for all \(t\), the fitter architecture is not universally determined when constitutive costs differ.
+
+The log-fitness contrast remains
+
+\[
+s_{i:j}
+=
+\log\frac{w_0+vq_i}{w_0+vq_j}
+-
+(\kappa_i-\kappa_j).
+\]
+
+Thus stochastic dominance licenses a universal **performance** ordering, not a universal fitness ordering unless architecture-cost differences are also bounded.
+
+
 ## 7. Process interpretation
 
 The causal chain is:
