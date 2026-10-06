@@ -18,6 +18,8 @@ from adaptive_gain.opportunity_fitness import (
     opportunity_log_selection,
     hard_budget_log_selection,
     pairwise_architecture_log_selection,
+    empirical_timely_success_probability,
+    empirical_pairwise_log_selection,
     opportunity_window_mass,
     pathwise_advantage_over_fixed,
 )
@@ -288,3 +290,45 @@ def test_architecture_overhead_can_reverse_runtime_ordering():
         comparator_maintenance_log_cost=1.0,
     )
     assert s_a_vs_p > 0.0
+
+
+
+def test_empirical_overlap_recovers_deterministic_deadline_case():
+    q = empirical_timely_success_probability([2.0, 2.0], [1.0, 2.0, 3.0])
+    assert q == pytest.approx(2.0 / 3.0)
+
+
+def test_equal_mean_completion_times_can_reverse_under_different_opportunities():
+    # Same mean completion time (=2), different early/late tails.
+    architecture_x = [1.0, 3.0]
+    architecture_y = [2.0, 2.0]
+
+    short_windows = [1.5]
+    long_windows = [2.5]
+
+    s_short = empirical_pairwise_log_selection(
+        architecture_x,
+        architecture_y,
+        short_windows,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    s_long = empirical_pairwise_log_selection(
+        architecture_x,
+        architecture_y,
+        long_windows,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+
+    assert sum(architecture_x) / 2 == sum(architecture_y) / 2 == 2.0
+    assert s_short > 0.0
+    assert s_long < 0.0
+
+
+def test_nonresolution_can_be_encoded_as_infinite_completion_time():
+    q = empirical_timely_success_probability(
+        [1.0, math.inf],
+        [2.0],
+    )
+    assert q == pytest.approx(0.5)
