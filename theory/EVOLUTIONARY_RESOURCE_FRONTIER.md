@@ -1341,6 +1341,129 @@ Those objects belong to the separate policy-fitness layer.
 
 
 
+
+## Corollary RF3.3 — architecture switching can create re-entrant urgency windows
+
+For one fixed adaptive depth \(h\), the exponential robust benefit at cue arity
+\(b\) is
+
+\[
+G_h(\mu)
+=
+v
+\left[
+e^{-\mu h}
+-
+e^{-\mu J_b(h)}
+\right].
+\]
+
+Because
+
+\[
+J_b(h)>h
+\]
+
+for every strict adaptive case, \(G_h\) is zero at both urgency extremes and
+has one unique maximum at
+
+\[
+\boxed{
+\mu_h^*
+=
+\frac{\log[J_b(h)/h]}
+{J_b(h)-h}.
+}
+\]
+
+Thus for a declared control cost \(0<K<\max_\mu G_h(\mu)\), one depth is viable
+over one open urgency interval.
+
+But the scalable arity-limited ceiling is the upper envelope
+
+\[
+K_{\rm crit,robust}^{(b)}(\mu)
+=
+\max_{h\ge2}G_h(\mu).
+\]
+
+A maximum of unimodal depth-specific curves need not itself be monotone or
+unimodal. Consequently the set
+
+\[
+\boxed{
+\left\{
+\mu>0:
+K<K_{\rm crit,robust}^{(b)}(\mu)
+\right\}
+}
+\]
+
+can be a union of multiple disjoint intervals.
+
+### Explicit re-entrant witness
+
+Take
+
+\[
+b=10,\qquad v=1,\qquad K=0.97630.
+\]
+
+Direct evaluation of the exact depth envelope gives:
+
+\[
+\mu=0.0045:
+\quad
+K_{\rm crit,robust}^{(10)}
+\approx0.977751>K,
+\]
+
+\[
+\mu=0.0048:
+\quad
+K_{\rm crit,robust}^{(10)}
+\approx0.976286<K,
+\]
+
+\[
+\mu=0.0051:
+\quad
+K_{\rm crit,robust}^{(10)}
+\approx0.976345>K,
+\]
+
+and
+
+\[
+\mu=0.006:
+\quad
+K_{\rm crit,robust}^{(10)}
+\approx0.975012<K.
+\]
+
+Therefore increasing urgency produces the sequence
+
+\[
+\boxed{
+\text{robustly feasible}
+\to
+\text{infeasible}
+\to
+\text{robustly feasible}
+\to
+\text{infeasible}.
+}
+\]
+
+The re-entry occurs because the maximizing architecture switches from a deeper
+routing tree to a shallower one. It is a discrete architecture-switching
+effect, not a violation of the single-depth unimodality theorem.
+
+This result should remain supplementary. Its role is to prevent the stronger
+but false claim that the scalable robust cost ceiling must decrease
+monotonically with ecological urgency.
+
+
 ## 9e. Theorem RF4 — retaining a fixed fraction of adaptive value has a sharp complexity scale
 
 RF3 proves that, at fixed cue arity \(b\), the maximum opportunity value can
