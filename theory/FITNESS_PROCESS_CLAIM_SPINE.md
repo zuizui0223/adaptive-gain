@@ -371,6 +371,65 @@ K<x(1-x).
 At \(\mu=\log2\), this expected-value ceiling is \(1/4\), despite the
 robust ceiling being zero for the same task.
 
+
+## Absolute robust versus expected ceilings
+
+When all finite information structure is allowed and \(U\) is bounded below,
+
+\[
+\boxed{
+R_{\rm robust}^{\sup}
+=
+U(2)-U_\infty
+}
+\]
+
+but, if positive world frequencies may be arbitrarily skewed,
+
+\[
+\boxed{
+R_{\rm expected}^{\sup}
+=
+U(1)-U_\infty.
+}
+\]
+
+Therefore encounter frequencies do more than add a small correction to a robust
+margin. They open an exact **expected-only** regime:
+
+\[
+\boxed{
+U(2)-U_\infty
+\le K
+<
+U(1)-U_\infty.
+}
+\]
+
+In this interval no finite architecture can repay its control cost in every
+represented world, yet a finite task with a sufficiently common one-query
+branch can repay it in expectation.
+
+For exponential opportunity value,
+
+\[
+U(c)=v e^{-\mu c},
+\]
+
+the two absolute ceilings are
+
+\[
+v e^{-2\mu}
+\quad\text{and}\quad
+v e^{-\mu}.
+\]
+
+At \(\mu=0.3,\ v=1\), a cost \(K=0.60\) is above the absolute robust ceiling
+\(0.548812\) but below the expected ceiling \(0.740818\).  The repository
+contains an explicit finite binary witness with 99% mass on a one-query common
+state whose expected advantage exceeds 0.60.
+
+
 ## Layer 4 — realized branch frequencies
 
 Even the pair (C_A,C_U) does not identify realized expected fitness.
