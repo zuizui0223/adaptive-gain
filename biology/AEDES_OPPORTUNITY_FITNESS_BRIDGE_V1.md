@@ -149,6 +149,40 @@ Claim ceiling:
 
 Public-data Phase A can validate the feasibility and scale of the stochastic completion-time framework. It cannot establish the Aedes gonotrophic routing task or fitness selection.
 
+
+### Public-code audit
+
+The authors' public repository \`Craig-Montell-Lab/Chandel_DeBeaubien_2023\` confirms that Phase A does not require reconstructing timing from published bar plots.
+
+In \`Aedes_track/MosquitoTrackerExpressv1.m\`:
+
+- frame rate is explicitly set to 10 FPS;
+- the main analysis window is 0-300 s;
+- framewise mosquito centroids are retained in \`cords\`;
+- linked trajectories are retained in \`track_set\`;
+- the output MAT file saves the full working variables rather than only PI/HSI summaries.
+
+\`TrackFinderv2.m\` links framewise coordinates and computes time spent in each declared zone.
+
+Therefore a reanalysis can define new, preregistered event times from the saved trajectories, for example:
+
+\[
+T_{\rm zone}
+=
+\inf\{t:\text{a qualifying active track first enters the host-seeking zone}\}.
+\]
+
+This is a secondary analysis of public tracking output, not a claim that the original authors measured the present theory's decision-completion variable.
+
+The cleanest first receipt should compare empirical completion curves rather than only means:
+
+\[
+\widehat F_j(t)=\Pr(T_j\le t).
+\]
+
+A failure to enter the declared zone within 300 s should be encoded as right-censored for descriptive survival analysis or as \(T=\infty\) for the finite-window timely-success calculation, with the choice declared before comparing treatments.
+
+
 ## 6. Phase B — experimentally controlled opportunity windows
 
 Use an artificial feeder or host-mimicking target so that opportunity duration can be randomized without relying on uncontrolled human defensive behavior.
