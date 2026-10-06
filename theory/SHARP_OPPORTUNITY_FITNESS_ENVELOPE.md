@@ -627,6 +627,156 @@ The fitness theorem asks:
 Both are valid, but only the second licenses an evolutionary interpretation.
 
 
+
+## 4d. Theorem EF4 — a structurally improving extremal family can become ecologically worthless
+
+Use the repository's exact binary extremal routing family with routing depth
+
+\[
+d\ge1.
+\]
+
+For this family,
+
+\[
+\boxed{
+C_A=d+1,
+\qquad
+C_F=2^d.
+}
+\]
+
+Hence the structural ratio is
+
+\[
+\boxed{
+\rho_d
+=
+\frac{2^d}{d+1}
+\to\infty.
+}
+\]
+
+Indeed \(\rho_d\) is strictly increasing for every \(d\ge1\).
+
+Now impose any fixed exponential opportunity-loss rate
+
+\[
+\mu>0.
+\]
+
+The guarantee-level ecological advantage is
+
+\[
+R_d
+=
+v
+\left(
+e^{-\mu(d+1)}
+-
+e^{-\mu 2^d}
+\right).
+\]
+
+Because
+
+\[
+0
+\le
+R_d
+\le
+v e^{-\mu(d+1)},
+\]
+
+we obtain
+
+\[
+\boxed{
+R_d\to0
+\qquad
+\text{as}
+\qquad
+d\to\infty.
+}
+\]
+
+Therefore
+
+\[
+\boxed{
+\rho_d\to\infty
+\quad\text{while}\quad
+R_d\to0.
+}
+\]
+
+This is stronger than the universal bounded-fitness statement in EF3. It gives
+an explicit family in which the structural adaptive/fixed ratio becomes
+strictly more extreme while the ecological value of that adaptivity eventually
+vanishes.
+
+## Corollary EF4.1 — increasing structural adaptivity can reverse into lower ecological value
+
+For every fixed \(\mu>0\), the sequence \(R_d\) has a finite maximizer because
+
+\[
+R_d>0
+\]
+
+for every finite \(d\) and
+
+\[
+R_d\to0.
+\]
+
+Thus beyond some routing depth, increasing the structural ratio further cannot
+keep increasing opportunity value.
+
+The reason is mechanistic:
+
+- fixed resolution becomes exponentially expensive;
+- but contingent routing itself also requires \(d+1\) acquisitions;
+- under a real opportunity clock, sufficiently deep routing arrives too late to
+  exploit its enormous relative saving.
+
+So "more structural adaptive gain" can become **less biologically valuable**.
+
+## Corollary EF4.2 — positive maintenance cost eventually makes the most structurally extreme members maladaptive
+
+Let baseline fitness be \(w_0>0\), timely-resolution value \(v>0\), and
+adaptive-only log maintenance cost \(\kappa>0\).
+
+The log-performance advantage before maintenance is
+
+\[
+L_d
+=
+\log
+\frac{w_0+v e^{-\mu(d+1)}}
+{w_0+v e^{-\mu2^d}}.
+\]
+
+Since both exponential terms tend to zero,
+
+\[
+L_d\to0.
+\]
+
+Therefore
+
+\[
+\boxed{
+s_d=L_d-\kappa\to-\kappa<0.
+}
+\]
+
+So for every positive constitutive control cost, all sufficiently deep members
+of this structurally improving family are selected against.
+
+This provides a direct evolutionary counterexample to treating
+\(C_F/C_A\) as an ordinal fitness score.
+
+
 ## 5. Exponential opportunity closure
 
 For
