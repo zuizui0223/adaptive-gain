@@ -396,3 +396,60 @@ def exponential_near_max_value_scaling(
         witness_query_count=witness_fixed,
         witness_value_fraction=value_fraction,
     )
+
+
+
+def exponential_minimum_robust_cue_arity(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> int | None:
+    """Minimum finite cue arity with robust K_crit^(b) > architecture_cost.
+
+    Returns None when the declared cost is at or above the unrestricted finite-
+    information supremum v*exp(-2*mu), so no finite arity can guarantee positive
+    net value in every represented world.
+    """
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    absolute = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if architecture_cost >= absolute - 1e-15:
+        return None
+
+    # Depth two alone gives a finite upper bound on the required arity.
+    target = math.exp(-2.0 * closure_rate) - architecture_cost / resolution_value
+    if target <= 0:
+        return None
+    threshold = -math.log(target) / closure_rate - 1.0
+    upper = max(2, math.floor(threshold + 1e-15) + 1)
+
+    for arity in range(2, upper + 1):
+        ceiling, _ = exponential_arity_limited_cost_ceiling(
+            arity,
+            closure_rate=closure_rate,
+            resolution_value=resolution_value,
+        )
+        if architecture_cost < ceiling - 1e-15:
+            return arity
+
+    # Strict inequality can require one extra integer beyond a numerical
+    # threshold rounded onto the boundary.
+    arity = upper + 1
+    while True:
+        ceiling, _ = exponential_arity_limited_cost_ceiling(
+            arity,
+            closure_rate=closure_rate,
+            resolution_value=resolution_value,
+        )
+        if architecture_cost < ceiling - 1e-15:
+            return arity
+        arity += 1
