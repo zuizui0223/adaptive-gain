@@ -42,6 +42,12 @@ class FrameTrack:
         return self.points[-1].frame
 
 
+@dataclass(frozen=True)
+class ZoneEntryReceipt:
+    event_frame: int | None
+    status: str
+
+
 def euclidean_distance(a: TrackPoint, b: TrackPoint) -> float:
     return math.hypot(b.x - a.x, b.y - a.y)
 
@@ -151,13 +157,44 @@ def point_in_polygon(
     return inside
 
 
-def first_active_zone_entry_frame(
+def first_zone_entry_receipt(
+    track: FrameTrack,
+    polygon: Sequence[tuple[float, float]],
+    *,
+    min_speed_px_per_frame: float = 0.0,
+) -> ZoneEntryReceipt:
+    """Classify literal outside-to-inside entry with censoring explicit."""
+    if not track.points:
+        raise ValueError("track must contain at least one point")
+    if not math.isfinite(min_speed_px_per_frame) or min_speed_px_per_frame < 0:
+        raise ValueError("min_speed_px_per_frame must be finite and nonnegative")
+
+    first = track.points[0]
+    if point_in_polygon(first.x, first.y, polygon):
+        return ZoneEntryReceipt(None, "left_censored_inside")
+
+    for prev, current in zip(track.points, track.points[1:]):
+        frame_gap = current.frame - prev.frame
+        if frame_gap <= 0:
+            raise ValueError("track frames must be strictly increasing")
+        prev_inside = point_in_polygon(prev.x, prev.y, polygon)
+        current_inside = point_in_polygon(current.x, current.y, polygon)
+        if prev_inside or not current_inside:
+            continue
+        speed = euclidean_distance(prev, current) / frame_gap
+        if speed >= min_speed_px_per_frame:
+            return ZoneEntryReceipt(current.frame, "observed_entry")
+
+    return ZoneEntryReceipt(None, "no_observed_entry")
+
+
+def first_active_point_in_zone_frame(
     track: FrameTrack,
     polygon: Sequence[tuple[float, float]],
     *,
     min_speed_px_per_frame: float = 0.0,
 ) -> int | None:
-    """Return first zone-entry frame with sufficient Euclidean movement."""
+    """Return first in-zone point preceded by sufficient Euclidean movement."""
     if not math.isfinite(min_speed_px_per_frame) or min_speed_px_per_frame < 0:
         raise ValueError("min_speed_px_per_frame must be finite and nonnegative")
 
@@ -172,6 +209,19 @@ def first_active_zone_entry_frame(
         ):
             return current.frame
     return None
+
+def first_active_zone_entry_frame(
+    track: FrameTrack,
+    polygon: Sequence[tuple[float, float]],
+    *,
+    min_speed_px_per_frame: float = 0.0,
+) -> int | None:
+    """Backward-compatible alias for the first active in-zone point."""
+    return first_active_point_in_zone_frame(
+        track,
+        polygon,
+        min_speed_px_per_frame=min_speed_px_per_frame,
+    )
 
 
 def event_time_seconds(frame: int | None, *, frame_rate_hz: float) -> float:
