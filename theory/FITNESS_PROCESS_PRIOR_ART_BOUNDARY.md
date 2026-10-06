@@ -104,6 +104,60 @@ value-of-time process from natural history and composing it with an
 interaction-specific cue topology, encounter process and architecture cost.
 
 
+
+### Sequential value of information is long established
+
+Miller (1975, Management Science, DOI 10.1287/mnsc.22.1.1) explicitly showed
+that the value of information changes when observables can be acquired
+sequentially, because early observations affect whether later observations are
+worth purchasing.
+
+Therefore the present programme must not claim that conditional acquisition
+creates a distinct value of information in principle.
+
+### Real-time decision trees already optimize utility before deadlines
+
+Real-time diagnosis and cost-sensitive tree literatures already allow action
+utility to depend on how far through a decision tree the agent has progressed
+when a deadline arrives. Decision-tree theory also distinguishes worst-case and
+expected testing cost and provides approximation/trade-off results.
+
+Therefore neither a deadline-weighted tree objective nor the distinction
+between worst and expected cost is a novelty claim here.
+
+### Consequence for the sharp envelope claim
+
+The defensible candidate is narrower.
+
+The repository already owns an exact finite extremal theorem for the attainable
+adaptive/fixed cost frontier under fixed world count, query count and query
+arity.
+
+The opportunity-fitness branch composes that **sharp structural frontier** with
+a natural-history time-value function and proves that the resulting ecological
+envelope is itself sharp and constructively attained:
+
+[
+R_{max}
+=
+vmax_h[S(h)-S(I_h)].
+]
+
+The novelty candidate is therefore not "sequential information has value" but:
+
+> a finite ecological information architecture admits an exact sharp ceiling on
+> the amount of ecological value adaptivity can generate, and natural history
+> can select a different extremal architecture than the one maximizing the
+> structural adaptive/fixed ratio.
+
+A targeted prior-art search found decision-tree work on value-dependent test
+costs, worst/expected cost trade-offs, sequential information value and
+deadline-contingent action utility, but not this particular sharp ecological
+composition with the bounded-arity extremal frontier.
+
+This absence is not a proof of priority; it is the current claim boundary.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
