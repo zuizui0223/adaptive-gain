@@ -151,3 +151,71 @@ def exponential_max_viable_adaptive_depth(
 
     bound = math.log(resolution_value / architecture_cost) / closure_rate
     return math.ceil(bound - 1e-15) - 1
+
+
+
+def full_b_ary_internal_nodes(max_arity: int, adaptive_depth: int) -> int:
+    """Maximum internal-node count of a full b-ary tree of depth h."""
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if type(adaptive_depth) is not int or adaptive_depth < 0:
+        raise ValueError("adaptive_depth must be a nonnegative integer")
+    if adaptive_depth == 0:
+        return 0
+    return (max_arity ** adaptive_depth - 1) // (max_arity - 1)
+
+
+def exponential_arity_limited_cost_ceiling(
+    max_arity: int,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> tuple[float, tuple[int, ...]]:
+    """Exact K_crit^(b) for U(c)=v exp(-mu c), plus maximizing depths.
+
+    The search stops exactly once the upper bound v*exp(-mu*h) for all future
+    depths is no larger than the best value already seen.
+    """
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    best = -1.0
+    maximizing: list[int] = []
+    h = 2
+    while True:
+        fixed = full_b_ary_internal_nodes(max_arity, h)
+        value = resolution_value * (
+            math.exp(-closure_rate * h)
+            - math.exp(-closure_rate * fixed)
+        )
+        if value > best + 1e-15:
+            best = value
+            maximizing = [h]
+        elif math.isclose(value, best, rel_tol=0.0, abs_tol=1e-15):
+            maximizing.append(h)
+
+        next_upper = resolution_value * math.exp(
+            -closure_rate * (h + 1)
+        )
+        if next_upper <= best + 1e-15:
+            break
+        h += 1
+
+    return best, tuple(maximizing)
+
+
+def exponential_unrestricted_information_cost_ceiling(
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float:
+    """Supremal K_crit with no finite n,m,b restriction."""
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    return resolution_value * math.exp(-2.0 * closure_rate)
