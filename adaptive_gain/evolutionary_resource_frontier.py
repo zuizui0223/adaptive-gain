@@ -310,3 +310,89 @@ def exponential_unrestricted_information_cost_ceiling(
     if not math.isfinite(resolution_value) or resolution_value <= 0:
         raise ValueError("resolution_value must be finite and positive")
     return resolution_value * math.exp(-2.0 * closure_rate)
+
+
+
+@dataclass(frozen=True)
+class NearMaxValueScalingReceipt:
+    max_arity: int
+    closure_rate: float
+    epsilon: float
+    lower_adaptive_depth: float
+    upper_adaptive_depth: float
+    required_fixed_cost_lower: float
+    required_world_count_lower: float
+    required_query_count_lower: float
+    witness_adaptive_depth: int
+    witness_fixed_cost: int
+    witness_world_count: int
+    witness_query_count: int
+    witness_value_fraction: float
+
+
+def exponential_near_max_value_scaling(
+    max_arity: int,
+    *,
+    closure_rate: float,
+    epsilon: float,
+) -> NearMaxValueScalingReceipt:
+    """Tight-order near-maximal-value scaling witness for fixed cue arity.
+
+    Returns necessary lower bounds plus one full b-ary witness attaining at
+    least 1-epsilon of the full timely-resolution value whenever the sufficient
+    small-mu condition is met.
+    """
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(epsilon) or not (0.0 < epsilon < 1.0):
+        raise ValueError("epsilon must lie strictly between zero and one")
+
+    mu = closure_rate
+    lower_fixed = math.log(1.0 / epsilon) / mu
+    lower_h = math.log(
+        1.0 + (max_arity - 1) * lower_fixed,
+        max_arity,
+    )
+    upper_h = -math.log(1.0 - epsilon) / mu
+
+    L = math.log(2.0 / epsilon)
+    witness_h = math.ceil(
+        math.log(
+            1.0 + (max_arity - 1) * L / mu,
+            max_arity,
+        )
+        - 1e-15
+    )
+    witness_fixed = full_b_ary_internal_nodes(max_arity, witness_h)
+    witness_worlds = max_arity ** witness_h
+    value_fraction = (
+        math.exp(-mu * witness_h)
+        - math.exp(-mu * witness_fixed)
+    )
+
+    if mu * witness_h > -math.log(1.0 - epsilon / 2.0) + 1e-12:
+        raise ValueError(
+            "closure_rate is not yet in the asymptotic regime required by "
+            "the split-epsilon sufficient construction"
+        )
+
+    if value_fraction < 1.0 - epsilon - 1e-12:
+        raise ArithmeticError("near-maximal-value witness missed target fraction")
+
+    return NearMaxValueScalingReceipt(
+        max_arity=max_arity,
+        closure_rate=mu,
+        epsilon=epsilon,
+        lower_adaptive_depth=lower_h,
+        upper_adaptive_depth=upper_h,
+        required_fixed_cost_lower=lower_fixed,
+        required_world_count_lower=1.0 + lower_fixed,
+        required_query_count_lower=lower_fixed,
+        witness_adaptive_depth=witness_h,
+        witness_fixed_cost=witness_fixed,
+        witness_world_count=witness_worlds,
+        witness_query_count=witness_fixed,
+        witness_value_fraction=value_fraction,
+    )
