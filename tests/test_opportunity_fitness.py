@@ -23,6 +23,8 @@ from adaptive_gain.opportunity_fitness import (
     opportunity_log_recovery_exponential,
     opportunity_architecture_thresholds_exponential,
     opportunity_architecture_value_exponential,
+    opportunity_uniform_recovery_parameters,
+    opportunity_architecture_optimum_uniform,
     opportunity_window_mass,
     pathwise_advantage_over_fixed,
 )
@@ -391,3 +393,56 @@ def test_finite_jump_barrier_exists_between_thresholds():
 
     assert near_zero < 0.0
     assert full > 0.0
+
+
+
+def test_uniform_opportunity_has_partial_routing_regime():
+    d, a = opportunity_uniform_recovery_parameters(
+        baseline_completion_cost=4.0,
+        opportunity_upper_bound=6.0,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    assert d > 0.0
+    max_saving = 2.0
+
+    lower = a / (1.0 + a * max_saving)
+    upper = a
+    k = (lower + upper) / 2.0
+
+    optimum = opportunity_architecture_optimum_uniform(
+        max_saving,
+        baseline_completion_cost=4.0,
+        opportunity_upper_bound=6.0,
+        architecture_cost_per_saving=k,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    assert 0.0 < optimum < max_saving
+
+
+def test_uniform_opportunity_endpoint_regimes():
+    _, a = opportunity_uniform_recovery_parameters(
+        baseline_completion_cost=4.0,
+        opportunity_upper_bound=6.0,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    max_saving = 2.0
+    lower = a / (1.0 + a * max_saving)
+
+    none = opportunity_architecture_optimum_uniform(
+        max_saving,
+        baseline_completion_cost=4.0,
+        opportunity_upper_bound=6.0,
+        architecture_cost_per_saving=a * 1.1,
+    )
+    full = opportunity_architecture_optimum_uniform(
+        max_saving,
+        baseline_completion_cost=4.0,
+        opportunity_upper_bound=6.0,
+        architecture_cost_per_saving=lower * 0.9,
+    )
+
+    assert none == pytest.approx(0.0)
+    assert full == pytest.approx(max_saving)
