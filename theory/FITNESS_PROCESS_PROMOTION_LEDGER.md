@@ -75,6 +75,30 @@ routeability theorem into a direct statement about which control costs can be
 paid by natural selection.
 
 
+On the additive PAYOFF scale, the same statement is even simpler:
+
+\[
+\boxed{
+K_{\rm crit}
+=
+R_{\max}
+=
+\max_h[U(h)-U(I_h)].
+}
+\]
+
+Positive architecture value exists somewhere in the declared finite scope
+exactly when
+
+\[
+K<K_{\rm crit}.
+\]
+
+This makes the repository relation explicit: adaptive-gain derives the sharp
+recoverable-benefit ceiling, while PAYOFF evaluates \(R-K\) and its downstream
+population consequences.
+
+
 Also retain the interpretive correction
 
 [
