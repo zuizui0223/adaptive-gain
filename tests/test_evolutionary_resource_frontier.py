@@ -5,10 +5,8 @@ import pytest
 from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolution
 from adaptive_gain.bounded_arity_extremal_bounds import (
     bounded_arity_unit_cost_witness_at_depth,
+    shallow_leaf_expected_value_witness,
 )
-from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
-from adaptive_gain.bounded_arity_extremal_bounds import shallow_leaf_expected_value_witness
-from adaptive_gain.core import fixed_minimum_resolution
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.evolutionary_resource_frontier import (
     binary_evolutionary_resource_corners,
@@ -19,7 +17,6 @@ from adaptive_gain.evolutionary_resource_frontier import (
     full_b_ary_internal_nodes,
     exponential_arity_limited_cost_ceiling,
     exponential_unrestricted_information_cost_ceiling,
-    exponential_unrestricted_expected_information_cost_ceiling,
     exponential_unrestricted_expected_cost_ceiling,
     exponential_robust_expected_cost_regime,
     exponential_minimum_robust_cue_arity,
@@ -465,7 +462,7 @@ def test_expected_global_ceiling_exceeds_robust_global_ceiling():
         closure_rate=mu,
         resolution_value=1.0,
     )
-    expected = exponential_unrestricted_expected_information_cost_ceiling(
+    expected = exponential_unrestricted_expected_cost_ceiling(
         closure_rate=mu,
         resolution_value=1.0,
     )
