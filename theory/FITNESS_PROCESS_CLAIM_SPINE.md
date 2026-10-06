@@ -183,7 +183,7 @@ decision topology
 -> ecological feedback
 \`\`\`
 
-## Four nontrivial predictions
+## Five nontrivial predictions
 
 ### P1 — intermediate ecological closure can maximize selection for contingent sensing
 
@@ -227,7 +227,22 @@ Two tasks can share the same n, m, target counts, C_A and C_U yet differ in how 
 
 The faster path distribution has higher expected fitness under any strictly decreasing opportunity-value function.
 
-### P4 — the sign of selection depends on the available comparator architecture
+### P4 — mean decision time is not sufficient
+
+For stochastic completion times, fitness depends on
+
+\[
+q_j=\Pr(T_j\le B),
+\]
+
+not on \(E[T_j]\) alone.
+
+Two architectures can have identical mean completion time while the sign of their pairwise selection reverses when the opportunity distribution changes.
+
+This creates a direct empirical prediction: the early and late tails of the decision-time distribution can matter more than its mean.
+
+
+### P5 — the sign of selection depends on the available comparator architecture
 
 The same environment can give:
 
