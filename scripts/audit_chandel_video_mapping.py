@@ -241,7 +241,6 @@ def main() -> None:
         blocker = {
             "status": "ZIP_MEMBER_MAPPING_BLOCKED",
             "dryad_ir_zip_url": zip_url,
-        "range_diagnostics": range_diagnostics,
             "error": repr(exc),
             "live_download_diagnostics": {
                 "api_download": (
