@@ -1,5 +1,5 @@
 {
-  "status": "SHARP_EVOLUTIONARY_FRONTIER_NUMERIC_RECEIPT",
+  "status": "SHARP_ROBUST_EVOLUTIONARY_FRONTIER_NUMERIC_RECEIPT",
   "structural_scope": {
     "unit_query_cost": true,
     "deterministic_queries": true,
@@ -63,25 +63,25 @@
       "b": 2,
       "optimum_h": 4,
       "sharp_fixed_cost": 15,
-      "Kcrit": 0.2900852153739598
+      "Kcrit_robust": 0.2900852153739598
     },
     {
       "b": 3,
       "optimum_h": 3,
       "sharp_fixed_cost": 13,
-      "Kcrit": 0.38632774829479477
+      "Kcrit_robust": 0.38632774829479477
     },
     {
       "b": 4,
       "optimum_h": 3,
       "sharp_fixed_cost": 21,
-      "Kcrit": 0.40473335496357027
+      "Kcrit_robust": 0.40473335496357027
     },
     {
       "b": 10,
       "optimum_h": 2,
       "sharp_fixed_cost": 11,
-      "Kcrit": 0.5119284686927864
+      "Kcrit_robust": 0.5119284686927864
     }
   ],
   "unrestricted_information_supremum_mu03_v1": 0.5488116360940264,
@@ -105,13 +105,14 @@
       "minimum_world_count": 8,
       "minimum_query_count": 5,
       "required_fixed_cost": 5
-    }
+    },
+    "scope": "minimum architecture for positive robust statewise net value, not minimum architecture for positive expected selection"
   },
   "binary_global_no_go_example": {
     "U": "exp(-0.3*c)",
     "architecture_cost_K": 0.3,
     "binary_arity_ceiling": 0.2900852153739598,
-    "conclusion": "No finite deterministic binary task can pay K=0.30 through this completion-value mechanism."
+    "conclusion": "No finite deterministic binary task can guarantee positive net adaptive value in every represented world at K=0.30 through this completion-value mechanism. Positive expected value under a skewed world distribution is not excluded."
   },
   "exact_extremal_ratio_value_reversal": {
     "mu": 0.3,
@@ -127,12 +128,17 @@
       "ratio": 5.333333333333333,
       "opportunity_value": 0.1652311594850957
     },
-    "conclusion": "The structural ratio increases while ecological value decreases."
+    "conclusion": "The structural ratio increases while guarantee-level ecological value decreases."
   },
   "validation": {
     "focused_ci_run_37475355329": "26 tests passed",
     "earlier_frontier_solver_grid_cases": 279,
     "latest_arity_extensions": "pending latest queued CI at time of receipt creation"
   },
-  "claim_ceiling": "Numeric examples instantiate the exact theorem family; they do not estimate natural Aedes opportunity survival or architecture cost."
+  "claim_ceiling": "Numeric examples instantiate the exact robust theorem family; they do not provide no-go theorems for frequency-specific expected selection, nor estimate natural Aedes opportunity survival or architecture cost.",
+  "robust_expected_boundary": {
+    "robust": "U(C_A)-U(C_F) is the exact worst-state/frequency-free margin.",
+    "expected": "sum_x p_x U[T_pi(x)]-U(C_F) can exceed the robust margin when common branches finish earlier.",
+    "implication": "Robust viability implies expected viability for every world distribution; failure of robust viability does not imply expected-selection failure."
+  }
 }
