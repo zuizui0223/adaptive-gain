@@ -2827,6 +2827,116 @@ The theorem concerns the aggregate probability of one-step completion, not the
 frequency of any particular ecological species or habitat state.
 
 
+
+## Corollary RF6.3 — encounter-frequency structure can substitute for cue arity in expectation
+
+The robust and expected inverse problems have qualitatively different arity
+requirements.
+
+For robust statewise repayment, RF2.3a defines
+
+\[
+b_{\min}^{\rm robust}(K;U)
+=
+\min
+\left\{
+b\ge2:
+K<K_{\rm crit,robust}^{(b)}
+\right\},
+\]
+
+which can equal \(3,4,\ldots\) or \(\infty\).
+
+For expected repayment when encounter frequencies and finite task size may vary,
+RF5 gives the absolute ceiling
+
+\[
+U(1)-U_\infty.
+\]
+
+Because the matching RF5 construction is already binary, the minimum expected-
+value cue arity is simply
+
+\[
+\boxed{
+b_{\min}^{\rm expected}
+=
+\begin{cases}
+2,&K<U(1)-U_\infty,\\
+\infty,&K\ge U(1)-U_\infty.
+\end{cases}
+}
+\]
+
+Thus ecological frequency concentration can substitute for sensory branching
+capacity in the expected-value problem.
+
+### Two canonical contrasts
+
+For
+
+\[
+U(c)=e^{-0.3c},
+\]
+
+and
+
+\[
+K=0.30,
+\]
+
+the robust problem gives
+
+\[
+b_{\min}^{\rm robust}=3,
+\]
+
+while
+
+\[
+\boxed{
+b_{\min}^{\rm expected}=2.
+}
+\]
+
+For
+
+\[
+K=0.60,
+\]
+
+the cost lies above the absolute robust ceiling
+
+\[
+e^{-0.6}\approx0.548812,
+\]
+
+so
+
+\[
+b_{\min}^{\rm robust}=\infty.
+\]
+
+But it remains below the expected ceiling
+
+\[
+e^{-0.3}\approx0.740818,
+\]
+
+so
+
+\[
+\boxed{
+b_{\min}^{\rm expected}=2.
+}
+\]
+
+This does not mean binary sensory systems are universally sufficient.
+The expected result exploits arbitrarily skewed encounter frequencies and a
+scalable rare-state subtree. The robust result remains the relevant threshold
+when positive value must hold across all represented states.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
