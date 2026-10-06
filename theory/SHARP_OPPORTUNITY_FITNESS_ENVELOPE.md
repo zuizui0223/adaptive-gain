@@ -375,6 +375,110 @@ upper-envelope switches among structural depths; the theorem guarantees the
 global zero-at-both-extremes geometry, not universal unimodality.
 
 
+
+## 4c. Theorem EF3 — unbounded structural ratio does not imply unbounded fitness advantage
+
+The repository contains finite families in which
+
+\[
+\frac{C_F}{C_A}\to\infty.
+\]
+
+That structural divergence does **not** imply an unbounded ecological or
+evolutionary benefit.
+
+Because every opportunity survival function satisfies
+
+\[
+0\le S(c)\le1,
+\]
+
+the guarantee-level opportunity benefit always obeys
+
+\[
+\boxed{
+0\le
+R_{\rm opp}
+=
+v[S(C_A)-S(C_F)]
+\le v.
+}
+\]
+
+Likewise, with baseline fitness \(w_0>0\), the zero-maintenance log-performance
+advantage satisfies
+
+\[
+\boxed{
+0
+\le
+\log
+\frac{w_0+vS(C_A)}
+{w_0+vS(C_F)}
+\le
+\log\left(1+\frac{v}{w_0}\right).
+}
+\]
+
+With adaptive-only maintenance cost \(\kappa\),
+
+\[
+\boxed{
+s
+\le
+\log\left(1+\frac{v}{w_0}\right)-\kappa.
+}
+\]
+
+Therefore even a structurally unbounded adaptive/fixed ratio has a finite
+fitness ceiling whenever the ecological value of timely correct action is
+bounded.
+
+## Corollary EF3.1 — structural divergence can be biologically silent
+
+A family may satisfy
+
+\[
+C_F/C_A\to\infty
+\]
+
+while its ecological advantage tends to zero.
+
+For example, if both \(C_A\) and \(C_F\) move into a region where
+
+\[
+S(C_A)\approx S(C_F)\approx0,
+\]
+
+then
+
+\[
+R_{\rm opp}\approx0
+\]
+
+despite an arbitrarily large structural ratio.
+
+The same occurs when both completion costs lie in a region where opportunity
+survival is nearly one.
+
+Thus the structural ratio is a statement about conditional information
+architecture, not a scale-free proxy for biological importance.
+
+## Corollary EF3.2 — the earlier unbounded theorem and the fitness envelope answer different questions
+
+The unbounded structural theorem asks:
+
+> how inefficient can one universal fixed resolving bundle be relative to
+> contingent routing?
+
+The fitness theorem asks:
+
+> how much of that structural saving falls where ecology assigns value to
+> completing sooner?
+
+Both are valid, but only the second licenses an evolutionary interpretation.
+
+
 ## 5. Exponential opportunity closure
 
 For
