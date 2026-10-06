@@ -13,7 +13,7 @@ The paper should not be sold as a new general theory of sequential decisions.
 
 ## Tier A — manuscript spine
 
-### A0. Sharp cross-layer fitness envelope
+### A0. Sharp cross-layer robust-value envelope
 
 Promote `SHARP_OPPORTUNITY_FITNESS_ENVELOPE.md` to the first theorem result.
 
@@ -24,11 +24,11 @@ opportunity survival (S), define
 I_h=min{m,F_b(n,h)}.
 ]
 
-Then the exact maximum guarantee-level ecological value of contingent routing is
+Then the exact maximum **worst-state / frequency-free** ecological value of contingent routing is
 
 [
 oxed{
-R_{max}
+R_{\rm robust,max}
 =
 vmax_h[S(h)-S(I_h)].
 }
@@ -41,7 +41,7 @@ This is stronger than maximizing (C_F/C_A): natural history re-ranks the exact
 structural frontier.
 
 In the binary (n=10,m=9) example, the structural ratio is maximized at
-(h=3), while the exponential-opportunity fitness envelope selects
+(h=3), while the exponential-opportunity robust-value envelope selects
 (h=4	o3	o2) as ecological urgency increases.
 
 This should be the main nontrivial theorem because it uses the repository's
@@ -49,7 +49,7 @@ distinct sharp extremal mathematics rather than generic sequential-decision
 theory.
 
 
-The same envelope gives an exact evolutionary feasibility threshold:
+The same envelope gives an exact **robust statewise feasibility** threshold:
 
 [
 kappa_{m crit}
@@ -64,7 +64,7 @@ For an adaptive-only log maintenance cost (kappa),
 
 [
 oxed{
-	ext{some task in the structural scope favors contingent sensing}
+	ext{some task in the structural scope has positive net adaptive value in every represented world}
 iff
 kappa<kappa_{m crit}.
 }
@@ -72,7 +72,7 @@ kappa<kappa_{m crit}.
 
 This no-go/existence form should be emphasized because it converts the finite
 routeability theorem into a direct statement about which control costs can be
-paid by natural selection.
+paid **robustly without knowing encounter frequencies**.
 
 
 On the additive PAYOFF scale, the same statement is even simpler:
@@ -87,16 +87,16 @@ R_{\max}
 }
 \]
 
-Positive architecture value exists somewhere in the declared finite scope
-exactly when
+Positive architecture value in **every represented world** exists somewhere in
+the declared finite scope exactly when
 
 \[
-K<K_{\rm crit}.
+K<K_{\rm crit}^{\rm robust}.
 \]
 
-This makes the repository relation explicit: adaptive-gain derives the sharp
-recoverable-benefit ceiling, while PAYOFF evaluates \(R-K\) and its downstream
-population consequences.
+This makes the repository relation explicit: adaptive-gain derives the sharp **robust recoverable-benefit** ceiling, while
+PAYOFF evaluates the relevant \(R-K\).  Distribution-sensitive expected \(R\)
+can exceed the robust floor and requires branch frequencies.
 
 
 Also retain the interpretive correction
@@ -129,7 +129,38 @@ Required claim boundary:
 
 C_A is not fitness, expected latency, or the uniquely evolved policy.
 
-### A2. Ecological value-of-time interface
+### A1.5. Robust versus expected value
+
+State explicitly in the main text:
+
+\[
+R_{\rm robust}
+=
+U(C_A)-U(C_F)
+\]
+
+is the largest value difference that can be guaranteed in the slowest adaptive
+branch.
+
+For a world distribution \(p_x\),
+
+\[
+R_{\rm expected}(\pi)
+=
+\sum_xp_xU[T_\pi(x)]-U(C_F)
+\ge
+R_{\rm robust}
+\]
+
+for a minimax tree, and the inequality can be strict.
+
+Therefore the sharp envelope is an exact **frequency-free floor/threshold**.
+It is not an upper bound on expected selection under skewed encounter
+frequencies.
+
+This distinction must appear before any use of the word "fitness."
+
+### A2. Expected-value extension above the robust floor
 
 Promote the general kernel form:
 
@@ -140,7 +171,7 @@ int_0^infty
 [F_i(t)-F_j(t)]m(t),dt.
 ]
 
-This is the cleanest process statement.
+This is the cleanest expected-value process interface, but it is established in general decision theory and is **not** the theorem-level novelty.
 
 The biological interpretation is:
 
