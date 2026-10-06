@@ -66,22 +66,29 @@ def _survival_values(
     return values
 
 
-def sharp_opportunity_advantage_envelope(
+
+def sharp_completion_value_envelope(
     world_count: int,
     query_count: int,
     max_arity: int,
-    survival: Callable[[float], float],
-    *,
-    resolution_value: float = 1.0,
+    completion_value: Callable[[float], float],
 ) -> OpportunityEnvelopeReceipt:
-    """Exact maximum v[S(C_A)-S(C_F)] over the declared structural scope."""
+    """Exact maximum U(C_A)-U(C_F) for any nonincreasing completion value U."""
     _validate_counts(world_count, query_count, max_arity)
-    if not math.isfinite(resolution_value) or resolution_value < 0:
-        raise ValueError("resolution_value must be finite and nonnegative")
 
-    survival_values = _survival_values(world_count, query_count, survival)
+    maximum_cost = max(world_count - 1, query_count)
+    values: dict[int, float] = {}
+    previous = None
+    for cost in range(maximum_cost + 1):
+        value = float(completion_value(float(cost)))
+        if not math.isfinite(value):
+            raise ValueError("completion_value must be finite on relevant costs")
+        if previous is not None and value > previous + 1e-12:
+            raise ValueError("completion_value must be nonincreasing")
+        values[cost] = value
+        previous = value
+
     rows: list[OpportunityEnvelopeRow] = []
-
     max_depth = min(world_count - 1, query_count)
     for depth in range(1, max_depth + 1):
         fixed = bounded_arity_fixed_cost_bound(
@@ -90,9 +97,7 @@ def sharp_opportunity_advantage_envelope(
             depth,
             max_arity,
         )
-        advantage = resolution_value * (
-            survival_values[depth] - survival_values[fixed]
-        )
+        advantage = values[depth] - values[fixed]
         rows.append(
             OpportunityEnvelopeRow(
                 depth,
@@ -120,6 +125,38 @@ def sharp_opportunity_advantage_envelope(
         optimum,
         maximizing,
         tuple(rows),
+        scope="sharp_monotone_completion_value_advantage",
+    )
+
+
+def sharp_opportunity_advantage_envelope(
+    world_count: int,
+    query_count: int,
+    max_arity: int,
+    survival: Callable[[float], float],
+    *,
+    resolution_value: float = 1.0,
+) -> OpportunityEnvelopeReceipt:
+    """Exact maximum v[S(C_A)-S(C_F)] over the declared structural scope."""
+    _validate_counts(world_count, query_count, max_arity)
+    if not math.isfinite(resolution_value) or resolution_value < 0:
+        raise ValueError("resolution_value must be finite and nonnegative")
+
+    _survival_values(world_count, query_count, survival)
+    base = sharp_completion_value_envelope(
+        world_count,
+        query_count,
+        max_arity,
+        lambda c: resolution_value * float(survival(c)),
+    )
+    return OpportunityEnvelopeReceipt(
+        base.world_count,
+        base.query_count,
+        base.max_arity,
+        base.sharp_opportunity_advantage,
+        base.maximizing_adaptive_costs,
+        base.rows,
+        scope="sharp_guarantee_level_opportunity_advantage",
     )
 
 
