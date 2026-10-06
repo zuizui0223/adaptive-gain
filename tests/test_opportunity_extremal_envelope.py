@@ -216,3 +216,19 @@ def test_general_completion_value_must_be_nonincreasing():
             2,
             lambda c: c,
         )
+
+
+
+def test_structural_ratio_can_increase_while_ecological_value_falls():
+    mu = 0.3
+
+    def ratio(depth):
+        return (2 ** depth) / (depth + 1)
+
+    def opportunity_value(depth):
+        ca = depth + 1
+        cf = 2 ** depth
+        return math.exp(-mu * ca) - math.exp(-mu * cf)
+
+    assert ratio(5) > ratio(4)
+    assert opportunity_value(5) < opportunity_value(4)
