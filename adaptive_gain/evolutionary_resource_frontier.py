@@ -573,3 +573,68 @@ def exponential_minimum_one_step_mass_for_expected_repayment(
         value_at_two=u2,
         asymptotic_value=0.0,
     )
+
+
+
+def finite_scope_expected_value_ceiling(
+    world_count: int,
+    query_count: int,
+    completion_value: Callable[[float], float],
+) -> float:
+    """Exact finite-scope expected-value supremum U(1)-U(min(m,n-1))."""
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+
+    fixed_ceiling = min(query_count, world_count - 1)
+    u1 = float(completion_value(1.0))
+    uf = float(completion_value(float(fixed_ceiling)))
+    if not math.isfinite(u1) or not math.isfinite(uf):
+        raise ValueError("completion_value must be finite")
+    if u1 < uf - 1e-12:
+        raise ValueError("completion_value must be nonincreasing")
+    return u1 - uf
+
+
+def finite_scope_one_step_mass_threshold(
+    world_count: int,
+    query_count: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+) -> float | None:
+    """Exact fixed-scope p1 threshold for expected repayment.
+
+    Returns 0 when no one-step mass is required, None when even the finite-scope
+    expected ceiling is insufficient, otherwise the strict threshold in (0,1).
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+
+    fixed_ceiling = min(query_count, world_count - 1)
+    if fixed_ceiling < 2:
+        return None
+
+    u1 = float(completion_value(1.0))
+    u2 = float(completion_value(2.0))
+    uf = float(completion_value(float(fixed_ceiling)))
+    if any(not math.isfinite(x) for x in (u1, u2, uf)):
+        raise ValueError("completion_value must be finite")
+    if u1 < u2 - 1e-12 or u2 < uf - 1e-12:
+        raise ValueError("completion_value must be nonincreasing")
+
+    baseline = u2 - uf
+    ceiling = u1 - uf
+
+    if architecture_cost <= baseline + 1e-15:
+        return 0.0
+    if architecture_cost >= ceiling - 1e-15:
+        return None
+    if u1 <= u2 + 1e-15:
+        return None
+
+    return (architecture_cost - baseline) / (u1 - u2)
