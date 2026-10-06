@@ -68,6 +68,42 @@ Examples include foraging drift-diffusion models and stopping-theory treatments 
 
 Therefore the present programme must not claim a general new theory of ecological time costs or optimal stopping.
 
+
+### Time pressure can change cue use in animals
+
+Time-pressure-dependent cue selection is not only a human or algorithmic result.
+
+Toader et al. (2019, Journal of Comparative Psychology, DOI
+10.1037/com0000168) tested rhesus macaques on a four-cue probabilistic
+decision task. Under time pressure, cue use decreased; one animal showed a
+satisficing strategy that ignored the least informative cue dimension.
+
+Therefore the present programme must not claim that:
+
+- animals can change cue use under time pressure;
+- urgency can favor dropping information;
+- cue weighting/order can be context dependent.
+
+The narrower question is whether a **declared finite ecological routing
+topology** plus a measured ecological value-of-time predicts which contingent
+policy is favored and where policy switches occur.
+
+### Label-dependent deadlines already alter decision-tree design
+
+Kao & Tang (2014, INFORMS Journal on Computing, DOI
+10.1287/ijoc.2013.0560) explicitly formulate cost-sensitive decision-tree
+induction with label-dependent late constraints and optimize trees under
+completion-time requirements.
+
+Thus deadline-sensitive tree topology is established operations-research
+theory. The ecological programme cannot claim novelty for adding deadlines to
+trees.
+
+The biologically distinctive layer must come from identifying the deadline or
+value-of-time process from natural history and composing it with an
+interaction-specific cue topology, encounter process and architecture cost.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
