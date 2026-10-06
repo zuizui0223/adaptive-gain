@@ -1,5 +1,5 @@
 {
-  "status": "CORE_SHARP_ENVELOPE_GREEN",
+  "status": "CORE_SHARP_ROBUST_ENVELOPE_GREEN",
   "branch": "theory/opportunity-fitness-process-v1",
   "focused_ci": {
     "workflow": "sharp-opportunity-envelope",
@@ -25,10 +25,10 @@
     "mechanism": "protected deepest child-0 spine plus private opposite-target pairs"
   },
   "sharp_lift": {
-    "general_form": "max[U(C_A)-U(C_F)] = max_h[U(h)-U(I_h)] for finite nonincreasing U",
-    "opportunity_special_case": "R_max = v max_h[S(h)-S(I_h)]",
-    "payoff_cost_ceiling": "K_crit = max_h[U(h)-U(I_h)]",
-    "log_selection_ceiling": "kappa_crit = max_h log((w0+vS(h))/(w0+vS(I_h)))"
+    "general_form": "max robust statewise margin = max[U(C_A)-U(C_F)] = max_h[U(h)-U(I_h)] for finite nonincreasing U",
+    "opportunity_special_case": "R_robust,max = v max_h[S(h)-S(I_h)]",
+    "payoff_cost_ceiling": "K_crit^robust = max_h[U(h)-U(I_h)] for positive net value in every represented world",
+    "log_selection_ceiling": "kappa_crit^robust = max_h log((w0+vS(h))/(w0+vS(I_h)))"
   },
   "canonical_binary_example": {
     "n": 10,
@@ -55,9 +55,10 @@
     }
   },
   "interpretation": {
-    "main": "Natural history re-ranks an exact finite structural frontier; the ratio-optimal architecture need not maximize biological value.",
-    "correction": "Unbounded C_F/C_A does not imply unbounded fitness value.",
-    "comparator_ceiling": "The result is relative to the declared universal fixed comparator unless another architecture class is modeled."
+    "main": "Natural history re-ranks an exact finite structural frontier; the ratio-optimal architecture need not maximize robust statewise biological value.",
+    "correction": "Unbounded C_F/C_A does not imply unbounded robust value. Expected branchwise value is a separate estimand.",
+    "comparator_ceiling": "The result is relative to the declared universal fixed comparator unless another architecture class is modeled.",
+    "robust_expected_boundary": "The sharp envelope is exact for worst-state/distribution-free value. It is not an upper bound on positive expected selection under a particular nonuniform world distribution."
   },
   "prior_art_boundary": {
     "established": [
@@ -68,5 +69,5 @@
     ],
     "candidate_distinctive_result": "sharp composition of the fixed-(n,m,b) guaranteed-resolution frontier with arbitrary monotone completion value, attained by the same constructive witnesses"
   },
-  "claim_ceiling": "The core sharp frontier and opportunity envelope are green at the recorded CI commit. Later general monotone-value and interpretive extensions should still be required to pass the latest branch CI before manuscript promotion."
+  "claim_ceiling": "The recorded green tests validate the exact structural frontier and robust guarantee-level envelope. Expected evolutionary value additionally requires world frequencies and branch-specific completion times and is not bounded above by this robust ceiling."
 }
