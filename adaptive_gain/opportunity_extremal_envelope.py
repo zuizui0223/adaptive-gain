@@ -73,7 +73,7 @@ def sharp_completion_value_envelope(
     max_arity: int,
     completion_value: Callable[[float], float],
 ) -> OpportunityEnvelopeReceipt:
-    """Exact maximum U(C_A)-U(C_F) for any nonincreasing completion value U."""
+    """Exact maximum robust statewise margin U(C_A)-U(C_F)."""
     _validate_counts(world_count, query_count, max_arity)
 
     maximum_cost = max(world_count - 1, query_count)
@@ -170,7 +170,7 @@ def sharp_log_selection_envelope(
     resolution_value: float = 1.0,
     maintenance_log_cost: float = 0.0,
 ) -> LogSelectionEnvelopeReceipt:
-    """Exact maximum guarantee-level log-fitness advantage in the scope."""
+    """Exact maximum robust guarantee-level log-value advantage in the scope."""
     _validate_counts(world_count, query_count, max_arity)
     if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
         raise ValueError("baseline_fitness must be finite and positive")
@@ -244,7 +244,7 @@ def sharp_maintenance_log_cost_ceiling(
     baseline_fitness: float = 1.0,
     resolution_value: float = 1.0,
 ) -> float:
-    """Largest adaptive-only log maintenance cost any task in scope can overcome."""
+    """Largest log maintenance cost supportable with positive value in every world."""
     receipt = sharp_log_selection_envelope(
         world_count,
         query_count,
@@ -257,7 +257,7 @@ def sharp_maintenance_log_cost_ceiling(
     return receipt.sharp_log_selection
 
 
-def adaptive_selection_possible_in_scope(
+def robust_positive_advantage_possible_in_scope(
     world_count: int,
     query_count: int,
     max_arity: int,
@@ -267,7 +267,12 @@ def adaptive_selection_possible_in_scope(
     resolution_value: float = 1.0,
     maintenance_log_cost: float = 0.0,
 ) -> bool:
-    """Whether some task in the declared scope can have positive adaptive selection."""
+    """Whether some task can keep the adaptive net advantage positive in every world.
+
+    This is a distribution-free robust criterion derived from worst-path
+    completion. It is not a necessary condition for positive expected selection
+    under a particular nonuniform world distribution.
+    """
     if not math.isfinite(maintenance_log_cost) or maintenance_log_cost < 0:
         raise ValueError("maintenance_log_cost must be finite and nonnegative")
     ceiling = sharp_maintenance_log_cost_ceiling(
