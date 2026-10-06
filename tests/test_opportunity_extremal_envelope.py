@@ -152,3 +152,20 @@ def test_exponential_maintenance_ceiling_is_small_at_urgency_extremes():
 
     assert low < middle
     assert high < middle
+
+
+
+def test_unbounded_structural_ratio_still_has_finite_log_fitness_ceiling():
+    w0 = 2.0
+    value = 3.0
+    receipt = sharp_log_selection_envelope(
+        20,
+        20,
+        2,
+        exp_survival(0.2),
+        baseline_fitness=w0,
+        resolution_value=value,
+        maintenance_log_cost=0.0,
+    )
+    universal_ceiling = math.log(1.0 + value / w0)
+    assert receipt.sharp_log_selection <= universal_ceiling + 1e-12
