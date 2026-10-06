@@ -275,6 +275,44 @@ So the candidate contribution is a **natural-history-dependent complexity
 requirement**, not the generic existence of logarithmic adaptive routing.
 
 
+
+### Sensory-system cost/fidelity tradeoffs and strategy switching are established
+
+Sensory ecology and theoretical biology already contain explicit models in which:
+
+- sensory fidelity has a biological cost;
+- environmental noise changes the optimal measurement strategy;
+- more sophisticated sensing is favored only when its performance benefit
+  exceeds energetic or implementation cost;
+- sensory systems and decision policies can coevolve.
+
+Relevant anchors include work on the evolution of sensory fidelity and recent
+signal-detection models of joint sensory/decision-system evolution.
+
+Therefore the present programme must not claim novelty for:
+
+- costly sensory complexity;
+- an optimal sensory resolution;
+- sensory strategies changing with environmental uncertainty;
+- cognition/sensing being favored only when information is valuable enough.
+
+The narrower RF2.3a claim is a finite-routing **global no-go**:
+
+> after cue arity \(b\) is fixed, there is an exact robust cost ceiling
+> \(K_{\rm crit,robust}^{(b)}\) that cannot be overcome by adding arbitrarily
+> many worlds or query resources.
+
+The inverse threshold
+
+\[
+b_{\min}(K;U)
+\]
+
+is meaningful only in this model-specific sense. Cue arity is the number of
+distinguishable outcomes of one declared query, not receptor count, neural
+dimensionality, or sensory fidelity in general.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
