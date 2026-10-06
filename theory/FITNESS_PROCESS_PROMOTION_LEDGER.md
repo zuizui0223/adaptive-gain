@@ -48,6 +48,32 @@ This should be the main nontrivial theorem because it uses the repository's
 distinct sharp extremal mathematics rather than generic sequential-decision
 theory.
 
+
+The same envelope gives an exact evolutionary feasibility threshold:
+
+[
+kappa_{m crit}
+=
+max_h
+log
+rac{w_0+vS(h)}
+{w_0+vS(I_h)}.
+]
+
+For an adaptive-only log maintenance cost (kappa),
+
+[
+oxed{
+	ext{some task in the structural scope favors contingent sensing}
+iff
+kappa<kappa_{m crit}.
+}
+]
+
+This no-go/existence form should be emphasized because it converts the finite
+routeability theorem into a direct statement about which control costs can be
+paid by natural selection.
+
 ### A1. Exact structural source object
 
 Retain the existing finite task and its exact feasible routing structure.
