@@ -7,6 +7,9 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
     bounded_arity_unit_cost_witness_at_depth,
 )
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
+from adaptive_gain.bounded_arity_extremal_bounds import shallow_leaf_expected_value_witness
+from adaptive_gain.core import fixed_minimum_resolution
+from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.evolutionary_resource_frontier import (
     binary_evolutionary_resource_corners,
     bounded_arity_evolutionary_depth_corners,
@@ -16,6 +19,7 @@ from adaptive_gain.evolutionary_resource_frontier import (
     full_b_ary_internal_nodes,
     exponential_arity_limited_cost_ceiling,
     exponential_unrestricted_information_cost_ceiling,
+    exponential_unrestricted_expected_information_cost_ceiling,
     exponential_unrestricted_expected_cost_ceiling,
     exponential_robust_expected_cost_regime,
     exponential_minimum_robust_cue_arity,
@@ -450,3 +454,48 @@ def test_explicit_binary_task_has_positive_expected_value_above_robust_ceiling()
     # but this finite binary task still repays it in expectation.
     assert 0.60 > math.exp(-0.6)
     assert expected_advantage > 0.60
+
+
+
+def test_expected_global_ceiling_exceeds_robust_global_ceiling():
+    mu = 0.3
+    robust = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=mu,
+        resolution_value=1.0,
+    )
+    expected = exponential_unrestricted_expected_information_cost_ceiling(
+        closure_rate=mu,
+        resolution_value=1.0,
+    )
+    assert robust == pytest.approx(math.exp(-0.6))
+    assert expected == pytest.approx(math.exp(-0.3))
+    assert expected > robust
+
+
+def test_binary_frequency_skew_can_pay_cost_above_absolute_robust_ceiling():
+    mu = 0.3
+    cost = 0.60
+    task = shallow_leaf_expected_value_witness(
+        rare_depth=3,
+        max_arity=2,
+    )
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 8
+
+    probs = [0.95] + [0.05 / (len(task.worlds) - 1)] * (len(task.worlds) - 1)
+    adaptive = discounted_fitness_optimal_policy(
+        task,
+        probs,
+        discount_rate=mu,
+    )
+    assert adaptive.selected_policy is not None
+    assert adaptive.world_path_costs is not None
+
+    expected_advantage = (
+        adaptive.expected_discounted_completion_value
+        - math.exp(-mu * fixed.minimum_cost)
+    )
+    robust_absolute = math.exp(-2.0 * mu)
+
+    assert expected_advantage > cost
+    assert cost > robust_absolute
