@@ -1,4 +1,10 @@
-"""Inverse evolutionary resource thresholds for finite routing."""
+"""Inverse robust statewise-value thresholds for finite routing.
+
+These functions invert U(C_A)-U(C_F)>K, where C_A is a worst-path guarantee.
+They therefore characterize distribution-free robust viability, not the minimum
+structure required for positive expected selection under a particular world
+frequency distribution.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -44,7 +50,7 @@ def required_fixed_cost_for_value(
     *,
     search_limit: int,
 ) -> int | None:
-    """Minimum integer j>=h with U(h)-U(j)>K, or None within the limit."""
+    """Minimum j>=h making the robust worst-state value U(h)-U(j) exceed K."""
     if type(adaptive_depth) is not int or adaptive_depth < 0:
         raise ValueError("adaptive_depth must be a nonnegative integer")
     if not math.isfinite(architecture_cost) or architecture_cost < 0:
@@ -107,7 +113,7 @@ def bounded_arity_evolutionary_depth_corners(
     architecture_cost: float,
     completion_value: Callable[[float], float],
 ) -> tuple[BoundedArityEvolutionaryCorner, ...]:
-    """Exact minimum (n,m) requirements separately at each adaptive depth."""
+    """Exact minimum (n,m) for robust positive value at each adaptive depth."""
     if type(max_adaptive_depth) is not int or max_adaptive_depth < 1:
         raise ValueError("max_adaptive_depth must be a positive integer")
     if type(max_arity) is not int or max_arity < 2:
@@ -150,7 +156,7 @@ def binary_evolutionary_resource_corners(
     architecture_cost: float,
     completion_value: Callable[[float], float],
 ) -> tuple[BinaryEvolutionaryCorner, ...]:
-    """Exact nondominated binary (world_count,query_count) corners by depth."""
+    """Exact binary resource corners for positive robust statewise value."""
     if type(max_adaptive_depth) is not int or max_adaptive_depth < 1:
         raise ValueError("max_adaptive_depth must be a positive integer")
 
@@ -222,7 +228,7 @@ def exponential_max_viable_adaptive_depth(
     closure_rate: float,
     resolution_value: float = 1.0,
 ) -> int | None:
-    """Largest h>=0 with K < v exp(-mu h); None if even h=0 is not viable."""
+    """Largest h whose guaranteed completion value can exceed K before fixed contrast."""
     if not math.isfinite(architecture_cost) or architecture_cost < 0:
         raise ValueError("architecture_cost must be finite and nonnegative")
     if not math.isfinite(closure_rate) or closure_rate <= 0:
@@ -256,7 +262,7 @@ def exponential_arity_limited_cost_ceiling(
     closure_rate: float,
     resolution_value: float = 1.0,
 ) -> tuple[float, tuple[int, ...]]:
-    """Exact K_crit^(b) for U(c)=v exp(-mu c), plus maximizing depths.
+    """Exact arity-limited robust K_crit^(b) for U(c)=v exp(-mu c), plus depths.
 
     The search stops exactly once the upper bound v*exp(-mu*h) for all future
     depths is no larger than the best value already seen.
@@ -298,7 +304,7 @@ def exponential_unrestricted_information_cost_ceiling(
     closure_rate: float,
     resolution_value: float = 1.0,
 ) -> float:
-    """Supremal K_crit with no finite n,m,b restriction."""
+    """Supremal robust K_crit with no finite n,m,b restriction."""
     if not math.isfinite(closure_rate) or closure_rate <= 0:
         raise ValueError("closure_rate must be finite and positive")
     if not math.isfinite(resolution_value) or resolution_value <= 0:
