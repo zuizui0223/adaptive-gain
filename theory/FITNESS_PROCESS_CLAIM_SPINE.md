@@ -430,6 +430,74 @@ contains an explicit finite binary witness with 99% mass on a one-query common
 state whose expected advantage exceeds 0.60.
 
 
+
+### Global robust-versus-expected capacity gap
+
+When task size and encounter frequencies are both allowed to vary, the two
+estimands have different absolute ceilings.
+
+For bounded-below nonincreasing completion value \(U\),
+
+\[
+\boxed{
+\sup R_{\rm robust}
+=
+U(2)-U_\infty,
+}
+\]
+
+whereas
+
+\[
+\boxed{
+\sup R_{\rm expected}
+=
+U(1)-U_\infty.
+}
+\]
+
+Therefore
+
+\[
+\boxed{
+U(2)-U_\infty
+\le K
+<
+U(1)-U_\infty
+}
+\]
+
+is a frequency-assisted evolvability band: robust positive value is impossible
+for every finite information architecture, yet expected positive value is
+possible under a sufficiently skewed encounter distribution.
+
+For exponential opportunity value,
+
+\[
+U(c)=ve^{-\mu c},
+\]
+
+the ceilings are
+
+\[
+ve^{-2\mu}
+\quad\text{and}\quad
+ve^{-\mu}.
+\]
+
+At \(\mu=0.3,\ v=1,\ K=0.60\), robust repayment is impossible because
+
+\[
+0.60>e^{-0.6}\approx0.5488,
+\]
+
+while a finite binary shallow-leaf witness with a 95% common state achieves
+expected advantage above 0.60.
+
+This is a process distinction, not a generic claim that skewed priors help
+adaptive decision trees.
+
+
 ## Layer 4 — realized branch frequencies
 
 Even the pair (C_A,C_U) does not identify realized expected fitness.
