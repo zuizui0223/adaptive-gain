@@ -20,6 +20,9 @@ from adaptive_gain.opportunity_fitness import (
     pairwise_architecture_log_selection,
     empirical_timely_success_probability,
     empirical_pairwise_log_selection,
+    opportunity_log_recovery_exponential,
+    opportunity_architecture_thresholds_exponential,
+    opportunity_architecture_value_exponential,
     opportunity_window_mass,
     pathwise_advantage_over_fixed,
 )
@@ -332,3 +335,59 @@ def test_nonresolution_can_be_encoded_as_infinite_completion_time():
         [2.0],
     )
     assert q == pytest.approx(0.5)
+
+
+
+def test_opportunity_generated_recovery_is_convex():
+    kwargs = dict(
+        baseline_completion_cost=4.0,
+        closure_rate=0.7,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    r0 = opportunity_log_recovery_exponential(0.0, **kwargs)
+    r1 = opportunity_log_recovery_exponential(1.0, **kwargs)
+    r2 = opportunity_log_recovery_exponential(2.0, **kwargs)
+
+    assert r0 == pytest.approx(0.0)
+    assert (r2 - r1) > (r1 - r0)
+
+
+def test_local_global_threshold_gap_is_strict():
+    local, global_threshold = opportunity_architecture_thresholds_exponential(
+        2.0,
+        baseline_completion_cost=4.0,
+        closure_rate=0.7,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    assert 0.0 < local < global_threshold
+
+
+def test_finite_jump_barrier_exists_between_thresholds():
+    kwargs = dict(
+        baseline_completion_cost=4.0,
+        closure_rate=0.7,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    local, global_threshold = opportunity_architecture_thresholds_exponential(
+        2.0,
+        **kwargs,
+    )
+    k = (local + global_threshold) / 2.0
+
+    epsilon = 1e-5
+    near_zero = opportunity_architecture_value_exponential(
+        epsilon,
+        architecture_cost_per_saving=k,
+        **kwargs,
+    )
+    full = opportunity_architecture_value_exponential(
+        2.0,
+        architecture_cost_per_saving=k,
+        **kwargs,
+    )
+
+    assert near_zero < 0.0
+    assert full > 0.0
