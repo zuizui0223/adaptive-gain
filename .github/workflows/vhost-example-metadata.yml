@@ -1,0 +1,27 @@
+name: vhost-example-metadata
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - scripts/fetch_vhost_example_metadata.py
+      - .github/workflows/vhost-example-metadata.yml
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch Figshare metadata
+        run: python scripts/fetch_vhost_example_metadata.py
+      - name: Upload metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: vhost-example-metadata
+          path: vhost_example_metadata.json
+          if-no-files-found: error
