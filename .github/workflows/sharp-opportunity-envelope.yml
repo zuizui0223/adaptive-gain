@@ -9,6 +9,8 @@ on:
       - adaptive_gain/opportunity_extremal_envelope.py
       - tests/test_bounded_arity_extremal_bounds.py
       - tests/test_opportunity_extremal_envelope.py
+      - adaptive_gain/evolutionary_resource_frontier.py
+      - tests/test_evolutionary_resource_frontier.py
       - .github/workflows/sharp-opportunity-envelope.yml
 
 jobs:
@@ -27,3 +29,4 @@ jobs:
           python -m pytest -q
           tests/test_bounded_arity_extremal_bounds.py
           tests/test_opportunity_extremal_envelope.py
+          tests/test_evolutionary_resource_frontier.py
