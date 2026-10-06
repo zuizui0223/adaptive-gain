@@ -6,6 +6,7 @@ from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolutio
 from adaptive_gain.bounded_arity_extremal_bounds import (
     bounded_arity_unit_cost_witness_at_depth,
     shallow_leaf_expected_value_witness,
+    two_shallow_leaf_expected_value_witness,
 )
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.evolutionary_resource_frontier import (
@@ -536,3 +537,38 @@ def test_generic_one_step_mass_threshold_interpolates_linearly_in_band():
     # robust ceiling = 0.3, expected ceiling = 0.7
     # threshold = (0.5-0.3)/(0.8-0.4) = 0.5
     assert threshold == pytest.approx(0.5)
+
+
+
+def test_two_shallow_leaf_witness_has_expected_exact_costs():
+    task = two_shallow_leaf_expected_value_witness(
+        rare_depth=3,
+        max_arity=2,
+    )
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 9
+
+    probs = [0.65, 0.34] + [0.01 / (len(task.worlds) - 2)] * (len(task.worlds) - 2)
+    adaptive = discounted_fitness_optimal_policy(
+        task,
+        probs,
+        discount_rate=0.3,
+    )
+    assert adaptive.selected_policy is not None
+    assert adaptive.world_path_costs is not None
+
+    expected_advantage = (
+        adaptive.expected_discounted_completion_value
+        - math.exp(-0.3 * fixed.minimum_cost)
+    )
+    assert expected_advantage > 0.60
+
+
+def test_asymptotic_one_step_threshold_is_below_finite_depth_three_requirement():
+    asymptotic = exponential_minimum_one_step_mass_for_expected_repayment(
+        0.60,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    )
+    assert asymptotic == pytest.approx(0.26659691914156886)
+    assert asymptotic < 0.65
