@@ -2,6 +2,11 @@ import math
 
 import pytest
 
+from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolution
+from adaptive_gain.bounded_arity_extremal_bounds import (
+    bounded_arity_unit_cost_witness_at_depth,
+)
+from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.evolutionary_resource_frontier import (
     binary_evolutionary_resource_corners,
     bounded_arity_evolutionary_depth_corners,
@@ -11,6 +16,8 @@ from adaptive_gain.evolutionary_resource_frontier import (
     full_b_ary_internal_nodes,
     exponential_arity_limited_cost_ceiling,
     exponential_unrestricted_information_cost_ceiling,
+    exponential_unrestricted_expected_cost_ceiling,
+    exponential_robust_expected_cost_regime,
     exponential_minimum_robust_cue_arity,
     required_fixed_cost_for_value,
     exponential_near_max_value_scaling,
@@ -356,3 +363,90 @@ def test_each_fixed_depth_exponential_robust_value_is_unimodal():
     peak = value(mu_star)
     assert value(mu_star * 0.8) < peak
     assert value(mu_star * 1.2) < peak
+
+
+
+def test_unrestricted_expected_ceiling_exceeds_robust_ceiling():
+    mu = 0.3
+    robust = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=mu,
+        resolution_value=1.0,
+    )
+    expected = exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=mu,
+        resolution_value=1.0,
+    )
+    assert robust == pytest.approx(math.exp(-0.6))
+    assert expected == pytest.approx(math.exp(-0.3))
+    assert expected > robust
+    assert expected / robust == pytest.approx(math.exp(mu))
+
+
+def test_cost_point_six_is_expected_only_possible_at_mu_point_three():
+    assert exponential_robust_expected_cost_regime(
+        0.60,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    ) == "expected_only_possible"
+
+
+def _skewed_expected_rescue_task():
+    rare = bounded_arity_unit_cost_witness_at_depth(
+        8,
+        7,
+        2,
+        3,
+    )
+    common_target = rare.worlds[0].target
+    worlds = (World("common", common_target),) + tuple(
+        World(f"rare_{w.name}", w.target)
+        for w in rare.worlds
+    )
+
+    root = Query(
+        "common_vs_rare",
+        1,
+        (0,) + tuple(1 for _ in rare.worlds),
+    )
+
+    extended_queries = [root]
+    for q in rare.queries:
+        common_outcome = q.outcomes[0]
+        extended_queries.append(
+            Query(
+                f"rare_{q.name}",
+                q.cost,
+                (common_outcome,) + tuple(q.outcomes),
+            )
+        )
+
+    return FiniteTask(worlds, tuple(extended_queries))
+
+
+def test_explicit_binary_task_has_positive_expected_value_above_robust_ceiling():
+    task = _skewed_expected_rescue_task()
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 7
+
+    p_common = 0.99
+    rare_mass = (1.0 - p_common) / 8.0
+    probs = (p_common,) + tuple(rare_mass for _ in range(8))
+    mu = 0.3
+
+    adaptive = discounted_fitness_optimal_policy(
+        task,
+        probs,
+        discount_rate=mu,
+    )
+    assert adaptive.selected_policy is not None
+
+    fixed_value = math.exp(-mu * fixed.minimum_cost)
+    expected_advantage = (
+        adaptive.expected_discounted_completion_value
+        - fixed_value
+    )
+
+    # K=0.60 lies above the unrestricted robust ceiling exp(-0.6),
+    # but this finite binary task still repays it in expectation.
+    assert 0.60 > math.exp(-0.6)
+    assert expected_advantage > 0.60
