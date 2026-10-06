@@ -2631,6 +2631,202 @@ world frequencies can rescue an architecture that fails every statewise robust
 threshold.
 
 
+
+## 9g. Theorem RF6 — exact encounter-frequency threshold above the robust ceiling
+
+RF5 identifies a frequency-assisted evolvability band but does not quantify how
+skewed the encounter distribution must be.
+
+Let
+
+\[
+p_1
+=
+\Pr[T_\pi=1]
+\]
+
+be the total encounter probability of worlds resolved after exactly one query
+by a guaranteed-resolving adaptive policy.
+
+For every other represented world,
+
+\[
+T_\pi\ge2.
+\]
+
+Therefore, for bounded-below nonincreasing \(U\),
+
+\[
+\sum_xp_xU[T_\pi(x)]
+\le
+p_1U(1)
++
+(1-p_1)U(2).
+\]
+
+Also
+
+\[
+U(C_F)\ge U_\infty.
+\]
+
+Hence every finite task obeys
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+p_1U(1)
++
+(1-p_1)U(2)
+-
+U_\infty.
+}
+\]
+
+### Sharpness
+
+The bound is asymptotically attainable with binary queries.
+
+Construct a tree with:
+
+1. one target-pure leaf at depth 1 carrying probability \(p_1\);
+2. one target-pure leaf at depth 2 carrying probability
+   \(1-p_1-\delta\);
+3. a deep private-pair subtree below the other depth-2 branch carrying total
+   probability \(\delta>0\).
+
+As the rare subtree grows,
+
+\[
+C_F\to\infty,
+\]
+
+and as
+
+\[
+\delta\to0^+,
+\]
+
+the expected adaptive value approaches
+
+\[
+p_1U(1)+(1-p_1)U(2).
+\]
+
+Thus
+
+\[
+\boxed{
+\sup R_{\rm expected}\mid p_1
+=
+p_1U(1)
++
+(1-p_1)U(2)
+-
+U_\infty.
+}
+\]
+
+## Corollary RF6.1 — minimum frequency of one-step states needed for expected rescue
+
+Suppose architecture cost lies strictly inside the frequency-assisted band:
+
+\[
+U(2)-U_\infty
+<
+K
+<
+U(1)-U_\infty.
+\]
+
+Positive expected net value is possible if and only if
+
+\[
+\boxed{
+p_1
+>
+p_{\rm crit}
+=
+\frac{
+K-[U(2)-U_\infty]
+}{
+U(1)-U(2)
+}.
+}
+\]
+
+So \(p_{\rm crit}\) is the exact scalable-scope minimum encounter mass that
+must be placed on one-step states in order for frequency concentration to
+rescue a control cost that no architecture can repay robustly.
+
+At the lower edge of the band,
+
+\[
+p_{\rm crit}\to0,
+\]
+
+while at the upper expected-value ceiling,
+
+\[
+p_{\rm crit}\to1.
+\]
+
+## Corollary RF6.2 — exponential opportunity formula
+
+For
+
+\[
+U(c)=ve^{-\mu c},
+\qquad
+U_\infty=0,
+\]
+
+the frequency-assisted band is
+
+\[
+ve^{-2\mu}<K<ve^{-\mu},
+\]
+
+and
+
+\[
+\boxed{
+p_{\rm crit}
+=
+\frac{
+K-ve^{-2\mu}
+}{
+v(e^{-\mu}-e^{-2\mu})
+}.
+}
+\]
+
+At
+
+\[
+\mu=0.3,\qquad
+v=1,\qquad
+K=0.60,
+\]
+
+\[
+\boxed{
+p_{\rm crit}
+\approx
+0.266597.
+}
+\]
+
+Thus only about \(26.7\%\) of encounters need to belong to one-step states in
+the asymptotic scalable construction to make expected repayment possible,
+despite robust repayment being impossible for every finite information
+architecture.
+
+The theorem concerns the aggregate probability of one-step completion, not the
+frequency of any particular ecological species or habitat state.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
