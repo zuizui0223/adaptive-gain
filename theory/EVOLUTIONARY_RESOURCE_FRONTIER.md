@@ -693,9 +693,9 @@ The full \(b\)-ary private-pair construction attains
 
 using \(b^h\) represented leaves and \(J_b(h)\) query resources.
 
-Hence for any finite nonincreasing completion value \(U\), the maximum
-architecture benefit over **all finite tasks of arbitrary size** with cue arity
-at most \(b\) is
+Hence for any finite nonincreasing completion value \(U\) that is bounded
+below, the maximum architecture benefit over **all finite tasks of arbitrary
+size** with cue arity at most \(b\) is
 
 \[
 \boxed{
@@ -740,7 +740,7 @@ Thus
 
 \[
 \boxed{
-K_{\rm crit}^{(2)}
+K_{\rm crit,robust}^{(2)}
 =
 \max_{h\ge2}
 \left[
@@ -787,7 +787,7 @@ and equals approximately
 
 \[
 \boxed{
-K_{\rm crit}^{(2)}
+K_{\rm crit,robust}^{(2)}
 =
 0.290085.
 }
@@ -827,7 +827,7 @@ Therefore
 
 \[
 \boxed{
-K_{\rm crit}^{(b+1)}
+K_{\rm crit,robust}^{(b+1)}
 \ge
 K_{\rm crit,robust}^{(b)}.
 }
@@ -856,7 +856,7 @@ U_\infty
 \lim_{c\to\infty}U(c),
 \]
 
-which exists for every finite nonincreasing \(U\).
+which exists and is finite under the bounded-below scope of RF2.
 
 Then for every finite task,
 
