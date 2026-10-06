@@ -74,6 +74,27 @@ This no-go/existence form should be emphasized because it converts the finite
 routeability theorem into a direct statement about which control costs can be
 paid by natural selection.
 
+
+Also retain the interpretive correction
+
+[
+C_F/C_A	oinfty
+
+otRightarrow
+s	oinfty.
+]
+
+For bounded timely-resolution value (v),
+
+[
+s
+le
+log(1+v/w_0)-kappa.
+]
+
+This is important because it prevents the repository's unbounded structural
+ratio theorem from being over-read as an unbounded biological effect.
+
 ### A1. Exact structural source object
 
 Retain the existing finite task and its exact feasible routing structure.
