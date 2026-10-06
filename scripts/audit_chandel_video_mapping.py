@@ -243,6 +243,16 @@ def main() -> None:
             "dryad_ir_zip_url": zip_url,
         "range_diagnostics": range_diagnostics,
             "error": repr(exc),
+            "live_download_diagnostics": {
+                "api_download": (
+                    "GET /api/v2/files/3370964/download returned HTTP 401 "
+                    "to the anonymous GitHub runner"
+                ),
+                "legacy_file_stream": (
+                    "GET /downloads/file_stream/3370964 returned HTTP 200 "
+                    "but did not honor Range requests"
+                ),
+            },
             "source_referenced_unique_ir_id_count": len(all_referenced),
             "source_workbooks": source,
             "claim_ceiling": (
