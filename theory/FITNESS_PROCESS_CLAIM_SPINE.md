@@ -54,7 +54,7 @@ v\max_h[S(h)-S(I_h)].
 With baseline fitness \(w_0\), define
 
 \[
-\kappa_{\rm crit}
+\kappa_{\rm crit}^{\rm robust}
 =
 \max_h
 \log
@@ -66,14 +66,19 @@ Then, relative to the declared universal fixed comparator,
 
 \[
 \boxed{
-\text{positive selection is possible somewhere in the scope}
+\text{positive net advantage can be guaranteed in every represented world}
 \iff
-\kappa<\kappa_{\rm crit}.
+\kappa<\kappa_{\rm crit}^{\rm robust}.
 }
 \]
 
 So the finite information constraints impose an exact ceiling on the
-constitutive control cost that natural selection can support.
+constitutive control cost that can be supported **without knowing encounter
+frequencies**.
+
+This is a robust statewise threshold, not a no-go for positive expected
+selection.  Expected fitness can exceed the robust margin when common branches
+terminate earlier than the worst path.
 
 
 ## Central biological question
@@ -243,6 +248,44 @@ is recovered only locally:
 for weak resolution value and a small structural gap.
 
 Therefore lambda is an ecological/natural-history derivative, not a primitive universal constant.
+
+## Robust versus expected evolutionary value
+
+The sharp frontier theorem closes the frequency-free robust quantity
+
+\[
+R_{\rm robust}
+=
+U(C_A)-U(C_F).
+\]
+
+Expected evolutionary value is a different estimand:
+
+\[
+R_{\rm expected}(\pi)
+=
+\sum_x p_xU[T_\pi(x)]
+-
+U(C_F).
+\]
+
+For a minimax tree,
+
+\[
+R_{\rm expected}
+\ge
+R_{\rm robust},
+\]
+
+but equality need not hold.
+
+Therefore:
+
+- the structural frontier gives an exact **robust floor / statewise threshold**;
+- encounter frequencies and branchwise completion times determine the extra
+  expected-fitness value above that floor.
+
+This distinction is central to the biological interpretation.
 
 ## Layer 4 — realized branch frequencies
 
@@ -440,15 +483,17 @@ All have strong precedents.
 
 ## Proposed headline claim
 
-> Natural history selects among an exact finite frontier of information
+> Natural history re-ranks an exact finite frontier of information
 > architectures: the structure that maximizes adaptive efficiency need not
-> maximize fitness, and finite ecological constraints impose a sharp ceiling on
-> the control cost that selection can support.
+> maximize robust ecological value, and finite information constraints impose a
+> sharp ceiling on the control cost that can be repaid in every represented
+> state.
 
 A shorter version:
 
 > Structural adaptive gain is potential; natural history determines which part
-> of that potential is evolvable.
+> is robustly valuable, while encounter frequencies determine the additional
+> expected-fitness value.
 
 ## Empirical measurement ladder
 
