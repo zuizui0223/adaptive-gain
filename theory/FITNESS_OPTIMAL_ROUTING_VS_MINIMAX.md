@@ -268,6 +268,194 @@ As \(\mu\) increases, it increasingly rewards early resolution on high-probabili
 
 It still differs from a pure worst-case objective.
 
+
+## 5b. Theorem FP2 — ecological urgency can switch the optimal cue order
+
+The previous witness changes world frequencies. A second exact witness holds world frequencies fixed and changes only the ecological value of speed.
+
+Use four equiprobable worlds with targets
+
+\[
+(0,0,1,1)
+\]
+
+and unit-cost binary queries
+
+\[
+q_0=(0,0,0,1),
+\]
+
+\[
+q_1=(0,1,0,0),
+\]
+
+\[
+q_2=(0,1,0,1),
+\]
+
+\[
+q_3=(0,1,1,0).
+\]
+
+Consider two policy classes already realizable in this one fixed task.
+
+### Balanced policy
+
+A balanced root partitions the worlds into two target-mixed pairs, each resolvable with one additional query.
+
+Its path vector is
+
+\[
+\boxed{
+(2,2,2,2).
+}
+\]
+
+Under
+
+\[
+V(t)=e^{-\mu t},
+\]
+
+its expected performance is
+
+\[
+\boxed{
+J_{\rm balanced}=e^{-2\mu}.
+}
+\]
+
+### Prioritized policy
+
+A different root immediately resolves one world, resolves another in two steps, and leaves two worlds at depth three.
+
+Its path multiset is
+
+\[
+\boxed{
+\{1,2,3,3\}.
+}
+\]
+
+With equal world frequencies,
+
+\[
+\boxed{
+J_{\rm priority}
+=
+\frac{
+e^{-\mu}
++
+e^{-2\mu}
++
+2e^{-3\mu}
+}{4}.
+}
+\]
+
+Let
+
+\[
+x=e^{-\mu}\in(0,1).
+\]
+
+Then
+
+\[
+J_{\rm priority}-J_{\rm balanced}
+=
+\frac{x}{4}
+(2x-1)(x-1).
+\]
+
+Because \(x-1<0\),
+
+\[
+J_{\rm balanced}>J_{\rm priority}
+\quad\Longleftrightarrow\quad
+x>\frac12,
+\]
+
+or equivalently
+
+\[
+\boxed{
+\mu<\log2.
+}
+\]
+
+Likewise,
+
+\[
+\boxed{
+\mu>\log2
+\quad\Longrightarrow\quad
+J_{\rm priority}>J_{\rm balanced}.
+}
+\]
+
+At
+
+\[
+\boxed{
+\mu^*=\log2
+}
+\]
+
+the two policies tie exactly.
+
+Therefore the same organisms, same state frequencies, same cue vocabulary, same cue costs and same target can change their fitness-optimal cue order solely because the ecological value of delay changes.
+
+### Biological interpretation
+
+Weak time pressure favors the balanced tree:
+
+\[
+(2,2,2,2).
+\]
+
+Strong time pressure favors a more prioritized tree:
+
+\[
+\{1,2,3,3\},
+\]
+
+which creates one immediate success at the cost of making two other states slower.
+
+This is a decision-policy analogue of specialization under urgency:
+
+> as delay becomes more costly, selection can favor early resolution of a subset of ecological states rather than uniformly good performance across all states.
+
+The word "specialization" here refers only to decision-path allocation. It does not by itself imply narrower dietary, habitat or taxonomic niche breadth.
+
+## Corollary FP2.1 — time pressure can rewire sensing without environmental turnover
+
+No represented ecological state changes across the threshold.
+
+Only the value-of-time parameter changes.
+
+Thus:
+
+\[
+\boxed{
+\text{ecological time pressure}
+\to
+\text{optimal decision-tree rewiring}
+}
+\]
+
+can occur without:
+
+- species turnover;
+- cue turnover;
+- target turnover;
+- altered state frequencies.
+
+This is a cleaner process prediction than treating routeability as a fixed property of an environment.
+
+Routeability defines a feasible policy space. Natural history selects where within that space the organism should operate.
+
+
 ## 6. Relation to stochastic completion-time theory
 
 The earlier process theory treated an architecture as inducing a completion-time distribution \(T\).
