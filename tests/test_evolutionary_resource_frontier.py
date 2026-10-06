@@ -320,3 +320,39 @@ def test_no_finite_arity_above_unrestricted_information_ceiling():
         closure_rate=0.3,
         resolution_value=1.0,
     ) is None
+
+
+
+def test_scalable_arity_ceiling_can_be_reentrant_in_urgency():
+    kwargs = dict(
+        max_arity=10,
+        resolution_value=1.0,
+    )
+    cost = 0.97630
+
+    values = [
+        exponential_arity_limited_cost_ceiling(
+            closure_rate=mu,
+            **kwargs,
+        )[0]
+        for mu in (0.0045, 0.0048, 0.0051, 0.0060)
+    ]
+
+    assert values[0] > cost
+    assert values[1] < cost
+    assert values[2] > cost
+    assert values[3] < cost
+
+
+def test_each_fixed_depth_exponential_robust_value_is_unimodal():
+    b = 10
+    h = 4
+    fixed = full_b_ary_internal_nodes(b, h)
+    mu_star = math.log(fixed / h) / (fixed - h)
+
+    def value(mu):
+        return math.exp(-mu * h) - math.exp(-mu * fixed)
+
+    peak = value(mu_star)
+    assert value(mu_star * 0.8) < peak
+    assert value(mu_star * 1.2) < peak
