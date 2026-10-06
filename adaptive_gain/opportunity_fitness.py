@@ -249,3 +249,85 @@ def pathwise_advantage_over_fixed(
     if not math.isfinite(fixed_success) or not (0.0 <= fixed_success <= 1.0):
         raise ValueError("survival values must lie in [0, 1]")
     return value * (adaptive_success - fixed_success)
+
+
+
+def empirical_timely_success_probability(
+    completion_times: Sequence[float],
+    opportunity_limits: Sequence[float],
+) -> float:
+    """Independent empirical plug-in estimate of P(T <= B).
+
+    completion_times may contain math.inf to encode trials that never
+    complete correctly. opportunity_limits must be finite and nonnegative.
+    """
+    if len(completion_times) == 0 or len(opportunity_limits) == 0:
+        raise ValueError("empirical samples must be nonempty")
+
+    times = [float(t) for t in completion_times]
+    limits = [float(b) for b in opportunity_limits]
+
+    if any(math.isnan(t) or t < 0 for t in times):
+        raise ValueError("completion times must be nonnegative or infinity")
+    if any((not math.isfinite(b) or b < 0) for b in limits):
+        raise ValueError("opportunity limits must be finite and nonnegative")
+
+    successful_pairs = sum(t <= b for t in times for b in limits)
+    return successful_pairs / (len(times) * len(limits))
+
+
+def empirical_performance_advantage(
+    focal_completion_times: Sequence[float],
+    comparator_completion_times: Sequence[float],
+    opportunity_limits: Sequence[float],
+    *,
+    resolution_value: float = 1.0,
+) -> float:
+    """Plug-in performance advantage v[P(T_i<=B)-P(T_j<=B)]."""
+    if not math.isfinite(resolution_value) or resolution_value < 0:
+        raise ValueError("resolution_value must be finite and nonnegative")
+    focal = empirical_timely_success_probability(
+        focal_completion_times, opportunity_limits
+    )
+    comparator = empirical_timely_success_probability(
+        comparator_completion_times, opportunity_limits
+    )
+    return resolution_value * (focal - comparator)
+
+
+def empirical_pairwise_log_selection(
+    focal_completion_times: Sequence[float],
+    comparator_completion_times: Sequence[float],
+    opportunity_limits: Sequence[float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    focal_maintenance_log_cost: float = 0.0,
+    comparator_maintenance_log_cost: float = 0.0,
+) -> float:
+    """Plug-in log-fitness comparison from empirical T and B samples."""
+    if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value < 0:
+        raise ValueError("resolution_value must be finite and nonnegative")
+    if (
+        not math.isfinite(focal_maintenance_log_cost)
+        or focal_maintenance_log_cost < 0
+        or not math.isfinite(comparator_maintenance_log_cost)
+        or comparator_maintenance_log_cost < 0
+    ):
+        raise ValueError("maintenance log costs must be finite and nonnegative")
+
+    q_focal = empirical_timely_success_probability(
+        focal_completion_times, opportunity_limits
+    )
+    q_comparator = empirical_timely_success_probability(
+        comparator_completion_times, opportunity_limits
+    )
+    return (
+        math.log(
+            (baseline_fitness + resolution_value * q_focal)
+            / (baseline_fitness + resolution_value * q_comparator)
+        )
+        - (focal_maintenance_log_cost - comparator_maintenance_log_cost)
+    )
