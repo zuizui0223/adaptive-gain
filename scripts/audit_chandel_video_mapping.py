@@ -98,18 +98,101 @@ def dryad_ir_zip_url() -> str:
     return candidates[0]
 
 
-def member_ids(zip_url: str) -> tuple[list[int], list[str]]:
-    with RemoteZip(zip_url, headers={"User-Agent": UA}) as rz:
-        names = [info.filename for info in rz.infolist() if not info.is_dir()]
-    ids = []
-    unmatched = []
-    for name in names:
-        m = IR_RE.search(Path(name).name)
-        if m:
-            ids.append(int(m.group(1)))
-        else:
-            unmatched.append(name)
-    return sorted(set(ids)), unmatched
+def _range_probe(url: str) -> dict:
+    """Probe one URL/redirect target without downloading the full object."""
+    session = requests.Session()
+    session.headers.update({"User-Agent": UA})
+    hops = []
+    current = url
+    for _ in range(5):
+        response = session.get(
+            current,
+            headers={"Range": "bytes=0-0"},
+            timeout=60,
+            allow_redirects=False,
+            stream=True,
+        )
+        info = {
+            "url": current,
+            "status": response.status_code,
+            "location": response.headers.get("location"),
+            "accept_ranges": response.headers.get("accept-ranges"),
+            "content_range": response.headers.get("content-range"),
+            "content_length": response.headers.get("content-length"),
+        }
+        hops.append(info)
+        if response.status_code in {301, 302, 303, 307, 308}:
+            location = response.headers.get("location")
+            response.close()
+            if not location:
+                break
+            current = urljoin(current, location)
+            continue
+        response.close()
+        return {
+            "requested_url": url,
+            "final_url": current,
+            "range_supported": response.status_code == 206,
+            "hops": hops,
+        }
+    return {
+        "requested_url": url,
+        "final_url": current,
+        "range_supported": False,
+        "hops": hops,
+    }
+
+
+def _download_candidates(zip_url: str) -> list[str]:
+    candidates = [zip_url]
+    match = re.search(r"/file_stream/(\d+)", zip_url)
+    if match:
+        file_id = match.group(1)
+        candidates.insert(
+            0,
+            f"https://datadryad.org/api/v2/files/{file_id}/download",
+        )
+    return candidates
+
+
+def member_ids(zip_url: str) -> tuple[list[int], list[str], list[dict]]:
+    diagnostics = []
+    errors = []
+    for candidate in _download_candidates(zip_url):
+        probe = _range_probe(candidate)
+        diagnostics.append(probe)
+        if not probe["range_supported"]:
+            errors.append(f"no range support: {candidate}")
+            continue
+
+        final_url = probe["final_url"]
+        try:
+            with RemoteZip(final_url, headers={"User-Agent": UA}) as rz:
+                names = [
+                    info.filename
+                    for info in rz.infolist()
+                    if not info.is_dir()
+                ]
+        except Exception as exc:
+            errors.append(f"{candidate}: {exc!r}")
+            continue
+
+        ids = []
+        unmatched = []
+        for name in names:
+            m = IR_RE.search(Path(name).name)
+            if m:
+                ids.append(int(m.group(1)))
+            else:
+                unmatched.append(name)
+        return sorted(set(ids)), unmatched, diagnostics
+
+    raise RuntimeError(
+        "No range-readable Dryad download URL found. "
+        + " | ".join(errors)
+        + " | diagnostics="
+        + json.dumps(diagnostics)
+    )
 
 
 def contiguous_runs(values: list[int]) -> list[list[int]]:
@@ -152,7 +235,27 @@ def main() -> None:
         }
 
     zip_url = dryad_ir_zip_url()
-    ir_ids, unmatched = member_ids(zip_url)
+    try:
+        ir_ids, unmatched, range_diagnostics = member_ids(zip_url)
+    except Exception as exc:
+        blocker = {
+            "status": "ZIP_MEMBER_MAPPING_BLOCKED",
+            "dryad_ir_zip_url": zip_url,
+        "range_diagnostics": range_diagnostics,
+            "error": repr(exc),
+            "source_referenced_unique_ir_id_count": len(all_referenced),
+            "source_workbooks": source,
+            "claim_ceiling": (
+                "Figure 3a raw videos cannot be assigned from public metadata "
+                "without a range-readable archive manifest or independent mapping."
+            ),
+        }
+        (outdir / "video_mapping_audit.json").write_text(
+            json.dumps(blocker, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(json.dumps(blocker, indent=2, sort_keys=True))
+        return
 
     referenced_in_ir_zip = sorted(set(ir_ids) & all_referenced)
     unreferenced = sorted(set(ir_ids) - all_referenced)
