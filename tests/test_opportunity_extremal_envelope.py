@@ -8,6 +8,7 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
 from adaptive_gain.core import adaptive_minimum_resolution, fixed_minimum_resolution
 from adaptive_gain.opportunity_extremal_envelope import (
     sharp_exponential_opportunity_envelope,
+    sharp_completion_value_envelope,
     sharp_log_selection_envelope,
     sharp_opportunity_advantage_envelope,
     sharp_maintenance_log_cost_ceiling,
@@ -169,3 +170,49 @@ def test_unbounded_structural_ratio_still_has_finite_log_fitness_ceiling():
     )
     universal_ceiling = math.log(1.0 + value / w0)
     assert receipt.sharp_log_selection <= universal_ceiling + 1e-12
+
+
+
+def test_general_monotone_value_envelope_contains_opportunity_special_case():
+    mu = 0.3
+    general = sharp_completion_value_envelope(
+        10,
+        9,
+        2,
+        lambda c: math.exp(-mu * c),
+    )
+    special = sharp_exponential_opportunity_envelope(
+        10,
+        9,
+        2,
+        closure_rate=mu,
+    )
+    assert general.sharp_opportunity_advantage == pytest.approx(
+        special.sharp_opportunity_advantage
+    )
+    assert general.maximizing_adaptive_costs == special.maximizing_adaptive_costs
+
+
+def test_linear_completion_value_recovers_maximum_additive_gap():
+    lam = 0.4
+    receipt = sharp_completion_value_envelope(
+        10,
+        9,
+        2,
+        lambda c: -lam * c,
+    )
+    rows = {row.adaptive_cost: row for row in receipt.rows}
+    expected = lam * max(row.structural_gap for row in receipt.rows)
+    assert receipt.sharp_opportunity_advantage == pytest.approx(expected)
+    assert receipt.maximizing_adaptive_costs == (4,)
+    assert rows[4].structural_gap == 5
+
+
+def test_general_completion_value_must_be_nonincreasing():
+    with pytest.raises(ValueError):
+        sharp_completion_value_envelope(
+            5,
+            4,
+            2,
+            lambda c: c,
+        )
