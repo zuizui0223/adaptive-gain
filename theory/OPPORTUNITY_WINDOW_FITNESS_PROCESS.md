@@ -867,6 +867,138 @@ s_{i:j}
 Thus stochastic dominance licenses a universal **performance** ordering, not a universal fitness ordering unless architecture-cost differences are also bounded.
 
 
+
+## 6e. Theorem OF8 — any monotone value of decision time has an equivalent opportunity representation
+
+The variable \(B\) need not be interpreted only as a literal abrupt deadline.
+
+Let
+
+\[
+V(t)
+\]
+
+be the ecological value of completing the correct decision at time \(t\), after removing any time-independent baseline contribution.
+
+Assume:
+
+- \(V(0)=v>0\);
+- \(V(t)\) is nonincreasing and right-continuous;
+- \(V(t)\to0\) as \(t\to\infty\).
+
+Define
+
+\[
+S_V(t)=\frac{V(t)}{v}.
+\]
+
+Then \(S_V\) is a valid survival function. Therefore there exists a nonnegative random variable \(B_V\) such that
+
+\[
+\boxed{
+P(B_V\ge t)=S_V(t)=\frac{V(t)}{v}.
+}
+\]
+
+For any completion-time random variable \(T\) independent of this representation variable,
+
+\[
+\boxed{
+E[V(T)]
+=
+vE[S_V(T)]
+=
+vP(T\le B_V).
+}
+\]
+
+Thus every monotone value-of-time function can be represented as an equivalent mixture of hard ecological deadlines.
+
+### Interpretation
+
+The opportunity formalism therefore includes, after appropriate calibration:
+
+- literal prey or mate disappearance;
+- host defensive interruption;
+- predation or exposure risk that accumulates with delay;
+- declining resource profitability;
+- handling-time penalties;
+- any other ecological payoff that decreases monotonically with completion time.
+
+A physical deadline distribution is one direct natural-history interpretation, but it is not required mathematically.
+
+## Corollary OF8.1 — the overlap formula is a general value-of-time identity
+
+For architectures \(i\) and \(j\),
+
+\[
+E[V(T_i)]-E[V(T_j)]
+=
+v\int [F_i(b)-F_j(b)]\,dG_V(b),
+\]
+
+where \(G_V\) is the distribution corresponding to \(S_V=V/v\).
+
+Hence the earlier overlap formula is not restricted to systems with abrupt deadline events.
+
+It is a general representation of how completion-time distributions interact with a monotone ecological value of time.
+
+## Corollary OF8.2 — first-order stochastic dominance is the universal monotone-time criterion
+
+The standard stochastic-order result now has a direct ecological interpretation.
+
+If
+
+\[
+F_i(t)\ge F_j(t)
+\quad\forall t,
+\]
+
+then
+
+\[
+E[V(T_i)]\ge E[V(T_j)]
+\]
+
+for every nonincreasing ecological value-of-time function \(V\).
+
+If the completion CDFs cross, there exist monotone ecological value functions that favor \(i\) and others that favor \(j\).
+
+Thus
+
+\[
+\boxed{
+\text{environment-independent advantage under all monotone time penalties}
+\iff
+\text{first-order stochastic dominance of completion time}.
+}
+\]
+
+The stochastic-order mathematics is standard. The role here is to identify the exact process-level object required downstream of the repository's finite decision topology.
+
+## 6f. Baseline-plus-decay form
+
+If ecological value approaches a nonzero asymptote,
+
+\[
+V(t)\to V_\infty\ge0,
+\]
+
+write
+
+\[
+V(t)
+=
+V_\infty
++
+[V(0)-V_\infty]S_V(t).
+\]
+
+The constant \(V_\infty\) belongs with baseline fitness, while the decaying component has the same opportunity representation.
+
+This prevents an arbitrary choice of zero from affecting the decision-time comparison.
+
+
 ## 7. Process interpretation
 
 The causal chain is:
