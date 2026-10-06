@@ -27,6 +27,16 @@ class BinaryEvolutionaryCorner:
     minimum_query_count: int
 
 
+@dataclass(frozen=True)
+class BoundedArityEvolutionaryCorner:
+    adaptive_depth: int
+    max_arity: int
+    required_fixed_cost: int
+    required_gap: int
+    minimum_world_count: int
+    minimum_query_count: int
+
+
 def required_fixed_cost_for_value(
     adaptive_depth: int,
     architecture_cost: float,
@@ -57,6 +67,81 @@ def required_fixed_cost_for_value(
         if u_h - value > architecture_cost + 1e-15:
             return fixed_cost
     return None
+
+
+
+def minimum_world_count_for_fixed_burden(
+    required_fixed_cost: int,
+    adaptive_depth: int,
+    max_arity: int,
+) -> int | None:
+    """Minimum n with F_b(n,h)>=required_fixed_cost, or None if impossible at h."""
+    if type(required_fixed_cost) is not int or required_fixed_cost < 0:
+        raise ValueError("required_fixed_cost must be a nonnegative integer")
+    if type(adaptive_depth) is not int or adaptive_depth < 1:
+        raise ValueError("adaptive_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if required_fixed_cost < adaptive_depth:
+        raise ValueError("required_fixed_cost cannot be below adaptive_depth")
+
+    absolute_ceiling = full_b_ary_internal_nodes(max_arity, adaptive_depth)
+    if required_fixed_cost > absolute_ceiling:
+        return None
+
+    maximum_worlds = max_arity ** adaptive_depth
+    for world_count in range(adaptive_depth + 1, maximum_worlds + 1):
+        if maximum_bounded_arity_tree_internal_nodes(
+            world_count,
+            adaptive_depth,
+            max_arity,
+        ) >= required_fixed_cost:
+            return world_count
+    raise ArithmeticError("failed to find world count below full-tree leaf ceiling")
+
+
+def bounded_arity_evolutionary_depth_corners(
+    *,
+    max_adaptive_depth: int,
+    max_arity: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+) -> tuple[BoundedArityEvolutionaryCorner, ...]:
+    """Exact minimum (n,m) requirements separately at each adaptive depth."""
+    if type(max_adaptive_depth) is not int or max_adaptive_depth < 1:
+        raise ValueError("max_adaptive_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+
+    rows: list[BoundedArityEvolutionaryCorner] = []
+    for depth in range(1, max_adaptive_depth + 1):
+        absolute_ceiling = full_b_ary_internal_nodes(max_arity, depth)
+        required = required_fixed_cost_for_value(
+            depth,
+            architecture_cost,
+            completion_value,
+            search_limit=absolute_ceiling,
+        )
+        if required is None:
+            continue
+        n_min = minimum_world_count_for_fixed_burden(
+            required,
+            depth,
+            max_arity,
+        )
+        if n_min is None:
+            continue
+        rows.append(
+            BoundedArityEvolutionaryCorner(
+                adaptive_depth=depth,
+                max_arity=max_arity,
+                required_fixed_cost=required,
+                required_gap=required-depth,
+                minimum_world_count=n_min,
+                minimum_query_count=required,
+            )
+        )
+    return tuple(rows)
 
 
 def binary_evolutionary_resource_corners(
