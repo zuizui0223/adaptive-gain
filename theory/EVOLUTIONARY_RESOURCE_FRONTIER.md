@@ -2551,6 +2551,302 @@ scalable rare-state subtree. The robust result remains the relevant threshold
 when positive value must hold across all represented states.
 
 
+
+## 9h. Theorem RF7 — exact finite-scope expected-value ceiling is independent of cue arity
+
+RF5 gives the unrestricted expected-value supremum.
+
+The same question can be closed exactly at fixed finite world/query budgets.
+
+Fix:
+
+\[
+n\ge2,
+\qquad
+m\ge1,
+\qquad
+b\ge2.
+\]
+
+Let
+
+\[
+\boxed{
+M=\min\{m,n-1\}.
+}
+\]
+
+Consider all finite deterministic unit-cost tasks with exactly \(n\) represented
+worlds, at most \(m\) declared query resources, query arity at most \(b\), all
+guaranteed-resolving adaptive policies, and all strictly positive world-
+frequency distributions.
+
+For any finite nonincreasing completion value \(U\),
+
+\[
+\boxed{
+\sup R_{\rm expected}(n,m,b)
+=
+U(1)-U(M).
+}
+\]
+
+### Upper bound
+
+Every nontrivial realized adaptive path requires at least one query:
+
+\[
+T_\pi(x)\ge1.
+\]
+
+Therefore
+
+\[
+\sum_xp_xU[T_\pi(x)]
+\le U(1).
+\]
+
+Any productive adaptive decision tree has at most \(n\) nonempty leaves and
+therefore at most \(n-1\) internal-node occurrences.
+
+Flattening its distinct queries gives a fixed resolver, so
+
+\[
+C_F\le n-1.
+\]
+
+Also
+
+\[
+C_F\le m.
+\]
+
+Hence
+
+\[
+C_F\le M.
+\]
+
+Because \(U\) is nonincreasing,
+
+\[
+U(C_F)\ge U(M).
+\]
+
+Therefore
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+U(1)-U(M).
+}
+\]
+
+### Sharpness
+
+Use a binary private-pair tree with exactly \(M\) internal nodes and one
+target-pure leaf directly below the root.
+
+If
+
+\[
+n>M+1,
+\]
+
+pad represented-world count with exact duplicate worlds.
+
+The resulting task has
+
+\[
+C_F=M
+\]
+
+and one adaptive branch completing after one query.
+
+Assign probability
+
+\[
+1-\delta
+\]
+
+to that one-step world and distribute total probability \(\delta>0\) over all
+remaining represented worlds.
+
+As
+
+\[
+\delta\to0^+,
+\]
+
+adaptive expected value tends to \(U(1)\), while fixed value is exactly \(U(M)\).
+
+Thus the upper bound is sharp as a supremum.
+
+Because the construction is binary, it is admissible for every
+
+\[
+b\ge2.
+\]
+
+Hence the finite-scope expected ceiling is independent of cue arity.
+
+## Corollary RF7.1 — exact finite-scope frequency-assisted band
+
+Let
+
+\[
+K_{\rm crit,robust}(n,m,b;U)
+\]
+
+be the sharp frequency-free robust ceiling from the structural frontier.
+
+Define
+
+\[
+\boxed{
+K_{\rm crit,expected}(n,m;U)
+=
+U(1)-U(\min\{m,n-1\}).
+}
+\]
+
+Then
+
+\[
+K_{\rm crit,robust}
+\le
+K_{\rm crit,expected}.
+\]
+
+Therefore the fixed finite scope has three exact regimes:
+
+\[
+\boxed{
+\begin{array}{ll}
+K<K_{\rm crit,robust}
+&
+\text{robust and expected repayment are possible},
+\\[4pt]
+K_{\rm crit,robust}\le K<K_{\rm crit,expected}
+&
+\text{expected repayment only},
+\\[4pt]
+K\ge K_{\rm crit,expected}
+&
+\text{neither is possible}.
+\end{array}
+}
+\]
+
+Unlike the robust threshold, the expected ceiling depends only on \(n\), \(m\),
+and \(U\), not on cue arity \(b\ge2\).
+
+This is because arbitrarily skewed encounter frequencies can concentrate
+ecological value on one shallow binary branch while rare branches carry the
+fixed-resolution burden.
+
+## Corollary RF7.2 — finite-scope one-step mass threshold
+
+Fix the total probability
+
+\[
+p_1
+=
+\Pr[T_\pi=1].
+\]
+
+For all remaining worlds,
+
+\[
+T_\pi\ge2.
+\]
+
+At fixed finite budgets, the same argument gives the sharp supremum
+
+\[
+\boxed{
+\sup R_{\rm expected}\mid p_1
+=
+p_1U(1)
++
+(1-p_1)U(2)
+-
+U(M)
+}
+\]
+
+whenever \(M\ge2\).
+
+Therefore architecture cost \(K\) requires
+
+\[
+\boxed{
+p_1
+>
+\frac{
+K-[U(2)-U(M)]
+}{
+U(1)-U(2)
+}
+}
+\]
+
+when \(K\) lies between the zero-one-step baseline \(U(2)-U(M)\) and the
+finite-scope expected ceiling \(U(1)-U(M)\).
+
+The scalable RF6 threshold is recovered as \(M\to\infty\) for bounded-below
+\(U\).
+
+### Canonical finite example
+
+Take
+
+\[
+n=10,
+\qquad
+m=9,
+\qquad
+\mu=0.3,
+\qquad
+v=1.
+\]
+
+Then
+
+\[
+M=9,
+\]
+
+so
+
+\[
+K_{\rm crit,expected}
+=
+e^{-0.3}
+-
+e^{-2.7}
+\approx
+0.673613.
+\]
+
+Thus the cost
+
+\[
+K=0.60
+\]
+
+is expected-value feasible inside this finite binary-capable scope even though
+it exceeds the unrestricted robust ceiling
+
+\[
+e^{-0.6}\approx0.548812.
+\]
+
+This separates finite-resource expected rescue from the scalable asymptotic
+argument.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
