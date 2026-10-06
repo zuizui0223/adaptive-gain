@@ -505,17 +505,11 @@ def exponential_unrestricted_expected_information_cost_ceiling(
     closure_rate: float,
     resolution_value: float = 1.0,
 ) -> float:
-    """Supremal additive expected-value ceiling with free world frequencies.
-
-    Over all finite nontrivial tasks, all finite cue arities at least two, and
-    all strictly positive world-frequency distributions, the expected
-    completion-value advantage has supremum v*exp(-mu).
-    """
-    if not math.isfinite(closure_rate) or closure_rate <= 0:
-        raise ValueError("closure_rate must be finite and positive")
-    if not math.isfinite(resolution_value) or resolution_value <= 0:
-        raise ValueError("resolution_value must be finite and positive")
-    return resolution_value * math.exp(-closure_rate)
+    """Backward-compatible alias for exponential_unrestricted_expected_cost_ceiling."""
+    return exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
 
 
 
