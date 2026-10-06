@@ -147,3 +147,21 @@ def test_binary_no_go_cost_point_three_is_above_global_binary_ceiling():
         closure_rate=0.3,
     )
     assert 0.30 > ceiling
+
+
+
+def test_canonical_binary_resource_corner_mu_point_three_cost_point_two_five():
+    corners = binary_evolutionary_resource_corners(
+        max_adaptive_depth=8,
+        architecture_cost=0.25,
+        completion_value=lambda c: math.exp(-0.3 * c),
+    )
+    assert corners == (
+        type(corners[0])(
+            adaptive_depth=3,
+            required_fixed_cost=7,
+            required_gap=4,
+            minimum_world_count=8,
+            minimum_query_count=7,
+        ),
+    )
