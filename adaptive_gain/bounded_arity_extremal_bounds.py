@@ -408,6 +408,50 @@ def _tree_task(tree: BoundedArityTree, world_count: int, query_count: int) -> tu
     return task, len(private_pairs)
 
 
+
+def bounded_arity_unit_cost_witness_at_depth(
+    world_count: int,
+    query_count: int,
+    max_arity: int,
+    adaptive_depth: int,
+) -> FiniteTask:
+    """Construct the private-pair witness at one declared feasible depth.
+
+    The declared depth must be no larger than both the world and query budgets.
+    The construction uses I=min(m,F_b(n,h)) internal queries and pads any
+    remaining declared queries with constants.
+    """
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+    if type(adaptive_depth) is not int or adaptive_depth < 1:
+        raise ValueError("adaptive_depth must be a positive integer")
+    if adaptive_depth > world_count - 1:
+        raise ValueError("adaptive_depth exceeds the nontrivial world-depth bound")
+    if adaptive_depth > query_count:
+        raise ValueError("adaptive_depth exceeds the declared query budget")
+
+    maximum = maximum_bounded_arity_tree_internal_nodes(
+        world_count, adaptive_depth, max_arity
+    )
+    internal_target = min(query_count, maximum)
+    if internal_target < adaptive_depth:
+        raise ValueError("declared depth cannot be preserved by the available queries")
+
+    tree = _prune_to_internal_count(
+        _maximum_tree(world_count, adaptive_depth, max_arity),
+        internal_target,
+    )
+    if _height(tree) != adaptive_depth:
+        raise ArithmeticError("depth-preserving bounded-arity pruning failed")
+
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("bounded-arity depth witness private-pair count mismatch")
+    if any(len(set(query.outcomes)) > max_arity for query in task.queries):
+        raise ArithmeticError("bounded-arity depth witness exceeded declared query arity")
+    return task
+
+
 def sharp_bounded_arity_unit_cost_witness(
     world_count: int,
     query_count: int,
