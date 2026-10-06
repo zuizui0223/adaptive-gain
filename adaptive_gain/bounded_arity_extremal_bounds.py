@@ -319,6 +319,77 @@ def _prune_one_deepest(tree: BoundedArityTree) -> BoundedArityTree:
     return result
 
 
+
+def _prune_one_deepest_off_spine(tree: BoundedArityTree) -> BoundedArityTree:
+    """Prune one deepest internal node while protecting a child-0 deepest spine."""
+    oriented = _orient_deepest_first(tree)
+    target_depth = -1
+    target_path: tuple[int, ...] | None = None
+
+    def scan(
+        node: BoundedArityTree,
+        depth: int,
+        path: tuple[int, ...],
+        on_spine: bool,
+    ) -> None:
+        nonlocal target_depth, target_path
+        if node.is_leaf:
+            return
+        if not on_spine and depth > target_depth:
+            target_depth = depth
+            target_path = path
+        for index, child in enumerate(node.children):
+            scan(
+                child,
+                depth + 1,
+                path + (index,),
+                on_spine and index == 0,
+            )
+
+    scan(oriented, 0, (), True)
+    if target_path is None:
+        return oriented
+
+    def replace(
+        node: BoundedArityTree,
+        path: tuple[int, ...],
+    ) -> BoundedArityTree:
+        if not path:
+            return BoundedArityTree()
+        index = path[0]
+        children = list(node.children)
+        children[index] = replace(children[index], path[1:])
+        return BoundedArityTree(tuple(children))
+
+    return _orient_deepest_first(replace(oriented, target_path))
+
+
+def _prune_to_internal_count_preserving_height(
+    tree: BoundedArityTree,
+    target_internal_count: int,
+    target_height: int,
+) -> BoundedArityTree:
+    """Reduce internal-node count without shortening one deepest spine."""
+    if target_internal_count < target_height:
+        raise ValueError("target_internal_count cannot be below target_height")
+    result = _orient_deepest_first(tree)
+    if _height(result) != target_height:
+        raise ValueError("input tree does not have the declared target height")
+
+    while _internal_count(result) > target_internal_count:
+        before = _internal_count(result)
+        result = _prune_one_deepest_off_spine(result)
+        after = _internal_count(result)
+        if after >= before:
+            raise ArithmeticError("no off-spine internal node remained to prune")
+        if _height(result) != target_height:
+            raise ArithmeticError("protected-spine pruning shortened the tree")
+
+    if _internal_count(result) != target_internal_count:
+        raise ArithmeticError("protected-spine pruning missed target internal count")
+    return result
+
+
 def _prune_to_internal_count(
     tree: BoundedArityTree,
     target_internal_count: int,
@@ -458,11 +529,11 @@ def bounded_arity_unit_cost_witness_at_depth(
     if internal_target < adaptive_depth:
         raise ValueError("declared depth cannot be preserved by the available queries")
 
-    tree = _prune_to_internal_count(
+    tree = _prune_to_internal_count_preserving_height(
         _maximum_tree(world_count, adaptive_depth, max_arity),
         internal_target,
+        adaptive_depth,
     )
-    tree = _orient_deepest_first(tree)
     if _height(tree) != adaptive_depth:
         raise ArithmeticError("depth-preserving bounded-arity pruning failed")
 
