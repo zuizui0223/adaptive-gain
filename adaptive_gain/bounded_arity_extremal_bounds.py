@@ -279,6 +279,27 @@ def _deepest_internal_depth(tree: BoundedArityTree) -> int:
     return best
 
 
+
+def _orient_deepest_first(tree: BoundedArityTree) -> BoundedArityTree:
+    """Recursively place one deepest child first at every internal node.
+
+    This exposes a child-0 spine whose length equals the tree height.  The
+    private-pair construction then makes the leftmost leaf an endpoint of one
+    unique opposite-target pair for every query on that spine, certifying the
+    adaptive lower bound by a single realized world.
+    """
+    if tree.is_leaf:
+        return tree
+    oriented_children = tuple(_orient_deepest_first(c) for c in tree.children)
+    ordered = tuple(
+        sorted(
+            oriented_children,
+            key=lambda child: (-_height(child), repr(child)),
+        )
+    )
+    return BoundedArityTree(ordered)
+
+
 def _prune_one_deepest(tree: BoundedArityTree) -> BoundedArityTree:
     target_depth = _deepest_internal_depth(tree)
     if target_depth < 0:
@@ -441,6 +462,7 @@ def bounded_arity_unit_cost_witness_at_depth(
         _maximum_tree(world_count, adaptive_depth, max_arity),
         internal_target,
     )
+    tree = _orient_deepest_first(tree)
     if _height(tree) != adaptive_depth:
         raise ArithmeticError("depth-preserving bounded-arity pruning failed")
 
