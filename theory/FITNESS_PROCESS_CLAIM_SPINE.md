@@ -285,7 +285,91 @@ Therefore:
 - encounter frequencies and branchwise completion times determine the extra
   expected-fitness value above that floor.
 
+For any guaranteed-resolving policy \(\pi\) with worst path
+\(H_\pi=\max_xT_\pi(x)\),
+
+\[
+\boxed{
+R_{\rm expected}(\pi)
+=
+\underbrace{
+U(H_\pi)-U(C_F)
+}_{R_{\rm robust}(\pi)}
++
+\underbrace{
+\sum_xp_x\left[U(T_\pi(x))-U(H_\pi)\right]
+}_{P_{\rm early}(\pi)\ge0}.
+}
+\]
+
+The second term is the **early-termination premium**.  It is exactly the value
+created when frequently encountered states terminate before the policy's worst
+path.
+
 This distinction is central to the biological interpretation.
+
+### Exact expected-value rescue despite zero robust gain
+
+The four-world witness in
+`FITNESS_OPTIMAL_ROUTING_VS_MINIMAX.md` has
+
+\[
+C_A=C_F=2,
+\]
+
+so the robust adaptive value is exactly zero.
+
+A different guaranteed policy has path costs
+
+\[
+(1,3,3,2).
+\]
+
+Let the one-step world occur with probability \(p\), and split
+\(1-p\) equally among the other three worlds.
+
+Under
+
+\[
+U(t)=e^{-\mu t},
+\qquad
+x=e^{-\mu},
+\]
+
+this adaptive policy beats the fixed cost-2 comparator exactly when
+
+\[
+\boxed{
+p>
+\frac{2x}{2x+3}.
+}
+\]
+
+At
+
+\[
+\mu=\log2,
+\]
+
+the threshold is
+
+\[
+\boxed{p>1/4.}
+\]
+
+Thus robust gain can be zero while expected adaptive value is positive.
+
+With additive architecture cost \(K\), the expected rescue remains possible
+for some \(p<1\) exactly when
+
+\[
+\boxed{
+K<x(1-x).
+}
+\]
+
+At \(\mu=\log2\), this expected-value ceiling is \(1/4\), despite the
+robust ceiling being zero for the same task.
 
 ## Layer 4 — realized branch frequencies
 
@@ -491,9 +575,8 @@ All have strong precedents.
 
 A shorter version:
 
-> Structural adaptive gain is potential; natural history determines which part
-> is robustly valuable, while encounter frequencies determine the additional
-> expected-fitness value.
+> Structural adaptive gain supplies a robust floor; encounter frequencies
+> convert early termination into an additional expected-fitness premium.
 
 ## Empirical measurement ladder
 
