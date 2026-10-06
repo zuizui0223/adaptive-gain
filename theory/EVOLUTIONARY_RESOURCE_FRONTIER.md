@@ -461,6 +461,125 @@ structural frontier.
 
 
 
+
+## 8b. Exact bounded-arity depth corner
+
+The binary closed form is a special case of an exact bounded-arity construction.
+
+For a declared adaptive depth \(h\), let
+
+\[
+j_h=J_K(h).
+\]
+
+Positive value at that depth is possible only if
+
+\[
+j_h
+\le
+J_b(h)
+=
+\frac{b^h-1}{b-1},
+\]
+
+the full \(b\)-ary internal-node ceiling.
+
+When this holds, define
+
+\[
+\boxed{
+n_b^*(h,j_h)
+=
+\min
+\left\{
+n:
+F_b(n,h)\ge j_h
+\right\}.
+}
+\]
+
+Then the exact componentwise minimum resource requirements at that depth are
+
+\[
+\boxed{
+n=n_b^*(h,j_h),
+\qquad
+m=j_h.
+}
+\]
+
+The protected-spine witness at those counts attains
+
+\[
+(C_A,C_F)=(h,j_h)
+\]
+
+and therefore positive net architecture value.
+
+This provides an exact finite algorithm for the evolutionary resource frontier
+at arbitrary bounded cue arity.
+
+### Arity changes the minimum viable sensing depth
+
+Take again
+
+\[
+U(c)=e^{-0.3c},
+\qquad
+K=0.25.
+\]
+
+At depth \(h=2\),
+
+\[
+J_K(2)=5.
+\]
+
+Binary and ternary trees satisfy
+
+\[
+J_2(2)=3,
+\qquad
+J_3(2)=4,
+\]
+
+so neither can generate enough fixed burden at two adaptive steps.
+
+But for four-outcome cues,
+
+\[
+J_4(2)=5,
+\]
+
+so depth two becomes feasible.
+
+The exact minimum resources are
+
+\[
+\boxed{
+b=4:
+\quad
+h=2,\ n=8,\ m=5.
+}
+\]
+
+By contrast, for \(b=2\) or \(b=3\), the first viable depth is
+
+\[
+\boxed{
+h=3,\ n=8,\ m=7.
+}
+\]
+
+Thus increased cue arity can reduce both the minimum adaptive depth and the
+number of distinct query resources required to pay the same constitutive
+control cost.
+
+The claim is about the declared discrete query model. It should not be read as
+a universal prediction that sensory systems with more receptor states are
+always fitter.
+
+
 ## 9a. Canonical binary example — natural history creates a minimum information architecture
 
 Take
