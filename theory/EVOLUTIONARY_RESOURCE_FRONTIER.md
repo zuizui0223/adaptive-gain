@@ -911,6 +911,145 @@ statewise repayment** of a constitutive contingent-control cost above the
 biological value remaining after the minimum two-step strict-routing
 architecture.
 
+
+## Corollary RF2.3a — exact minimum cue arity required for robust repayment
+
+For a bounded-below nonincreasing completion value \(U\), define
+
+\[
+K_{\rm crit,robust}^{(b)}
+=
+\max_{h\ge2}
+\left[
+U(h)-U(J_b(h))
+\right].
+\]
+
+Because this ceiling is nondecreasing in \(b\), define
+
+\[
+\boxed{
+b_{\min}(K;U)
+=
+\min
+\left\{
+b\ge2:
+K<K_{\rm crit,robust}^{(b)}
+\right\},
+}
+\]
+
+with \(b_{\min}=\infty\) if the set is empty.
+
+Then
+
+\[
+\boxed{
+b<b_{\min}
+\Longrightarrow
+\text{no finite task with cue arity }b
+\text{ can guarantee positive net value in every world},
+}
+\]
+
+whereas every
+
+\[
+b\ge b_{\min}
+\]
+
+admits a finite constructive witness with robust positive architecture value.
+
+For exponential opportunity value,
+
+\[
+U(c)=v e^{-\mu c},
+\]
+
+the unrestricted-information robust supremum is
+
+\[
+K_{\rm crit,robust}^{(\infty)}
+=
+v e^{-2\mu}.
+\]
+
+Hence
+
+\[
+\boxed{
+K\ge v e^{-2\mu}
+\Longrightarrow
+b_{\min}=\infty.
+}
+\]
+
+No finite cue arity, number of worlds, or number of query resources can
+guarantee statewise repayment of such an expensive contingent-control
+architecture.
+
+Conversely, if
+
+\[
+K<v e^{-2\mu},
+\]
+
+then \(b_{\min}<\infty\), because the depth-two robust value
+
+\[
+v
+\left[
+e^{-2\mu}
+-
+e^{-\mu(b+1)}
+\right]
+\]
+
+approaches \(v e^{-2\mu}\) as \(b\to\infty\).
+
+### Canonical example
+
+At
+
+\[
+\mu=0.3,\qquad v=1,
+\]
+
+the robust arity ceilings include
+
+\[
+K_{\rm crit,robust}^{(2)}
+\approx0.290085
+\]
+
+and
+
+\[
+K_{\rm crit,robust}^{(3)}
+\approx0.386328.
+\]
+
+Therefore for
+
+\[
+K=0.30,
+\]
+
+\[
+\boxed{
+b_{\min}=3.
+}
+\]
+
+No binary finite task can guarantee repayment of the control cost, regardless
+of how many worlds or binary query resources are added, whereas a ternary task
+can.
+
+Cue arity here means the maximum number of distinguishable outcomes of one
+declared query in the finite model. It is not a direct proxy for receptor
+number or sensory-organ complexity.
+
+
 ## Corollary RF2.4 — sensory complexity and natural history jointly bound robust evolvability
 
 The hierarchy is now
@@ -1202,7 +1341,7 @@ Those objects belong to the separate policy-fitness layer.
 
 
 
-## 9d. Theorem RF4 — retaining a fixed fraction of adaptive value has a sharp complexity scale
+## 9e. Theorem RF4 — retaining a fixed fraction of adaptive value has a sharp complexity scale
 
 RF3 proves that, at fixed cue arity \(b\), the maximum opportunity value can
 approach the full timely-resolution value \(v\) as
