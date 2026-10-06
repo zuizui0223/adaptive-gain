@@ -1,4 +1,4 @@
-# Natural-history-dependent evolutionary resource frontier
+# Natural-history-dependent robust evolutionary resource frontier
 
 Status: theorem extension on branch \`theory/opportunity-fitness-process-v1\`.
 
@@ -12,7 +12,8 @@ The forward theorem asks:
 The inverse theorem asks:
 
 > given the constitutive cost of adaptive control, how much information
-> structure is minimally required before adaptivity can be favored?
+> structure is minimally required before adaptivity has positive net value in
+> every represented world, without knowing world frequencies?
 
 This gives the earlier structural-gap thresholds a direct biological
 microfoundation.
@@ -37,13 +38,18 @@ K\ge0
 be the additive constitutive architecture cost of contingent control relative
 to the declared universal fixed comparator.
 
-For a task with completion costs \((C_A,C_F)\), net architecture value is
+For a task with completion costs \((C_A,C_F)\), define the robust worst-state
+architecture margin
 
 \[
-\Phi
+\Phi_{\rm robust}
 =
 U(C_A)-U(C_F)-K.
 \]
+
+This is the net value guaranteed in the slowest adaptive branch relative to the
+state-independent fixed bundle. It is not, in general, the expected value under
+a particular world-frequency distribution.
 
 Fix adaptive depth
 
@@ -92,7 +98,7 @@ whenever \(J_K(h)<\infty\).
 
 So the biology supplies a **depth-specific required fixed burden**.
 
-## 3. Theorem RF1 — exact selection criterion inside a finite structural scope
+## 3. Theorem RF1 — exact robust criterion inside a finite structural scope
 
 For world count \(n\), query count \(m\), and maximum query arity \(b\), define
 
@@ -109,7 +115,7 @@ adaptive depth \(h\):
 (C_A,C_F)=(h,I_h).
 \]
 
-Therefore positive architecture value exists at depth \(h\) if and only if
+Therefore positive **worst-state** architecture value exists at depth \(h\) if and only if
 
 \[
 \boxed{
@@ -117,8 +123,8 @@ I_h\ge J_K(h).
 }
 \]
 
-Consequently positive adaptive architecture value exists somewhere in the
-entire finite scope if and only if
+Consequently a task with positive adaptive net value in every represented
+world exists somewhere in the entire finite scope if and only if
 
 \[
 \boxed{
@@ -132,7 +138,7 @@ J_K(h).
 This is equivalent to the forward condition
 
 \[
-K<K_{\rm crit},
+K<K_{\rm crit}^{\rm robust},
 \]
 
 but it exposes the required structural resources rather than the maximum
@@ -330,8 +336,9 @@ J_K(h)=\infty.
 }
 \]
 
-So sufficiently deep adaptive routes are evolutionarily impossible regardless
-of how expensive fixed resolution becomes.
+So sufficiently deep adaptive routes cannot maintain positive **worst-state**
+net value regardless of how expensive fixed resolution becomes. A skewed world
+distribution can still produce positive expected value through earlier branches.
 
 When
 
@@ -426,8 +433,8 @@ h_{\max}^{\rm viable}
 
 This ceiling is independent of how many fixed query resources are available.
 
-No amount of branch-exclusive fixed burden can rescue an adaptive route that
-finishes after the biological value of timely completion has fallen below its
+No amount of branch-exclusive fixed burden can rescue the **worst-state** margin
+of an adaptive route whose guaranteed completion value has fallen below its
 constitutive control cost.
 
 ## 9. Corollary RF1.2 — natural history turns one structural threshold into a Pareto set
@@ -634,7 +641,7 @@ The evolvable architecture therefore occupies an intermediate structural
 window generated jointly by cue arity and natural-history time value.
 
 
-## 9b. Theorem RF2 — cue arity creates an absolute evolvable-cost ceiling
+## 9b. Theorem RF2 — cue arity creates an absolute robust-cost ceiling
 
 The previous results fixed world count and query count.
 
@@ -692,7 +699,7 @@ at most \(b\) is
 
 \[
 \boxed{
-K_{\rm crit}^{(b)}
+K_{\rm crit,robust}^{(b)}
 =
 \max_{h\ge2}
 \left[
@@ -708,18 +715,20 @@ Therefore
 
 \[
 \boxed{
-K>K_{\rm crit}^{(b)}
+K>K_{\rm crit,robust}^{(b)}
 \Longrightarrow
-\text{contingent sensing cannot be favored in any finite task with arity }\le b.
+\text{no finite task with arity }\le b\text{ can guarantee positive net adaptive value in every world.}
 }
 \]
 
-This no-go is independent of world count and query count.
+This **robust no-go** is independent of world count and query count.
 
 Adding more ecological states or more sensor resources cannot overcome a
-control cost above the arity-limited ceiling.
+control cost above the arity-limited ceiling if positive value is required in
+every represented world. It does not exclude positive expected value under a
+specific nonuniform encounter distribution.
 
-## Corollary RF2.1 — binary cues impose a global evolutionary ceiling
+## Corollary RF2.1 — binary cues impose a global robust-value ceiling
 
 For \(b=2\),
 
@@ -791,13 +800,14 @@ constitutive cost
 K\ge0.290085
 \]
 
-cannot be favored by this opportunity mechanism in **any** finite deterministic
-binary task, no matter how many worlds or binary queries are supplied.
+cannot have positive **statewise guaranteed** net value through this mechanism
+in any finite deterministic binary task, no matter how many worlds or binary
+queries are supplied.
 
 This explains the example \(K=0.30\): the failure is not caused by insufficient
 sample size of the finite task. It is an arity-limited global no-go.
 
-## Corollary RF2.2 — increasing cue arity raises the maximum payable control cost
+## Corollary RF2.2 — increasing cue arity raises the maximum robustly payable control cost
 
 For fixed \(h\),
 
@@ -819,17 +829,18 @@ Therefore
 \boxed{
 K_{\rm crit}^{(b+1)}
 \ge
-K_{\rm crit}^{(b)}.
+K_{\rm crit,robust}^{(b)}.
 }
 \]
 
 Higher-outcome cues can never reduce the maximum constitutive control cost that
-some finite task can pay.
+some finite task can pay while keeping the net advantage positive in every
+represented world.
 
 This is a structural statement about declared query arity, not a claim that
 real sensory systems should evolve arbitrarily high categorical resolution.
 
-## Corollary RF2.3 — even unlimited cue arity has a natural-history ceiling
+## Corollary RF2.3 — even unlimited cue arity has a robust natural-history ceiling
 
 Every strict adaptive advantage requires
 
@@ -879,7 +890,7 @@ so the absolute architecture-cost ceiling is
 
 \[
 \boxed{
-K_{\rm crit}^{(\infty)}
+K_{\rm crit,robust}^{(\infty)}
 =
 v e^{-2\mu}.
 }
@@ -888,25 +899,26 @@ v e^{-2\mu}.
 At \(\mu=0.3,\ v=1\),
 
 \[
-K_{\rm crit}^{(\infty)}
+K_{\rm crit,robust}^{(\infty)}
 =
 e^{-0.6}
 \approx
 0.548812.
 \]
 
-Thus even infinitely rich finite information architecture cannot pay a
-constitutive contingent-control cost above the biological value remaining
-after the minimum two-step strict-routing architecture.
+Thus even infinitely rich finite information architecture cannot **guarantee
+statewise repayment** of a constitutive contingent-control cost above the
+biological value remaining after the minimum two-step strict-routing
+architecture.
 
-## Corollary RF2.4 — sensory complexity and natural history jointly bound evolvability
+## Corollary RF2.4 — sensory complexity and natural history jointly bound robust evolvability
 
 The hierarchy is now
 
 \[
-K_{\rm crit}(n,m,b;U)
+K_{\rm crit}^{\rm robust}(n,m,b;U)
 \le
-K_{\rm crit}^{(b)}(U)
+K_{\rm crit,robust}^{(b)}(U)
 \le
 U(2)-U_\infty.
 \]
@@ -917,7 +929,7 @@ The three ceilings correspond to:
 2. unlimited task size but bounded cue arity;
 3. unlimited finite information structure.
 
-So failure of adaptive sensing can arise at three distinct levels:
+So failure of **distribution-free robust** adaptive value can arise at three distinct levels:
 
 - not enough worlds/resources in the focal system;
 - cue arity too restrictive;
@@ -926,7 +938,7 @@ So failure of adaptive sensing can arise at three distinct levels:
 
 
 
-## 9c. Theorem RF3 — finite-scope and scalable-scope low-urgency limits differ
+## 9c. Theorem RF3 — finite-scope and scalable-scope robust low-urgency limits differ
 
 For one fixed finite structural scope \((n,m,b)\), exponential opportunity value
 
@@ -953,7 +965,7 @@ fixed.
 Let
 
 \[
-K_{\rm crit}^{(b)}(\mu)
+K_{\rm crit,robust}^{(b)}(\mu)
 =
 v
 \max_{h\ge2}
@@ -972,7 +984,7 @@ b\ge2,
 
 \[
 \boxed{
-K_{\rm crit}^{(b)}(\mu)\to v
+K_{\rm crit,robust}^{(b)}(\mu)\to v
 \qquad
 \text{as}
 \qquad
@@ -985,7 +997,7 @@ K_{\rm crit}^{(b)}(\mu)\to v
 The upper bound
 
 \[
-K_{\rm crit}^{(b)}(\mu)\le v
+K_{\rm crit,robust}^{(b)}(\mu)\le v
 \]
 
 is immediate.
@@ -1103,7 +1115,7 @@ increase task complexity without bound as opportunities become longer.
 For fixed \(b\),
 
 \[
-K_{\rm crit}^{(b)}(\mu)
+K_{\rm crit,robust}^{(b)}(\mu)
 \le
 v e^{-2\mu},
 \]
@@ -1114,7 +1126,7 @@ Therefore
 
 \[
 \boxed{
-K_{\rm crit}^{(b)}(\mu)\to0
+K_{\rm crit,robust}^{(b)}(\mu)\to0
 \qquad
 \text{as}
 \qquad
@@ -1126,17 +1138,81 @@ So unlimited task complexity can rescue adaptive value under arbitrarily weak
 urgency, but not under arbitrarily severe urgency.
 
 
-## 10. Relation to PAYOFF
 
-The forward interface is
+## 9d. Expected-value escape from the robust frontier
+
+The resource thresholds above answer a frequency-free question.
+
+They do **not** give the minimum architecture required for positive expected
+selection under a declared world distribution.
+
+For an adaptive policy \(\pi\),
 
 \[
-R_{\max}
+R_{\rm expected}
+=
+\sum_x p_x U[T_\pi(x)]
+-
+U(C_F).
+\]
+
+Because
+
+\[
+T_\pi(x)\le C_A
+\]
+
+for a minimax-optimal tree,
+
+\[
+R_{\rm expected}
+\ge
+U(C_A)-U(C_F)
+=
+R_{\rm robust}.
+\]
+
+Therefore a robustly viable architecture is viable in expectation under every
+world distribution.
+
+But the converse need not hold.  If common worlds terminate early while rare
+worlds determine \(C_A\), then
+
+\[
+R_{\rm expected}>K
+\]
+
+can occur even when
+
+\[
+R_{\rm robust}\le K.
+\]
+
+Hence the present inverse frontier is an exact **distribution-free sufficient
+and necessary frontier for statewise positive value**, not an expected-fitness
+no-go.
+
+The expected-value inverse problem additionally requires:
+
+- world frequencies \(p_x\);
+- branch-specific completion costs;
+- the fitness-optimal rather than merely minimax routing policy.
+
+Those objects belong to the separate policy-fitness layer.
+
+
+## 10. Relation to PAYOFF
+
+The forward **robust** interface is
+
+\[
+R_{\rm robust,max}
 =
 \max_h[U(h)-U(I_h)].
 \]
 
-PAYOFF asks whether
+PAYOFF asks whether the relevant recoverable benefit, robust or expected for
+the declared comparison, exceeds architecture cost:
 
 \[
 R-K>0.
