@@ -44,6 +44,27 @@ g=C_U-C_A
 
 is not intrinsically fitness.
 
+Nor does the C_A-minimizing tree have to be the policy favored by selection. C_A solves a minimax guarantee problem:
+
+\[
+\pi_{\rm mm}
+\in
+\arg\min_\pi \max_x T_\pi(x).
+\]
+
+A biological policy exposed to state frequencies p_x and value-of-time V instead solves a distribution-sensitive objective such as
+
+\[
+\pi_V
+\in
+\arg\max_\pi
+\sum_x p_x V[T_\pi(x)].
+\]
+
+The repository contains an exact four-world witness in which the minimax policy has worst path 2 but expected time-discounted performance 31/120, whereas a different policy with worst path 3 has performance 7/15.
+
+Thus C_A is a guaranteed-complexity estimand, not a universal evolutionary policy objective.
+
 ## Layer 2 — ecological exposure of the structural opportunity
 
 Let B be the random ecological opportunity limit and S_B(c)=P(B>=c).
@@ -345,7 +366,7 @@ All have strong precedents.
 
 ## Proposed headline claim
 
-> Environmental heterogeneity selects for contingent sensing only when the decision costs saved by conditional routing overlap with ecologically valuable opportunity windows relative to the alternative architectures actually available to evolution.
+> Environmental heterogeneity selects particular sensing policies through the interaction of feasible decision topology, encounter frequencies, the ecological value of decision time, and the alternative architectures available to evolution.
 
 A shorter version:
 
