@@ -12,6 +12,7 @@ from adaptive_gain.evolutionary_resource_frontier import (
     exponential_arity_limited_cost_ceiling,
     exponential_unrestricted_information_cost_ceiling,
     required_fixed_cost_for_value,
+    exponential_near_max_value_scaling,
 )
 
 
@@ -226,3 +227,61 @@ def test_higher_arity_can_make_shallower_evolutionary_corner_feasible():
     assert quaternary[0].adaptive_depth == 2
     assert quaternary[0].minimum_world_count == 8
     assert quaternary[0].minimum_query_count == 5
+
+
+
+def test_near_maximal_value_scaling_binary_witness():
+    receipt = exponential_near_max_value_scaling(
+        2,
+        closure_rate=1e-3,
+        epsilon=0.1,
+    )
+    assert receipt.witness_adaptive_depth == 12
+    assert receipt.witness_fixed_cost == 4095
+    assert receipt.witness_world_count == 4096
+    assert receipt.witness_query_count == 4095
+    assert receipt.witness_value_fraction >= 0.9
+    assert receipt.witness_adaptive_depth >= receipt.lower_adaptive_depth
+    assert receipt.witness_adaptive_depth <= receipt.upper_adaptive_depth
+    assert receipt.witness_fixed_cost >= receipt.required_fixed_cost_lower
+
+
+def test_near_maximal_value_scaling_is_linear_size_log_depth_order():
+    epsilon = 0.1
+    receipts = [
+        exponential_near_max_value_scaling(
+            2,
+            closure_rate=mu,
+            epsilon=epsilon,
+        )
+        for mu in (2e-3, 1e-3, 5e-4)
+    ]
+
+    # Fixed burden grows on the 1/mu scale.
+    scaled_fixed = [
+        r.closure_rate * r.witness_fixed_cost
+        for r in receipts
+    ]
+    assert max(scaled_fixed) / min(scaled_fixed) < 2.1
+
+    # Adaptive depth grows only logarithmically as the opportunity timescale doubles.
+    depth_increments = [
+        receipts[i + 1].witness_adaptive_depth
+        - receipts[i].witness_adaptive_depth
+        for i in range(len(receipts) - 1)
+    ]
+    assert all(0 <= step <= 2 for step in depth_increments)
+
+
+def test_higher_arity_changes_constants_not_near_maximal_orders():
+    rows = [
+        exponential_near_max_value_scaling(
+            b,
+            closure_rate=1e-3,
+            epsilon=0.1,
+        )
+        for b in (2, 3, 4)
+    ]
+    assert all(r.witness_value_fraction >= 0.9 for r in rows)
+    assert rows[0].witness_adaptive_depth > rows[1].witness_adaptive_depth
+    assert rows[1].witness_adaptive_depth >= rows[2].witness_adaptive_depth
