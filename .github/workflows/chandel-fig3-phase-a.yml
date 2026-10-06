@@ -1,0 +1,29 @@
+name: chandel-fig3-phase-a
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - scripts/fetch_chandel_fig3_source_data.py
+      - .github/workflows/chandel-fig3-phase-a.yml
+
+jobs:
+  fetch-source-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install phase-a dependencies
+        run: python -m pip install requests beautifulsoup4 openpyxl
+      - name: Fetch and inspect Source Data Fig. 3
+        run: python scripts/fetch_chandel_fig3_source_data.py phase_a_chandel_fig3
+      - name: Upload phase-a artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chandel-fig3-phase-a
+          path: phase_a_chandel_fig3
+          if-no-files-found: error
