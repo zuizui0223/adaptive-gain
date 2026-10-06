@@ -516,3 +516,66 @@ def exponential_unrestricted_expected_information_cost_ceiling(
     if not math.isfinite(resolution_value) or resolution_value <= 0:
         raise ValueError("resolution_value must be finite and positive")
     return resolution_value * math.exp(-closure_rate)
+
+
+
+def minimum_one_step_mass_for_expected_repayment(
+    architecture_cost: float,
+    *,
+    value_at_one: float,
+    value_at_two: float,
+    asymptotic_value: float,
+) -> float | None:
+    """Sharp scalable-scope threshold for one-step encounter mass.
+
+    Returns 0 when robust repayment is already possible without any required
+    one-step mass. Returns None when even the absolute expected-value ceiling is
+    insufficient. Otherwise returns the strict threshold p_crit in (0,1).
+    """
+    vals = (
+        float(value_at_one),
+        float(value_at_two),
+        float(asymptotic_value),
+    )
+    if any(not math.isfinite(x) for x in vals):
+        raise ValueError("completion values must be finite")
+    u1, u2, uinf = vals
+    if u1 < u2 - 1e-12 or u2 < uinf - 1e-12:
+        raise ValueError("require U(1) >= U(2) >= U_infinity")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+
+    robust_ceiling = u2 - uinf
+    expected_ceiling = u1 - uinf
+
+    if architecture_cost <= robust_ceiling + 1e-15:
+        return 0.0
+    if architecture_cost >= expected_ceiling - 1e-15:
+        return None
+    if u1 <= u2 + 1e-15:
+        return None
+
+    return (
+        architecture_cost - robust_ceiling
+    ) / (u1 - u2)
+
+
+def exponential_minimum_one_step_mass_for_expected_repayment(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float | None:
+    """RF6 threshold for U(c)=v*exp(-mu*c)."""
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    u1 = resolution_value * math.exp(-closure_rate)
+    u2 = resolution_value * math.exp(-2.0 * closure_rate)
+    return minimum_one_step_mass_for_expected_repayment(
+        architecture_cost,
+        value_at_one=u1,
+        value_at_two=u2,
+        asymptotic_value=0.0,
+    )
