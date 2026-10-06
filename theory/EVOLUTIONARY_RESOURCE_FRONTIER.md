@@ -2330,6 +2330,307 @@ expected theorem uses ecological frequency concentration as an additional
 resource.
 
 
+
+## 9f. Theorem RF5 — robust and expected selection have different absolute information ceilings
+
+The robust frontier asks whether contingent sensing has positive net value in
+every represented world.
+
+Expected selection asks only whether the world-frequency-weighted mean benefit
+is positive.
+
+These two questions have different absolute ceilings even when all finite
+information structure is allowed.
+
+Let \(U(c)\) be bounded below and nonincreasing, with
+
+\[
+U_\infty
+=
+\lim_{c\to\infty}U(c).
+\]
+
+### Robust ceiling
+
+From RF2.3,
+
+\[
+\boxed{
+\sup_{\text{all finite tasks}}
+R_{\rm robust}
+=
+U(2)-U_\infty.
+}
+\]
+
+The minimum worst-path depth supporting strict adaptive advantage is two.
+
+### Expected ceiling
+
+Now allow an arbitrary world-frequency distribution with strictly positive
+probabilities that may be arbitrarily skewed.
+
+For any nontrivial adaptive decision task, every realized policy must acquire
+at least one query before resolving the target, so
+
+\[
+T_\pi(x)\ge1
+\]
+
+for every represented world.
+
+Therefore
+
+\[
+\sum_xp_xU[T_\pi(x)]
+\le
+U(1).
+\]
+
+Also
+
+\[
+U(C_F)\ge U_\infty.
+\]
+
+Hence every expected adaptive advantage satisfies
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+U(1)-U_\infty.
+}
+\]
+
+This upper bound is a supremum and is sharp.
+
+### Sharpness construction
+
+Take a binary root query with:
+
+- one target-pure branch containing a focal common world;
+- one rare branch containing an arbitrarily large finite routing task whose
+  fixed burden tends to infinity.
+
+Let the common world have probability
+
+\[
+1-\delta
+\]
+
+and distribute total probability \(\delta>0\) across the rare branch.
+
+The adaptive policy resolves the common world after one query.
+
+As the rare subtask grows,
+
+\[
+C_F\to\infty,
+\]
+
+and as
+
+\[
+\delta\to0^+,
+\]
+
+the expected adaptive completion value tends to
+
+\[
+U(1),
+\]
+
+while fixed completion value tends to
+
+\[
+U_\infty.
+\]
+
+Therefore
+
+\[
+\boxed{
+\sup_{\substack{\text{finite tasks}\\\text{positive world frequencies}}}
+R_{\rm expected}
+=
+U(1)-U_\infty.
+}
+\]
+
+The supremum need not be attained by one finite task with all world
+probabilities strictly positive.
+
+## Corollary RF5.1 — encounter-frequency skew creates a selection regime unavailable to robust architecture
+
+Let architecture cost be \(K\).
+
+If
+
+\[
+K<U(2)-U_\infty,
+\]
+
+some finite architecture can have positive net value robustly in every world.
+
+If
+
+\[
+\boxed{
+U(2)-U_\infty
+\le
+K
+<
+U(1)-U_\infty,
+}
+\]
+
+then no finite information architecture can guarantee positive net value in
+every represented world, but some finite task with sufficiently skewed encounter
+frequencies can have positive expected net value.
+
+If
+
+\[
+K\ge U(1)-U_\infty,
+\]
+
+then even arbitrarily skewed expected selection cannot repay the control cost
+through completion-time advantage alone.
+
+Thus encounter frequencies create an exact three-regime decomposition:
+
+\[
+\boxed{
+\begin{array}{ll}
+K<U(2)-U_\infty
+&
+\text{robust and expected repayment are both possible},
+\\[4pt]
+U(2)-U_\infty\le K<U(1)-U_\infty
+&
+\text{expected repayment only},
+\\[4pt]
+K\ge U(1)-U_\infty
+&
+\text{neither is possible}.
+\end{array}
+}
+\]
+
+## Corollary RF5.2 — exponential opportunity value
+
+For
+
+\[
+U(c)=v e^{-\mu c},
+\]
+
+\[
+U_\infty=0.
+\]
+
+Therefore the unrestricted robust ceiling is
+
+\[
+\boxed{
+K_{\rm robust}^{\sup}
+=
+v e^{-2\mu},
+}
+\]
+
+whereas the unrestricted expected ceiling is
+
+\[
+\boxed{
+K_{\rm expected}^{\sup}
+=
+v e^{-\mu}.
+}
+\]
+
+The expected ceiling exceeds the robust ceiling by
+
+\[
+\boxed{
+v(e^{-\mu}-e^{-2\mu}),
+}
+\]
+
+and their ratio is
+
+\[
+\boxed{
+\frac{K_{\rm expected}^{\sup}}
+{K_{\rm robust}^{\sup}}
+=
+e^\mu.
+}
+\]
+
+At
+
+\[
+\mu=0.3,
+\qquad
+v=1,
+\]
+
+\[
+K_{\rm robust}^{\sup}
+\approx0.548812,
+\]
+
+while
+
+\[
+K_{\rm expected}^{\sup}
+\approx0.740818.
+\]
+
+Thus a control cost such as
+
+\[
+K=0.60
+\]
+
+cannot be repaid robustly by **any** finite information architecture, but can be
+favored in expectation when common worlds terminate after one query and hard
+worlds are sufficiently rare.
+
+## Corollary RF5.3 — cue-arity no-go is specifically a robust no-go
+
+For fixed finite cue arity \(b\),
+
+\[
+K_{\rm crit,robust}^{(b)}
+\le
+U(2)-U_\infty.
+\]
+
+But the expected supremum
+
+\[
+U(1)-U_\infty
+\]
+
+can be approached even with binary cues by placing the common world in a
+one-query pure branch and the growing fixed burden in the rare branch.
+
+Therefore
+
+\[
+b_{\min}^{\rm robust}=\infty
+\]
+
+does **not** imply expected evolutionary impossibility.
+
+This formalizes the claim boundary already used elsewhere in the repository:
+world frequencies can rescue an architecture that fails every statewise robust
+threshold.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
