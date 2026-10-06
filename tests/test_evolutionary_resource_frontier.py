@@ -11,6 +11,7 @@ from adaptive_gain.evolutionary_resource_frontier import (
     full_b_ary_internal_nodes,
     exponential_arity_limited_cost_ceiling,
     exponential_unrestricted_information_cost_ceiling,
+    exponential_minimum_robust_cue_arity,
     required_fixed_cost_for_value,
     exponential_near_max_value_scaling,
 )
@@ -285,3 +286,37 @@ def test_higher_arity_changes_constants_not_near_maximal_orders():
     assert all(r.witness_value_fraction >= 0.9 for r in rows)
     assert rows[0].witness_adaptive_depth > rows[1].witness_adaptive_depth
     assert rows[1].witness_adaptive_depth >= rows[2].witness_adaptive_depth
+
+
+
+def test_minimum_robust_cue_arity_canonical_example():
+    assert exponential_minimum_robust_cue_arity(
+        0.30,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    ) == 3
+
+
+def test_binary_is_enough_below_binary_global_ceiling():
+    assert exponential_minimum_robust_cue_arity(
+        0.20,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    ) == 2
+
+
+def test_no_finite_arity_above_unrestricted_information_ceiling():
+    absolute = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=0.3,
+        resolution_value=1.0,
+    )
+    assert exponential_minimum_robust_cue_arity(
+        absolute,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    ) is None
+    assert exponential_minimum_robust_cue_arity(
+        absolute + 0.01,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    ) is None
