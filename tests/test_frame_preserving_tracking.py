@@ -8,6 +8,7 @@ from adaptive_gain.frame_preserving_tracking import (
     euclidean_distance,
     event_time_seconds,
     first_active_zone_entry_frame,
+    first_zone_entry_receipt,
     link_frame_detections,
 )
 
@@ -99,3 +100,48 @@ def test_first_active_zone_entry_uses_true_frame_gap_and_2d_speed():
 
 def test_no_event_returns_infinite_time():
     assert math.isinf(event_time_seconds(None, frame_rate_hz=10.0))
+
+
+
+def test_literal_zone_entry_distinguishes_left_censoring():
+    polygon = (
+        (0.0, 0.0),
+        (5.0, 0.0),
+        (5.0, 5.0),
+        (0.0, 5.0),
+    )
+    track = FrameTrack(
+        0,
+        [
+            TrackPoint(10, 1.0, 1.0),
+            TrackPoint(11, 2.0, 1.0),
+        ],
+    )
+    receipt = first_zone_entry_receipt(track, polygon)
+    assert receipt.event_frame is None
+    assert receipt.status == "left_censored_inside"
+
+
+def test_literal_zone_entry_requires_outside_to_inside_transition():
+    polygon = (
+        (3.0, -1.0),
+        (6.0, -1.0),
+        (6.0, 1.0),
+        (3.0, 1.0),
+    )
+    track = FrameTrack(
+        0,
+        [
+            TrackPoint(0, 0.0, 0.0),
+            TrackPoint(1, 2.0, 0.0),
+            TrackPoint(2, 4.0, 0.0),
+            TrackPoint(3, 5.0, 0.0),
+        ],
+    )
+    receipt = first_zone_entry_receipt(
+        track,
+        polygon,
+        min_speed_px_per_frame=1.5,
+    )
+    assert receipt.event_frame == 2
+    assert receipt.status == "observed_entry"
