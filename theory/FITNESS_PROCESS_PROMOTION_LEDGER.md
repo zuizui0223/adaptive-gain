@@ -119,6 +119,77 @@ log(1+v/w_0)-kappa.
 This is important because it prevents the repository's unbounded structural
 ratio theorem from being over-read as an unbounded biological effect.
 
+
+### A0.5. Global arity-limited robust no-go
+
+Promote the scalable-scope consequence from
+\`EVOLUTIONARY_RESOURCE_FRONTIER.md\`.
+
+With unlimited finite world/query counts but cue arity bounded by \(b\),
+
+\[
+K_{\rm crit,robust}^{(b)}
+=
+\max_{h\ge2}
+[U(h)-U(J_b(h))],
+\qquad
+J_b(h)=\frac{b^h-1}{b-1}.
+\]
+
+No finite task of arity at most \(b\) can guarantee positive statewise net value
+for a control cost above this ceiling.
+
+For exponential opportunity value,
+
+\[
+U(c)=ve^{-\mu c},
+\]
+
+the absolute unrestricted-information ceiling is
+
+\[
+K_{\rm crit,robust}^{(\infty)}
+=
+ve^{-2\mu}.
+\]
+
+Hence a declared cost \(K\) induces an exact minimum cue arity
+
+\[
+b_{\min}
+=
+\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\},
+\]
+
+or \(b_{\min}=\infty\) when even unlimited finite information structure cannot
+pay the cost.
+
+Canonical example:
+
+\[
+\mu=0.3,\quad v=1,\quad K=0.30
+\]
+
+gives
+
+\[
+K_{\rm crit,robust}^{(2)}\approx0.290085
+<
+0.30
+<
+K_{\rm crit,robust}^{(3)}\approx0.386328,
+\]
+
+so
+
+\[
+\boxed{b_{\min}=3.}
+\]
+
+This is a global no-go over the whole finite model class, not a generic claim
+that higher-fidelity sensory systems are fitter.
+
+
 ### A1. Exact structural source object
 
 Retain the existing finite task and its exact feasible routing structure.
