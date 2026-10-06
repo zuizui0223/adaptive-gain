@@ -611,6 +611,196 @@ The distinct contribution here is upstream:
 In particular, OA3 identifies when convexity should or should not arise from natural-history timing rather than assuming the shape of \(R\).
 
 
+
+## 9d. Theorem OA4 — a bounded uniform opportunity window generates diminishing returns and partial routing
+
+A simple alternative natural history gives the opposite curvature from exponential closure.
+
+Let the ecological opportunity limit be uniformly distributed:
+
+\[
+B\sim \mathrm{Uniform}(0,T).
+\]
+
+For completion times inside the support,
+
+\[
+0<c<T,
+\]
+
+the survival function is
+
+\[
+S(c)=1-\frac{c}{T}.
+\]
+
+Assume the architecture family remains inside this interval:
+
+\[
+0<C_0-L<C_0<T.
+\]
+
+Define
+
+\[
+D
+=
+w_0+v\left(1-\frac{C_0}{T}\right)
+>0
+\]
+
+and
+
+\[
+a
+=
+\frac{v/T}{D}
+>0.
+\]
+
+Then reducing completion time by \(r\) gives log-performance recovery
+
+\[
+\boxed{
+R(r)
+=
+\log(1+ar).
+}
+\]
+
+Therefore
+
+\[
+\boxed{
+R'(r)
+=
+\frac{a}{1+ar}
+}
+\]
+
+and
+
+\[
+\boxed{
+R''(r)
+=
+-\frac{a^2}{(1+ar)^2}
+<0.
+}
+\]
+
+Thus a bounded uniform opportunity process generates strictly diminishing returns throughout the admissible architecture interval.
+
+### Exact optimum under linear architecture cost
+
+Let
+
+\[
+K(r)=kr,
+\qquad
+k\ge0.
+\]
+
+Then
+
+\[
+\Phi(r)=\log(1+ar)-kr
+\]
+
+is strictly concave.
+
+Its derivative is
+
+\[
+\Phi'(r)
+=
+\frac{a}{1+ar}-k.
+\]
+
+The unique global optimum is therefore
+
+\[
+\boxed{
+r^*
+=
+\operatorname{clip}
+\left(
+\frac{1}{k}-\frac{1}{a},
+0,
+L
+\right)
+}
+\]
+
+for \(k>0\), with the zero-cost limit at \(r^*=L\).
+
+Equivalently:
+
+\[
+k\ge a
+\quad\Longrightarrow\quad
+r^*=0,
+\]
+
+\[
+\frac{a}{1+aL}<k<a
+\quad\Longrightarrow\quad
+0<r^*<L,
+\]
+
+and
+
+\[
+k\le\frac{a}{1+aL}
+\quad\Longrightarrow\quad
+r^*=L.
+\]
+
+So the same linear architecture-cost rule that produces endpoint optima under exponential opportunity loss produces a stable partial-routing optimum under a bounded uniform opportunity distribution.
+
+## Corollary OA4.1 — ecology can switch the qualitative architecture phase without changing architecture cost
+
+Hold fixed:
+
+- the architecture coordinate \(r\);
+- the maximum feasible saving \(L\);
+- the linear cost coefficient \(k\);
+- baseline fitness \(w_0\);
+- timely-resolution value \(v\).
+
+Changing only the opportunity-duration distribution can change the curvature of \(R(r)\):
+
+\[
+\text{exponential opportunity duration}
+\to
+R''(r)>0
+\to
+\text{endpoint / finite-jump geometry},
+\]
+
+whereas
+
+\[
+\text{bounded uniform opportunity duration}
+\to
+R''(r)<0
+\to
+\text{graded / partial-routing geometry}.
+\]
+
+Therefore
+
+\[
+\boxed{
+\text{the form of ecological opportunity loss can determine whether}
+\\
+\text{selection favors all-or-none versus graded information architecture.}
+}
+\]
+
+This is a process prediction, not a statement that real opportunity distributions are exactly exponential or uniform.
+
+
 ## 10. Claim boundary
 
 Do not claim that:
