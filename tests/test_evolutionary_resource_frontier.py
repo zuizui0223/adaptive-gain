@@ -165,3 +165,22 @@ def test_canonical_binary_resource_corner_mu_point_three_cost_point_two_five():
             minimum_query_count=7,
         ),
     )
+
+
+
+def test_binary_arity_ceiling_approaches_full_value_under_low_urgency():
+    ceiling, _ = exponential_arity_limited_cost_ceiling(
+        2,
+        closure_rate=1e-3,
+        resolution_value=1.0,
+    )
+    assert ceiling > 0.98
+
+
+def test_binary_arity_ceiling_vanishes_under_high_urgency():
+    ceiling, _ = exponential_arity_limited_cost_ceiling(
+        2,
+        closure_rate=10.0,
+        resolution_value=1.0,
+    )
+    assert ceiling < 1e-8
