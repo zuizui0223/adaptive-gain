@@ -629,6 +629,71 @@ Likewise, one architecture can have a lower mean completion time but little fitn
 
 Hence neither worst-case cost, structural gap, nor mean latency alone identifies selection.
 
+
+### Corollary OF6.1 — equal mean latency can still reverse selection
+
+Consider two completion-time distributions with equal mean:
+
+\[
+T_X=
+\begin{cases}
+1,&1/2\\
+3,&1/2
+\end{cases}
+\]
+
+and
+
+\[
+T_Y=2
+\]
+
+deterministically. Both have mean 2.
+
+If the ecological opportunity is deterministically
+
+\[
+B=1.5,
+\]
+
+then
+
+\[
+\Pr(T_X\le B)=1/2,
+\qquad
+\Pr(T_Y\le B)=0,
+\]
+
+so X has the higher timely-success probability.
+
+If instead
+
+\[
+B=2.5,
+\]
+
+then
+
+\[
+\Pr(T_X\le B)=1/2,
+\qquad
+\Pr(T_Y\le B)=1,
+\]
+
+so Y has the higher timely-success probability.
+
+Thus
+
+\[
+\boxed{
+E[T_X]=E[T_Y]
+\quad\text{while the sign of selection reverses with the opportunity distribution.}
+}
+\]
+
+Mean decision speed is therefore not an evolutionarily sufficient summary even when the two architectures have identical average latency.
+
+
 ### Exact log-fitness comparison
 
 With baseline fitness w0>0, timely-resolution value v>=0, and architecture log costs kappa_i and kappa_j,
