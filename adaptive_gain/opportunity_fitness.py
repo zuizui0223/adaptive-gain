@@ -422,3 +422,73 @@ def opportunity_architecture_value_exponential(
         baseline_fitness=baseline_fitness,
         resolution_value=resolution_value,
     ) - architecture_cost_per_saving * saving
+
+
+
+def opportunity_uniform_recovery_parameters(
+    *,
+    baseline_completion_cost: float,
+    opportunity_upper_bound: float,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> tuple[float, float]:
+    """Return (D, a) for uniform opportunity-window recovery log(1+a*r)."""
+    if (
+        not math.isfinite(baseline_completion_cost)
+        or baseline_completion_cost <= 0
+    ):
+        raise ValueError("baseline_completion_cost must be finite and positive")
+    if (
+        not math.isfinite(opportunity_upper_bound)
+        or opportunity_upper_bound <= baseline_completion_cost
+    ):
+        raise ValueError(
+            "opportunity_upper_bound must exceed baseline_completion_cost"
+        )
+    if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    d = baseline_fitness + resolution_value * (
+        1.0 - baseline_completion_cost / opportunity_upper_bound
+    )
+    a = (resolution_value / opportunity_upper_bound) / d
+    return d, a
+
+
+def opportunity_architecture_optimum_uniform(
+    max_saving: float,
+    *,
+    baseline_completion_cost: float,
+    opportunity_upper_bound: float,
+    architecture_cost_per_saving: float,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> float:
+    """Exact optimal saving under a uniform opportunity limit and linear cost."""
+    if not math.isfinite(max_saving) or max_saving <= 0:
+        raise ValueError("max_saving must be finite and positive")
+    if max_saving >= baseline_completion_cost:
+        raise ValueError("max_saving must be below baseline_completion_cost")
+    if (
+        not math.isfinite(architecture_cost_per_saving)
+        or architecture_cost_per_saving < 0
+    ):
+        raise ValueError(
+            "architecture_cost_per_saving must be finite and nonnegative"
+        )
+
+    _, a = opportunity_uniform_recovery_parameters(
+        baseline_completion_cost=baseline_completion_cost,
+        opportunity_upper_bound=opportunity_upper_bound,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+    )
+    if architecture_cost_per_saving == 0:
+        return max_saving
+    raw = (
+        1.0 / architecture_cost_per_saving
+        - 1.0 / a
+    )
+    return min(max(raw, 0.0), max_saving)
