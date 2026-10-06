@@ -1464,6 +1464,191 @@ but false claim that the scalable robust cost ceiling must decrease
 monotonically with ecological urgency.
 
 
+
+## Corollary RF3.3 — finite-resource band-pass can disappear when ecological complexity is scalable
+
+The finite-scope and scalable-scope limits imply a qualitative difference in
+selection geometry.
+
+Fix
+
+\[
+U_\mu(c)=v e^{-\mu c}
+\]
+
+and a positive robust architecture cost
+
+\[
+0<K<v.
+\]
+
+### Fixed finite structural scope
+
+For any fixed finite
+
+\[
+(n,m,b),
+\]
+
+the robust value ceiling satisfies
+
+\[
+K_{\rm crit,robust}(n,m,b;\mu)
+\to0
+\]
+
+as both
+
+\[
+\mu\to0^+
+\]
+
+and
+
+\[
+\mu\to\infty.
+\]
+
+Therefore if the ceiling exceeds \(K\) at some intermediate \(\mu\), robust
+positive adaptive value can occur only inside bounded intermediate-urgency
+regions.
+
+This is the finite-resource band-pass effect.
+
+### Scalable task size at fixed cue arity
+
+If \(n\) and \(m\) may grow while cue arity \(b\) remains fixed, RF3 gives
+
+\[
+K_{\rm crit,robust}^{(b)}(\mu)
+\to v
+\qquad
+\text{as}
+\qquad
+\mu\to0^+.
+\]
+
+Hence every
+
+\[
+K<v
+\]
+
+is robustly repayable for sufficiently weak urgency by some sufficiently large
+finite task.
+
+High urgency still destroys the ceiling:
+
+\[
+K_{\rm crit,robust}^{(b)}(\mu)
+\to0
+\qquad
+\text{as}
+\qquad
+\mu\to\infty.
+\]
+
+Thus the low-urgency loss of adaptive value is not universal. It is a
+**finite-resource effect**.
+
+## Canonical binary contrast
+
+Take
+
+\[
+v=1,
+\qquad
+K=0.25,
+\qquad
+b=2.
+\]
+
+For the fixed finite scope
+
+\[
+n=10,
+\qquad
+m=9,
+\]
+
+the exact robust ceiling crosses \(K\) at approximately
+
+\[
+\boxed{
+\mu_{\rm low}=0.0877299
+}
+\]
+
+and
+
+\[
+\boxed{
+\mu_{\rm high}=0.379725.
+}
+\]
+
+So robust positive value is available only for
+
+\[
+\boxed{
+0.0877299<\mu<0.379725.
+}
+\]
+
+At very weak urgency the finite task cannot create enough fixed burden before
+both architectures become effectively timely.
+
+Now allow arbitrary finite world/query counts while retaining binary cues.
+
+The binary global ceiling satisfies
+
+\[
+K_{\rm crit,robust}^{(2)}(\mu)>0.25
+\]
+
+for all sufficiently small positive \(\mu\), and crosses \(0.25\) only at
+
+\[
+\boxed{
+\mu\approx0.379725.
+}
+\]
+
+Hence in the scalable binary class,
+
+\[
+\boxed{
+0<\mu<0.379725
+}
+\]
+
+admits some finite task with positive robust value.
+
+The upper threshold is the same in this example because at that urgency the
+finite \((10,9)\) scope already contains the globally maximizing binary depth.
+The low threshold disappears because larger tasks can exploit longer
+opportunity windows.
+
+### Biological interpretation
+
+The prediction is not simply
+
+> intermediate time pressure favors flexibility.
+
+It is conditional:
+
+> intermediate time pressure favors flexibility when the ecological decision
+> problem itself is held finite.
+
+If longer opportunity windows are accompanied by proportionally richer
+branch-specific alternatives, contingent sensing can remain valuable even when
+time pressure is weak.
+
+This distinction is especially important when comparing ecological systems
+that differ simultaneously in opportunity duration and interaction
+complexity.
+
+
 ## 9e. Theorem RF4 — retaining a fixed fraction of adaptive value has a sharp complexity scale
 
 RF3 proves that, at fixed cue arity \(b\), the maximum opportunity value can
