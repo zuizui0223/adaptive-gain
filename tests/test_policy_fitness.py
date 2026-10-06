@@ -7,6 +7,7 @@ from adaptive_gain.core import (
     Query,
     World,
     adaptive_minimum_resolution,
+    fixed_minimum_resolution,
 )
 from adaptive_gain.policy_fitness import (
     discounted_fitness_optimal_policy,
@@ -28,6 +29,14 @@ def _minimax_vs_fitness_witness():
         Query("q3_common_first", 1, (0, 1, 1, 1)),
     )
     return FiniteTask(worlds, queries)
+
+
+def test_four_world_witness_has_zero_robust_structural_gap():
+    task = _minimax_vs_fitness_witness()
+    adaptive = adaptive_minimum_resolution(task).minimum_worst_path_cost
+    fixed = fixed_minimum_resolution(task).minimum_cost
+    assert adaptive == 2
+    assert fixed == 2
 
 
 def test_fitness_optimum_can_reject_the_minimax_policy():
