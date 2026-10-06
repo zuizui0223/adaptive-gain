@@ -209,6 +209,172 @@ Thus the finite structural theorem supplies a hard ceiling on the amount of
 selection that routeability alone can generate under a declared natural-history
 opportunity process.
 
+
+## 4b. Theorem EF2 — sharp evolutionary feasibility ceiling
+
+Define the zero-maintenance sharp log-performance envelope
+
+\[
+\boxed{
+\kappa_{\rm crit}(n,m,b;S,w_0,v)
+=
+\max_h
+\log
+\frac{w_0+vS(h)}
+{w_0+vS(I_h)}.
+}
+\]
+
+Suppose contingent sensing pays an adaptive-only constitutive log maintenance
+cost
+
+\[
+\kappa\ge0
+\]
+
+relative to the universal fixed comparator.
+
+Then every task in the declared finite scope satisfies
+
+\[
+s
+\le
+\kappa_{\rm crit}-\kappa.
+\]
+
+Therefore:
+
+### No-go region
+
+If
+
+\[
+\boxed{
+\kappa>\kappa_{\rm crit},
+}
+\]
+
+then
+
+\[
+s<0
+\]
+
+for **every** finite deterministic unit-cost task with the declared
+\((n,m,b)\) limits.
+
+No rearrangement of worlds, targets, or legal cue outcomes inside that scope can
+make contingent routing selectively favorable through this opportunity-timing
+mechanism alone.
+
+### Boundary
+
+If
+
+\[
+\kappa=\kappa_{\rm crit},
+\]
+
+then the best attainable task is neutral and no task has positive selection.
+
+### Existence region
+
+If
+
+\[
+\boxed{
+0\le\kappa<\kappa_{\rm crit},
+}
+\]
+
+then the arbitrary-depth private-pair witness at a maximizing depth has
+
+\[
+s>0.
+\]
+
+Hence
+
+\[
+\boxed{
+\text{positive selection is possible in the scope}
+\iff
+\kappa<\kappa_{\rm crit}.
+}
+\]
+
+This is an exact necessary-and-sufficient evolutionary feasibility threshold
+for the declared comparator and opportunity process.
+
+## Corollary EF2.1 — the structural scope sets a hard ceiling on evolvable control cost
+
+The result reverses the usual direction of the model.
+
+Instead of choosing an architecture cost and asking what happens in one task,
+one can ask:
+
+> how expensive may contingent control be before **no ecology in this entire
+> finite information scope** can pay for it?
+
+The answer is exactly
+
+\[
+\kappa_{\rm crit}.
+\]
+
+This gives the bounded-arity extremal theorem a direct evolutionary meaning.
+
+## Corollary EF2.2 — under exponential opportunity loss the evolvable-cost ceiling vanishes at both urgency extremes
+
+Let
+
+\[
+S(c)=e^{-\mu c}.
+\]
+
+For any finite feasible \(h\),
+
+\[
+\log
+\frac{w_0+ve^{-\mu h}}
+{w_0+ve^{-\mu I_h}}
+\to0
+\]
+
+as
+
+\[
+\mu\to0^+
+\]
+
+and also as
+
+\[
+\mu\to\infty.
+\]
+
+Therefore
+
+\[
+\boxed{
+\kappa_{\rm crit}(\mu)\to0
+}
+\]
+
+at both ecological extremes.
+
+If the structural scope contains any strict adaptive gap, then
+\(\kappa_{\rm crit}(\mu)>0\) for every finite \(\mu>0\), so it attains a positive
+interior maximum.
+
+Thus a positive-cost contingent-control architecture can be evolutionarily
+feasible only over an intermediate range of ecological urgency.
+
+The exact number of disjoint feasible urgency intervals can depend on the
+upper-envelope switches among structural depths; the theorem guarantees the
+global zero-at-both-extremes geometry, not universal unimodality.
+
+
 ## 5. Exponential opportunity closure
 
 For
