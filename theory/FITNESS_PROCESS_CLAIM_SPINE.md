@@ -183,7 +183,7 @@ decision topology
 -> ecological feedback
 \`\`\`
 
-## Five nontrivial predictions
+## Six nontrivial predictions
 
 ### P1 — intermediate ecological closure can maximize selection for contingent sensing
 
@@ -242,7 +242,26 @@ Two architectures can have identical mean completion time while the sign of thei
 This creates a direct empirical prediction: the early and late tails of the decision-time distribution can matter more than its mean.
 
 
-### P5 — the sign of selection depends on the available comparator architecture
+### P5 — universal performance advantage is a stochastic-dominance claim
+
+With stochastic completion times, one architecture has higher timely performance under every possible independent opportunity distribution if and only if its completion-time CDF lies everywhere above the comparator CDF.
+
+Thus the exact process-level generalization of
+
+\[
+C_A\le C_F
+\]
+
+is not a comparison of mean latencies. It is first-order stochastic dominance:
+
+\[
+F_A(t)\ge F_F(t)\quad\forall t.
+\]
+
+If the curves cross, ecology can reverse the performance ordering by changing where opportunity limits fall.
+
+
+### P6 — the sign of selection depends on the available comparator architecture
 
 The same environment can give:
 
