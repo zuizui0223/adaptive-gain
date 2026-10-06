@@ -174,5 +174,25 @@
       "minimum_adaptive_depth": "Theta(log(1/mu))",
       "minimum_fixed_world_query_scale": "Theta(1/mu)"
     }
+  },
+  "finite_expected_rescue_example": {
+    "n": 10,
+    "m": 9,
+    "max_arity": 2,
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.6,
+    "fixed_cost_ceiling": 9,
+    "finite_expected_value_ceiling": 0.673612707941968,
+    "one_step_mass_threshold": 0.6166136276001076,
+    "finite_binary_witness_one_step_mass": 0.65,
+    "conclusion": "Expected repayment is feasible in the finite scope, but requires substantially more one-step encounter mass than the scalable asymptotic threshold."
+  },
+  "scalable_expected_rescue_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.6,
+    "robust_global_ceiling": 0.5488116360940264,
+    "expected_global_ceiling": 0.7408182206817179,
+    "one_step_mass_threshold": 0.26659691914156886,
+    "conclusion": "The asymptotic scalable threshold is lower because the rare branch can carry arbitrarily large fixed burden."
   }
 }
