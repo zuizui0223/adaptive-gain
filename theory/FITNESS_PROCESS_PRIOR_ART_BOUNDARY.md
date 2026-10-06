@@ -146,9 +146,9 @@ vmax_h[S(h)-S(I_h)].
 The novelty candidate is therefore not "sequential information has value" but:
 
 > a finite ecological information architecture admits an exact sharp ceiling on
-> the amount of ecological value adaptivity can generate, and natural history
-> can select a different extremal architecture than the one maximizing the
-> structural adaptive/fixed ratio.
+> the **worst-state / frequency-free** value adaptivity can guarantee, and
+> natural history can select a different extremal architecture than the one
+> maximizing the structural adaptive/fixed ratio.
 
 A targeted prior-art search found decision-tree work on value-dependent test
 costs, worst/expected cost trade-offs, sequential information value and
@@ -222,14 +222,20 @@ direction:
 1. the hidden-world/query model has an exact attainable frontier
    \((h,I_h)\) at fixed world count, query count and query arity;
 2. **every** finite nonincreasing completion-value function \(U\) lifts that
-   frontier sharply:
+   frontier sharply as a **robust worst-state margin**:
    \[
    \max[U(C_A)-U(C_F)]
    =
    \max_h[U(h)-U(I_h)];
    \]
-3. the same constructive witnesses attain the lifted envelope;
-4. the envelope yields an exact architecture-cost feasibility threshold.
+3. the same constructive witnesses attain the lifted robust envelope;
+4. the envelope yields an exact architecture-cost threshold for positive net
+   value in every represented world.
+
+This robust envelope is not an upper bound on expected adaptive value under a
+specific world-frequency distribution. Expected-value adaptivity gaps remain a
+separate, established class of problems and require branch probabilities and
+completion-time profiles.
 
 A targeted search found broad adaptivity-gap and deadline-utility literatures,
 but not this particular fixed-\((n,m,b)\), guaranteed-resolution, arbitrary
@@ -356,7 +362,7 @@ Whether that is publishably novel requires a targeted search in time-sensitive d
 
 Strongest current candidate:
 
-> Ecological opportunity structure determines how an exact finite conditional-information topology is converted into a selected sensing policy and an architecture payoff landscape.
+> Exact finite information constraints determine a sharp **frequency-free robust-value frontier**; natural history re-ranks that frontier, while encounter frequencies separately determine any additional expected-fitness value.
 
 Supporting results:
 
