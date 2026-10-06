@@ -2045,6 +2045,291 @@ This is an asymptotic capacity statement. It is not a claim that real
 communities literally tune species richness or receptor number to \(1/\mu\).
 
 
+
+## 9f. Theorem RF5 — expected-value capacity exceeds the robust ceiling by one decision step
+
+The scalable robust frontier asks for positive net value in **every** represented
+world.
+
+If encounter frequencies are allowed to be nonuniform, the absolute expected-
+value capacity is larger.
+
+Assume \(U(c)\) is finite, nonincreasing, and bounded below, with
+
+\[
+U_\infty
+=
+\lim_{c\to\infty}U(c).
+\]
+
+Fix any cue-arity bound
+
+\[
+b\ge2.
+\]
+
+Consider all finite nontrivial tasks with query arity at most \(b\), all
+guaranteed-resolving adaptive policies, and all strictly positive world-
+frequency distributions.
+
+Define
+
+\[
+R_{\rm expected}
+=
+\sum_x p_xU[T_\pi(x)]
+-
+U(C_F).
+\]
+
+Then
+
+\[
+\boxed{
+\sup R_{\rm expected}
+=
+U(1)-U_\infty.
+}
+\]
+
+### Upper bound
+
+A nontrivial task contains at least two target classes, so before any query is
+taken the target is unresolved.
+
+Therefore every realized adaptive path satisfies
+
+\[
+T_\pi(x)\ge1.
+\]
+
+Since \(U\) is nonincreasing,
+
+\[
+U[T_\pi(x)]
+\le
+U(1)
+\]
+
+for every world, and hence
+
+\[
+\sum_xp_xU[T_\pi(x)]
+\le
+U(1).
+\]
+
+Also
+
+\[
+U(C_F)\ge U_\infty.
+\]
+
+Thus
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+U(1)-U_\infty.
+}
+\]
+
+### Matching construction
+
+Take a binary root query with:
+
+- one target-pure leaf that terminates after the root query;
+- one remaining branch containing an increasingly large private-pair routing
+  subtree.
+
+The full tree is a valid binary task and hence is admissible under every
+\(b\ge2\).
+
+Let the shallow leaf have encounter probability
+
+\[
+1-\delta
+\]
+
+and distribute total probability \(\delta>0\) over the remaining worlds.
+
+As the rare subtree grows,
+
+\[
+C_F\to\infty,
+\]
+
+so
+
+\[
+U(C_F)\to U_\infty.
+\]
+
+As
+
+\[
+\delta\to0^+,
+\]
+
+the adaptive expected value tends to
+
+\[
+U(1).
+\]
+
+Therefore the upper bound is approached arbitrarily closely:
+
+\[
+\boxed{
+\sup R_{\rm expected}
+=
+U(1)-U_\infty.
+}
+\]
+
+The result is a supremum because every represented world may be required to
+retain positive probability.
+
+## Corollary RF5.1 — robust and expected global ceilings differ
+
+From RF2.3,
+
+\[
+\sup R_{\rm robust}
+=
+U(2)-U_\infty.
+\]
+
+From RF5,
+
+\[
+\sup R_{\rm expected}
+=
+U(1)-U_\infty.
+\]
+
+Therefore
+
+\[
+\boxed{
+\sup R_{\rm expected}
+-
+\sup R_{\rm robust}
+=
+U(1)-U(2)
+\ge0.
+}
+\]
+
+The gap is the maximum possible contribution of concentrating encounters on a
+branch that terminates one query earlier than any strict worst-case adaptive
+architecture can guarantee.
+
+For exponential opportunity value,
+
+\[
+U(c)=v e^{-\mu c},
+\]
+
+\[
+\boxed{
+K_{\rm crit,robust}^{(\infty)}
+=
+v e^{-2\mu},
+}
+\]
+
+whereas
+
+\[
+\boxed{
+K_{\rm crit,expected}^{(\infty)}
+=
+v e^{-\mu}.
+}
+\]
+
+At
+
+\[
+\mu=0.3,\qquad v=1,
+\]
+
+these are
+
+\[
+K_{\rm crit,robust}^{(\infty)}
+\approx0.548812
+\]
+
+and
+
+\[
+K_{\rm crit,expected}^{(\infty)}
+\approx0.740818.
+\]
+
+## Corollary RF5.2 — frequency-assisted evolvability band
+
+If architecture cost satisfies
+
+\[
+\boxed{
+U(2)-U_\infty
+\le
+K
+<
+U(1)-U_\infty,
+}
+\]
+
+then:
+
+- no finite information architecture can guarantee positive net value in every
+  represented world;
+- but some finite **binary** architecture can have positive expected net value
+  under a sufficiently skewed encounter distribution.
+
+For exponential opportunity value,
+
+\[
+\boxed{
+v e^{-2\mu}
+\le
+K
+<
+v e^{-\mu}
+}
+\]
+
+is therefore a frequency-assisted evolvability band.
+
+Example:
+
+\[
+\mu=0.3,\qquad v=1,\qquad K=0.60.
+\]
+
+Since
+
+\[
+0.548812
+<
+0.60
+<
+0.740818,
+\]
+
+robust repayment is impossible even with unlimited finite cue arity and task
+size, yet positive expected selection remains constructively possible with
+binary cues if one early-terminating state dominates encounter frequency.
+
+This is not a contradiction. The robust theorem is distribution-free; the
+expected theorem uses ecological frequency concentration as an additional
+resource.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
