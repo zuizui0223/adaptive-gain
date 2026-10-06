@@ -460,6 +460,61 @@ This is the inverse form of the result that natural history re-ranks the exact
 structural frontier.
 
 
+
+## 9a. Canonical binary example — natural history creates a minimum information architecture
+
+Take
+
+\[
+U(c)=e^{-0.3c},
+\qquad
+K=0.25,
+\qquad
+b=2.
+\]
+
+The depth-specific requirements are:
+
+| adaptive depth \(h\) | available value \(U(h)\) | required gap \(q_h\) | required fixed cost \(J_K(h)\) | binary ceiling \(2^h-1\) | result |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 1 | 0.741 | 2 | 3 | 1 | structurally impossible |
+| 2 | 0.549 | 3 | 5 | 3 | structurally impossible |
+| 3 | 0.407 | 4 | 7 | 7 | feasible |
+| 4 | 0.301 | 6 | 10 | 15 | feasible but larger |
+| 5 | 0.223 | — | \(\infty\) | 31 | biologically unviable |
+
+Thus the first feasible binary architecture occurs exactly at
+
+\[
+\boxed{
+h=3,
+\qquad
+C_F=7.
+}
+\]
+
+The minimum world/query counts are
+
+\[
+\boxed{
+n_{\min}=8,
+\qquad
+m_{\min}=7.
+}
+\]
+
+This example shows two different failure mechanisms on opposite sides of the
+viable region:
+
+- shallow routing fails because binary structure cannot make fixed resolution
+  expensive enough;
+- deep routing fails because too little biological value remains by the time
+  the adaptive route finishes.
+
+The evolvable architecture therefore occupies an intermediate structural
+window generated jointly by cue arity and natural-history time value.
+
+
 ## 9b. Theorem RF2 — cue arity creates an absolute evolvable-cost ceiling
 
 The previous results fixed world count and query count.
