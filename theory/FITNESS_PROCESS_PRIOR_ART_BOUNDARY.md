@@ -158,6 +158,46 @@ composition with the bounded-arity extremal frontier.
 This absence is not a proof of priority; it is the current claim boundary.
 
 
+
+### Deadline-distribution weighting of performance profiles is established
+
+Ash & Hayes-Roth (1996, *Artificial Intelligence* 88:317-347, DOI
+10.1016/S0004-3702(96)00024-0) developed action-based hierarchies for
+real-time diagnosis in which performance through the diagnostic process is
+weighted by a deadline distribution. Their formulation explicitly integrates
+time-varying action utility against the probability distribution of deadlines.
+
+Therefore the present programme must not claim novelty for the generic kernel
+
+\[
+\int P(t)m(t)\,dt
+\]
+
+or for weighting a decision process by a deadline distribution.
+
+This directly demotes the general value-of-time overlap identity from a novelty
+claim to an interface/result-organizing device.
+
+The remaining candidate is the **sharp composition with this repository's
+finite structural frontier**:
+
+\[
+I_h=\min\{m,F_b(n,h)\}
+\]
+
+and
+
+\[
+R_{\max}
+=
+v\max_h[S(h)-S(I_h)].
+\]
+
+The distinction is that the finite ecological information architecture gives an
+exact attainable frontier before deadline weighting, and the same constructive
+witnesses attain the deadline-weighted ecological envelope.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
