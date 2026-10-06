@@ -198,6 +198,47 @@ exact attainable frontier before deadline weighting, and the same constructive
 witnesses attain the deadline-weighted ecological envelope.
 
 
+
+### Adaptivity-gap theory already compares adaptive and nonadaptive expected value
+
+A large algorithms literature studies the **adaptivity gap**: the ratio or
+difference between the expected value/cost of optimal adaptive and nonadaptive
+policies.
+
+Examples include stochastic probing, stochastic packing, stochastic Boolean
+function evaluation, adaptive submodular optimization, and recent exact/sharp
+adaptivity-gap results in specialized models.
+
+Therefore the present programme must not claim novelty for:
+
+- defining a value gap between adaptive and nonadaptive policies;
+- showing that adaptivity can have a large expected-value advantage;
+- optimizing expected reward over adaptive trees;
+- calling that advantage an "adaptivity gap."
+
+The current claim is narrower and structurally stronger in a different
+direction:
+
+1. the hidden-world/query model has an exact attainable frontier
+   \((h,I_h)\) at fixed world count, query count and query arity;
+2. **every** finite nonincreasing completion-value function \(U\) lifts that
+   frontier sharply:
+   \[
+   \max[U(C_A)-U(C_F)]
+   =
+   \max_h[U(h)-U(I_h)];
+   \]
+3. the same constructive witnesses attain the lifted envelope;
+4. the envelope yields an exact architecture-cost feasibility threshold.
+
+A targeted search found broad adaptivity-gap and deadline-utility literatures,
+but not this particular fixed-\((n,m,b)\), guaranteed-resolution, arbitrary
+monotone-completion-value envelope.
+
+That absence is not a priority proof. It defines the current defensible novelty
+boundary.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
