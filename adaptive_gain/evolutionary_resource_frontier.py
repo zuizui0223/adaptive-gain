@@ -453,3 +453,47 @@ def exponential_minimum_robust_cue_arity(
         if architecture_cost < ceiling - 1e-15:
             return arity
         arity += 1
+
+
+
+def exponential_unrestricted_expected_cost_ceiling(
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float:
+    """Supremal expected-value control-cost ceiling with arbitrary frequencies.
+
+    This is v*exp(-mu): an adaptive policy must spend at least one query before
+    resolving a nontrivial target, while arbitrarily skewed frequencies can put
+    almost all mass on a one-query pure branch and push fixed burden arbitrarily
+    high in rare branches.
+    """
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    return resolution_value * math.exp(-closure_rate)
+
+
+def exponential_robust_expected_cost_regime(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> str:
+    """Classify unrestricted robust/expected repayment possibility."""
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    robust = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    expected = exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if architecture_cost < robust - 1e-15:
+        return "robust_and_expected_possible"
+    if architecture_cost < expected - 1e-15:
+        return "expected_only_possible"
+    return "neither_possible"
