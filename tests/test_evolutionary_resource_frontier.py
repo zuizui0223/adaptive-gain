@@ -6,6 +6,9 @@ from adaptive_gain.evolutionary_resource_frontier import (
     binary_evolutionary_resource_corners,
     exponential_max_viable_adaptive_depth,
     exponential_required_gap,
+    full_b_ary_internal_nodes,
+    exponential_arity_limited_cost_ceiling,
+    exponential_unrestricted_information_cost_ceiling,
     required_fixed_cost_for_value,
 )
 
@@ -99,3 +102,48 @@ def test_zero_cost_has_no_finite_maximum_viable_depth():
         closure_rate=0.3,
         resolution_value=1.0,
     ) is None
+
+
+
+def test_full_b_ary_internal_node_formula():
+    assert full_b_ary_internal_nodes(2, 4) == 15
+    assert full_b_ary_internal_nodes(3, 3) == 13
+    assert full_b_ary_internal_nodes(4, 2) == 5
+
+
+def test_binary_global_cost_ceiling_at_mu_point_three():
+    ceiling, depths = exponential_arity_limited_cost_ceiling(
+        2,
+        closure_rate=0.3,
+        resolution_value=1.0,
+    )
+    assert ceiling == pytest.approx(0.2900852153739598)
+    assert depths == (4,)
+
+
+def test_arity_limited_cost_ceiling_is_nondecreasing_in_arity():
+    ceilings = [
+        exponential_arity_limited_cost_ceiling(
+            b,
+            closure_rate=0.3,
+            resolution_value=1.0,
+        )[0]
+        for b in range(2, 7)
+    ]
+    assert ceilings == sorted(ceilings)
+
+
+def test_unrestricted_information_ceiling_is_exp_minus_two_mu():
+    ceiling = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=0.3,
+        resolution_value=1.0,
+    )
+    assert ceiling == pytest.approx(math.exp(-0.6))
+
+
+def test_binary_no_go_cost_point_three_is_above_global_binary_ceiling():
+    ceiling, _ = exponential_arity_limited_cost_ceiling(
+        2,
+        closure_rate=0.3,
+    )
+    assert 0.30 > ceiling
