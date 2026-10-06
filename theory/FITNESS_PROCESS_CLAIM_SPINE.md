@@ -62,6 +62,60 @@ Thus routeability matters when ecological opportunities actually terminate insid
 
 The same structural gap can have very different value depending on where that interval lies relative to the natural-history distribution of opportunity limits.
 
+
+## Layer 2b — general ecological value-of-time kernel
+
+A literal opportunity deadline is only one interpretation.
+
+Let \(V(t)\) be any nonincreasing ecological value of completing the correct action at time \(t\), after removing a time-independent baseline.
+
+If \(V\) is differentiable, define the nonnegative marginal value-of-time kernel
+
+\[
+m(t)=-V'(t)\ge0.
+\]
+
+For architecture \(j\) with completion CDF \(F_j(t)\),
+
+\[
+E[V(T_j)]
+=
+V(\infty)
++
+\int_0^\infty F_j(t)m(t)\,dt.
+\]
+
+Therefore the performance difference between architectures \(i\) and \(j\) is
+
+\[
+\boxed{
+\Delta R_{i:j}
+=
+\int_0^\infty
+[F_i(t)-F_j(t)]
+m(t)\,dt.
+}
+\]
+
+This is the process-level core of the proposed paper.
+
+The organism supplies the completion-time difference
+
+\[
+\Delta F(t)=F_i(t)-F_j(t),
+\]
+
+while natural history supplies the ecological value-of-time kernel
+
+\[
+m(t).
+\]
+
+Selection depends on their overlap.
+
+The hard-deadline model, stochastic opportunity model, exposure-risk interpretation and declining-profitability interpretation are all special cases of this kernel form.
+
+
 ## Layer 3 — exact selection coefficient
 
 With baseline fitness w0>0, timely-resolution value v>=0, and contingent-control log maintenance cost kappa,
@@ -295,7 +349,7 @@ All have strong precedents.
 
 A shorter version:
 
-> The fitness value of routeability is determined by where decision-time savings fall in ecological opportunity space, not by structural gain alone.
+> The fitness value of routeability is the overlap between where a decision architecture changes completion probability through time and where ecology assigns value to being faster.
 
 ## Empirical measurement ladder
 
