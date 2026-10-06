@@ -110,6 +110,154 @@ explicit exact witness
 }
 \]
 
+
+## 2b. Theorem EF0 — sharp envelope for any monotone completion value
+
+The deadline/opportunity model is a biological special case of a more general
+finite statement.
+
+Let
+
+\[
+U(c)
+\]
+
+be any finite nonincreasing value assigned to guaranteed completion at cost
+\(c\). No differentiability, probability interpretation, or linearity is
+required.
+
+For one task define the adaptive value advantage
+
+\[
+\Delta U
+=
+U(C_A)-U(C_F).
+\]
+
+If \(C_A=h\), the structural frontier gives
+
+\[
+C_F\le I_h.
+\]
+
+Because \(U\) is nonincreasing,
+
+\[
+U(C_F)\ge U(I_h),
+\]
+
+so
+
+\[
+\Delta U
+\le
+U(h)-U(I_h).
+\]
+
+The arbitrary-depth witness attains equality. Therefore
+
+\[
+\boxed{
+\max_{\substack{|W|=n,\ |Q|=m\\
+\operatorname{arity}(q)\le b}}
+\left[
+U(C_A)-U(C_F)
+\right]
+=
+\max_{1\le h\le\min(n-1,m)}
+\left[
+U(h)-U(I_h)
+\right].
+}
+\]
+
+This is the general sharp cross-layer theorem.
+
+### Linear completion cost recovers the old gap lift
+
+If
+
+\[
+U(c)=-\lambda c
+\]
+
+with \(\lambda>0\), then
+
+\[
+U(C_A)-U(C_F)
+=
+\lambda(C_F-C_A).
+\]
+
+Hence EF0 becomes
+
+\[
+\boxed{
+\max \Delta U
+=
+\lambda
+\max_h(I_h-h).
+}
+\]
+
+So the old linear sensing-to-selection bridge corresponds to one very specific
+natural-history assumption: every additional unit of completion cost has the
+same marginal biological penalty everywhere on the time axis.
+
+### Opportunity survival is a bounded nonlinear special case
+
+If
+
+\[
+U(c)=vS(c),
+\]
+
+EF0 reduces to the opportunity-value envelope in EF1.
+
+If instead
+
+\[
+U(c)
+=
+\log[w_0+vS(c)],
+\]
+
+EF0 gives the zero-maintenance log-fitness envelope directly.
+
+Thus the process theory does not replace the earlier structural gap. It shows
+exactly which biological value functions make the gap sufficient and which
+require the absolute locations of \(C_A\) and \(C_F\).
+
+## Corollary EF0.1 — gap-only lifts are exceptional
+
+A structural gap
+
+\[
+g=C_F-C_A
+\]
+
+is sufficient to determine
+
+\[
+U(C_A)-U(C_F)
+\]
+
+for all pairs \((C_A,C_F)\) only under restricted value-function forms.
+
+For a generic nonlinear \(U\), equal gaps at different absolute completion
+costs can have different biological value.
+
+Therefore the finite pair
+
+\[
+(C_A,C_F)
+\]
+
+is the correct interface object between exact routeability and natural-history
+value, while \(g\) alone is a valid sufficient statistic only for declared
+special lifts such as the linear model.
+
+
 ## 3. Theorem EF1 — sharp opportunity-value envelope
 
 Let ecological opportunity survival be any nonincreasing function
