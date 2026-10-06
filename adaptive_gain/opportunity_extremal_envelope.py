@@ -195,3 +195,50 @@ def sharp_exponential_opportunity_envelope(
         lambda c: math.exp(-closure_rate * c),
         resolution_value=resolution_value,
     )
+
+
+
+def sharp_maintenance_log_cost_ceiling(
+    world_count: int,
+    query_count: int,
+    max_arity: int,
+    survival: Callable[[float], float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> float:
+    """Largest adaptive-only log maintenance cost any task in scope can overcome."""
+    receipt = sharp_log_selection_envelope(
+        world_count,
+        query_count,
+        max_arity,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+        maintenance_log_cost=0.0,
+    )
+    return receipt.sharp_log_selection
+
+
+def adaptive_selection_possible_in_scope(
+    world_count: int,
+    query_count: int,
+    max_arity: int,
+    survival: Callable[[float], float],
+    *,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+    maintenance_log_cost: float = 0.0,
+) -> bool:
+    """Whether some task in the declared scope can have positive adaptive selection."""
+    if not math.isfinite(maintenance_log_cost) or maintenance_log_cost < 0:
+        raise ValueError("maintenance_log_cost must be finite and nonnegative")
+    ceiling = sharp_maintenance_log_cost_ceiling(
+        world_count,
+        query_count,
+        max_arity,
+        survival,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+    )
+    return maintenance_log_cost < ceiling - 1e-15
