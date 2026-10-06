@@ -13,6 +13,41 @@ The paper should not be sold as a new general theory of sequential decisions.
 
 ## Tier A — manuscript spine
 
+### A0. Sharp cross-layer fitness envelope
+
+Promote `SHARP_OPPORTUNITY_FITNESS_ENVELOPE.md` to the first theorem result.
+
+For fixed world count (n), query count (m), query arity (b), and ecological
+opportunity survival (S), define
+
+[
+I_h=min{m,F_b(n,h)}.
+]
+
+Then the exact maximum guarantee-level ecological value of contingent routing is
+
+[
+oxed{
+R_{max}
+=
+vmax_h[S(h)-S(I_h)].
+}
+]
+
+The same constructive witnesses attain the bound at every feasible adaptive
+depth.
+
+This is stronger than maximizing (C_F/C_A): natural history re-ranks the exact
+structural frontier.
+
+In the binary (n=10,m=9) example, the structural ratio is maximized at
+(h=3), while the exponential-opportunity fitness envelope selects
+(h=4	o3	o2) as ecological urgency increases.
+
+This should be the main nontrivial theorem because it uses the repository's
+distinct sharp extremal mathematics rather than generic sequential-decision
+theory.
+
 ### A1. Exact structural source object
 
 Retain the existing finite task and its exact feasible routing structure.
@@ -218,10 +253,16 @@ These are established, generic, or already owned elsewhere in the programme.
 
 ## Current strongest one-sentence claim
 
-> Natural history does not merely scale the value of information; by weighting
-> where in time a finite decision architecture succeeds, it can change which
-> routing policy is favored and the curvature of the architecture's fitness
-> landscape.
+> Natural history does not merely scale a structural adaptive-gain score; it
+> selects among points on the exact finite routing frontier, so the architecture
+> that maximizes (C_F/C_A) need not maximize the ecological or evolutionary
+> value of adaptivity.
+
+A process-oriented companion sentence is:
+
+> By weighting where in time a finite decision architecture succeeds, natural
+> history can change both which routing policy is favored and the curvature of
+> the architecture's fitness landscape.
 
 ## Publication consequence
 
