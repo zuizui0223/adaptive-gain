@@ -459,6 +459,298 @@ It is a resource Pareto frontier over:
 This is the inverse form of the result that natural history re-ranks the exact
 structural frontier.
 
+
+## 9b. Theorem RF2 — cue arity creates an absolute evolvable-cost ceiling
+
+The previous results fixed world count and query count.
+
+Now allow both to grow without bound while keeping only one structural
+restriction:
+
+\[
+\operatorname{arity}(q)\le b,
+\qquad
+b\ge2.
+\]
+
+For an adaptive tree of depth \(h\), the maximum possible number of internal
+node occurrences in a full \(b\)-ary tree is
+
+\[
+\boxed{
+J_b(h)
+=
+1+b+b^2+\cdots+b^{h-1}
+=
+\frac{b^h-1}{b-1}.
+}
+\]
+
+Therefore every finite task with query arity at most \(b\) and
+
+\[
+C_A=h
+\]
+
+satisfies
+
+\[
+\boxed{
+C_F\le J_b(h).
+}
+\]
+
+The full \(b\)-ary private-pair construction attains
+
+\[
+\boxed{
+(C_A,C_F)
+=
+(h,J_b(h))
+}
+\]
+
+using \(b^h\) represented leaves and \(J_b(h)\) query resources.
+
+Hence for any finite nonincreasing completion value \(U\), the maximum
+architecture benefit over **all finite tasks of arbitrary size** with cue arity
+at most \(b\) is
+
+\[
+\boxed{
+K_{\rm crit}^{(b)}
+=
+\max_{h\ge2}
+\left[
+U(h)-U(J_b(h))
+\right].
+}
+\]
+
+Depth \(h=1\) is excluded because strict adaptive advantage is impossible when
+one query already resolves the target: the same query is a fixed resolver.
+
+Therefore
+
+\[
+\boxed{
+K>K_{\rm crit}^{(b)}
+\Longrightarrow
+\text{contingent sensing cannot be favored in any finite task with arity }\le b.
+}
+\]
+
+This no-go is independent of world count and query count.
+
+Adding more ecological states or more sensor resources cannot overcome a
+control cost above the arity-limited ceiling.
+
+## Corollary RF2.1 — binary cues impose a global evolutionary ceiling
+
+For \(b=2\),
+
+\[
+J_2(h)=2^h-1.
+\]
+
+Thus
+
+\[
+\boxed{
+K_{\rm crit}^{(2)}
+=
+\max_{h\ge2}
+\left[
+U(h)-U(2^h-1)
+\right].
+}
+\]
+
+For exponential opportunity value
+
+\[
+U(c)=v e^{-\mu c},
+\]
+
+\[
+\boxed{
+K_{\rm crit}^{(2)}
+=
+v
+\max_{h\ge2}
+\left[
+e^{-\mu h}
+-
+e^{-\mu(2^h-1)}
+\right].
+}
+\]
+
+At
+
+\[
+\mu=0.3,
+\qquad
+v=1,
+\]
+
+the maximum occurs at
+
+\[
+h=4
+\]
+
+and equals approximately
+
+\[
+\boxed{
+K_{\rm crit}^{(2)}
+=
+0.290085.
+}
+\]
+
+Therefore a binary-cue contingent-control architecture with additive
+constitutive cost
+
+\[
+K\ge0.290085
+\]
+
+cannot be favored by this opportunity mechanism in **any** finite deterministic
+binary task, no matter how many worlds or binary queries are supplied.
+
+This explains the example \(K=0.30\): the failure is not caused by insufficient
+sample size of the finite task. It is an arity-limited global no-go.
+
+## Corollary RF2.2 — increasing cue arity raises the maximum payable control cost
+
+For fixed \(h\),
+
+\[
+J_{b+1}(h)\ge J_b(h).
+\]
+
+Since \(U\) is nonincreasing,
+
+\[
+U(h)-U(J_{b+1}(h))
+\ge
+U(h)-U(J_b(h)).
+\]
+
+Therefore
+
+\[
+\boxed{
+K_{\rm crit}^{(b+1)}
+\ge
+K_{\rm crit}^{(b)}.
+}
+\]
+
+Higher-outcome cues can never reduce the maximum constitutive control cost that
+some finite task can pay.
+
+This is a structural statement about declared query arity, not a claim that
+real sensory systems should evolve arbitrarily high categorical resolution.
+
+## Corollary RF2.3 — even unlimited cue arity has a natural-history ceiling
+
+Every strict adaptive advantage requires
+
+\[
+C_A\ge2.
+\]
+
+Let
+
+\[
+U_\infty
+=
+\lim_{c\to\infty}U(c),
+\]
+
+which exists for every finite nonincreasing \(U\).
+
+Then for every finite task,
+
+\[
+U(C_A)-U(C_F)
+\le
+U(2)-U_\infty.
+\]
+
+As cue arity, represented worlds and fixed resources grow, depth-two
+constructions can make \(C_F\) arbitrarily large. Hence
+
+\[
+\boxed{
+\sup_{\text{all finite tasks}}
+\left[
+U(C_A)-U(C_F)
+\right]
+=
+U(2)-U_\infty.
+}
+\]
+
+For exponential opportunity value,
+
+\[
+U_\infty=0,
+\]
+
+so the absolute architecture-cost ceiling is
+
+\[
+\boxed{
+K_{\rm crit}^{(\infty)}
+=
+v e^{-2\mu}.
+}
+\]
+
+At \(\mu=0.3,\ v=1\),
+
+\[
+K_{\rm crit}^{(\infty)}
+=
+e^{-0.6}
+\approx
+0.548812.
+\]
+
+Thus even infinitely rich finite information architecture cannot pay a
+constitutive contingent-control cost above the biological value remaining
+after the minimum two-step strict-routing architecture.
+
+## Corollary RF2.4 — sensory complexity and natural history jointly bound evolvability
+
+The hierarchy is now
+
+\[
+K_{\rm crit}(n,m,b;U)
+\le
+K_{\rm crit}^{(b)}(U)
+\le
+U(2)-U_\infty.
+\]
+
+The three ceilings correspond to:
+
+1. a particular finite ecological information budget;
+2. unlimited task size but bounded cue arity;
+3. unlimited finite information structure.
+
+So failure of adaptive sensing can arise at three distinct levels:
+
+- not enough worlds/resources in the focal system;
+- cue arity too restrictive;
+- or natural history itself leaves too little value after the minimum strict
+  adaptive decision depth.
+
+
 ## 10. Relation to PAYOFF
 
 The forward interface is
