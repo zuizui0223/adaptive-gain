@@ -313,6 +313,60 @@ distinguishable outcomes of one declared query, not receptor count, neural
 dimensionality, or sensory fidelity in general.
 
 
+
+### Adaptive-tree flattening into all possible queries is established
+
+The generic simulation
+
+\[
+\text{adaptive depth }h
+\Longrightarrow
+\text{nonadaptive query all internal nodes}
+\]
+
+is not novel.
+
+For binary-outcome query algorithms, recent query-complexity literature
+explicitly uses the bound
+
+\[
+1+2+\cdots+2^{h-1}
+=
+2^h-1
+\]
+
+to convert an adaptive \(h\)-query computation tree into a nonadaptive query
+set. For example, *Adaptive Query Algorithms for Relational Structures Based
+on Homomorphism Counts* (MFCS 2025) uses exactly this flattening argument.
+
+Therefore the programme must not claim novelty for:
+
+- the existence of adaptive-to-nonadaptive flattening;
+- the crude \(b\)-ary internal-node ceiling
+  \[
+  J_b(h)=\frac{b^h-1}{b-1};
+  \]
+- exponential adaptive/nonadaptive separations in query complexity by
+  themselves.
+
+The narrower candidate is the **fixed-resource sharpness** inside the present
+target-resolution model:
+
+- the exact frontier
+  \[
+  (C_A,C_F)=(h,\min\{m,F_b(n,h)\})
+  \]
+  is attained at every feasible depth;
+- represented-world count \(n\), query count \(m\), and query arity \(b\) are
+  simultaneously controlled;
+- private opposite-target pairs certify fixed necessity;
+- natural-history value then lifts that attainable frontier exactly.
+
+So the biological paper should treat flattening as a known upper-bound idea and
+place any novelty on the sharp finite frontier plus its evolutionary
+interpretation.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
