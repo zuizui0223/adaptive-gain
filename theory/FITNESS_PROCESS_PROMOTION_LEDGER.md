@@ -200,6 +200,45 @@ Required claim boundary:
 
 C_A is not fitness, expected latency, or the uniquely evolved policy.
 
+
+### A1.25. Absolute robust versus expected ceilings
+
+Promote the unrestricted distinction:
+
+\[
+R_{\rm robust}^{\sup}
+=
+U(2)-U_\infty,
+\]
+
+while
+
+\[
+R_{\rm expected}^{\sup}
+=
+U(1)-U_\infty
+\]
+
+when encounter frequencies may be arbitrarily skewed.
+
+This creates an exact expected-only cost interval
+
+\[
+U(2)-U_\infty
+\le K
+<
+U(1)-U_\infty.
+\]
+
+Use the exponential \(\mu=0.3,\ K=0.60\) binary witness to show that a control
+cost can be impossible to repay robustly under **any** finite information
+architecture yet still be favored in expectation when hard states are rare.
+
+This should be presented as the sharp consequence of adding encounter
+frequencies to the structural theory, not as a generic novelty claim about
+expected versus worst-case optimization.
+
+
 ### A1.5. Robust base plus early-termination premium
 
 State explicitly in the main text:
