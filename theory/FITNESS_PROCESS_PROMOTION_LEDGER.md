@@ -129,7 +129,7 @@ Required claim boundary:
 
 C_A is not fitness, expected latency, or the uniquely evolved policy.
 
-### A1.5. Robust versus expected value
+### A1.5. Robust base plus early-termination premium
 
 State explicitly in the main text:
 
@@ -157,6 +157,37 @@ for a minimax tree, and the inequality can be strict.
 Therefore the sharp envelope is an exact **frequency-free floor/threshold**.
 It is not an upper bound on expected selection under skewed encounter
 frequencies.
+
+Promote the exact decomposition
+
+\[
+\boxed{
+R_{\rm expected}(\pi)
+=
+R_{\rm robust}(\pi)
++
+P_{\rm early}(\pi),
+}
+\]
+
+where
+
+\[
+P_{\rm early}(\pi)
+=
+\sum_xp_x[U(T_\pi(x))-U(H_\pi)]
+\ge0.
+\]
+
+This gives a direct biological interpretation to encounter frequencies:
+frequencies do not change the robust structural base; they determine how much
+extra value is earned by early-terminating branches.
+
+Use the exact four-world rescue witness as the canonical example:
+\(C_A=C_F=2\) but expected adaptive value becomes positive when the common
+one-step state exceeds the threshold
+\(p^*=2e^{-\mu}/(3+2e^{-\mu})\), equal to \(1/4\) at
+\(\mu=\log2\).
 
 This distinction must appear before any use of the word "fitness."
 
@@ -342,23 +373,26 @@ These are established, generic, or already owned elsewhere in the programme.
 
 ## Proposed main-result hierarchy
 
-1. **Process identity:** ecological value arises from overlap between feasible
-   completion profiles and natural-history value of time.
-2. **Architecture consequence:** opportunity hazard shape determines recovery
+1. **Sharp robust frontier:** finite topology gives the exact frequency-free
+   value floor and robust architecture-cost threshold.
+2. **Expected-value premium:** branch frequencies add the exact
+   early-termination premium above that robust floor.
+3. **Policy consequence:** the biologically favored routing policy need not be
+   the minimax \(C_A\) policy because a worse worst case can buy a larger
+   early-termination premium.
+4. **Architecture consequence:** opportunity hazard shape determines recovery
    curvature and therefore whether time-saving architecture has increasing or
    diminishing returns.
-3. **Policy consequence:** the biologically favored routing policy need not be
-   the minimax (C_A) policy.
-4. **Empirical anchor:** a real multisensory Aedes response has strongly
+5. **Empirical anchor:** a real multisensory Aedes response has strongly
    nonuniform temporal benefit, so scalar effect magnitude cannot determine
    ecological value.
 
 ## Current strongest one-sentence claim
 
-> Natural history does not merely scale a structural adaptive-gain score; it
-> selects among points on the exact finite routing frontier, so the architecture
-> that maximizes (C_F/C_A) need not maximize the ecological or evolutionary
-> value of adaptivity.
+> Exact routing structure determines a robust value floor; encounter
+> frequencies add an early-termination premium, so the architecture that
+> maximizes structural adaptive gain need not maximize expected evolutionary
+> value.
 
 A process-oriented companion sentence is:
 
