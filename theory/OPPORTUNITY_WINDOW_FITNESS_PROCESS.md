@@ -526,6 +526,150 @@ the branchwise distribution of completion costs, together with state probabiliti
 This is not a defect of the worst-case theory. It clarifies its biological role: worst-case routeability provides a guaranteed performance floor, while evolutionary fitness generally depends on how often each branch is encountered and how quickly that branch terminates.
 
 
+
+## 6c. Theorem OF6 — stochastic completion times reduce fitness to distribution overlap
+
+Real organisms need not complete the same decision in a deterministic time on every encounter.
+
+For architecture j, let
+
+\[
+T_j\in[0,\infty]
+\]
+
+be the random time or acquisition cost at which the correct focal action is resolved. Trials that never resolve correctly may be represented by T_j=infinity.
+
+Let B be the random ecological opportunity limit.
+
+The timely-success probability is always
+
+\[
+q_j=\Pr(T_j\le B).
+\]
+
+If B is independent of T_j conditional on the declared ecological state, with opportunity CDF G and completion-time CDF F_j, then
+
+\[
+\boxed{
+q_j
+=
+E_B[F_j(B)]
+=
+E_{T_j}[S_B(T_j)].
+}
+\]
+
+Therefore the performance advantage of architecture i over architecture j is
+
+\[
+\boxed{
+R_{i:j}
+=
+vE_B[F_i(B)-F_j(B)].
+}
+\]
+
+This is the distributional version of the opportunity-window theorem.
+
+For deterministic completion times
+
+\[
+T_A=C_A,
+\qquad
+T_F=C_F,
+\]
+
+the CDF difference is one exactly on
+
+\[
+[C_A,C_F)
+\]
+
+and zero elsewhere, recovering
+
+\[
+R_{A:F}=v\Pr(C_A\le B<C_F).
+\]
+
+### Consequence — deadline experiments can estimate the relevant performance object directly
+
+At an experimentally imposed deadline b,
+
+\[
+F_j(b)=\Pr(T_j\le b)
+\]
+
+is simply the probability of a correct completed decision by that deadline.
+
+Thus an experiment that randomizes presentation durations or opportunity windows can estimate the entire curve
+
+\[
+b\mapsto F_j(b)
+\]
+
+without first forcing every trial into one deterministic cost.
+
+Natural-history measurements of the opportunity distribution G then supply the ecological weighting:
+
+\[
+\boxed{
+R_{i:j}
+=
+v\int [F_i(b)-F_j(b)]\,dG(b).
+}
+\]
+
+The fitness-relevant object is therefore the **overlap between the architecture performance-difference curve and the distribution of ecological opportunity limits**.
+
+### Consequence — mean decision time is not sufficient
+
+Two architectures can have the same mean completion time but different early tails, and therefore different values under short ecological opportunities.
+
+Likewise, one architecture can have a lower mean completion time but little fitness advantage if its improvement occurs mostly at durations where ecological opportunities rarely terminate.
+
+Hence neither worst-case cost, structural gap, nor mean latency alone identifies selection.
+
+### Exact log-fitness comparison
+
+With baseline fitness w0>0, timely-resolution value v>=0, and architecture log costs kappa_i and kappa_j,
+
+\[
+\boxed{
+s_{i:j}
+=
+\log
+\frac{w_0+vq_i}
+{w_0+vq_j}
+-
+(\kappa_i-\kappa_j),
+}
+\]
+
+where
+
+\[
+q_i=\Pr(T_i\le B),
+\qquad
+q_j=\Pr(T_j\le B).
+\]
+
+This formula is directly estimable from individual-level time-to-decision data and opportunity-duration data.
+
+### Dependence caveat
+
+If the ecological opportunity limit responds to the organism's behavior—for example, a host becomes defensive after probing—B and T need not be independent.
+
+Then the primitive quantity remains
+
+\[
+q_j=\Pr(T_j\le B_j)
+\]
+
+under the joint process for architecture j.
+
+The overlap integral using separate marginal distributions is licensed only when conditional independence, external deadline randomization, or another justified decomposition applies.
+
+
 ## 7. Process interpretation
 
 The causal chain is:
