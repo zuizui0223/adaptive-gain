@@ -331,3 +331,94 @@ def empirical_pairwise_log_selection(
         )
         - (focal_maintenance_log_cost - comparator_maintenance_log_cost)
     )
+
+
+
+def opportunity_log_recovery_exponential(
+    saving: float,
+    *,
+    baseline_completion_cost: float,
+    closure_rate: float,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> float:
+    """Log-performance recovery from reducing completion cost."""
+    if not math.isfinite(saving) or saving < 0:
+        raise ValueError("saving must be finite and nonnegative")
+    if (
+        not math.isfinite(baseline_completion_cost)
+        or baseline_completion_cost <= 0
+        or saving >= baseline_completion_cost
+    ):
+        raise ValueError("require 0 <= saving < baseline_completion_cost")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(baseline_fitness) or baseline_fitness <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    base_term = resolution_value * math.exp(
+        -closure_rate * baseline_completion_cost
+    )
+    routed_term = base_term * math.exp(closure_rate * saving)
+    return math.log(
+        (baseline_fitness + routed_term)
+        / (baseline_fitness + base_term)
+    )
+
+
+def opportunity_architecture_thresholds_exponential(
+    max_saving: float,
+    *,
+    baseline_completion_cost: float,
+    closure_rate: float,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> tuple[float, float]:
+    """Return local and global linear architecture-cost thresholds."""
+    if not math.isfinite(max_saving) or max_saving <= 0:
+        raise ValueError("max_saving must be finite and positive")
+    if max_saving >= baseline_completion_cost:
+        raise ValueError("max_saving must be below baseline completion cost")
+
+    a = resolution_value * math.exp(
+        -closure_rate * baseline_completion_cost
+    )
+    p0 = a / (baseline_fitness + a)
+    local = closure_rate * p0
+    recovery = opportunity_log_recovery_exponential(
+        max_saving,
+        baseline_completion_cost=baseline_completion_cost,
+        closure_rate=closure_rate,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+    )
+    global_threshold = recovery / max_saving
+    return local, global_threshold
+
+
+def opportunity_architecture_value_exponential(
+    saving: float,
+    *,
+    baseline_completion_cost: float,
+    closure_rate: float,
+    architecture_cost_per_saving: float,
+    baseline_fitness: float = 1.0,
+    resolution_value: float = 1.0,
+) -> float:
+    """Net log-fitness value with linear architecture cost."""
+    if (
+        not math.isfinite(architecture_cost_per_saving)
+        or architecture_cost_per_saving < 0
+    ):
+        raise ValueError(
+            "architecture_cost_per_saving must be finite and nonnegative"
+        )
+    return opportunity_log_recovery_exponential(
+        saving,
+        baseline_completion_cost=baseline_completion_cost,
+        closure_rate=closure_rate,
+        baseline_fitness=baseline_fitness,
+        resolution_value=resolution_value,
+    ) - architecture_cost_per_saving * saving
