@@ -4,6 +4,8 @@ import pytest
 
 from adaptive_gain.evolutionary_resource_frontier import (
     binary_evolutionary_resource_corners,
+    bounded_arity_evolutionary_depth_corners,
+    minimum_world_count_for_fixed_burden,
     exponential_max_viable_adaptive_depth,
     exponential_required_gap,
     full_b_ary_internal_nodes,
@@ -184,3 +186,43 @@ def test_binary_arity_ceiling_vanishes_under_high_urgency():
         resolution_value=1.0,
     )
     assert ceiling < 1e-8
+
+
+
+def test_minimum_world_count_for_declared_burden_depends_on_arity_and_depth():
+    assert minimum_world_count_for_fixed_burden(7, 3, 2) == 8
+    assert minimum_world_count_for_fixed_burden(7, 3, 3) == 8
+    assert minimum_world_count_for_fixed_burden(5, 2, 4) == 8
+    assert minimum_world_count_for_fixed_burden(5, 2, 3) is None
+
+
+def test_higher_arity_can_make_shallower_evolutionary_corner_feasible():
+    kwargs = dict(
+        max_adaptive_depth=6,
+        architecture_cost=0.25,
+        completion_value=lambda c: math.exp(-0.3 * c),
+    )
+    binary = bounded_arity_evolutionary_depth_corners(
+        max_arity=2,
+        **kwargs,
+    )
+    ternary = bounded_arity_evolutionary_depth_corners(
+        max_arity=3,
+        **kwargs,
+    )
+    quaternary = bounded_arity_evolutionary_depth_corners(
+        max_arity=4,
+        **kwargs,
+    )
+
+    assert binary[0].adaptive_depth == 3
+    assert binary[0].minimum_world_count == 8
+    assert binary[0].minimum_query_count == 7
+
+    assert ternary[0].adaptive_depth == 3
+    assert ternary[0].minimum_world_count == 8
+    assert ternary[0].minimum_query_count == 7
+
+    assert quaternary[0].adaptive_depth == 2
+    assert quaternary[0].minimum_world_count == 8
+    assert quaternary[0].minimum_query_count == 5
