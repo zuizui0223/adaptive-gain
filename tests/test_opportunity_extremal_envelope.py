@@ -12,7 +12,7 @@ from adaptive_gain.opportunity_extremal_envelope import (
     sharp_log_selection_envelope,
     sharp_opportunity_advantage_envelope,
     sharp_maintenance_log_cost_ceiling,
-    adaptive_selection_possible_in_scope,
+    robust_positive_advantage_possible_in_scope,
 )
 
 
@@ -99,7 +99,7 @@ def test_nonincreasing_survival_is_required():
 
 
 
-def test_maintenance_cost_ceiling_is_exact_existence_threshold():
+def test_maintenance_cost_ceiling_is_exact_robust_existence_threshold():
     survival = exp_survival(0.3)
     ceiling = sharp_maintenance_log_cost_ceiling(
         10,
@@ -111,7 +111,7 @@ def test_maintenance_cost_ceiling_is_exact_existence_threshold():
     )
     assert ceiling > 0.0
 
-    assert adaptive_selection_possible_in_scope(
+    assert robust_positive_advantage_possible_in_scope(
         10,
         9,
         2,
@@ -120,7 +120,7 @@ def test_maintenance_cost_ceiling_is_exact_existence_threshold():
         resolution_value=1.0,
         maintenance_log_cost=0.99 * ceiling,
     )
-    assert not adaptive_selection_possible_in_scope(
+    assert not robust_positive_advantage_possible_in_scope(
         10,
         9,
         2,
@@ -129,7 +129,7 @@ def test_maintenance_cost_ceiling_is_exact_existence_threshold():
         resolution_value=1.0,
         maintenance_log_cost=ceiling,
     )
-    assert not adaptive_selection_possible_in_scope(
+    assert not robust_positive_advantage_possible_in_scope(
         10,
         9,
         2,
