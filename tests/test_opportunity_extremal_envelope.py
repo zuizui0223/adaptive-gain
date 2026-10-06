@@ -10,6 +10,8 @@ from adaptive_gain.opportunity_extremal_envelope import (
     sharp_exponential_opportunity_envelope,
     sharp_log_selection_envelope,
     sharp_opportunity_advantage_envelope,
+    sharp_maintenance_log_cost_ceiling,
+    adaptive_selection_possible_in_scope,
 )
 
 
@@ -93,3 +95,60 @@ def test_nonincreasing_survival_is_required():
             2,
             lambda c: min(1.0, 0.2 + 0.1 * c),
         )
+
+
+
+def test_maintenance_cost_ceiling_is_exact_existence_threshold():
+    survival = exp_survival(0.3)
+    ceiling = sharp_maintenance_log_cost_ceiling(
+        10,
+        9,
+        2,
+        survival,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+    )
+    assert ceiling > 0.0
+
+    assert adaptive_selection_possible_in_scope(
+        10,
+        9,
+        2,
+        survival,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+        maintenance_log_cost=0.99 * ceiling,
+    )
+    assert not adaptive_selection_possible_in_scope(
+        10,
+        9,
+        2,
+        survival,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+        maintenance_log_cost=ceiling,
+    )
+    assert not adaptive_selection_possible_in_scope(
+        10,
+        9,
+        2,
+        survival,
+        baseline_fitness=1.0,
+        resolution_value=1.0,
+        maintenance_log_cost=1.01 * ceiling,
+    )
+
+
+def test_exponential_maintenance_ceiling_is_small_at_urgency_extremes():
+    low = sharp_maintenance_log_cost_ceiling(
+        10, 9, 2, exp_survival(1e-5)
+    )
+    middle = sharp_maintenance_log_cost_ceiling(
+        10, 9, 2, exp_survival(0.3)
+    )
+    high = sharp_maintenance_log_cost_ceiling(
+        10, 9, 2, exp_survival(10.0)
+    )
+
+    assert low < middle
+    assert high < middle
