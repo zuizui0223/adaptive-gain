@@ -18,9 +18,9 @@ For fixed (n,m,b), plot:
 
 Highlight the binary (n=10,m=9) points:
 
-[
+\[
 (2,3),quad(3,7),quad(4,9).
-]
+\]
 
 Annotate:
 
@@ -31,9 +31,9 @@ Annotate:
 
 Plot or label the fixed/adaptive ratios:
 
-[
+\[
 3/2,quad7/3,quad9/4.
-]
+\]
 
 Highlight (h=3) as the ratio optimum.
 
@@ -41,31 +41,31 @@ Highlight (h=3) as the ratio optimum.
 
 For exponential completion value
 
-[
-U(c)=e^{-mu c},
-]
+\[
+U(c)=e^{-\mu c},
+\]
 
 plot
 
-[
+\[
 U(h)-U(I_h)
-]
+\]
 
 against (mu) for the three highlighted frontier points.
 
 Mark the two crossings near:
 
-[
-mu=0.1546968,
-qquad
-mu=0.6562560.
-]
+\[
+\mu=0.1546968,
+\qquad
+\mu=0.6562560.
+\]
 
 Show the optimum sequence:
 
-[
-h^*:4	o3	o2.
-]
+\[
+h^*:4\to3\to2.
+\]
 
 ### Figure 1 message
 
@@ -87,13 +87,13 @@ information class can support it?
 
 Schematic of
 
-[
+\[
 K
-	o
+\to
 J_K(h)
-	o
+\to
 I_hge J_K(h).
-]
+\]
 
 Show that natural history plus control cost determines the fixed burden required
 at each adaptive depth.
@@ -105,15 +105,15 @@ and one late depth that fails biologically.
 
 For
 
-[
+\[
 U(c)=e^{-0.3c},
-]
+\]
 
 plot
 
-[
-K_{m crit,robust}^{(b)}
-]
+\[
+K_{\rm crit,robust}^{(b)}
+\]
 
 against cue arity (b).
 
@@ -126,15 +126,15 @@ Mark:
 
 Draw a horizontal line at
 
-[
+\[
 K=0.30.
-]
+\]
 
 This visually gives
 
-[
-b_{min}^{m robust}=3.
-]
+\[
+b_{min}^{\rm robust}=3.
+\]
 
 ### Panel C — Interpretation
 
@@ -165,22 +165,22 @@ can make it valuable in every state?
 
 For bounded-below (U), show:
 
-[
-sup R_{m robust}=U(2)-U_infty,
-]
+\[
+sup R_{\rm robust}=U(2)-U_\infty,
+\]
 
-[
-sup R_{m expected}=U(1)-U_infty.
-]
+\[
+sup R_{\rm expected}=U(1)-U_\infty.
+\]
 
 Shade the frequency-assisted evolvability band:
 
-[
-U(2)-U_infty
+\[
+U(2)-U_\infty
 le K
 <
-U(1)-U_infty.
-]
+U(1)-U_\infty.
+\]
 
 For exponential (U(c)=e^{-0.3c}), annotate:
 
@@ -192,10 +192,10 @@ For exponential (U(c)=e^{-0.3c}), annotate:
 
 Use the exact finite (n=10,m=9) expected ceiling:
 
-[
+\[
 U(1)-U(9)
-approx0.673613.
-]
+\approx0.673613.
+\]
 
 Show a binary tree with:
 
@@ -206,15 +206,15 @@ Plot expected value against one-step encounter mass (p_1).
 
 Mark the finite-scope threshold for (K=0.60):
 
-[
-p_{1,m crit}approx0.6166.
-]
+\[
+p_{1,\rm crit}\approx0.6166.
+\]
 
 Optionally show the scalable asymptotic threshold
 
-[
-p_{m crit}approx0.2666
-]
+\[
+p_{\rm crit}\approx0.2666
+\]
 
 as a dashed comparison, clearly labeled as a different scope.
 
@@ -250,40 +250,40 @@ query forces (C_F=I_h).
 
 Use the exact binary family
 
-[
-C_A=d+1,qquad C_F=2^d.
-]
+\[
+C_A=d+1,\qquad C_F=2^d.
+\]
 
 Show:
 
-- (C_F/C_A	oinfty);
+- (C_F/C_A\toinfty);
 - for fixed exponential urgency, biological value tends to zero.
 
 ### Figure S3 — robust versus expected decomposition within one task
 
 Show:
 
-[
-R_{m expected}
+\[
+R_{\rm expected}
 =
-R_{m robust}
+R_{\rm robust}
 +
-P_{m early}.
-]
+P_{\rm early}.
+\]
 
 ### Figure S4 — scalable complexity
 
 Show the near-maximal-value scaling:
 
-[
-C_{A,min}=Theta(log(1/mu)),
-]
+\[
+C_{A,min}=Theta(log(1/\mu)),
+\]
 
-[
+\[
 C_{F,min},n_{min},m_{min}
 =
-Theta(1/mu).
-]
+Theta(1/\mu).
+\]
 
 Keep as Supplement because log-versus-linear adaptivity gaps have substantial
 algorithmic prior art.
