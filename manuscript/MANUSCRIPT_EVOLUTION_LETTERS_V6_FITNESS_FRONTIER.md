@@ -329,7 +329,7 @@ J_K(h)
 \]
 Then positive robust architecture value at depth (h) is possible exactly when
 \[
-I_hge J_K(h).
+I_h\ge J_K(h).
 \]
 
 The forward value theorem therefore has an exact inverse: natural history and
