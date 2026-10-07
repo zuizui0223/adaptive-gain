@@ -6,6 +6,8 @@ ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "manuscript" / "MANUSCRIPT_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md"
 SPINE = ROOT / "theory" / "CANONICAL_FITNESS_THEOREM_SPINE_V1.md"
 READINESS = ROOT / "manuscript" / "EVOLUTION_LETTERS_V6_FITNESS_FRONTIER_READINESS_V1.json"
+FIGPLAN = ROOT / "manuscript" / "FIGURE_PLAN_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md"
+LEGENDS = ROOT / "manuscript" / "FIGURE_LEGENDS_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md"
 
 
 def _text(path: Path) -> str:
@@ -116,3 +118,24 @@ def test_v6_readiness_declares_draft_and_preserves_v5():
     assert data["target"] == "Evolution Letters"
     assert data["preserved_v5_freeze"]["preserved"] is True
     assert data["promotion_rule"]["new_main_theorem_stop_rule"] is True
+
+
+
+def test_v6_figure_plan_tracks_four_result_story():
+    text = _text(FIGPLAN)
+    for phrase in (
+        "Natural history re-ranks an exact structural frontier",
+        "Finite information constraints impose exact evolutionary no-go regions",
+        "Encounter frequencies create value unavailable to robust architecture",
+        "temporal process-shape anchor — not a fitness estimate",
+    ):
+        assert phrase in text
+
+
+def test_v6_legends_keep_visual_claim_firewalls():
+    text = _text(LEGENDS)
+    assert text.count("**Alt text:**") == 3
+    assert "Structural ratios are not interpreted as fitness." in text
+    assert "not biological receptor count" in text
+    assert "it is not an estimate of fitness" in text
+    assert "frequency-assisted evolvability band" in text
