@@ -15,8 +15,6 @@ import csv
 import math
 from pathlib import Path
 
-from openpyxl import load_workbook
-
 
 def first_code_frame(
     values: list[object],
@@ -49,6 +47,13 @@ def extract_workbook(
 ) -> list[dict[str, object]]:
     if not math.isfinite(fps) or fps <= 0:
         raise ValueError("fps must be finite and positive")
+
+    try:
+        from openpyxl import load_workbook
+    except ImportError as exc:
+        raise RuntimeError(
+            "openpyxl is required for XLSX latency extraction"
+        ) from exc
 
     workbook = load_workbook(path, data_only=True, read_only=True)
     sheet = workbook.active
