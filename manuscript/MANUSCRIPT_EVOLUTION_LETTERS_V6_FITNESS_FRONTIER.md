@@ -58,10 +58,14 @@ Predators narrow prey alternatives, herbivores evaluate hosts sequentially,
 pollinators combine sensory channels, and animals often stop gathering
 information once a sufficient ecological distinction has been resolved.
 Conditional information use is therefore a natural feature of ecological
-decision making.
+decision making (Dall et al. 2005; Schmidt et al. 2010; Trimmer & Houston
+2014).
 
-The evolutionary interpretation is less straightforward. A sensing
-architecture can be structurally efficient without being selectively valuable.
+The evolutionary interpretation is less straightforward. Information can have
+a measurable fitness value, but that value depends on the ecological decision
+problem rather than information amount alone (Donaldson-Matasci et al. 2010;
+Rivoire & Leibler 2011; Moffett & Eckford 2022). A sensing architecture can be
+structurally efficient without being selectively valuable.
 Saving five observations may matter greatly if it moves an action inside an
 ecological opportunity window, or hardly at all if both the fixed and
 contingent decisions are already early enough, or already too late. Likewise,
@@ -491,7 +495,7 @@ no finite information architecture can make robustly favorable.
 
 The theory requires a biological value of completion through time. We do not
 claim to estimate that function from current data, but public Aedes aegypti
-host-seeking data illustrate why it matters.
+host-seeking data illustrate why it matters (Chandel et al. 2024).
 
 Chandel et al. measured host-seeking activity with and without infrared cues
 during a 300-s assay containing transient CO2 pulses. Reanalysis of the public
@@ -590,9 +594,12 @@ contribution here is to derive sharp information-structural limits on (R).
 
 ### What the theory does not claim
 
-Sequential value of information, prior-weighted decision trees,
-deadline-sensitive decisions, adaptive-tree flattening, adaptivity gaps and
-costly sensory fidelity all have substantial prior literatures.
+Sequential value of information (Miller 1975), prior-weighted and
+worst-versus-expected decision trees (Hyafil & Rivest 1976; Saettler et al.
+2017), deadline-sensitive action utility (Ash & Hayes-Roth 1996), and
+adaptive-versus-nonadaptive expected-value gaps (Hellerstein et al. 2022) all
+have substantial prior literatures. These are boundary conditions for the
+present contribution, not claims of novelty.
 
 The proposed contribution is narrower:
 
@@ -633,3 +640,56 @@ regimes unavailable to any robust statewise architecture.
 Structural adaptive gain is potential. Evolution depends on where that
 potential lies in time and how often each branch of the environment is
 encountered.
+
+
+## References
+
+Ash, D. & Hayes-Roth, B. 1996. Using action-based hierarchies for real-time
+diagnosis. *Artificial Intelligence* 88:317–347.
+https://doi.org/10.1016/S0004-3702(96)00024-0.
+
+Chandel, A., DeBeaubien, N. A., Ganguly, A. et al. 2024. Thermal infrared
+directs host-seeking behaviour in *Aedes aegypti* mosquitoes. *Nature*
+633:615–623. https://doi.org/10.1038/s41586-024-07848-5.
+
+Dall, S. R. X., Giraldeau, L.-A., Olsson, O., McNamara, J. M. & Stephens,
+D. W. 2005. Information and its use by animals in evolutionary ecology.
+*Trends in Ecology & Evolution* 20:187–193.
+https://doi.org/10.1016/j.tree.2005.01.010.
+
+Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness
+value of information. *Oikos* 119:219–230.
+https://doi.org/10.1111/j.1600-0706.2009.17781.x.
+
+Hellerstein, L., Kletenik, D., Liu, N. & Witter, R. T. 2022. Adaptivity gaps
+for the stochastic Boolean function evaluation problem. In *Approximation and
+Online Algorithms*, Lecture Notes in Computer Science, 190–210.
+https://doi.org/10.1007/978-3-031-18367-6_10.
+
+Hyafil, L. & Rivest, R. L. 1976. Constructing optimal binary decision trees is
+NP-complete. *Information Processing Letters* 5:15–17.
+https://doi.org/10.1016/0020-0190(76)90095-8.
+
+Miller, A. C. 1975. The value of sequential information. *Management Science*
+22:1–11. https://doi.org/10.1287/mnsc.22.1.1.
+
+Moffett, A. S. & Eckford, A. W. 2022. Minimal informational requirements for
+fitness. *Physical Review E* 105:014403.
+https://doi.org/10.1103/PhysRevE.105.014403.
+
+Rivoire, O. & Leibler, S. 2011. The value of information for populations in
+varying environments. *Journal of Statistical Physics* 142:1124–1166.
+https://doi.org/10.1007/s10955-011-0166-2.
+
+Saettler, A., Laber, E. & Cicalese, F. 2017. Trading off worst and expected
+cost in decision tree problems. *Algorithmica* 79:886–908.
+https://doi.org/10.1007/s00453-016-0211-2.
+
+Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of
+information: an overview on the ecological significance of making informed
+decisions. *Oikos* 119:304–316.
+https://doi.org/10.1111/j.1600-0706.2009.17573.x.
+
+Trimmer, P. C. & Houston, A. I. 2014. An evolutionary perspective on
+information processing. *Topics in Cognitive Science* 6:312–330.
+https://doi.org/10.1111/tops.12085.
