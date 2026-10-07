@@ -1,0 +1,60 @@
+{
+  "schema": "adaptive-gain-evolution-letters-v6-fitness-frontier-readiness-v1",
+  "date": "2026-10-07",
+  "target": "Evolution Letters",
+  "article_type": "Letter",
+  "status": "v6_theory_draft_green_core_not_submission_ready",
+  "headline": "natural history re-ranks adaptive information architectures",
+  "preserved_v5_freeze": {
+    "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V5_ROUTEABILITY_READINESS_V1.json",
+    "preserved": true,
+    "replacement_status": "V5 remains frozen fallback; V6 is a separate theory-development candidate."
+  },
+  "v6_assets": {
+    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md",
+    "robust_theory": "theory/SHARP_OPPORTUNITY_FITNESS_ENVELOPE.md",
+    "inverse_theory": "theory/EVOLUTIONARY_RESOURCE_FRONTIER.md",
+    "surface_test": "tests/test_evolution_letters_v6_fitness_frontier_surface.py",
+    "robust_receipt": "validation/sharp_opportunity_fitness_envelope_v1.json",
+    "evolutionary_receipt": "validation/evolutionary_resource_frontier_v1.json"
+  },
+  "main_results": [
+    "exact attainable fixed-(n,m,b) adaptive/fixed frontier at every feasible depth",
+    "sharp lift of that frontier by arbitrary finite nonincreasing biological completion value",
+    "inverse robust evolutionary thresholds including global cue-arity no-go and minimum robust cue arity",
+    "exact fixed-scope expected-value ceiling U(1)-U(min(m,n-1)), independent of cue arity b>=2"
+  ],
+  "claim_firewalls": {
+    "CA": "C_A is minimax guaranteed complexity, not fitness or the uniquely evolved policy.",
+    "robust_expected": "Robust value is frequency-free/statewise; expected value additionally depends on branch frequencies and completion profiles.",
+    "comparator": "All adaptive-versus-fixed claims use the declared universal fixed comparator unless another comparator is modeled explicitly.",
+    "Aedes": "Chandel Figure 3a is a temporal process-shape anchor only, not a fitness or adaptive/fixed validation.",
+    "prior_art": "Sequential VOI, deadline-weighted utility, adaptivity gaps, tree flattening, prior-weighted expected depth and costly sensory fidelity are not novelty claims."
+  },
+  "validation": {
+    "arbitrary_depth_solver_grid_cases": 279,
+    "focused_ci_run_with_RF7_witnesses": 37613648497,
+    "focused_ci_status": "success",
+    "full_matrix_green_head_before_v6_prose": "552c3e24ce8fedeb419bb935ac45b6804f304edb",
+    "latest_full_matrix_status": "triggered_after_v6_prose",
+    "title_words": 6,
+    "abstract_words": 273,
+    "main_text_words": 2578
+  },
+  "promotion_rule": {
+    "new_main_theorem_stop_rule": true,
+    "rule": "Do not add a fifth main theorem unless it invalidates or strictly strengthens MAIN 1-4. New consequences belong in corollaries or Supplement.",
+    "submission_gate": [
+      "latest full Python matrix green at final V6 source head",
+      "targeted prior-art audit of exact fixed-(n,m,b) frontier and biological lift complete",
+      "citation pass and reference list complete",
+      "figure plan and legends created",
+      "human author metadata and approvals complete"
+    ]
+  },
+  "manuscript_role": {
+    "V5": "environment-centered routeability paper, frozen fallback",
+    "V6": "evolutionary process paper asking when structural routeability becomes robust or expected value"
+  }
+}
