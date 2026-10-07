@@ -129,6 +129,62 @@ first minute, while two individuals remain right-censored.
 This is a distribution-shape difference that would be obscured by a single
 mean latency.
 
+
+## 3b. Real individual completion profiles can cross
+
+The clean *Anopheles* profiles provide a particularly useful shape contrast.
+
+For *An. gambiae*,
+
+\[
+F(1)=F(2)=F(3)=F(4)=0.857.
+\]
+
+For *An. stephensi*,
+
+\[
+F(1)=F(2)=F(3)=0.833,
+\]
+
+but
+
+\[
+F(4)=0.889.
+\]
+
+Therefore the empirical discrete CDFs cross between the ends of minutes 3 and
+4:
+
+\[
+\boxed{
+F_{\rm gambiae}(t)>F_{\rm stephensi}(t)
+\quad
+\text{for }t=1,2,3\ {\rm min},
+}
+\]
+
+whereas
+
+\[
+\boxed{
+F_{\rm stephensi}(4)
+>
+F_{\rm gambiae}(4).
+}
+\]
+
+The two observed event-time distributions therefore do not have a single
+deadline-independent ordering.
+
+A hard ecological opportunity closing by 1–3 min would rank the observed
+*gambiae* probing profile higher, whereas one closing at 4 min would rank the
+observed *stephensi* profile higher.
+
+This is an empirical illustration of why a completion profile must be combined
+with a biological value-of-time function. It is **not** evidence that the two
+species evolved different routing architectures for this reason.
+
+
 ## 4. Relation to V6 theory
 
 The V6 expected-value layer uses an empirical object of the form
