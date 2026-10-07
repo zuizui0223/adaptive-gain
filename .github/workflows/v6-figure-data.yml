@@ -1,0 +1,36 @@
+name: v6-figure-data
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - adaptive_gain/bounded_arity_extremal_bounds.py
+      - adaptive_gain/evolutionary_resource_frontier.py
+      - scripts/build_v6_figure_data.py
+      - tests/test_v6_figure_data.py
+      - validation/uehara_binned_first_probe_v1.json
+      - validation/chandel_fig3a_value_kernel_v1.json
+      - .github/workflows/v6-figure-data.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: python -m pip install -e . pytest
+      - name: Test figure-data pipeline
+        run: python -m pytest -q tests/test_v6_figure_data.py
+      - name: Build frozen figure tables
+        run: python scripts/build_v6_figure_data.py --output-dir v6_figure_data
+      - name: Upload figure-data artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v6-figure-data
+          path: v6_figure_data
+          if-no-files-found: error
