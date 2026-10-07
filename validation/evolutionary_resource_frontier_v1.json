@@ -133,7 +133,18 @@
   "validation": {
     "focused_ci_run_37475355329": "26 tests passed",
     "earlier_frontier_solver_grid_cases": 279,
-    "latest_arity_extensions": "pending latest queued CI at time of receipt creation"
+    "latest_arity_extensions": "pending latest queued CI at time of receipt creation",
+    "latest_focused_ci": {
+      "run_id": 37613336925,
+      "head_sha": "778f8851c1ad8cfc41302586c321fc828d73b4aa",
+      "conclusion": "success",
+      "includes": [
+        "bounded-arity exact frontier tests",
+        "sharp opportunity envelope tests",
+        "evolutionary resource frontier tests",
+        "explicit finite expected-value ceiling witness tests"
+      ]
+    }
   },
   "claim_ceiling": "Robust ceilings are distribution-free statewise guarantees. Expected ceilings additionally optimize over encounter frequencies; neither supplies an empirical Aedes fitness estimate without natural opportunity and architecture-cost measurements.",
   "robust_expected_boundary": {
@@ -194,5 +205,20 @@
     "expected_global_ceiling": 0.7408182206817179,
     "one_step_mass_threshold": 0.26659691914156886,
     "conclusion": "The asymptotic scalable threshold is lower because the rare branch can carry arbitrarily large fixed burden."
-  }
+  },
+  "finite_scope_expected_frontier": {
+    "theorem": "sup R_expected(n,m,b)=U(1)-U(min(m,n-1)) for every b>=2",
+    "arity_dependence": "none for the supremum when world frequencies may be arbitrarily skewed",
+    "canonical_exponential_example": {
+      "n": 10,
+      "m": 9,
+      "mu": 0.3,
+      "M": 9,
+      "expected_ceiling": 0.6736127079419681,
+      "K": 0.6,
+      "p1_threshold": 0.6166136276001074
+    },
+    "interpretation": "Cue arity constrains robust statewise value, while encounter-frequency concentration can substitute for branching capacity in expected value."
+  },
+  "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md"
 }
