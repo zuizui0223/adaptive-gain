@@ -703,3 +703,39 @@ def test_finite_one_step_mass_witness_has_two_shallow_levels_and_exact_fixed_cos
         if second.outcomes[i] == second_outcome
     ]
     assert len({task.worlds[i].target for i in second_cell}) == 1
+
+
+
+def test_finite_expected_ceiling_witness_exact_on_small_nm_grid():
+    for n in range(3, 9):
+        for m in range(2, 7):
+            task = finite_expected_ceiling_witness(n, m)
+            fixed = fixed_minimum_resolution(task)
+            expected_fixed = min(m, n - 1)
+            assert fixed.minimum_cost == expected_fixed
+
+            root = task.queries[0]
+            shallow_outcome = root.outcomes[0]
+            compatible = [
+                i for i, outcome in enumerate(root.outcomes)
+                if outcome == shallow_outcome
+            ]
+            assert compatible
+            assert len({task.worlds[i].target for i in compatible}) == 1
+
+
+def test_finite_one_step_mass_witness_exact_on_small_nm_grid():
+    for n in range(3, 9):
+        for m in range(2, 7):
+            task = finite_expected_one_step_mass_witness(n, m)
+            fixed = fixed_minimum_resolution(task)
+            expected_fixed = min(m, n - 1)
+            assert fixed.minimum_cost == expected_fixed
+
+            root = task.queries[0]
+            common_outcome = root.outcomes[0]
+            root_common = [
+                i for i, outcome in enumerate(root.outcomes)
+                if outcome == common_outcome
+            ]
+            assert len({task.worlds[i].target for i in root_common}) == 1
