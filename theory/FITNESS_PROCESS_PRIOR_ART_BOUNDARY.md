@@ -367,6 +367,48 @@ place any novelty on the sharp finite frontier plus its evolutionary
 interpretation.
 
 
+
+### Distribution-dependent expected tree depth is established
+
+Decision-tree theory has long treated expected cost under a prior distribution
+as distinct from worst-case depth. High-probability states being placed in
+shallow leaves is therefore not a novelty claim.
+
+Recent and classical decision-tree work explicitly writes expected depth/cost as
+
+\[
+\sum_\ell p_\ell d_\ell
+\]
+
+and studies trade-offs between worst and expected performance.
+
+Therefore MAIN 4 must not be sold as:
+
+- skewed encounter frequencies favoring shallow branches;
+- priors changing expected decision cost;
+- expected value exceeding worst-state value.
+
+The narrower finite-routing result is the exact ceiling:
+
+\[
+\boxed{
+\sup R_{\rm expected}(n,m,b)
+=
+U(1)-U(\min\{m,n-1\})
+}
+\]
+
+for every \(b\ge2\), with a binary private-pair construction attaining the
+supremum.
+
+The model-specific consequence is that cue arity remains important for robust
+statewise evolvability but disappears from the exact finite-scope expected
+ceiling once encounter frequencies may be arbitrarily skewed.
+
+That arity contrast, rather than skewed priors themselves, is the defensible
+claim.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
