@@ -24,15 +24,15 @@ declared query resources, and maximum query arity (b).
 
 For each feasible adaptive depth (h), define
 
-[
-I_h=min{m,F_b(n,h)}.
-]
+\[
+I_h=\min{m,F_b(n,h)}.
+\]
 
 The protected-spine private-pair construction attains
 
-[
-oxed{(C_A,C_F)=(h,I_h)}
-]
+\[
+\boxed{(C_A,C_F)=(h,I_h)}
+\]
 
 for every feasible depth.
 
@@ -54,13 +54,13 @@ completion at cost (c).
 
 Then
 
-[
-oxed{
-R_{m robust,max}
+\[
+\boxed{
+R_{\rm robust,max}
 =
-max_h[U(h)-U(I_h)].
+\max_h[U(h)-U(I_h)].
 }
-]
+\]
 
 The same frontier witnesses attain the bound.
 
@@ -74,29 +74,29 @@ constant-marginal-value case is the structural gap alone sufficient.
 If (U(c)=vS(c)), with (S(c)) the probability that the ecological opportunity
 remains open, then
 
-[
-oxed{
-R_{m robust,max}
+\[
+\boxed{
+R_{\rm robust,max}
 =
-vmax_h[S(h)-S(I_h)].
+v\max_h[S(h)-S(I_h)].
 }
-]
+\]
 
 Canonical finite example: for binary (n=10,m=9), the frontier contains
 ((2,3),(3,7),(4,9)). The structural ratio is maximized at (h=3).
 Under exponential opportunity value (U(c)=e^{-mu c}), the robust-value
-optimum switches (h^*:4	o3	o2) as urgency increases.
+optimum switches (h^*:4\to3\to2) as urgency increases.
 
 Hence
 
-[
-oxed{
-	ext{ratio-optimal architecture}
+\[
+\boxed{
+\text{ratio-optimal architecture}
 
 eq
-	ext{biologically optimal architecture}.
+\text{biologically optimal architecture}.
 }
-]
+\]
 
 ## MAIN 3 — exact inverse evolutionary threshold and global arity no-go
 
@@ -104,17 +104,17 @@ Let contingent control pay additive constitutive cost (Kge0).
 
 At adaptive depth (h), define
 
-[
+\[
 J_K(h)
 =
-min{jge h:U(h)-U(j)>K}.
-]
+\min{jge h:U(h)-U(j)>K}.
+\]
 
 Positive robust value at that depth is possible exactly when
 
-[
-oxed{I_hge J_K(h).}
-]
+\[
+\boxed{I_hge J_K(h).}
+\]
 
 Thus biology can be inverted back into a minimum finite information
 architecture.
@@ -122,47 +122,47 @@ architecture.
 Allow world count and query count to grow without bound while keeping cue arity
 at most (b). Define
 
-[
-J_b(h)=rac{b^h-1}{b-1}.
-]
+\[
+J_b(h)=\frac{b^h-1}{b-1}.
+\]
 
 For bounded-below (U),
 
-[
-oxed{
-K_{m crit,robust}^{(b)}
+\[
+\boxed{
+K_{\rm crit,robust}^{(b)}
 =
-max_{hge2}[U(h)-U(J_b(h))].
+\max_{h\ge2}[U(h)-U(J_b(h))].
 }
-]
+\]
 
-If (K>K_{m crit,robust}^{(b)}), then no finite task with query arity at most
+If (K>K_{\rm crit,robust}^{(b)}), then no finite task with query arity at most
 (b) can guarantee positive net adaptive value in every represented state.
 Adding more worlds or more query resources cannot rescue it.
 
 Define
 
-[
-oxed{
-b_{min}^{m robust}
+\[
+\boxed{
+b_{min}^{\rm robust}
 =
-min{bge2:K<K_{m crit,robust}^{(b)}}.
+\min{b\ge2:K<K_{\rm crit,robust}^{(b)}}.
 }
-]
+\]
 
 For (U(c)=e^{-0.3c}) and (K=0.30),
 
-[
-K_{m crit,robust}^{(2)}approx0.290085,
-qquad
-K_{m crit,robust}^{(3)}approx0.386328,
-]
+\[
+K_{\rm crit,robust}^{(2)}\approx0.290085,
+\qquad
+K_{\rm crit,robust}^{(3)}\approx0.386328,
+\]
 
 so
 
-[
-oxed{b_{min}^{m robust}=3.}
-]
+\[
+\boxed{b_{min}^{\rm robust}=3.}
+\]
 
 This is a model-specific information-branching no-go, not a generic statement
 that biologically higher-fidelity senses are fitter.
@@ -174,20 +174,20 @@ Expected selection is different.
 
 For fixed finite (n,m), define
 
-[
-M=min{m,n-1}.
-]
+\[
+M=\min{m,n-1}.
+\]
 
 Across all legal tasks, guaranteed-resolving adaptive policies, and strictly
 positive world-frequency distributions,
 
-[
-oxed{
-sup R_{m expected}(n,m)
+\[
+\boxed{
+sup R_{\rm expected}(n,m)
 =
 U(1)-U(M).
 }
-]
+\]
 
 The supremum is approached by a binary private-pair tree with one
 high-probability one-query branch and rare branches carrying the fixed burden.
@@ -200,58 +200,58 @@ can substitute for cue branching capacity in the expected-value problem.
 
 Globally, for bounded-below (U),
 
-[
-oxed{sup R_{m robust}=U(2)-U_infty,}
-]
+\[
+\boxed{sup R_{\rm robust}=U(2)-U_\infty,}
+\]
 
 while
 
-[
-oxed{sup R_{m expected}=U(1)-U_infty.}
-]
+\[
+\boxed{sup R_{\rm expected}=U(1)-U_\infty.}
+\]
 
 Hence
 
-[
-oxed{
-U(2)-U_infty
+\[
+\boxed{
+U(2)-U_\infty
 le K
 <
-U(1)-U_infty
+U(1)-U_\infty
 }
-]
+\]
 
 is a frequency-assisted evolvability band.
 
 For exponential opportunity value (U(c)=ve^{-mu c}), the band is
 
-[
-oxed{
-ve^{-2mu}
+\[
+\boxed{
+ve^{-2\mu}
 le K
 <
-ve^{-mu}.
+ve^{-\mu}.
 }
-]
+\]
 
 At (mu=0.3,v=1,K=0.60), robust repayment is impossible for every finite
 architecture, but expected repayment is possible with binary cues.
 
 Inside this band, the scalable minimum mass on one-query states is
 
-[
-oxed{
-p_{m crit}
+\[
+\boxed{
+p_{\rm crit}
 =
-rac{
-K-[U(2)-U_infty]
+\frac{
+K-[U(2)-U_\infty]
 }{
 U(1)-U(2)
 }.
 }
-]
+\]
 
-For the example above, (p_{m crit}approx0.2666).
+For the example above, (p_{\rm crit}approx0.2666).
 
 This turns encounter frequencies into an explicit evolutionary resource.
 
@@ -274,14 +274,14 @@ encounter-frequency distribution
 
 The central distinction is therefore
 
-[
-oxed{
-	ext{information architecture}
+\[
+\boxed{
+\text{information architecture}
 
 eq
-	ext{fitness},
+\text{fitness},
 }
-]
+\]
 
 but finite architecture places exact limits on which fitness effects are
 possible.
