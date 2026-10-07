@@ -17,7 +17,9 @@
     "inverse_theory": "theory/EVOLUTIONARY_RESOURCE_FRONTIER.md",
     "surface_test": "tests/test_evolution_letters_v6_fitness_frontier_surface.py",
     "robust_receipt": "validation/sharp_opportunity_fitness_envelope_v1.json",
-    "evolutionary_receipt": "validation/evolutionary_resource_frontier_v1.json"
+    "evolutionary_receipt": "validation/evolutionary_resource_frontier_v1.json",
+    "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md"
   },
   "main_results": [
     "exact attainable fixed-(n,m,b) adaptive/fixed frontier at every feasible depth",
@@ -40,7 +42,8 @@
     "latest_full_matrix_status": "triggered_after_v6_prose",
     "title_words": 6,
     "abstract_words": 273,
-    "main_text_words": 2578
+    "main_text_words": 2578,
+    "focused_ci_with_finite_expected_grid": 37613648497
   },
   "promotion_rule": {
     "new_main_theorem_stop_rule": true,
@@ -56,5 +59,10 @@
   "manuscript_role": {
     "V5": "environment-centered routeability paper, frozen fallback",
     "V6": "evolutionary process paper asking when structural routeability becomes robust or expected value"
-  }
+  },
+  "figure_story": [
+    "Figure 1: exact structural frontier and natural-history re-ranking",
+    "Figure 2: inverse robust thresholds and cue-arity no-go",
+    "Figure 3: robust-versus-expected frequency rescue plus Aedes temporal process anchor"
+  ]
 }
