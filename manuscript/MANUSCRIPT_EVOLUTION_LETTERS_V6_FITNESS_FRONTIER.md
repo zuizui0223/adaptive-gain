@@ -514,9 +514,12 @@ especially delayed: only 10 of 38 individuals (26.3%) show probing in the first
 minute, the discrete cumulative probability reaches 0.50 only by minute 4, and
 15 of 38 remain without observed probing through 8 min. By contrast, first-
 minute probing occurs in 18/28 *Ae. aegypti* (64.3%), 12/14 *Anopheles
-gambiae* (85.7%) and 15/18 *An. stephensi* (83.3%). Thus individual temporal
-profiles differ in both early-tail mass and right-censoring, not merely in a
-single mean.
+gambiae* (85.7%) and 15/18 *An. stephensi* (83.3%). The two *Anopheles*
+profiles also cross: *An. gambiae* remains higher through minute 3
+(85.7% versus 83.3%), whereas *An. stephensi* reaches 88.9% by minute 4 and
+overtakes *An. gambiae*. Thus real individual temporal profiles can differ in
+early-tail mass, right-censoring and even deadline-dependent ordering, not
+merely in a single mean.
 
 These are process anchors, not fitness validations. The Chandel data do not
 identify individual completion times, and the Uehara source data are
