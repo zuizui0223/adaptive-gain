@@ -176,5 +176,28 @@
     "main": "Published source data preserve individual one-minute probing profiles with strongly different early-tail and right-censor structure across species.",
     "v6_role": "Individual-level coarse completion-profile anchor F_j(t), complementary to the aggregate high-resolution Chandel temporal-effect anchor.",
     "claim_ceiling": "Not frame-resolved latency, successful feeding, fitness, natural opportunity survival, or adaptive-versus-fixed architecture evidence."
+  },
+  "crossing_completion_profiles": {
+    "species_pair": [
+      "Anopheles gambiae",
+      "Anopheles stephensi"
+    ],
+    "gambiae_cdf_minute_end": {
+      "1": 0.8571428571428571,
+      "2": 0.8571428571428571,
+      "3": 0.8571428571428571,
+      "4": 0.8571428571428571
+    },
+    "stephensi_cdf_minute_end": {
+      "1": 0.8333333333333334,
+      "2": 0.8333333333333334,
+      "3": 0.8333333333333334,
+      "4": 0.8888888888888888
+    },
+    "ordering": {
+      "1_to_3_min": "Anopheles gambiae higher",
+      "4_min": "Anopheles stephensi higher"
+    },
+    "interpretation": "Observed one-minute completion profiles cross, so no deadline-independent stochastic ordering is available from these coarse source data."
   }
 }
