@@ -26,15 +26,15 @@
   "main_results": [
     "exact attainable fixed-(n,m,b) adaptive/fixed frontier at every feasible depth",
     "sharp lift of that frontier by arbitrary finite nonincreasing biological completion value",
-    "inverse robust evolutionary thresholds including global cue-arity no-go and minimum robust cue arity",
-    "exact fixed-scope expected-value ceiling U(1)-U(min(m,n-1)), independent of cue arity b>=2"
+    "inverse robust evolutionary thresholds including global cue-arity no-go and minimum robust cue arity"
   ],
   "claim_firewalls": {
     "CA": "C_A is minimax guaranteed complexity, not fitness or the uniquely evolved policy.",
     "robust_expected": "Robust value is frequency-free/statewise; expected value additionally depends on branch frequencies and completion profiles.",
     "comparator": "All adaptive-versus-fixed claims use the declared universal fixed comparator unless another comparator is modeled explicitly.",
     "Aedes": "Chandel Figure 3a is an aggregate temporal-effect anchor; Uehara Figure 2D/S2 supplies one-minute interval-censored individual first-probe profiles. Neither is a fitness or adaptive/fixed validation.",
-    "prior_art": "Sequential VOI, deadline-weighted utility, adaptivity gaps, tree flattening, prior-weighted expected depth and costly sensory fidelity are not novelty claims."
+    "prior_art": "Sequential VOI, deadline-weighted utility, adaptivity gaps, tree flattening, prior-weighted expected depth and costly sensory fidelity are not novelty claims.",
+    "expected_value_prior_art": "Prior-weighted expected tree cost and skewed shallow-branch effects are established; V6 uses expected-value ceilings only to separate robust from frequency-dependent claims."
   },
   "validation": {
     "arbitrary_depth_solver_grid_cases": 279,
@@ -59,7 +59,7 @@
   },
   "promotion_rule": {
     "new_main_theorem_stop_rule": true,
-    "rule": "Do not add a fifth main theorem unless it invalidates or strictly strengthens MAIN 1-4. New consequences belong in corollaries or Supplement.",
+    "rule": "The novelty spine contains MAIN 1-3 only. Do not promote expected-value/skewed-frequency corollaries as a fourth novelty theorem. New results belong in corollaries, empirical synthesis or Supplement unless they invalidate or strictly strengthen MAIN 1-3.",
     "submission_gate": [
       "latest full Python matrix green at final V6 source head",
       "targeted prior-art audit of exact fixed-(n,m,b) frontier and biological lift complete",
@@ -80,7 +80,13 @@
   "submission_gate_status": {
     "manuscript_length": "pass",
     "core_references": "pass",
-    "final_full_matrix": "pending latest head after empirical-anchor update",
+    "final_full_matrix": "pending latest head after novelty-spine and Uehara empirical updates",
     "supplementary_data_empirical_gate": "pass at one-minute interval-censored individual level; frame-resolved Uehara latency remains optional refinement"
-  }
+  },
+  "supporting_biological_consequences": [
+    "frequency-dependent early termination can raise expected value above the robust floor",
+    "fixed-scope expected-value ceiling is used as a claim firewall, not an independent novelty theorem",
+    "Uehara individual one-minute probing profiles provide a coarse empirical completion-profile anchor",
+    "Chandel aggregate IR time course provides a complementary temporal-effect-shape anchor"
+  ]
 }
