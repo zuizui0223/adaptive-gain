@@ -218,19 +218,47 @@ p_{\rm crit}\approx0.2666
 
 as a dashed comparison, clearly labeled as a different scope.
 
-### Panel C — Public Aedes temporal process anchor
+### Panel C — Two public mosquito temporal anchors
 
-Plot the aggregate post-CO2 IR-minus-no-IR Figure 3a contrast through time for
-the two post-pulse intervals, or plot cumulative signed advantage.
+Split the panel into two aligned subpanels.
+
+#### C1 — Individual discrete completion profiles
+
+Use Uehara et al. 2026 Supplementary Data Figure 2D/S2.
+
+Plot the one-minute discrete first post-stimulus Probe CDF for the primary
+pre-probe-zero cohorts.
+
+At minimum highlight:
+
+- *Ae. albopictus*: (F(1)=0.263), (F(4)=0.500), (F(8)=0.605);
+- *Ae. aegypti*: (F(1)=0.643), (F(8)=0.893);
+- *An. gambiae*: (F(1)=F(8)=0.857).
+
+Show right-censor mass at 8 min explicitly.
+
+Label:
+
+> individual one-minute interval-censored first-probe profile.
+
+Do not label the x-axis as frame-resolved latency.
+
+#### C2 — Aggregate temporal effect shape
+
+Plot the Chandel et al. 2024 post-CO2 IR-minus-no-IR Figure 3a contrast through
+time for the two post-pulse intervals, or plot cumulative signed advantage.
 
 Mark the half-area times:
 
 - 46.2 s;
 - 46.5 s.
 
-Label explicitly:
+Label:
 
-> temporal process-shape anchor — not a fitness estimate.
+> aggregate temporal effect-shape anchor.
+
+Together C1 and C2 visually separate individual completion profiles from the
+timing of an aggregate cue effect. Neither is a fitness estimate.
 
 ### Figure 3 message
 
