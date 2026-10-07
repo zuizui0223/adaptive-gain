@@ -1,4 +1,4 @@
-"""Fetch and inventory Uehara et al. 2026 Supplementary Data 1."""
+"""Fetch and inventory Uehara et al. 2026 Supplementary Data 1.\n\nThe exported CSV sheets are also the frozen inputs for the one-minute binned\nindividual first-probe analysis on this branch.\n"""
 from __future__ import annotations
 
 import csv
