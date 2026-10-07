@@ -13,6 +13,10 @@ on:
       - validation/chandel_fig3a_value_kernel_v1.json
       - .github/workflows/v6-figure-data.yml
 
+concurrency:
+  group: v6-figure-data-${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
