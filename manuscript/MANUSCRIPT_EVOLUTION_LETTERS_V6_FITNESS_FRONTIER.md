@@ -1,0 +1,645 @@
+# Natural history re-ranks adaptive information architectures
+
+## Teaser
+
+Adaptive sensing can have an arbitrarily large structural advantage without
+having a large fitness effect. Exact finite routing theory shows why: natural
+history selects among an attainable frontier of information architectures, and
+encounter frequencies can rescue architectures that are impossible to favor
+robustly across all states.
+
+## Abstract
+
+Environmental heterogeneity is often expected to favor behavioral flexibility,
+plasticity and contingent information use. Yet a structural advantage in
+information acquisition is not itself a fitness advantage. We develop an exact
+finite theory linking contingent sensing architecture to ecological value. A
+decision task contains represented environmental states, a focal action target
+and costly queries. Let (C_A) be the minimum worst-case cost of contingent
+target resolution and (C_F) the minimum cost of a precommitted resolving
+query set. For fixed world count (n), query count (m) and maximum query
+arity (b), we first show that every feasible adaptive depth (h) lies on an
+exact attainable frontier
+[
+(C_A,C_F)=
+left(
+h,
+min{m,F_b(n,h)}
+ight),
+]
+where (F_b(n,h)) is the exact productive-tree bound. This frontier can then be
+lifted by any nonincreasing biological value of completion (U(c)):
+[
+max[U(C_A)-U(C_F)]
+=
+max_h[U(h)-U(I_h)].
+]
+Natural history therefore re-ranks the structural frontier rather than merely
+scaling one adaptive-gain score. Under exponential opportunity loss, the
+architecture maximizing (C_F/C_A) can differ from the architecture maximizing
+ecological value, and structurally unbounded adaptive advantage can converge to
+zero biological value. Inverting the frontier gives exact evolutionary
+requirements. For bounded cue arity (b), there is a global cost ceiling above
+which no finite task can guarantee positive net contingent value, regardless of
+how many environmental states or query resources are added. Finally, robust
+statewise value and expected value have different exact ceilings. For fixed
+finite (n,m), the expected-value supremum is
+[
+U(1)-U(min{m,n-1}),
+]
+independent of cue arity, because encounter-frequency concentration can place
+most ecological weight on a shallow branch while rare branches carry the fixed
+information burden. Thus sensory branching capacity and ecological frequency
+structure play distinct evolutionary roles. Public Aedes aegypti data provide
+a process anchor: a multisensory infrared effect is strongly delayed through
+time, illustrating why the timing of an information benefit must be measured
+separately from its magnitude. Structural adaptive gain is therefore
+evolutionary potential, not fitness; natural history and encounter frequencies
+determine which part of that potential can be realized.
+
+Keywords: adaptive sensing; ecological information; decision trees;
+behavioral flexibility; environmental heterogeneity; natural history;
+evolutionary constraints; value of information
+
+## Introduction
+
+Organisms rarely acquire all potentially relevant information before acting.
+Predators narrow prey alternatives, herbivores evaluate hosts sequentially,
+pollinators combine sensory channels, and animals often stop gathering
+information once a sufficient ecological distinction has been resolved.
+Conditional information use is therefore a natural feature of ecological
+decision making.
+
+The evolutionary interpretation is less straightforward. A sensing
+architecture can be structurally efficient without being selectively valuable.
+Saving five observations may matter greatly if it moves an action inside an
+ecological opportunity window, or hardly at all if both the fixed and
+contingent decisions are already early enough, or already too late. Likewise,
+the same sensing tree can have very different expected value when common
+environmental states occupy shallow branches rather than deep ones.
+
+These distinctions matter because theoretical treatments often collapse
+information architecture into one scalar advantage. In our earlier finite
+routing theory, the structural benefit of contingent sensing is summarized by
+the difference or ratio between the minimum contingent worst-case cost
+(C_A) and the minimum precommitted resolving cost (C_F). This structure is
+mathematically informative: (C_Ale C_F), and finite environments can
+generate large or even unbounded fixed-to-contingent ratios. But neither
+(C_F-C_A) nor (C_F/C_A) is intrinsically fitness. Both ignore where the
+saved information cost occurs relative to ecological time, and both ignore the
+frequency with which different decision branches are encountered.
+
+Here we ask a reverse evolutionary question:
+
+> Which finite information architectures can generate enough ecological value
+> for contingent sensing to be supported by selection?
+
+We answer this in four steps.
+
+First, we close the finite structural problem at fixed world count, query count
+and query arity. Rather than retaining only the single architecture that
+maximizes (C_F/C_A), we identify an exact attainable frontier of
+((C_A,C_F)) pairs.
+
+Second, we compose this frontier with an arbitrary nonincreasing biological
+value of completion (U(c)). This yields a sharp cross-layer result:
+natural history selects among structural architectures and can rank them
+differently from any purely structural adaptive-gain metric.
+
+Third, we invert the result. Given an architecture cost, we derive the minimum
+fixed burden—and therefore the minimum world, query and cue-arity structure—
+needed for positive contingent value. This produces model-wide no-go regions:
+for a fixed maximum query arity, some control costs cannot be repaid by any
+finite environment in the declared class.
+
+Fourth, we separate robust statewise value from expected evolutionary value.
+Robust selection asks whether contingent sensing pays in every represented
+state. Expected selection additionally uses state frequencies and early
+termination. This distinction changes the information constraint
+qualitatively: cue arity limits robust evolvability, whereas the exact expected
+value ceiling at fixed world and query budgets is already attainable by binary
+queries when encounter frequencies may be skewed.
+
+The resulting picture differs from the common intuition that more
+heterogeneity or larger adaptive gain should monotonically favor flexible
+information use. Structural routeability defines evolutionary opportunity.
+Natural history and encounter frequencies determine whether that opportunity
+is worth anything.
+
+## Model
+
+### Finite ecological decision tasks
+
+A task contains a finite set of represented worlds (W), a focal target
+(T(w)), and a finite set of queries. A query has deterministic outcomes and
+positive acquisition cost. The target is intentionally narrower than the full
+environmental state: two worlds can be ecologically distinct yet equivalent
+for the focal action.
+
+A fixed resolver chooses one query set in advance. Its minimum total cost is
+(C_F).
+
+A contingent resolver can choose later queries from earlier outcomes. Its
+minimum worst-path cost is (C_A).
+
+Any fixed strategy is a special contingent strategy, so
+[
+C_Ale C_F.
+]
+
+Throughout the principal exact results we use unit query costs and bound the
+number of possible outcomes of any query by (b).
+
+### Biological value of completion
+
+We deliberately separate information structure from biological value.
+
+Let
+[
+U(c)
+]
+be the biological value of guaranteed correct completion at total acquisition
+cost (c). We require only that (U) is finite and nonincreasing over the
+relevant finite costs.
+
+Examples include a linear time penalty,
+[
+U(c)=-lambda c,
+]
+or an ecological opportunity model,
+[
+U(c)=vS(c),
+]
+where (S(c)) is the probability that a feeding, mating or other opportunity
+remains available through cost (c).
+
+The robust value of contingent over fixed resolution is
+[
+R_{m robust}
+=
+U(C_A)-U(C_F).
+]
+
+This is a frequency-free worst-state quantity. It is not the expected fitness
+value of a decision tree.
+
+### Expected value
+
+For a contingent policy (pi), let (T_pi(w)) be its realized completion
+cost in world (w), and let (p_w) be the encounter probability of that world.
+
+Then
+[
+R_{m expected}(pi)
+=
+sum_w p_w U[T_pi(w)]
+-
+U(C_F).
+]
+
+For a minimax tree,
+[
+R_{m expected}ge R_{m robust},
+]
+because every realized path is no longer than the worst path.
+
+The difference is the early-termination premium generated by the distribution
+of ecological encounters across tree branches.
+
+## Results
+
+### 1. Finite information constraints define an exact attainable frontier
+
+Let (F_b(n,h)) be the exact maximum number of productive internal-node
+occurrences in a rooted decision tree with at most (n) nonempty leaves,
+worst-path depth at most (h), and at most (b) nonempty children at each
+internal node.
+
+For a task with (n) represented worlds, (m) query resources and
+(C_A=h),
+[
+C_F
+le
+I_h
+=
+min{m,F_b(n,h)}.
+]
+
+The key strengthening is sharpness at every feasible depth.
+
+For each (h), we construct a productive tree with a protected deepest spine
+and one physical query per internal node. A private opposite-target pair is
+assigned to every internal query so that this query is the pair's unique
+separator. Private pairs make all internal queries fixed-mandatory. Along the
+protected spine, one realized world belongs to a private pair at every depth,
+forcing every adaptive resolver on that world to acquire all (h) spine
+queries.
+
+Thus
+[
+oxed{
+(C_A,C_F)
+=
+(h,I_h)
+}
+]
+is exactly attainable at every feasible (h).
+
+The structural problem is therefore not represented by one optimum ratio. It
+is represented by an exact frontier.
+
+### 2. Natural history re-ranks the structural frontier
+
+For any finite nonincreasing (U), the maximum robust biological value over
+the declared structural scope is
+[
+oxed{
+R_{m robust,max}
+=
+max_h
+[U(h)-U(I_h)].
+}
+]
+
+The same frontier constructions attain the bound.
+
+This result identifies when a structural gap is biologically sufficient. If
+[
+U(c)=-lambda c,
+]
+then
+[
+U(C_A)-U(C_F)
+=
+lambda(C_F-C_A).
+]
+A linear adaptive-gain-to-fitness map is therefore equivalent to assuming
+constant marginal biological penalty per unit completion cost.
+
+For nonlinear natural history, absolute completion times matter. Equal
+structural gaps at different positions on the time axis need not have equal
+value.
+
+Consider binary tasks with
+[
+n=10,qquad m=9.
+]
+Relevant exact frontier points are
+[
+(2,3),quad(3,7),quad(4,9).
+]
+The fixed-to-contingent ratio is largest at (h=3).
+
+Now let
+[
+U(c)=e^{-mu c}.
+]
+The robust biological values are
+[
+e^{-2mu}-e^{-3mu},
+]
+[
+e^{-3mu}-e^{-7mu},
+]
+and
+[
+e^{-4mu}-e^{-9mu}.
+]
+As (mu) increases, the maximizing depth switches
+[
+4	o3	o2.
+]
+The structural ratio optimum therefore agrees with the biological optimum only
+over an intermediate range.
+
+An even sharper counterexample comes from the exact binary extremal family
+[
+C_A=d+1,qquad C_F=2^d.
+]
+Its structural ratio diverges:
+[
+rac{2^d}{d+1}	oinfty.
+]
+But for every fixed (mu>0),
+[
+e^{-mu(d+1)}-e^{-mu2^d}	o0.
+]
+A sequence can therefore become structurally more adaptive while becoming
+biologically worthless.
+
+### 3. Architecture cost can be inverted into minimum information structure
+
+Let the contingent architecture pay constitutive cost (K).
+
+At adaptive depth (h), define
+[
+J_K(h)
+=
+min{jge h:U(h)-U(j)>K}.
+]
+Then positive robust architecture value at depth (h) is possible exactly when
+[
+I_hge J_K(h).
+]
+
+The forward value theorem therefore has an exact inverse: natural history and
+architecture cost specify the amount of information structure required for
+evolvability.
+
+This becomes especially informative when world and query counts are allowed to
+grow but cue arity remains bounded.
+
+A full (b)-ary adaptive tree of depth (h) has at most
+[
+J_b(h)
+=
+rac{b^h-1}{b-1}
+]
+internal nodes. The private-pair construction attains
+[
+(C_A,C_F)
+=
+(h,J_b(h)).
+]
+
+For bounded-below (U), define
+[
+oxed{
+K_{m crit,robust}^{(b)}
+=
+max_{hge2}
+[U(h)-U(J_b(h))].
+}
+]
+
+If
+[
+K>K_{m crit,robust}^{(b)},
+]
+no finite task with cue arity at most (b) can guarantee positive net
+contingent value in every represented world. More environmental states and
+more query resources cannot help.
+
+This gives an exact minimum robust cue arity
+[
+b_{min}^{m robust}
+=
+min{bge2:K<K_{m crit,robust}^{(b)}}.
+]
+
+For
+[
+U(c)=e^{-0.3c},
+qquad K=0.30,
+]
+the binary global ceiling is approximately (0.290085), whereas the ternary
+ceiling is approximately (0.386328). Thus
+[
+b_{min}^{m robust}=3.
+]
+
+The interpretation is specific to the finite query model. Query arity is the
+number of distinguishable outcomes of one declared information source, not a
+generic measure of receptor number or nervous-system complexity.
+
+### 4. Encounter frequencies create a different exact frontier
+
+The robust frontier is intentionally distribution free. Expected selection is
+not.
+
+Fix finite world and query budgets (n,m) and define
+[
+M=min{m,n-1}.
+]
+
+Across all legal tasks, guaranteed-resolving policies and strictly positive
+world-frequency distributions,
+[
+oxed{
+sup R_{m expected}(n,m,b)
+=
+U(1)-U(M)
+}
+]
+for every
+[
+bge2.
+]
+
+The upper bound follows because no nontrivial decision can finish before one
+query and because any fixed resolver costs at most (M).
+
+Sharpness requires only binary queries. We construct a private-pair tree with
+exactly (M) fixed-mandatory internal queries and one target-pure leaf directly
+below the root. As encounter probability concentrates on that leaf, adaptive
+expected value approaches (U(1)), whereas fixed value remains (U(M)).
+
+This creates a qualitative split.
+
+Cue arity matters for robust statewise evolvability:
+[
+K_{m crit,robust}^{(b)}
+]
+depends on (b).
+
+But cue arity disappears from the exact finite-scope expected ceiling once
+encounter frequencies can be skewed.
+
+In the unrestricted finite-size limit,
+[
+sup R_{m robust}
+=
+U(2)-U_infty,
+]
+whereas
+[
+sup R_{m expected}
+=
+U(1)-U_infty.
+]
+
+Therefore
+[
+U(2)-U_infty
+le K
+<
+U(1)-U_infty
+]
+defines a frequency-assisted evolvability band: no finite architecture can be
+positive in every state, yet expected positive value remains possible.
+
+For exponential opportunity value,
+[
+U(c)=ve^{-mu c},
+]
+the robust and expected global ceilings are
+[
+ve^{-2mu}
+]
+and
+[
+ve^{-mu}.
+]
+
+At
+[
+mu=0.3,qquad v=1,qquad K=0.60,
+]
+the control cost exceeds the absolute robust ceiling
+[
+e^{-0.6}approx0.5488,
+]
+but remains below the expected ceiling
+[
+e^{-0.3}approx0.7408.
+]
+
+Thus encounter-frequency structure can support a contingent architecture that
+no finite information architecture can make robustly favorable.
+
+## Empirical process anchor: temporal value is not the same as cue-effect magnitude
+
+The theory requires a biological value of completion through time. We do not
+claim to estimate that function from current data, but public Aedes aegypti
+host-seeking data illustrate why it matters.
+
+Chandel et al. measured host-seeking activity with and without infrared cues
+during a 300-s assay containing transient CO2 pulses. Reanalysis of the public
+Figure 3a source data shows that the post-pulse infrared advantage is strongly
+late weighted. Half of the first post-pulse signed advantage accumulates only
+after approximately 46.2 s, and half of the second only after approximately
+46.5 s.
+
+Consequently, the same aggregate cue effect would contribute very differently
+to ecological value if the focal opportunity typically closes after 5, 30 or
+120 s.
+
+This is a process-shape example, not a fitness validation. The public Figure 3a
+source data do not identify the natural opportunity distribution, the
+constitutive cost of contingent sensing, or the individual trial completion
+times needed for a direct estimate of (R_{m expected}).
+
+## Discussion
+
+### Structural adaptive gain is evolutionary potential, not fitness
+
+The central result is a separation.
+
+Finite information architecture determines which contingent and fixed
+completion-cost combinations are possible. Natural history determines their
+value.
+
+This prevents two opposite errors.
+
+The first is to equate a large structural adaptive gap with a large biological
+effect. The exact extremal family shows that the structural ratio can diverge
+while ecological value tends to zero.
+
+The second is to conclude that weak robust value makes adaptivity irrelevant.
+Encounter frequencies can concentrate ecological weight on shallow branches,
+creating positive expected value even when robust repayment is impossible in
+every state.
+
+### Natural history selects a point on a frontier
+
+The usual question asks how much adaptivity a system has.
+
+The finite theory suggests a different object: an exact frontier of
+architectures. A deep contingent architecture can support a large simultaneous
+fixed burden but itself completes late. A shallower architecture finishes
+earlier but supports less branch-exclusive structure.
+
+Natural history selects among these alternatives.
+
+This is why a structural ratio, an additive structural gap and an expected
+fitness advantage can rank the same architectures differently.
+
+### Sensory branching and encounter frequency are different evolutionary resources
+
+Cue arity and encounter frequencies enter the theory differently.
+
+Higher cue arity enlarges the robust structural frontier by allowing more
+branching to be compressed into a fixed adaptive depth.
+
+Encounter-frequency skew does not change that robust frontier. Instead it
+places more ecological value on selected shallow branches.
+
+The resulting distinction is sharp: robust cost ceilings depend on cue arity,
+whereas the exact expected-value ceiling at fixed (n,m) does not.
+
+This provides a precise sense in which ecological frequency structure can
+substitute for information branching capacity in expected, but not robust,
+evolvability.
+
+### Relation to PAYOFF
+
+The present framework supplies the upstream recoverable benefit.
+
+At the robust level,
+[
+R_{m robust,max}
+=
+max_h[U(h)-U(I_h)].
+]
+
+PAYOFF then asks whether
+[
+R-K>0
+]
+and transports architecture value into invasion, fixation and occupancy.
+
+The two theories therefore answer different parts of one chain:
+
+finite routing structure
+-> recoverable ecological value
+-> architecture cost
+-> selection and population dynamics.
+
+The generic (R-K) architecture landscape remains PAYOFF's domain. The
+contribution here is to derive sharp information-structural limits on (R).
+
+### What the theory does not claim
+
+Sequential value of information, prior-weighted decision trees,
+deadline-sensitive decisions, adaptive-tree flattening, adaptivity gaps and
+costly sensory fidelity all have substantial prior literatures.
+
+The proposed contribution is narrower:
+
+1. an exact fixed-((n,m,b)) target-resolution frontier attained at every
+   feasible depth;
+2. a sharp lift of that frontier by arbitrary monotone biological completion
+   value;
+3. exact inverse robust thresholds, including global cue-arity no-go regions;
+4. an exact finite expected-value ceiling that separates sensory branching
+   capacity from encounter-frequency effects.
+
+These claims remain inside finite deterministic guaranteed target resolution.
+No claim is made for noisy sensing, continuous belief states or endogenous
+learning without further extensions.
+
+## Current empirical requirements
+
+A direct biological test needs four empirical objects:
+
+1. the focal target and available cue topology;
+2. branch-specific completion-time distributions;
+3. the ecological value of completion through time;
+4. architecture or control costs.
+
+Expected-value tests additionally require encounter frequencies.
+
+A positive (C_F-C_A) measurement alone is therefore a structural receipt,
+not a selection estimate.
+
+## Conclusion
+
+Adaptive information architecture does not carry a fixed evolutionary value.
+Finite ecological information constraints define an exact structural frontier.
+Natural history re-ranks that frontier, architecture cost determines which
+points are evolvable, and encounter frequencies can create expected-value
+regimes unavailable to any robust statewise architecture.
+
+Structural adaptive gain is potential. Evolution depends on where that
+potential lies in time and how often each branch of the environment is
+encountered.
