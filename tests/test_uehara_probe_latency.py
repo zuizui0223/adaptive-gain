@@ -1,6 +1,6 @@
 import math
 
-from openpyxl import Workbook
+import pytest
 
 from scripts.analyze_uehara_probe_latency import (
     extract_workbook,
@@ -31,6 +31,9 @@ def test_first_code_frame_observed_and_absent():
 
 
 def test_extract_workbook_returns_individual_latencies(tmp_path):
+    openpyxl = pytest.importorskip("openpyxl")
+    Workbook = openpyxl.Workbook
+
     path = tmp_path / "behaviors.xlsx"
     wb = Workbook()
     ws = wb.active
