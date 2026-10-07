@@ -491,27 +491,38 @@ e^{-0.3}\approx0.7408.
 Thus encounter-frequency structure can support a contingent architecture that
 no finite information architecture can make robustly favorable.
 
-## Empirical process anchor: temporal value is not the same as cue-effect magnitude
+## Empirical process anchors: temporal effect shape and individual completion profiles
 
-The theory requires a biological value of completion through time. We do not
-claim to estimate that function from current data, but public Aedes aegypti
-host-seeking data illustrate why it matters (Chandel et al. 2024).
+The theory separates two temporal objects: when a behavioral effect is expressed
+and how individuals are distributed across completion times. Current public
+mosquito data illustrate both objects without yet closing the fitness chain.
 
-Chandel et al. measured host-seeking activity with and without infrared cues
-during a 300-s assay containing transient CO2 pulses. Reanalysis of the public
-Figure 3a source data shows that the post-pulse infrared advantage is strongly
-late weighted. Half of the first post-pulse signed advantage accumulates only
-after approximately 46.2 s, and half of the second only after approximately
-46.5 s.
+First, Chandel et al. (2024) measured *Aedes aegypti* host-seeking activity with
+and without infrared cues during a 300-s assay containing transient CO2 pulses.
+Reanalysis of the public Figure 3a source data shows that the post-pulse
+infrared advantage is strongly late weighted. Half of the first post-pulse
+signed advantage accumulates only after approximately 46.2 s, and half of the
+second only after approximately 46.5 s. The same aggregate cue effect would
+therefore be valued differently by short versus long ecological opportunity
+windows.
 
-Consequently, the same aggregate cue effect would contribute very differently
-to ecological value if the focal opportunity typically closes after 5, 30 or
-120 s.
+Second, Uehara et al. (2026) provide individual one-minute Probe percentages
+for six mosquito species. Restricting the secondary analysis to individuals
+with zero probing in the -1 to 0 min pre-stimulus bin gives a one-minute
+interval-censored first post-stimulus probing profile. *Aedes albopictus* is
+especially delayed: only 10 of 38 individuals (26.3%) show probing in the first
+minute, the discrete cumulative probability reaches 0.50 only by minute 4, and
+15 of 38 remain without observed probing through 8 min. By contrast, first-
+minute probing occurs in 18/28 *Ae. aegypti* (64.3%), 12/14 *Anopheles
+gambiae* (85.7%) and 15/18 *An. stephensi* (83.3%). Thus individual temporal
+profiles differ in both early-tail mass and right-censoring, not merely in a
+single mean.
 
-This is a process-shape example, not a fitness validation. The public Figure 3a
-source data do not identify the natural opportunity distribution, the
-constitutive cost of contingent sensing, or the individual trial completion
-times needed for a direct estimate of (R_{\rm expected}).
+These are process anchors, not fitness validations. The Chandel data do not
+identify individual completion times, and the Uehara source data are
+one-minute interval-censored rather than frame-resolved. Neither dataset
+identifies the natural opportunity-value function, constitutive control cost or
+an adaptive-versus-fixed architecture.
 
 ## Discussion
 
@@ -689,6 +700,12 @@ Schmidt, K. A., Dall, S. R. X. & Van Gils, J. A. 2010. The ecology of
 information: an overview on the ecological significance of making informed
 decisions. *Oikos* 119:304–316.
 https://doi.org/10.1111/j.1600-0706.2009.17573.x.
+
+
+Uehara, T., Dong, L. & Duvall, L. B. 2026. Behavioral heterogeneity in host
+seeking and post-feeding suppression among disease vector mosquitoes.
+*Communications Biology* 9:757.
+https://doi.org/10.1038/s42003-026-09987-z.
 
 Trimmer, P. C. & Houston, A. I. 2014. An evolutionary perspective on
 information processing. *Topics in Cognitive Science* 6:312–330.
