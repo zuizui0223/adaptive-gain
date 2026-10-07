@@ -1,0 +1,40 @@
+name: uehara-binned-first-probe
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - scripts/fetch_uehara_supplementary_data.py
+      - scripts/analyze_uehara_binned_first_probe.py
+      - tests/test_uehara_binned_first_probe.py
+      - .github/workflows/uehara-binned-first-probe.yml
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install requests openpyxl
+      - name: Fetch public Supplementary Data
+        run: python scripts/fetch_uehara_supplementary_data.py
+      - name: Reconstruct individual binned first-probe intervals
+        run: >-
+          python scripts/analyze_uehara_binned_first_probe.py
+          --fig2d-csv "uehara_supplementary_data/03_Fig2D and S2.csv"
+          --exclusion-csv "uehara_supplementary_data/09_Excl_Spp_Cond.csv"
+          --output-json uehara_binned_first_probe/results.json
+          --output-individual-csv uehara_binned_first_probe/individual_intervals.csv
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: uehara-binned-first-probe
+          path: |
+            uehara_binned_first_probe
+            uehara_supplementary_data/manifest.json
+          if-no-files-found: error
