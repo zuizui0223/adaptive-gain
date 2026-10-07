@@ -167,7 +167,7 @@ so
 This is a model-specific information-branching no-go, not a generic statement
 that biologically higher-fidelity senses are fitter.
 
-## MAIN 4 — encounter frequencies create a distinct expected-value frontier
+## SUPPORT 1 — encounter frequencies create a distinct expected-value frontier
 
 The robust result requires positive value across all represented states.
 Expected selection is different.
@@ -255,6 +255,23 @@ For the example above, (p_{\rm crit}approx0.2666).
 
 This turns encounter frequencies into an explicit evolutionary resource.
 
+### Novelty status
+
+This section is biologically important but should **not** carry the paper's
+theorem-level novelty claim. Prior-weighted expected decision-tree cost and the
+ability of skewed distributions to concentrate mass on shallow leaves are
+established ideas. In the present paper the exact expected ceiling is used to:
+
+- separate frequency-free robust claims from frequency-dependent expected
+  claims;
+- prevent robust no-go results from being over-read as universal selection
+  impossibility;
+- provide a quantitative ecological interpretation of encounter-frequency
+  skew.
+
+The exact formula is therefore a model-specific corollary of the structural
+framework, not a fourth independent main theorem.
+
 ## Biological synthesis
 
 The core process is:
@@ -334,7 +351,9 @@ Short form:
 
 ## Publication rule
 
-Do not add another main theorem unless it changes one of MAIN 1-4.
+The novelty spine contains MAIN 1-3 only. SUPPORT 1 is a biological consequence
+and claim firewall, not a fourth novelty theorem.
 
-New consequences should be treated as corollaries or Supplement unless they
-invalidate or strictly strengthen one of those four results.
+Do not add another main theorem unless it invalidates or strictly strengthens
+one of MAIN 1-3. New consequences belong in corollaries, empirical synthesis or
+Supplement.
