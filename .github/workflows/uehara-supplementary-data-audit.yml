@@ -6,6 +6,8 @@ on:
       - theory/opportunity-fitness-process-v1
     paths:
       - scripts/fetch_uehara_supplementary_data.py
+      - scripts/analyze_uehara_binned_first_probe.py
+      - tests/test_uehara_binned_first_probe.py
       - .github/workflows/uehara-supplementary-data-audit.yml
 
 jobs:
@@ -21,9 +23,18 @@ jobs:
         run: python -m pip install requests openpyxl
       - name: Download and inspect supplementary XLSX
         run: python scripts/fetch_uehara_supplementary_data.py
-      - name: Upload audit
+      - name: Reconstruct binned individual first-probe intervals
+        run: >-
+          python scripts/analyze_uehara_binned_first_probe.py
+          --fig2d-csv "uehara_supplementary_data/03_Fig2D and S2.csv"
+          --exclusion-csv "uehara_supplementary_data/09_Excl_Spp_Cond.csv"
+          --output-json uehara_binned_first_probe/results.json
+          --output-individual-csv uehara_binned_first_probe/individual_intervals.csv
+      - name: Upload audit and binned first-probe results
         uses: actions/upload-artifact@v4
         with:
           name: uehara-supplementary-data-audit
-          path: uehara_supplementary_data
+          path: |
+            uehara_supplementary_data
+            uehara_binned_first_probe
           if-no-files-found: error
