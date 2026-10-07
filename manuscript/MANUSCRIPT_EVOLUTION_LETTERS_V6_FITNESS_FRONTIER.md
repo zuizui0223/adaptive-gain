@@ -11,51 +11,41 @@ robustly across all states.
 ## Abstract
 
 Environmental heterogeneity is often expected to favor behavioral flexibility,
-plasticity and contingent information use. Yet a structural advantage in
-information acquisition is not itself a fitness advantage. We develop an exact
-finite theory linking contingent sensing architecture to ecological value. A
-decision task contains represented environmental states, a focal action target
-and costly queries. Let (C_A) be the minimum worst-case cost of contingent
-target resolution and (C_F) the minimum cost of a precommitted resolving
-query set. For fixed world count (n), query count (m) and maximum query
-arity (b), we first show that every feasible adaptive depth (h) lies on an
-exact attainable frontier
+yet a structural advantage in information acquisition is not itself a fitness
+advantage. We link an exact finite theory of contingent sensing to ecological
+value. Let (C_A) be the minimum worst-case cost of contingent target
+resolution and (C_F) the minimum cost of a precommitted resolving query set.
+For fixed world count (n), query count (m) and maximum query arity (b),
+every feasible adaptive depth (h) lies on an exact attainable frontier
 [
 (C_A,C_F)=
-left(
-h,
-min{m,F_b(n,h)}
-ight),
+left(h,min{m,F_b(n,h)}ight).
 ]
-where (F_b(n,h)) is the exact productive-tree bound. This frontier can then be
-lifted by any nonincreasing biological value of completion (U(c)):
+For any nonincreasing biological value of completion (U(c)), this frontier
+lifts sharply:
 [
 max[U(C_A)-U(C_F)]
 =
 max_h[U(h)-U(I_h)].
 ]
-Natural history therefore re-ranks the structural frontier rather than merely
-scaling one adaptive-gain score. Under exponential opportunity loss, the
-architecture maximizing (C_F/C_A) can differ from the architecture maximizing
-ecological value, and structurally unbounded adaptive advantage can converge to
-zero biological value. Inverting the frontier gives exact evolutionary
-requirements. For bounded cue arity (b), there is a global cost ceiling above
-which no finite task can guarantee positive net contingent value, regardless of
-how many environmental states or query resources are added. Finally, robust
-statewise value and expected value have different exact ceilings. For fixed
-finite (n,m), the expected-value supremum is
+Natural history therefore re-ranks information architectures rather than merely
+scaling one adaptive-gain score. Inverting the frontier gives exact
+evolutionary requirements: for bounded cue arity, some control costs cannot be
+repaid robustly by any finite task, regardless of how many states or query
+resources are added. Encounter frequencies create a distinct limit. At fixed
+finite (n,m), the supremal expected value is
 [
 U(1)-U(min{m,n-1}),
 ]
-independent of cue arity, because encounter-frequency concentration can place
-most ecological weight on a shallow branch while rare branches carry the fixed
-information burden. Thus sensory branching capacity and ecological frequency
-structure play distinct evolutionary roles. Public Aedes aegypti data provide
-a process anchor: a multisensory infrared effect is strongly delayed through
-time, illustrating why the timing of an information benefit must be measured
-separately from its magnitude. Structural adaptive gain is therefore
-evolutionary potential, not fitness; natural history and encounter frequencies
-determine which part of that potential can be realized.
+independent of cue arity, because frequent states can occupy shallow branches
+while rare states carry the fixed information burden. Thus sensory branching
+capacity constrains robust statewise evolvability, whereas ecological frequency
+structure can rescue expected value. Public Aedes aegypti data provide a
+process anchor: an infrared host-seeking effect is strongly delayed through
+time, illustrating why the timing of information benefits must be separated
+from their magnitude. Structural adaptive gain is evolutionary potential;
+natural history and encounter frequencies determine how much of that potential
+is evolvable.
 
 Keywords: adaptive sensing; ecological information; decision trees;
 behavioral flexibility; environmental heterogeneity; natural history;
