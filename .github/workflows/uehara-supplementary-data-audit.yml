@@ -10,6 +10,10 @@ on:
       - tests/test_uehara_binned_first_probe.py
       - .github/workflows/uehara-supplementary-data-audit.yml
 
+concurrency:
+  group: uehara-supplementary-data-${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   audit:
     runs-on: ubuntu-latest
