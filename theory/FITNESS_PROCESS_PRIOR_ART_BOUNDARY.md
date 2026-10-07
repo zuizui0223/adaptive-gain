@@ -409,6 +409,65 @@ That arity contrast, rather than skewed priors themselves, is the defensible
 claim.
 
 
+
+### The fixed resolver is a test-collection problem, not a new object
+
+The fixed side of the model is closely related to the classical minimum test
+collection / minimum test set / minimum test cover literature.
+
+In the classical Test Collection Problem, one selects a minimum subset of
+binary tests whose joint outcomes distinguish the relevant entities. The
+Generalized Test Collection Problem (Douek-Pinkovich, Ben-Gal & Raviv 2021,
+*TOP* 29:372–386, DOI 10.1007/s11750-020-00554-1) extends this to categorical
+test outputs, multiple readings per state/class and heterogeneous test costs.
+
+That literature is especially close to the present fixed resolver because a
+fixed query set must jointly separate every represented pair that carries a
+different focal target.
+
+Therefore V6 must not claim novelty for:
+
+- selecting a minimum fixed resolving set of tests;
+- categorical test outcomes;
+- multiple environmental readings mapping to one target class;
+- fixed test-selection cost minimization.
+
+The candidate mathematical contribution is the **joint adaptive/fixed
+frontier** in one target-resolution model:
+
+\[
+\boxed{
+(C_A,C_F)
+=
+\left(
+h,\min\{m,F_b(n,h)\}
+\right)
+}
+\]
+
+attained for every feasible adaptive depth \(h\), with world count \(n\),
+available query count \(m\), and query arity \(b\) simultaneously controlled.
+
+So the novelty boundary is not:
+
+> fixed test collections exist,
+
+nor:
+
+> adaptive trees can be flatter than fixed tests,
+
+but rather:
+
+> the two established viewpoints can be closed into one exact finite attainable
+> frontier, which can then be lifted and inverted by biological completion
+> value.
+
+A targeted search across test-collection, separating-system and decision-tree
+literatures did not identify this exact fixed-\((n,m,b)\), all-depth joint
+frontier. That absence is not a priority proof and should not be written as
+such in the manuscript.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
