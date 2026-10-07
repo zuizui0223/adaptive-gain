@@ -41,9 +41,11 @@
     "full_matrix_green_head_before_v6_prose": "552c3e24ce8fedeb419bb935ac45b6804f304edb",
     "latest_full_matrix_status": "triggered_after_v6_prose",
     "title_words": 6,
-    "abstract_words": 273,
-    "main_text_words": 2578,
-    "focused_ci_with_finite_expected_grid": 37613648497
+    "abstract_words": 240,
+    "main_text_words": 2696,
+    "focused_ci_with_finite_expected_grid": 37613648497,
+    "latex_control_character_audit": "PASS: zero non-whitespace ASCII control characters in V6 manuscript",
+    "citation_pass": "core ecological-information, information-fitness, decision-tree prior-art and Chandel empirical citations added"
   },
   "promotion_rule": {
     "new_main_theorem_stop_rule": true,
@@ -64,5 +66,11 @@
     "Figure 1: exact structural frontier and natural-history re-ranking",
     "Figure 2: inverse robust thresholds and cue-arity no-go",
     "Figure 3: robust-versus-expected frequency rescue plus Aedes temporal process anchor"
-  ]
+  ],
+  "submission_gate_status": {
+    "manuscript_length": "pass",
+    "core_references": "pass",
+    "final_full_matrix": "pending latest head",
+    "supplementary_data_empirical_gate": "pending Uehara XLSX audit"
+  }
 }
