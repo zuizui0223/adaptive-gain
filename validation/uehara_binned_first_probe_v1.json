@@ -1,0 +1,180 @@
+{
+  "status": "SOURCE_DATA_INDIVIDUAL_INTERVAL_CENSORED_PROBE_RECEIPT",
+  "source": {
+    "paper": "Uehara, Dong & Duvall 2026, Communications Biology",
+    "doi": "10.1038/s42003-026-09987-z",
+    "supplementary_data_file": "42003_2026_9987_MOESM3_ESM.xlsx",
+    "supplementary_data_sha256": "13b64727b521b09bbf5446411d0e7ef2062edae17ebd93be5c93d12a6a07f3b3",
+    "fig2d_csv_sha256": "3f8fac80aaa636dda4206f6faf9e249ffc4f9c3bf4b8947fabaff1ba3ac79f22",
+    "exclusion_csv_sha256": "a0326936aabd5e78a24dffe1ebaba3ca65766809e2a5e52dfc1d05351d65dcda"
+  },
+  "endpoint": {
+    "primary_cohort": "Probe%=0 in the -1–0 min pre-stimulus bin",
+    "event": "first post-stimulus 1-min bin with Probe%>0",
+    "censoring": "right-censored at 8 min if all post-stimulus Probe bins are zero",
+    "resolution": "1 minute interval-censored",
+    "not_frame_resolved": true
+  },
+  "row_count_validation": {
+    "Aedes aegypti": {
+      "fig2d_rows": 43,
+      "inactive_timepoint0": 43,
+      "match": true
+    },
+    "Aedes albopictus": {
+      "fig2d_rows": 55,
+      "inactive_timepoint0": 55,
+      "match": true
+    },
+    "Anopheles gambiae": {
+      "fig2d_rows": 47,
+      "inactive_timepoint0": 47,
+      "match": true
+    },
+    "Anopheles stephensi": {
+      "fig2d_rows": 43,
+      "inactive_timepoint0": 43,
+      "match": true
+    },
+    "Culex tarsalis": {
+      "fig2d_rows": 30,
+      "inactive_timepoint0": 30,
+      "match": true
+    },
+    "Culex quinquefasciatus": {
+      "fig2d_rows": 15,
+      "inactive_timepoint0": 15,
+      "match": true
+    }
+  },
+  "species": {
+    "Aedes aegypti": {
+      "n_all": 43,
+      "n_primary": 28,
+      "n_pre_probe_positive_excluded": 15,
+      "first_probe_interval_counts": [
+        18,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      "right_censored_8min": 3,
+      "probe_by_1min": 0.6428571428571429,
+      "probe_by_8min": 0.8928571428571429,
+      "median_cdf_crossing_min": 1
+    },
+    "Aedes albopictus": {
+      "n_all": 55,
+      "n_primary": 38,
+      "n_pre_probe_positive_excluded": 17,
+      "first_probe_interval_counts": [
+        10,
+        7,
+        1,
+        1,
+        1,
+        2,
+        0,
+        1
+      ],
+      "right_censored_8min": 15,
+      "probe_by_1min": 0.2631578947368421,
+      "probe_by_8min": 0.6052631578947368,
+      "median_cdf_crossing_min": 4
+    },
+    "Anopheles gambiae": {
+      "n_all": 47,
+      "n_primary": 14,
+      "n_pre_probe_positive_excluded": 33,
+      "first_probe_interval_counts": [
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "right_censored_8min": 2,
+      "probe_by_1min": 0.8571428571428571,
+      "probe_by_8min": 0.8571428571428571,
+      "median_cdf_crossing_min": 1
+    },
+    "Anopheles stephensi": {
+      "n_all": 43,
+      "n_primary": 18,
+      "n_pre_probe_positive_excluded": 25,
+      "first_probe_interval_counts": [
+        15,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "right_censored_8min": 0,
+      "probe_by_1min": 0.8333333333333334,
+      "probe_by_8min": 1,
+      "median_cdf_crossing_min": 1
+    },
+    "Culex tarsalis": {
+      "n_all": 30,
+      "n_primary": 10,
+      "n_pre_probe_positive_excluded": 20,
+      "first_probe_interval_counts": [
+        7,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "right_censored_8min": 0,
+      "probe_by_1min": 0.7,
+      "probe_by_8min": 1,
+      "median_cdf_crossing_min": 1
+    },
+    "Culex quinquefasciatus": {
+      "n_all": 15,
+      "n_primary": 4,
+      "n_pre_probe_positive_excluded": 11,
+      "first_probe_interval_counts": [
+        3,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "right_censored_8min": 0,
+      "probe_by_1min": 0.75,
+      "probe_by_8min": 1,
+      "median_cdf_crossing_min": 1
+    }
+  },
+  "aggregate": {
+    "primary_n": 112,
+    "source_individual_n": 233,
+    "slowest_first_minute_species": "Aedes albopictus",
+    "slowest_first_minute_probability": 0.2631578947368421,
+    "fastest_first_minute_species": "Anopheles gambiae",
+    "fastest_first_minute_probability": 0.8571428571428571,
+    "first_minute_probability_range": 0.593984962406015
+  },
+  "interpretation": {
+    "main": "Published source data preserve individual one-minute probing profiles with strongly different early-tail and right-censor structure across species.",
+    "v6_role": "Individual-level coarse completion-profile anchor F_j(t), complementary to the aggregate high-resolution Chandel temporal-effect anchor.",
+    "claim_ceiling": "Not frame-resolved latency, successful feeding, fitness, natural opportunity survival, or adaptive-versus-fixed architecture evidence."
+  }
+}
