@@ -32,20 +32,16 @@ Natural history therefore re-ranks information architectures rather than merely
 scaling one adaptive-gain score. Inverting the frontier gives exact
 evolutionary requirements: for bounded cue arity, some control costs cannot be
 repaid robustly by any finite task, regardless of how many states or query
-resources are added. Encounter frequencies create a distinct limit. At fixed
-finite (n,m), the supremal expected value is
-\[
-U(1)-U(\min{m,n-1}),
-\]
-independent of cue arity, because frequent states can occupy shallow branches
-while rare states carry the fixed information burden. Thus sensory branching
-capacity constrains robust statewise evolvability, whereas ecological frequency
-structure can rescue expected value. Public Aedes aegypti data provide a
-process anchor: an infrared host-seeking effect is strongly delayed through
-time, illustrating why the timing of information benefits must be separated
-from their magnitude. Structural adaptive gain is evolutionary potential;
-natural history and encounter frequencies determine how much of that potential
-is evolvable.
+resources are added. As a biological consequence, encounter frequencies can
+still raise expected value above this robust floor by concentrating common
+states on shallow branches; we use this distinction to prevent robust no-go
+results from being over-read as universal selection impossibility. Public
+mosquito data provide complementary temporal anchors: individual probing
+profiles can differ strongly in early-tail and censoring structure, while an
+infrared host-seeking effect is strongly nonuniform through time. Structural
+adaptive gain is evolutionary potential; natural history determines which
+parts of the exact frontier are robustly evolvable, and encounter frequencies
+determine the additional expected-value premium.
 
 Keywords: adaptive sensing; ecological information; decision trees;
 behavioral flexibility; environmental heterogeneity; natural history;
@@ -88,7 +84,7 @@ Here we ask a reverse evolutionary question:
 > Which finite information architectures can generate enough ecological value
 > for contingent sensing to be supported by selection?
 
-We answer this in four steps.
+We answer this with three main results and one biological extension.
 
 First, we close the finite structural problem at fixed world count, query count
 and query arity. Rather than retaining only the single architecture that
@@ -106,13 +102,12 @@ needed for positive contingent value. This produces model-wide no-go regions:
 for a fixed maximum query arity, some control costs cannot be repaid by any
 finite environment in the declared class.
 
-Fourth, we separate robust statewise value from expected evolutionary value.
-Robust selection asks whether contingent sensing pays in every represented
-state. Expected selection additionally uses state frequencies and early
-termination. This distinction changes the information constraint
-qualitatively: cue arity limits robust evolvability, whereas the exact expected
-value ceiling at fixed world and query budgets is already attainable by binary
-queries when encounter frequencies may be skewed.
+Finally, as an interpretive extension rather than a separate novelty theorem,
+we separate robust statewise value from expected evolutionary value. Expected
+selection additionally uses state frequencies and early termination, so a
+robust no-go need not imply negative expected selection. This distinction is
+used as a biological claim firewall and to quantify the extra value contributed
+by common shallow branches.
 
 The resulting picture differs from the common intuition that more
 heterogeneity or larger adaptive gain should monotonically favor flexible
@@ -396,10 +391,12 @@ The interpretation is specific to the finite query model. Query arity is the
 number of distinguishable outcomes of one declared information source, not a
 generic measure of receptor number or nervous-system complexity.
 
-### 4. Encounter frequencies create a different exact frontier
+### Biological consequence: encounter frequencies can rescue expected value
 
 The robust frontier is intentionally distribution free. Expected selection is
-not.
+not. The following exact ceiling is a model-specific corollary used to separate
+those claims; prior-weighted expected decision-tree cost itself is established
+theory.
 
 Fix finite world and query budgets (n,m) and define
 \[
