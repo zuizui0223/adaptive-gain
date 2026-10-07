@@ -1,23 +1,32 @@
 # Uehara et al. 2026 individual probe-latency audit v1
 
-Status: public-code empirical gate for the V6 fitness-frontier programme.
+Status: public-data empirical gate for the V6 fitness-frontier programme.
 
 Source paper:
 
-Uehara, Dong & Duvall (2026), Communications Biology,
+Uehara, Dong & Duvall (2026), *Communications Biology* 9:757,
 "Behavioral heterogeneity in host seeking and post-feeding suppression among
 disease vector mosquitoes", DOI 10.1038/s42003-026-09987-z.
 
 Public code:
 
-Duvall-Lab/UeharaDongDuvall2025
+- \`Duvall-Lab/UeharaDongDuvall2025\`
+
+Public Supplementary Data 1:
+
+- \`42003_2026_9987_MOESM3_ESM.xlsx\`
 
 ## 1. Why this dataset is useful
 
 The Chandel Figure 3a dataset supplies a high-resolution aggregate temporal
 response but not a mapped individual completion-time distribution.
 
-The Uehara pipeline is closer to the quantity needed by the V6 theory.
+The Uehara programme retains individual behavioral trajectories and therefore
+offers a route to the V6 completion-profile object
+
+\[
+F_j(t)=P(T_j\le t).
+\]
 
 The paper reports:
 
@@ -25,125 +34,167 @@ The paper reports:
 - individual wells analyzed separately;
 - framewise behavioral classification;
 - behavioral categories including probing;
-- all code public on GitHub;
-- raw data supplied with the paper and videos archived on Zenodo.
-
-This makes an individual first-probe latency distribution feasible in
-principle.
+- public analysis code;
+- public Supplementary Data;
+- videos archived at Zenodo DOI 10.5281/zenodo.15478199.
 
 ## 2. Public-code audit
 
-The repository's acquisition README states:
+The acquisition README states a frame rate of 60 fps.
 
-- frame rate: 60 fps.
+The analysis notebook reads XLSX files in which:
 
-The analysis notebook shows the post-blood-feeding behavior pipeline reading
-XLSX files in which:
-
-- rows are framewise behavior observations;
+- rows are framewise behavioral observations;
 - columns are individual animals;
 - behavior code 0 is treated as inactive;
 - behavior code 2 is treated as probing.
 
-For the 8-minute analysis window the notebook uses:
+For the focal 8-minute analysis window the notebook uses
 
-[
-	ext{start frame}=3600,
-]
+\[
+\text{start frame}=3600,
+\]
 
-[
-	ext{end frame}=3600+3600	imes8=32400.
-]
+and
+
+\[
+\text{end frame}=32400.
+\]
 
 At 60 fps this corresponds to:
 
-- 60 s before the analyzed stimulus window;
-- 28,800 analyzed frames;
+- a 60 s pre-window;
+- 28,800 analyzed post-onset frames;
 - 480 s of behavior.
 
-The notebook computes, for every individual column,
+The private/local stage-4 and stage-5 XLSX files referenced by the notebook are
+not present in the public GitHub repository.
 
-[
-rac{#{	ext{frames coded probe}}}{28800},
-]
+## 3. Frame-resolved candidate endpoint
 
-confirming that the underlying files retain individual framewise behavior codes
-rather than only group summaries.
+If the processed framewise behavior XLSX is recovered, define for one individual
 
-## 3. Candidate completion-time variable
-
-For one individual define
-
-[
-T_{m probe}
+\[
+T_{\rm probe}
 =
-rac{
-f_{m first probe}-f_{m stimulus onset}
+\frac{
+f_{\rm first\ probe}-f_{\rm stimulus\ onset}
 }{60}.
-]
+\]
 
-A first analysis should use the already processed behavioral-state XLSX rather
-than reclassifying video.
+Trials with no probe in the declared window should remain right-censored for
+survival-style summaries, or be represented as \(T=\infty\) only for a
+finite-window timely-success calculation.
 
-Trials with no probe during the declared observation window should remain
-right-censored for survival-style summaries or be encoded as
-(T=infty) only for a finite-window timely-success calculation.
+Those two treatments must not be mixed.
 
-These two treatments must not be mixed.
+## 4. Supplementary Data closes a coarser individual gate
 
-## 4. What this can estimate
+The published Supplementary Data do **not** contain 28,800 frame rows.
 
-If the frame-level XLSX files are recovered, the public data can estimate:
+However, sheet \`Fig2D and S2\` retains one row per included individual and
+separate one-minute Probe percentages for:
 
-[
-F_j(t)
+\[
+-1\text{ to }0\ {\rm min}
+\]
+
+and
+
+\[
+0\text{ to }1,\ 1\text{ to }2,\ldots,7\text{ to }8\ {\rm min}.
+\]
+
+The number of individual rows in each species block exactly matches the
+timepoint-0 inactive-before-cue count in sheet \`Excl_Spp_Cond\`.
+
+Therefore a defensible coarse endpoint is already recoverable:
+
+> among individuals with zero probing in the -1 to 0 min bin, record the first
+> post-stimulus one-minute bin with Probe% > 0.
+
+This is a one-minute **interval-censored** first-probe onset, not a frame-resolved
+latency.
+
+The resulting public-data analysis is recorded in:
+
+- \`biology/UEHARA_2026_BINNED_FIRST_PROBE_RESULTS_V1.md\`;
+- \`validation/uehara_binned_first_probe_v1.json\`;
+- \`scripts/analyze_uehara_binned_first_probe.py\`.
+
+## 5. What the coarse data can estimate
+
+The Supplementary Data now provide individual discrete completion profiles:
+
+\[
+F_j(k)
 =
-P(T_{m probe}le t)
-]
+P(T_{\rm probe}\le k\ {\rm min}),
+\qquad
+k=1,\ldots,8,
+\]
 
-for each declared condition (j).
+conditional on no observed probing in the preceding one-minute bin.
 
-This is much closer to the V6 process variable than aggregate percent probing.
+This permits direct description of:
 
-It can test:
+- early-tail mass;
+- delayed onset;
+- right-censoring through 8 min;
+- cross-species differences in discrete completion-profile shape.
 
-- early-tail differences;
-- median latency differences;
-- persistence of non-probing;
-- whether two conditions have crossing completion CDFs;
-- whether mean latency is a misleading summary.
+It is already substantially closer to the V6 expected-value layer than an
+aggregate percent-probing trajectory.
 
-It still does not supply the ecological value function (U(t)) by itself.
+## 6. What still requires frame-level data
 
-## 5. Claim ceiling
+The coarse Source Data cannot identify:
 
-A first-probe CDF is not automatically:
+- sub-minute first-probe latency;
+- exact within-bin event order;
+- whether probing began at 2 s versus 58 s inside one minute;
+- short-timescale completion-CDF crossings;
+- frame-resolved response to cue onset.
+
+Those remain a refinement gate, not a prerequisite for demonstrating
+individual temporal heterogeneity.
+
+## 7. Claim ceiling
+
+Neither the coarse nor future frame-level first-probe endpoint is automatically:
 
 - time to successful blood feeding;
 - time to a physiologically sufficient meal;
 - reproductive fitness;
-- an adaptive-versus-fixed architecture comparison;
-- the natural opportunity distribution.
+- the natural opportunity distribution;
+- an adaptive-versus-fixed architecture comparison.
 
-The public data can close the individual completion-time side of the V6
-process, not the full selection chain.
+The public data close an **individual temporal-process** layer, not the full
+selection chain.
 
-## 6. Current data gate
+## 8. Current empirical gate
 
-The GitHub repository contains analysis code but not the local
-`data_stage_4` / `data_stage_5` XLSX files referenced by the notebook.
+Status:
 
-The Communications Biology paper states that raw data are provided in the
-associated data file and videos are deposited at Zenodo DOI
-10.5281/zenodo.15478199.
+\[
+\boxed{
+\text{individual coarse completion profile: OPEN}
+}
+\]
 
-The next empirical gate is therefore:
+because the public Supplementary Data are sufficient.
 
-1. obtain the associated frame-level behavior XLSX or identify its public
-   mapping;
-2. verify that the columns and behavior codes match the notebook assumptions;
-3. freeze a stimulus-onset and censoring contract;
-4. run the latency extractor added in this branch;
-5. compare individual (F_j(t)) curves before any fitness interpretation.
+Status:
 
-No latency result is claimed until that gate is crossed.
+\[
+\boxed{
+\text{frame-resolved first-probe latency: PENDING}
+}
+\]
+
+because the processed framewise XLSX mapping is still absent from the public
+GitHub repository.
+
+The frame-level refinement should be pursued only if it changes a V6 inference;
+the one-minute Source Data result is already a valid empirical anchor at its
+declared resolution.
