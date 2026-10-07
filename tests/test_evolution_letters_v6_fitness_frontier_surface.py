@@ -33,113 +33,167 @@ def test_v6_letter_length_surface():
     text = _text(MAIN)
     title = text.splitlines()[0].lstrip("# ")
     abstract = _section(text, "## Abstract", "Keywords:")
-    main = text.split("## Introduction", 1)[1]
+    main = text.split("## Introduction", 1)[1].split("## References", 1)[0]
 
     assert _words(title) <= 30
     assert _words(abstract) <= 300
     assert _words(main) <= 5000
 
 
-def test_v6_has_four_canonical_results():
+def test_v6_has_three_novelty_results_and_one_supporting_frequency_section():
     text = _text(MAIN)
-    required = (
+    for phrase in (
         "Finite information constraints define an exact attainable frontier",
         "Natural history re-ranks the structural frontier",
         "Architecture cost can be inverted into minimum information structure",
-        "Encounter frequencies create a different exact frontier",
-    )
-    for phrase in required:
+        "Biological consequence: encounter frequencies can rescue expected value",
+    ):
         assert phrase in text
+
+    spine = _text(SPINE)
+    assert "## MAIN 1" in spine
+    assert "## MAIN 2" in spine
+    assert "## MAIN 3" in spine
+    assert "## SUPPORT 1" in spine
+    assert "## MAIN 4" not in spine
 
 
 def test_v6_keeps_structural_and_fitness_objects_separate():
-    text = _text(MAIN)
-    lower = _flat(text).lower()
+    text = _flat(_text(MAIN))
+    lower = text.lower()
     assert "a structural advantage in information acquisition is not itself a fitness advantage" in lower
     assert "structural adaptive gain is evolutionary potential, not fitness" in lower
-    assert "c_a is guaranteed minimax complexity, not fitness" not in lower  # wording is in theory notes, not required verbatim
-    assert "r_robust" in text
-    assert "r_expected" in text
+    assert "robust value of contingent over fixed resolution" in lower
+    assert "expected value" in lower
 
 
-def test_v6_keeps_robust_expected_claim_firewall():
+def test_v6_expected_frequency_result_is_not_promoted_as_independent_novelty():
     text = _flat(_text(MAIN))
-    assert "The robust frontier is intentionally distribution free." in text
-    assert "Expected selection is" in text
-    assert "Cue arity matters for robust statewise evolvability" in text
-    assert "cue arity disappears from the exact finite-scope expected ceiling" in text
-    assert "frequency-assisted evolvability band" in text
+    assert "interpretive extension rather than a separate novelty theorem" in text
+    assert "prior-weighted expected decision-tree cost itself is established theory" in text
+
+    readiness = json.loads(_text(READINESS))
+    assert len(readiness["main_results"]) == 3
+    assert any(
+        "frequency" in item.lower()
+        for item in readiness["supporting_biological_consequences"]
+    )
 
 
-def test_v6_keeps_prior_art_demotions():
+def test_v6_prior_art_firewalls_include_flattening_and_test_collection():
     text = _text(MAIN)
     paragraph = _section(text, "### What the theory does not claim", "## Current empirical requirements")
+    flat = _flat(paragraph).lower()
+
     for phrase in (
-        "Sequential value of information",
-        "prior-weighted decision trees",
-        "deadline-sensitive decisions",
-        "adaptive-tree flattening",
-        "adaptivity gaps",
-        "costly sensory fidelity",
+        "sequential value of information",
+        "worst-versus-expected decision trees",
+        "deadline-sensitive action utility",
+        "adaptive-versus-nonadaptive expected-value gaps",
+        "minimum/generalized test-collection problems",
     ):
-        assert phrase in paragraph
+        assert phrase in flat
+
+    assert "fixed resolver is closely related to a test collection" in flat
+    assert "exact joint frontier" in flat
 
 
-def test_v6_aedes_anchor_is_not_promoted_to_fitness_validation():
+def test_v6_empirical_anchors_are_individual_and_aggregate_but_not_fitness():
     text = _text(MAIN)
     anchor = _section(
         text,
-        "## Empirical process anchor: temporal value is not the same as cue-effect magnitude",
+        "## Empirical process anchors: temporal effect shape and individual completion profiles",
         "## Discussion",
     )
+
     assert "46.2 s" in anchor
     assert "46.5 s" in anchor
-    assert "This is a process-shape example, not a fitness validation." in anchor
-    assert "do not identify the natural opportunity distribution" in anchor
+    assert "10 of 38 individuals (26.3%)" in anchor
+    assert "12/14 *Anopheles" in anchor
+    assert "profiles also cross" in anchor
+    assert "process anchors, not fitness validations" in anchor
+    assert "one-minute interval-censored" in anchor
 
 
 def test_v6_payoff_relation_is_upstream_downstream_not_duplicate_theory():
     text = _text(MAIN)
     relation = _section(text, "### Relation to PAYOFF", "### What the theory does not claim")
-    assert "The present framework supplies the upstream recoverable benefit." in relation
-    assert "The generic" in relation
-    assert "R-K" in relation
-    assert "The contribution here is to derive sharp information-structural limits" in _flat(relation)
+    flat = _flat(relation)
+    assert "upstream recoverable benefit" in flat
+    assert "R-K" in flat
+    assert "generic" in flat
+    assert "sharp information-structural limits" in flat
 
 
-def test_v6_canonical_spine_has_stop_rule():
+def test_v6_canonical_spine_has_three_main_result_stop_rule():
     text = _text(SPINE)
     assert "MAIN 1" in text
     assert "MAIN 2" in text
     assert "MAIN 3" in text
-    assert "MAIN 4" in text
-    assert "Do not add another main theorem unless it changes one of MAIN 1-4." in text
+    assert "SUPPORT 1" in text
+    assert "MAIN 4" not in text
+    assert "MAIN 1-3 only" in text
 
 
-def test_v6_readiness_declares_draft_and_preserves_v5():
+def test_v6_readiness_declares_draft_three_result_spine_and_preserves_v5():
     data = json.loads(_text(READINESS))
-    assert data["status"] == "v6_theory_draft_green_core_not_submission_ready"
     assert data["target"] == "Evolution Letters"
+    assert "not_submission_ready" in data["status"]
     assert data["preserved_v5_freeze"]["preserved"] is True
     assert data["promotion_rule"]["new_main_theorem_stop_rule"] is True
+    assert len(data["main_results"]) == 3
+    assert "MAIN 1-3" in data["promotion_rule"]["rule"]
 
 
-
-def test_v6_figure_plan_tracks_four_result_story():
+def test_v6_figure_plan_tracks_three_result_plus_empirical_story():
     text = _text(FIGPLAN)
     for phrase in (
         "Natural history re-ranks an exact structural frontier",
         "Finite information constraints impose exact evolutionary no-go regions",
         "Encounter frequencies create value unavailable to robust architecture",
-        "temporal process-shape anchor — not a fitness estimate",
+        "Individual discrete completion profiles",
+        "Aggregate temporal effect shape",
     ):
         assert phrase in text
 
 
-def test_v6_legends_keep_visual_claim_firewalls():
+def test_v6_legends_keep_visual_claim_firewalls_and_two_empirical_objects():
     text = _text(LEGENDS)
     assert text.count("**Alt text:**") == 3
     assert "Structural ratios are not interpreted as fitness." in text
     assert "not biological receptor count" in text
-    assert "it is not an estimate of fitness" in text
-    assert "frequency-assisted evolvability band" in text
+    assert "Uehara et al. (2026)" in text
+    assert "Chandel et al. (2024)" in text
+    assert "Neither estimates fitness" in text
+
+
+def test_v6_manuscript_has_no_known_broken_tex_tokens_or_control_chars():
+    text = _text(MAIN)
+    forbidden = (
+        "C_Ale",
+        "hmapsto",
+        "toinfty",
+        "notRightarrow",
+        ",qquad",
+        ")quad(",
+    )
+    for token in forbidden:
+        assert token not in text
+
+    controls = [
+        char
+        for char in text
+        if ord(char) < 32 and char not in "\n\r\t"
+    ]
+    assert controls == []
+
+
+def test_v6_references_include_fixed_test_collection_and_both_mosquito_anchors():
+    text = _text(MAIN)
+    refs = text.split("## References", 1)[1]
+    for phrase in (
+        "The generalized test collection problem",
+        "Thermal infrared directs host-seeking behaviour",
+        "Behavioral heterogeneity in host seeking and post-feeding suppression",
+    ):
+        assert phrase in refs
