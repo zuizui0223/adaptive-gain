@@ -633,6 +633,96 @@ def two_shallow_leaf_expected_value_witness(
         raise ArithmeticError("two-shallow-leaf witness lost private-pair necessity")
     return task
 
+
+def finite_expected_ceiling_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Binary witness for the exact finite-scope expected-value ceiling.
+
+    Let M=min(query_count, world_count-1). For M>=2, construct a binary tree
+    with exactly M internal nodes and one target-pure leaf directly below the
+    root. Private-pair targets make all M internal queries fixed-mandatory.
+    Extra worlds are exact duplicates and extra declared queries are constants.
+
+    The distinguished first leaf is therefore resolvable after one query,
+    while C_F=M. This witnesses the supremum U(1)-U(M) as its encounter
+    probability tends to one.
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+
+    internal_target = min(query_count, world_count - 1)
+    if internal_target < 2:
+        raise ValueError("strict expected adaptive advantage requires at least two fixed queries")
+
+    def chain(internal_count: int) -> BoundedArityTree:
+        if internal_count == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            (
+                BoundedArityTree(),
+                chain(internal_count - 1),
+            )
+        )
+
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            chain(internal_target - 1),
+        )
+    )
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("finite expected ceiling witness lost fixed necessity")
+    return task
+
+
+def finite_expected_one_step_mass_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Binary witness with one depth-1 leaf, one depth-2 leaf, and rare tail."""
+    if type(world_count) is not int or world_count < 3:
+        raise ValueError("world_count must be an integer at least 3")
+    if type(query_count) is not int or query_count < 2:
+        raise ValueError("query_count must be an integer at least 2")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+
+    internal_target = min(query_count, world_count - 1)
+
+    def chain(internal_count: int) -> BoundedArityTree:
+        if internal_count == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            (
+                BoundedArityTree(),
+                chain(internal_count - 1),
+            )
+        )
+
+    second = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            chain(internal_target - 2),
+        )
+    )
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            second,
+        )
+    )
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("finite one-step-mass witness lost fixed necessity")
+    return task
+
 def sharp_bounded_arity_unit_cost_witness(
     world_count: int,
     query_count: int,
