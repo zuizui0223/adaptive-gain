@@ -19,7 +19,9 @@
     "robust_receipt": "validation/sharp_opportunity_fitness_envelope_v1.json",
     "evolutionary_receipt": "validation/evolutionary_resource_frontier_v1.json",
     "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
-    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md"
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "uehara_binned_result": "biology/UEHARA_2026_BINNED_FIRST_PROBE_RESULTS_V1.md",
+    "uehara_binned_receipt": "validation/uehara_binned_first_probe_v1.json"
   },
   "main_results": [
     "exact attainable fixed-(n,m,b) adaptive/fixed frontier at every feasible depth",
@@ -31,7 +33,7 @@
     "CA": "C_A is minimax guaranteed complexity, not fitness or the uniquely evolved policy.",
     "robust_expected": "Robust value is frequency-free/statewise; expected value additionally depends on branch frequencies and completion profiles.",
     "comparator": "All adaptive-versus-fixed claims use the declared universal fixed comparator unless another comparator is modeled explicitly.",
-    "Aedes": "Chandel Figure 3a is a temporal process-shape anchor only, not a fitness or adaptive/fixed validation.",
+    "Aedes": "Chandel Figure 3a is an aggregate temporal-effect anchor; Uehara Figure 2D/S2 supplies one-minute interval-censored individual first-probe profiles. Neither is a fitness or adaptive/fixed validation.",
     "prior_art": "Sequential VOI, deadline-weighted utility, adaptivity gaps, tree flattening, prior-weighted expected depth and costly sensory fidelity are not novelty claims."
   },
   "validation": {
@@ -42,10 +44,18 @@
     "latest_full_matrix_status": "triggered_after_v6_prose",
     "title_words": 6,
     "abstract_words": 240,
-    "main_text_words": 2696,
+    "main_text_words": 2761,
     "focused_ci_with_finite_expected_grid": 37613648497,
-    "latex_control_character_audit": "PASS: zero non-whitespace ASCII control characters in V6 manuscript",
-    "citation_pass": "core ecological-information, information-fitness, decision-tree prior-art and Chandel empirical citations added"
+    "latex_control_character_audit": "PASS: zero non-whitespace ASCII control characters in current V6 manuscript",
+    "citation_pass": "core ecological-information, information-fitness, decision-tree prior-art, Chandel 2024 and Uehara et al. 2026 empirical citations added",
+    "uehara_source_data": {
+      "supplementary_xlsx_sha256": "13b64727b521b09bbf5446411d0e7ef2062edae17ebd93be5c93d12a6a07f3b3",
+      "fig2d_rows_match_exclusion_counts": true,
+      "source_individuals": 233,
+      "primary_pre_probe_zero_individuals": 112,
+      "endpoint": "one-minute interval-censored first post-stimulus probing among individuals with zero probing in -1 to 0 min",
+      "status": "source-data result materialized; workflow reproduction pending latest source-data-audit rerun"
+    }
   },
   "promotion_rule": {
     "new_main_theorem_stop_rule": true,
@@ -65,12 +75,12 @@
   "figure_story": [
     "Figure 1: exact structural frontier and natural-history re-ranking",
     "Figure 2: inverse robust thresholds and cue-arity no-go",
-    "Figure 3: robust-versus-expected frequency rescue plus Aedes temporal process anchor"
+    "Figure 3: robust-versus-expected frequency rescue plus Uehara individual completion profiles and Chandel aggregate effect timing"
   ],
   "submission_gate_status": {
     "manuscript_length": "pass",
     "core_references": "pass",
-    "final_full_matrix": "pending latest head",
-    "supplementary_data_empirical_gate": "pending Uehara XLSX audit"
+    "final_full_matrix": "pending latest head after empirical-anchor update",
+    "supplementary_data_empirical_gate": "pass at one-minute interval-censored individual level; frame-resolved Uehara latency remains optional refinement"
   }
 }
