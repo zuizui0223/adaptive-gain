@@ -13,20 +13,20 @@ robustly across all states.
 Environmental heterogeneity is often expected to favor behavioral flexibility,
 yet a structural advantage in information acquisition is not itself a fitness
 advantage. We link an exact finite theory of contingent sensing to ecological
-value. Let (C_A) be the minimum worst-case cost of contingent target
-resolution and (C_F) the minimum cost of a precommitted resolving query set.
-For fixed world count (n), query count (m) and maximum query arity (b),
-every feasible adaptive depth (h) lies on an exact attainable frontier
+value. Let \(C_A\) be the minimum worst-case cost of contingent target
+resolution and \(C_F\) the minimum cost of a precommitted resolving query set.
+For fixed world count \(n\), query count \(m\) and maximum query arity \(b\),
+every feasible adaptive depth \(h\) lies on an exact attainable frontier
 \[
 (C_A,C_F)=
-\left(h,\min{m,F_b(n,h)}\right).
+\left(h,\min\{m,F_b(n,h)\}\right).
 \]
-For any nonincreasing biological value of completion (U(c)), this frontier
+For any nonincreasing biological value of completion \(U(c)\), this frontier
 lifts sharply:
 \[
-max[U(C_A)-U(C_F)]
+\max[U\(C_A\)-U\(C_F\)]
 =
-\max_h[U(h)-U(I_h)].
+\max_h[U\(h\)-U(I_h)].
 \]
 Natural history therefore re-ranks information architectures rather than merely
 scaling one adaptive-gain score. Inverting the frontier gives exact
@@ -72,10 +72,10 @@ These distinctions matter because theoretical treatments often collapse
 information architecture into one scalar advantage. In our earlier finite
 routing theory, the structural benefit of contingent sensing is summarized by
 the difference or ratio between the minimum contingent worst-case cost
-(C_A) and the minimum precommitted resolving cost (C_F). This structure is
-mathematically informative: (C_Ale C_F), and finite environments can
+\(C_A\) and the minimum precommitted resolving cost \(C_F\). This structure is
+mathematically informative: \(C_A\le C_F\), and finite environments can
 generate large or even unbounded fixed-to-contingent ratios. But neither
-(C_F-C_A) nor (C_F/C_A) is intrinsically fitness. Both ignore where the
+\(C_F-C_A\) nor \(C_F/C_A\) is intrinsically fitness. Both ignore where the
 saved information cost occurs relative to ecological time, and both ignore the
 frequency with which different decision branches are encountered.
 
@@ -88,11 +88,11 @@ We answer this with three main results and one biological extension.
 
 First, we close the finite structural problem at fixed world count, query count
 and query arity. Rather than retaining only the single architecture that
-maximizes (C_F/C_A), we identify an exact attainable frontier of
-((C_A,C_F)) pairs.
+maximizes \(C_F/C_A\), we identify an exact attainable frontier of
+\((C_A,C_F)\) pairs.
 
 Second, we compose this frontier with an arbitrary nonincreasing biological
-value of completion (U(c)). This yields a sharp cross-layer result:
+value of completion \(U(c)\). This yields a sharp cross-layer result:
 natural history selects among structural architectures and can rank them
 differently from any purely structural adaptive-gain metric.
 
@@ -119,17 +119,17 @@ is worth anything.
 
 ### Finite ecological decision tasks
 
-A task contains a finite set of represented worlds (W), a focal target
-(T(w)), and a finite set of queries. A query has deterministic outcomes and
+A task contains a finite set of represented worlds \(W\), a focal target
+\(T(w)\), and a finite set of queries. A query has deterministic outcomes and
 positive acquisition cost. The target is intentionally narrower than the full
 environmental state: two worlds can be ecologically distinct yet equivalent
 for the focal action.
 
 A fixed resolver chooses one query set in advance. Its minimum total cost is
-(C_F).
+\(C_F\).
 
 A contingent resolver can choose later queries from earlier outcomes. Its
-minimum worst-path cost is (C_A).
+minimum worst-path cost is \(C_A\).
 
 Any fixed strategy is a special contingent strategy, so
 \[
@@ -137,7 +137,7 @@ C_A\le C_F.
 \]
 
 Throughout the principal exact results we use unit query costs and bound the
-number of possible outcomes of any query by (b).
+number of possible outcomes of any query by \(b\).
 
 ### Biological value of completion
 
@@ -166,7 +166,7 @@ The robust value of contingent over fixed resolution is
 \[
 R_{\rm robust}
 =
-U(C_A)-U(C_F).
+U\(C_A\)-U\(C_F\).
 \]
 
 This is a frequency-free worst-state quantity. It is not the expected fitness
@@ -174,16 +174,16 @@ value of a decision tree.
 
 ### Expected value
 
-For a contingent policy (pi), let (T_pi(w)) be its realized completion
-cost in world (w), and let (p_w) be the encounter probability of that world.
+For a contingent policy \(\pi\), let \(T_\pi(w)\) be its realized completion
+cost in world (w), and let \(p_w\) be the encounter probability of that world.
 
 Then
 \[
-R_{\rm expected}(pi)
+R_{\rm expected}\(\pi\)
 =
 \sum_w p_w U[T_pi(w)]
 -
-U(C_F).
+U\(C_F\).
 \]
 
 For a minimax tree,
@@ -199,29 +199,29 @@ of ecological encounters across tree branches.
 
 ### 1. Finite information constraints define an exact attainable frontier
 
-Let (F_b(n,h)) be the exact maximum number of productive internal-node
-occurrences in a rooted decision tree with at most (n) nonempty leaves,
-worst-path depth at most (h), and at most (b) nonempty children at each
+Let \(F_b(n,h)\) be the exact maximum number of productive internal-node
+occurrences in a rooted decision tree with at most \(n\) nonempty leaves,
+worst-path depth at most \(h\), and at most \(b\) nonempty children at each
 internal node.
 
-For a task with (n) represented worlds, (m) query resources and
-(C_A=h),
+For a task with \(n\) represented worlds, \(m\) query resources and
+\(C_A=h\),
 \[
 C_F
 \le
 I_h
 =
-\min{m,F_b(n,h)}.
+\min\{m,F_b(n,h)\}.
 \]
 
 The key strengthening is sharpness at every feasible depth.
 
-For each (h), we construct a productive tree with a protected deepest spine
+For each \(h\), we construct a productive tree with a protected deepest spine
 and one physical query per internal node. A private opposite-target pair is
 assigned to every internal query so that this query is the pair's unique
 separator. Private pairs make all internal queries fixed-mandatory. Along the
 protected spine, one realized world belongs to a private pair at every depth,
-forcing every adaptive resolver on that world to acquire all (h) spine
+forcing every adaptive resolver on that world to acquire all \(h\) spine
 queries.
 
 Thus
@@ -232,7 +232,7 @@ Thus
 (h,I_h)
 }
 \]
-is exactly attainable at every feasible (h).
+is exactly attainable at every feasible \(h\).
 
 The structural problem is therefore not represented by one optimum ratio. It
 is represented by an exact frontier.
@@ -246,7 +246,7 @@ the declared structural scope is
 R_{\rm robust,max}
 =
 \max_h
-[U(h)-U(I_h)].
+[U\(h\)-U(I_h)].
 }
 \]
 
@@ -258,9 +258,9 @@ U(c)=-\lambda c,
 \]
 then
 \[
-U(C_A)-U(C_F)
+U\(C_A\)-U\(C_F\)
 =
-\lambda(C_F-C_A).
+\lambda\(C_F-C_A\).
 \]
 A linear adaptive-gain-to-fitness map is therefore equivalent to assuming
 constant marginal biological penalty per unit completion cost.
@@ -275,9 +275,9 @@ n=10,\qquad m=9.
 \]
 Relevant exact frontier points are
 \[
-(2,3),quad(3,7),quad(4,9).
+(2,3),\qquad(3,7),\qquad(4,9).
 \]
-The fixed-to-contingent ratio is largest at (h=3).
+The fixed-to-contingent ratio is largest at \(h=3\).
 
 Now let
 \[
@@ -294,7 +294,7 @@ and
 \[
 e^{-4\mu}-e^{-9\mu}.
 \]
-As (mu) increases, the maximizing depth switches
+As \(\mu\) increases, the maximizing depth switches
 \[
 4\to3\to2.
 \]
@@ -303,13 +303,13 @@ over an intermediate range.
 
 An even sharper counterexample comes from the exact binary extremal family
 \[
-C_A=d+1,qquad C_F=2^d.
+C_A=d+1,\qquad C_F=2^d.
 \]
 Its structural ratio diverges:
 \[
 \frac{2^d}{d+1}\to\infty.
 \]
-But for every fixed (mu>0),
+But for every fixed \(\mu>0\),
 \[
 e^{-\mu(d+1)}-e^{-\mu2^d}\to0.
 \]
@@ -318,17 +318,17 @@ biologically worthless.
 
 ### 3. Architecture cost can be inverted into minimum information structure
 
-Let the contingent architecture pay constitutive cost (K).
+Let the contingent architecture pay constitutive cost \(K\).
 
-At adaptive depth (h), define
+At adaptive depth \(h\), define
 \[
-J_K(h)
+J_K\(h\)
 =
-\min\{j\ge h:U(h)-U(j)>K\}.
+\min\{j\ge h:U\(h\)-U(j)>K\}.
 \]
-Then positive robust architecture value at depth (h) is possible exactly when
+Then positive robust architecture value at depth \(h\) is possible exactly when
 \[
-I_h\ge J_K(h).
+I_h\ge J_K\(h\).
 \]
 
 The forward value theorem therefore has an exact inverse: natural history and
@@ -338,9 +338,9 @@ evolvability.
 This becomes especially informative when world and query counts are allowed to
 grow but cue arity remains bounded.
 
-A full (b)-ary adaptive tree of depth (h) has at most
+A full \(b\)-ary adaptive tree of depth \(h\) has at most
 \[
-J_b(h)
+J_b\(h\)
 =
 \frac{b^h-1}{b-1}
 \]
@@ -348,24 +348,24 @@ internal nodes. The private-pair construction attains
 \[
 (C_A,C_F)
 =
-(h,J_b(h)).
+(h,J_b\(h\)).
 \]
 
 For bounded-below (U), define
 \[
 \boxed{
-K_{\rm crit,robust}^{(b)}
+K_{\rm crit,robust}^{\(b\)}
 =
 \max_{h\ge2}
-[U(h)-U(J_b(h))].
+[U\(h\)-U(J_b\(h\))].
 }
 \]
 
 If
 \[
-K>K_{\rm crit,robust}^{(b)},
+K>K_{\rm crit,robust}^{\(b\)},
 \]
-no finite task with cue arity at most (b) can guarantee positive net
+no finite task with cue arity at most \(b\) can guarantee positive net
 contingent value in every represented world. More environmental states and
 more query resources cannot help.
 
@@ -373,13 +373,13 @@ This gives an exact minimum robust cue arity
 \[
 b_{min}^{\rm robust}
 =
-\min{b\ge2:K<K_{\rm crit,robust}^{(b)}}.
+\min{b\ge2:K<K_{\rm crit,robust}^{\(b\)}}.
 \]
 
 For
 \[
 U(c)=e^{-0.3c},
-qquad K=0.30,
+\qquad K=0.30,
 \]
 the binary global ceiling is approximately (0.290085), whereas the ternary
 ceiling is approximately (0.386328). Thus
@@ -400,16 +400,16 @@ theory.
 
 Fix finite world and query budgets (n,m) and define
 \[
-M=\min{m,n-1}.
+M=\min\{m,n-1\}.
 \]
 
 Across all legal tasks, guaranteed-resolving policies and strictly positive
 world-frequency distributions,
 \[
 \boxed{
-sup R_{\rm expected}(n,m,b)
+\sup R_{\rm expected}(n,m,b)
 =
-U(1)-U(M)
+U(1)-U\(M\)
 }
 \]
 for every
@@ -418,33 +418,33 @@ b\ge2.
 \]
 
 The upper bound follows because no nontrivial decision can finish before one
-query and because any fixed resolver costs at most (M).
+query and because any fixed resolver costs at most \(M\).
 
 Sharpness requires only binary queries. We construct a private-pair tree with
-exactly (M) fixed-mandatory internal queries and one target-pure leaf directly
+exactly \(M\) fixed-mandatory internal queries and one target-pure leaf directly
 below the root. As encounter probability concentrates on that leaf, adaptive
-expected value approaches (U(1)), whereas fixed value remains (U(M)).
+expected value approaches \(U(1)\), whereas fixed value remains \(U\(M\)\).
 
 This creates a qualitative split.
 
 Cue arity matters for robust statewise evolvability:
 \[
-K_{\rm crit,robust}^{(b)}
+K_{\rm crit,robust}^{\(b\)}
 \]
-depends on (b).
+depends on \(b\).
 
 But cue arity disappears from the exact finite-scope expected ceiling once
 encounter frequencies can be skewed.
 
 In the unrestricted finite-size limit,
 \[
-sup R_{\rm robust}
+\sup R_{\rm robust}
 =
 U(2)-U_\infty,
 \]
 whereas
 \[
-sup R_{\rm expected}
+\sup R_{\rm expected}
 =
 U(1)-U_\infty.
 \]
@@ -584,7 +584,7 @@ At the robust level,
 \[
 R_{\rm robust,max}
 =
-\max_h[U(h)-U(I_h)].
+\max_h[U\(h\)-U(I_h)].
 \]
 
 PAYOFF then asks whether
@@ -637,7 +637,7 @@ A direct biological test needs four empirical objects:
 
 Expected-value tests additionally require encounter frequencies.
 
-A positive (C_F-C_A) measurement alone is therefore a structural receipt,
+A positive \(C_F-C_A\) measurement alone is therefore a structural receipt,
 not a selection estimate.
 
 ## Conclusion
