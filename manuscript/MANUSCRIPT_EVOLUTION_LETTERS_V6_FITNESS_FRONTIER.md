@@ -607,10 +607,15 @@ contribution here is to derive sharp information-structural limits on (R).
 
 Sequential value of information (Miller 1975), prior-weighted and
 worst-versus-expected decision trees (Hyafil & Rivest 1976; Saettler et al.
-2017), deadline-sensitive action utility (Ash & Hayes-Roth 1996), and
-adaptive-versus-nonadaptive expected-value gaps (Hellerstein et al. 2022) all
+2017), deadline-sensitive action utility (Ash & Hayes-Roth 1996),
+adaptive-versus-nonadaptive expected-value gaps (Hellerstein et al. 2022), and
+minimum/generalized test-collection problems (Douek-Pinkovich et al. 2021) all
 have substantial prior literatures. These are boundary conditions for the
-present contribution, not claims of novelty.
+present contribution, not claims of novelty. In particular, the fixed resolver
+is closely related to a test collection: V6's mathematical claim is the exact
+joint frontier with contingent worst-case depth under simultaneous finite
+world, query and query-arity constraints, not the fixed test-set problem by
+itself.
 
 The proposed contribution is narrower:
 
@@ -671,6 +676,11 @@ https://doi.org/10.1016/j.tree.2005.01.010.
 Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness
 value of information. *Oikos* 119:219–230.
 https://doi.org/10.1111/j.1600-0706.2009.17781.x.
+
+Douek-Pinkovich, Y., Ben-Gal, I. & Raviv, T. 2021. The generalized test
+collection problem. *TOP* 29:372–386.
+https://doi.org/10.1007/s11750-020-00554-1.
+
 
 Hellerstein, L., Kletenik, D., Liu, N. & Witter, R. T. 2022. Adaptivity gaps
 for the stochastic Boolean function evaluation problem. In *Approximation and
