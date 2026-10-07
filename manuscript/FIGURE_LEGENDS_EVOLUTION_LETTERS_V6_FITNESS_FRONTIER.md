@@ -41,21 +41,28 @@ limits.
 ## Figure 3. Encounter frequencies create an expected-value regime beyond the robust frontier
 
 **A**, the absolute robust statewise value ceiling is
-(U(2)-U_infty), whereas the expected-value ceiling is
-(U(1)-U_infty). The interval between them is a frequency-assisted
+(U(2)-U_\infty), whereas the expected-value ceiling is
+(U(1)-U_\infty). The interval between them is a frequency-assisted
 evolvability band. **B**, at fixed finite (n=10,m=9), a binary tree can place
 a common state in a one-query branch while rare states carry the fixed
 information burden. Expected value rises with the encounter mass on the
 one-query branch and crosses the declared architecture cost at a finite
-threshold. **C**, public Aedes aegypti source data provide a temporal
-process-shape anchor: after transient CO2, half of the aggregate infrared
-advantage accumulates only after approximately 46 s in each post-pulse period.
-This empirical panel demonstrates nonuniform timing of a cue effect; it is not
-an estimate of fitness, natural opportunity survival or adaptive-versus-fixed
-sensing.
+threshold. **C1**, Uehara et al. (2026) Supplementary Data provide
+individual one-minute probing profiles. After excluding individuals with
+positive probing in the preceding -1 to 0 min bin, only 26.3% of
+*Aedes albopictus* probe in the first post-stimulus minute and 60.5% by 8 min,
+whereas corresponding first-minute fractions are 64.3% for *Ae. aegypti* and
+85.7% for *Anopheles gambiae*. **C2**, Chandel et al. (2024) source data show
+that after transient CO2, half of the aggregate infrared advantage accumulates
+only after approximately 46 s in each post-pulse period. The two empirical
+subpanels distinguish individual completion-profile shape from the timing of an
+aggregate cue effect. Neither estimates fitness, natural opportunity survival
+or an adaptive-versus-fixed sensing contrast.
 
 **Alt text:** Panel A compares robust and expected evolutionary-value ceilings.
 Panel B shows a binary decision tree with a common shallow branch and rare deep
 branches plus a threshold curve against common-state encounter frequency.
-Panel C shows delayed accumulation of the public Aedes infrared behavioral
-effect through post-pulse time.
+Panel C1 shows individual cumulative first-probe profiles at one-minute
+resolution for several mosquito species, with *Aedes albopictus* shifted
+toward later or absent probing. Panel C2 shows delayed accumulation of the
+aggregate *Aedes aegypti* infrared behavioral effect through post-pulse time.
