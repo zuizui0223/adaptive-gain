@@ -6,6 +6,8 @@ from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolutio
 from adaptive_gain.bounded_arity_extremal_bounds import (
     bounded_arity_unit_cost_witness_at_depth,
     shallow_leaf_expected_value_witness,
+    finite_expected_ceiling_witness,
+    finite_expected_one_step_mass_witness,
     two_shallow_leaf_expected_value_witness,
 )
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
@@ -625,3 +627,79 @@ def test_finite_scope_expected_ceiling_converges_to_unrestricted_with_large_budg
     )
     assert finite < unrestricted
     assert unrestricted - finite < 1e-12
+
+
+
+def test_finite_expected_ceiling_witness_attains_fixed_burden_and_one_step_branch():
+    task = finite_expected_ceiling_witness(10, 9)
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 9
+
+    # The first pre-order query is the root; world 0 is the shallow child.
+    root = task.queries[0]
+    shallow_outcome = root.outcomes[0]
+    compatible = [
+        i for i, outcome in enumerate(root.outcomes)
+        if outcome == shallow_outcome
+    ]
+    assert compatible
+    assert len({task.worlds[i].target for i in compatible}) == 1
+
+
+def test_finite_expected_ceiling_witness_approaches_exact_supremum():
+    mu = 0.3
+    task = finite_expected_ceiling_witness(10, 9)
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 9
+
+    p_common = 0.999
+    probs = [p_common] + [
+        (1.0 - p_common) / (len(task.worlds) - 1)
+    ] * (len(task.worlds) - 1)
+
+    adaptive = discounted_fitness_optimal_policy(
+        task,
+        probs,
+        discount_rate=mu,
+    )
+    direct = (
+        adaptive.expected_discounted_completion_value
+        - math.exp(-mu * fixed.minimum_cost)
+    )
+    ceiling = finite_scope_expected_value_ceiling(
+        10,
+        9,
+        lambda x: math.exp(-mu * x),
+    )
+
+    assert direct <= ceiling + 1e-12
+    assert ceiling - direct < 0.01
+
+
+def test_finite_one_step_mass_witness_has_two_shallow_levels_and_exact_fixed_cost():
+    task = finite_expected_one_step_mass_witness(10, 9)
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 9
+
+    root = task.queries[0]
+    shallow0 = root.outcomes[0]
+    root_pure = [
+        i for i, outcome in enumerate(root.outcomes)
+        if outcome == shallow0
+    ]
+    assert len({task.worlds[i].target for i in root_pure}) == 1
+
+    # Query 1 is the second internal node in pre-order. On the non-shallow
+    # root branch it exposes another target-pure leaf at depth two.
+    second = task.queries[1]
+    rare_root_outcome = root.outcomes[1]
+    root_rare = [
+        i for i, outcome in enumerate(root.outcomes)
+        if outcome == rare_root_outcome
+    ]
+    second_outcome = second.outcomes[root_rare[0]]
+    second_cell = [
+        i for i in root_rare
+        if second.outcomes[i] == second_outcome
+    ]
+    assert len({task.worlds[i].target for i in second_cell}) == 1
