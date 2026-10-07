@@ -134,7 +134,7 @@ minimum worst-path cost is (C_A).
 
 Any fixed strategy is a special contingent strategy, so
 \[
-C_Ale C_F.
+C_A\le C_F.
 \]
 
 Throughout the principal exact results we use unit query costs and bound the
@@ -189,7 +189,7 @@ U(C_F).
 
 For a minimax tree,
 \[
-R_{\rm expected}ge R_{\rm robust},
+R_{\rm expected}\ge R_{\rm robust},
 \]
 because every realized path is no longer than the worst path.
 
@@ -209,7 +209,7 @@ For a task with (n) represented worlds, (m) query resources and
 (C_A=h),
 \[
 C_F
-le
+\le
 I_h
 =
 \min{m,F_b(n,h)}.
@@ -272,7 +272,7 @@ value.
 
 Consider binary tasks with
 \[
-n=10,qquad m=9.
+n=10,\qquad m=9.
 \]
 Relevant exact frontier points are
 \[
@@ -325,7 +325,7 @@ At adaptive depth (h), define
 \[
 J_K(h)
 =
-\min{jge h:U(h)-U(j)>K}.
+\min\{j\ge h:U(h)-U(j)>K\}.
 \]
 Then positive robust architecture value at depth (h) is possible exactly when
 \[
@@ -451,7 +451,7 @@ U(1)-U_\infty.
 Therefore
 \[
 U(2)-U_\infty
-le K
+\le K
 <
 U(1)-U_\infty
 \]
@@ -473,15 +473,15 @@ ve^{-\mu}.
 
 At
 \[
-\mu=0.3,qquad v=1,qquad K=0.60,
+\mu=0.3,\qquad v=1,\qquad K=0.60,
 \]
 the control cost exceeds the absolute robust ceiling
 \[
-e^{-0.6}approx0.5488,
+e^{-0.6}\approx0.5488,
 \]
 but remains below the expected ceiling
 \[
-e^{-0.3}approx0.7408.
+e^{-0.3}\approx0.7408.
 \]
 
 Thus encounter-frequency structure can support a contingent architecture that
