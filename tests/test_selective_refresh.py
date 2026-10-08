@@ -192,3 +192,104 @@ def test_local_243_case_stability_of_policy_reversal():
         assert rare_high.strict_conditional_gain > 0
         count += 1
     assert count == 243
+
+
+def test_noisy_old_cue_reversal_and_identifiability_limit():
+    """Direction reversal survives modest noise, but is not universal."""
+    baseline = dict(
+        alpha=.8, beta=.2, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.15, opportunity_hazard=.25, query_cost=.015,
+    )
+    for error in (0, .01, .03, .05, .08):
+        equal = selective_refresh(
+            reward0=1, reward1=1, old_cue_error_rate=error, **baseline
+        )
+        rare_high = selective_refresh(
+            reward0=4, reward1=1, old_cue_error_rate=error, **baseline
+        )
+        assert equal.selective_policy == ("refresh", "skip")
+        assert rare_high.selective_policy == ("skip", "refresh")
+        assert equal.strict_conditional_gain > 0
+        assert rare_high.strict_conditional_gain > 0
+
+    at_ten_percent = selective_refresh(
+        reward0=4, reward1=1, old_cue_error_rate=.1, **baseline
+    )
+    assert at_ten_percent.selective_policy == ("refresh", "refresh")
+    assert at_ten_percent.strict_conditional_gain == pytest.approx(0)
+
+    for r0, r1 in ((1, 1), (4, 1)):
+        uninformative = selective_refresh(
+            reward0=r0, reward1=r1, old_cue_error_rate=.5, **baseline
+        )
+        assert uninformative.strict_conditional_gain == pytest.approx(0)
+    with pytest.raises(ValueError):
+        selective_refresh(
+            reward0=1, reward1=1, old_cue_error_rate=.6, **baseline
+        )
+
+
+def test_independent_noisy_old_observation_and_state_path_enumeration():
+    """Enumerate latent initial state, noisy report, refresh and final state."""
+    up, down = .8, .2
+    prior = (.2, .8)
+    sampling, terminal, hazard, cost, age = .15, .15, .25, .015, .1
+    r0, r1 = 4, 1
+
+    def transition(start, elapsed, destination):
+        p1 = .8 + (start - .8) * math.exp(-elapsed)
+        return p1 if destination else 1 - p1
+
+    for error in (0, .01, .05, .08, .1, .3, .5):
+        def emit(observation, initial):
+            return 1 - error if observation == initial else error
+
+        branches, weights = [], []
+        for observation in (0, 1):
+            weight = sum(
+                prior[z] * emit(observation, z) for z in (0, 1)
+            )
+            weights.append(weight)
+
+            skip = max(
+                math.exp(-hazard * terminal) * sum(
+                    prior[z] * emit(observation, z)
+                    * transition(z, age + terminal, final)
+                    * ((r0 if final == 0 else r1) if action == final else 0)
+                    for z in (0, 1) for final in (0, 1)
+                ) / weight
+                for action in (0, 1)
+            )
+
+            refresh = max(
+                math.exp(-hazard * (sampling + terminal)) * sum(
+                    prior[z] * emit(observation, z)
+                    * transition(z, age + sampling, new)
+                    * transition(new, terminal, final)
+                    * ((r0 if final == 0 else r1)
+                       if policy[new] == final else 0)
+                    for z in (0, 1)
+                    for new in (0, 1)
+                    for final in (0, 1)
+                ) / weight - cost
+                for policy in itertools.product((0, 1), repeat=2)
+            )
+            branches.append((skip, refresh))
+
+        values = [
+            sum(
+                weights[old] * branches[old][schedule[old]]
+                for old in (0, 1)
+            )
+            for schedule in itertools.product((0, 1), repeat=2)
+        ]
+        actual = selective_refresh(
+            up, down, cue_age=age, sampling_delay=sampling,
+            terminal_delay=terminal, opportunity_hazard=hazard,
+            reward0=r0, reward1=r1, query_cost=cost,
+            old_cue_error_rate=error,
+        )
+        assert actual.selective_expected_reward == pytest.approx(max(values))
+        assert actual.best_precommitted_reward == pytest.approx(
+            max(values[0], values[3])
+        )
