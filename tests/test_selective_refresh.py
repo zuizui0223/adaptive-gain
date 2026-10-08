@@ -293,3 +293,157 @@ def test_independent_noisy_old_observation_and_state_path_enumeration():
         assert actual.best_precommitted_reward == pytest.approx(
             max(values[0], values[3])
         )
+
+
+
+def _exhaustive_two_imperfect_cues(
+    alpha, beta, age, sampling, terminal, hazard, r0, r1, cost,
+    old_error, refresh_error,
+):
+    """Independent exhaustive joint history enumerator with no posterior DP.
+
+    Latent chain: initial true state -> noisy old observation ->
+    refreshed true state -> noisy refreshed observation -> final state.
+    Optimize terminal actions by explicitly enumerating four two-label
+    action mappings; optimize schedules by enumerating all four possibilities.
+    """
+    pi1 = alpha / (alpha + beta)
+    prior = (1 - pi1, pi1)
+
+    def transition(start, t, end):
+        p1 = pi1 + (start - pi1) * math.exp(-(alpha + beta) * t)
+        return p1 if end else 1 - p1
+
+    def reporting(label, state, err):
+        return (1 - err) if label == state else err
+
+    def payoff(action, final):
+        if action != final:
+            return 0.0
+        return r0 if final == 0 else r1
+
+    branch_rewards, observed_weights = [], []
+    for old_report in (0, 1):
+        weight = sum(
+            prior[start] * reporting(old_report, start, old_error)
+            for start in (0, 1)
+        )
+        observed_weights.append(weight)
+        skip = max(
+            math.exp(-hazard * terminal) * sum(
+                prior[start] * reporting(old_report, start, old_error)
+                * transition(start, age + terminal, final)
+                * payoff(action, final)
+                for start in (0, 1) for final in (0, 1)
+            ) / weight
+            for action in (0, 1)
+        )
+        refresh = max(
+            math.exp(-hazard * (sampling + terminal)) * sum(
+                prior[start] * reporting(old_report, start, old_error)
+                * transition(start, age + sampling, updated)
+                * reporting(new_report, updated, refresh_error)
+                * transition(updated, terminal, final)
+                * payoff(actions[new_report], final)
+                for start in (0, 1)
+                for updated in (0, 1)
+                for new_report in (0, 1)
+                for final in (0, 1)
+            ) / weight - cost
+            for actions in itertools.product((0, 1), repeat=2)
+        )
+        branch_rewards.append((skip, refresh))
+
+    schedule_scores = tuple(
+        sum(
+            observed_weights[old] * branch_rewards[old][schedule[old]]
+            for old in (0, 1)
+        )
+        for schedule in itertools.product((0, 1), repeat=2)
+    )
+    return branch_rewards, schedule_scores
+
+
+def test_refreshed_cue_error_independent_exhaustive_oracle():
+    cases = 0
+    for alpha, beta, reward0, reward1, old_err, new_err, age in itertools.product(
+        (.2, .8), (.2, .8), (1., 4.), (1., 4.),
+        (0., .08), (0., .03, .05, .1, .5), (.1, .8),
+    ):
+        kwargs = dict(
+            cue_age=age, sampling_delay=.15, terminal_delay=.15,
+            opportunity_hazard=.25, reward0=reward0, reward1=reward1,
+            query_cost=.015, old_cue_error_rate=old_err,
+            refresh_cue_error_rate=new_err,
+        )
+        actual = selective_refresh(alpha, beta, **kwargs)
+        branches, scores = _exhaustive_two_imperfect_cues(
+            alpha, beta, age, .15, .15, .25, reward0, reward1,
+            .015, old_err, new_err,
+        )
+        assert actual.skip_by_old_cue == pytest.approx(
+            tuple(x[0] for x in branches))
+        assert actual.refresh_by_old_cue == pytest.approx(
+            tuple(x[1] for x in branches))
+        assert actual.selective_expected_reward == pytest.approx(max(scores))
+        assert actual.best_precommitted_reward == pytest.approx(
+            max(scores[0], scores[3]))
+        assert actual.strict_conditional_gain == pytest.approx(
+            max(scores)-max(scores[0],scores[3]), abs=1e-11)
+        cases += 1
+    assert cases == 320
+
+
+def test_refresh_precision_can_eliminate_reward_driven_policy_reversal():
+    params = dict(
+        alpha=.8, beta=.2, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.15, opportunity_hazard=.25, query_cost=.015,
+    )
+    for new_error in (0., .01, .03):
+        equal = selective_refresh(
+            reward0=1, reward1=1,
+            refresh_cue_error_rate=new_error, **params)
+        rare = selective_refresh(
+            reward0=4, reward1=1,
+            refresh_cue_error_rate=new_error, **params)
+        assert equal.selective_policy == ("refresh", "skip")
+        assert rare.selective_policy == ("skip", "refresh")
+        assert equal.strict_conditional_gain > 0
+        assert rare.strict_conditional_gain > 0
+
+    equal_five = selective_refresh(
+        reward0=1, reward1=1,
+        refresh_cue_error_rate=.05, **params)
+    rare_five = selective_refresh(
+        reward0=4, reward1=1,
+        refresh_cue_error_rate=.05, **params)
+    assert equal_five.selective_policy == ("skip", "skip")
+    assert equal_five.strict_conditional_gain == pytest.approx(0)
+    assert rare_five.selective_policy == ("skip", "refresh")
+    assert rare_five.strict_conditional_gain > 0
+
+    rare_eight = selective_refresh(
+        reward0=4, reward1=1,
+        refresh_cue_error_rate=.08, **params)
+    assert rare_eight.selective_policy == ("skip", "skip")
+    assert rare_eight.strict_conditional_gain == pytest.approx(0)
+
+
+def test_uninformative_refresh_cue_never_creates_strict_routing_value():
+    for old_err, reward0, reward1, age in itertools.product(
+        (0., .03, .1, .5), (1., 4.), (1., 4.), (.1, 1.2)
+    ):
+        actual = selective_refresh(
+            .8, .2, cue_age=age, sampling_delay=.15,
+            terminal_delay=.15, opportunity_hazard=.25,
+            reward0=reward0, reward1=reward1, query_cost=.015,
+            old_cue_error_rate=old_err, refresh_cue_error_rate=.5,
+        )
+        assert actual.strict_conditional_gain == pytest.approx(0, abs=1e-12)
+        assert actual.selective_policy == ("skip", "skip")
+
+    with pytest.raises(ValueError):
+        selective_refresh(
+            .8, .2, cue_age=.1, sampling_delay=.15,
+            terminal_delay=.15, opportunity_hazard=.25,
+            refresh_cue_error_rate=.7)
