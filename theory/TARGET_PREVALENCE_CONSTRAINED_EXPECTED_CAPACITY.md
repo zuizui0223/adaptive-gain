@@ -519,6 +519,107 @@ Implementation:
 \`adaptive_gain/target_prevalence_capacity.py\`.
 
 
+## Example TP2.3 — matched worlds give a direct pairwise architecture comparison
+
+The preceding capacity comparisons optimize over different finite tasks. They
+do not, by themselves, predict selection between sensory genotypes in the
+same environment.
+
+A four-world construction closes that particular gap for one declared
+architecture pair.
+
+Let the represented ecological states and targets be
+
+| World | Target | Encounter probability |
+| --- | ---: | ---: |
+| common-0 | 0 | 0.49 |
+| common-1 | 1 | 0.49 |
+| rare-0 | 0 | 0.01 |
+| rare-1 | 1 | 0.01 |
+
+Both target classes have prevalence exactly 50%.
+
+**Binary architecture:** query \(q_B\) identifies common-1 versus the other
+three worlds. Query \(t\) identifies rare-1 versus the other three. Both are
+binary and each costs one unit. Asking \(q_B\) then \(t\), only as needed,
+resolves all four targets exactly.
+
+**Ternary architecture:** query \(q_T\) returns a distinct outcome for
+common-0, for common-1, and for the rare pair; query \(t\) resolves the rare
+pair. Again each query costs one unit.
+
+Each architecture has the same guarantees:
+
+\[
+\boxed{
+C_A=C_F=2.
+}
+\]
+
+Thus neither has a strict robust structural adaptive gain relative to its own
+universal fixed comparator.
+
+Yet the binary architecture finishes after one query in one common world only,
+whereas the ternary architecture finishes after one query in **both** common
+worlds.
+
+At exponential opportunity value
+
+\[
+U(c)=e^{-0.3c},
+\]
+
+the fitness-optimal guaranteed policies have expected completion values
+
+\[
+E_2
+=
+0.49U(1)+0.51U(2),
+\]
+
+\[
+E_3
+=
+0.98U(1)+0.02U(2).
+\]
+
+Hence their direct performance difference in this **same world and encounter
+distribution** is
+
+\[
+\boxed{
+E_3-E_2
+=
+0.49[U(1)-U(2)]
+\approx0.094083.
+}
+\]
+
+If the ternary architecture carries 0.05 extra constitutive cost on the same
+additive fitness scale, its net pairwise advantage is still approximately
+
+\[
+\boxed{
+0.094083-0.05\approx0.044083>0.
+}
+\]
+
+This matched-state witness is mechanistically stronger than subtracting two
+class-wise supremal capacities. The cue vocabularies differ as the competing
+architectures differ, but **worlds, target function, encounter frequencies,
+maximum acquired-query cost, fixed-bundle cost, per-query cost and opportunity
+value are held fixed**.
+
+It establishes an **existence example** of positive pairwise selection within
+a specified ecological environment. It does not identify an actual heritable
+sensory difference in mosquitoes, nor prove that all ternary alternatives beat
+all binary alternatives. The binary repertoire is declared explicitly; a
+different biological repertoire could reverse the comparison.
+
+Implementation and regression: \`test_matched_worlds_binary_ternary_pairwise_performance\`
+in \`tests/test_target_prevalence_capacity.py\`.
+
+
 ## 5. Biological reading
 
 What matters is not only whether cue outcomes branch, but whether one early observation can dispose of *both target classes* while preserving a rare branch for difficult cases.
