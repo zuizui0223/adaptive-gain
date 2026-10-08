@@ -1,0 +1,75 @@
+{
+  "receipt": "ou_pets_mirror_causal_gauge_correlation_20261008_v1",
+  "date": "2026-10-08",
+  "input_receipt": "validation/ou_pets_mirror_independent_refit_20261008_v1.json",
+  "domain": "EXACT_CONSTRUCTED_RECIPROCAL_GAUGE_ONLY",
+  "fitted_source_diffusion": {
+    "v_trait": 527.5416514959081,
+    "v_optimum": 2.5206495950619603,
+    "v_optimum_over_v_trait": 0.004778105364598897
+  },
+  "equations": {
+    "direct_half_life": "H_direct=H_OU/q",
+    "instantaneous_correlation": "rho(q)=-(1-q)/sqrt((1-q)^2+v_optimum/v_trait)",
+    "critical_cap": "sqrt(v_trait/(v_trait+v_optimum))",
+    "finite_upper_halflife_when": "abs(rho)<=r<critical_cap; H_direct<=H_OU/[1-r*sqrt(v_optimum/(v_trait*(1-r^2)))]"
+  },
+  "critical_abs_correlation": 0.9976194747294604,
+  "representative_witnesses": [
+    {
+      "q": 0.9,
+      "H_direct_years": 13.343080647641832,
+      "rho": -0.8226036281661567
+    },
+    {
+      "q": 0.75,
+      "H_direct_years": 16.011696777170197,
+      "rho": -0.9638359752200026
+    },
+    {
+      "q": 0.5,
+      "H_direct_years": 24.017545165755298,
+      "rho": -0.9905786251741091
+    },
+    {
+      "q": 0.1,
+      "H_direct_years": 120.08772582877648,
+      "rho": -0.9970635372916099
+    },
+    {
+      "q": 0.01,
+      "H_direct_years": 1200.8772582877648,
+      "rho": -0.9975713163658646
+    }
+  ],
+  "hypothetical_external_abs_rho_caps": [
+    {
+      "cap": 0.95,
+      "max_direct_half_life_years": 15.206844853110358
+    },
+    {
+      "cap": 0.98,
+      "max_direct_half_life_years": 18.206507308934942
+    },
+    {
+      "cap": 0.99,
+      "max_direct_half_life_years": 23.322798929934443
+    },
+    {
+      "cap": 0.995,
+      "max_direct_half_life_years": 38.56921199727578
+    },
+    {
+      "cap": 0.997,
+      "max_direct_half_life_years": 109.544929951672
+    }
+  ],
+  "interpretation": "At the PETS mirror fit, doubling the point-estimate direct half-life within this constructed equivalence gauge requires nearly perfect negative correlation (about -0.9906) between the latent and observed innovations. The unbounded identified set demands a correlation magnitude approaching 0.99762 in this gauge. These are not empirical estimates of real shock correlations.",
+  "caveats": [
+    "The latent Y in this gauge equals (Theta-(1-q)X)/q and is not independently established as an ecological variable.",
+    "A correlation cap requires separately justified biological measurement and interpretation of Y. None is available here.",
+    "Do not call near-perfect anticorrelation implausible from the model fit alone or infer which biological mechanism is true.",
+    "The original OUBM observable half-life remains statistically model-conditional and its published confidence uncertainty is distinct.",
+    "These fitted diffusion values are from the PETS mirror independent refit, not the authors' original Dryad source."
+  ]
+}
