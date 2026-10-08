@@ -173,16 +173,52 @@ F_{\rm gambiae}(4).
 }
 \]
 
-The two observed event-time distributions therefore do not have a single
-deadline-independent ordering.
+The two *sample* CDFs therefore lack a single observed ordering. This does
+not establish crossing in the underlying population completion distributions.
 
-A hard ecological opportunity closing by 1–3 min would rank the observed
-*gambiae* probing profile higher, whereas one closing at 4 min would rank the
-observed *stephensi* profile higher.
+Plugging these *sample fractions* into a hypothetical hard deadline at 1–3 min
+or 4 min reverses the numerical ranking, but the tiny differences and sampling
+uncertainty do not support a population-level selection-reversal claim.
 
 This is an empirical illustration of why a completion profile must be combined
 with a biological value-of-time function. It is **not** evidence that the two
 species evolved different routing architectures for this reason.
+
+
+## 3c. Sampling uncertainty: descriptive crossover versus population evidence
+
+An independent audit of the frozen one-minute event-count receipt estimates
+Wilson binomial 95% intervals and two-sided Fisher exact comparisons. It
+treats individuals as independent and is exploratory, not a pre-registered
+test of differences between evolved sensing architectures.
+
+| Comparison | Deadline | Observed fractions | Difference | Fisher two-sided p |
+| --- | --- | --- | ---: | ---: |
+| *An. gambiae* vs *An. stephensi* | 1 min | 12/14 vs 15/18 | +2.4 pp | 1.000 |
+| *An. gambiae* vs *An. stephensi* | 4 min | 12/14 vs 16/18 | −3.2 pp | 1.000 |
+| *An. gambiae* vs *Ae. albopictus* | 1 min | 12/14 vs 10/38 | +59.4 pp | 0.00025 |
+| *Ae. aegypti* vs *Ae. albopictus* | 1 min | 18/28 vs 10/38 | +38.0 pp | 0.00271 |
+
+The Anopheles comparison is particularly uncertain. For *An. gambiae*,
+the Wilson interval at minutes 1 and 4 is approximately 0.601–0.960.
+For *An. stephensi*, the intervals are 0.608–0.942 at minute 1 and
+0.672–0.969 at minute 4. These intervals overlap substantially.
+
+The much larger observed early-tail contrast involving *Ae. albopictus*
+is a stronger descriptive ecological anchor than the tiny Anopheles
+crossover. Its exploratory p-value does not account for experimental
+batch structure, selection into the pre-probe-zero cohort, or the
+post-hoc choice of species pair.
+
+**Claim ceiling:** a small-sample CDF crossing is not evidence of a
+population-level crossing or a reversal of natural selection. The valid
+result is that temporal completion profiles differ substantially in some
+comparisons and require uncertainty-aware estimation.
+
+Reproducibility: `adaptive_gain/empirical_cdf_uncertainty.py`,
+`scripts/audit_uehara_cdf_uncertainty.py`,
+`tests/test_empirical_cdf_uncertainty.py`, and
+`validation/uehara_cdf_uncertainty_v1.json`.
 
 
 ## 4. Relation to V6 theory
