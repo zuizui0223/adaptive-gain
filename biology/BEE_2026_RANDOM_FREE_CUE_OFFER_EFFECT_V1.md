@@ -90,6 +90,34 @@ This is not proof of randomization, but it tests a
 pre-assignment correlate rather than a post-assignment
 outcome. There remain many untested assignment covariates.
 
+## Ancillary within-offer control: does landing itself predict correctness?
+
+Within the 3,840 Free-Cue trials, the predictive cue was shown
+**regardless of landing**. This allows an observational comparison
+of platform landing among trials that all received the informative cue.
+It is *not* a randomized landing intervention:
+
+| Difficulty | Free-Cue landed accuracy | Free-Cue did not land accuracy | Landed minus no-land | Bee-cluster 95% |
+|---|---:|---:|---:|---|
+| Easy | 906/950 = 95.37% | 555/590 = 94.07% | +1.30 pp | [-1.02,+3.63] pp |
+| Hard | 871/925 = 94.16% | 612/647 = 94.59% | -0.43 pp | [-2.61,+1.71] pp |
+| Impossible | 142/153 = 92.81% | 532/575 = 92.52% | +0.29 pp | [-5.00,+4.70] pp |
+
+All three bee-cluster 95% intervals contain zero.
+The result suggests the observed high correctness in Free-Cue
+trials is not *strongly associated* with choosing to land
+again at the information platform. It does **not** prove
+no motor/attention effect: landing is self-selected, group
+sizes differ (especially on Impossible), and accuracy is
+near ceiling in both groups. In particular, the
+automatically triggered flash can affect timing and
+attention even if the bee never lands. A same-duration,
+uninformative SHAM signal remains essential.
+
+Reproducible receipt:
+free_arm_landing_accuracy_control in
+validation/bee_2026_random_free_cue_accuracy_v1.json.
+
 ## What this DOES and DOES NOT establish
 
 The experimental-condition contrast is **stronger evidence**
