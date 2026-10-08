@@ -118,6 +118,18 @@ def test_frozen_third_party_trial_receipt_is_internally_consistent():
             + paired[diff]["zero"]
         ) == 192
     assert paired["Easy"]["positive"] == 190
+    for difficulty in ("Easy","Hard","Impossible"):
+        group_reg=groups["Regular|"+difficulty]
+        group_free=groups["Random_Free_Cue|"+difficulty]
+        report=receipt["pooled_label_semantics"][difficulty]
+        total=group_reg["n"]+group_free["n"]
+        pooled_info=(group_reg["info"]+group_free["info"])/total
+        pooled_landing=(group_reg["land"]+group_free["land"])/total
+        assert report["pooled_info_requested"] == pytest.approx(pooled_info)
+        assert report["pooled_actual_platform_landing"] == pytest.approx(
+            pooled_landing)
+        assert report["pooled_info_requested"] != pytest.approx(
+            report["pooled_actual_platform_landing"])
     assert paired["Impossible"]["negative"] == 178
     assert receipt["source"]["blob_sha"] == (
         "26259c9071c6d73141d56b9bedd396cab1a04491"
