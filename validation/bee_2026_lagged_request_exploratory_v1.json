@@ -59,5 +59,51 @@
     "The separate decision-latency CSV reuses trial identifiers; a same-trial join is blocked (validation/bee_2026_cross_experiment_join_gate_v1.json)."
   ],
   "status": "EXPLORATORY_SEQUENCE_ASSOCIATION_NO_CAUSAL_HISTORY_EFFECT",
-  "claim_ceiling": "No inference of dynamic ecological state switches, information-age decay, optimized wait versus query, evolutionary fitness or experimentally induced sequential learning."
+  "claim_ceiling": "No inference of dynamic ecological state switches, information-age decay, optimized wait versus query, evolutionary fitness or experimentally induced sequential learning. The prior Free-Cue carryover contrast is an exploratory exposure association, not a causal value of optional information.",
+  "previous_free_cue_exposure": {
+    "next_regular_after_any_previous_type": 15205,
+    "by_current_difficulty": {
+      "Easy": {
+        "raw_free_minus_regular": 0.008299419679144424,
+        "adjusted_free_minus_regular": 0.020635733115483536,
+        "strata": 30,
+        "covered_trials": 6078,
+        "bee_cluster_bootstrap_95": [
+          -0.003281981168047016,
+          0.05176512289084279
+        ],
+        "bootstrap_valid_repetitions": 1500
+      },
+      "Hard": {
+        "raw_free_minus_regular": 0.0008203587818105817,
+        "adjusted_free_minus_regular": -0.00020352296092384967,
+        "strata": 30,
+        "covered_trials": 6044,
+        "bee_cluster_bootstrap_95": [
+          -0.041552341026773895,
+          0.04284524649586571
+        ],
+        "bootstrap_valid_repetitions": 1500
+      },
+      "Impossible": {
+        "raw_free_minus_regular": 0.009941583885462069,
+        "adjusted_free_minus_regular": 0.03854112596977768,
+        "strata": 30,
+        "covered_trials": 3083,
+        "bee_cluster_bootstrap_95": [
+          -0.011127819736216578,
+          0.07438284979528155
+        ],
+        "bootstrap_valid_repetitions": 1500
+      }
+    },
+    "method": "Prior Free-Cue assignment versus prior Regular trial, predicting current Regular-trial platform landing. Stratify over prior difficulty, prior outcome, and current 20-trial order bin; bee cluster bootstrap B=1500, seed=6459249 (0x628F71).",
+    "status": "EXPLORATORY_LAGGED_EXPOSURE_ASSOCIATION_NOT_INFORMATION_CAUSAL_EFFECT",
+    "limitations": [
+      "Previous Free-Cue block condition is interleaved within the experiment but assignment sequence probabilities and carryover exchangeability are not independently established by this audit.",
+      "Free-Cue versus Regular also changes prior sensory stimulation, reward opportunities, and approach behavior; this is not a pure information purchase contrast.",
+      "Bootstrap intervals all include zero and cannot establish absence of carryover, especially for small effects.",
+      "Current request is operationalized as a platform landing in a Regular trial; the prior Info_Requested field is not treated as an active action on free-cue trials."
+    ]
+  }
 }
