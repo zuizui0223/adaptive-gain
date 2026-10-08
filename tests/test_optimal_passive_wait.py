@@ -182,3 +182,57 @@ def test_flexible_precision_certificate_matches_independent_grid():
             assert 0<=x.lower_error<=x.peak_error<=x.upper_error<=.5
         count+=1
     assert count==64
+
+
+
+def test_canonical_wait_horizon_covers_global_no_query_optimum():
+    """With positive opportunity hazard, more waiting past the optimum cannot help."""
+    common=dict(
+        alpha=.8,beta=.2,cue_age=1.2,sampling_delay=.15,
+        terminal_delay=.1,opportunity_hazard=.25,
+        reward0=1,reward1=1,query_cost=.03,
+        refresh_cue_error_rate=.11,
+    )
+    short=compare_with_optimal_passive_wait(max_wait=.5,**common)
+    for horizon in (1.,2.,5.,20.):
+        long=compare_with_optimal_passive_wait(max_wait=horizon,**common)
+        assert long.best_no_query_reward==pytest.approx(
+            short.best_no_query_reward,abs=1e-12)
+        assert long.optimal_no_query_delays==pytest.approx(
+            short.optimal_no_query_delays,abs=1e-12)
+        assert long.conditional_query_premium==pytest.approx(
+            short.conditional_query_premium,abs=1e-12)
+
+
+def test_reward_sensitive_query_trigger_reversal_survives_optimal_wait_grid():
+    """Conditional sample-after-warning versus sample-after-safe remains local.
+
+    243 local parameter choices; at fixed environment distribution and
+    sampling-error model, altering relative loss of a rare danger state
+    reverses the preferred report that triggers a new query.
+    This checks model arithmetic only, not observed animal behavior.
+    """
+    n=0
+    for age,sampling,terminal,hazard,cost in itertools.product(
+        (.08,.10,.12),(.13,.15,.17),(.13,.15,.17),
+        (.22,.25,.28),(.013,.015,.017)
+    ):
+        common=dict(
+            alpha=.8,beta=.2,cue_age=age,sampling_delay=sampling,
+            terminal_delay=terminal,opportunity_hazard=hazard,
+            query_cost=cost,max_wait=.5
+        )
+        equal=compare_with_optimal_passive_wait(
+            reward0=1,reward1=1,**common)
+        rare=compare_with_optimal_passive_wait(
+            reward0=4,reward1=1,**common)
+        assert equal.conditional_query_policy==("query","no-query")
+        assert rare.conditional_query_policy==("no-query","query")
+        assert equal.conditional_query_premium>0
+        assert rare.conditional_query_premium>0
+        # The stronger waiting comparator may delay, but the
+        # particular local witnesses have their optimum at t=0.
+        assert equal.optimal_no_query_delays==pytest.approx((0,0))
+        assert rare.optimal_no_query_delays==pytest.approx((0,0))
+        n+=1
+    assert n==243
