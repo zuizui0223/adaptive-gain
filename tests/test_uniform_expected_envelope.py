@@ -2,7 +2,8 @@ import math
 
 import pytest
 
-from adaptive_gain.core import fixed_minimum_resolution
+from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolution
+from adaptive_gain.bounded_arity_extremal_bounds import BoundedArityTree, _tree_task
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.uniform_expected_envelope import (
     _binary_leaf_depth_profiles,
@@ -110,3 +111,61 @@ def test_depth_profile_recursion_includes_all_full_binary_tree_shapes_for_n4():
         (2, 2, 2, 2),
         (1, 2, 3, 3),
     }
+
+
+
+def test_uniform_world_and_balanced_target_prevalence_still_allow_large_gain():
+    # A concrete eight-terminal private-pair tree with target counts 3:5.
+    # Two target-0 exact twins of its one-step world make ten equiprobable
+    # represented worlds and exactly balanced target prevalence 5:5.
+    shape = (
+        None,
+        (
+            (None, (None, None)),
+            (((None, None), None), None),
+        ),
+    )
+
+    def make_tree(shape):
+        if shape is None:
+            return BoundedArityTree()
+        return BoundedArityTree(tuple(make_tree(x) for x in shape))
+
+    base, mandatory = _tree_task(make_tree(shape), 8, 7)
+    assert mandatory == 7
+    assert sum(w.target == 0 for w in base.worlds) == 3
+    assert sum(w.target == 1 for w in base.worlds) == 5
+
+    worlds = list(base.worlds) + [
+        World("same_easy_world_1", base.worlds[0].target),
+        World("same_easy_world_2", base.worlds[0].target),
+    ]
+    queries = [
+        Query(
+            q.name, q.cost,
+            q.outcomes + (q.outcomes[0], q.outcomes[0]),
+        )
+        for q in base.queries
+    ]
+    task = FiniteTask(tuple(worlds), tuple(queries))
+    assert len(task.worlds) == 10
+    assert sum(w.target == 0 for w in task.worlds) == 5
+    assert sum(w.target == 1 for w in task.worlds) == 5
+
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 7
+
+    mu = 0.3
+    selected = discounted_fitness_optimal_policy(
+        task, (0.1,) * 10, discount_rate=mu
+    )
+    assert selected.selected_policy is not None
+    realized_gain = (
+        selected.expected_discounted_completion_value
+        - math.exp(-mu * fixed.minimum_cost)
+    )
+
+    # This is an explicit lower bound, NOT an assertion of global sharpness
+    # over all balanced-target finite information architectures.
+    assert realized_gain >= 0.3160872655029999 - 1e-12
+    assert realized_gain <= 0.3328200167641013 + 1e-12
