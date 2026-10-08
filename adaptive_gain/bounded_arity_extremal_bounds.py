@@ -634,6 +634,52 @@ def two_shallow_leaf_expected_value_witness(
     return task
 
 
+
+def ternary_target_balance_expected_witness(
+    rare_depth: int,
+) -> FiniteTask:
+    """A three-outcome root with pure targets 0/1 and a rare mixed branch.
+
+    The first two root outcomes are single-leaf pure targets of opposite type;
+    a third root outcome enters a complete binary rare-state subtree.
+    Every internal query has its own opposite-target private pair, so the
+    fixed resolver acquires exactly 2**rare_depth query resources.
+
+    The two common target types can each finish in one query, while positive
+    low-probability rare worlds from both targets preserve fixed necessity.
+    """
+    if type(rare_depth) is not int or rare_depth < 1:
+        raise ValueError("rare_depth must be a positive integer")
+
+    def binary_subtree(depth: int) -> BoundedArityTree:
+        if depth == 0:
+            return BoundedArityTree()
+        return BoundedArityTree((
+            binary_subtree(depth - 1),
+            binary_subtree(depth - 1),
+        ))
+
+    tree = BoundedArityTree((
+        BoundedArityTree(),
+        BoundedArityTree(),
+        binary_subtree(rare_depth),
+    ))
+    world_count = _leaf_count(tree)
+    query_count = _internal_count(tree)
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != query_count:
+        raise ArithmeticError("target-balance witness lost fixed mandatory queries")
+    if task.worlds[0].target == task.worlds[1].target:
+        raise ArithmeticError("one-step root outcomes must represent both targets")
+    if len({w.target for w in task.worlds[2:]}) != 2:
+        raise ArithmeticError("rare subtree must contain both target classes")
+    if len(set(task.queries[0].outcomes)) != 3:
+        raise ArithmeticError("root did not produce exactly three outcomes")
+    if any(len(set(q.outcomes)) > 3 for q in task.queries):
+        raise ArithmeticError("witness exceeded ternary cue arity")
+    return task
+
+
 def finite_expected_ceiling_witness(
     world_count: int,
     query_count: int,
