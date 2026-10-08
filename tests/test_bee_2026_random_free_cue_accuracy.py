@@ -121,4 +121,4 @@ def test_pinned_source_receipt_has_positive_offered_cue_contrast_not_new_selecti
         frozen["status"]
         == "DESCRIPTIVE_RANDOM_FREE_CUE_POLICY_CONTRAST__CAUSAL_ITT_CONDITIONAL_ON_REPORTED_RANDOMIZATION"
     )
-    assert "information-only" in frozen["claim_ceiling"]
+    assert "information-value" in frozen["claim_ceiling"]
