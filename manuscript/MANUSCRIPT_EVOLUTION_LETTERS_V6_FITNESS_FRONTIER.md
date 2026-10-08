@@ -26,7 +26,7 @@ lifts sharply:
 \[
 \max[U\(C_A\)-U\(C_F\)]
 =
-\max_h[U\(h\)-U(I_h)].
+\max_h[U(h)-U(I_h)].
 \]
 Natural history therefore re-ranks information architectures rather than merely
 scaling one adaptive-gain score. Inverting the frontier gives exact
@@ -354,7 +354,7 @@ internal nodes. The private-pair construction attains
 For bounded-below (U), define
 \[
 \boxed{
-K_{\rm crit,robust}^{\(b\)}
+K_{\rm crit,robust}^{(b)}
 =
 \max_{h\ge2}
 [U\(h\)-U(J_b\(h\))].
@@ -363,7 +363,7 @@ K_{\rm crit,robust}^{\(b\)}
 
 If
 \[
-K>K_{\rm crit,robust}^{\(b\)},
+K>K_{\rm crit,robust}^{(b)},
 \]
 no finite task with cue arity at most \(b\) can guarantee positive net
 contingent value in every represented world. More environmental states and
@@ -373,7 +373,7 @@ This gives an exact minimum robust cue arity
 \[
 b_{min}^{\rm robust}
 =
-\min{b\ge2:K<K_{\rm crit,robust}^{\(b\)}}.
+\min{b\ge2:K<K_{\rm crit,robust}^{(b)}}.
 \]
 
 For
@@ -409,7 +409,7 @@ world-frequency distributions,
 \boxed{
 \sup R_{\rm expected}(n,m,b)
 =
-U(1)-U\(M\)
+U(1)-U(M)
 }
 \]
 for every
@@ -423,18 +423,24 @@ query and because any fixed resolver costs at most \(M\).
 Sharpness requires only binary queries. We construct a private-pair tree with
 exactly \(M\) fixed-mandatory internal queries and one target-pure leaf directly
 below the root. As encounter probability concentrates on that leaf, adaptive
-expected value approaches \(U(1)\), whereas fixed value remains \(U\(M\)\).
+expected value approaches \(U(1)\), whereas fixed value remains \(U(M)\).
 
 This creates a qualitative split.
 
 Cue arity matters for robust statewise evolvability:
 \[
-K_{\rm crit,robust}^{\(b\)}
+K_{\rm crit,robust}^{(b)}
 \]
 depends on \(b\).
 
 But cue arity disappears from the exact finite-scope expected ceiling once
 encounter frequencies can be skewed.
+
+This is a supremum over freely varying encounter distributions, not a
+prediction that arity has no effect at a measured distribution. The limiting
+construction concentrates almost all encounters on a one-query branch; if
+rare-state probabilities cannot approach zero, the branch completion-time
+profile and cue arity may still affect expected performance.
 
 In the unrestricted finite-size limit,
 \[
@@ -584,7 +590,7 @@ At the robust level,
 \[
 R_{\rm robust,max}
 =
-\max_h[U\(h\)-U(I_h)].
+\max_h[U(h)-U(I_h)].
 \]
 
 PAYOFF then asks whether
