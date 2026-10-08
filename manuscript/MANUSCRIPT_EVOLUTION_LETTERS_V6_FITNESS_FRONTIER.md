@@ -639,23 +639,28 @@ Sequential value of information (Miller 1975), prior-weighted and
 worst-versus-expected decision trees (Hyafil & Rivest 1976; Saettler et al.
 2017), deadline-sensitive action utility (Ash & Hayes-Roth 1996),
 adaptive-versus-nonadaptive expected-value gaps (Hellerstein et al. 2022), and
-minimum/generalized test-collection problems (Douek-Pinkovich et al. 2021) all
-have substantial prior literatures. These are boundary conditions for the
+minimum/generalized test-collection problems (Douek-Pinkovich et al. 2021),
+and combining a minimum query set with a decision tree (Wieczorek et al. 2021)
+all have substantial prior literatures. These are boundary conditions for the
 present contribution, not claims of novelty. In particular, the fixed resolver
 is closely related to a test collection: V6's mathematical claim is the exact
 joint frontier with contingent worst-case depth under simultaneous finite
 world, query and query-arity constraints, not the fixed test-set problem by
-itself.
+itself. The earlier query-set/tree combination does not, by itself, assert
+our sharp all-depth joint extremum; nevertheless it sharply restricts
+claims that coupling fixed tests with sequential decision trees is new.
 
-The proposed contribution is narrower:
+The proposed MAIN contribution is restricted to three results:
 
-1. an exact fixed-((n,m,b)) target-resolution frontier attained at every
+1. an exact fixed-\((n,m,b)\) target-resolution frontier attained at every
    feasible depth;
 2. a sharp lift of that frontier by arbitrary monotone biological completion
    value;
-3. exact inverse robust thresholds, including global cue-arity no-go regions;
-4. an exact finite expected-value ceiling that separates sensory branching
-   capacity from encounter-frequency effects.
+3. exact inverse robust thresholds, including global cue-arity no-go regions.
+
+As a SUPPORTING biological consequence, the finite expected-value ceiling
+separates sensory branching capacity from encounter-frequency effects. It is
+not a fourth independent novelty claim.
 
 These claims remain inside finite deterministic guaranteed target resolution.
 No claim is made for noisy sensing, continuous belief states or endogenous
@@ -709,6 +714,10 @@ https://doi.org/10.1111/j.1600-0706.2009.17781.x.
 
 Douek-Pinkovich, Y., Ben-Gal, I. & Raviv, T. 2021. The generalized test collection problem. *TOP* 29:372–386.
 https://doi.org/10.1007/s11750-020-00554-1.
+
+Wieczorek, W., Kozak, J., Strąk, Ł. & Nowakowski, A. 2021.
+Minimum query set for decision tree construction. *Entropy* 23:1682.
+https://doi.org/10.3390/e23121682.
 
 
 Hellerstein, L., Kletenik, D., Liu, N. & Witter, R. T. 2022. Adaptivity gaps
