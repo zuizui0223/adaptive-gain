@@ -109,7 +109,7 @@ def mixture_viability_window(
     # floating representation (e.g. 0.2*0.05/0.25 vs literal 0.04).
     # Do not manufacture an extremely narrow viability interval at equality.
     feasible=(k<maxgain and not math.isclose(
-        k,maxgain,rel_tol=1e-12,abs_tol=1e-15
+        k,maxgain,rel_tol=1e-12,abs_tol=0.0
     ))
     window=(k/a,1-k/b) if feasible else None
     return MixtureViabilityWindow(
