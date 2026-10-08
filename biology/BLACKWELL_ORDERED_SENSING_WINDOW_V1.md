@@ -50,7 +50,7 @@ The precise active window (to approximate 1e-8) is
 0.05652258<\epsilon<0.35127167.
 \]
 
-The relative premium peaks at the crossover of expected values of *always refresh* and *always skip*, near epsilon=.114, where G is approximately 0.04081 in expected-payoff units. At perfect new sensing, both branches favor refresh, so no conditional schedule gain is left; at uninformative sensing, both favor skip, also giving zero conditional gain. Throughout this process the absolute optimized conditional expected payoff is nonincreasing with epsilon. This does **not** favor worse sensing per se.
+The relative premium peaks at the crossover of expected values of *always refresh* and *always skip*, at epsilon approximately .113985736, where G is approximately 0.040810843 in expected-payoff units. At perfect new sensing, both branches favor refresh, so no conditional schedule gain is left; at uninformative sensing, both favor skip, also giving zero conditional gain. Throughout this process the absolute optimized conditional expected payoff is nonincreasing with epsilon. This does **not** favor worse sensing per se.
 
 The ordered_accuracy_window.py module estimates the two branchwise crossings and the fixed comparator's tie by monotone bisection. It returns a numerical root *estimate*, not a formal interval-arithmetic proof. Tests independently inspect a dense error grid, verify the branchwise Blackwell monotonicity, and check the shape theorem for general 3-branch synthetic monotone payoffs.
 
@@ -168,10 +168,10 @@ fitness link.
 For the illustrative Markov settings of this note and
 chosen gross baseline w0=1 expected-reward unit, the
 fixed schedule's performance at the peak is 0.78024793,
-G_peak=0.04080839 and therefore
+G_peak=0.040810843 and therefore
 
 \[
-\kappa^{\rm crit}_{C:F}\approx0.02266409
+\kappa^{\rm crit}_{C:F}\approx0.022665434
 \]
 
 in log-fitness cost units. Above this **model-specific**
