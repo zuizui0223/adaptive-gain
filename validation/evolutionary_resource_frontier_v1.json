@@ -220,5 +220,35 @@
     },
     "interpretation": "Cue arity constrains robust statewise value, while encounter-frequency concentration can substitute for branching capacity in expected value."
   },
-  "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md"
+  "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md",
+  "inverse_expected_resource_corner_v1": {
+    "status": "THEOREM_AND_CODE_ADDED_LATEST_CI_PENDING",
+    "scope": "Exact finite deterministic unit-cost target-resolution tasks, binary witness, freely chosen strictly positive world probabilities",
+    "generic_identity": "J_exp(K)=min{j>=2:U(1)-U(j)>K}; (n_min,m_min)=(J_exp+1,J_exp), independent of allowed cue arity b>=2",
+    "opportunity_value": "U(c)=exp(-0.3*c)",
+    "examples": [
+      {
+        "maintenance_cost": 0.3,
+        "minimum_world_count": 4,
+        "minimum_query_count": 3,
+        "minimum_cue_arity": 2,
+        "minimum_fixed_cost": 3,
+        "expected_value_ceiling_at_corner": 0.3342485609411187,
+        "one_step_mass_strict_threshold": 0.821628195644108,
+        "preceding_fixed_cost_ceiling": 0.1920065845876915
+      },
+      {
+        "maintenance_cost": 0.6,
+        "minimum_world_count": 8,
+        "minimum_query_count": 7,
+        "minimum_cue_arity": 2,
+        "minimum_fixed_cost": 7,
+        "expected_value_ceiling_at_corner": 0.618361792428736,
+        "one_step_mass_strict_threshold": 0.9043689440746759,
+        "preceding_fixed_cost_ceiling": 0.5755193324601313
+      }
+    ],
+    "interpretive_boundary": "Expected positive selection is an existence claim over world-frequency distributions, not robust positivity and not an empirical selection estimate",
+    "regression": "tests/test_evolutionary_resource_frontier.py has inverse corner, exact binary witness, strict boundary and finite-search tests"
+  }
 }
