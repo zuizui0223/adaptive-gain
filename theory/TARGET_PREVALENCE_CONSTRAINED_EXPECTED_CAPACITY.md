@@ -312,6 +312,72 @@ Target prevalence therefore interacts with cue arity to determine what fraction 
 
 This is a model-specific constructive limit, not a new general theory of categorical sensing or a claim about receptor number. It offers a stricter empirical target than the frequency-free RF7 maximum.
 
+## 5b. Acquisition-cost sensitivity of the finite ternary witness
+
+The sharp TP2 bounds assume one unit per query regardless of outcome
+cardinality. That is a model assumption, not a biological law.
+
+For the explicit ten-world ternary construction in Section 4, let the root
+three-outcome query take acquisition time \(a\) instead of 1, while each later
+binary query retains cost 1. Keep \(\mu=0.3\), target prevalence 50:50, the
+same path probabilities, and constitutive control cost \(K=0.62\).
+
+Its declared expected benefit becomes
+
+\[
+R(a)
+=
+0.98e^{-0.3a}
++
+0.02e^{-0.3(a+3)}
+-
+e^{-0.3(a+7)}
+=
+0.641307787\,e^{-0.3(a-1)}.
+\]
+
+Consequently that **specific witness** can repay \(K\) only if
+
+\[
+\boxed{
+a<
+1+\frac{\log(0.641307787/0.62)}{0.3}
+\approx1.11263.
+}
+\]
+
+For example, at \(a=1.10\), benefit is approximately 0.62235, but at
+\(a=1.15\) it is only 0.61309.
+
+This does **not** prove that all ternary architectures fail beyond this
+threshold. It demonstrates that the finite existence example has little
+margin for an additional arity-dependent acquisition delay.
+
+The constitutive maintenance cost \(K\) and the per-encounter query time \(a\)
+are distinct biological cost channels. Both must be measured before claiming
+that real higher-arity sensory systems are favored.
+
+## 5c. Prior-art boundary
+
+Prior probabilities, expected-vs-worst diagnostic-tree objectives and
+multiway/value-dependent testing are established theory, including:
+
+- Cicalese, Laber & Saettler (2014), *Diagnosis determination: decision trees
+  optimizing simultaneously worst and expected testing cost*, ICML/PMLR 32;
+- Saettler, Laber & Cicalese (2015), *Approximating decision trees with value
+  dependent testing costs*, *Information Processing Letters* 115:594–599,
+  DOI 10.1016/j.ipl.2015.02.006.
+
+TP2 does not claim that target prevalence affects optimal testing or that
+ternary outcomes are generally superior. Its model-specific candidate
+contribution is the **sharp finite envelope under simultaneous world-count,
+query-count, arity and fixed binary-target-prevalence constraints**.
+
+The novelty/priority of that precise envelope still requires a broader
+literature audit; it remains supplementary rather than a fourth V6 main
+result.
+
+
 ## 6. Relation to the manuscript
 
 This result belongs as a caveat or supplementary extension to RF7. The manuscript should retain the defensible wording:
