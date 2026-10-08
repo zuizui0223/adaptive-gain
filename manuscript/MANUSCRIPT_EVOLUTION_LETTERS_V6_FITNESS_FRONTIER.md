@@ -24,7 +24,7 @@ every feasible adaptive depth \(h\) lies on an exact attainable frontier
 For any nonincreasing biological value of completion \(U(c)\), this frontier
 lifts sharply:
 \[
-\max[U\(C_A\)-U\(C_F\)]
+\max_{\mathrm{tasks}}[U(C_A)-U(C_F)]
 =
 \max_h[U(h)-U(I_h)].
 \]
@@ -148,7 +148,7 @@ Let
 U(c)
 \]
 be the biological value of guaranteed correct completion at total acquisition
-cost (c). We require only that (U) is finite and nonincreasing over the
+cost \(c\). We require only that \(U\) is finite and nonincreasing over the
 relevant finite costs.
 
 Examples include a linear time penalty,
@@ -159,14 +159,14 @@ or an ecological opportunity model,
 \[
 U(c)=vS(c),
 \]
-where (S(c)) is the probability that a feeding, mating or other opportunity
+where \(S(c)\) is the probability that a feeding, mating or other opportunity
 remains available through cost (c).
 
 The robust value of contingent over fixed resolution is
 \[
 R_{\rm robust}
 =
-U\(C_A\)-U\(C_F\).
+U(C_A)-U(C_F).
 \]
 
 This is a frequency-free worst-state quantity. It is not the expected fitness
@@ -175,15 +175,15 @@ value of a decision tree.
 ### Expected value
 
 For a contingent policy \(\pi\), let \(T_\pi(w)\) be its realized completion
-cost in world (w), and let \(p_w\) be the encounter probability of that world.
+cost in world \(w\), and let \(p_w\) be the encounter probability of that world.
 
 Then
 \[
-R_{\rm expected}\(\pi\)
+R_{\rm expected}(\pi)
 =
-\sum_w p_w U[T_pi(w)]
+\sum_w p_w U(T_\pi(w))
 -
-U\(C_F\).
+U(C_F).
 \]
 
 For a minimax tree,
@@ -239,14 +239,14 @@ is represented by an exact frontier.
 
 ### 2. Natural history re-ranks the structural frontier
 
-For any finite nonincreasing (U), the maximum robust biological value over
+For any finite nonincreasing \(U\), the maximum robust biological value over
 the declared structural scope is
 \[
 \boxed{
 R_{\rm robust,max}
 =
 \max_h
-[U\(h\)-U(I_h)].
+[U(h)-U(I_h)].
 }
 \]
 
@@ -258,9 +258,9 @@ U(c)=-\lambda c,
 \]
 then
 \[
-U\(C_A\)-U\(C_F\)
+U(C_A)-U(C_F)
 =
-\lambda\(C_F-C_A\).
+\lambda(C_F-C_A).
 \]
 A linear adaptive-gain-to-fitness map is therefore equivalent to assuming
 constant marginal biological penalty per unit completion cost.
@@ -322,13 +322,13 @@ Let the contingent architecture pay constitutive cost \(K\).
 
 At adaptive depth \(h\), define
 \[
-J_K\(h\)
+J_K(h)
 =
-\min\{j\ge h:U\(h\)-U(j)>K\}.
+\min\{j\ge h:U(h)-U(j)>K\}.
 \]
 Then positive robust architecture value at depth \(h\) is possible exactly when
 \[
-I_h\ge J_K\(h\).
+I_h\ge J_K(h).
 \]
 
 The forward value theorem therefore has an exact inverse: natural history and
@@ -340,7 +340,7 @@ grow but cue arity remains bounded.
 
 A full \(b\)-ary adaptive tree of depth \(h\) has at most
 \[
-J_b\(h\)
+J_b(h)
 =
 \frac{b^h-1}{b-1}
 \]
@@ -348,16 +348,16 @@ internal nodes. The private-pair construction attains
 \[
 (C_A,C_F)
 =
-(h,J_b\(h\)).
+(h,J_b(h)).
 \]
 
-For bounded-below (U), define
+For bounded-below \(U\), define
 \[
 \boxed{
 K_{\rm crit,robust}^{(b)}
 =
 \max_{h\ge2}
-[U\(h\)-U(J_b\(h\))].
+[U(h)-U(J_b(h))].
 }
 \]
 
