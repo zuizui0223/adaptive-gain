@@ -179,6 +179,49 @@ mechanism, not a contradiction of standard decision theory.
 In the limit \(\tau\to\infty\), old-cue posteriors coincide
 and the conditional advantage vanishes.
 
+
+## Cue reliability is a real constraint (not a cosmetic caveat)
+
+The perfect old-cue assumption can be relaxed to a symmetric binary
+misclassification probability \(\varepsilon\in[0,1/2]\). The new
+re-query remains perfect in this sensitivity model, and its cost and
+time burden stay fixed.
+
+The probability of the observed old cue \(O=1\) is now
+
+\[
+q_1=\pi_1(1-\varepsilon)+\pi_0\varepsilon,
+\]
+
+and the initial state-1 posterior used in the skip/refresh branch is
+
+\[
+p_{O=1}={\pi_1(1-\varepsilon)\over q_1},\quad
+p_{O=0}={\pi_1\varepsilon\over 1-q_1}.
+\]
+
+Subsequent Markov transitions operate on these posterior values
+instead of treating the reported old state as known exactly.
+The unconditional branch weights are \(1-q_1,q_1\), not
+\(\pi_0,\pi_1\).
+
+At the Witness A parameter settings, the cue-driven direction
+reversal persists at symmetric old-cue error probabilities
+0, .01, .03, .05 and .08. The reported 4:1 reversal is **not**
+robust at .10: both old-cue outcomes then favor refreshing,
+and the conditional-over-precommitted gain becomes zero.
+With \(\varepsilon=.5\) the old cue conveys no state
+information, so conditional acquisition cannot improve on
+the best precommitted schedule.
+
+This is **not** a universal .08/.10 biological threshold.
+It shows that measurement reliability is an indispensable
+dimension, and identifies a falsifiable negative-control
+boundary for the displayed hypothetical ecology.
+Independent brute-force evaluation enumerates the latent old
+state, imperfect old observation, new state and terminal
+state across seven error values.
+
 ## Test and scope receipt
 
 Executable:
