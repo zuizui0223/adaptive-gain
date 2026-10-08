@@ -368,7 +368,7 @@ a>a_{\rm crit}
 \]
 
 At (U(c)=e^{-0.3c}\) and (K=0.68\),
-(a_{\rm crit}\approx0.6833\). Binary cues can repay the cost in some
+(a_{\rm crit}\approx0.68325\). Binary cues can repay the cost in some
 scalable task if the target prevalence is sufficiently skewed past this
 boundary; otherwise at least ternary query outcomes are needed.
 This is a task-class existence condition, not a predicted evolutionary
