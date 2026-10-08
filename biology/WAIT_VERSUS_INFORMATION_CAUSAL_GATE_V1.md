@@ -174,6 +174,65 @@ contrasts in the same individuals. Experimental validation remains
 on HOLD; neither the failed CI nor the corrected algebra establishes
 natural selection for one sensory architecture.
 
+## Related experiments and novelty boundary
+
+The idea of separating the influence of time from information is
+**not** new:
+
+- A 2002 gray-jay study explicitly compared longer delays with and
+  without opportunity to inspect rewards, using opaque covers to
+  determine whether improved choice was merely caused by further
+  information processing (https://pubmed.ncbi.nlm.nih.gov/12461598/).
+  It is a strong precedent for the WAIT/sham intervention.
+- A 2024 pigeon experiment differentiated manipulating reward
+  probability, reducing time until reward, and obtaining earlier
+  information about an outcome
+  (https://doi.org/10.3389/fpsyg.2024.1426434).
+  Therefore neither "delay can matter" nor "measure information
+  separately" can carry a novelty claim.
+- Canessa et al. 2015
+  (https://doi.org/10.1111/2041-210X.12423) emphasize
+  that additional environmental information is valuable for a
+  decision only relative to explicitly defined actions and
+  management objectives.
+
+The *current corrective contribution* is narrower:
+a state-transition calculation that concretely exposes an
+uninformative-sensor false positive in the existing
+conditional-acquisition comparator, an operational WAIT
+baseline that removes it, and an exactly reproducible change
+in the sensor-quality window. The wider literature already
+anticipates why such a control matters.
+
+### The exact timing-versus-opportunity criterion
+
+Even if the sensor returns zero new information, a delayed
+action can improve performance conditional on old report o
+precisely when
+
+\[
+ e^{-\mu r}
+ h\!\left[\pi_1+(p_o(\tau+a)-\pi_1)
+ e^{-(\alpha+\beta)r}\right]
+ > h[p_o(\tau+a)].
+\]
+
+That is a state-drift-versus-opportunity-loss inequality,
+not an information-value theorem. In the limit of an
+effectively frozen environment, the conditional state
+distribution does not change during r; with \(\mu>0\),
+the criterion cannot hold, so WAIT is dominated by SKIP.
+Independent regression tests include this frozen-environment
+negative control.
+
+The planned experiment should **not** simply maximize
+differences between wait and query at different times.
+It needs identical observation/decision times, matched
+handling and opportunities, and independently measured
+post-cue environmental change. Otherwise chemical cue
+degradation, decision preparation and background reward
+dynamics remain confounded.
+
 ## 7. Reproducibility and claim boundaries
 
 - adaptive_gain/waiting_control.py implements SKIP/WAIT/QUERY,
