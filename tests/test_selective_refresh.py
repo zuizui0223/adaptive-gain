@@ -447,3 +447,89 @@ def test_uninformative_refresh_cue_never_creates_strict_routing_value():
             .8, .2, cue_age=.1, sampling_delay=.15,
             terminal_delay=.15, opportunity_hazard=.25,
             refresh_cue_error_rate=.7)
+
+
+
+def test_noise_can_create_conditional_advantage_without_improving_accuracy():
+    """A three-phase ecological witness, not a general new VOI theorem.
+
+    The initial cue is 1.2 time units old, too stale to affect the immediate
+    action with 80:20 occupancy; but can still direct optional re-query.
+    For perfect new sensing every state is worth re-querying, for intermediate
+    noise only the rare old report is, and for uninformative new sensing neither
+    is. Absolute optimized reward always weakly decreases with fresh-cue noise.
+    """
+    common = dict(
+        alpha=.8, beta=.2, cue_age=1.2, sampling_delay=.15,
+        terminal_delay=.1, opportunity_hazard=.25, reward0=1,
+        reward1=1, query_cost=.03,
+    )
+    perfect = selective_refresh(refresh_cue_error_rate=0, **common)
+    intermediate = selective_refresh(refresh_cue_error_rate=.12, **common)
+    uninformative = selective_refresh(refresh_cue_error_rate=.5, **common)
+
+    assert perfect.selective_policy == ("refresh", "refresh")
+    assert perfect.strict_conditional_gain == pytest.approx(0, abs=1e-12)
+    assert intermediate.selective_policy == ("refresh", "skip")
+    assert intermediate.strict_conditional_gain == pytest.approx(
+        0.03977644835330949, abs=1e-12)
+    assert uninformative.selective_policy == ("skip", "skip")
+    assert uninformative.strict_conditional_gain == pytest.approx(0, abs=1e-12)
+    assert (perfect.selective_expected_reward >
+            intermediate.selective_expected_reward >
+            uninformative.selective_expected_reward)
+
+    # Independently establish that the old cue does not select the immediate
+    # action: both old-state posteriors imply state-1 probability > 1/2.
+    for old in (0, 1):
+        p1 = .8 + (old - .8) * math.exp(-1.2)
+        assert p1 > .5
+
+
+def test_refreshed_information_blackwell_monotonic_but_gap_nonmonotonic():
+    """Increasing binary observation error never helps either refreshed branch.
+
+    Its *relative* advantage over the best fixed acquisition schedule may
+    increase and then decrease, because the fixed comparator changes.
+    """
+    parameters = dict(
+        alpha=.8, beta=.2, cue_age=1.2, sampling_delay=.15,
+        terminal_delay=.1, opportunity_hazard=.25,
+        reward0=1, reward1=1, query_cost=.03,
+    )
+    grid = [
+        selective_refresh(refresh_cue_error_rate=i/1000, **parameters)
+        for i in range(501)
+    ]
+    for left, right in zip(grid, grid[1:]):
+        for a, b in zip(left.refresh_by_old_cue, right.refresh_by_old_cue):
+            assert a + 1e-12 >= b
+        assert left.selective_expected_reward + 1e-12 >= (
+            right.selective_expected_reward
+        )
+    positive = [i for i, result in enumerate(grid)
+                if result.strict_conditional_gain > 1e-9]
+    assert positive[0] in (56, 57)
+    assert positive[-1] in (350, 351)
+    assert grid[114].strict_conditional_gain == pytest.approx(
+        0.04080838921450323, abs=1e-12
+    )
+    assert grid[114].strict_conditional_gain > grid[0].strict_conditional_gain
+    assert grid[114].strict_conditional_gain > grid[500].strict_conditional_gain
+
+
+def test_refresh_posterior_fuses_old_and_new_noisy_labels():
+    """When both cues are imperfect, the old posterior still changes action."""
+    x = selective_refresh(
+        .8, .2, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.1, opportunity_hazard=.25,
+        reward0=4, reward1=1, query_cost=.015,
+        old_cue_error_rate=.08, refresh_cue_error_rate=.05,
+    )
+    branches, schedules = _exhaustive_two_imperfect_cues(
+        .8, .2, .1, .15, .1, .25, 4, 1, .015, .08, .05,
+    )
+    assert x.selective_expected_reward == pytest.approx(max(schedules))
+    assert x.refresh_by_old_cue == pytest.approx(
+        tuple(reward[1] for reward in branches)
+    )
