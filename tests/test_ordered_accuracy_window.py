@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from adaptive_gain.ordered_accuracy_window import precision_window
+from adaptive_gain.ordered_accuracy_window import (precision_window, controller_log_cost_ceiling)
 from adaptive_gain.selective_refresh import selective_refresh
 
 
@@ -123,3 +123,58 @@ def test_interval_and_root_validation():
         assert (selective_refresh(
             refresh_cue_error_rate=eps, **baseline
         ).strict_conditional_gain > 1e-12) == positive
+
+
+
+def test_pairwise_log_maintenance_threshold_matches_peak():
+    params = dict(
+        alpha=.8, beta=.2, cue_age=1.2,
+        sampling_delay=.15, terminal_delay=.1,
+        opportunity_hazard=.25, reward0=1, reward1=1, query_cost=.03,
+    )
+    threshold = controller_log_cost_ceiling(
+        baseline_fitness=1, **params
+    )
+    assert threshold == pytest.approx(
+        0.022664086780739928, abs=1e-9
+    )
+    cert = precision_window(**params)
+    assert cert.peak_error is not None
+    fixed_at_peak = selective_refresh(
+        refresh_cue_error_rate=cert.peak_error, **params
+    )
+    expected = math.log(
+        (1 + fixed_at_peak.selective_expected_reward)
+        / (1 + fixed_at_peak.best_precommitted_reward)
+    )
+    assert threshold == pytest.approx(expected, abs=1e-12)
+
+    for baseline in (.01, .1, 1, 10):
+        ceiling = controller_log_cost_ceiling(
+            baseline_fitness=baseline, **params
+        )
+        for j in range(101):
+            at_quality = selective_refresh(
+                refresh_cue_error_rate=j/200, **params
+            )
+            marginal = math.log(
+                (baseline + at_quality.selective_expected_reward)
+                / (baseline + at_quality.best_precommitted_reward)
+            )
+            assert marginal <= ceiling + 1e-11
+
+    with pytest.raises(ValueError):
+        controller_log_cost_ceiling(
+            baseline_fitness=0, **params
+        )
+
+
+def test_no_conditional_gain_means_zero_maintenance_budget():
+    budget = controller_log_cost_ceiling(
+        baseline_fitness=1,
+        alpha=.8, beta=.2, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.1, opportunity_hazard=.25,
+        reward0=1, reward1=1, query_cost=.03,
+        old_cue_error_rate=.5,
+    )
+    assert budget == 0
