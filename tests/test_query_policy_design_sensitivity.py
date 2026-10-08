@@ -62,7 +62,7 @@ def test_variance_design_effect_doubles_illustrative_trial_burden():
 def test_invalid_probability_reward_and_wrong_policy_signs_are_rejected():
     with pytest.raises(ValueError,match="target_old_zero"):
         design_sensitivity(**dict(TOY,target_old_zero=0),laboratory_old_zero=.5)
-    with pytest.raises(ValueError,match="SHAM"):
+    with pytest.raises(ValueError,match="(?i)sham"):
         design_sensitivity(**dict(
             TOY,arm_probability_passive=.6,arm_probability_query=.4
         ),laboratory_old_zero=.5)
