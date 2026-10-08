@@ -677,8 +677,7 @@ Donaldson-Matasci, M. C., Bergstrom, C. T. & Lachmann, M. 2010. The fitness
 value of information. *Oikos* 119:219–230.
 https://doi.org/10.1111/j.1600-0706.2009.17781.x.
 
-Douek-Pinkovich, Y., Ben-Gal, I. & Raviv, T. 2021. The generalized test
-collection problem. *TOP* 29:372–386.
+Douek-Pinkovich, Y., Ben-Gal, I. & Raviv, T. 2021. The generalized test collection problem. *TOP* 29:372–386.
 https://doi.org/10.1007/s11750-020-00554-1.
 
 
