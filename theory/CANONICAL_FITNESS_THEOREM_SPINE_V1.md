@@ -19,13 +19,13 @@ The distinction is essential.
 
 ## MAIN 1 — exact finite structural frontier
 
-Fix finite deterministic unit-cost tasks with (n) represented worlds, (m)
-declared query resources, and maximum query arity (b).
+Fix finite deterministic unit-cost tasks with \(n\) represented worlds, \(m\)
+declared query resources, and maximum query arity \(b\).
 
-For each feasible adaptive depth (h), define
+For each feasible adaptive depth \(h\), define
 
 \[
-I_h=\min{m,F_b(n,h)}.
+I_h=\min\{m,F_b(n,h)\}.
 \]
 
 The protected-spine private-pair construction attains
@@ -36,7 +36,7 @@ The protected-spine private-pair construction attains
 
 for every feasible depth.
 
-Therefore (hmapsto(h,I_h)) is an exact attainable adaptive/fixed frontier,
+Therefore \(h\mapsto(h,I_h)\) is an exact attainable adaptive/fixed frontier,
 not only an upper-bound curve.
 
 Biological interpretation: the finite environment does not provide one scalar
@@ -44,13 +44,13 @@ amount of routeability. It provides a menu of attainable architectures trading
 adaptive completion depth against fixed simultaneous provisioning burden.
 
 Prior-art boundary: adaptive-tree flattening itself is established. The claim
-retained here is the fixed-((n,m,b)) exact frontier with constructive
+retained here is the fixed-\((n,m,b)\) exact frontier with constructive
 attainment at every feasible depth.
 
 ## MAIN 2 — natural history sharply re-ranks the frontier
 
-Let (U(c)) be any finite nonincreasing biological value of guaranteed
-completion at cost (c).
+Let \(U(c)\) be any finite nonincreasing biological value of guaranteed
+completion at cost \(c\).
 
 Then
 
@@ -67,11 +67,11 @@ The same frontier witnesses attain the bound.
 Thus natural history does not multiply one structural adaptive-gain score. It
 chooses among points on the structural frontier.
 
-If (U(c)=-lambda c), then
-(U(C_A)-U(C_F)=lambda(C_F-C_A)). Only in this
+If \(U(c)=-\lambda c\), then
+\(U(C_A)-U(C_F)=\lambda(C_F-C_A)\). Only in this
 constant-marginal-value case is the structural gap alone sufficient.
 
-If (U(c)=vS(c)), with (S(c)) the probability that the ecological opportunity
+If \(U(c)=vS(c)\), with \(S(c)\) the probability that the ecological opportunity
 remains open, then
 
 \[
@@ -85,35 +85,34 @@ v\max_h[S(h)-S(I_h)].
 Canonical finite example: for binary (n=10,m=9), the frontier contains
 ((2,3),(3,7),(4,9)). The structural ratio is maximized at (h=3).
 Under exponential opportunity value (U(c)=e^{-mu c}), the robust-value
-optimum switches (h^*:4\to3\to2) as urgency increases.
+optimum switches \(h^*:4\to3\to2\) as urgency increases.
 
 Hence
 
 \[
 \boxed{
 \text{ratio-optimal architecture}
-
-eq
+\neq
 \text{biologically optimal architecture}.
 }
 \]
 
 ## MAIN 3 — exact inverse evolutionary threshold and global arity no-go
 
-Let contingent control pay additive constitutive cost (Kge0).
+Let contingent control pay additive constitutive cost \(K\ge0\).
 
 At adaptive depth (h), define
 
 \[
 J_K(h)
 =
-\min{jge h:U(h)-U(j)>K}.
+\min\{j\ge h:U(h)-U(j)>K\}.
 \]
 
 Positive robust value at that depth is possible exactly when
 
 \[
-\boxed{I_hge J_K(h).}
+\boxed{I_h\ge J_K(h).}
 \]
 
 Thus biology can be inverted back into a minimum finite information
@@ -126,7 +125,7 @@ at most (b). Define
 J_b(h)=\frac{b^h-1}{b-1}.
 \]
 
-For bounded-below (U),
+For bounded-below \(U\),
 
 \[
 \boxed{
@@ -146,7 +145,7 @@ Define
 \boxed{
 b_{min}^{\rm robust}
 =
-\min{b\ge2:K<K_{\rm crit,robust}^{(b)}}.
+\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\}.
 }
 \]
 
@@ -175,7 +174,7 @@ Expected selection is different.
 For fixed finite (n,m), define
 
 \[
-M=\min{m,n-1}.
+M=\min\{m,n-1\}.
 \]
 
 Across all legal tasks, guaranteed-resolving adaptive policies, and strictly
@@ -183,7 +182,7 @@ positive world-frequency distributions,
 
 \[
 \boxed{
-sup R_{\rm expected}(n,m)
+\sup R_{\rm expected}(n,m)
 =
 U(1)-U(M).
 }
@@ -193,7 +192,7 @@ The supremum is approached by a binary private-pair tree with one
 high-probability one-query branch and rare branches carrying the fixed burden.
 
 Therefore the finite-scope expected ceiling is independent of cue arity
-(bge2).
+\(b\ge2\).
 
 **Scope restriction:** this supremum also permits the *target-class
 prevalence* to vary freely. At fixed 50/50 binary-target prevalence, the
@@ -209,13 +208,13 @@ can substitute for cue branching capacity in the expected-value problem.
 Globally, for bounded-below (U),
 
 \[
-\boxed{sup R_{\rm robust}=U(2)-U_\infty,}
+\boxed{\sup R_{\rm robust}=U(2)-U_\infty,}
 \]
 
 while
 
 \[
-\boxed{sup R_{\rm expected}=U(1)-U_\infty.}
+\boxed{\sup R_{\rm expected}=U(1)-U_\infty.}
 \]
 
 Hence
@@ -223,7 +222,7 @@ Hence
 \[
 \boxed{
 U(2)-U_\infty
-le K
+\le K
 <
 U(1)-U_\infty
 }
@@ -231,12 +230,12 @@ U(1)-U_\infty
 
 is a frequency-assisted evolvability band.
 
-For exponential opportunity value (U(c)=ve^{-mu c}), the band is
+For exponential opportunity value \(U(c)=ve^{-\mu c}\), the band is
 
 \[
 \boxed{
 ve^{-2\mu}
-le K
+\le K
 <
 ve^{-\mu}.
 }
@@ -259,7 +258,7 @@ U(1)-U(2)
 }
 \]
 
-For the example above, (p_{\rm crit}approx0.2666).
+For the example above, \(p_{\rm crit}\approx0.2666\).
 
 This turns encounter frequencies into an explicit evolutionary resource.
 
@@ -366,8 +365,7 @@ The central distinction is therefore
 \[
 \boxed{
 \text{information architecture}
-
-eq
+\neq
 \text{fitness},
 }
 \]
@@ -383,7 +381,7 @@ The aggregate +IR effect after CO2 cessation is strongly late weighted:
 half of the first post-pulse signed advantage accumulates after about 46.2 s,
 and half of the second after about 46.5 s.
 
-This supports the need for (U(c)) or an ecological value-of-time function.
+This supports the need for \(U(c)\) or an ecological value-of-time function.
 
 It does not validate an adaptive/fixed architecture, individual completion-time
 distributions, natural opportunity survival, architecture cost, or selection.
