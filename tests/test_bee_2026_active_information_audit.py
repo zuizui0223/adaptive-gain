@@ -53,6 +53,9 @@ def test_free_cue_delivery_is_not_platform_landing():
     assert out["groups"]["Random_Free_Cue|Easy"]["info"]==3
     assert out["groups"]["Random_Free_Cue|Easy"]["land"]==2
     assert out["groups"]["Regular|Easy"]["info"]==0
+    assert out["within_bee_differences"]["Easy"]["n_paired"]==3
+    assert out["within_bee_differences"]["Easy"]["positive"]==2
+    assert out["within_bee_differences"]["Easy"]["negative"]==0
 
 
 def test_all_trial_ids_are_unique_and_binary_flags_required():
@@ -105,6 +108,17 @@ def test_frozen_third_party_trial_receipt_is_internally_consistent():
         expected=free["land"]/free["n"]-regular["land"]/regular["n"]
         assert stats["difference"]==pytest.approx(expected,abs=1e-12)
         assert stats["bootstrap95"][0]<expected<stats["bootstrap95"][1]
+    paired = receipt["within_bee_paired_landing_differences"]
+    for diff in ("Easy", "Hard", "Impossible"):
+        assert paired[diff]["n_paired"] == 192
+        assert paired[diff]["n_missing"] == 0
+        assert (
+            paired[diff]["positive"]
+            + paired[diff]["negative"]
+            + paired[diff]["zero"]
+        ) == 192
+    assert paired["Easy"]["positive"] == 190
+    assert paired["Impossible"]["negative"] == 178
     assert receipt["source"]["blob_sha"] == (
         "26259c9071c6d73141d56b9bedd396cab1a04491"
     )
