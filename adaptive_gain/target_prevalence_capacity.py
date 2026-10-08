@@ -134,3 +134,101 @@ def exponential_minimum_expected_arity_with_target_prevalence(
         value_at_two=resolution_value * math.exp(-2.0 * closure_rate),
         limiting_value=0.0,
     )
+
+
+@dataclass(frozen=True)
+class FiniteTargetPrevalenceCapacity:
+    world_count: int
+    query_count: int
+    max_arity: int
+    target_one_probability: float
+    binary_supr: float
+    two_target_pure_root_supr: float | None
+    expected_value_supremum: float
+    maximizing_root_pattern: str
+    scope: str = "sharp_finite_expected_value_fixed_target_prevalence"
+
+
+def finite_target_prevalence_expected_capacity(
+    world_count: int,
+    query_count: int,
+    target_one_probability: float,
+    *,
+    max_arity: int,
+    completion_value,
+) -> FiniteTargetPrevalenceCapacity:
+    """Exact expected-value supremum at fixed two-target marginal and (n,m,b).
+
+    World probabilities may vary, must be strictly positive, and must retain
+    the supplied target marginal. Unit-cost deterministic exact resolution.
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    p = float(target_one_probability)
+    if not math.isfinite(p) or not 0.0 < p < 1.0:
+        raise ValueError("target_one_probability must lie strictly between 0 and 1")
+
+    m = min(query_count, world_count - 1)
+    values = {
+        j: float(completion_value(float(j)))
+        for j in range(1, m + 1)
+    }
+    if any(not math.isfinite(v) for v in values.values()):
+        raise ValueError("completion values must be finite")
+    if any(values[j] < values[j + 1] for j in range(1, m)):
+        raise ValueError("completion_value must be nonincreasing")
+
+    if m == 1:
+        return FiniteTargetPrevalenceCapacity(
+            world_count, query_count, max_arity, p, 0.0, None, 0.0, "no_gain"
+        )
+
+    q = max(p, 1.0 - p)
+    binary = q * values[1] + (1.0 - q) * values[2] - values[m]
+    ternary = None
+    if max_arity >= 3 and world_count >= 4:
+        m3 = min(query_count, world_count - 2)
+        if m3 >= 2:
+            ternary = values[1] - values[m3]
+
+    if ternary is not None and ternary > binary:
+        best = ternary
+        pattern = "two_target_pure_root_outcomes_plus_rare_mixed"
+    else:
+        best = binary
+        pattern = "one_target_pure_root_outcome_plus_rare_mixed"
+
+    return FiniteTargetPrevalenceCapacity(
+        world_count, query_count, max_arity, p,
+        binary, ternary, best, pattern,
+    )
+
+
+def finite_minimum_expected_cue_arity_with_target_prevalence(
+    world_count: int,
+    query_count: int,
+    target_one_probability: float,
+    architecture_cost: float,
+    *,
+    completion_value,
+) -> int | None:
+    """Minimum arity 2 or 3 that allows strict positive expected net value."""
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    binary = finite_target_prevalence_expected_capacity(
+        world_count, query_count, target_one_probability,
+        max_arity=2, completion_value=completion_value,
+    )
+    if architecture_cost < binary.expected_value_supremum:
+        return 2
+    ternary = finite_target_prevalence_expected_capacity(
+        world_count, query_count, target_one_probability,
+        max_arity=3, completion_value=completion_value,
+    )
+    if architecture_cost < ternary.expected_value_supremum:
+        return 3
+    return None
