@@ -9,7 +9,7 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
     two_shallow_leaf_expected_value_witness,
     finite_target_prevalence_ternary_witness,
 )
-from adaptive_gain.core import fixed_minimum_resolution
+from adaptive_gain.core import FiniteTask, Query, World, fixed_minimum_resolution
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.target_prevalence_capacity import (
     finite_ternary_capacity_premium_prevalence_interval,
@@ -563,3 +563,49 @@ def test_free_ternary_capacity_can_dominate_all_nonextreme_prevalences():
             10, 6, p, max_arity=3, completion_value=val
         )
         assert ternary.expected_value_supremum > binary.expected_value_supremum
+
+
+
+def test_matched_worlds_binary_ternary_pairwise_performance():
+    """Same worlds/prior/target, different declared sensing vocabularies.
+
+    This is a valid within-environment comparison only for the specified cue
+    sets and acquisition costs. It does not imply a universal selection
+    advantage of all ternary sensors over all binary sensors.
+    """
+    worlds = (
+        World("frequent_zero", 0),
+        World("frequent_one", 1),
+        World("rare_zero", 0),
+        World("rare_one", 1),
+    )
+    # Both task architectures are guaranteed resolvers with the same fixed
+    # bundle cost 2 and adaptive worst-path cost 2.
+    binary = FiniteTask(worlds, (
+        Query("is_frequent_one", 1, (0, 1, 0, 0)),
+        Query("is_rare_one", 1, (0, 0, 0, 1)),
+    ))
+    ternary = FiniteTask(worlds, (
+        Query("frequent_zero_one_or_rare", 1, (0, 1, 2, 2)),
+        Query("is_rare_one", 1, (0, 0, 0, 1)),
+    ))
+    assert fixed_minimum_resolution(binary).minimum_cost == 2
+    assert fixed_minimum_resolution(ternary).minimum_cost == 2
+
+    p = (0.49, 0.49, 0.01, 0.01)
+    mu = 0.3
+    fit_binary = discounted_fitness_optimal_policy(
+        binary, p, discount_rate=mu
+    )
+    fit_ternary = discounted_fitness_optimal_policy(
+        ternary, p, discount_rate=mu
+    )
+    bval = 0.49 * math.exp(-mu) + 0.51 * math.exp(-2 * mu)
+    tval = 0.98 * math.exp(-mu) + 0.02 * math.exp(-2 * mu)
+    incremental = 0.49 * (math.exp(-mu) - math.exp(-2 * mu))
+
+    assert fit_binary.expected_discounted_completion_value == pytest.approx(bval)
+    assert fit_ternary.expected_discounted_completion_value == pytest.approx(tval)
+    assert tval - bval == pytest.approx(incremental)
+    assert incremental > 0.05
+    assert (tval - bval) - 0.05 > 0.0
