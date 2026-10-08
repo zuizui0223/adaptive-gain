@@ -5,7 +5,8 @@ import math
 import pytest
 
 from adaptive_gain.optimal_passive_wait import (
-    passive_timing_optimum, compare_with_optimal_passive_wait
+    passive_timing_optimum, compare_with_optimal_passive_wait,
+    flexible_wait_precision_window, flexible_wait_log_maintenance_ceiling,
 )
 
 
@@ -119,3 +120,65 @@ def test_bad_flexible_waiting_horizon_and_parameter_inputs_are_rejected():
             cue_age=.1,terminal_delay=.1,max_wait=.5,
             opportunity_hazard=.25,reward0=1,reward1=4
         )
+
+
+
+def test_flexible_delay_precision_window_and_fitness_ceiling():
+    params=dict(
+        alpha=.8,beta=.2,cue_age=1.2,sampling_delay=.15,
+        terminal_delay=.1,opportunity_hazard=.25,
+        reward0=1,reward1=1,query_cost=.03,
+        max_wait=.5,
+    )
+    x=flexible_wait_precision_window(**params)
+    assert x.lower_error==pytest.approx(
+        .05652257923804355,abs=2e-8)
+    assert x.upper_error==pytest.approx(
+        .33949700863458265,abs=2e-8)
+    assert x.peak_error==pytest.approx(
+        .11169019188346191,abs=2e-8)
+    assert x.peak_query_control_premium==pytest.approx(
+        .03918052711065734,abs=2e-8)
+    assert x.no_query_reward_at_peak==pytest.approx(
+        .7822730559560074,abs=2e-8)
+    assert x.fixed_policy_tie_at_peak
+    assert flexible_wait_log_maintenance_ceiling(
+        baseline_fitness=1,**params
+    )==pytest.approx(.021745306970609772,abs=1e-9)
+
+    for eps in (0, .03, .06, .1, .2, .3, .34, .5):
+        z=compare_with_optimal_passive_wait(
+            refresh_cue_error_rate=eps,**params)
+        assert z.conditional_query_premium<=(
+            x.peak_query_control_premium+1e-11
+        )
+        assert z.conditional_query_premium<=(
+            z.matched_wait_query_premium+1e-11
+        )
+
+
+def test_flexible_precision_certificate_matches_independent_grid():
+    count=0
+    for alpha,beta,r0,r1,age,old_err in itertools.product(
+        (.2,.8),(.2,.8),(1,4),(1,4),(.1,1.2),(0,.08)
+    ):
+        params=dict(
+            alpha=alpha,beta=beta,cue_age=age,
+            sampling_delay=.15,terminal_delay=.1,
+            opportunity_hazard=.25,reward0=r0,reward1=r1,
+            query_cost=.03,max_wait=.5,old_cue_error_rate=old_err
+        )
+        x=flexible_wait_precision_window(**params)
+        brute=max(
+            compare_with_optimal_passive_wait(
+                refresh_cue_error_rate=i/100,**params
+            ).conditional_query_premium
+            for i in range(51)
+        )
+        assert brute<=(x.peak_query_control_premium+1e-10)
+        if x.peak_error is None:
+            assert brute==pytest.approx(0,abs=1e-10)
+        else:
+            assert 0<=x.lower_error<=x.peak_error<=x.upper_error<=.5
+        count+=1
+    assert count==64
