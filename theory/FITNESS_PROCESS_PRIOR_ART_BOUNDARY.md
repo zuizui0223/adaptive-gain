@@ -468,6 +468,47 @@ frontier. That absence is not a priority proof and should not be written as
 such in the manuscript.
 
 
+
+### Three-way positive/negative/uncertain triage is established
+
+A first-stage decision that returns positive, negative, or uncertain and
+continues testing only uncertain cases is established sequential diagnosis
+practice and decision-tree design.
+
+For example, the serial risk-score approach in clinical classification
+(*A Serial Risk Score Approach to Disease Classification that Accounts for
+Accuracy and Cost*, PMC4790436) explicitly divides subjects into positive,
+negative and neutral/undecided categories and sends undecided subjects for
+additional testing. Sequential diagnostic testing with inconclusive outcomes
+is likewise discussed in the statistical testing literature (DOI
+10.1002/sim.4358).
+
+Therefore the target-prevalence extension must not claim that a three-outcome
+cue with two pure decisions plus an ambiguous continuation is a new behavioral
+or diagnostic architecture.
+
+The narrower candidate result is the *sharp capacity contrast* for the
+declared finite hidden-world/query comparator:
+
+- fixing the prevalence of the two target classes at alpha and 1-alpha;
+- allowing arbitrarily many finite worlds and queries, but requiring all world
+  probabilities to be positive;
+- comparing to one universal fixed resolving bundle;
+- proving the exact binary supremum
+  \[
+  aU(1)+(1-a)U(2)-U_\infty
+  \]
+  against the ternary-or-higher supremum
+  \[
+  U(1)-U_\infty,
+  \]
+  where a=max(alpha,1-alpha);
+- obtaining an exact cue-arity feasibility threshold from the difference.
+
+This does not establish a new general theory of triage, nor does it identify
+real sensory receptor number from mathematical cue arity.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
