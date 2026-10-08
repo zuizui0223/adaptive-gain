@@ -23,7 +23,11 @@ jobs:
           R CMD INSTALL /tmp/paleoTS
           git clone https://github.com/klvoje/evoTS.git /tmp/evoTS
           git -C /tmp/evoTS checkout 651458ccd4b940053f9257e3c18a4110b0c2d4db
-          # plotly is required only by evoTS visualizers; omit it from the temporary\n          # analysis installation to avoid unrelated system-library compilation errors.\n          sed -i '/^[[:space:]]*plotly,$/d' /tmp/evoTS/DESCRIPTION\n          sed -i '/^importFrom(plotly,/d' /tmp/evoTS/NAMESPACE\n          R CMD INSTALL /tmp/evoTS
+          # plotly is required only by evoTS visualizers; omit it from the temporary
+          # analysis installation to avoid unrelated system-library compilation errors.
+          sed -i '/^[[:space:]]*plotly,$/d' /tmp/evoTS/DESCRIPTION
+          sed -i '/^importFrom(plotly,/d' /tmp/evoTS/NAMESPACE
+          R CMD INSTALL /tmp/evoTS
       - name: Reconstruct PETS C. andinus and fit OUBM
         shell: Rscript {0}
         run: |
