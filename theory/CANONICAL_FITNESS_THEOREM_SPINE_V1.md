@@ -255,6 +255,41 @@ For the example above, (p_{\rm crit}approx0.2666).
 
 This turns encounter frequencies into an explicit evolutionary resource.
 
+### Inverse expected-value resource corner (supporting corollary)
+
+The finite expected ceiling also gives a minimal architecture for **possible**
+positive expected value, assuming a sufficiently skewed but strictly positive
+encounter distribution.
+
+Define
+
+\[
+J_K^{\rm expected}
+=
+\min\{j\ge2:U(1)-U(j)>K\}.
+\]
+
+If finite, the exact componentwise minimum is
+
+\[
+\boxed{
+(n_{\min},m_{\min})
+=
+(J_K^{\rm expected}+1,J_K^{\rm expected}),
+}
+\]
+
+achievable using binary queries at any permitted cue arity \(b\ge2\).
+
+For \(U(c)=e^{-0.3c}\), the cases \(K=0.30\) and \(K=0.60\) require,
+respectively, \((n,m)=(4,3)\) and \((8,7)\). At the latter minimum corner,
+one-step encounters must exceed approximately \(90.4\%\) to pay \(K=0.60\);
+the much smaller \(26.7\%\) threshold applies only to an unbounded scalable
+rare-state burden.
+
+These are existence results over possible world frequencies, not predictions
+for an empirically fixed species assemblage or a separate main theorem.
+
 ### Novelty status
 
 This section is biologically important but should **not** carry the paper's
