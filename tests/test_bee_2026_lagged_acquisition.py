@@ -9,6 +9,8 @@ import pytest
 
 from scripts.analyze_bee_2026_lagged_acquisition import (
     parse_rows, lag_pairs, difference, summarize, xorshift32,
+    next_regular_pairs, free_cue_carryover_difference,
+    summarize_free_cue_carryover,
 )
 
 HEADER = (
@@ -119,3 +121,54 @@ def test_frozen_public_source_result_is_not_interpreted_causally():
         ci = estimate["bee_cluster_bootstrap_95"]
         assert ci[0] < 0 < ci[1]
         assert estimate["bootstrap_valid_repetitions"] == 1500
+
+
+
+def test_previous_free_cue_exposure_is_not_previous_voluntary_request():
+    bees = _toy_bees()
+    pairs = next_regular_pairs(bees)
+    assert len(pairs) == 12
+    assert sum(len(records) for records in pairs.values()) == 24
+    # Every bee contributes one Regular->Regular and one Free->Regular pair.
+    assert all(sum(x["prev_free"] for x in records) == 1
+               for records in pairs.values())
+    assert all(sum(1 for x in records if x["prev_free"] == 0) == 1
+               for records in pairs.values())
+
+    all_rows = [x for record in pairs.values() for x in record]
+    raw = free_cue_carryover_difference(
+        all_rows, "Hard", adjusted=False
+    )
+    assert raw["covered_trials"] == 8
+    assert raw["free_minus_regular_previous_trial"] == pytest.approx(-.75)
+    for d in ("Easy", "Hard", "Impossible"):
+        x = free_cue_carryover_difference(
+            all_rows, d, adjusted=True
+        )
+        assert x["covered_trials"] > 0
+        assert x["included_strata"] >= 1
+
+
+def test_previous_free_exposure_bootstrap_and_frozen_source():
+    bees = _toy_bees()
+    a = summarize_free_cue_carryover(bees, bootstrap_reps=50)
+    b = summarize_free_cue_carryover(bees, bootstrap_reps=50)
+    assert a == b
+    assert a["next_regular_after_any_previous_type"] == 24
+    assert a["status"] == (
+        "EXPLORATORY_LAGGED_EXPOSURE_ASSOCIATION_NOT_INFORMATION_CAUSAL_EFFECT"
+    )
+    receipt = json.loads(
+        (Path(__file__).resolve().parents[1] / "validation"
+         / "bee_2026_lagged_request_exploratory_v1.json").read_text(
+             encoding="utf-8"
+         )
+    )["previous_free_cue_exposure"]
+    assert receipt["next_regular_after_any_previous_type"] == 15205
+    for d in ("Easy", "Hard", "Impossible"):
+        x = receipt["by_current_difficulty"][d]
+        assert x["strata"] == 30
+        assert x["bee_cluster_bootstrap_95"][0] < 0 < (
+            x["bee_cluster_bootstrap_95"][1]
+        )
+        assert x["bootstrap_valid_repetitions"] == 1500
