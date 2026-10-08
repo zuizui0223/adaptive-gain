@@ -5,9 +5,11 @@ import pytest
 
 from adaptive_gain.bounded_arity_extremal_bounds import (
     ternary_target_balance_expected_witness,
+    finite_expected_ceiling_witness,
     two_shallow_leaf_expected_value_witness,
 )
 from adaptive_gain.core import fixed_minimum_resolution
+from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.target_prevalence_capacity import (
     exponential_target_prevalence_expected_capacity,
     exponential_minimum_expected_arity_with_target_prevalence,
@@ -170,3 +172,53 @@ def test_general_monotone_capacity_inverts_expected_arity():
         value_at_two=0.5,
         limiting_value=0.0,
     ) is None
+
+
+
+def test_four_world_two_query_minimal_target_balanced_arity_separation():
+    mu, cost = 0.3, 0.14
+    task = ternary_target_balance_expected_witness(rare_depth=1)
+
+    assert len(task.worlds) == 4
+    assert len(task.queries) == 2
+    assert len(set(task.queries[0].outcomes)) == 3
+    assert fixed_minimum_resolution(task).minimum_cost == 2
+
+    probs = [0.45, 0.45, 0.05, 0.05]
+    for target in (task.worlds[0].target, task.worlds[1].target):
+        assert sum(
+            p for p, world in zip(probs, task.worlds)
+            if world.target == target
+        ) == pytest.approx(0.5)
+
+    policy = discounted_fitness_optimal_policy(
+        task,
+        probs,
+        discount_rate=mu,
+    )
+    fixed_value = math.exp(-2.0 * mu)
+    advantage = policy.expected_discounted_completion_value - fixed_value
+
+    explicit = 0.9 * (math.exp(-mu) - math.exp(-2.0 * mu))
+    binary_global_upper = 0.5 * (math.exp(-mu) - math.exp(-2.0 * mu))
+
+    assert advantage >= explicit - 1e-12
+    assert binary_global_upper < cost < explicit
+
+
+def test_binary_four_world_two_query_witness_respects_class_balance():
+    task = finite_expected_ceiling_witness(4, 2)
+    assert all(len(set(q.outcomes)) <= 2 for q in task.queries)
+    assert fixed_minimum_resolution(task).minimum_cost == 2
+
+    # The first world and the padded fourth world share the root-pure
+    # target; leaf 2 is a rare same-target world in the mixed branch.
+    labels = [w.target for w in task.worlds]
+    assert labels[0] == labels[2] == labels[3]
+    assert labels[1] != labels[0]
+    probs = [0.4, 0.5, 0.05, 0.05]
+    assert sum(p for p, y in zip(probs, labels) if y == labels[0]) == pytest.approx(0.5)
+
+    value = discounted_fitness_optimal_policy(task, probs, discount_rate=0.3)
+    gain = value.expected_discounted_completion_value - math.exp(-0.6)
+    assert gain <= 0.5 * (math.exp(-0.3) - math.exp(-0.6)) + 1e-12
