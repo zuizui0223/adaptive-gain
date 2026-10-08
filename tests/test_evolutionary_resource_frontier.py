@@ -31,6 +31,7 @@ from adaptive_gain.evolutionary_resource_frontier import (
     finite_scope_one_step_mass_threshold,
     minimum_expected_evolutionary_resources,
     exponential_minimum_expected_evolutionary_resources,
+    probability_floor_expected_advantage_upper_bound,
 )
 
 
@@ -884,3 +885,57 @@ def test_generic_expected_corner_has_explicit_search_horizon():
     )
     assert found is not None
     assert found.required_fixed_cost == 3
+
+
+def test_frequency_floor_destroys_unconstrained_expected_rescue_under_uniform_worlds():
+    mu = 0.3
+    value = lambda cost: math.exp(-mu * cost)
+    arbitrary_prior_ceiling = finite_scope_expected_value_ceiling(10, 9, value)
+    uniform_prior_bound = probability_floor_expected_advantage_upper_bound(
+        10, 9, value, minimum_world_probability=0.1
+    )
+    assert arbitrary_prior_ceiling == pytest.approx(0.673612707941968)
+    assert uniform_prior_bound == pytest.approx(0.5008067818130457)
+    assert uniform_prior_bound < 0.60 < arbitrary_prior_ceiling
+
+
+def test_frequency_floor_upper_bound_controls_exact_policy_expected_value():
+    mu = 0.3
+    value = lambda cost: math.exp(-mu * cost)
+    task = finite_expected_ceiling_witness(6, 5)
+    fixed_cost = fixed_minimum_resolution(task).minimum_cost
+
+    for eta in (1.0 / 6.0, 0.05):
+        if eta == 1.0 / 6.0:
+            probs = [eta] * 6
+        else:
+            probs = [1.0 - 5 * eta] + [eta] * 5
+        policy = discounted_fitness_optimal_policy(
+            task, probs, discount_rate=mu
+        )
+        direct = policy.expected_discounted_completion_value - math.exp(
+            -mu * fixed_cost
+        )
+        bound = probability_floor_expected_advantage_upper_bound(
+            6, 5, value, minimum_world_probability=eta
+        )
+        assert direct <= bound + 1e-12
+
+    unrestricted = probability_floor_expected_advantage_upper_bound(
+        6, 5, value, minimum_world_probability=0.0
+    )
+    assert unrestricted == pytest.approx(
+        finite_scope_expected_value_ceiling(6, 5, value)
+    )
+
+
+def test_frequency_floor_bound_rejects_invalid_probability_floors():
+    value = lambda cost: math.exp(-0.3 * cost)
+    with pytest.raises(ValueError):
+        probability_floor_expected_advantage_upper_bound(
+            6, 5, value, minimum_world_probability=0.2
+        )
+    with pytest.raises(ValueError):
+        probability_floor_expected_advantage_upper_bound(
+            6, 5, value, minimum_world_probability=-0.1
+        )
