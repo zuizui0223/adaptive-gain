@@ -34,7 +34,7 @@ def _synthetic_trials():
             difficulty = ("Easy", "Hard", "Impossible")[j % 3]
             free = (j % 5 == 0)
             correctness = int(free or difficulty == "Easy")
-            landed = int(not free and j % 7 == 0)
+            landed = int(bee_index % 2 == 0) if free else int(j % 7 == 0)
             info = 1 if free else landed
             post = str(correctness) if free or landed else ""
             non = str(correctness) if not free and not landed else ""
@@ -58,6 +58,11 @@ def test_one_hundred_trial_design_and_descriptive_offer_contrast():
         assert z["accuracy_by_difficulty"][d]["free_minus_regular_accuracy"] == pytest.approx(1)
         assert z["accuracy_by_difficulty"][d]["paired_bee_signs"]["positive"] == 4
     assert len(z["trial_order_20_bins"]) == 5
+    for d in ("Easy", "Hard", "Impossible"):
+        control = z["free_arm_landing_accuracy_control"]["by_difficulty"][d]
+        assert control["free_landed"]["n"] > 0
+        assert control["free_not_landed"]["n"] > 0
+        assert control["landing_minus_no_landing"] == pytest.approx(0)
 
 
 def test_free_information_delivery_is_not_a_voluntary_request():
@@ -122,3 +127,10 @@ def test_pinned_source_receipt_has_positive_offered_cue_contrast_not_new_selecti
         == "DESCRIPTIVE_RANDOM_FREE_CUE_POLICY_CONTRAST__CAUSAL_ITT_CONDITIONAL_ON_REPORTED_RANDOMIZATION"
     )
     assert "information-value" in frozen["claim_ceiling"]
+    controls = frozen["free_arm_landing_accuracy_control"]["by_difficulty"]
+    for d in ("Easy", "Hard", "Impossible"):
+        ci = controls[d]["bee_cluster_bootstrap_95"]
+        assert ci[0] < 0 < ci[1]
+    assert frozen["free_arm_landing_accuracy_control"]["status"].endswith(
+        "NOT_MOTOR_CAUSAL_EFFECT"
+    )
