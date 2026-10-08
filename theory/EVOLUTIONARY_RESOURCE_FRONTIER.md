@@ -3110,6 +3110,44 @@ K=0.60
 though it is repayable by a finite binary task when encounter probabilities
 may be strongly skewed.
 
+
+### Exact uniform-encounter closure for the canonical binary scope
+
+The probability-floor result above is a general upper bound, not sharp.
+
+The separate constructive result in
+\`UNIFORM_ENCOUNTER_EXACT_ENVELOPE.md\` closes the uniform-world problem for
+binary queries when the declared query budget satisfies \(m\ge n-1\):
+
+\[
+R_{\rm uniform,max}
+=
+\max_T
+\left[
+\frac{\sum_{\ell\in L(T)}U(d_\ell)
++[n-|L(T)|]U(d_{\min})}{n}
+-U(j(T))
+\right].
+\]
+
+For \(n=10,m=9,U(c)=e^{-0.3c}\), the exact maximum is
+
+\[
+\boxed{R_{\rm uniform,max}=0.3328200168,}
+\]
+
+not \(0.5008067818\). The optimum has fixed burden \(C_F=6\),
+seven terminal cells with depths \(\{1,3,3,4,4,4,4\}\), and three additional
+represented worlds sharing the shallowest decision class.
+
+If each represented world is instead required to occupy its own terminal
+leaf, the exact maximum is \(0.2972139679\).
+
+Thus uniform frequencies over named worlds do **not** imply uniform frequencies
+over decision-equivalent terminal classes. No experimental ecological inference
+is made from these model constructions.
+
+
 This result begins to constrain expected selection using ecological encounter
 information rather than treating arbitrary prior concentration as free. Its
 purpose is to expose the empirical dependency of RF7, not to claim a new
