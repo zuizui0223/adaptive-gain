@@ -110,7 +110,9 @@ def test_v6_empirical_anchors_are_individual_and_aggregate_but_not_fitness():
     assert "46.5 s" in anchor
     assert "10 of 38 individuals (26.3%)" in anchor
     assert "12/14 *Anopheles" in anchor
-    assert "profiles also cross" in anchor
+    assert "sample CDFs also cross" in anchor
+    assert "population-level ordering" in anchor
+    assert "two-sided Fisher exact" in anchor
     assert "process anchors, not fitness validations" in anchor
     assert "one-minute interval-censored" in anchor
 
@@ -190,7 +192,7 @@ def test_v6_manuscript_has_no_known_broken_tex_tokens_or_control_chars():
 
 def test_v6_references_include_fixed_test_collection_and_both_mosquito_anchors():
     text = _text(MAIN)
-    refs = text.split("## References", 1)[1]
+    refs = _flat(text.split("## References", 1)[1])
     for phrase in (
         "The generalized test collection problem",
         "Thermal infrared directs host-seeking behaviour",
