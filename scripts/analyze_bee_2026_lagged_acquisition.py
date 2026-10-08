@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -46,6 +47,57 @@ REQUIRED = {
     "Info_Requested", "Actually_Landed_On_Platform",
     "Is_Post_Request_Correct", "Is_Post_Non_Request_Correct",
 }
+
+
+
+def git_blob_sha(data: bytes) -> str:
+    """Git SHA1 of exact raw file bytes, not just a content-text digest."""
+    header = b"blob " + str(len(data)).encode("ascii") + b"\x00"
+    return hashlib.sha1(header + data).hexdigest()
+
+
+def verify_frozen_receipt(current: dict, frozen: dict, tol: float = 1e-9):
+    """Check exact source result and bootstrap cutoffs against stored receipt."""
+    for field in ("n_bees", "n_total_trials",
+                  "regular_following_regular_pairs"):
+        if current[field] != frozen[field]:
+            raise ValueError(f"source/result differs: {field}")
+    if current["source"]["blob_sha"] != frozen["source"]["blob_sha"]:
+        raise ValueError("pinned source blob metadata differs")
+
+    def check_fields(a, b, fields, scope):
+        for field in fields:
+            x, y = a[field], b[field]
+            if isinstance(x, list) and isinstance(y, list):
+                if len(x) != len(y) or any(abs(p-q)>tol for p,q in zip(x,y)):
+                    raise ValueError(f"frozen result differs: {scope}/{field}")
+            elif isinstance(x, float) and isinstance(y, float):
+                if not math.isclose(x,y,abs_tol=tol,rel_tol=0):
+                    raise ValueError(f"frozen result differs: {scope}/{field}")
+            elif x != y:
+                raise ValueError(f"frozen result differs: {scope}/{field}")
+
+    for difficulty in DIFFICULTIES:
+        a = current["difficulty"][difficulty]
+        b = frozen["difficulty"][difficulty]
+        check_fields(a,b,(
+            "raw_fail_minus_success",
+            "stratified_fail_minus_success",
+            "included_strata",
+            "covered_trials",
+            "bee_cluster_bootstrap_95",
+            "bootstrap_valid_repetitions",
+        ),difficulty)
+        a = current["previous_free_cue_exposure"]["by_current_difficulty"][difficulty]
+        b = frozen["previous_free_cue_exposure"]["by_current_difficulty"][difficulty]
+        check_fields(a,b,(
+            "raw_free_minus_regular",
+            "adjusted_free_minus_regular",
+            "strata",
+            "covered_trials",
+            "bee_cluster_bootstrap_95",
+            "bootstrap_valid_repetitions",
+        ),"Free-Cue/"+difficulty)
 
 
 def _binary(raw: str, field: str) -> int:
@@ -363,13 +415,28 @@ def main():
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--bootstrap", type=int, default=1500)
+    parser.add_argument("--verify-source-blob", action="store_true",
+                        help="fail unless exact Git blob bytes match source pin")
+    parser.add_argument("--verify-receipt", type=Path,
+                        help="frozen result JSON for consistency checking")
     args = parser.parse_args()
+    if args.verify_source_blob:
+        observed_sha = git_blob_sha(args.input.read_bytes())
+        if observed_sha != SOURCE_BLOB_SHA:
+            raise ValueError(
+                f"Git blob SHA mismatch: expected {SOURCE_BLOB_SHA}, "
+                f"observed {observed_sha}"
+            )
     with args.input.open("r", encoding="utf-8-sig", newline="") as f:
         bees = parse_rows(f)
     result = summarize(bees, bootstrap_reps=args.bootstrap)
     result["previous_free_cue_exposure"] = summarize_free_cue_carryover(
         bees, bootstrap_reps=args.bootstrap
     )
+    if args.verify_receipt is not None:
+        verify_frozen_receipt(
+            result, json.loads(args.verify_receipt.read_text(encoding="utf-8"))
+        )
     output = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output is None:
         print(output, end="")
