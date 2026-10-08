@@ -108,6 +108,8 @@ def design_sensitivity(
     variance_Q=((1-w0)**2/(1-f0))*(
         p1*(1-p1)/pP+q1*(1-q1)/pQ
     )
+    if variance_P<=0 or variance_Q<=0:
+        raise ValueError("degenerate Bernoulli contrast variance; Gaussian power sensitivity invalid")
     # For 2 Bonferroni lower bounds, alpha/2 is each one's size.
     # For joint power >=target, conservative each contrast gets >=
     # 1-(1-target)/2 marginal power (union bound).
@@ -164,4 +166,6 @@ def variance_balancing_old_zero_allocation(
         raise ValueError("no-go for the declared old-report conditional policy")
     C0=w0*w0*(p0*(1-p0)/a+q0*(1-q0)/b)/(w0*(q0-p0))**2
     C1=(1-w0)**2*(p1*(1-p1)/a+q1*(1-q1)/b)/((1-w0)*(p1-q1))**2
+    if C0+C1<=0:
+        raise ValueError("degenerate Bernoulli contrast variance; oracle allocation undefined")
     return C0/(C0+C1)
