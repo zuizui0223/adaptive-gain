@@ -59,5 +59,30 @@
     },
     "conclusion": "Binary cannot repay K=0.62 under 50:50 target prevalence at n=10,m=9, while a concrete ternary policy can."
   },
-  "claim_ceiling": "Not an empirical evolutionary result; outcome cardinality carries unit acquisition cost, arity-specific hardware costs are not modeled, and all envelope attainments optimize within-target world frequencies. New theorem remains supplementary pending latest CI and prior-art review."
+  "claim_ceiling": "Not an empirical evolutionary result; outcome cardinality carries unit acquisition cost, arity-specific hardware costs are not modeled, and all envelope attainments optimize within-target world frequencies. New theorem remains supplementary pending latest CI and prior-art review.",
+  "exact_ternary_only_target_prevalence_window": {
+    "status": "THEOREM_DERIVED__REGRESSION_PENDING_CURRENT_HEAD",
+    "n": 10,
+    "m": 9,
+    "completion_value": "exp(-0.3*c)",
+    "maintenance_cost": 0.62,
+    "majority_frequency_upper": 0.7207767220218294,
+    "target_one_frequency_interval_inclusive": [
+      0.2792232779781706,
+      0.7207767220218294
+    ],
+    "binary_expected_ceiling_at_p05": 0.5776094156481224,
+    "ternary_expected_ceiling_at_p05": 0.6501002673923054,
+    "binary_expected_ceiling_at_p08": 0.6352113910244299,
+    "interpretation": "In this finite idealized model, ternary is needed only when the two target classes are sufficiently balanced. Binary existence returns when one target class exceeds about 72.08% encounter prevalence.",
+    "assumptions": [
+      "exact deterministic guaranteed target resolution",
+      "unit query acquisition costs independent of outcome cardinality",
+      "one universal fixed-bundle comparator",
+      "within-target world probabilities may be redistributed",
+      "not a claim about sensory receptor count or empirical mosquito fitness"
+    ],
+    "implementation": "adaptive_gain/target_prevalence_capacity.py:finite_ternary_only_prevalence_interval",
+    "tests": "tests/test_target_prevalence_capacity.py"
+  }
 }
