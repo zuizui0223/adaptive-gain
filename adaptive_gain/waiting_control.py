@@ -158,3 +158,140 @@ def waiting_control_decomposition(
         ),
         original_two_schedule_premium=primitive.strict_conditional_gain,
     )
+
+
+
+@dataclass(frozen=True)
+class TimingAdjustedPrecisionReceipt:
+    """Genuine query-control window against an explicit wait-only alternative."""
+    lower_error: float | None
+    upper_error: float | None
+    peak_error: float | None
+    peak_query_control_premium: float
+    no_query_timing_reward_at_peak: float
+    query_fixed_tie_at_peak: bool
+    peak_on_boundary: bool
+
+
+def timing_adjusted_precision_window(
+    *,
+    iterations: int = 70,
+    **parameters,
+) -> TimingAdjustedPrecisionReceipt:
+    """Numerically solve the unimodal query premium after WAIT is allowed.
+
+    The old observation can control SKIP or WAIT without ever querying:
+    M_o=max(S_o,W_o). A true selective-query controller may instead choose
+    Q_o. Both M and Q are compared against universal querying. Along
+    symmetric-binary refreshed-cue garbling, Q_o is nonincreasing.
+    The timing-adjusted strict premium is
+       min(sum w_o(Q_o-M_o)_+, sum w_o(M_o-Q_o)_+).
+    Its max is at the fixed-comparator tie if such a tie lies inside
+    the strict positive interval.
+
+    This numerical root search is not interval-arithmetic verification.
+    """
+    if iterations < 1 or iterations > 1000:
+        raise ValueError("iterations must lie in [1,1000]")
+    if "refresh_cue_error_rate" in parameters:
+        raise ValueError("refresh_cue_error_rate is the optimization axis")
+
+    def at(error: float) -> WaitingControlReceipt:
+        return waiting_control_decomposition(
+            refresh_cue_error_rate=error, **parameters
+        )
+
+    def delta(error: float, report: int) -> float:
+        x = at(error)
+        return (
+            x.query_with_cue_by_old_report[report]
+            - max(x.skip_by_old_report[report],
+                  x.wait_without_cue_by_old_report[report])
+        )
+
+    def root(report: int) -> float:
+        lower, upper = 0.0, 0.5
+        if delta(lower, report) <= 0:
+            return lower
+        if delta(upper, report) >= 0:
+            return upper
+        for _ in range(iterations):
+            mid = (lower + upper) / 2
+            if delta(mid, report) > 0:
+                lower = mid
+            else:
+                upper = mid
+        return (lower + upper) / 2
+
+    roots = (root(0), root(1))
+    lower, upper = min(roots), max(roots)
+    if upper - lower < 1e-12:
+        return TimingAdjustedPrecisionReceipt(
+            None, None, None, 0.0, 0.0, False, False
+        )
+
+    def fixed_difference(err: float) -> float:
+        x = at(err)
+        return (
+            x.universal_query_reward - x.best_no_query_timing_reward
+        )
+
+    is_boundary = False
+    if fixed_difference(lower) <= 0:
+        peak = lower
+        is_boundary = True
+    elif fixed_difference(upper) >= 0:
+        peak = upper
+        is_boundary = True
+    else:
+        left, right = lower, upper
+        for _ in range(iterations):
+            mid = (left + right) / 2
+            if fixed_difference(mid) > 0:
+                left = mid
+            else:
+                right = mid
+        peak = (left + right) / 2
+
+    x = at(peak)
+    return TimingAdjustedPrecisionReceipt(
+        lower, upper, peak,
+        x.conditional_query_premium,
+        x.best_no_query_timing_reward,
+        math.isclose(fixed_difference(peak), 0, abs_tol=1e-9),
+        is_boundary,
+    )
+
+
+def timing_adjusted_log_maintenance_ceiling(
+    *,
+    baseline_fitness: float,
+    iterations: int = 70,
+    **parameters,
+) -> float:
+    """Largest pairwise log maintenance debit payable by true query control.
+
+    This keeps the no-query comparator allowed to conditionally WAIT or SKIP
+    based on the old report. Constitutive controller cost is separate from
+    per-query debit already present in Q.
+    """
+    w0 = float(baseline_fitness)
+    if not math.isfinite(w0) or w0 <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    window = timing_adjusted_precision_window(
+        iterations=iterations, **parameters
+    )
+    if window.peak_error is None:
+        return 0.0
+    x = waiting_control_decomposition(
+        refresh_cue_error_rate=window.peak_error, **parameters
+    )
+    alternative = max(
+        x.best_no_query_timing_reward,
+        x.universal_query_reward,
+    )
+    if w0 + alternative <= 0:
+        raise ValueError("comparator gross fitness is not positive")
+    return math.log1p(
+        x.conditional_query_premium / (w0 + alternative)
+    )
