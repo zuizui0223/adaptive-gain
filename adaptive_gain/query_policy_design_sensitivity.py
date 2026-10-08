@@ -29,7 +29,8 @@ from statistics import NormalDist
 class QueryPowerSensitivity:
     old_zero_fraction_in_lab: float
     old_zero_fraction_in_target: float
-    arm_probability_each_passive_and_query: float
+    arm_probability_passive: float
+    arm_probability_query: float
     target_joint_power: float
     assumed_variance_design_effect: float
     conditional_minus_passive: float
@@ -117,7 +118,8 @@ def design_sensitivity(
     return QueryPowerSensitivity(
         old_zero_fraction_in_lab=f0,
         old_zero_fraction_in_target=w0,
-        arm_probability_each_passive_and_query=pP if pP==pQ else float("nan"),
+        arm_probability_passive=pP,
+        arm_probability_query=pQ,
         target_joint_power=power,
         assumed_variance_design_effect=deff,
         conditional_minus_passive=dP,
