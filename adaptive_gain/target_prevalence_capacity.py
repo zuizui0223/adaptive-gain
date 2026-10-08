@@ -232,3 +232,95 @@ def finite_minimum_expected_cue_arity_with_target_prevalence(
     if architecture_cost < ternary.expected_value_supremum:
         return 3
     return None
+
+
+
+@dataclass(frozen=True)
+class FiniteTernaryOnlyPrevalenceInterval:
+    """Exact range of target prevalence where ternary, but not binary, can pay K.
+
+    World frequencies remain freely redistributable within each of two fixed
+    target classes. This is an existence result over finite unit-cost tasks,
+    not an inference about a measured sensory system.
+    """
+
+    world_count: int
+    query_count: int
+    architecture_cost: float
+    binary_ceiling_at_balance: float
+    two_pure_root_ceiling: float | None
+    target_one_probability_interval: tuple[float, float] | None
+    majority_target_probability_max: float | None
+    scope: str = "finite_target_prevalence_ternary_only_existence"
+
+
+def finite_ternary_only_prevalence_interval(
+    world_count: int,
+    query_count: int,
+    architecture_cost: float,
+    *,
+    completion_value,
+) -> FiniteTernaryOnlyPrevalenceInterval:
+    """Invert TP2 for the exact prevalence interval requiring >=3 cue outcomes.
+
+    A returned closed interval [p_lo,p_hi] means that throughout that
+    interval binary tasks cannot generate strictly positive net expected value
+    after K, while some ternary task can. Outside the interval, binary tasks
+    can pay K, whenever the interval exists.
+
+    Returns None for the interval if no ternary-only region exists.
+    """
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+
+    binary = finite_target_prevalence_expected_capacity(
+        world_count,
+        query_count,
+        0.5,
+        max_arity=2,
+        completion_value=completion_value,
+    )
+    ternary = finite_target_prevalence_expected_capacity(
+        world_count,
+        query_count,
+        0.5,
+        max_arity=3,
+        completion_value=completion_value,
+    )
+
+    baseline = binary.binary_supr
+    pure = ternary.two_target_pure_root_supr
+    if (
+        pure is None
+        or architecture_cost < baseline
+        or architecture_cost >= pure
+    ):
+        return FiniteTernaryOnlyPrevalenceInterval(
+            world_count, query_count, architecture_cost,
+            baseline, pure, None, None,
+        )
+
+    M = min(query_count, world_count - 1)
+    u1 = float(completion_value(1.0))
+    u2 = float(completion_value(2.0))
+    uM = float(completion_value(float(M)))
+    if u1 <= u2:
+        # The ternary pure-root ceiling cannot strictly exceed the binary
+        # ceiling if the first two completion values are equal.
+        return FiniteTernaryOnlyPrevalenceInterval(
+            world_count, query_count, architecture_cost,
+            baseline, pure, None, None,
+        )
+
+    q_max = (architecture_cost - u2 + uM) / (u1 - u2)
+    # In a genuine ternary-only regime, this lies in [1/2,1).
+    if q_max < 0.5 - 1e-12 or q_max >= 1.0:
+        raise ArithmeticError("unexpected ternary-only prevalence boundary")
+    q_max = max(q_max, 0.5)
+
+    return FiniteTernaryOnlyPrevalenceInterval(
+        world_count, query_count, architecture_cost,
+        baseline, pure,
+        (1.0 - q_max, q_max),
+        q_max,
+    )
