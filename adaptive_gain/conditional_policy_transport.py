@@ -105,7 +105,13 @@ def mixture_viability_window(
         raise ValueError("additional_controller_cost must be finite and nonnegative")
     wstar=b/(a+b)
     maxgain=a*b/(a+b)
-    window=(k/a,1-k/b) if k<maxgain else None
+    # An exact threshold can round a few ulps above its caller's binary
+    # floating representation (e.g. 0.2*0.05/0.25 vs literal 0.04).
+    # Do not manufacture an extremely narrow viability interval at equality.
+    feasible=(k<maxgain and not math.isclose(
+        k,maxgain,rel_tol=1e-12,abs_tol=1e-15
+    ))
+    window=(k/a,1-k/b) if feasible else None
     return MixtureViabilityWindow(
         maximum_gain=maxgain,
         target_probability_at_maximum=wstar,
