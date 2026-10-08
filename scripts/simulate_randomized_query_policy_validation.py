@@ -48,6 +48,37 @@ def _colony_rate(p: float, log_odds_shift: float) -> float:
     return _logistic(math.log(p/(1-p))+log_odds_shift)
 
 
+
+def _marginal_probabilities(
+    table: tuple[tuple[float,...],...],
+    colony_logit_sd: float,
+    *,
+    n_steps: int=800,
+) -> tuple[tuple[float,...], tuple[float,...]]:
+    """Deterministic Gaussian quadrature over random colony log odds.
+
+    Midpoint rule on standard normal [-8,8], divided by represented mass.
+    This is a numerical population benchmark, distinct from the base
+    probabilities at colony random effect zero.
+    """
+    if colony_logit_sd==0:
+        return table
+    norm=0.0
+    integrated=[[0.0]*3 for _ in REPORTS]
+    dx=16/n_steps
+    for i in range(n_steps):
+        z=-8+(i+.5)*dx
+        weight=math.exp(-z*z/2)/math.sqrt(2*math.pi)*dx
+        norm+=weight
+        for old in REPORTS:
+            for arm in range(3):
+                integrated[old][arm]+=weight*_colony_rate(
+                    table[old][arm],z*colony_logit_sd)
+    return tuple(
+        tuple(value/norm for value in row) for row in integrated
+    )
+
+
 def _one_colony(
     rng: random.Random,
     table: tuple[tuple[float, ...], ...],
@@ -104,6 +135,8 @@ class OperatingCharacteristicReceipt:
     trials_per_cluster: int
     colony_logit_sd: float
     nominal_no_cluster_contingent_gain: float
+    marginal_cluster_contingent_gain: float
+    marginal_cluster_policy_is_mixed: bool
     fraction_naive_training_gain_positive: float
     fraction_heldout_gain_positive: float
     fraction_joint_lower_bounds_both_positive: float
@@ -144,6 +177,12 @@ def repeated_assay(
     table=NULL_PROBABILITIES if scenario=="null" else MIXED_PROBABILITIES
     nominal_policy=(2,0)
     nominal=_values(table,nominal_policy)[2]
+    marginal=_marginal_probabilities(table,colony_logit_sd)
+    marginal_policy=tuple(
+        2 if marginal[o][2]>marginal[o][0] else 0
+        for o in REPORTS
+    )
+    marginal_gain=_values(marginal,marginal_policy)[2]
     stats={
         "training_positive":0,"heldout_positive":0,"detected":0,
         "mixed_policy":0,"correct_policy":0,
@@ -203,6 +242,8 @@ def repeated_assay(
         trials_per_cluster=6*trials_per_cell,
         colony_logit_sd=colony_logit_sd,
         nominal_no_cluster_contingent_gain=nominal,
+        marginal_cluster_contingent_gain=marginal_gain,
+        marginal_cluster_policy_is_mixed=(marginal_policy[0]!=marginal_policy[1]),
         fraction_naive_training_gain_positive=stats["training_positive"]/n,
         fraction_heldout_gain_positive=stats["heldout_positive"]/n,
         fraction_joint_lower_bounds_both_positive=passes,
