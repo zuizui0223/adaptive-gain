@@ -301,6 +301,119 @@ specific theorem until its relation to constrained-prior decision-tree
 literature has been audited.
 
 
+## Corollary TP2.1 — exact ecological-prevalence window for a ternary-only advantage
+
+TP2 can be inverted without increasing the number of main theorems.
+
+For fixed \(n,m\), let
+
+\[
+M=\min(m,n-1),\qquad M_3=\min(m,n-2),
+\]
+
+and write \(q=\max(p,1-p)\) for the more prevalent target class.
+
+The sharp binary expected-value ceiling is
+
+\[
+E_2(q)
+=
+U(2)-U(M)
++
+q[U(1)-U(2)].
+\]
+
+The ternary architecture can use two target-pure root outcomes plus one rare
+mixed continuation, giving a prevalence-independent candidate ceiling
+
+\[
+E_{\rm pure,3}=U(1)-U(M_3)
+\]
+
+when \(n\ge4\), \(m\ge2\) and both target classes remain represented.
+
+For a declared architecture cost \(K\), a **ternary-only expected repayment
+regime** exists exactly when
+
+\[
+E_2(1/2)\le K<E_{\rm pure,3}
+\]
+
+and \(U(1)>U(2)\). In that case define
+
+\[
+\boxed{
+q_{\rm crit}
+=
+\frac{K-U(2)+U(M)}{U(1)-U(2)}.
+}
+\]
+
+Then
+
+\[
+\boxed{
+1-q_{\rm crit}
+\le p\le
+q_{\rm crit}
+}
+\]
+
+is exactly the interval of target prevalences where binary queries cannot pay
+\(K\) in expectation, but ternary queries can. The endpoints belong to the
+interval because a binary ceiling equal to \(K\) gives neutral, not positive,
+net value.
+
+Outside this interval, some binary finite task can pay \(K\) in expectation
+under the declared constraints.
+
+### Numerical example
+
+Fix \(n=10,m=9,U(c)=e^{-0.3c}\) and \(K=0.62\).
+
+Then
+
+\[
+M=9,\quad M_3=8,\quad
+q_{\rm crit}\approx0.7207767.
+\]
+
+The exact ternary-only interval is therefore
+
+\[
+\boxed{
+0.2792233\le p\le0.7207767.
+}
+\]
+
+At 50:50 target prevalence, binary expected-value capacity is approximately
+0.57761, which is below \(K\), whereas ternary capacity is approximately
+0.65010, which exceeds \(K\).
+
+At 80:20 target prevalence, binary capacity increases to approximately
+0.63521 and also exceeds \(K\). No change in \(n,m,U,K\) is required.
+
+### Biological interpretation and claim ceiling
+
+Target prevalence can substitute for cue-outcome capacity *in expectation*.
+If one target category becomes sufficiently dominant, a binary first query
+that recognizes that frequent target can be nearly as useful as a ternary
+query that creates two pure target branches and a rare ambiguity branch.
+
+This is a supremal task-design existence result, not a prediction that an
+individual organism will evolve ternary versus binary sensory machinery.
+The calculation optimizes within-target world frequencies, assumes equal
+per-query acquisition costs regardless of arity, and compares against one
+universal fixed bundle. It is not validated by cross-species differences in
+mosquito probing. The two target categories, their encounter proportions,
+actual cue outcomes, and arity-dependent acquisition/maintenance costs must
+be measured before using the interval as a population prediction.
+
+Implementation:
+\`finite_ternary_only_prevalence_interval(...)\` in
+\`adaptive_gain/target_prevalence_capacity.py\`, with regression tests.
+
+
 ## 5. Biological reading
 
 What matters is not only whether cue outcomes branch, but whether one early observation can dispose of *both target classes* while preserving a rare branch for difficult cases.
