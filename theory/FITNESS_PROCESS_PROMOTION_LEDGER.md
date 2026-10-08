@@ -461,6 +461,44 @@ aids.
 Do not headline them; response-time distributions and stochastic orders are
 established.
 
+### B5. Exact uniform-world expected-value envelope
+
+Keep \`UNIFORM_ENCOUNTER_EXACT_ENVELOPE.md\` as a sharply validated
+distribution-constrained companion to RF7, **not** as a new prefix-coding
+method.
+
+Under binary unit-cost queries and \(m\ge n-1\), optimizing over finite target
+tasks with \(n\) equiprobable represented worlds gives an exact attained
+expected-value maximum. The canonical \(n=10,m=9,\mu=0.3\) values are:
+
+\[
+R_{\rm expected,free\ prior}^{\sup}=0.673612708,
+\]
+
+\[
+R_{\rm uniform,probability-floor\ upper}=0.500806782,
+\]
+
+\[
+\boxed{R_{\rm uniform,exact\ max}=0.332820017.}
+\]
+
+A more restrictive one-world-per-terminal comparison gives \(0.297213968\).
+
+At the sharp uniform optimum, \(C_F=6\) rather than the full possible burden
+nine. Equal probabilities on represented worlds still give unequal terminal
+decision-class frequencies when several worlds share the same
+cue/target-equivalent early outcome.
+
+This is a genuine tightening over the earlier frequency-floor upper bound, but
+its biological interpretation depends on whether distinct named ecological
+states may share the same decision-relevant terminal class. The general
+nonlinear prefix-tree optimization objective predates this repository.
+
+Do not headline this as an empirical fitness effect or claim that natural
+populations have uniform state frequencies.
+
+
 ## Tier C — reserve / cross-repository bridge
 
 ### C1. Finite-jump architecture barrier under exponential opportunity loss
