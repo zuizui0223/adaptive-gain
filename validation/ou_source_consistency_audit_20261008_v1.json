@@ -1,0 +1,84 @@
+{
+  "receipt": "ou_source_consistency_audit_20261008_v1",
+  "date": "2026-10-08",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "protocol": "theory/OU_PRACTICE_AUDIT_PROTOCOL_V2.md",
+  "protocol_preserved": true,
+  "direct_denominators_changed": false,
+  "direct_empirical_refit_counts_changed": false,
+  "source_crosscheck": {
+    "voje_2024": {
+      "doi": "10.1093/jeb/voae087",
+      "html": "https://academic.oup.com/jeb/article/37/12/1551/7714595",
+      "table1": {
+        "andinus_best": "OUBM moving optimum",
+        "andinus_aicc": -153.573,
+        "andinus_weight": 1,
+        "biwa_best": "OU two fixed optima",
+        "biwa_aicc": -289.521,
+        "biwa_weight": 1
+      },
+      "results_text": "Agrees with Table 1, assigning moving optimum to C. andinus and two-fixed-optima to Biwa Stephanodiscus",
+      "table2_display": "Prints two-fixed-optima under C. andinus and moving-optimum under Biwa Stephanodiscus: conflicts with Table 1 and prose",
+      "reported_andinus_half_life_years": 12,
+      "andicus_half_life_confidence": "published text does not exclude immediate adaptation (half-life = 0)",
+      "data": "https://doi.org/10.5061/dryad.bk3j9kdmj",
+      "archive_identified_files": [
+        "Supplemental_files.zip",
+        "Data/andinus.txt",
+        "R scripts/main_analyses_andinus_biwa.R"
+      ],
+      "raw_zip_retrieval": "BLOCKED_HTTP_403_IN_THIS_AUDIT",
+      "raw_refit": "OPEN",
+      "handling": "Do not map model parameters to the organism by Table 2 label until original archive script and files cross-checked; do not label source mistaken without archive reconciliation"
+    },
+    "hunt_2008": {
+      "doi": "10.1111/j.1558-5646.2007.00310.x",
+      "html": "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1558-5646.2007.00310.x",
+      "direct": "FIXED",
+      "codes": [
+        "F1_ATTRACTION_OR_SELECTION",
+        "F2_ADAPTATION_SPEED",
+        "F3_PARAMETER_TRANSLATION"
+      ],
+      "external_evidence": "INDIRECT_NATURAL_HISTORY_AND_INTERNAL_PARAMETRIC_CONSISTENCY",
+      "fitness_mechanism_refuted": false,
+      "numerical_refit": "ALREADY_PASS"
+    },
+    "lo_cascio_saetre_2017": {
+      "doi": "10.1038/ncomms14159",
+      "html": "https://www.nature.com/articles/ncomms14159",
+      "direct": "FIXED",
+      "codes": [
+        "F1_ATTRACTION_OR_SELECTION",
+        "F2_ADAPTATION_SPEED"
+      ],
+      "external_evidence": "SURVIVAL_FITNESS_SELECTION_GRADIENT_PARENT_OFFSPRING_AND_NE_ESTIMATES",
+      "causal_selection_refuted": false,
+      "numerical_refit": "OPEN"
+    }
+  },
+  "semantic_identifiability_gate": {
+    "reciprocal_coordinate": "Y=(Theta-(1-q)*X)/q",
+    "exact_statistical_equality": "PASS_IN_DECLARED_GAUGE",
+    "distinct_physical_latent_mechanism": "UNDEMONSTRATED",
+    "high_impact_interpretation": "NOT_PROMOTED_WITHOUT_LATENT_SEMANTICS_AND_EMPIRICAL_REPRODUCTION"
+  },
+  "dimensionless_sensitivity": {
+    "formula": "rho=-(1-q)/sqrt((1-q)^2+v_optimum/v_trait)",
+    "domain": "v_trait>0, v_optimum>0, 0<q<=1",
+    "cap_upper": "delta_max=rho_max*sqrt(v_optimum/[v_trait*(1-rho_max^2)])",
+    "finite_if": "delta_max<1",
+    "half_life_multiplier_upper": "1/(1-delta_max)",
+    "critical_cap": "sqrt(v_trait/(v_trait+v_optimum))",
+    "test_status": "ANALYTIC_DERIVATION_AND_FOUR_INDEPENDENT_NUMERIC_SPOT_CHECKS_PASS",
+    "full_repo_ci": "UNVERIFIED_AT_RECEIPT_CREATION"
+  },
+  "next_priority": [
+    "reconcile Voje Table2/model-to-taxon mapping against Dryad scripts",
+    "obtain archive source and reproduce moving OUBM exact likelihood",
+    "independently justify latent state meaning and innovation correlation bounds",
+    "code interpretation-specific denominator rather than reusing PETS model-class denominator"
+  ],
+  "status": "AUDIT_UPDATE_NOT_NEW_PUBLICATION_CLAIM"
+}
