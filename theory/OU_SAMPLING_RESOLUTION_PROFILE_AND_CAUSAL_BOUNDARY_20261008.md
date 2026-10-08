@@ -17,7 +17,6 @@ The pinned PETS mirror has n=266, first trait mean 2.644626001 (already in sourc
 | 0.1 | -0.03342 |
 | 1 | -0.03321 |
 | 3 | -0.03271 |
-| 6 | -0.0259 |
 | 10 | -0.00413 |
 | 12 | 0 |
 | 20 | -0.07387 |
