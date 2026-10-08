@@ -1,0 +1,48 @@
+{
+  "receipt": "ou_second_paper_gate_v5_pets_mirror",
+  "date": "2026-10-08",
+  "inherits": "validation/ou_second_paper_gate_v4.json",
+  "scope": "Second-paper causal identified-set proposal; current frozen Theoretical Ecology manuscript untouched",
+  "theoretical_status": {
+    "stochastic_observation_law_congruence": "PASS_DECLARED_GAUSSIAN_MODEL",
+    "moving_exogenous_and_reciprocal_gauge": "PASS_MATHEMATICAL",
+    "direct_halflife_identified_set": "PASS_WITHIN_TRANSFORMED_TWO_STATE_GAUGE",
+    "independently_physical_latent_mechanism": "UNRESOLVED"
+  },
+  "empirical_status": {
+    "fixed_Hunt_2008": {
+      "status": "PASS_FIXED_PAPER_MATCHED_REPRODUCTION_PREVIOUS",
+      "half_life_generations": 844.9939159290783
+    },
+    "moving_Voje_2024": {
+      "status": "PASS_INDEPENDENT_NUMERICAL_PETS_MIRROR_NOT_AUTHOR_ARCHIVE",
+      "series": "VildeBruhn/rate_time PETS tsID582, n266",
+      "refit_AICc": -153.6573645396676,
+      "published_AICc": -153.573,
+      "refit_half_life_years": 12.008772582877649,
+      "published_half_life_years": "about 12",
+      "kalman_dense_abs_logL_difference": 8.100187187665142e-13,
+      "original_Dryad_archive_bytes": "UNAVAILABLE_401_403",
+      "authors_original_script_execution": "OPEN",
+      "table2_label_reconciliation": "OPEN",
+      "source_contract": "validation/ou_pets_mirror_independent_refit_20261008_v1.json",
+      "script": "scripts/refit_voje_2024_pets_ou.py",
+      "script_clean_room_run_in_separate_environment": "NOT_YET_RECORDED"
+    }
+  },
+  "protocol_and_conclusions": {
+    "two_stratum_practice_audit": "FROZEN_UNCHANGED",
+    "PETS_OU_best_counts": "125/630 model-class context ONLY; cannot be used as mechanistic-overinterpretation numerator",
+    "Nature_family_claim": "NOT_YET_QUALIFIED",
+    "reason": "Independent numerical moving refit substantially reduces empirical reproducibility gap. However an observational latent-coordinate transformation cannot by itself establish the feasibility of a distinct ecological mechanism, the author archive/script are not byte-verified, and the systematic claim-attribution denominator is incomplete."
+  },
+  "priority": [
+    "Run or separately verify pinned independent Python refit script in a clean environment",
+    "Cross-check PETS mirror with authors' Dryad archive R script once accessible",
+    "Define physically meaningful measured latent environmental or fitness coordinate and whether transformed Y is admissible",
+    "Complete denominator-defensible coding of directly covered mechanistic attributions",
+    "Keep OU conditional half-life and causal direct-response half-life distinct"
+  ],
+  "ci_status": "GitHub test and temporary R refit queued when v5 authored; do not claim their results",
+  "hard_stop": "Do not call the PETS mirror result a verbatim Dryad-author-workflow reproduction or claim empirical existence of reciprocal ecological feedback from the coordinate gauge."
+}
