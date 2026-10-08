@@ -43,6 +43,70 @@ class BoundedArityEvolutionaryCorner:
     minimum_query_count: int
 
 
+
+@dataclass(frozen=True)
+class ExpectedEvolutionaryResourceCorner:
+    """Componentwise minimum (n,m) for positive expected net value.
+
+    Requires a chosen, sufficiently skewed strictly positive world-frequency
+    distribution and comparison against a precommitted universal fixed bundle.
+    """
+    required_fixed_cost: int
+    minimum_world_count: int
+    minimum_query_count: int
+    minimum_cue_arity: int = 2
+
+
+def minimum_expected_evolutionary_resources(
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+    *,
+    search_limit: int,
+) -> ExpectedEvolutionaryResourceCorner | None:
+    """Invert RF7 within a declared finite fixed-cost search horizon.
+
+    Returns None if no j in [2,search_limit] makes U(1)-U(j)>K;
+    this is NOT a global no-go when U has no known asymptotic bound.
+    """
+    if type(search_limit) is not int or search_limit < 2:
+        raise ValueError("search_limit must be an integer at least two")
+    required = required_fixed_cost_for_value(
+        1, architecture_cost, completion_value, search_limit=search_limit
+    )
+    if required is None:
+        return None
+    if required < 2:
+        raise ArithmeticError("nontrivial expected corner must require two queries")
+    return ExpectedEvolutionaryResourceCorner(
+        required_fixed_cost=required,
+        minimum_world_count=required + 1,
+        minimum_query_count=required,
+    )
+
+
+def exponential_minimum_expected_evolutionary_resources(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> ExpectedEvolutionaryResourceCorner | None:
+    """Exact inverse RF7 corner for U(c)=v*exp(-mu*c), or None if impossible."""
+    required_gap = exponential_required_gap(
+        1,
+        architecture_cost,
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if required_gap is None:
+        return None
+    required = 1 + required_gap
+    return ExpectedEvolutionaryResourceCorner(
+        required_fixed_cost=required,
+        minimum_world_count=required + 1,
+        minimum_query_count=required,
+    )
+
+
 def required_fixed_cost_for_value(
     adaptive_depth: int,
     architecture_cost: float,
