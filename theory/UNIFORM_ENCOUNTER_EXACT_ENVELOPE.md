@@ -263,6 +263,45 @@ The distinction is important biologically: an equal-frequency distribution
 over species or named environments is not necessarily an equal-frequency
 distribution over *decisions that still need to be distinguished*.
 
+## 5b. Equal target prevalence does not erase the effect
+
+The exact unrestricted uniform-world optimum does not constrain the
+prevalence of target labels. To check whether its advantage depends on a
+majority target class, construct a different private-pair witness with:
+
+- ten equally probable represented worlds;
+- exactly five target-0 and five target-1 worlds;
+- seven fixed-mandatory binary query resources;
+- one early terminal world of target 0, duplicated twice as
+  cue/target-equivalent represented worlds.
+
+Its eight distinct terminal leaf depths are
+
+\[
+\{1,3,3,4,4,4,5,5\}.
+\]
+
+The private-pair tree has base target counts \(3:5\); two copies of the
+one-step target-0 leaf make the represented target counts \(5:5\).
+
+Under \(U(c)=e^{-0.3c}\), the declared tree has expected-value advantage
+
+\[
+\boxed{R_{\rm balanced\ target}\ge0.3160872655.}
+\]
+
+The inequality is a *constructive lower bound*. A different adaptive policy
+for this same task could potentially have higher expected value; the global
+sharp optimum subject to balanced target prevalence has **not** been
+established.
+
+It nevertheless rules out the explanation that a strongly unequal target
+base rate is necessary for a large fraction of the uniform-world advantage.
+Decision-equivalent world multiplicity can generate highly uneven decision
+completion opportunities even when both the world frequencies and the binary
+target prevalences are exactly balanced.
+
+
 ## 6. Relation to RF7 and PAYOFF
 
 RF7's arity-free envelope assumes encounter frequencies may be chosen
