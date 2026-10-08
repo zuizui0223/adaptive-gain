@@ -195,6 +195,14 @@ high-probability one-query branch and rare branches carrying the fixed burden.
 Therefore the finite-scope expected ceiling is independent of cue arity
 (bge2).
 
+**Scope restriction:** this supremum also permits the *target-class
+prevalence* to vary freely. At fixed 50/50 binary-target prevalence, the
+minimal four-world, two-query corner instead has a binary supremum
+\(\tfrac12[U(1)-U(2)]\) and a ternary supremum \(U(1)-U(2)\).
+This conditional arity effect is audited in
+\`TARGET_PREVALENCE_EXPECTED_CAPACITY.md\` and its independent exhaustive test.
+It remains supporting interpretation, not another MAIN theorem.
+
 Cue arity constrains robust evolvability, but encounter-frequency concentration
 can substitute for cue branching capacity in the expected-value problem.
 
