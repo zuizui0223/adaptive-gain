@@ -237,11 +237,15 @@ payoff-driven direction switch. A 7x3x3x4 grid checks the
 mixed-sign decomposition. Local eight-test suite passed
 before GitHub commits; latest head CI must be checked separately.
 
-The old cue is **free and perfect at its initial observation
-time**. Noisy observations, stochastic refresh delays, partial
-state observation, context-dependent survival, additional
-refresh rounds and genotype-specific equipment costs are
-outside the present theorem. Static V6 MAIN 1–3 remain
+The old cue's *acquisition cost is sunk*. Both old and refreshed
+binary reports can now have independent symmetric misclassification
+errors, with their Bayes posteriors combined at the terminal decision.
+The original witness assumes zero errors. See
+`SENSOR_PRECISION_ADAPTIVE_PREMIUM_V1.md` for the refreshed-cue
+precision threshold and an independent 320-scenario path-enumeration
+audit. Stochastic refresh delays, nonbinary observations,
+context-dependent opportunity survival, additional refresh rounds
+and genotype-specific equipment costs remain outside this model. Static V6 MAIN 1–3 remain
 unchanged.
 
 ## Biological experiment with falsification criteria
