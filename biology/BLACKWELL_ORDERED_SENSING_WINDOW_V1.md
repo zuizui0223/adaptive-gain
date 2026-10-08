@@ -120,6 +120,72 @@ theoretical prediction; it signals that the model's
 assumptions are unverified.
 
 
+
+## Explicit bridge to PAYOFF: a controller-cost ceiling, not a fitness observation
+
+Separate per-decision acquisition debit K (already included in J_C
+and J_F) from constitutive maintenance costs kappa_C and kappa_F.
+If a biological architecture has a shared baseline gross fitness
+w0>0, and timely per-decision reward is assumed to contribute
+to gross fitness in the same additive currency, write
+
+\[
+W_C(q)=e^{-\kappa_C}[w_0+J_C(q)],
+\qquad
+W_F(q)=e^{-\kappa_F}[w_0+J_F(q)].
+\]
+
+The log-selection coefficient in this declared pairwise comparison is
+
+\[
+s_{C:F}(q)=\log\left(
+1+\frac{G(q)}{w_0+J_F(q)}
+\right)-(\kappa_C-\kappa_F).
+\]
+
+With fixed w0 and costs, the same accuracy that maximizes
+the conditional premium G also maximizes this log-fitness
+allowance. Proof: before the fixed-schedule tie, G=N
+increases while J_F=J_always_refresh decreases; after the
+tie, G=P decreases while J_F=J_always_skip is constant.
+If no tie occurs inside the active window, both maxima
+occur on its same relevant boundary.
+
+Consequently the **maximum log-maintenance difference that
+can be repaid by contingent control** under the declared
+sensor-quality family is
+
+\[
+\boxed{\kappa^{\rm crit}_{C:F}
+=\max_q\log[1+G(q)/(w_0+J_F(q))].}
+\]
+
+This does not make the controller selectively advantageous
+without a biologically justified comparator, measurable
+maintenance costs, heritable variation and an empirical
+fitness link.
+
+For the illustrative Markov settings of this note and
+chosen gross baseline w0=1 expected-reward unit, the
+fixed schedule's performance at the peak is 0.78024793,
+G_peak=0.04080839 and therefore
+
+\[
+\kappa^{\rm crit}_{C:F}\approx0.02266409
+\]
+
+in log-fitness cost units. Above this **model-specific**
+maintenance contrast, no sensor precision within [0,.5]
+can repay the controller relative to the declared fixed
+schedules. This is a conditional resource ceiling,
+not a measured selection coefficient or a separate
+novelty theorem. Different w0 changes the numerical ceiling.
+
+Executable bridge: controller_log_cost_ceiling in
+adaptive_gain/ordered_accuracy_window.py; regression tests
+evaluate the log ratio on a separate dense precision grid.
+
+
 ## Stop rule
 
 Do not elevate this to a fourth V6 headline result. A new monotonicity or Blackwell-value theorem is not claimed. This is a compact source-of-gain certificate and a precise *ecological falsification target* where the extra value of conditional acquisition is isolated from absolute accuracy.
