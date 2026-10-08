@@ -1,7 +1,8 @@
 """Dynamic two-state ecological decision: selective refresh vs fixed refresh.
 
 State X follows a stationary binary CTMC (0->1 at alpha, 1->0 at beta).
-At time -cue_age a prior observation of X was acquired, optionally with\na symmetric binary error rate old_cue_error_rate. At time 0,
+At time -cue_age a prior observation of X was acquired, optionally with
+symmetric binary error rate old_cue_error_rate. At time 0,
 the agent may skip or refresh *conditional on that previous observation*.
 Skipping acts after terminal_delay. Refreshing waits sampling_delay, observes
 the current X perfectly, then acts after terminal_delay. The environment
@@ -102,7 +103,7 @@ def selective_refresh(
     )
     skip = []
     refresh = []
-    for observed_old, posterior_at_cue in enumerate(initial_state_posteriors):
+    for posterior_at_cue in initial_state_posteriors:
         old_posterior = _probability_one(
             posterior_at_cue, cue_age + terminal_delay, alpha, beta
         )
