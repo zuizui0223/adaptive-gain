@@ -324,3 +324,79 @@ def finite_ternary_only_prevalence_interval(
         (1.0 - q_max, q_max),
         q_max,
     )
+
+
+
+@dataclass(frozen=True)
+class FiniteTernaryCapacityPremiumInterval:
+    """Class-level expected-value capacity advantage after ternary overhead.
+
+    NOT a within-task genotype comparison: the binary and ternary ceilings
+    optimize over different admissible task designs with common (n,m,p,U).
+    """
+    world_count: int
+    query_count: int
+    extra_ternary_cost: float
+    maximal_capacity_premium_at_balance: float
+    ternary_minus_binary_positive_interval: tuple[float, float] | None
+    majority_prevalence_threshold: float | None
+    scope: str = "finite_task_class_capacity_comparison_not_pairwise_selection"
+
+
+def finite_ternary_capacity_premium_prevalence_interval(
+    world_count: int,
+    query_count: int,
+    extra_ternary_cost: float,
+    *,
+    completion_value,
+) -> FiniteTernaryCapacityPremiumInterval:
+    """Where the ternary-class sharp ceiling exceeds the binary ceiling + overhead.
+
+    The interval, if present, is OPEN at both prevalence boundaries: equal
+    net class capacities do not give strict advantage. This is a comparison
+    of attainable class optima, not selection between two policies evaluated
+    on one shared realized cue task.
+    """
+    if not math.isfinite(extra_ternary_cost) or extra_ternary_cost < 0:
+        raise ValueError("extra_ternary_cost must be finite and nonnegative")
+    binary = finite_target_prevalence_expected_capacity(
+        world_count, query_count, 0.5,
+        max_arity=2, completion_value=completion_value
+    )
+    ternary = finite_target_prevalence_expected_capacity(
+        world_count, query_count, 0.5,
+        max_arity=3, completion_value=completion_value
+    )
+    ternary_pure = ternary.two_target_pure_root_supr
+    maximal_premium = max(
+        0.0,
+        (ternary_pure - binary.binary_supr)
+        if ternary_pure is not None else 0.0,
+    )
+    if ternary_pure is None or extra_ternary_cost >= maximal_premium:
+        return FiniteTernaryCapacityPremiumInterval(
+            world_count, query_count, extra_ternary_cost,
+            maximal_premium, None, None
+        )
+
+    M = min(world_count - 1, query_count)
+    u1 = float(completion_value(1.0))
+    u2 = float(completion_value(2.0))
+    uM = float(completion_value(float(M)))
+    if u1 <= u2:
+        return FiniteTernaryCapacityPremiumInterval(
+            world_count, query_count, extra_ternary_cost,
+            maximal_premium, None, None
+        )
+    q_limit = (
+        ternary_pure - extra_ternary_cost - u2 + uM
+    ) / (u1 - u2)
+    if not (0.5 < q_limit < 1.0):
+        raise ArithmeticError("ternary capacity premium boundary outside (1/2,1)")
+
+    return FiniteTernaryCapacityPremiumInterval(
+        world_count, query_count, extra_ternary_cost,
+        maximal_premium,
+        (1.0 - q_limit, q_limit),
+        q_limit
+    )
