@@ -12,6 +12,7 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
 from adaptive_gain.core import fixed_minimum_resolution
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.target_prevalence_capacity import (
+    finite_ternary_only_prevalence_interval,
     exponential_target_prevalence_expected_capacity,
     exponential_minimum_expected_arity_with_target_prevalence,
     minimum_expected_cue_arity_with_target_prevalence,
@@ -409,3 +410,69 @@ def test_independent_exhaustive_four_world_two_query_target_balance():
     assert results[3][1] > results[2][1]
     assert results[2][0] == pytest.approx(binary_theory, abs=1e-12)
     assert results[3][0] == pytest.approx(ternary_theory, abs=1e-12)
+
+
+
+def test_finite_prevalence_arity_transition_window_exact_canonical():
+    mu, cost = 0.3, 0.62
+    val = lambda c: math.exp(-mu * c)
+    receipt = finite_ternary_only_prevalence_interval(
+        10, 9, cost, completion_value=val
+    )
+    assert receipt.target_one_probability_interval is not None
+    lo, hi = receipt.target_one_probability_interval
+    assert lo == pytest.approx(0.2792232779781706)
+    assert hi == pytest.approx(0.7207767220218294)
+    assert receipt.majority_target_probability_max == pytest.approx(hi)
+    assert lo == pytest.approx(1.0 - hi)
+
+    for p in (0.5, 0.6, 0.7, 0.72, lo, hi):
+        binary = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=2, completion_value=val
+        )
+        ternary = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=3, completion_value=val
+        )
+        assert binary.expected_value_supremum <= cost + 1e-12
+        assert ternary.expected_value_supremum > cost
+
+    for p in (0.25, 0.73, 0.8, 0.9):
+        binary = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=2, completion_value=val
+        )
+        assert binary.expected_value_supremum > cost
+
+
+def test_finite_prevalence_arity_transition_absent_if_binary_already_pays():
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_only_prevalence_interval(
+        10, 9, 0.55, completion_value=val
+    )
+    assert receipt.target_one_probability_interval is None
+
+
+def test_finite_prevalence_arity_transition_absent_if_ternary_cannot_pay():
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_only_prevalence_interval(
+        10, 9, 0.66, completion_value=val
+    )
+    assert receipt.target_one_probability_interval is None
+
+
+def test_finite_prevalence_arity_transition_empty_for_small_scope():
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_only_prevalence_interval(
+        3, 2, 0.05, completion_value=val
+    )
+    assert receipt.target_one_probability_interval is None
+
+
+def test_finite_prevalence_arity_transition_at_balance_boundary():
+    val = lambda c: math.exp(-0.3 * c)
+    binary = finite_target_prevalence_expected_capacity(
+        10, 9, 0.5, max_arity=2, completion_value=val
+    )
+    receipt = finite_ternary_only_prevalence_interval(
+        10, 9, binary.expected_value_supremum, completion_value=val
+    )
+    assert receipt.target_one_probability_interval == pytest.approx((0.5, 0.5))
