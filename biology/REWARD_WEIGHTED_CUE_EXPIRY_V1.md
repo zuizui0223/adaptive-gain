@@ -128,6 +128,29 @@ and mutual information are unchanged.
 of an old signal. This is conditional on the measured payoff
 structure; rarity alone does not do it.
 
+## General 2-by-2 payoff matrices and biological losses
+
+The same formula covers an arbitrary reward/cost matrix \(u(a,x)\)
+provided each true state favors its own action. Define the two
+**action-contrast gaps**
+
+\[
+d_0=u(0,0)-u(1,0)>0,\qquad
+d_1=u(1,1)-u(0,1)>0.
+\]
+
+The gain from observing the cue (after optimizing both policies)
+is unchanged by adding a state-specific payoff constant to both
+actions. Therefore replace \(r_0,r_1\) above with \(d_0,d_1\).
+
+Biologically, a rare state can preserve a cue's decision value because
+*missing it is costly*, even if detecting it does not deliver a positive
+resource reward. This does **not** establish that the state is actually
+rare, that error costs have been measured, or that an evolved architecture
+is selected. If one action dominates in both states (either required gap
+nonpositive), then the cue can have positive mutual information but no
+decision value at *any* lag.
+
 ## Existing work and priority ceiling
 
 Classical Blackwell informativeness and decision-dependent information
