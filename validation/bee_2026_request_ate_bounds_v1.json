@@ -1,0 +1,81 @@
+{
+  "schema": "adaptive-gain-bee-2026-request-accuracy-partial-identification-v1",
+  "source": {
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "active_path": "data/4_active_information_seeking_trials.csv",
+    "active_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "preprint_doi": "10.64898/2026.09.15.751944"
+  },
+  "estimand": "E[Correct if voluntary information requested] - E[Correct if not requested], within a declared Regular-trial difficulty stratum, under consistency and no other assumptions about counterfactual outcomes.",
+  "method": "Sharp finite-sample binary potential-outcome bounds; A=self-selected actual information-platform landing, Y=terminal correct. No ignorability/random assignment, monotonicity or exclusion restriction imposed. For counts n11=request+correct, n10=request+wrong, n01=no request+correct, n00=no request+wrong, lower=(n11-n01-(n11+n10))/N, upper=(n11+(n01+n00)-n01)/N. These are identification bounds, not confidence intervals.",
+  "regular_trials_by_difficulty": {
+    "Easy": {
+      "n_regular": 6140,
+      "n_request": 591,
+      "n_no_request": 5549,
+      "request_correct": 555,
+      "request_wrong": 36,
+      "no_request_correct": 4163,
+      "no_request_wrong": 1386,
+      "observed_request_accuracy": 0.9390862944162437,
+      "observed_no_request_accuracy": 0.7502252658136601,
+      "naive_conditional_accuracy_difference": 0.18886102860258358,
+      "sharp_ate_lower": -0.6838762214983714,
+      "sharp_ate_upper": 0.31612377850162865,
+      "n_free": 1540,
+      "free_correct": 1461,
+      "observed_free_accuracy": 0.9487012987012987,
+      "observed_regular_overall_accuracy": 0.7684039087947883,
+      "free_minus_regular_overall_accuracy_descriptive": 0.18029738990651045
+    },
+    "Hard": {
+      "n_regular": 6108,
+      "n_request": 2866,
+      "n_no_request": 3242,
+      "request_correct": 2662,
+      "request_wrong": 204,
+      "no_request_correct": 1600,
+      "no_request_wrong": 1642,
+      "observed_request_accuracy": 0.9288206559665039,
+      "observed_no_request_accuracy": 0.4935225169648365,
+      "naive_conditional_accuracy_difference": 0.43529813900166736,
+      "sharp_ate_lower": -0.2953503601833661,
+      "sharp_ate_upper": 0.704649639816634,
+      "n_free": 1572,
+      "free_correct": 1483,
+      "observed_free_accuracy": 0.943384223918575,
+      "observed_regular_overall_accuracy": 0.697773411918795,
+      "free_minus_regular_overall_accuracy_descriptive": 0.24561081199977997
+    },
+    "Impossible": {
+      "n_regular": 3112,
+      "n_request": 2229,
+      "n_no_request": 883,
+      "request_correct": 2073,
+      "request_wrong": 156,
+      "no_request_correct": 183,
+      "no_request_wrong": 700,
+      "observed_request_accuracy": 0.9300134589502019,
+      "observed_no_request_accuracy": 0.2072480181200453,
+      "naive_conditional_accuracy_difference": 0.7227654408301566,
+      "sharp_ate_lower": -0.1089331619537275,
+      "sharp_ate_upper": 0.8910668380462725,
+      "n_free": 728,
+      "free_correct": 674,
+      "observed_free_accuracy": 0.9258241758241759,
+      "observed_regular_overall_accuracy": 0.7249357326478149,
+      "free_minus_regular_overall_accuracy_descriptive": 0.200888443176361
+    }
+  },
+  "free_cue_control": "Free-Cue is an automatic-delivery condition whose random interleaving the preprint describes; observed Free-Cue-vs-Regular correct rates can be reported descriptively but are not the same estimand as the effect of voluntarily purchasing a cue.",
+  "limitations": [
+    "Correctness potential outcomes in the unchosen action are missing for every trial; voluntary requesting is selected by the animal.",
+    "Positive conditional accuracy difference between requesters and nonrequesters does not identify the sign of the causal effect.",
+    "Bounds do not include sampling uncertainty; population-level confidence regions would be at least as wide with appropriate uncertainty.",
+    "Quinine penalties and differential sucrose rewards imply accuracy is only one behavioral outcome, not full fitness or payoff.",
+    "A randomized Free-Cue delivery policy is different from a voluntary-request intervention. Direct visual/motor/timing effects and exclusions require independent justification.",
+    "Trial-level request/latency joins to a different experiment are invalid (cross-experiment join gate)."
+  ],
+  "status": "PARTIAL_IDENTIFICATION_SIGN_UNRESOLVED_IN_ALL_THREE_DIFFICULTIES"
+}
