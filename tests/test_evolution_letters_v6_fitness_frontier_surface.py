@@ -229,3 +229,44 @@ def test_v6_display_math_never_contains_nested_inline_delimiters():
     assert "U[T_pi(w)]" not in source
     assert r"U(C_A)-U(C_F)" in source
     assert r"J_K(h)" in source
+
+
+
+def test_v6_canonical_spine_has_complete_comparison_operators():
+    """Protect mathematical *meaning* against lost LaTeX backslashes.
+
+    A dropped backslash in \neq, \le or \sup can silently turn
+    a theorem into malformed plain text while all numerical tests pass.
+    """
+    source = _text(SPINE)
+    assert source.count(r"\neq") >= 2
+    assert source.count(r"\le") >= 2
+    assert r"\ge" in source
+    assert r"\sup R_{\rm expected}" in source
+    assert r"\sup R_{\rm robust}" in source
+    assert r"\min\{m,F_b(n,h)\}" in source
+    assert r"\min\{j\ge h:U(h)-U(j)>K\}" in source
+    assert r"\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\}" in source
+    assert r"h\mapsto(h,I_h)" in source
+    assert not re.search(r"(?m)^\s*(?:eq|le K|sup R|hmapsto)\s*$", source)
+    assert r"I_hge" not in source
+    assert r"Kge0" not in source
+
+
+def test_v6_references_are_not_accidentally_counted_inside_math_blocks():
+    """A simple parity lint: inline math can appear in prose but not in display."""
+    for path in (MAIN, SPINE):
+        source = _text(path)
+        parts = re.split(r"(\\\[|\\\])", source)
+        state = False
+        for part in parts:
+            if part == r"\[":
+                assert not state, f"nested display opener: {path}"
+                state = True
+            elif part == r"\]":
+                assert state, f"unmatched display closer: {path}"
+                state = False
+            elif state:
+                assert r"\(" not in part, f"nested inline opener: {path}"
+                assert r"\)" not in part, f"nested inline closer: {path}"
+        assert not state
