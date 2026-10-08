@@ -327,3 +327,51 @@ def test_neither_query_nor_controller_can_be_preferred_when_old_cue_uninformativ
         timing_adjusted_log_maintenance_ceiling(
             baseline_fitness=0, **kwargs
         )
+
+
+
+def test_frozen_environment_negative_control_requires_no_profitable_wait():
+    """When state change is negligible, slowing action loses opportunity."""
+    frozen = waiting_control_decomposition(
+        8e-10, 2e-10, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.15, opportunity_hazard=.25,
+        reward0=1, reward1=4, query_cost=.015,
+        refresh_cue_error_rate=.5,
+    )
+    for skip, waited in zip(
+        frozen.skip_by_old_report,
+        frozen.wait_without_cue_by_old_report,
+    ):
+        assert skip > waited
+    assert frozen.no_query_timing_policy == ("skip", "skip")
+    assert frozen.conditional_query_premium == pytest.approx(0, abs=1e-12)
+    assert frozen.timing_only_conditional_premium == pytest.approx(0, abs=1e-12)
+
+
+def test_waiting_is_profitable_if_state_drift_overcomes_opportunity_hazard():
+    """Verify exact timing threshold without a new observation or query."""
+    from math import exp
+
+    alpha, beta = .8, .2
+    pi1 = alpha / (alpha + beta)
+    age, sample, terminal, hazard = .1, .15, .15, .25
+    r0, r1 = 1, 4
+    receipt = waiting_control_decomposition(
+        alpha, beta,
+        cue_age=age, sampling_delay=sample, terminal_delay=terminal,
+        opportunity_hazard=hazard, reward0=r0, reward1=r1,
+        query_cost=.015, refresh_cue_error_rate=.5
+    )
+    p_at_skip = pi1 * (1 - exp(-(alpha + beta) * (age + terminal)))
+    p_at_wait = pi1 * (1 - exp(-(alpha + beta) * (age + sample + terminal)))
+    h = lambda p: max(r0 * (1-p), r1*p)
+    predicted_benefit = (
+        exp(-hazard * sample) * h(p_at_wait) > h(p_at_skip)
+    )
+    assert predicted_benefit
+    assert receipt.wait_without_cue_by_old_report[0] > (
+        receipt.skip_by_old_report[0]
+    )
+    assert receipt.wait_without_cue_by_old_report[1] < (
+        receipt.skip_by_old_report[1]
+    )
