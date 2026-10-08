@@ -109,3 +109,14 @@ def test_reweighting_is_not_changing_markov_stationary_distribution():
             passive_advantage_given_old_one=.05,
             additional_controller_cost=0,
         )
+
+
+
+def test_zero_controller_cost_retains_arbitrarily_small_positive_gain():
+    very_small=mixture_viability_window(
+        query_advantage_given_old_zero=1e-12,
+        passive_advantage_given_old_one=1e-12,
+        additional_controller_cost=0.,
+    )
+    assert very_small.maximum_gain==pytest.approx(5e-13,abs=1e-26)
+    assert very_small.strictly_profitable_old_zero_frequency_interval == (0.,1.)
