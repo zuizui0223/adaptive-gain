@@ -442,6 +442,23 @@ construction concentrates almost all encounters on a one-query branch; if
 rare-state probabilities cannot approach zero, the branch completion-time
 profile and cue arity may still affect expected performance.
 
+
+The finite budget also imposes a quantitative frequency requirement. With
+\(n=10,\ m=9,\ U(c)=e^{-0.3c}\), a contingent-control cost \(K=0.60\) lies
+below the expected ceiling \(U(1)-U(9)\approx0.6736\), but a one-step
+completion mass \(p_1\) must satisfy
+
+\[
+\boxed{
+p_1>
+\frac{0.60-[U(2)-U(9)]}{U(1)-U(2)}
+\approx0.6166.
+}
+\]
+
+This threshold is sharp as a supremum over legal finite tasks and encounter
+distributions, not an estimate of mosquito encounter frequencies.
+
 In the unrestricted finite-size limit,
 \[
 \sup R_{\rm robust}
