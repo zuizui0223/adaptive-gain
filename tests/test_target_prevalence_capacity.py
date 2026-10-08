@@ -7,6 +7,7 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
     ternary_target_balance_expected_witness,
     finite_expected_ceiling_witness,
     two_shallow_leaf_expected_value_witness,
+    finite_target_prevalence_ternary_witness,
 )
 from adaptive_gain.core import fixed_minimum_resolution
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
@@ -15,6 +16,8 @@ from adaptive_gain.target_prevalence_capacity import (
     exponential_minimum_expected_arity_with_target_prevalence,
     minimum_expected_cue_arity_with_target_prevalence,
     target_prevalence_expected_capacity,
+    finite_target_prevalence_expected_capacity,
+    finite_minimum_expected_cue_arity_with_target_prevalence,
 )
 
 
@@ -222,3 +225,104 @@ def test_binary_four_world_two_query_witness_respects_class_balance():
     value = discounted_fitness_optimal_policy(task, probs, discount_rate=0.3)
     gain = value.expected_discounted_completion_value - math.exp(-0.6)
     assert gain <= 0.5 * (math.exp(-0.3) - math.exp(-0.6)) + 1e-12
+
+
+
+def test_sharp_finite_target_prevalence_frontier_binary_vs_ternary():
+    value = lambda c: math.exp(-0.3 * c)
+    binary = finite_target_prevalence_expected_capacity(
+        10, 9, 0.5, max_arity=2, completion_value=value
+    )
+    ternary = finite_target_prevalence_expected_capacity(
+        10, 9, 0.5, max_arity=3, completion_value=value
+    )
+    binary_exact = (
+        0.5 * (math.exp(-0.3) + math.exp(-0.6))
+        - math.exp(-2.7)
+    )
+    ternary_exact = math.exp(-0.3) - math.exp(-2.4)
+
+    assert binary.expected_value_supremum == pytest.approx(binary_exact)
+    assert binary_exact == pytest.approx(0.5776094156481224)
+    assert ternary.expected_value_supremum == pytest.approx(ternary_exact)
+    assert ternary_exact == pytest.approx(0.6501002673923054)
+    assert binary.expected_value_supremum < 0.62
+    assert ternary.expected_value_supremum > 0.62
+    assert finite_minimum_expected_cue_arity_with_target_prevalence(
+        10, 9, 0.5, 0.62, completion_value=value
+    ) == 3
+
+
+def test_finite_prevalence_frontier_can_prefer_binary_structure_even_with_ternary_available():
+    value = lambda c: math.exp(-0.3 * c)
+    receipt = finite_target_prevalence_expected_capacity(
+        4, 3, 0.9, max_arity=3, completion_value=value
+    )
+    assert receipt.binary_supr > receipt.two_target_pure_root_supr
+    assert receipt.expected_value_supremum == pytest.approx(receipt.binary_supr)
+    assert receipt.maximizing_root_pattern == (
+        "one_target_pure_root_outcome_plus_rare_mixed"
+    )
+
+
+def test_finite_ternary_private_pair_builder_attains_all_small_cost_budgets():
+    for n in range(4, 9):
+        for m in range(2, 7):
+            task = finite_target_prevalence_ternary_witness(n, m)
+            assert len(task.worlds) == n
+            assert len(task.queries) == m
+            assert all(len(set(q.outcomes)) <= 3 for q in task.queries)
+            assert len(set(task.queries[0].outcomes)) == 3
+            assert task.worlds[0].target != task.worlds[1].target
+            assert {w.target for w in task.worlds[2:]} == {
+                task.worlds[0].target, task.worlds[1].target
+            }
+            assert fixed_minimum_resolution(task).minimum_cost == min(m, n - 2)
+
+
+def test_finite_balanced_ternary_witness_beats_binary_impossibility_at_same_nm():
+    mu = 0.3
+    k = 0.62
+    task = finite_target_prevalence_ternary_witness(10, 9)
+    assert fixed_minimum_resolution(task).minimum_cost == 8
+    probabilities = _balanced_target_world_probabilities(
+        task, rare_mass=0.02
+    )
+
+    # Even the declared tree's conservative worst rare-branch bound suffices.
+    # All frequent worlds finish at depth one; rare worlds take at most 8.
+    conservative = (
+        0.98 * math.exp(-mu)
+        + 0.02 * math.exp(-mu * 8)
+        - math.exp(-mu * 8)
+    )
+    binary_upper = finite_target_prevalence_expected_capacity(
+        10, 9, 0.5,
+        max_arity=2,
+        completion_value=lambda t: math.exp(-mu * t)
+    ).expected_value_supremum
+    assert binary_upper < k < conservative
+
+    policy = discounted_fitness_optimal_policy(
+        task, probabilities, discount_rate=mu
+    )
+    actual = policy.expected_discounted_completion_value - math.exp(-mu * 8)
+    assert actual >= conservative - 1e-12
+    assert actual > k
+
+
+def test_finite_target_prevalence_edge_cases():
+    value = lambda c: math.exp(-0.3 * c)
+    for b in (2,3,4):
+        assert finite_target_prevalence_expected_capacity(
+            5, 1, 0.5, max_arity=b, completion_value=value
+        ).expected_value_supremum == pytest.approx(0.0)
+    n3binary = finite_target_prevalence_expected_capacity(
+        3, 2, 0.5, max_arity=2, completion_value=value
+    )
+    n3ternary = finite_target_prevalence_expected_capacity(
+        3, 2, 0.5, max_arity=3, completion_value=value
+    )
+    assert n3binary.expected_value_supremum == pytest.approx(
+        n3ternary.expected_value_supremum
+    )
