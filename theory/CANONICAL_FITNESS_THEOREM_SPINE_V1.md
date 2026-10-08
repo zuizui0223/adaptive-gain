@@ -290,6 +290,35 @@ rare-state burden.
 These are existence results over possible world frequencies, not predictions
 for an empirically fixed species assemblage or a separate main theorem.
 
+### Ecological frequency floor (supporting no-go bound)
+
+RF7 permits encounter frequencies to become arbitrarily concentrated. If each
+represented world instead has probability at least \(\eta>0\), an adaptive
+policy facing fixed cost \(j\) must leave at least \(j\) worlds unresolved
+after the first query. Consequently,
+
+\[
+R_{\rm expected}
+\le
+\max_{2\le j\le M}
+\left[
+U(1)-U(j)-j\eta\{U(1)-U(2)\}
+\right],
+\]
+
+with zero included if \(M=1\).
+
+This bound is generally **not sharp** but is a valid no-go when an ecological
+frequency floor is known.
+
+At \(n=10,m=9,\ U(c)=e^{-0.3c}\), freely varying frequencies give an exact
+expected supremum of \(0.673613\); uniform encounters \(\eta=0.1\) restrict
+the expected advantage to at most \(0.500807\).
+
+Thus the earlier \(K=0.60\) expected-rescue example is impossible under
+uniform encounters. The model must measure or justify encounter frequencies
+before using the arity-independent supremum as biological evidence.
+
 ### Novelty status
 
 This section is biologically important but should **not** carry the paper's
