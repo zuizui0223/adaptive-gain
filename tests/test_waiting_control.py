@@ -5,7 +5,11 @@ import math
 import pytest
 
 from adaptive_gain.selective_refresh import selective_refresh
-from adaptive_gain.waiting_control import waiting_control_decomposition
+from adaptive_gain.waiting_control import (
+    waiting_control_decomposition,
+    timing_adjusted_precision_window,
+    timing_adjusted_log_maintenance_ceiling,
+)
 
 
 def _independent_schedule_values(
@@ -222,3 +226,104 @@ def test_conditional_information_premium_degrades_monotonically_in_absolute_rewa
     assert gains[0] == pytest.approx(0, abs=1e-12)
     assert gains[-1] == pytest.approx(0, abs=1e-12)
     assert max(gains) > .0395
+
+
+
+def test_matched_wait_precision_window_is_not_naive_two_schedule_window():
+    kwargs = dict(
+        alpha=.8, beta=.2, cue_age=1.2,
+        sampling_delay=.15, terminal_delay=.1,
+        opportunity_hazard=.25, reward0=1, reward1=1,
+        query_cost=.03,
+    )
+    result = timing_adjusted_precision_window(**kwargs)
+    assert result.lower_error == pytest.approx(
+        .05652257923804355, abs=2e-8)
+    assert result.upper_error == pytest.approx(
+        .34238956740911564, abs=2e-8)
+    assert result.peak_error == pytest.approx(
+        .11225411408084168, abs=2e-8)
+    assert result.peak_query_control_premium == pytest.approx(
+        .039581029649796484, abs=2e-8)
+    assert result.no_query_timing_reward_at_peak == pytest.approx(
+        .7817755643571999, abs=2e-8)
+    assert result.query_fixed_tie_at_peak
+    assert not result.peak_on_boundary
+
+    for error, has_information_schedule_premium in (
+        (0, False), (.05, False), (.07, True), (.12, True),
+        (.34, True), (.35, False), (.5, False)
+    ):
+        x = waiting_control_decomposition(
+            refresh_cue_error_rate=error, **kwargs
+        )
+        assert (
+            x.conditional_query_premium > 1e-10
+        ) == has_information_schedule_premium
+
+    cost = timing_adjusted_log_maintenance_ceiling(
+        baseline_fitness=1, **kwargs
+    )
+    assert cost == pytest.approx(.021971229563271327, abs=1e-9)
+
+
+def test_timing_adjusted_root_beats_finite_independent_grid():
+    count = 0
+    for alpha, beta, r0, r1, age, olderr in itertools.product(
+        (.2, .8), (.2, .8), (1., 4.), (1., 4.),
+        (.1, 1.2), (0., .08)
+    ):
+        kwargs = dict(
+            alpha=alpha, beta=beta, cue_age=age,
+            sampling_delay=.15, terminal_delay=.1,
+            opportunity_hazard=.25, reward0=r0, reward1=r1,
+            query_cost=.03, old_cue_error_rate=olderr,
+        )
+        optimum = timing_adjusted_precision_window(**kwargs)
+        grid = [
+            waiting_control_decomposition(
+                refresh_cue_error_rate=j/100, **kwargs
+            ).conditional_query_premium
+            for j in range(51)
+        ]
+        if optimum.peak_error is None:
+            assert max(grid) == pytest.approx(0, abs=1e-10)
+        else:
+            assert optimum.peak_query_control_premium + 1e-10 >= max(grid)
+            assert (0 <= optimum.lower_error <= optimum.peak_error
+                    <= optimum.upper_error <= .5)
+        count += 1
+    assert count == 64
+
+
+def test_neither_query_nor_controller_can_be_preferred_when_old_cue_uninformative():
+    kwargs = dict(
+        alpha=.8, beta=.2, cue_age=.1,
+        sampling_delay=.15, terminal_delay=.15,
+        opportunity_hazard=.25, reward0=4,
+        reward1=1, query_cost=.015,
+        old_cue_error_rate=.5
+    )
+    cert = timing_adjusted_precision_window(**kwargs)
+    assert cert.peak_error is None
+    assert timing_adjusted_log_maintenance_ceiling(
+        baseline_fitness=1, **kwargs
+    ) == 0
+    for eps in (0, .01, .2, .5):
+        x = waiting_control_decomposition(
+            refresh_cue_error_rate=eps, **kwargs
+        )
+        assert x.conditional_query_premium == pytest.approx(0, abs=1e-12)
+
+    with pytest.raises(ValueError):
+        timing_adjusted_precision_window(
+            iterations=0, **kwargs
+        )
+    with pytest.raises(ValueError):
+        timing_adjusted_precision_window(
+            refresh_cue_error_rate=.1, **kwargs
+        )
+    with pytest.raises(ValueError):
+        timing_adjusted_log_maintenance_ceiling(
+            baseline_fitness=0, **kwargs
+        )
