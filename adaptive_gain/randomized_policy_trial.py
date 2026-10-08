@@ -60,6 +60,7 @@ class HeldoutPolicyReceipt:
     independent_clusters: int
     evaluated_cluster_bootstrap_replicates: int
     target_old_report_weights: tuple[float, float]
+    recorded_randomization_probabilities: tuple[tuple[float, float, float], tuple[float, float, float]]
     conditional_reward: float
     always_passive_reward: float
     always_query_reward: float
@@ -86,14 +87,34 @@ def validate_target(target_old_report_weights: dict[int, float]) -> tuple[float,
     return vals
 
 
+def validate_design_probabilities(
+    assignment_probabilities: dict[int, dict[str, float]]
+) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
+    """The externally preregistered arm probabilities for each old report."""
+    if set(assignment_probabilities) != {0, 1}:
+        raise ValueError("declare randomized arm probabilities for both old reports")
+    design=[]
+    for o in REPORTS:
+        options=assignment_probabilities[o]
+        if set(options) != set(ARMS):
+            raise ValueError("all three arms must have known assignment probabilities")
+        values=tuple(float(options[arm]) for arm in ARMS)
+        if not all(math.isfinite(v) and 0<v<1 for v in values):
+            raise ValueError("arm assignment probabilities must be strictly positive")
+        if not math.isclose(sum(values),1,abs_tol=1e-12,rel_tol=0):
+            raise ValueError("each old-report assignment probabilities must sum to one")
+        design.append(values)
+    return (design[0],design[1])
+
+
 def validate_trials(records: Iterable[dict], *, min_unique_clusters: int = 2) -> list[dict]:
     rows = list(records)
     if not rows:
         raise ValueError("no trials")
     clusters = set()
     for row in rows:
-        if not {"cluster", "old_report", "assigned_arm", "reward"}.issubset(row):
-            raise ValueError("trial missing cluster, old_report, assigned_arm or reward")
+        if not {"cluster", "old_report", "assigned_arm", "reward", "assignment_probability"}.issubset(row):
+            raise ValueError("trial missing cluster, old_report, assigned_arm, reward or assignment_probability")
         if not isinstance(row["cluster"], str) or not row["cluster"]:
             raise ValueError("cluster identifier must be nonempty string")
         clusters.add(row["cluster"])
@@ -107,6 +128,12 @@ def validate_trials(records: Iterable[dict], *, min_unique_clusters: int = 2) ->
             raise ValueError("reward must be numeric") from None
         if not math.isfinite(v):
             raise ValueError("reward must be finite")
+        try:
+            prob=float(row["assignment_probability"])
+        except (TypeError,ValueError):
+            raise ValueError("assigned probability must be numeric") from None
+        if not math.isfinite(prob) or not 0<prob<=1:
+            raise ValueError("assigned probability must be positive and <=1")
     if len(clusters) < min_unique_clusters:
         raise ValueError("too few independent biological clusters")
     return rows
@@ -182,6 +209,7 @@ def evaluate_frozen_policy(
     policy: FrozenQueryPolicy,
     *,
     target_old_report_weights: dict[int, float],
+    assignment_probabilities: dict[int,dict[str,float]],
     bootstrap_repetitions: int = 1000,
     seed: int = 86023,
 ) -> HeldoutPolicyReceipt:
@@ -199,7 +227,13 @@ def evaluate_frozen_policy(
     if not isinstance(bootstrap_repetitions,int) or bootstrap_repetitions<20:
         raise ValueError("at least 20 cluster-bootstrap draws required")
     weights=validate_target(target_old_report_weights)
+    design=validate_design_probabilities(assignment_probabilities)
     trials=validate_trials(evaluation_trials)
+    for row in trials:
+        p=assignment_probabilities[row["old_report"]][row["assigned_arm"]]
+        if not math.isclose(float(row["assignment_probability"]),p,
+                            abs_tol=1e-12,rel_tol=0):
+            raise ValueError("recorded randomization probability disagrees with declared design")
     groups={}
     for r in trials:
         groups.setdefault(r["cluster"],[]).append(r)
@@ -231,6 +265,7 @@ def evaluate_frozen_policy(
         independent_clusters=len(groups),
         evaluated_cluster_bootstrap_replicates=len(ds_p),
         target_old_report_weights=weights,
+        recorded_randomization_probabilities=design,
         conditional_reward=c,
         always_passive_reward=p,
         always_query_reward=q,
@@ -256,6 +291,7 @@ def fit_then_holdout_evaluate(
     records: Iterable[dict],
     *,
     target_old_report_weights: dict[int,float],
+    assignment_probabilities: dict[int,dict[str,float]],
     test_fraction: float = .5,
     split_seed: int = 1492,
     bootstrap_repetitions: int = 1000,
@@ -266,6 +302,7 @@ def fit_then_holdout_evaluate(
     pi=learn_query_policy(train)
     return evaluate_frozen_policy(
         test,pi,target_old_report_weights=target_old_report_weights,
+        assignment_probabilities=assignment_probabilities,
         bootstrap_repetitions=bootstrap_repetitions,
         seed=bootstrap_seed,
     )
