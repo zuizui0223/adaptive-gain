@@ -1,0 +1,63 @@
+{
+  "schema": "adaptive-gain-bee-2026-one-trial-lag-v1",
+  "source": {
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "path": "data/4_active_information_seeking_trials.csv",
+    "paper": "He et al. (2026), Uncertainty-Guided Decision-Making in Bumble Bees (bioRxiv)",
+    "doi": "10.64898/2026.09.15.751944"
+  },
+  "n_bees": 192,
+  "n_total_trials": 19200,
+  "regular_following_regular_pairs": 12132,
+  "difficulty": {
+    "Easy": {
+      "raw_fail_minus_success": 0.0007169100985039978,
+      "stratified_fail_minus_success": 0.005997007168295514,
+      "included_strata": 30,
+      "covered_trials": 4877,
+      "bee_cluster_bootstrap_95": [
+        -0.01960979523422126,
+        0.03412643236344427
+      ],
+      "bootstrap_valid_repetitions": 1500
+    },
+    "Hard": {
+      "raw_fail_minus_success": -0.024311206705719512,
+      "stratified_fail_minus_success": -0.02972247154671966,
+      "included_strata": 30,
+      "covered_trials": 4794,
+      "bee_cluster_bootstrap_95": [
+        -0.07673526113580635,
+        0.010427244195594052
+      ],
+      "bootstrap_valid_repetitions": 1500
+    },
+    "Impossible": {
+      "raw_fail_minus_success": 0.009380383769975631,
+      "stratified_fail_minus_success": -0.0001982419263588782,
+      "included_strata": 28,
+      "covered_trials": 2425,
+      "bee_cluster_bootstrap_95": [
+        -0.05537594203044323,
+        0.05031552955884778
+      ],
+      "bootstrap_valid_repetitions": 1500
+    }
+  },
+  "method": "Previous Regular trial correctness versus next Regular trial platform landing, by next difficulty; adjusted standardization over preceding difficulty, preceding request, next trial bin (20-trial quintile), weighted by eligible stratum size. Bee cluster bootstrap B=1500, xorshift32 seed=6212643.",
+  "method_source": "scripts/analyze_bee_2026_lagged_acquisition.py",
+  "source_audit": "independent GitHub line-range pull of five successive chunks of the pinned public file; no raw data copied to repository",
+  "interpretation": "No consistent evidence that the previous-trial error increases the next Regular-trial information-platform landing probability once current difficulty is separated. All descriptive uncertainty intervals include zero. Current difficulty is a dominant observed grouping of requests, already a published result.",
+  "limitations": [
+    "Trial_Number interpreted as sequential within this task, without independent timestamp verification.",
+    "Previous accuracy/outcome is not randomized; cluster uncertainty and strata do not identify a causal learning effect.",
+    "Outcome correctness is structurally in Post or Non columns depending on whether information was delivered/requested, and Regular trials only are used to avoid delivery/request conflation.",
+    "The 28-30 adjusted strata condition on preceding difficulty, preceding request and coarse current trial order. Empty error/success strata are omitted, leaving 2425 of 2461 previous-Regular/current-Impossible pairs covered.",
+    "Zero-containing confidence intervals do not establish absence of trial-history, slower learning or subject-specific effects.",
+    "The separate decision-latency CSV reuses trial identifiers; a same-trial join is blocked (validation/bee_2026_cross_experiment_join_gate_v1.json)."
+  ],
+  "status": "EXPLORATORY_SEQUENCE_ASSOCIATION_NO_CAUSAL_HISTORY_EFFECT",
+  "claim_ceiling": "No inference of dynamic ecological state switches, information-age decay, optimized wait versus query, evolutionary fitness or experimentally induced sequential learning."
+}
