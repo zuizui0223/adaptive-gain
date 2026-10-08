@@ -509,6 +509,44 @@ This does not establish a new general theory of triage, nor does it identify
 real sensory receptor number from mathematical cue arity.
 
 
+### Exponential-value prefix-tree optimization is established
+
+Nonlinear objectives of the form
+
+\[
+\sum_i p_i a^{d_i}
+\]
+
+for binary prefix-code lengths \(d_i\) were explicitly studied before this
+repository. Michael B. Baer's work on optimal prefix codes for exponential
+penalties includes the \(a<1\) setting, motivated by maximizing one-shot
+message-receipt probability (IEEE Transactions on Information Theory 54(3),
+1273–1286, 2008, DOI 10.1109/TIT.2007.915696; arXiv cs/0511003).
+
+Thus the uniform-encounter supplement must not claim novelty for:
+
+- exponential discounting of decision/prefix-tree depths;
+- optimal prefix-tree shape changing with a nonlinear completion value;
+- enumeration or construction of an optimal binary prefix tree;
+- classical source-coding principles.
+
+The separate repository-specific result in
+UNIFORM_ENCOUNTER_EXACT_ENVELOPE.md is the **attained fixed-burden
+comparison**, not a new prefix-code optimizer: for unit-cost guaranteed
+target-resolution tasks with \(m\ge n-1\) binary queries and uniform
+represented-world encounters, it maximizes expected completion value minus
+the *minimal universal fixed resolver cost*, using private opposite-target
+pairs to certify that each declared internal query is fixed-mandatory.
+
+For the canonical \(n=10,m=9,\mu=0.3\) case, this replaces a loose
+frequency-floor bound (\(0.500807\)) by a sharp uniform-world maximum
+(\(0.332820\)), below the free-prior supremum (\(0.673613\)).
+
+The domain restriction \(m\ge n-1\) is essential to the current sharp proof.
+This exact uniform prior result does not establish the broader
+nonuniform-encounter optimum or a biological fitness effect in Aedes.
+
+
 ## What remains repository-specific
 
 The defensible contribution is the composition of layers that the existing finite theory already makes exact upstream.
