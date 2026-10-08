@@ -17,6 +17,8 @@ on:
       - adaptive_gain/empirical_cdf_uncertainty.py
       - tests/test_empirical_cdf_uncertainty.py
       - adaptive_gain/expected_value_bridge.py
+      - adaptive_gain/uniform_expected_envelope.py
+      - tests/test_uniform_expected_envelope.py
       - tests/test_expected_value_bridge.py
       - adaptive_gain/policy_fitness.py
       - tests/test_policy_fitness.py
@@ -43,4 +45,5 @@ jobs:
           tests/test_target_prevalence_independent_exhaustive.py
           tests/test_empirical_cdf_uncertainty.py
           tests/test_expected_value_bridge.py
+          tests/test_uniform_expected_envelope.py
           tests/test_policy_fitness.py
