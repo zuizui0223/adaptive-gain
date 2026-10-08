@@ -7,6 +7,10 @@ Git blob SHA 26259c9071c6d73141d56b9bedd396cab1a04491.
 Trial_Number is used ONLY within this active-information experiment. It must
 not be matched to the separate metacognition decision-latency experiment.
 
+An ancillary analysis compares a prior automatically delivered Free-Cue
+trial with a prior Regular trial before a next Regular request. This is
+*previous exposure*, not voluntary information purchase or a causal effect.
+
 Outcome correctness is structurally recorded in exactly one of the
 Post_Request and Post_Non_Request columns. In Random_Free_Cue conditions
 Info_Requested indicates information delivery, not a voluntary request.
@@ -235,6 +239,125 @@ def summarize(
     }
 
 
+
+def next_regular_pairs(bees: dict[str, list[dict]]) -> dict[str, list[dict]]:
+    """Previous Free-Cue vs Regular assignment and current Regular request.
+
+    The lag is confined to the active-information experiment. The previous
+    trial's information *delivery* does not imply voluntary request, and
+    current outcome is measured by current platform landing only.
+    """
+    result = {}
+    for bee, rows in bees.items():
+        group = []
+        for prev, now in zip(rows, rows[1:]):
+            if now["trial"] != prev["trial"] + 1 or now["type"] != "Regular":
+                continue
+            group.append({
+                "bee": bee,
+                "y": now["landing"],
+                "prev_free": int(prev["type"] == "Random_Free_Cue"),
+                "prev_diff": prev["difficulty"],
+                "prev_correct": prev["correct"],
+                "cur_diff": now["difficulty"],
+                "bin": (now["trial"] - 1) // 20,
+            })
+        result[bee] = group
+    return result
+
+
+def free_cue_carryover_difference(
+    rows: list[dict], difficulty: str, *, adjusted: bool
+) -> dict:
+    """Previous Free-Cue minus previous Regular after matched covariate strata.
+
+    Stratifies on previous difficulty, previous correctness and a coarse
+    current trial-order bin. This is a descriptive exposure association.
+    Do not interpret it as an information-only causal effect.
+    """
+    if difficulty not in DIFFICULTIES:
+        raise ValueError("unknown difficulty")
+    strata = {}
+    for row in rows:
+        if row["cur_diff"] != difficulty:
+            continue
+        key = ((row["prev_diff"], row["prev_correct"], row["bin"])
+               if adjusted else ("all",))
+        counts = strata.setdefault(key, [[0, 0], [0, 0]])
+        label = row["prev_free"]
+        counts[label][0] += 1
+        counts[label][1] += row["y"]
+    numerator, denominator, n_strata = 0.0, 0, 0
+    for group in strata.values():
+        regular_n, regular_y = group[0]
+        free_n, free_y = group[1]
+        if not regular_n or not free_n:
+            continue
+        weight = regular_n + free_n
+        numerator += weight * (free_y/free_n - regular_y/regular_n)
+        denominator += weight
+        n_strata += 1
+    return {
+        "free_minus_regular_previous_trial": (
+            numerator/denominator if denominator else None
+        ),
+        "included_strata": n_strata,
+        "covered_trials": denominator,
+    }
+
+
+def summarize_free_cue_carryover(
+    bees: dict[str, list[dict]], *,
+    bootstrap_reps: int = 1500, seed: int = 0x628F71
+) -> dict:
+    """Separate previous *assignment* audit; no immediate error conflation."""
+    if bootstrap_reps < 1:
+        raise ValueError("bootstrap_reps must be positive")
+    if not bees:
+        raise ValueError("no bees")
+    all_pairs = next_regular_pairs(bees)
+    clusters = [all_pairs[bee] for bee in sorted(bees)]
+    flat = [r for cluster in clusters for r in cluster]
+    generator = xorshift32(seed)
+    comparisons = {}
+    for difficulty in DIFFICULTIES:
+        raw = free_cue_carryover_difference(flat, difficulty, adjusted=False)
+        adjusted = free_cue_carryover_difference(flat, difficulty, adjusted=True)
+        boot = []
+        for _ in range(bootstrap_reps):
+            sampled = []
+            for _ in clusters:
+                j = int(next(generator)*len(clusters))
+                sampled.extend(clusters[j])
+            z = free_cue_carryover_difference(
+                sampled, difficulty, adjusted=True
+            )["free_minus_regular_previous_trial"]
+            if z is not None:
+                boot.append(z)
+        if not boot:
+            raise ValueError("no evaluable bootstrap data")
+        comparisons[difficulty] = {
+            "raw_free_minus_regular": raw["free_minus_regular_previous_trial"],
+            "adjusted_free_minus_regular": adjusted["free_minus_regular_previous_trial"],
+            "strata": adjusted["included_strata"],
+            "covered_trials": adjusted["covered_trials"],
+            "bee_cluster_bootstrap_95": [
+                percentile(boot, .025), percentile(boot, .975)
+            ],
+            "bootstrap_valid_repetitions": len(boot),
+        }
+    return {
+        "next_regular_after_any_previous_type": len(flat),
+        "by_current_difficulty": comparisons,
+        "method": (
+            "Prior Free-Cue assignment versus prior Regular trial, predicting "
+            "current Regular-trial platform landing. Stratify over prior "
+            "difficulty, prior outcome, and current 20-trial order bin; "
+            f"bee cluster bootstrap B={bootstrap_reps}, seed={seed}."
+        ),
+        "status": "EXPLORATORY_LAGGED_EXPOSURE_ASSOCIATION_NOT_INFORMATION_CAUSAL_EFFECT",
+    }
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path, required=True)
@@ -242,7 +365,11 @@ def main():
     parser.add_argument("--bootstrap", type=int, default=1500)
     args = parser.parse_args()
     with args.input.open("r", encoding="utf-8-sig", newline="") as f:
-        result = summarize(parse_rows(f), bootstrap_reps=args.bootstrap)
+        bees = parse_rows(f)
+    result = summarize(bees, bootstrap_reps=args.bootstrap)
+    result["previous_free_cue_exposure"] = summarize_free_cue_carryover(
+        bees, bootstrap_reps=args.bootstrap
+    )
     output = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output is None:
         print(output, end="")
