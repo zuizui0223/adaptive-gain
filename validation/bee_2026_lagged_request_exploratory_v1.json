@@ -46,7 +46,7 @@
       "bootstrap_valid_repetitions": 1500
     }
   },
-  "method": "Previous Regular trial correctness versus next Regular trial platform landing, by next difficulty; adjusted standardization over preceding difficulty, preceding request, next trial bin (20-trial quintile), weighted by eligible stratum size. Bee cluster bootstrap B=1500, xorshift32 seed=6212643.",
+  "method": "Previous Regular trial correctness versus next Regular trial platform landing, by next difficulty; adjusted standardization over preceding difficulty, preceding request, next trial bin (20-trial quintile), weighted by eligible stratum size. Bee cluster bootstrap B=1500, xorshift32 seed=6220835 (0x5EEC23).",
   "method_source": "scripts/analyze_bee_2026_lagged_acquisition.py",
   "source_audit": "independent GitHub line-range pull of five successive chunks of the pinned public file; no raw data copied to repository",
   "interpretation": "No consistent evidence that the previous-trial error increases the next Regular-trial information-platform landing probability once current difficulty is separated. All descriptive uncertainty intervals include zero. Current difficulty is a dominant observed grouping of requests, already a published result.",
