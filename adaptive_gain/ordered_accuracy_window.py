@@ -132,3 +132,41 @@ def precision_window(
         math.isclose(fixed_difference(peak), 0, abs_tol=1e-9),
         is_boundary,
     )
+
+
+
+def controller_log_cost_ceiling(
+    *,
+    baseline_fitness: float,
+    iterations: int = 70,
+    **selective_refresh_parameters: Any,
+) -> float:
+    """Maximum excess constitutive log-maintenance cost payable by control.
+
+    In the declared pairwise architecture comparison,
+    W_C=exp(-kappa_C)*(w0+J_conditional) and
+    W_F=exp(-kappa_F)*(w0+J_best_fixed), with w0>0 and
+    identical reward-to-fitness scale in both architectures.
+
+    Conditional control is favored at some precision if
+    (kappa_C-kappa_F) < this ceiling. The per-query cost has
+    already been subtracted inside J. This does not identify
+    real heritable strategies or population fitness.
+    """
+    w0 = float(baseline_fitness)
+    if not math.isfinite(w0) or w0 <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    window = precision_window(
+        iterations=iterations, **selective_refresh_parameters
+    )
+    if window.peak_error is None:
+        return 0.0
+    outcome = _value(
+        window.peak_error, dict(selective_refresh_parameters)
+    )
+    fixed = outcome.best_precommitted_reward
+    if w0 + fixed <= 0:
+        raise ValueError("nonpositive gross comparator fitness")
+    return math.log1p(
+        outcome.strict_conditional_gain / (w0 + fixed)
+    )
