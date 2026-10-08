@@ -325,6 +325,56 @@ but is repaid by the explicit ternary two-query task.
 This is an exact finite construction, not a biological experiment.
 
 
+## Independent finite enumeration of TP2
+
+To avoid relying on the private-pair witness factory or the general exact
+solver, we independently enumerated every binary target labeling on four
+worlds and every unordered pair of two deterministic unit-cost queries.
+
+We retained only configurations in which neither query resolves the target
+alone but the pair does, so the minimum universal fixed bundle contains both.
+
+| Query arity | Fixed-cost-two configurations | One-step pure outcomes from both target classes | Supremal one-step encounter mass at 50/50 target prevalence |
+| --- | ---: | ---: | ---: |
+| Binary | 264 | 0 | 0.5 |
+| Ternary | 9,720 | 3,888 | 1.0 |
+
+The enumeration covers target labelings with one or more worlds in each
+class; strictly positive individual world probabilities can realize exactly
+50/50 aggregate target prevalence. The one-step mass values are suprema
+because within-class world probabilities may become arbitrarily small.
+
+A separate three-world check finds no fixed-cost-two ternary pair whose
+root offers both target-pure classes and still retains a mixed branch.
+This verifies that four represented worlds are the first finite corner at
+which the ternary separation can occur.
+
+The independent regression is
+`tests/test_target_prevalence_independent_exhaustive.py`.
+
+The result does not turn TP2 into an independent main theorem: it audits the
+exact finite mechanism behind the target-prevalence caveat to RF7.
+
+### Predicted prevalence boundary (supporting inversion)
+
+For any cost (K) between the binary balanced-target and the ternary
+ceilings, the binary threshold depends on
+(a=\max\{\alpha,1-\alpha\}\):
+
+\[
+a>a_{\rm crit}
+=
+\frac{K+U_\infty-U(2)}{U(1)-U(2)}.
+\]
+
+At (U(c)=e^{-0.3c}\) and (K=0.68\),
+(a_{\rm crit}\approx0.6833\). Binary cues can repay the cost in some
+scalable task if the target prevalence is sufficiently skewed past this
+boundary; otherwise at least ternary query outcomes are needed.
+This is a task-class existence condition, not a predicted evolutionary
+response for a measured natural population.
+
+
 ## Why this matters biologically
 
 The result identifies a specific compensation mechanism:
