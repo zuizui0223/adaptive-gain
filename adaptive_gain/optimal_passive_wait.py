@@ -173,3 +173,121 @@ def compare_with_optimal_passive_wait(
         conditional_query_premium=premium,
         matched_wait_query_premium=paired.conditional_query_premium
     )
+
+
+
+@dataclass(frozen=True)
+class FlexibleWaitingPrecisionReceipt:
+    lower_error: float | None
+    upper_error: float | None
+    peak_error: float | None
+    peak_query_control_premium: float
+    no_query_reward_at_peak: float
+    fixed_policy_tie_at_peak: bool
+
+
+def flexible_wait_precision_window(
+    *,
+    iterations: int = 70,
+    **parameters,
+) -> FlexibleWaitingPrecisionReceipt:
+    """Blackwell-ordered query premium against any permitted wait time.
+
+    Every no-query competitor may condition waiting duration in
+    [0,max_wait] on the old cue. Q(eps) is nonincreasing under cue
+    garbling while optimal passive waiting is quality-independent.
+    With two reports the relative premium is weakly unimodal, and
+    the interior maximum is at universal-query/no-query indifference.
+
+    Numerical bisection provides estimates, not certified intervals.
+    """
+    if iterations<1 or iterations>1000:
+        raise ValueError("iterations must lie in [1,1000]")
+    if "refresh_cue_error_rate" in parameters:
+        raise ValueError("refresh_cue_error_rate is optimized")
+
+    def model(err: float) -> FlexibleWaitingComparison:
+        return compare_with_optimal_passive_wait(
+            refresh_cue_error_rate=err, **parameters
+        )
+
+    def increment(err: float, idx: int) -> float:
+        x=model(err)
+        return (
+            x.query_branch_values[idx] -
+            x.optimal_no_query_branch_values[idx]
+        )
+
+    def root(j: int) -> float:
+        lo, hi=0.0,0.5
+        if increment(lo,j)<=0:
+            return lo
+        if increment(hi,j)>=0:
+            return hi
+        for _ in range(iterations):
+            mid=(lo+hi)/2
+            if increment(mid,j)>0:
+                lo=mid
+            else:
+                hi=mid
+        return (lo+hi)/2
+
+    a,b=sorted((root(0),root(1)))
+    if b-a<1e-12:
+        return FlexibleWaitingPrecisionReceipt(
+            None,None,None,0.0,0.0,False
+        )
+
+    def diff(err:float) -> float:
+        x=model(err)
+        return x.always_query_reward-x.best_no_query_reward
+
+    if diff(a)<=0:
+        peak=a
+    elif diff(b)>=0:
+        peak=b
+    else:
+        lo,hi=a,b
+        for _ in range(iterations):
+            m=(lo+hi)/2
+            if diff(m)>0:
+                lo=m
+            else:
+                hi=m
+        peak=(lo+hi)/2
+    x=model(peak)
+    return FlexibleWaitingPrecisionReceipt(
+        a,b,peak,x.conditional_query_premium,
+        x.best_no_query_reward,
+        math.isclose(diff(peak),0,abs_tol=1e-9),
+    )
+
+
+def flexible_wait_log_maintenance_ceiling(
+    *,
+    baseline_fitness:float,
+    iterations:int=70,
+    **parameters,
+) -> float:
+    """Model-specific upper log-fitness debit for *optional information*.
+
+    The comparison includes a fully optimized no-query timing policy.
+    This is not a measured controller genotype or realized fitness.
+    """
+    w0=float(baseline_fitness)
+    if not math.isfinite(w0) or w0<=0:
+        raise ValueError("baseline_fitness must be positive and finite")
+    optimal=flexible_wait_precision_window(
+        iterations=iterations,**parameters
+    )
+    if optimal.peak_error is None:
+        return 0.0
+    x=compare_with_optimal_passive_wait(
+        refresh_cue_error_rate=optimal.peak_error,**parameters
+    )
+    comparator=max(
+        x.best_no_query_reward,x.always_query_reward
+    )
+    return math.log1p(
+        x.conditional_query_premium/(w0+comparator)
+    )
