@@ -182,6 +182,100 @@ times, not only an immediate action. A passive control
 that cannot choose the timing available to the query
 controller will overestimate fresh information benefit.
 
+
+## Critical 2026 prior art: bumblebees already buy information at a reward cost
+
+He, Ye, Lin et al. (bioRxiv preprint posted 22 September 2026),
+"Uncertainty-Guided Decision-Making in Bumble Bees",
+https://doi.org/10.64898/2026.09.15.751944, introduced an
+explicit information-request platform **before** a mandatory
+terminal choice. A request provided a 500-ms flash indicating
+the correct target, but a correct requested decision earned
+a smaller reward (15% rather than 30% sucrose).
+The same preprint used Random_Free_Cue controls in which
+the cue was automatically shown. This is much closer
+to an actual information-purchase manipulation than the
+earlier fluctuating-reward revisits in Dunlap et al. (2017).
+
+**This preempts claiming that voluntary costly information
+seeking in bumblebees is a novel demonstration.** It is
+also a bioRxiv preprint, not yet treated here as independently
+peer reviewed. Its externally imposed discrimination
+difficulty and memory delay are not equivalent to a
+continuously changing *payoff-relevant environmental
+state within a decision*, and its published protocol
+does not independently randomize an equally long,
+uninformative SHAM WAIT, free choice of passive delay,
+and the sensor's Blackwell-ordered precision at matched
+opportunity cost. The further test proposed here must
+isolate exactly those still-missing mechanisms.
+
+### Public raw data: reproducible semantic gate
+
+Source:
+https://github.com/Cuixiaojian21/bee_metacognition
+at commit 7f886394b4de872ecdb19ca4ea214ec321d5dce9.
+The active-information trial data are at
+data/4_active_information_seeking_trials.csv,
+Git blob SHA 26259c9071c6d73141d56b9bedd396cab1a04491.
+
+An independent audit of **19,200 individual trials from 192
+bees** found 15,360 Regular and 3,840 Random_Free_Cue
+trials. These columns are crucial:
+
+- Info_Requested: on Free-Cue trials, it is 1 for **all**
+  3,840 trials because the information was provided.
+  It must not be interpreted as the animal's active
+  purchase/request on those trials.
+- Actually_Landed_On_Platform: actual information-platform
+  landing, separable from information delivery.
+
+Among Random_Free_Cue trials, **1,812** have
+Info_Requested=1 but no platform landing. In Regular
+trials, the two fields agree for all 15,360 records.
+The source analysis code includes a separate
+Actually_Landed_On_Platform ~ Difficulty * Trial_Type
+analysis; this is a critical measurement distinction,
+not an accusation that the authors overlooked it.
+
+Observed landing frequencies (Regular versus Free-Cue):
+- Easy: 591/6140=9.63% versus 950/1540=61.69%.
+- Hard: 2866/6108=46.92% versus 925/1572=58.84%.
+- Impossible: 2229/3112=71.63% versus 153/728=21.02%.
+
+Bee-cluster bootstrap intervals for Free minus Regular
+landing proportions are approximately
+Easy [+0.495,+0.546], Hard [+0.091,+0.146],
+Impossible [-0.543,-0.468] (3,000 seed-frozen
+resamples). This trial-type interaction is descriptive:
+automatic cue presentation may change cue salience,
+approach motor behavior and timing, not just information
+purchase incentives. It does not directly estimate a
+query-versus-optimal-wait causal information premium.
+
+The published decision-process latency CSV is from
+a different experimental endpoint; similarly named
+Trial_ID or Trial_Number fields alone do **not**
+authorize a trialwise join with the Active Information
+Seeking file. The active-information file itself
+does not supply the environmental switch events,
+matched no-cue waiting, optional post-query delay,
+and reproductive fitness needed here.
+
+Reproducible source audit:
+- scripts/audit_bee_2026_active_information.py
+- tests/test_bee_2026_active_information_audit.py
+- validation/bee_2026_active_information_schema_audit_v1.json
+
+The 2026 dataset makes the experimental avenue
+credible: bees can and do use a non-rewarding information
+platform. The remaining *ecological* identification target
+is **what adaptive acquisition adds beyond optimized
+noninformative timing when target conditions can change
+between cue and eventual action**. It should not
+be marketed as discovering information seeking itself.
+
+
 ## STOP / go
 
 The executable model can establish only *possibility* and
