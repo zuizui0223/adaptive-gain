@@ -11,6 +11,7 @@ from scripts.analyze_bee_2026_lagged_acquisition import (
     parse_rows, lag_pairs, difference, summarize, xorshift32,
     next_regular_pairs, free_cue_carryover_difference,
     summarize_free_cue_carryover,
+    git_blob_sha, verify_frozen_receipt,
 )
 
 HEADER = (
@@ -172,3 +173,31 @@ def test_previous_free_exposure_bootstrap_and_frozen_source():
             x["bee_cluster_bootstrap_95"][1]
         )
         assert x["bootstrap_valid_repetitions"] == 1500
+
+
+
+def test_git_blob_pin_algorithm_and_receipt_checker():
+    assert git_blob_sha(b"hello\n") == (
+        "ce013625030ba8dba906f756967f9e9ca394464a"
+    )
+    bees = _toy_bees()
+    current = summarize(bees, bootstrap_reps=50, seed=0x5EEC23)
+    current["previous_free_cue_exposure"] = summarize_free_cue_carryover(
+        bees, bootstrap_reps=50
+    )
+    import copy
+    frozen = copy.deepcopy(current)
+    verify_frozen_receipt(current, frozen)
+    bad = copy.deepcopy(frozen)
+    bad["difficulty"]["Hard"]["stratified_fail_minus_success"] += .1
+    with pytest.raises(ValueError, match="frozen result differs"):
+        verify_frozen_receipt(current,bad)
+    bad = copy.deepcopy(frozen)
+    bad["source"]["blob_sha"] = "wrong"
+    with pytest.raises(ValueError, match="source blob metadata differs"):
+        verify_frozen_receipt(current,bad)
+    bad = copy.deepcopy(frozen)
+    bad["previous_free_cue_exposure"]["by_current_difficulty"]["Easy"][
+        "bee_cluster_bootstrap_95"][0] += .01
+    with pytest.raises(ValueError, match="frozen result differs"):
+        verify_frozen_receipt(current,bad)
