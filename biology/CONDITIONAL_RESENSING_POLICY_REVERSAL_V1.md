@@ -1,6 +1,10 @@
 # Conditional re-sensing can survive the expiry of direct cue value
 
 **Status:** ecological-process / source-of-gain stress test for PR #67.
+**Comparator correction:** the original SKIP-versus-QUERY gain can
+include waiting alone; WAIT_VERSUS_INFORMATION_CAUSAL_GATE_V1.md adds an
+explicit sham wait control. Do not attribute the original numeric
+gap solely to new information.
 Not V6 MAIN 4. Not a result about the static-world sharp
 \((n,m,b)\) frontier; this model explicitly permits environmental
 state changes during acquisition. No direct biological selection
@@ -101,7 +105,9 @@ action optimally from its eventual information):
 J_{\rm fixed}=\max\big\{\sum_x\pi_x S_x,\sum_x\pi_xQ_x\big\}.
 \]
 
-The extra value due *only* to contingent re-sensing is therefore
+The extra value due to a contingent **bundled QUERY+DELAY**
+schedule, compared with an immediate SKIP or uniform QUERY+DELAY,
+is therefore
 
 \[
 \boxed{
@@ -174,7 +180,10 @@ predictivity is not zero; rather, the posterior differences
 remain insufficient to change the terminal action but
 sufficient to change the expected value of sampling again.
 This is one instance of a known non-myopic information value
-mechanism, not a contradiction of standard decision theory.
+mechanism in the original bundled model, not a contradiction of
+standard decision theory. A matched-duration WAIT control is
+required before calling the excess specifically *fresh information*
+value.
 
 In the limit \(\tau\to\infty\), old-cue posteriors coincide
 and the conditional advantage vanishes.
@@ -268,9 +277,11 @@ the re-query trigger from old danger to old safety.
 Controls:
 - terminal actions may optimize in all arms, not be forced
   to mirror prior cues;
-- compare conditional refresh with both uniformly refresh
-  and uniformly skip, **not** just one deliberately weak
-  control;
+- compare conditional refresh with uniformly refresh,
+  uniformly skip **and a matched-duration sham WAIT control**.
+  Conditioning a query on old information can look profitable merely
+  because waiting itself is state-dependent; compare also against a
+  no-query controller allowed to conditionally WAIT or SKIP;
 - document nondecision motor priming separately from cue
   *acquisition*;
 - pre-register the sign of both branch-specific incremental
