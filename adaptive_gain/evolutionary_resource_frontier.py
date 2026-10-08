@@ -661,6 +661,52 @@ def finite_scope_expected_value_ceiling(
     return u1 - uf
 
 
+
+def probability_floor_expected_advantage_upper_bound(
+    world_count: int,
+    query_count: int,
+    completion_value: Callable[[float], float],
+    *,
+    minimum_world_probability: float,
+) -> float:
+    """Rigorous (generally nonsharp) expected gain bound with p_x >= eta.
+
+    For any guaranteed-resolving exact policy and universal fixed comparator,
+    C_F=j>=2 implies at least j worlds remain mixed after the root query.
+    Thus P(T=1)<=1-j*eta and the expected benefit is bounded by
+
+       max_j [U(1)-U(j)-j*eta*(U(1)-U(2))].
+
+    When eta=0 this recovers the unrestricted exact RF7 envelope.
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    eta = float(minimum_world_probability)
+    if not math.isfinite(eta) or eta < 0 or eta > 1.0 / world_count + 1e-15:
+        raise ValueError("minimum_world_probability must lie in [0, 1/n]")
+
+    max_fixed = min(query_count, world_count - 1)
+    if max_fixed == 1:
+        return 0.0
+
+    u = [float(completion_value(float(j))) for j in range(1, max_fixed + 1)]
+    if any(not math.isfinite(x) for x in u):
+        raise ValueError("completion_value must be finite")
+    if any(u[j] > u[j - 1] + 1e-12 for j in range(1, len(u))):
+        raise ValueError("completion_value must be nonincreasing")
+
+    u1, u2 = u[0], u[1]
+    return max(
+        [0.0]
+        + [
+            u1 - u[j - 1] - j * eta * (u1 - u2)
+            for j in range(2, max_fixed + 1)
+        ]
+    )
+
+
 def finite_scope_one_step_mass_threshold(
     world_count: int,
     query_count: int,
