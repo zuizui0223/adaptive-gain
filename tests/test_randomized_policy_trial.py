@@ -174,5 +174,5 @@ def test_invalid_randomization_weights_and_posivity_fail_closed():
         evaluate_frozen_policy(single,pi,**args)
     with pytest.raises(ValueError,match="bootstrap draws"):
         evaluate_frozen_policy(trial,pi,**dict(args,bootstrap_repetitions=5))
-    with pytest.raises(ValueError,match="cluster"):
+    with pytest.raises(ValueError,match="test_fraction"):
         by_cluster_holdout(trial,test_fraction=1.0)
