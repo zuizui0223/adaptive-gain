@@ -291,3 +291,139 @@ def flexible_wait_log_maintenance_ceiling(
     return math.log1p(
         x.conditional_query_premium/(w0+comparator)
     )
+
+
+
+@dataclass(frozen=True)
+class PassivePrecisionWindowReceipt:
+    lower_error: float | None
+    upper_error: float | None
+    peak_error: float | None
+    peak_conditional_query_premium: float
+    best_passive_no_query_at_peak: float
+    peak_fixed_policy_tie: bool
+    peak_on_boundary: bool
+
+
+def optimal_passive_precision_window(
+    *,
+    iterations: int = 70,
+    **parameters,
+) -> PassivePrecisionWindowReceipt:
+    """Numerically locate selective-query gain against optimal passive timing.
+
+    Every old report can trigger its own optimal passive wait in
+    [0,max_wait] even without sensing, with max_wait at least as large
+    as the query sampling duration. A QUERY branch is allowed the
+    predeclared sampling duration, calibrated error and cost.
+
+    The refreshed binary observations must be Blackwell ordered as
+    their symmetric error rises from 0 to 0.5, with all other
+    operational quantities held fixed. Root bisection is numerical,
+    not rigorous interval arithmetic.
+    """
+    if not isinstance(iterations, int) or not 1 <= iterations <= 1000:
+        raise ValueError("iterations must be an integer in [1,1000]")
+    if "refresh_cue_error_rate" in parameters:
+        raise ValueError("refresh_cue_error_rate is the optimization axis")
+
+    def at(error: float) -> FlexibleWaitingComparison:
+        return compare_with_optimal_passive_wait(
+            refresh_cue_error_rate=error, **parameters
+        )
+
+    def branch_difference(error: float, report: int) -> float:
+        result = at(error)
+        return (
+            result.query_branch_values[report]
+            - result.optimal_no_query_branch_values[report]
+        )
+
+    def break_even(report: int) -> float:
+        low, high = 0.0, 0.5
+        if branch_difference(low, report) <= 0:
+            return 0.0
+        if branch_difference(high, report) >= 0:
+            return 0.5
+        for _ in range(iterations):
+            midpoint = (low + high) / 2
+            if branch_difference(midpoint, report) > 0:
+                low = midpoint
+            else:
+                high = midpoint
+        return (low + high) / 2
+
+    roots = (break_even(0), break_even(1))
+    lo, hi = min(roots), max(roots)
+    if hi - lo <= 1e-12:
+        return PassivePrecisionWindowReceipt(
+            None, None, None, 0.0, 0.0, False, False
+        )
+
+    def fixed_diff(err: float) -> float:
+        result = at(err)
+        return result.always_query_reward - result.best_no_query_reward
+
+    boundary = False
+    if fixed_diff(lo) <= 0:
+        peak = lo
+        boundary = True
+    elif fixed_diff(hi) >= 0:
+        peak = hi
+        boundary = True
+    else:
+        left, right = lo, hi
+        for _ in range(iterations):
+            mid = (left + right) / 2
+            if fixed_diff(mid) > 0:
+                left = mid
+            else:
+                right = mid
+        peak = (left + right) / 2
+
+    outcome = at(peak)
+    return PassivePrecisionWindowReceipt(
+        lower_error=lo,
+        upper_error=hi,
+        peak_error=peak,
+        peak_conditional_query_premium=outcome.conditional_query_premium,
+        best_passive_no_query_at_peak=outcome.best_no_query_reward,
+        peak_fixed_policy_tie=math.isclose(
+            fixed_diff(peak), 0.0, abs_tol=1e-9
+        ),
+        peak_on_boundary=boundary,
+    )
+
+
+def optimal_passive_log_maintenance_ceiling(
+    *,
+    baseline_fitness: float,
+    iterations: int = 70,
+    **parameters,
+) -> float:
+    """Cost limit in a declared pairwise additive-reward/log-fitness model.
+
+    This only compares the chosen conditional QUERY architecture against
+    universal QUERY and an old-report-dependent controller with *arbitrary
+    passive wait times*. It is not an empirical selection coefficient.
+    """
+    w0 = float(baseline_fitness)
+    if not math.isfinite(w0) or w0 <= 0:
+        raise ValueError("baseline_fitness must be finite and positive")
+    result = optimal_passive_precision_window(
+        iterations=iterations, **parameters
+    )
+    if result.peak_error is None:
+        return 0.0
+    outcome = compare_with_optimal_passive_wait(
+        refresh_cue_error_rate=result.peak_error, **parameters
+    )
+    comparator = max(
+        outcome.best_no_query_reward,
+        outcome.always_query_reward,
+    )
+    if w0 + comparator <= 0:
+        raise ValueError("nonpositive comparator gross fitness")
+    return math.log1p(
+        outcome.conditional_query_premium / (w0 + comparator)
+    )
