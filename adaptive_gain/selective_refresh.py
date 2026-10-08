@@ -1,7 +1,7 @@
 """Dynamic two-state ecological decision: selective refresh vs fixed refresh.
 
 State X follows a stationary binary CTMC (0->1 at alpha, 1->0 at beta).
-At time -cue_age a perfect prior observation of X was acquired. At time 0,
+At time -cue_age a prior observation of X was acquired, optionally with\na symmetric binary error rate old_cue_error_rate. At time 0,
 the agent may skip or refresh *conditional on that previous observation*.
 Skipping acts after terminal_delay. Refreshing waits sampling_delay, observes
 the current X perfectly, then acts after terminal_delay. The environment
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 import math
 
 
-def _probability_one(start: int, lag: float, alpha: float, beta: float) -> float:
+def _probability_one(start: float, lag: float, alpha: float, beta: float) -> float:
     pi1 = alpha / (alpha + beta)
     return pi1 + (start - pi1) * math.exp(-(alpha + beta) * lag)
 
@@ -52,6 +52,7 @@ def selective_refresh(
     reward0: float = 1.0,
     reward1: float = 1.0,
     query_cost: float = 0.0,
+    old_cue_error_rate: float = 0.0,
 ) -> SelectiveRefreshResult:
     """Exact two-stage Bayes optimization over refresh/skip scheduling.
 
@@ -63,7 +64,8 @@ def selective_refresh(
     closes before completion. No future rewards or population-genetic fitness.
     """
     values = (alpha, beta, cue_age, sampling_delay, terminal_delay,
-              opportunity_hazard, reward0, reward1, query_cost)
+              opportunity_hazard, reward0, reward1, query_cost,
+              old_cue_error_rate)
     if not all(math.isfinite(float(x)) for x in values):
         raise ValueError("all parameters must be finite")
     if min(alpha, beta, reward0, reward1) <= 0:
@@ -71,10 +73,22 @@ def selective_refresh(
     if min(cue_age, sampling_delay, terminal_delay,
            opportunity_hazard, query_cost) < 0:
         raise ValueError("time, hazard and query cost must be nonnegative")
+    if not 0.0 <= old_cue_error_rate <= 0.5:
+        raise ValueError("old_cue_error_rate must be between zero and one half")
     if not math.isfinite(alpha + beta) or not math.isfinite(reward0 + reward1):
         raise ValueError("rate and reward sums must be finite")
 
     pi1 = alpha / (alpha + beta)
+    error = old_cue_error_rate
+    probability_old_observation_one = pi1 * (1 - error) + (1 - pi1) * error
+    observation_probabilities = (
+        1 - probability_old_observation_one,
+        probability_old_observation_one,
+    )
+    initial_state_posteriors = (
+        pi1 * error / observation_probabilities[0],
+        pi1 * (1 - error) / observation_probabilities[1],
+    )
     survival_skip = math.exp(-opportunity_hazard * terminal_delay)
     survival_refresh = math.exp(
         -opportunity_hazard * (sampling_delay + terminal_delay)
@@ -88,15 +102,15 @@ def selective_refresh(
     )
     skip = []
     refresh = []
-    for old in (0, 1):
+    for observed_old, posterior_at_cue in enumerate(initial_state_posteriors):
         old_posterior = _probability_one(
-            old, cue_age + terminal_delay, alpha, beta
+            posterior_at_cue, cue_age + terminal_delay, alpha, beta
         )
         skip.append(
             survival_skip * _optimal_reward(old_posterior, reward0, reward1)
         )
         probability_new_one = _probability_one(
-            old, cue_age + sampling_delay, alpha, beta
+            posterior_at_cue, cue_age + sampling_delay, alpha, beta
         )
         refresh.append(
             survival_refresh * (
@@ -105,7 +119,7 @@ def selective_refresh(
             ) - query_cost
         )
 
-    p0, p1 = 1 - pi1, pi1
+    p0, p1 = observation_probabilities
     fixed_skip = p0 * skip[0] + p1 * skip[1]
     fixed_refresh = p0 * refresh[0] + p1 * refresh[1]
     adaptive = p0 * max(skip[0], refresh[0]) + p1 * max(skip[1], refresh[1])
