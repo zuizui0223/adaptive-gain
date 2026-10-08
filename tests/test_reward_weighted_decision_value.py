@@ -9,6 +9,8 @@ from adaptive_gain.reward_weighted_decision_value import (
     optimal_action_threshold,
     reward_weighted_receipt,
     weighted_value_expiry,
+    reward_weighted_value_closed_form,
+    last_profitable_cue_age,
 )
 
 
@@ -94,3 +96,43 @@ def test_invalid_parameters_are_rejected():
     with pytest.raises(ValueError):
         reward_weighted_receipt(-1, .8, .2, 1, 1)
     assert optimal_action_threshold(4, 1) == pytest.approx(.8)
+
+
+def test_exact_closed_form_against_bayes_enumeration():
+    n = 0
+    for u, d, r0, r1, t in itertools.product(
+        (.1, .2, .8, 1.7), (.2, .8, 1.7),
+        (.5, 1, 2, 4), (.5, 1, 2, 4), (0, .01, .5, 1, 3, 12),
+    ):
+        closed = reward_weighted_value_closed_form(t, u, d, r0, r1)
+        brute = _independent_best_reward(t, u, d, r0, r1)
+        prior = u / (u + d)
+        blind = max((1 - prior) * r0, prior * r1)
+        assert closed == pytest.approx(max(0., brute - blind), abs=1e-12)
+        n += 1
+    assert n == 1152
+
+
+def test_cost_turns_infinite_information_lifetime_into_finite_use_horizon():
+    assert last_profitable_cue_age(.8, .2, 4, 1) == math.inf
+    horizon = last_profitable_cue_age(.8, .2, 4, 1, cue_use_cost=.1)
+    assert horizon == pytest.approx(math.log(8))
+    assert reward_weighted_value_closed_form(horizon, .8, .2, 4, 1) == pytest.approx(.1)
+    assert last_profitable_cue_age(.8, .2, 4, 1, cue_use_cost=.8) == 0.
+    assert last_profitable_cue_age(.8, .2, 1, 1) == pytest.approx(math.log(8/3))
+
+
+def test_action_value_cost_horizon_is_sharp_across_payoffs():
+    for r0, r1, cost in ((1, 1, .01), (2, 1, .01), (4, 1, .1),
+                         (1, 2, .02)):
+        h = last_profitable_cue_age(.8, .2, r0, r1, cue_use_cost=cost)
+        assert math.isfinite(h) and h > 0.
+        assert reward_weighted_value_closed_form(h-.001, .8, .2, r0, r1) > cost
+        assert reward_weighted_value_closed_form(h+.001, .8, .2, r0, r1) < cost
+
+
+def test_closed_form_and_cost_validate_inputs():
+    with pytest.raises(ValueError):
+        last_profitable_cue_age(.8, .2, 1, 1, cue_use_cost=-.1)
+    with pytest.raises(ValueError):
+        reward_weighted_value_closed_form(float("inf"), .8, .2, 1, 1)
