@@ -203,6 +203,26 @@ The distinction between information DELIVERED versus actively
 REQUESTED is mandatory; see
 validation/bee_2026_active_information_schema_audit_v1.json.
 
+## Cross-experiment trial identity safeguard (2026 public-data audit)
+
+The public bee timing file and active-information file both reuse
+numeric Trial_ID, Bee_ID and Trial_Number identifiers. Among 19,200
+apparently identical triplet keys, 12,399 disagree on task difficulty.
+See biology/BEE_2026_TRIAL_IDENTITY_TIMING_GATE_V1.md
+and validation/bee_2026_cross_experiment_join_gate_v1.json.
+
+**Do not** merge these separate experiments by the shared numeric
+triplet to assign a response latency to an active-information request.
+The existing free-cue vs regular differences in platform landing
+remain observable; the same-trial information/timing mechanism
+remains unmeasured.
+
+New trials must carry a globally unique identifier
+(study, subject, session, condition, encounter), an independent
+environment-state log and actual request, information-delivery,
+final action and timestamp fields within that encounter.
+Only a verified shared event identifier licenses a behavioral join.
+
 ## Falsification / failure gates
 
 - A positive QUERY-versus-PASSIVE contrast that disappears
