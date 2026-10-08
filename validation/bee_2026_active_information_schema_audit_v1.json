@@ -127,5 +127,28 @@
       "negative": 178,
       "zero": 1
     }
+  },
+  "pooled_label_semantics": {
+    "scope": "All 19200 trials, mixing voluntary Regular requests and automatically delivered Free-Cue information.",
+    "note": "A pooled Info_Requested rate is an information-delivery mixture, not a universal active request rate. The paper's core Fig.1E/S3B regular-only requests remain separately interpretable; pooled S3F is not an independent replication of voluntary requesting.",
+    "Easy": {
+      "regular_voluntary_request": 0.09625407166123778,
+      "pooled_info_requested": 0.2774739583333333,
+      "pooled_actual_platform_landing": 0.20065104166666667,
+      "free_cue_fraction": 0.20052083333333334
+    },
+    "Hard": {
+      "regular_voluntary_request": 0.46922069417157825,
+      "pooled_info_requested": 0.5778645833333333,
+      "pooled_actual_platform_landing": 0.49361979166666664,
+      "free_cue_fraction": 0.2046875
+    },
+    "Impossible": {
+      "regular_voluntary_request": 0.7162596401028277,
+      "pooled_info_requested": 0.7700520833333333,
+      "pooled_actual_platform_landing": 0.6203125,
+      "free_cue_fraction": 0.18958333333333333
+    },
+    "model_code_context": "01_conventional_stats/analysis/c_6_1_active_info_seeking_glmm.R pooled model Info_Requested ~ Difficulty + (1|Bee_ID); separate c_6_3 Regular and c_6_5 landing analyses present."
   }
 }
