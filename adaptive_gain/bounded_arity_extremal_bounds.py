@@ -769,6 +769,53 @@ def finite_expected_one_step_mass_witness(
         raise ArithmeticError("finite one-step-mass witness lost fixed necessity")
     return task
 
+def finite_target_prevalence_ternary_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Ternary root with two opposite-target pure leaves and rare binary chain.
+
+    Exact fixed cost is M3=min(query_count,world_count-2).
+    Supports strictly positive, freely chosen world probabilities with any
+    target prevalence in (0,1), including exactly balanced target prevalence.
+    """
+    if type(world_count) is not int or world_count < 4:
+        raise ValueError("world_count must be at least 4")
+    if type(query_count) is not int or query_count < 2:
+        raise ValueError("query_count must be at least 2")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness exceeds exact solver query cap")
+    fixed_target = min(query_count, world_count - 2)
+    if fixed_target < 2:
+        raise ValueError("ternary mixed-root witness needs two queries")
+
+    def chain(internals: int) -> BoundedArityTree:
+        if internals == 0:
+            return BoundedArityTree()
+        return BoundedArityTree((
+            BoundedArityTree(),
+            chain(internals - 1),
+        ))
+
+    tree = BoundedArityTree((
+        BoundedArityTree(),
+        BoundedArityTree(),
+        chain(fixed_target - 1),
+    ))
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != fixed_target:
+        raise ArithmeticError("lost mandatory query certificates")
+    if task.worlds[0].target == task.worlds[1].target:
+        raise ArithmeticError("root pure leaves must have opposite targets")
+    if len({w.target for w in task.worlds[2:]}) != 2:
+        raise ArithmeticError("rare branch must retain both targets")
+    if len(set(task.queries[0].outcomes)) != 3:
+        raise ArithmeticError("root query must be ternary")
+    if any(len(set(q.outcomes)) > 3 for q in task.queries):
+        raise ArithmeticError("query arity above three")
+    return task
+
+
 def sharp_bounded_arity_unit_cost_witness(
     world_count: int,
     query_count: int,
