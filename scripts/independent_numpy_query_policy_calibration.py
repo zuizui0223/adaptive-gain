@@ -104,13 +104,14 @@ def scenario(
     colony_logit_sd: float,replications: int,
     bootstrap_repetitions: int,per_cell_trials: int,
     seed: int,
+    seed_stride: int=17,
 ) -> dict:
     probabilities=P_NULL if case=="null" else P_MIXED
     if case not in ("null","mixed"):
         raise ValueError("case must be null or mixed")
     simulated=[
         simulation_once(
-            seed=seed+i*17,
+            seed=seed+i*seed_stride,
             probabilities=probabilities,ntrain=ntrain,ntest=ntest,
             colony_logit_sd=colony_logit_sd,
             per_cell_trials=per_cell_trials,
@@ -131,6 +132,7 @@ def scenario(
         "monte_carlo_repetitions":replications,
         "cluster_bootstrap_draws_each":bootstrap_repetitions,
         "seed":seed,
+        "seed_stride":seed_stride,
         "mean_metrics":means,
         "fraction_naive_gain_positive":float(np.mean(
             [item["naive_gain"]>0 for item in simulated])),
@@ -150,7 +152,7 @@ def main():
                 case=case,ntrain=clusters,ntest=clusters,
                 colony_logit_sd=sd,replications=200,
                 bootstrap_repetitions=300,per_cell_trials=12,
-                seed=975311,
+                seed=975311,seed_stride=37,
             )
             for case in ("null","mixed")
             for clusters in (12,30,60)
@@ -162,7 +164,7 @@ def main():
                 case=case,ntrain=30,ntest=30,
                 colony_logit_sd=.55,replications=250,
                 bootstrap_repetitions=400,per_cell_trials=12,
-                seed=519280,
+                seed=519280,seed_stride=17,
             )
             for case in ("null","mixed")
         ]
