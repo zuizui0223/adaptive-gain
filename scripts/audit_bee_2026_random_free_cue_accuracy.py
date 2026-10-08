@@ -201,6 +201,9 @@ def analyze(bees: dict[str, list[dict]], *,
         expected[d]["paired_bee_bootstrap_95"] = bounds(
             draws[d]["bee_paired"]
         )
+    landing_check = free_arm_landing_accuracy_audit(
+        clusters, bootstrap_repetitions=bootstrap_repetitions
+    )
 
     trial_order = {}
     for b in range(5):
@@ -256,6 +259,7 @@ def analyze(bees: dict[str, list[dict]], *,
         "n_trials": sum(len(x) for _, x in clusters),
         "free_cue_trials_per_bee_histogram": free_hist,
         "accuracy_by_difficulty": expected,
+        "free_arm_landing_accuracy_control": landing_check,
         "trial_order_20_bins": trial_order,
         "negative_control_previous_correctness": previous_outcome_balance,
         "uncertainty_method": (
@@ -287,6 +291,69 @@ def analyze(bees: dict[str, list[dict]], *,
     }
 
 
+
+def free_arm_landing_accuracy_audit(
+    clusters: list[tuple[str, list[dict]]], *,
+    bootstrap_repetitions: int = 3000,
+    seed: int = 0x5C29E3,
+) -> dict:
+    """Within automatically informed trials, compare LANDING groups.
+
+    Information is automatically delivered in every Free-Cue trial.
+    Platform landing is still self-selected. This is a negative-control
+    style DESCRIPTIVE check for possible motor/attention associations,
+    NOT the causal effect of landing or a time-matched sham trial.
+    """
+    if bootstrap_repetitions < 1:
+        raise ValueError("bootstrap_repetitions must be positive")
+
+    def per_group(sample):
+        result = {
+            d: [empty(), empty()] for d in DIFFICULTIES
+        }
+        for _, arr in sample:
+            for r in arr:
+                if r["free"]:
+                    add(result[r["difficulty"]][r["landed"]], r)
+        return result
+
+    by_diff = per_group(clusters)
+    rng = xorshift32(seed)
+    sampled_effects = {d: [] for d in DIFFICULTIES}
+    for _ in range(bootstrap_repetitions):
+        sampled = [
+            clusters[int(next(rng) * len(clusters))]
+            for _ in clusters
+        ]
+        group = per_group(sampled)
+        for d in DIFFICULTIES:
+            no_land, land = group[d]
+            if land["n"] and no_land["n"]:
+                sampled_effects[d].append(rate(land) - rate(no_land))
+    output = {}
+    for d in DIFFICULTIES:
+        no_land, land = by_diff[d]
+        if not land["n"] or not no_land["n"] or not sampled_effects[d]:
+            raise ValueError(f"missing Free-Cue landing subgroup {d}")
+        output[d] = {
+            "free_landed": land,
+            "free_not_landed": no_land,
+            "accuracy_if_landed": rate(land),
+            "accuracy_if_not_landed": rate(no_land),
+            "landing_minus_no_landing": rate(land) - rate(no_land),
+            "bee_cluster_bootstrap_95": bounds(sampled_effects[d]),
+        }
+    return {
+        "by_difficulty": output,
+        "method": (
+            f"Free-Cue arm only, all automatically receive predictive signal; "
+            f"bee-cluster bootstrap B={bootstrap_repetitions}; "
+            f"xorshift32 seed={seed} (0x{seed:x})"
+        ),
+        "status": "SELF_SELECTED_FREE_CUE_LANDING_ASSOCIATION_NOT_MOTOR_CAUSAL_EFFECT",
+    }
+
+
 def verify_receipt(result: dict, frozen: dict, tol: float = 1e-9):
     if result["source"] != frozen["source"]:
         raise ValueError("source pinned identity differs")
@@ -302,6 +369,15 @@ def verify_receipt(result: dict, frozen: dict, tol: float = 1e-9):
                     raise ValueError(f"frozen interval differs {d} {name}")
             elif abs(a-b) > tol:
                 raise ValueError(f"frozen effect differs {d} {name}")
+        control_a = result["free_arm_landing_accuracy_control"]["by_difficulty"][d]
+        control_b = frozen["free_arm_landing_accuracy_control"]["by_difficulty"][d]
+        for name in ("landing_minus_no_landing", "bee_cluster_bootstrap_95"):
+            a, b = control_a[name], control_b[name]
+            if isinstance(a, list):
+                if len(a) != len(b) or any(abs(x-y) > tol for x,y in zip(a,b)):
+                    raise ValueError(f"frozen landing control differs {d} {name}")
+            elif abs(a-b) > tol:
+                raise ValueError(f"frozen landing control differs {d} {name}")
 
 
 def main():
