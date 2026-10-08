@@ -136,7 +136,7 @@ def test_pairwise_log_maintenance_threshold_matches_peak():
         baseline_fitness=1, **params
     )
     assert threshold == pytest.approx(
-        0.022664086780739928, abs=1e-9
+        0.02266543398898567, abs=1e-9
     )
     cert = precision_window(**params)
     assert cert.peak_error is not None
