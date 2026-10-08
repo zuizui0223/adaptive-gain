@@ -268,5 +268,35 @@
       "conclusion": "K=0.60 is impossible to repay in expectation under uniform world encounters even though the unconstrained expected supremum exceeds K."
     },
     "tests": "tests/test_evolutionary_resource_frontier.py: uniform no-go, exact-policy upper-bound controls, invalid probability floors"
+  },
+  "uniform_world_exact_envelope": {
+    "status": "EXACT_CONSTRUCTIVE_BINARY_UNIFORM_PRIOR",
+    "scope": {
+      "n": 10,
+      "m": 9,
+      "b": 2,
+      "query_costs": "unit",
+      "world_probabilities": "uniform",
+      "completion_value": "exp(-0.3*c)",
+      "condition": "m >= n-1"
+    },
+    "distinct_binary_leaf_depth_profiles_enumerated": 115,
+    "sharp_expected_advantage": 0.3328200167641013,
+    "optimal_fixed_cost": 6,
+    "optimal_leaf_depths": [
+      1,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4
+    ],
+    "target_equivalent_worlds_at_earliest_leaf": 3,
+    "one_world_per_terminal_sharp_advantage": 0.29721396786949056,
+    "previous_nonsharp_frequency_floor_upper_bound": 0.5008067818130457,
+    "arbitrary_prior_expected_supremum": 0.673612707941968,
+    "interpretation": "Uniform encounters over represented worlds materially reduce attainable expected advantage. Decision-equivalent multiplicity can still concentrate early completions; this is not equivalent to a uniform distribution over terminal decisions.",
+    "status_validation": "Focused GitHub Actions sharp-opportunity-envelope success run 37745767356 after code/tests changes"
   }
 }
