@@ -3,7 +3,8 @@
 These tests intentionally use only frozen individual-count receipts, not the
 raw spreadsheet. The comparisons are exploratory, not confirmatory.
 """
-import math
+import json
+from pathlib import Path
 
 import pytest
 
@@ -60,3 +61,41 @@ def test_invalid_counts_are_rejected():
         wilson_interval(11, 10)
     with pytest.raises(ValueError):
         compare_cdfs(5, 4, 0, 2)
+
+
+
+def test_uncertainty_receipt_matches_frozen_individual_event_counts():
+    root = Path(__file__).resolve().parents[1]
+    source = json.loads(
+        (root / "validation" / "uehara_binned_first_probe_v1.json").read_text()
+    )
+    audit = json.loads(
+        (root / "validation" / "uehara_cdf_uncertainty_v1.json").read_text()
+    )
+
+    def first_k(name, minute):
+        data = source["species"][name]
+        return (
+            sum(data["first_probe_interval_counts"][:minute]),
+            data["n_primary"],
+        )
+
+    scenarios = (
+        ("Anopheles gambiae", "Anopheles stephensi", 1),
+        ("Anopheles gambiae", "Anopheles stephensi", 4),
+        ("Anopheles gambiae", "Aedes albopictus", 1),
+        ("Aedes aegypti", "Aedes albopictus", 1),
+    )
+    for frozen, (first, second, minute) in zip(audit["comparisons"], scenarios):
+        k1, n1 = first_k(first, minute)
+        k2, n2 = first_k(second, minute)
+        observed = compare_cdfs(k1, n1, k2, n2)
+        assert frozen["minute_end"] == minute
+        assert frozen["first"]["k"] == k1
+        assert frozen["first"]["n"] == n1
+        assert frozen["second"]["k"] == k2
+        assert frozen["second"]["n"] == n2
+        assert frozen["fraction_difference"] == pytest.approx(observed.difference)
+        assert frozen["fisher_two_sided_p"] == pytest.approx(
+            observed.fisher_two_sided_p
+        )
