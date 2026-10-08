@@ -10,8 +10,7 @@ fixed-to-contingent ratio is largest at adaptive depth three. **C**, when
 completion value decays exponentially through time, the biologically optimal
 frontier point changes with ecological urgency: the optimum moves from depth
 four to depth three to depth two. The structural frontier is unchanged;
-natural history changes its ranking. Structural ratios are not interpreted as
-fitness.
+natural history changes its ranking. Structural ratios are not interpreted as fitness.
 
 **Alt text:** Three panels show an exact frontier of contingent and fixed
 information costs, the structural ratio ranking of three frontier points, and
