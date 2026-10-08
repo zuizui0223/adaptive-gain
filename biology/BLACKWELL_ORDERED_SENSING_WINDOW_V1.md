@@ -1,6 +1,15 @@
 # Ordered cue quality makes the conditional-sensing premium single-peaked
 
-**Status:** analytic falsification constraint for the dynamic re-query model on PR #67, *not* a V6 MAIN 4 or a claim of new general sequential-decision theory. The source of the argument is classical Blackwell informativeness + an elementary two-schedule option-value identity; conditional information procurement is also established (Miller 1975, https://doi.org/10.1287/mnsc.22.1.1). Blackwell ranking has extensive prior art; see Athey & Levin's discussion (1998/2001, https://papers.ssrn.com/abstract=140591) and the decision-theory background in V6.
+**Status:** ORIGINAL TWO-SCHEDULE SHAPE CERTIFICATE; read alongside
+WAIT_VERSUS_INFORMATION_CAUSAL_GATE_V1.md. With a moving
+payoff-relevant environmental state, the original bundled query can
+also work as a state-conditioned delay. The algebra below remains
+correct for that narrower bundled comparator, but its numerical G
+cannot be attributed entirely to new information. For the
+matched-WAIT information-acquisition control, replace S_x with
+M_x=max(SKIP_x,WAIT_x) in the same derivation; this retains the
+weak unimodality guarantee, but changes the active window and peak.
+Analytic falsification constraint for the dynamic re-query model on PR #67, *not* a V6 MAIN 4 or a claim of new general sequential-decision theory. The source of the argument is classical Blackwell informativeness + an elementary two-schedule option-value identity; conditional information procurement is also established (Miller 1975, https://doi.org/10.1287/mnsc.22.1.1). Blackwell ranking has extensive prior art; see Athey & Levin's discussion (1998/2001, https://papers.ssrn.com/abstract=140591) and the decision-theory background in V6.
 
 ## Biological question
 
@@ -44,13 +53,20 @@ alpha=.8, beta=.2, old cue age=1.2, sampling time=.15, terminal action delay=.1,
 
 For a symmetric binary refreshed-signal error epsilon in [0,.5], higher epsilon is a Blackwell garbling of lower epsilon, with all operational quantities held fixed.
 
-The precise active window (to approximate 1e-8) is
+For the original two-schedule bundled comparison, the precise
+active window (to approximate 1e-8) is
 
 \[
 0.05652258<\epsilon<0.35127167.
 \]
 
-The relative premium peaks at the crossover of expected values of *always refresh* and *always skip*, at epsilon approximately .113985736, where G is approximately 0.040810843 in expected-payoff units. At perfect new sensing, both branches favor refresh, so no conditional schedule gain is left; at uninformative sensing, both favor skip, also giving zero conditional gain. Throughout this process the absolute optimized conditional expected payoff is nonincreasing with epsilon. This does **not** favor worse sensing per se.
+This original bundled relative premium peaks at the crossover of expected values of *always refresh* and *always skip*, at epsilon approximately .113985736, where G is approximately 0.040810843 in expected-payoff units. At perfect new sensing, both branches favor refresh, so no conditional schedule gain is left; at uninformative sensing, both favor skip, also giving zero conditional gain. Throughout this process the absolute optimized conditional expected payoff is nonincreasing with epsilon. This does **not** favor worse sensing per se.
+
+The matched-WAIT corrected numbers, computed by waiting_control.py,
+are 0.05652258 < epsilon < 0.34238957 and the maximum
+0.03958103 at epsilon=0.11225411. Only the latter comparison
+isolates genuine optional information acquisition relative to a
+no-query controller that may conditionally WAIT or SKIP.
 
 The ordered_accuracy_window.py module estimates the two branchwise crossings and the fixed comparator's tie by monotone bisection. It returns a numerical root *estimate*, not a formal interval-arithmetic proof. Tests independently inspect a dense error grid, verify the branchwise Blackwell monotonicity, and check the shape theorem for general 3-branch synthetic monotone payoffs.
 
@@ -165,7 +181,8 @@ without a biologically justified comparator, measurable
 maintenance costs, heritable variation and an empirical
 fitness link.
 
-For the illustrative Markov settings of this note and
+For the **original two-schedule bundled comparison**, the
+illustrative Markov settings of this note and
 chosen gross baseline w0=1 expected-reward unit, the
 fixed schedule's performance at the peak is 0.78024793,
 G_peak=0.040810843 and therefore
@@ -180,6 +197,12 @@ can repay the controller relative to the declared fixed
 schedules. This is a conditional resource ceiling,
 not a measured selection coefficient or a separate
 novelty theorem. Different w0 changes the numerical ceiling.
+
+With an explicit matched-WAIT comparator, the corrected w0=1
+log-maintenance ceiling is 0.02197123, not 0.02266543.
+The first number bounds the extra cost of conditional querying
+*after removing timing-only optionality*; neither is measured
+biological selection.
 
 Executable bridge: controller_log_cost_ceiling in
 adaptive_gain/ordered_accuracy_window.py; regression tests
