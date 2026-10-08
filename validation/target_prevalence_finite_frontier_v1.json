@@ -101,5 +101,85 @@
     "interpretation": "Even when ternary class has higher capacity, arity-specific overhead can eliminate the advantage; this is a cross-task-class bound, not a selection coefficient.",
     "implementation": "adaptive_gain/target_prevalence_capacity.py:finite_ternary_capacity_premium_prevalence_interval",
     "tests": "tests/test_target_prevalence_capacity.py"
+  },
+  "matched_world_architecture_comparison": {
+    "status": "INDEPENDENT_FINITE_POLICY_ENUMERATION_COMPLETE__GITHUB_REGRESSION_ADDED",
+    "worlds": [
+      "common_target_0",
+      "common_target_1",
+      "rare_target_0",
+      "rare_target_1"
+    ],
+    "targets": [
+      0,
+      1,
+      0,
+      1
+    ],
+    "encounter_probabilities": [
+      0.49,
+      0.49,
+      0.01,
+      0.01
+    ],
+    "binary_queries": [
+      {
+        "name": "is_common_target_1",
+        "outcomes": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "is_rare_target_1",
+        "outcomes": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "ternary_queries": [
+      {
+        "name": "identify_common_0_common_1_or_rare",
+        "outcomes": [
+          0,
+          1,
+          2,
+          2
+        ]
+      },
+      {
+        "name": "is_rare_target_1",
+        "outcomes": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "fixed_bundle_cost_both": 2,
+    "minimax_adaptive_cost_both": 2,
+    "completion_value": "exp(-0.3*time)",
+    "exact_optimal_expected_value_binary": 0.6428948625419952,
+    "exact_optimal_expected_value_ternary": 0.7369780889899641,
+    "ternary_performance_premium": 0.09408322644796885,
+    "extra_ternary_maintenance_cost": 0.05,
+    "ternary_pairwise_net_value": 0.044083226447968846,
+    "validation_method": "Independent exhaustive recursion over allowed query orders and outcomes, plus repository regression test",
+    "claim_ceiling": "Pairwise advantage only for the specified same-world different-vocabulary architectures, not universal evolutionary preference for ternary cues or empirical evidence."
+  },
+  "query_budget_endpoint_audit": {
+    "case": "n=10,m=6,extra_ternary_cost=0",
+    "observation": "M3=M, so the ternary-class capacity exceeds the binary-class capacity for all target prevalences p strictly between 0 and 1.",
+    "expected_open_prevalence_interval": [
+      0,
+      1
+    ],
+    "test": "test_free_ternary_capacity_can_dominate_all_nonextreme_prevalences"
   }
 }
