@@ -55,6 +55,55 @@ The best conditional schedule is QUERY after old report 0, PASSIVE after report 
 
 An aggregate Q-vs-P null cannot rule out a positive old-report-contingent information-acquisition value.
 
+## Feasibility stress test: the smaller common-branch effect governs sample burden
+
+Before using the toy table to plan a real experiment, calculate the
+precision of BOTH report-specific contrasts, not just the average
+QUERY-versus-PASSIVE null or the apparent 0.04 gain.
+
+For old report 0, the unweighted report-specific advantage is
+Q(0)-P(0)=+0.20; for old report 1, P(1)-Q(1)=+0.05.
+With target weights (0.2,0.8), both weighted contributions are +0.04.
+The common report therefore has a *small* arm difference but a large
+weight, making its comparison the precision bottleneck.
+
+Under exceptionally optimistic assumptions of independent Bernoulli
+net rewards, already-known correct policy, no animal/colony
+correlation, deliberately 50:50 old-report sampling, and 1:1:1
+randomized PASSIVE/SHAM/QUERY assignment:
+
+- sampling-variance coefficients of the two weighted contrasts
+  are 0.072/N and 1.3344/N;
+- for **two conservative Bonferroni one-sided lower bounds**
+  with nominal 80% simultaneous power, assign each contrast
+  at least 90% power by the union bound;
+- the Gaussian toy approximation yields about **473** independent
+  trial observations for conditional-minus-PASSIVE and **8,764**
+  for conditional-minus-QUERY. The latter binds.
+
+This is a **model-parameter sensitivity**, NOT a recommended
+sample size: it ignores within-bee and colony dependence,
+non-Bernoulli reward amounts, unknown arm means, acquisition
+compliance, loss of opportunity, attrition and the expense of
+learning the policy. Assuming an illustrative variance inflation
+factor of 2 doubles the binding toy burden to approximately
+17,527 trials; no such design effect has been estimated from bees.
+
+If the true branch effects were already known, the purely
+mathematical allocation balancing the two contrast signal-to-noise
+ratios would assign about 5.12% of test trials to old report 0
+and 94.88% to report 1 under equal three-arm randomization,
+reducing this artificial independent-trial approximation to
+about 4,619. This *oracle* allocation must not be recommended
+for a real bee assay without independent pilot parameter
+estimates, separate policy-learning needs and randomization
+integrity. A lab cue frequency is not an ecological deployment
+weight.
+
+Reproducible sensitivity:
+adaptive_gain/query_policy_design_sensitivity.py and
+tests/test_query_policy_design_sensitivity.py.
+
 ## Nonidentification and experimental stop rules
 
 The evaluator in adaptive_gain/randomized_policy_trial.py measures EXECUTED forced-regime performance, not the theoretical Bayes-optimal payoff envelope. It requires known assignment probabilities constant within old-report strata; if propensities depend on additional covariates/history, the cell-mean estimator is invalid without appropriate inverse-propensity or augmented estimation.
