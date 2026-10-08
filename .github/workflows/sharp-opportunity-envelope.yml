@@ -11,6 +11,8 @@ on:
       - tests/test_opportunity_extremal_envelope.py
       - adaptive_gain/evolutionary_resource_frontier.py
       - tests/test_evolutionary_resource_frontier.py
+      - adaptive_gain/target_prevalence_capacity.py
+      - tests/test_target_prevalence_capacity.py
       - adaptive_gain/expected_value_bridge.py
       - tests/test_expected_value_bridge.py
       - adaptive_gain/policy_fitness.py
@@ -34,5 +36,6 @@ jobs:
           tests/test_bounded_arity_extremal_bounds.py
           tests/test_opportunity_extremal_envelope.py
           tests/test_evolutionary_resource_frontier.py
+          tests/test_target_prevalence_capacity.py
           tests/test_expected_value_bridge.py
           tests/test_policy_fitness.py
