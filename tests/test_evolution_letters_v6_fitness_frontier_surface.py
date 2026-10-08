@@ -199,3 +199,33 @@ def test_v6_references_include_fixed_test_collection_and_both_mosquito_anchors()
         "Behavioral heterogeneity in host seeking and post-feeding suppression",
     ):
         assert phrase in refs
+
+
+
+def test_v6_display_math_never_contains_nested_inline_delimiters():
+    """Catch an actual math-rendering bug in earlier manuscript versions.
+
+    A LaTeX display block delimited by \[ and \] must not contain the
+    Markdown inline math delimiters \( and \). Otherwise formulas like
+    U\(C_A\) do not represent the function evaluation U(C_A).
+    """
+    source = _text(MAIN)
+    assert source.count(r"\[") == source.count(r"\]") > 0
+    parts = re.split(r"(\\\[|\\\])", source)
+    active = False
+    for part in parts:
+        if part == r"\[":
+            assert not active, "nested display math"
+            active = True
+        elif part == r"\]":
+            assert active, "unmatched display math close"
+            active = False
+        elif active:
+            assert r"\(" not in part, "inline opener inside display math"
+            assert r"\)" not in part, "inline closer inside display math"
+    assert not active
+    assert r"R_{\rm expected}(\pi)" in source
+    assert r"U(T_\pi(w))" in source
+    assert "U[T_pi(w)]" not in source
+    assert r"U(C_A)-U(C_F)" in source
+    assert r"J_K(h)" in source
