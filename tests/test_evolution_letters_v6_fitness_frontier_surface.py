@@ -270,3 +270,16 @@ def test_v6_references_are_not_accidentally_counted_inside_math_blocks():
                 assert r"\(" not in part, f"nested inline opener: {path}"
                 assert r"\)" not in part, f"nested inline closer: {path}"
         assert not state
+
+
+
+def test_v6_theory_prior_art_explicitly_covers_query_set_tree_coupling():
+    text = _text(MAIN)
+    boundary = _section(text, "### What the theory does not claim",
+                        "## Current empirical requirements")
+    assert "Wieczorek et al. 2021" in boundary
+    assert "sharp all-depth joint extremum" in boundary
+    assert "The proposed MAIN contribution is restricted to three results" in boundary
+    assert "not a fourth independent novelty claim" in boundary
+    assert "Minimum query set for decision tree construction" in text
+    assert "https://doi.org/10.3390/e23121682" in text
