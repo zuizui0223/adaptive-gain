@@ -2847,6 +2847,133 @@ This separates finite-resource expected rescue from the scalable asymptotic
 argument.
 
 
+## Corollary RF7.3 — the exact minimum expected-evolvability resource corner
+
+The forward finite-scope expected-value theorem can be inverted.
+
+For a finite nonincreasing completion-value function \(U\) and additive
+constitutive control cost \(K\ge0\), define
+
+\[
+\boxed{
+J_K^{\mathrm{expected}}
+=
+\min\left\{
+j\in\mathbb Z_{\ge2}:
+U(1)-U(j)>K
+\right\},
+}
+\]
+
+with value \(\infty\) if no finite \(j\) qualifies.
+
+For any finite nontrivial task with \(n\) worlds, at most \(m\) unit-cost
+queries, and cue arity at most \(b\ge2\), RF7 gives
+
+\[
+\sup R_{\mathrm{expected}}
+=
+U(1)-U(\min\{m,n-1\}).
+\]
+
+Consequently, positive expected net value is attainable with some strictly
+positive encounter-frequency distribution **if and only if**
+
+\[
+\boxed{
+\min\{m,n-1\}\ge J_K^{\mathrm{expected}}.
+}
+\]
+
+Whenever \(J_K^{\mathrm{expected}}<\infty\), the componentwise minimum
+resource corner is therefore
+
+\[
+\boxed{
+(n_{\min},m_{\min})
+=
+(J_K^{\mathrm{expected}}+1,J_K^{\mathrm{expected}}).
+}
+\]
+
+The binary shallow-leaf/private-pair construction in RF7 attains this corner
+in the supremal sense (and gives positive net value at sufficiently skewed but
+strictly positive encounter probabilities). Thus this expected-evolvability
+corner is independent of every permitted cue arity \(b\ge2\).
+
+### Exponential opportunity closure
+
+For \(U(c)=v e^{-\mu c}\), \(v,\mu>0\), write
+
+\[
+r=e^{-\mu}-K/v.
+\]
+
+If \(r\le0\), then no finite information architecture can pay \(K\) even in
+expectation. If \(r>0\), then the strict threshold has the closed form
+
+\[
+\boxed{
+J_K^{\mathrm{expected}}
+=
+\left\lfloor
+-\frac{\log r}{\mu}
+\right\rfloor+1.
+}
+\]
+
+Because \(K\ge0\), this integer is at least 2.
+
+### Canonical contrasts at \(\mu=0.3,\ v=1\)
+
+For \(K=0.30\),
+
+\[
+J_{0.30}^{\mathrm{expected}}=3,
+\qquad
+\boxed{(n_{\min},m_{\min})=(4,3)}.
+\]
+
+At the same \(\mu\), the arity-limited robust ceiling for binary queries is
+only \(0.290085\). Thus no binary task of any size can guarantee statewise
+repayment at \(K=0.30\), while a binary four-world, three-query task can be
+favored in expectation when encounters are sufficiently concentrated.
+
+For \(K=0.60\),
+
+\[
+J_{0.60}^{\mathrm{expected}}=7,
+\qquad
+\boxed{(n_{\min},m_{\min})=(8,7)}.
+\]
+
+Here \(K=0.60\) also exceeds the **unrestricted** robust ceiling
+\(e^{-0.6}\approx0.548812\), so statewise repayment is impossible for every
+finite information architecture. Nevertheless, expected repayment is possible
+at the exact finite binary corner \((8,7)\).
+
+The one-step encounter-mass threshold at this minimum corner is
+
+\[
+p_1>
+\frac{K-[U(2)-U(7)]}{U(1)-U(2)}
+\approx0.904369.
+\]
+
+The less demanding asymptotic threshold \(0.266597\) from RF6 is obtained only
+when the rare-branch fixed burden may grow without bound; it must not be used
+as the finite-corner threshold.
+
+### Scope and priority
+
+This inversion is an exact corollary of RF7, not a new independent
+value-of-information theorem. It compares contingent acquisition to a
+universal precommitted fixed bundle; it does not rule out context-preindexed
+biological alternatives or account for endogenous sensing costs. The strict
+expected-value existence statement permits encounter probabilities to be
+chosen, rather than requiring viability for a measured ecological distribution.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
