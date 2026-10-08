@@ -1,0 +1,63 @@
+{
+  "status": "THEOREM_AND_WITNESS_REGISTERED_PYTEST_PENDING",
+  "branch": "theory/opportunity-fitness-process-v1",
+  "scope": {
+    "world_count": "fixed n>=2",
+    "query_budget": "at most m>=1",
+    "unit_cost": true,
+    "deterministic_exact_resolution": true,
+    "comparator": "one universal fixed resolving bundle",
+    "target_labels": 2,
+    "fixed_target_prevalence": "P(target=0)=p in (0,1)",
+    "world_frequencies": "strictly positive but arbitrarily redistributable within each target class",
+    "biological_value": "finite nonincreasing U(c)"
+  },
+  "finite_sharp_envelope": {
+    "M": "min(m,n-1)",
+    "M3": "min(m,n-2)",
+    "q": "max(p,1-p)",
+    "if_M_eq_1": "zero adaptive advantage",
+    "b2_if_M_ge_2": "q*U(1)+(1-q)*U(2)-U(M)",
+    "b_ge_3_if_n_ge_4": "max[b2_envelope, U(1)-U(M3)]",
+    "b_ge_3_if_n_le_3": "same as b2 envelope",
+    "attainment": "supremum over strictly positive world frequencies; binary one-pure-root chain or ternary two-pure-root rare-mixed chain with private-pair fixed mandates"
+  },
+  "independent_small_exhaustive": {
+    "world_count": 4,
+    "query_count": 2,
+    "target_prevalence": 0.5,
+    "U": "exp(-0.3*c)",
+    "enumeration": "all nonconstant query outcome patterns, all unordered pairs of distinct queries, all nonconstant target label assignments, all pairs of one target-0 and one target-1 world carrying limiting probability 0.5 each, both query orders",
+    "binary": {
+      "evaluated_scenarios": 2064,
+      "max_expected_advantage": 0.09600329229384574,
+      "theorem_value": 0.09600329229384563
+    },
+    "ternary": {
+      "evaluated_scenarios": 101016,
+      "max_expected_advantage": 0.1920065845876915,
+      "theorem_value": 0.19200658458769138
+    },
+    "comparison": "agreement to numerical precision; enumeration performed independently of repository policy solver"
+  },
+  "finite_canonical": {
+    "n": 10,
+    "m": 9,
+    "p": 0.5,
+    "mu": 0.3,
+    "K": 0.62,
+    "binary_exact_supremum": 0.5776094156481224,
+    "ternary_exact_supremum": 0.6501002673923054,
+    "ternary_constructive_task": {
+      "world_count": 10,
+      "productive_queries": 8,
+      "max_arity": 3,
+      "fixed_cost": 8,
+      "early_pure_leaves": "opposite target classes, each with encounter probability 0.49",
+      "rare_mixed_branch": "8 worlds, total encounter probability 0.02",
+      "declared_expected_advantage": 0.6413077872169151
+    },
+    "conclusion": "Binary cannot repay K=0.62 under 50:50 target prevalence at n=10,m=9, while a concrete ternary policy can."
+  },
+  "claim_ceiling": "Not an empirical evolutionary result; outcome cardinality carries unit acquisition cost, arity-specific hardware costs are not modeled, and all envelope attainments optimize within-target world frequencies. New theorem remains supplementary pending latest CI and prior-art review."
+}
