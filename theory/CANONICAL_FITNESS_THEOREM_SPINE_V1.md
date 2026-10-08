@@ -200,7 +200,7 @@ prevalence* to vary freely. At fixed 50/50 binary-target prevalence, the
 minimal four-world, two-query corner instead has a binary supremum
 \(\tfrac12[U(1)-U(2)]\) and a ternary supremum \(U(1)-U(2)\).
 This conditional arity effect is audited in
-\`TARGET_PREVALENCE_EXPECTED_CAPACITY.md\` and its independent exhaustive test.
+`TARGET_PREVALENCE_EXPECTED_CAPACITY.md` and its independent exhaustive test.
 It remains supporting interpretation, not another MAIN theorem.
 
 Cue arity constrains robust evolvability, but encounter-frequency concentration
