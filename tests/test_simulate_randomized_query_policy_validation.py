@@ -6,7 +6,7 @@ import pytest
 
 from scripts.simulate_randomized_query_policy_validation import (
     MIXED_PROBABILITIES, NULL_PROBABILITIES, TARGET,
-    _values, repeated_assay,
+    _values, repeated_assay, _marginal_probabilities,
 )
 
 
@@ -28,7 +28,11 @@ def test_monte_carlo_deterministic_and_heldout_split_respected():
     c=repeated_assay(scenario="mixed",**args)
     assert a == b
     assert a.nominal_no_cluster_contingent_gain == pytest.approx(0)
+    assert a.marginal_cluster_contingent_gain == pytest.approx(0,abs=1e-12)
+    assert not a.marginal_cluster_policy_is_mixed
     assert c.nominal_no_cluster_contingent_gain == pytest.approx(.04)
+    assert c.marginal_cluster_contingent_gain > .035
+    assert c.marginal_cluster_policy_is_mixed
     assert a.clusters_train==8
     assert a.clusters_heldout==8
     assert a.trials_per_cluster==24
@@ -60,3 +64,18 @@ def test_one_report_missing_values_and_invalid_sampling_design_rejected():
         repeated_assay(scenario="null",colony_logit_sd=-.1,repetitions=1)
     with pytest.raises(ValueError,match="positive integers"):
         repeated_assay(scenario="null",trials_per_cell=0,repetitions=1)
+
+
+
+def test_marginal_colony_mixture_reduces_but_does_not_erase_toy_value():
+    assert _marginal_probabilities(MIXED_PROBABILITIES, 0)==MIXED_PROBABILITIES
+    marginal=_marginal_probabilities(MIXED_PROBABILITIES, .55)
+    assert marginal[0][0] == pytest.approx(.6885752044439802,abs=2e-6)
+    assert marginal[0][2] == pytest.approx(.8892301228380588,abs=2e-6)
+    assert marginal[1][0] == pytest.approx(.7864460434604592,abs=2e-6)
+    assert marginal[1][2] == pytest.approx(.7370374490766479,abs=2e-6)
+    assert _values(marginal,(2,0))[2] == pytest.approx(
+        .03952687550704903,abs=2e-6
+    )
+    # TRUE population-marginal gain under the assumed colony mixture
+    # differs from the nominal 0.04 at zero random intercept.
