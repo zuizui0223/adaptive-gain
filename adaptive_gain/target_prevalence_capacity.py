@@ -391,8 +391,11 @@ def finite_ternary_capacity_premium_prevalence_interval(
     q_limit = (
         ternary_pure - extra_ternary_cost - u2 + uM
     ) / (u1 - u2)
-    if not (0.5 < q_limit < 1.0):
-        raise ArithmeticError("ternary capacity premium boundary outside (1/2,1)")
+    if not (0.5 < q_limit <= 1.0 + 1e-12):
+        raise ArithmeticError("ternary capacity premium boundary outside (1/2,1]")
+    # If the query budget binds both classes (M3=M) and overhead is zero,
+    # q_limit=1: ternary capacity is strictly higher for every p in (0,1).
+    q_limit = min(q_limit, 1.0)
 
     return FiniteTernaryCapacityPremiumInterval(
         world_count, query_count, extra_ternary_cost,
