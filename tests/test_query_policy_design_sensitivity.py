@@ -79,3 +79,15 @@ def test_invalid_probability_reward_and_wrong_policy_signs_are_rejected():
         variance_balancing_old_zero_allocation(**dict(
             TOY,arm_probability_passive=.5,arm_probability_query=.5
         ))
+
+
+
+def test_zero_variance_gaussian_power_formula_is_not_a_zero_sample_design():
+    exact=dict(
+        TOY,success_passive_old_zero=0.,success_query_old_zero=1.,
+        success_passive_old_one=1.,success_query_old_one=0.
+    )
+    with pytest.raises(ValueError,match="degenerate Bernoulli"):
+        design_sensitivity(laboratory_old_zero=.5,**exact)
+    with pytest.raises(ValueError,match="degenerate Bernoulli"):
+        variance_balancing_old_zero_allocation(**exact)
