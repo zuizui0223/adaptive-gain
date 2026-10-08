@@ -540,3 +540,26 @@ def test_ternary_capacity_premium_rejects_negative_overhead():
             10, 9, -0.001,
             completion_value=lambda c: math.exp(-0.3*c),
         )
+
+
+
+def test_free_ternary_capacity_can_dominate_all_nonextreme_prevalences():
+    # When m <= n-2, both arity classes can have the same fixed burden M.
+    # With no extra ternary cost, the three-outcome class then strictly
+    # improves on binary for every target prevalence p in (0,1).
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_capacity_premium_prevalence_interval(
+        10, 6, 0.0, completion_value=val
+    )
+    assert receipt.ternary_minus_binary_positive_interval == pytest.approx(
+        (0.0, 1.0)
+    )
+
+    for p in (0.001, 0.20, 0.5, 0.8, 0.999):
+        binary = finite_target_prevalence_expected_capacity(
+            10, 6, p, max_arity=2, completion_value=val
+        )
+        ternary = finite_target_prevalence_expected_capacity(
+            10, 6, p, max_arity=3, completion_value=val
+        )
+        assert ternary.expected_value_supremum > binary.expected_value_supremum
