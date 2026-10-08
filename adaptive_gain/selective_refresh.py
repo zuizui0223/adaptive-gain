@@ -5,7 +5,8 @@ At time -cue_age a prior observation of X was acquired, optionally with
 symmetric binary error rate old_cue_error_rate. At time 0,
 the agent may skip or refresh *conditional on that previous observation*.
 Skipping acts after terminal_delay. Refreshing waits sampling_delay, observes
-the current X perfectly, then acts after terminal_delay. The environment
+the current X with symmetric binary error refresh_cue_error_rate, then
+acts after terminal_delay, updating on both old and new signals. The environment
 may change during either period. Payoff is reward0/reward1 for a correct
 terminal-state action, zero otherwise; environmental opportunity survives
 independently with exponential hazard opportunity_hazard. Every attempted
@@ -54,6 +55,7 @@ def selective_refresh(
     reward1: float = 1.0,
     query_cost: float = 0.0,
     old_cue_error_rate: float = 0.0,
+    refresh_cue_error_rate: float = 0.0,
 ) -> SelectiveRefreshResult:
     """Exact two-stage Bayes optimization over refresh/skip scheduling.
 
@@ -66,7 +68,7 @@ def selective_refresh(
     """
     values = (alpha, beta, cue_age, sampling_delay, terminal_delay,
               opportunity_hazard, reward0, reward1, query_cost,
-              old_cue_error_rate)
+              old_cue_error_rate, refresh_cue_error_rate)
     if not all(math.isfinite(float(x)) for x in values):
         raise ValueError("all parameters must be finite")
     if min(alpha, beta, reward0, reward1) <= 0:
@@ -76,6 +78,8 @@ def selective_refresh(
         raise ValueError("time, hazard and query cost must be nonnegative")
     if not 0.0 <= old_cue_error_rate <= 0.5:
         raise ValueError("old_cue_error_rate must be between zero and one half")
+    if not 0.0 <= refresh_cue_error_rate <= 0.5:
+        raise ValueError("refresh_cue_error_rate must be between zero and one half")
     if not math.isfinite(alpha + beta) or not math.isfinite(reward0 + reward1):
         raise ValueError("rate and reward sums must be finite")
 
@@ -94,13 +98,12 @@ def selective_refresh(
     survival_refresh = math.exp(
         -opportunity_hazard * (sampling_delay + terminal_delay)
     )
-    final_reward_after_new_signal = tuple(
-        _optimal_reward(
-            _probability_one(new, terminal_delay, alpha, beta),
-            reward0, reward1,
-        )
-        for new in (0, 1)
-    )
+    # The old cue remains available for posterior updating. If the refresh
+    # observation is noisy, it must be fused with the old posterior rather
+    # than assumed to reveal the present state perfectly.
+    final_one_if_new_zero = _probability_one(0, terminal_delay, alpha, beta)
+    final_one_if_new_one = _probability_one(1, terminal_delay, alpha, beta)
+    refresh_error = refresh_cue_error_rate
     skip = []
     refresh = []
     for posterior_at_cue in initial_state_posteriors:
@@ -113,11 +116,35 @@ def selective_refresh(
         probability_new_one = _probability_one(
             posterior_at_cue, cue_age + sampling_delay, alpha, beta
         )
+        # For each observed refreshed label, compute the *joint* mass
+        # of observation and final true state. The weighted maxima are
+        # equivalent to optimal posterior actions, without dividing by
+        # possibly tiny report probabilities.
+        expected_optimized_reward = 0.0
+        for refreshed_report in (0, 1):
+            chance_report_if_new_zero = (
+                1 - refresh_error if refreshed_report == 0 else refresh_error
+            )
+            chance_report_if_new_one = (
+                1 - refresh_error if refreshed_report == 1 else refresh_error
+            )
+            joint_final_one = (
+                (1 - probability_new_one) * chance_report_if_new_zero
+                * final_one_if_new_zero
+                + probability_new_one * chance_report_if_new_one
+                * final_one_if_new_one
+            )
+            joint_final_zero = (
+                (1 - probability_new_one) * chance_report_if_new_zero
+                * (1 - final_one_if_new_zero)
+                + probability_new_one * chance_report_if_new_one
+                * (1 - final_one_if_new_one)
+            )
+            expected_optimized_reward += max(
+                reward0 * joint_final_zero, reward1 * joint_final_one
+            )
         refresh.append(
-            survival_refresh * (
-                (1 - probability_new_one) * final_reward_after_new_signal[0]
-                + probability_new_one * final_reward_after_new_signal[1]
-            ) - query_cost
+            survival_refresh * expected_optimized_reward - query_cost
         )
 
     p0, p1 = observation_probabilities
