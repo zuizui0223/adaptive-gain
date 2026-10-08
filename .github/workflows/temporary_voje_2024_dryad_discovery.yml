@@ -55,7 +55,13 @@ jobs:
           d <- d[ord,]
           y0 <- as.paleoTS(mm=d$trait_mean, vv=d$trait_var, nn=d$N,
                            tt=d$age_MY, oldest="first")
-          ylog <- ln.paleoTS(y0)
+          # PETS tsID 582 has trait_mean ~2.645, already on the ln(micrometre)
+          # scale used in Voje 2024. ln.paleoTS(y0) here would log it twice.
+          # The PETS metadata flag 'log_transformed=no' records catalog handling;
+          # it does not override the source trait-unit annotation.
+          cat("PETS_RAW_TRAIT_MEAN_FIRST=", format(y0$mm[1],digits=15), "\\n",sep="")
+          cat("PETS_RAW_TRAIT_VAR_FIRST=", format(y0$vv[1],digits=15), "\\n",sep="")
+          ylog <- y0
           cat("LOG_MEAN_FIRST_LAST=", ylog$mm[1], ",", tail(ylog$mm,1), "\n", sep="")
           cat("LOG_TT_MIN_MAX_MY=", min(ylog$tt), ",", max(ylog$tt), "\n", sep="")
           cat("LOG_N=", length(ylog$mm), "\n", sep="")
