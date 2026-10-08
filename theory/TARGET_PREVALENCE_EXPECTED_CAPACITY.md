@@ -204,6 +204,127 @@ A concrete ternary root plus rare binary depth-four subtree suffices; take 49.5%
 
 Its fixed mandatory-query burden is 16 and its expected exponential completion-value advantage exceeds 0.68.
 
+
+## Theorem TP2 — a minimal finite four-world counterexample
+
+The class-balance constraint already restores an arity gap at the smallest
+nontrivial finite corner with a mixed continuation.
+
+Fix:
+
+\[
+n=4,\qquad m=2,
+\]
+
+two target classes each having exactly one-half of encounter probability, and
+finite nonincreasing U.
+
+Then, over deterministic unit-cost tasks and strictly positive world
+probabilities respecting this target balance,
+
+\[
+\boxed{
+\sup R_{\rm expected}^{(b=2)}
+=
+\frac12[U(1)-U(2)],
+}
+\]
+
+whereas
+
+\[
+\boxed{
+\sup R_{\rm expected}^{(b\ge3)}
+=
+U(1)-U(2).
+}
+\]
+
+### Proof for binary cues
+
+A strict gain requires fixed cost \(C_F=2\). The first binary query must then
+leave a target-mixed outcome; otherwise one query would already resolve the
+target universally.
+
+At most one root outcome is target-pure, and target balance limits its encounter
+mass to one-half.
+
+With only two available queries, all remaining states resolve no sooner than
+after the second query. Thus
+
+\[
+\mathbb E[U(T)]-U(C_F)
+\le
+\frac12U(1)+\frac12U(2)-U(2).
+\]
+
+A binary root-pure leaf plus a mixed second branch attains this in the limit as
+the rare opposite-target world inside the mixed branch gets arbitrarily small
+positive mass. Four-world padding can preserve the exact 50/50 target
+prevalence.
+
+### Proof for ternary cues
+
+A ternary root has:
+
+- one target-0-pure outcome;
+- one target-1-pure outcome;
+- one mixed outcome resolved by the second binary query.
+
+The two queries are fixed-mandatory by separate opposite-target private pairs.
+Both target classes can have almost all of their probability on their respective
+one-step pure outcomes while a positive rare mass is reserved for the mixed
+branch.
+
+Thus expected completion value approaches \(U(1)\), and the fixed comparator
+cost is two. The upper bound \(U(1)-U(2)\) is therefore sharp as a supremum.
+
+### Finite numerical witness without extreme rare-state concentration
+
+Take
+
+\[
+U(c)=e^{-0.3c}.
+\]
+
+The sharp binary ceiling is
+
+\[
+\frac12(e^{-0.3}-e^{-0.6})
+\approx0.0960033.
+\]
+
+Use the four-world ternary witness with probabilities
+
+\[
+(0.45,\ 0.45,\ 0.05,\ 0.05)
+\]
+
+on the two pure one-step worlds and the two rare mixed worlds, respectively.
+
+Both target classes have total probability exactly 0.50.
+
+The explicit routing tree has expected completion-value advantage
+
+\[
+0.9 e^{-0.3}+0.1 e^{-0.6}-e^{-0.6}
+=
+0.9(e^{-0.3}-e^{-0.6})
+\approx0.172806.
+\]
+
+Hence a constitutive architecture cost
+
+\[
+\boxed{K=0.14}
+\]
+
+is impossible to repay by any binary two-query task with this target balance,
+but is repaid by the explicit ternary two-query task.
+
+This is an exact finite construction, not a biological experiment.
+
+
 ## Why this matters biologically
 
 The result identifies a specific compensation mechanism:
