@@ -101,3 +101,68 @@ def reward_weighted_receipt(lag: float, up_rate: float, down_rate: float,
         marginal_decision_value=max(0.0, cue - blind),
         expiry_time=weighted_value_expiry(u, d, r0, r1),
     )
+
+
+def reward_weighted_value_closed_form(
+    lag: float,
+    up_rate: float,
+    down_rate: float,
+    reward_zero: float,
+    reward_one: float,
+) -> float:
+    """Exact rectified-exponential value of a perfect past-state cue.
+
+    V(t)=[A*exp(-(up+down)*t)-B]_+, where
+    A=(r0+r1)*pi0*pi1;
+    B=(r0+r1)*[pi0*(pi1-theta)] if pi1>theta,
+      (r0+r1)*[pi1*(theta-pi1)] if pi1<theta.
+    At theta==pi1 the physical information value has no finite zero.
+    """
+    u, d, r0, r1 = _parameters(up_rate, down_rate, reward_zero, reward_one)
+    t = float(lag)
+    if not math.isfinite(t) or t < 0:
+        raise ValueError("lag must be finite and nonnegative")
+    pi1 = u / (u + d)
+    pi0 = 1 - pi1
+    theta = r0 / (r0 + r1)
+    a = (r0 + r1) * pi0 * pi1
+    b = (r0 + r1) * (
+        pi0 * (pi1 - theta) if pi1 >= theta
+        else pi1 * (theta - pi1)
+    )
+    return max(0.0, a * math.exp(-(u + d) * t) - b)
+
+
+def last_profitable_cue_age(
+    up_rate: float,
+    down_rate: float,
+    reward_zero: float,
+    reward_one: float,
+    *,
+    cue_use_cost: float = 0.0,
+) -> float:
+    """Exclusive lag horizon for value(t)>cue_use_cost.
+
+    Returns 0 when no lag is beneficial, inf when always positive at every
+    finite lag (zero cost and prior exactly on action threshold). A cue-use
+    cost here is an additive *per-decision reward debit*, NOT an inherited
+    architecture's log-fitness maintenance cost.
+    """
+    u, d, r0, r1 = _parameters(up_rate, down_rate, reward_zero, reward_one)
+    kcost = float(cue_use_cost)
+    if not math.isfinite(kcost) or kcost < 0:
+        raise ValueError("cue_use_cost must be finite and nonnegative")
+    pi1 = u / (u + d)
+    pi0 = 1 - pi1
+    theta = r0 / (r0 + r1)
+    amplitude = (r0 + r1) * pi0 * pi1
+    offset = (r0 + r1) * (
+        pi0 * (pi1 - theta) if pi1 >= theta
+        else pi1 * (theta - pi1)
+    )
+    target = offset + kcost
+    if target >= amplitude:
+        return 0.0
+    if target == 0.0:
+        return math.inf
+    return math.log(amplitude / target) / (u + d)
