@@ -64,6 +64,62 @@ The ordered_accuracy_window.py module estimates the two branchwise crossings and
 
 Data contract: for every animal/trial, record the realized old cue, optional new cue, its calibrated error probability, true environmental state at acquisition and action, cue timestamps, opportunity closure, terminal action, reward, and either randomized assignment or independent estimates for *both* fixed-comparator regimes. Uncertainty must include individual clustering and independently measured cue classification errors.
 
+
+## Closest ecological experiments found, and why they do not close this gate
+
+The strongest nearby work is not yet a direct validation:
+
+- Leadbeater, Chittka and collaborators' bumblebee cue-weighting
+  experiment ("Foraging Bumble Bees Weigh the Reliability of
+  Personal and Social Information", Current Biology 2016,
+  https://doi.org/10.1016/j.cub.2016.03.009) manipulated the
+  reliability of personal and social floral reward information
+  (100%, 83%, 50%). It documented behavioral cue preference,
+  but not the *optional acquisition* of a new sample with a
+  measured runtime cost and two optimized fixed-schedule
+  controls. Therefore it cannot validate the G(q) peak.
+- Austin, Horack and Dunlap (Behavioral Ecology 2018/2019),
+  https://doi.org/10.1093/beheco/ary190,
+  published the Dryad spreadsheet
+  https://doi.org/10.5061/dryad.0rh6sg5.
+  Its individual/block-level schema includes manipulated
+  reward reliability, signal complexity and number of floral
+  types, with foraging efficiency, selectivity and decision
+  latency. This is a **usable public timing and performance
+  sensitivity anchor**. It does *not* record a randomized
+  "refresh or skip" information-acquisition action against
+  both fixed regimes; published metadata do not establish
+  per-trial refreshed cue reliability. Thus direct phase-window
+  inference is currently **HOLD**.
+- Baracchi et al. (Behavioral Ecology 2017),
+  https://doi.org/10.5061/dryad.743g3,
+  provide per-bee correct-choice traces across easy and hard
+  discrimination tasks, including social/personal cue
+  conditions. These can test cue-use correlations and learning,
+  not a precommitted-versus-conditional **acquisition** advantage.
+
+This screening is based on the official publication
+descriptions and public Dryad dataset schemas; it is not a
+completed row-level reanalysis. The scientific gap is not
+that bumblebees are known to respond to reliability (they are),
+but whether the *acquisition-control premium* exhibits the
+specific bounded unimodal behavior after holding common
+ecological and operating costs constant.
+
+### Crucial empirical distinction: accuracy is not Blackwell order
+
+A mere ranking of classification accuracies does **not**
+guarantee Blackwell nesting. Changing signal modalities,
+nonstationary calibration, correlated errors between old
+and new cues, or condition-specific detection failure may
+make the new signals incomparable as experiments,
+especially **conditional on the old cue**. Without
+pre-validated conditional garbling kernels, failure of
+unimodality is not evidence for selection against the
+theoretical prediction; it signals that the model's
+assumptions are unverified.
+
+
 ## Stop rule
 
 Do not elevate this to a fourth V6 headline result. A new monotonicity or Blackwell-value theorem is not claimed. This is a compact source-of-gain certificate and a precise *ecological falsification target* where the extra value of conditional acquisition is isolated from absolute accuracy.
