@@ -5,7 +5,7 @@ committed theorem functions and source-data receipts. The SVGs are
 deterministic schematic/quantitative panels, not fitted ecological
 selection coefficients or inferred animal fitness.
 
-Usage: python scripts/render_v6_figures.py --output-dir v6_figures
+Usage: python -m scripts.render_v6_figures --output-dir v6_figures
 
 No Matplotlib, fonts, internet, spreadsheet or full source-data re-download.
 A plain-text SVG is editable in vector illustration programs.
