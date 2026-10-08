@@ -739,3 +739,69 @@ def test_finite_one_step_mass_witness_exact_on_small_nm_grid():
                 if outcome == common_outcome
             ]
             assert len({task.worlds[i].target for i in root_common}) == 1
+
+
+
+def test_expected_ceiling_binary_witness_across_budgets_and_arities():
+    # A binary construction must attain the supremum for any allowed arity >=2,
+    # not just for the canonical (n,m)=(10,9) example.
+    for n, m in ((3, 2), (4, 3), (5, 7), (6, 4), (8, 7)):
+        task = finite_expected_ceiling_witness(n, m)
+        assert len(task.worlds) == n
+        assert len(task.queries) == m
+        assert all(len(set(q.outcomes)) <= 2 for q in task.queries)
+
+        fixed_cost = fixed_minimum_resolution(task).minimum_cost
+        assert fixed_cost == min(m, n - 1)
+        probs = [0.999] + [0.001 / (n - 1)] * (n - 1)
+
+        for mu in (0.2, 0.7):
+            selected = discounted_fitness_optimal_policy(
+                task, probs, discount_rate=mu
+            )
+            assert selected.selected_policy is not None
+            realized = (
+                selected.expected_discounted_completion_value
+                - math.exp(-mu * fixed_cost)
+            )
+            envelope = finite_scope_expected_value_ceiling(
+                n, m, lambda cost: math.exp(-mu * cost)
+            )
+            assert realized <= envelope + 1e-12
+            assert envelope - realized < 0.001
+
+        # The same binary witness is legal for b=2,3,4 and preserves C_F.
+        for b in (2, 3, 4):
+            assert all(len(set(q.outcomes)) <= b for q in task.queries)
+
+
+def test_expected_ceiling_for_nonexponential_monotone_values():
+    n, m = 6, 5
+    task = finite_expected_ceiling_witness(n, m)
+    fixed = fixed_minimum_resolution(task)
+    assert fixed.minimum_cost == 5
+
+    for value in (
+        lambda cost: -cost,
+        lambda cost: 1.0 if cost <= 1.0 else 0.0,
+        lambda cost: 1.0 / (1.0 + cost),
+    ):
+        ceiling = finite_scope_expected_value_ceiling(n, m, value)
+        assert ceiling == pytest.approx(value(1.0) - value(5.0))
+        # The root's first outcome yields a pure target after one query.
+        root = task.queries[0]
+        common = [
+            i for i, x in enumerate(root.outcomes)
+            if x == root.outcomes[0]
+        ]
+        assert len({task.worlds[i].target for i in common}) == 1
+
+
+def test_expected_ceiling_zero_at_one_query_resource():
+    # With M=1 there is no difference between adaptive and fixed resolution.
+    for n in (2, 5, 10):
+        assert finite_scope_expected_value_ceiling(
+            n, 1, lambda cost: math.exp(-0.5 * cost)
+        ) == pytest.approx(0.0)
+    with pytest.raises(ValueError):
+        finite_expected_ceiling_witness(5, 1)
