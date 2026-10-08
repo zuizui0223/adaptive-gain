@@ -84,5 +84,22 @@
     ],
     "implementation": "adaptive_gain/target_prevalence_capacity.py:finite_ternary_only_prevalence_interval",
     "tests": "tests/test_target_prevalence_capacity.py"
+  },
+  "ternary_capacity_premium_overhead_sensitivity": {
+    "status": "THEOREM_DERIVED__CURRENT_HEAD_CI_PENDING",
+    "scope": "difference of two class-specific supremal capacities, not within-environment genotype selection",
+    "n": 10,
+    "m": 9,
+    "completion_value": "exp(-0.3*c)",
+    "balanced_target_ternary_capacity_premium": 0.0724908517441829,
+    "extra_ternary_maintenance_cost": 0.05,
+    "ternary_class_premium_positive_target_one_interval_exclusive": [
+      0.38286416430728654,
+      0.6171358356927135
+    ],
+    "overhead_eliminating_all_positive_capacity_premium": 0.0724908517441829,
+    "interpretation": "Even when ternary class has higher capacity, arity-specific overhead can eliminate the advantage; this is a cross-task-class bound, not a selection coefficient.",
+    "implementation": "adaptive_gain/target_prevalence_capacity.py:finite_ternary_capacity_premium_prevalence_interval",
+    "tests": "tests/test_target_prevalence_capacity.py"
   }
 }
