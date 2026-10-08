@@ -1,9 +1,12 @@
 name: temporary-voje-2024-pets-refit
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - analysis/evoTS-moving-optimum-audit
+    paths:
+      - .github/workflows/temporary_voje_2024_dryad_discovery.yml
 
 jobs:
   refit:
