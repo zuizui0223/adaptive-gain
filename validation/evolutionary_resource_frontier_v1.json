@@ -146,7 +146,7 @@
       ]
     }
   },
-  "claim_ceiling": "Robust ceilings are distribution-free statewise guarantees. Expected ceilings additionally optimize over encounter frequencies; neither supplies an empirical Aedes fitness estimate without natural opportunity and architecture-cost measurements.",
+  "claim_ceiling": "Robust thresholds are frequency-free, unconstrained expected suprema optimize over arbitrarily skewed priors, and frequency-floor bounds are generally nonsharp. None estimates natural fitness without world frequencies, opportunity survival, and control cost measured in the same system.",
   "robust_expected_boundary": {
     "robust": "U(C_A)-U(C_F) is the exact worst-state/frequency-free margin.",
     "expected": "sum_x p_x U[T_pi(x)]-U(C_F) can exceed the robust margin when common branches finish earlier.",
@@ -250,5 +250,23 @@
     ],
     "interpretive_boundary": "Expected positive selection is an existence claim over world-frequency distributions, not robust positivity and not an empirical selection estimate",
     "regression": "tests/test_evolutionary_resource_frontier.py has inverse corner, exact binary witness, strict boundary and finite-search tests"
+  },
+  "encounter_probability_floor_bound_v1": {
+    "status": "PROVEN_GENERAL_UPPER_BOUND; NEW_TESTS_PENDING",
+    "scope": "Nontrivial finite deterministic unit-cost target-resolution tasks, universal fixed comparator, each world has probability >=eta, 0<=eta<=1/n",
+    "inequality": "R_expected <= max(0,max_{j=2..M}[U(1)-U(j)-j*eta*(U(1)-U(2))]), M=min(n-1,m)",
+    "sharpness": "Generally not sharp for strictly decreasing U; valid upper bound only",
+    "canonical_example": {
+      "n": 10,
+      "m": 9,
+      "mu": 0.3,
+      "K": 0.6,
+      "minimum_world_probability": 0.1,
+      "arbitrary_probability_supremum": 0.673612707941968,
+      "probability_floor_upper_bound": 0.5008067818130457,
+      "maximizing_fixed_cost": 9,
+      "conclusion": "K=0.60 is impossible to repay in expectation under uniform world encounters even though the unconstrained expected supremum exceeds K."
+    },
+    "tests": "tests/test_evolutionary_resource_frontier.py: uniform no-go, exact-policy upper-bound controls, invalid probability floors"
   }
 }
