@@ -414,6 +414,111 @@ Implementation:
 \`adaptive_gain/target_prevalence_capacity.py\`, with regression tests.
 
 
+## Corollary TP2.2 — extra cost can erase the class-level ternary capacity premium
+
+The previous result asks which cue-arity class can repay a common control cost
+relative to a universal fixed benchmark. Evolutionary competition among
+different arities additionally requires accounting for any **extra
+architecture cost** of the ternary channel.
+
+This can be bounded without treating a class envelope as an observed
+pairwise selection coefficient.
+
+Let
+
+\[
+B_2(q)
+=
+U(2)-U(M)+q[U(1)-U(2)]
+\]
+
+be the sharp binary expected-value capacity at majority target prevalence
+\(q=\max(p,1-p)\). Let
+
+\[
+T_3=U(1)-U(M_3)
+\]
+
+be the two-target-pure-root ternary capacity candidate.
+
+At the level of the **best attainable task in each class**, the extra
+performance capacity from permitting ternary queries is
+
+\[
+\boxed{
+\Delta R_{\rm capacity}(q)
+=
+\max\{0,T_3-B_2(q)\}.
+}
+\]
+
+If the ternary design incurs an additional constitutive cost
+\(\Delta K\ge0\), the extra class-level capacity can pay that cost exactly
+when
+
+\[
+\Delta R_{\rm capacity}(q)>\Delta K.
+\]
+
+When \(U(1)>U(2)\) and the maximum capacity premium at balanced prevalence
+exceeds \(\Delta K\), this is equivalent to
+
+\[
+\boxed{
+\max(p,1-p)
+<
+\frac{T_3-\Delta K-U(2)+U(M)}
+{U(1)-U(2)}.
+}
+\]
+
+Unlike TP2.1, the endpoints are **excluded**, because equality means no
+strict positive increment after the additional cost.
+
+### Canonical sensitivity
+
+For \(n=10,m=9,U(c)=e^{-0.3c}\), the maximum attainable ternary capacity
+premium at 50:50 target prevalence is only
+
+\[
+\boxed{
+T_3-B_2(1/2)\approx0.0724909.
+}
+\]
+
+If ternary control costs 0.05 extra per the same additive payoff scale, the
+remaining positive premium exists only when target prevalence lies within
+
+\[
+\boxed{
+0.382864<p<0.617136.
+}
+\]
+
+If its extra cost reaches 0.0724909, there is no strict class-level advantage
+at any target prevalence.
+
+### Essential comparator restriction
+
+\(\Delta R_{\rm capacity}\) subtracts **two suprema over different admissible
+task designs**. It does not compare two realized genotypes, two sensing
+policies, or two cue-processing systems embedded in the **same fixed
+environment**.
+
+Thus it cannot be interpreted as a selection coefficient favoring a ternary
+sensory organ. A within-environment evolutionary comparison still requires
+matched ecological states, actual cue outcomes, per-query acquisition costs,
+architecture maintenance costs, and the same encounter distribution.
+
+The calculation's role is to show that a theoretical arity advantage can be
+biologically fragile: only a modest extra architecture cost may eliminate the
+capacity premium in the stylized example.
+
+Implementation:
+\`finite_ternary_capacity_premium_prevalence_interval(...)\` in
+\`adaptive_gain/target_prevalence_capacity.py\`.
+
+
 ## 5. Biological reading
 
 What matters is not only whether cue outcomes branch, but whether one early observation can dispose of *both target classes* while preserving a rare branch for difficult cases.
