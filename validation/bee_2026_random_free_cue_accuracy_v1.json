@@ -211,5 +211,68 @@
   "assignment_contract": "Source preprint describes interleaved Random_Free_Cue trials on 20 percent of each bee's trials; complete randomization protocol/sequence generation was not independently audited.",
   "estimand": "Outcome difference for assignment to automatically delivered predictive Free-Cue trial versus Regular optional-query trial, within task difficulty; NOT the causal effect of voluntarily requesting a cue nor information-only effect at fixed timing/reward/salience.",
   "status": "DESCRIPTIVE_RANDOM_FREE_CUE_POLICY_CONTRAST__CAUSAL_ITT_CONDITIONAL_ON_REPORTED_RANDOMIZATION",
-  "claim_ceiling": "Random assignment, if implemented as described, supports a trial-condition intention-to-treat accuracy effect. Free-Cue changes cue delivery, timing/salience and potentially reward/cue approach behavior together; do not label its difference a pure information-value or evolutionary adaptive-gain selection coefficient."
+  "claim_ceiling": "Random assignment, if implemented as described, supports a trial-condition intention-to-treat accuracy effect. Free-Cue changes cue delivery, timing/salience and potentially reward/cue approach behavior together; do not label its difference a pure information-value or evolutionary adaptive-gain selection coefficient. Within Free-Cue, landing vs nonlanding correctness shows no consistent difference, but landing is self-selected and near-ceiling accuracy precludes a causal motor-effect exclusion.",
+  "free_arm_landing_accuracy_control": {
+    "by_difficulty": {
+      "Easy": {
+        "free_landed": {
+          "n": 950,
+          "correct": 906,
+          "landing": 950
+        },
+        "free_not_landed": {
+          "n": 590,
+          "correct": 555,
+          "landing": 0
+        },
+        "accuracy_if_landed": 0.9536842105263158,
+        "accuracy_if_not_landed": 0.940677966101695,
+        "landing_minus_no_landing": 0.013006244424620839,
+        "bee_cluster_bootstrap_95": [
+          -0.010195752749877052,
+          0.03632928275044456
+        ]
+      },
+      "Hard": {
+        "free_landed": {
+          "n": 925,
+          "correct": 871,
+          "landing": 925
+        },
+        "free_not_landed": {
+          "n": 647,
+          "correct": 612,
+          "landing": 0
+        },
+        "accuracy_if_landed": 0.9416216216216217,
+        "accuracy_if_not_landed": 0.9459041731066461,
+        "landing_minus_no_landing": -0.004282551485024433,
+        "bee_cluster_bootstrap_95": [
+          -0.026102347321029562,
+          0.017137930200888052
+        ]
+      },
+      "Impossible": {
+        "free_landed": {
+          "n": 153,
+          "correct": 142,
+          "landing": 153
+        },
+        "free_not_landed": {
+          "n": 575,
+          "correct": 532,
+          "landing": 0
+        },
+        "accuracy_if_landed": 0.9281045751633987,
+        "accuracy_if_not_landed": 0.9252173913043479,
+        "landing_minus_no_landing": 0.002887183859050846,
+        "bee_cluster_bootstrap_95": [
+          -0.0499740858047798,
+          0.047041863683542906
+        ]
+      }
+    },
+    "method": "Free-Cue arm only, all automatically receive predictive signal; bee-cluster bootstrap B=3000; xorshift32 seed=6040035 (0x5c29e3)",
+    "status": "SELF_SELECTED_FREE_CUE_LANDING_ASSOCIATION_NOT_MOTOR_CAUSAL_EFFECT"
+  }
 }
