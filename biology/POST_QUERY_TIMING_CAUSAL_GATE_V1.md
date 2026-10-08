@@ -267,6 +267,31 @@ Reproducible source audit:
 - tests/test_bee_2026_active_information_audit.py
 - validation/bee_2026_active_information_schema_audit_v1.json
 
+**Pooled-label caution in the preprint's supplementary analysis.**
+The paper's Fig. S3F reports pooled information-request
+rates near Easy 27.7%, Hard 57.8% and Impossible 77.0%
+using Info_Requested ~ Difficulty across Regular and
+Random_Free_Cue trials. Those values are reproducible
+directly from the public table. However, Free-Cue trials
+automatically deliver information regardless of landing,
+so the pooled field mixes delivery with paid requesting.
+The actual pooled platform landing rates are instead
+Easy 20.07%, Hard 49.36%, Impossible 62.03%.
+This does not invalidate the paper's main separate
+Regular-trial rates (Easy 9.63%, Hard 46.92%,
+Impossible 71.63%) or its separate landing analysis.
+It means S3F should not be used as an independent
+replication of *voluntary* request-rate scaling.
+
+The Free-Cue landing response is also direction-dependent:
+versus Regular, Free-Cue landing increases for Easy
+trials but decreases for Impossible trials, a pattern
+seen in 190/192 and 178/192 individual bees,
+respectively. This intervention is relevant to
+cue salience and motor approach, but it does not
+isolate the fitness value of acquiring new
+information relative to an equally delayed sham.
+
 The 2026 dataset makes the experimental avenue
 credible: bees can and do use a non-rewarding information
 platform. The remaining *ecological* identification target
