@@ -69,6 +69,10 @@ def test_free_information_delivery_is_not_a_voluntary_request():
     example = HEADER + (
         "1,Bee_A,1,Easy,Random_Free_Cue,1,0,1,\n"
         "2,Bee_A,2,Easy,Regular,0,0,,1\n"
+        "3,Bee_B,1,Hard,Random_Free_Cue,1,0,1,\n"
+        "4,Bee_B,2,Hard,Regular,0,0,,1\n"
+        "5,Bee_C,1,Impossible,Random_Free_Cue,1,0,1,\n"
+        "6,Bee_C,2,Impossible,Regular,0,0,,1\n"
     )
     source = parse_trials(io.StringIO(example))
     pair = contrasts(sorted(source.items()))["Easy"]
