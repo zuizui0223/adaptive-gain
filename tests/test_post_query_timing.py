@@ -186,3 +186,67 @@ def test_parameter_validation_and_equal_horizon_fairness():
         query_then_optimal_timing(**dict(p,refresh_cue_error_rate=.8))
     with pytest.raises(ValueError):
         query_then_optimal_timing(**dict(p,alpha=0))
+
+
+
+def test_new_signal_changes_timing_before_it_changes_immediate_action():
+    """The two new labels have the same Bayes action *immediately* after
+    acquisition but different best action times after conditioning.
+    The delayed branch may subsequently change its optimal final action;
+    no claim of unchanged terminal action is made.
+    """
+    result = query_then_optimal_timing(
+        .2,.2,cue_age=.1,sampling_delay=.03,
+        terminal_delay=.02,max_total_wait=.5,
+        opportunity_hazard=.01,reward0=1,reward1=4,
+        query_cost=.005,old_cue_error_rate=0,
+        refresh_cue_error_rate=.1,
+    )
+    assert result.acquisition_policy_by_old_report == ("query","passive")
+    assert result.postquery_delay_by_old_and_new_report[0][0] == pytest.approx(0)
+    assert result.postquery_delay_by_old_and_new_report[0][1] == pytest.approx(.47)
+    assert result.conditional_query_premium > .0045
+
+    pi1=.5
+    prior_at_new=pi1+(0-pi1)*math.exp(-.4*(.1+.03))
+    immediate_actions=[]
+    for new_label in (0,1):
+        prob_new=(
+            (1-prior_at_new)*(.9 if new_label==0 else .1)
+            + prior_at_new*(.9 if new_label==1 else .1)
+        )
+        conditional_now=(
+            prior_at_new*(.9 if new_label==1 else .1)/prob_new
+        )
+        probability_at_immediate_action=(
+            pi1+(conditional_now-pi1)*math.exp(-.4*.02)
+        )
+        immediate_actions.append(
+            int(4*probability_at_immediate_action >=
+                1-probability_at_immediate_action)
+        )
+    assert immediate_actions == [0, 0]
+
+
+def test_postquery_schedule_is_monotone_in_blackwell_sensing_accuracy():
+    """Absolute optional-sensing performance cannot improve as binary
+    symmetric refreshed reports become more corrupted.
+    """
+    params=dict(
+        alpha=.8,beta=.2,cue_age=1.2,sampling_delay=.15,
+        terminal_delay=.1,max_total_wait=.5,
+        opportunity_hazard=.25,reward0=1,reward1=1,
+        query_cost=.03,
+    )
+    xs=[
+        query_then_optimal_timing(
+            refresh_cue_error_rate=i/100, **params
+        )
+        for i in range(51)
+    ]
+    for a,b in zip(xs,xs[1:]):
+        for qa,qb in zip(a.query_reward_by_old_report,
+                         b.query_reward_by_old_report):
+            assert qa+1e-12 >= qb
+        assert (a.conditional_policy_reward+1e-12 >=
+                b.conditional_policy_reward)
