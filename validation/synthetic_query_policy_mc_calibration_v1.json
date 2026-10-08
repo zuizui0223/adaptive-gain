@@ -1,0 +1,140 @@
+{
+  "schema": "adaptive-gain-independent-numpy-query-policy-calibration-v1",
+  "status": "SYNTHETIC_CLUSTERED_BERNOULLI_ONLY__NO_FIELD_SAMPLE_SIZE",
+  "repository_code": "scripts/independent_numpy_query_policy_calibration.py",
+  "optional_dependencies": [
+    "numpy",
+    "scipy"
+  ],
+  "dataset": "Synthetic; no real bumblebee observations",
+  "protocol": {
+    "old_reports": [
+      0,
+      1
+    ],
+    "target_report_weights": [
+      0.2,
+      0.8
+    ],
+    "arms": [
+      "passive",
+      "sham",
+      "query"
+    ],
+    "probabilities_at_zero_colony_intercept": {
+      "null": [
+        [
+          0.7,
+          0.65,
+          0.7
+        ],
+        [
+          0.8,
+          0.7,
+          0.8
+        ]
+      ],
+      "mixed": [
+        [
+          0.7,
+          0.65,
+          0.9
+        ],
+        [
+          0.8,
+          0.7,
+          0.75
+        ]
+      ]
+    },
+    "per_colony_trial_count": 72,
+    "cluster_effect": "shared N(0,sigma^2) random logit intercept per colony",
+    "policy_learning": "train colonies only; choose query if query arm mean > passive by report",
+    "validation": "independent heldout colonies; 2 Bonferroni one-sided 97.5% lower percentile bounds on J_C-J_P, J_C-J_Q; reject only if both positive",
+    "sampling": "independent cluster bootstrap; fixed 12 encounters per old report x arm cell",
+    "scientific_scope": "No trial serial dependence, animal noncompliance, natural reward variances or heritable costs."
+  },
+  "main": {
+    "seed": 519280,
+    "seed_stride": 17,
+    "monte_carlo_repetitions": 250,
+    "bootstrap_draws": 400,
+    "clusters_train": 30,
+    "clusters_heldout": 30,
+    "colony_logit_sd": 0.55,
+    "null": {
+      "training_gain_positive_fraction": 0.516,
+      "heldout_gain_positive_fraction": 0.136,
+      "dual_lower_bounds_positive_fraction": 0,
+      "mean_training_gain": 0.0027244444444444425,
+      "mean_heldout_gain": -0.00957111111111112
+    },
+    "mixed": {
+      "training_gain_positive_fraction": 0.94,
+      "heldout_gain_positive_fraction": 0.9,
+      "dual_lower_bounds_positive_fraction": 0.38,
+      "mean_training_gain": 0.029360000000000008,
+      "mean_heldout_gain": 0.028220000000000012,
+      "fraction_correct_mixed_policy": 0.956
+    }
+  },
+  "grid": {
+    "seed": 975311,
+    "seed_stride": 37,
+    "monte_carlo_repetitions": 200,
+    "bootstrap_draws": 300,
+    "clusters_each_phase": [
+      12,
+      30,
+      60
+    ],
+    "colony_logit_sd": [
+      0,
+      0.55,
+      0.9
+    ],
+    "dual_lower_bounds_positive_fraction": {
+      "null": {
+        "12": [
+          0,
+          0,
+          0
+        ],
+        "30": [
+          0,
+          0,
+          0
+        ],
+        "60": [
+          0,
+          0,
+          0
+        ]
+      },
+      "mixed": {
+        "12": [
+          0.21,
+          0.205,
+          0.19
+        ],
+        "30": [
+          0.43,
+          0.455,
+          0.43
+        ],
+        "60": [
+          0.565,
+          0.59,
+          0.61
+        ]
+      }
+    }
+  },
+  "accuracy_note": "Nominal mixed-policy gain 0.04 uses p at colony intercept 0; with N(0,0.55^2) random intercept, marginal true gain approximates 0.0395268755. The full Monte Carlo estimator used here is conditional on a separate policy learned from training clusters.",
+  "interpretation": "The in-sample positive policy gain is selection-optimistic; the held-out dual-comparator criterion is much more demanding, including in a true-positive toy scenario. Zero detections in 200-250 null replications does not prove exact type-I validity, and the observed synthetic detection fractions cannot be used as real bee statistical power.",
+  "related_source": [
+    "biology/HELDOUT_ECOLOGICAL_CONTROLLER_VIABILITY_GATE_V1.md",
+    "biology/HELDOUT_RANDOMIZED_QUERY_POLICY_GATE_V1.md",
+    "scripts/simulate_randomized_query_policy_validation.py"
+  ]
+}
