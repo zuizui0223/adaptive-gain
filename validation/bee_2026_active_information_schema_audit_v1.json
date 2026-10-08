@@ -97,5 +97,35 @@
     "Differences are descriptive trial-type contrasts, not conditional information fitness or genetic selection.",
     "Raw data remain at original third-party repository; receipt stores only audited aggregates."
   ],
-  "proposed_followup": "Use this dataset only to motivate and check active-information-seeking measurement. For the dynamic ecology hypothesis, preregister the matched SKIP/SHAM-WAIT/QUERY experiment with state transitions and both final action and post-query timing."
+  "proposed_followup": "Use this dataset only to motivate and check active-information-seeking measurement. For the dynamic ecology hypothesis, preregister the matched SKIP/SHAM-WAIT/QUERY experiment with state transitions and both final action and post-query timing.",
+  "within_bee_paired_landing_differences": {
+    "method": "Within each bee, free-cue landing proportion minus regular landing proportion, by difficulty; descriptive unweighted individual comparison",
+    "Easy": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": 0.5196976517791217,
+      "median": 0.5333333333333333,
+      "positive": 190,
+      "negative": 2,
+      "zero": 0
+    },
+    "Hard": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": 0.12403074136962357,
+      "median": 0.125,
+      "positive": 147,
+      "negative": 44,
+      "zero": 1
+    },
+    "Impossible": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": -0.49867793649902276,
+      "median": -0.5490196078431373,
+      "positive": 13,
+      "negative": 178,
+      "zero": 1
+    }
+  }
 }
