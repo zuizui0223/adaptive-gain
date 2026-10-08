@@ -12,6 +12,7 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
 from adaptive_gain.core import fixed_minimum_resolution
 from adaptive_gain.policy_fitness import discounted_fitness_optimal_policy
 from adaptive_gain.target_prevalence_capacity import (
+    finite_ternary_capacity_premium_prevalence_interval,
     finite_ternary_only_prevalence_interval,
     exponential_target_prevalence_expected_capacity,
     exponential_minimum_expected_arity_with_target_prevalence,
@@ -476,3 +477,66 @@ def test_finite_prevalence_arity_transition_at_balance_boundary():
         10, 9, binary.expected_value_supremum, completion_value=val
     )
     assert receipt.target_one_probability_interval == pytest.approx((0.5, 0.5))
+
+
+
+def test_ternary_class_capacity_premium_shrinks_with_extra_overhead():
+    val = lambda c: math.exp(-0.3 * c)
+    free = finite_ternary_capacity_premium_prevalence_interval(
+        10, 9, 0.0, completion_value=val
+    )
+    costly = finite_ternary_capacity_premium_prevalence_interval(
+        10, 9, 0.05, completion_value=val
+    )
+
+    assert free.ternary_minus_binary_positive_interval == pytest.approx(
+        (0.12245642825298209, 0.8775435717470179)
+    )
+    assert costly.ternary_minus_binary_positive_interval == pytest.approx(
+        (0.38286416430728654, 0.6171358356927135)
+    )
+    assert costly.maximal_capacity_premium_at_balance == pytest.approx(
+        0.0724908517441829
+    )
+
+    for p in (0.50, 0.60):
+        b2 = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=2, completion_value=val
+        )
+        b3 = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=3, completion_value=val
+        )
+        assert b3.expected_value_supremum - b2.expected_value_supremum > 0.05
+
+    for p in (0.35, 0.65, 0.85):
+        b2 = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=2, completion_value=val
+        )
+        b3 = finite_target_prevalence_expected_capacity(
+            10, 9, p, max_arity=3, completion_value=val
+        )
+        assert b3.expected_value_supremum - b2.expected_value_supremum < 0.05
+
+
+def test_ternary_capacity_advantage_vanishes_if_its_extra_cost_too_high():
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_capacity_premium_prevalence_interval(
+        10, 9, 0.08, completion_value=val
+    )
+    assert receipt.ternary_minus_binary_positive_interval is None
+
+
+def test_ternary_class_capacity_premium_not_available_in_tiny_tasks():
+    val = lambda c: math.exp(-0.3 * c)
+    receipt = finite_ternary_capacity_premium_prevalence_interval(
+        3, 2, 0.0, completion_value=val
+    )
+    assert receipt.ternary_minus_binary_positive_interval is None
+
+
+def test_ternary_capacity_premium_rejects_negative_overhead():
+    with pytest.raises(ValueError):
+        finite_ternary_capacity_premium_prevalence_interval(
+            10, 9, -0.001,
+            completion_value=lambda c: math.exp(-0.3*c),
+        )
