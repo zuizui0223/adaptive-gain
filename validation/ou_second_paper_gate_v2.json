@@ -1,0 +1,60 @@
+{
+  "receipt": "ou_second_paper_gate_v2",
+  "date": "2026-09-13",
+  "branch": "analysis/evoTS-moving-optimum-audit",
+  "scope": "Causal-identifiability follow-on only; frozen Theoretical Ecology finite-architecture submission remains untouched.",
+  "moving_optimum": {
+    "exact_evots_observation_law": "PASS",
+    "reciprocal_exogenous_causal_congruence": "PASS",
+    "direct_half_life_identified_set": "PASS",
+    "common_shock_sensitivity_replacement": "PASS",
+    "published_anchor": "PASS_PUBLISHED_SUMMARY_VOJE_2024",
+    "independent_raw_data_refit": "OPEN",
+    "practice_audit": "WAVE1_COMPLETE_NOT_DENOMINATOR_COMPLETE"
+  },
+  "fixed_optimum": {
+    "implementation_match_paleots_joint_ou": "PASS",
+    "exact_boundary_corollary": "PASS",
+    "reciprocal_one_way_attribution_congruence": "PASS",
+    "observed_relaxation_half_life": "RETAINED_MODEL_CONDITIONAL",
+    "whole_alpha_as_direct_selection_attraction": "NONUNIQUE_FROM_TRAIT_LIKELIHOOD_ALONE",
+    "direct_empirical_anchors_wave1": [
+      "Hunt et al. 2008",
+      "Lo Cascio Saetre et al. 2017"
+    ],
+    "practice_audit": "WAVE1_COMPLETE_NOT_DENOMINATOR_COMPLETE",
+    "independent_empirical_refit": "OPEN"
+  },
+  "prior_art": {
+    "status": "TIGHTENED_NOT_EXHAUSTIVE",
+    "conceded": [
+      "partially observed OU/SDE identifiability",
+      "state-space realization nonuniqueness",
+      "reciprocal multivariate OU adaptation",
+      "Granger/causal OU-SDE analysis",
+      "general OU law equivalence",
+      "generic biological caution about OU alpha and stabilizing-selection interpretation"
+    ],
+    "candidate_increment": "implementation-matched evolutionary time-series likelihood congruence plus exact observed-relaxation/direct-coupling separation and assumption-sensitivity replacement tied to published practice"
+  },
+  "paper_architecture": {
+    "status": "FROZEN_V1",
+    "file": "theory/OU_SECOND_PAPER_ARCHITECTURE_V1.md",
+    "headline": "what a trait-only OU likelihood identifies"
+  },
+  "promotion_gates": {
+    "independent_reproduction_moving": "OPEN",
+    "independent_reproduction_fixed": "OPEN",
+    "denominator_defensible_two_stratum_audit": "OPEN",
+    "practitioner_replacement_workflow": "PARTIAL_PASS",
+    "nature_ecology_evolution_scope": "NOT_YET_QUALIFIED"
+  },
+  "current_assessment": "The fixed-optimum corollary broadens the result from one specialized moving-optimum application to a standard paleoTS evolutionary time-series likelihood used in multiple empirical systems. This raises the plausible venue ceiling, but impact remains practice- and reproduction-dependent.",
+  "hard_stops": [
+    "do not claim fixed-OU observed half-life is numerically unidentified",
+    "do not claim generic OU nonidentifiability as new",
+    "do not count phylogenetic/tree OU as direct",
+    "do not describe published adaptive conclusions as falsified when they also rely on external biological evidence",
+    "do not merge this line into the frozen Theoretical Ecology submission"
+  ]
+}

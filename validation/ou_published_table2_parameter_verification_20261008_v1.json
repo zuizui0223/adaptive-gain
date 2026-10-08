@@ -1,0 +1,33 @@
+{
+  "receipt": "ou_published_table2_parameter_verification_20261008_v1",
+  "date": "2026-10-08",
+  "paper": "Voje, Saito-Kato and Spanbauer (2024), Journal of Evolutionary Biology, doi:10.1093/jeb/voae087",
+  "source_vector": "Visible printed Table 2 moving-optimum OU parameter row (labels conflict with Table 1/Results)",
+  "printed_params": {
+    "anc": 2.645,
+    "vstep_trait": 2152.526,
+    "vstep_optimum": 2.532,
+    "alpha": 73318.01
+  },
+  "evaluation_on": "PETS public mirror Cyclostephanos andinus, tsID582, n266, pooled sampling-variance, full time span normalized to one",
+  "independent_evaluation": {
+    "method": "Dense Gaussian covariance/Cholesky evaluation independently coded in JavaScript",
+    "logL": 80.86416380369107,
+    "AICc": -153.5750709024013,
+    "published_AICc": -153.573,
+    "AICc_difference": -0.0020709024013001454,
+    "implied_half_life_years_if_alpha_is_per_normalized_full_series": 2.9252063464318057,
+    "reported_prose_half_life_years": 12,
+    "source_span_years": 309415.25,
+    "stationary_variance": 0.014679380959739632
+  },
+  "interpretation": {
+    "table_parameter_row_support": "Strong numeric evidence Table 2 moving-optimum parameter row belongs to C. andinus even though rendered label says Biwa",
+    "time_unit_mapping": "UNRESOLVED: printed alpha implies 2.93 yr under unit interval whereas prose reports 12 yr",
+    "source_error_claim": "NONE. Need original Dryad script and exact dates/time conversion; no direct archival reproduction yet",
+    "fit_limitation": "Profile likelihood is nearly flat for high alpha, so multiple alpha values can have practically identical support"
+  },
+  "script": "scripts/check_voje_2024_printed_params.py",
+  "original_Dryad_archive_status": "NOT_ACCESSED_AUTH_REQUIRED_OR_403",
+  "must_not_serialize_as": "verified journal error or independently published source correction"
+}

@@ -1,0 +1,115 @@
+{
+  "receipt": "ou_pets_mirror_brownian_nugget_alternative_20261008_v1",
+  "date": "2026-10-08",
+  "source": "VildeBruhn/rate_time@718d603c49ae640e34a5c36c93bcd8ba36d1e389 empirical_data/timeseries.txt tsID582",
+  "n": 266,
+  "n_gaps": 265,
+  "sample_spacing_years": {
+    "min": 28.231999999989156,
+    "median": 490.28000000000264,
+    "max": 25524.031000000003,
+    "less_than_50_years": 2,
+    "less_than_100_years": 4,
+    "less_than_200_years": 25
+  },
+  "input_trait_mean_first": 2.644626001,
+  "preprocessing": {
+    "time_normalized_range": [
+      0,
+      1
+    ],
+    "within_sample_variance_pool": 0.1597276044948899,
+    "sampling_error": "pooled within-population variance / N",
+    "second_log_transform": false
+  },
+  "finite_OUBM": {
+    "n_parameters": 4,
+    "alpha_normalized": 17859.469540254824,
+    "half_life_years": 12.008772582877649,
+    "logL": 80.90531062232422,
+    "AICc": -153.6573645396676,
+    "stationary_variance": 0.01476924189464519
+  },
+  "alternative": {
+    "name": "latent Brownian random walk + independent positive-time Gaussian biological nugget",
+    "n_parameters": 3,
+    "initial_condition": "deterministic X_0=anc; first sample has only known measurement error; subsequent population trait means include nugget S",
+    "covariance": "vo*min(t_i,t_j)+delta_ij*S*(t_i>0), plus measurement variance on diagonal",
+    "parameters": {
+      "anc": 2.6518622840915933,
+      "S": 0.014669985964737788,
+      "vo": 2.5277316282503706
+    },
+    "logL": 80.87186957112242,
+    "AICc": -155.65213608880973,
+    "delta_AICc_alternative_minus_finite_OUBM": -1.994771549142115,
+    "algorithm": "independent closed-form local-level Kalman likelihood, Nelder-Mead multi-start",
+    "relationship": "high-alpha, vs/(2alpha) fixed limiting member of the source OUBM observation-law family",
+    "sampling_test": "at 1-year lag finite OUBM short-term residual autocorrelation 0.9439; nugget short-term component lag correlation 0 (given latent Brownian removed)"
+  },
+  "profile_fixed_halflife": {
+    "status": "INDEPENDENT_OPTIMIZATION_OVER_ANC_S_VO",
+    "grid_years": [
+      0.01,
+      0.1,
+      0.5,
+      1,
+      2,
+      3,
+      5,
+      8,
+      10,
+      12,
+      15,
+      20,
+      24,
+      30,
+      36,
+      48,
+      60,
+      80,
+      100,
+      150
+    ],
+    "delta_logL_from_grid_max": [
+      -0.03343869238000252,
+      -0.03341822759099955,
+      -0.03332726232332561,
+      -0.03321353140721328,
+      -0.03298707846573734,
+      -0.0327144300583484,
+      -0.029649123852280468,
+      -0.014371740625762186,
+      -0.004131357110111367,
+      0,
+      -0.010405508067137248,
+      -0.07387170460881975,
+      -0.15904245606441236,
+      -0.32493481291233195,
+      -0.51729482777192,
+      -0.9326848908651613,
+      -1.3562307389492787,
+      -2.055612443963838,
+      -2.7483340026262084,
+      -4.47806488072348
+    ],
+    "statistical_warning": "profile grid not calibrated confidence interval, boundary alpha=infinity nonregular"
+  },
+  "novelty_and_biological_gate": {
+    "source_paper_acknowledges_half_life_zero_cannot_be_excluded": true,
+    "publication_main_result_falsified": false,
+    "alternative_model_aicc_delta": "modest (~2), not strong evidence of biological superiority",
+    "model_set_sensitivity": "a candidate with different biological meaning and lower AICc was not in the original comparison set; this does not disprove moving-optimum process",
+    "causal_identifiability": "does not identify ecosystem reciprocal feedback; the exact q-gauge is coordinate-dependent",
+    "next_step": "evaluate high-resolution data or independently anchored ecological state; control measurement error and nugget process."
+  },
+  "implementation": [
+    "adaptive_gain/ou_sampling_saturation.py",
+    "adaptive_gain/ou_nugget_state_space.py",
+    "scripts/profile_voje_2024_pets_half_life.py",
+    "scripts/compare_voje_2024_nugget.py",
+    "tests/test_ou_sampling_saturation.py",
+    "tests/test_ou_nugget_state_space.py"
+  ],
+  "ci_status": "queued at authoring; independent code execution was JavaScript (V8) reference and test suite not yet confirmed"
+}

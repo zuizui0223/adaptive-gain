@@ -1,0 +1,59 @@
+{
+  "receipt": "ou_fixed_practice_audit_wave1_v1",
+  "date": "2026-09-13",
+  "protocol": "theory/OU_PRACTICE_AUDIT_PROTOCOL_V2.md",
+  "scope": "First direct fixed-optimum paleoTS/joint-OU practice wave; not denominator-complete.",
+  "queries": [
+    "paleoTS alpha half-life adaptation fossil time series Ornstein-Uhlenbeck",
+    "paleoTS half-life alpha Nature Communications evolution",
+    "paleoTS restraining force alpha adaptation",
+    "paleoTS Ornstein-Uhlenbeck half-life fossil",
+    "paleoTS adaptive optimum half-life fossil",
+    "paleoTS rate of adaptation half-life"
+  ],
+  "direct_empirical_targets": [
+    {
+      "citation": "Hunt G, Bell MA, Travis MP. 2008. Evolution toward a new adaptive optimum: phenotypic evolution in a fossil stickleback lineage. Evolution 62:700-710.",
+      "doi": "10.1111/j.1558-5646.2007.00310.x",
+      "system": "fossil threespine stickleback skeletal traits",
+      "likelihood_class": "DIRECT_EQUIVALENT_JOINT_OU",
+      "evidence": "The paper fits the joint multivariate-normal fixed-optimum OU model later bundled in paleoTS, defines alpha as strength of the restraining force around the optimum, translates alpha into stabilizing-selection quantities, and reports half-lives of 853, 580 and 635 generations for three traits.",
+      "codes": ["F1_ATTRACTION_OR_SELECTION", "F2_ADAPTATION_SPEED", "F3_PARAMETER_TRANSLATION"],
+      "independent_biological_evidence": "yes; morphology, population-genetic plausibility checks and adaptive-landscape interpretation are discussed",
+      "reproduction_status": "OPEN"
+    },
+    {
+      "citation": "Lo Cascio Saetre C et al. 2017. Rapid adaptive phenotypic change following colonization of a newly restored habitat. Nature Communications 8:14159.",
+      "doi": "10.1038/ncomms14159",
+      "system": "19-year reed-warbler body-mass time series after habitat colonization",
+      "software": "PaleoTS",
+      "likelihood_class": "DIRECT_PALEOTS_FIXED_OU",
+      "evidence": "The article reports alpha=0.39 as the strength of the restraining force around the optimum, converts it to half-life 1.76 years, and interprets the result as very rapid adaptation. It also reports ecological, fitness and genetic evidence supporting adaptation.",
+      "codes": ["F1_ATTRACTION_OR_SELECTION", "F2_ADAPTATION_SPEED"],
+      "independent_biological_evidence": "yes; survival-body-mass association, fitness variation and genetic/ecological evidence",
+      "reproduction_status": "OPEN"
+    }
+  ],
+  "methodological_context": [
+    {
+      "citation": "Voje KL. 2023. Fitting and evaluating univariate and multivariate models of within-lineage evolution. Paleobiology.",
+      "class": "METHODS_CONTEXT_NOT_EMPIRICAL_DENOMINATOR",
+      "note": "Describes paleoTS fixed-OU as trait pull toward an adaptive optimum at rate alpha and half-life as the time to move halfway to the optimum; also develops reciprocal multivariate OU and Granger-causal models, which are conceded as prior art rather than counted as the present novelty."
+    },
+    {
+      "citation": "paleoTS current package documentation",
+      "class": "SOFTWARE_SEMANTICS_CONTEXT",
+      "note": "Documents alpha as strength of attraction to the optimum and states that in a microevolutionary context the parameters can be related to natural selection and genetic drift."
+    }
+  ],
+  "counts": {
+    "n_direct_fixed_empirical": 2,
+    "n_with_F1": 2,
+    "n_with_F2": 2,
+    "n_with_F3": 1,
+    "n_with_explicit_F4_causal_nonuniqueness": 0,
+    "n_independently_reproduced_by_this_project": 0
+  },
+  "interpretation": "The fixed-optimum corollary targets a real empirical practice in at least two independent systems, including a Nature Communications field time series. This wave establishes non-vacuous practice relevance but not prevalence. Both examples also contain external biological evidence, so the theorem qualifies what the trait likelihood alone identifies; it does not negate their broader adaptive arguments.",
+  "hard_stop": "Do not report 2/2 as a field prevalence estimate; this is a seed/wave audit, not a denominator-complete systematic review."
+}

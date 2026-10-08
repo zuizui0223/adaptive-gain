@@ -1,0 +1,65 @@
+{
+  "receipt": "ou_pets_630_model_denominator_v1",
+  "date": "2026-09-13",
+  "scope": "Best-AICc model-class prevalence in the public saved PETS empirical comparison object; not mechanistic-interpretation prevalence.",
+  "source": {
+    "paper": "Bruhn Kinneberg et al. 2026, Rate-time scaling in phenotypic evolution: Limitations of current models in capturing temporal dynamics",
+    "repository": "VildeBruhn/rate_time",
+    "source_sha": "a08b97d2153c797f4825b9d03ec9361ca9921caf",
+    "saved_object": "empirical_data/model_test.Rdata",
+    "analysis_script": "empirical_data/empirical.R",
+    "evots_model_order_commit": "84c201258e35776b7e1ad87fd5563f0c68fceed1"
+  },
+  "audit_execution": {
+    "workflow_run_id": 34741902818,
+    "job_id": 103682892068,
+    "adaptive_gain_commit": "132e8e9f3b6e8d56d4540da84e9b71d2651f5a9b",
+    "R_version": "4.4.1",
+    "operation": "which.min(AICc) for each saved model_test entry",
+    "temporary_workflow_removed_after_audit": true
+  },
+  "denominator": {
+    "paper_complete_series": 643,
+    "saved_model_test_entries": 630,
+    "valid_best_AICc_entries": 630,
+    "missing_or_invalid_within_saved_object": 0,
+    "count_denominator_used_here": 630
+  },
+  "best_model_counts": {
+    "GRW": 50,
+    "URW": 164,
+    "STASIS": 135,
+    "STRICT_STASIS": 114,
+    "DECEL": 20,
+    "ACCEL": 22,
+    "FIXED_OU": 56,
+    "OUBM_ANC_EQ_OPT": 30,
+    "OUBM_FREE_OPT": 39,
+    "OU_ANY": 125,
+    "MOVING_OU_ANY": 69
+  },
+  "percent_of_630": {
+    "GRW": 7.9365079365,
+    "URW": 26.0317460317,
+    "STASIS": 21.4285714286,
+    "STRICT_STASIS": 18.0952380952,
+    "DECEL": 3.1746031746,
+    "ACCEL": 3.4920634921,
+    "FIXED_OU": 8.8888888889,
+    "OUBM_ANC_EQ_OPT": 4.7619047619,
+    "OUBM_FREE_OPT": 6.1904761905,
+    "OU_ANY": 19.8412698413,
+    "MOVING_OU_ANY": 10.9523809524
+  },
+  "discrepancy_log": {
+    "paper_complete_vs_saved_object": "Paper describes 643 complete empirical series; public saved model_test object contains 630 entries. Exact model-class counts use 630 only.",
+    "URW_paper_vs_saved_object": "Paper reports 163 time series in the URW relative-fit subset; direct saved-object minimum-AICc audit gives 164 URW minima. Treat as an unresolved processing/version/filtering difference, not as a source error."
+  },
+  "inference": "OU likelihood classes are nontrivially represented in a broad empirical evolutionary time-series comparison: 125/630 saved successful model comparisons have an OU model as minimum AICc, including 56 fixed OU and 69 moving OUBM. This is model-class prevalence, not prevalence of mechanistic causal interpretation.",
+  "hard_stops": [
+    "do not use 643 as the denominator for these exact counts",
+    "do not translate 125 OU-best series into 125 affected published papers",
+    "do not treat minimum AICc as proof that OU is the true process",
+    "do not infer mechanistic-interpretation prevalence from model-class prevalence"
+  ]
+}

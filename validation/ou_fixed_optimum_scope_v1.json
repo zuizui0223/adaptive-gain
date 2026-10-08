@@ -1,0 +1,53 @@
+{
+  "receipt": "ou_fixed_optimum_scope_v1",
+  "date": "2026-09-13",
+  "scope": "Exact fixed-optimum OU corollary for the paleoTS joint time-series likelihood; second-paper branch only.",
+  "implementation_contract": {
+    "status": "PASS",
+    "source": "paleoTS::logL.joint.OU",
+    "mean": "theta + (anc-theta) exp(-alpha t)",
+    "process_covariance": "exp(-alpha |t-s|) min(V(s),V(t)), V(t)=vstep(1-exp(-2 alpha t))/(2 alpha)",
+    "sampling_error": "vv/nn added to covariance diagonal",
+    "relationship_to_existing_theorem": "exact v_optimum=0 boundary of the evoTS OUBM observation law"
+  },
+  "reciprocal_corollary": {
+    "status": "PASS",
+    "family": "a=q alpha, d=(1-q) alpha, 0<q<1",
+    "observed_law": "identical at arbitrary observation times",
+    "decay_rate": "alpha=a+d"
+  },
+  "semantic_boundary": {
+    "observed_relaxation_half_life": "IDENTIFIED_MODEL_CONDITIONAL",
+    "value": "log(2)/alpha",
+    "one_way_direct_attraction_coefficient": "NONUNIQUE",
+    "direct_coupling_half_life": "log(2)/(q alpha) = H_relax/q",
+    "hard_stop": "Do not claim that the observed OU half-life or expected halfway time is numerically wrong. The result targets mechanistic one-way attribution of alpha."
+  },
+  "empirical_anchors": [
+    {
+      "citation": "Hunt G, Bell MA, Travis MP. 2008. Evolution toward a new adaptive optimum: phenotypic evolution in a fossil stickleback lineage. Evolution 62:700-710.",
+      "doi": "10.1111/j.1558-5646.2007.00310.x",
+      "class": "DIRECT_EQUIVALENT_JOINT_OU",
+      "practice": "Interprets alpha as restraining force/stabilizing selection and reports half-lives of about 580-853 generations."
+    },
+    {
+      "citation": "Lo Cascio Saetre C et al. 2017. Rapid adaptive phenotypic change following colonization of a newly restored habitat. Nature Communications 8:14159.",
+      "doi": "10.1038/ncomms14159",
+      "class": "DIRECT_PALEOTS",
+      "practice": "Explicitly uses PaleoTS, interprets alpha as restraining force and reports half-life 1.76 years as exceptionally rapid adaptation."
+    }
+  ],
+  "prior_art_ceiling": {
+    "status": "STRONG_CAUTION_LITERATURE_EXISTS",
+    "concede": [
+      "generic OU parameter identifiability problems",
+      "phylogenetic OU half-life interpretation and cautions",
+      "warning that positive alpha need not alone prove stabilizing selection",
+      "reciprocal multivariate OU adaptation",
+      "causal/Granger OU-SDE methodology"
+    ],
+    "candidate_increment": "implementation-matched paleoTS time-series equality plus exact alpha=a+d causal decomposition and separation of descriptive relaxation from direct mechanistic attraction"
+  },
+  "scope_effect": "BROADENS_SECOND_PAPER_BEYOND_MOVING_OPTIMUM",
+  "nature_ecology_evolution_scope": "REASSESS_AFTER_FIXED_OU_PRACTICE_AUDIT_AND_EMPIRICAL_REPRODUCTIONS"
+}

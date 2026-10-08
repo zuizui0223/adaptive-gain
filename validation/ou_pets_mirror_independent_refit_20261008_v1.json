@@ -1,0 +1,81 @@
+{
+  "receipt": "ou_pets_mirror_independent_20261008_v1",
+  "date": "2026-10-08",
+  "scope": "Independent Gaussian OUBM likelihood refit of a publicly available PETS mirror of C. andinus; NOT authors' Dryad-archive byte-identical reproduction",
+  "source": {
+    "repository": "VildeBruhn/rate_time",
+    "commit": "718d603c49ae640e34a5c36c93bcd8ba36d1e389",
+    "timeseries_path": "empirical_data/timeseries.txt",
+    "metadata_path": "empirical_data/metadata.txt",
+    "timeseries_blob_sha": "7e4ffdb6a84b481bf5d320877a0c6b55410f63e9",
+    "metadata_blob_sha": "a52125fdb9ab0ae7cc170118cbb0de2d42cc4c57",
+    "series_id": 582,
+    "metadata_species": "Cyclostephanos andinus",
+    "metadata_log_transformed": "no (catalog flag; observed trait mean already near 2.645 log micrometre in the source-data units)",
+    "source_first_mean": 2.644626001,
+    "source_last_mean": 3.253418956,
+    "age_min_Myr": 0,
+    "age_max_Myr": 0.30941525,
+    "n": 266
+  },
+  "model": {
+    "family": "univariate moving-optimum OUBM with Brownian latent optimum and independent source innovations",
+    "initial_condition": "anc=theta0; deterministic",
+    "time_scale": "[0,1] across PETS full observed interval",
+    "observations": "all 266 population trait means",
+    "sampling_error": "pooled sample variance / sample size",
+    "pooled_within_sample_variance": 0.1597276044948899,
+    "variance_pooling_rule": "sum((N_i-1)*v_i)/sum(N_i-1)",
+    "trait_transform": "NONE: source trait_mean already matches publication ln(micrometre) scale; avoid second ln",
+    "likelihood_implementations": [
+      "independent two-state Gaussian Kalman filter",
+      "independent full n-by-n multivariate-normal covariance + Cholesky"
+    ]
+  },
+  "fit": {
+    "status": "INDEPENDENT_NUMERIC_REFIT_PETS_MIRROR_PASS",
+    "optimizer": "pure JavaScript Nelder-Mead multi-start using independently implemented Kalman Gaussian likelihood",
+    "parameterization": [
+      "anc",
+      "vstep_trait",
+      "alpha_scaled_unit_interval",
+      "vstep_optimum"
+    ],
+    "parameters": [
+      2.6519340141632024,
+      527.5416514959081,
+      17859.469540254824,
+      2.5206495950619603
+    ],
+    "logL_kalman": 80.90531062232422,
+    "logL_dense": 80.90531062232341,
+    "logL_absolute_difference": 8.100187187665142e-13,
+    "K": 4,
+    "AICc": -153.6573645396676,
+    "half_life_years": 12.008772582877649,
+    "published_AICc": -153.573,
+    "published_half_life_years": 12,
+    "AICc_difference_reproduced_minus_published": -0.0843645396676,
+    "unpooled_crosscheck": {
+      "AICc": -157.1969268483327,
+      "half_life_years": 11.026219242710999,
+      "interpretation": "Shows why using the paper's variance pooling contract matters; do not overwrite the pooled primary fit"
+    }
+  },
+  "evidence_tiers": {
+    "mathematical_likelihood_match": "PASS (Kalman vs dense Gaussian, absolute difference <1e-12)",
+    "same_public_mirror_series": "PASS (tsID582, n266, 0.30941525 Myr, source trait units)",
+    "published_AICc_and_half_life_approximation": "PASS_NEAR (AICc gap 0.0844 and half-life 12.009 yr vs reported about 12)",
+    "authors_Dryad_archive_exact_refit": "OPEN (403 binary route / 401 unauthenticated API, original archived script unavailable)",
+    "table2_taxon_parameter_mapping": "OPEN (conflict in rendered article table vs Table1 and prose)",
+    "physical_latent_feedback_interpretation": "NOT_TESTED_BY_LIKELIHOOD_FIT"
+  },
+  "script": "scripts/refit_voje_2024_pets_ou.py",
+  "cautions": [
+    "PETS mirror may differ from the authors' archived data, variance pooling or package-source versions.",
+    "An AICc value slightly lower than published by 0.084 is not a source error.",
+    "The original model-conditional half-life estimate has uncertainty including near-immediate response, per source paper.",
+    "Exact reciprocity construction is a latent-coordinate gauge until independent ecological state semantics are justified.",
+    "These results do not imply authors' biological adaptation claims are false or that phylogenetic OU models are covered."
+  ]
+}
