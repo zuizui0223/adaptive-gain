@@ -429,18 +429,43 @@ def test_refresh_precision_can_eliminate_reward_driven_policy_reversal():
     assert rare_eight.strict_conditional_gain == pytest.approx(0)
 
 
-def test_uninformative_refresh_cue_never_creates_strict_routing_value():
+def test_uninformative_refresh_cue_has_zero_information_gain_not_zero_timing_gain():
+    """A meaningless signal can still induce profitable delay in a moving world.
+
+    The old two-schedule model conflates refreshed observation with waiting.
+    Information value must be compared against equal-duration WAIT without
+    sampling, not just against immediate SKIP.
+    """
+    from adaptive_gain.waiting_control import waiting_control_decomposition
+
     for old_err, reward0, reward1, age in itertools.product(
         (0., .03, .1, .5), (1., 4.), (1., 4.), (.1, 1.2)
     ):
-        actual = selective_refresh(
+        receipt = waiting_control_decomposition(
             .8, .2, cue_age=age, sampling_delay=.15,
             terminal_delay=.15, opportunity_hazard=.25,
             reward0=reward0, reward1=reward1, query_cost=.015,
             old_cue_error_rate=old_err, refresh_cue_error_rate=.5,
         )
-        assert actual.strict_conditional_gain == pytest.approx(0, abs=1e-12)
-        assert actual.selective_policy == ("skip", "skip")
+        assert receipt.query_access_gain == pytest.approx(0, abs=1e-12)
+        assert receipt.conditional_query_premium == pytest.approx(0, abs=1e-12)
+        assert receipt.gross_fresh_information_value_by_old_report == pytest.approx(
+            (0, 0), abs=1e-12)
+        assert all(x == "skip" or x == "wait"
+                   for x in receipt.conditional_query_policy)
+
+    # The counterexample that invalidated the old assertion in full CI:
+    # state drift alone makes delayed action profitable after one old report.
+    special = waiting_control_decomposition(
+        .8, .2, cue_age=.1, sampling_delay=.15,
+        terminal_delay=.15, opportunity_hazard=.25,
+        reward0=1, reward1=4, query_cost=.015,
+        old_cue_error_rate=0, refresh_cue_error_rate=.5,
+    )
+    assert special.original_two_schedule_premium == pytest.approx(
+        .03419976772047084, abs=1e-12)
+    assert special.timing_only_conditional_premium > .03
+    assert special.query_access_gain == pytest.approx(0, abs=1e-12)
 
     with pytest.raises(ValueError):
         selective_refresh(
