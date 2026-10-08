@@ -2974,6 +2974,148 @@ expected-value existence statement permits encounter probabilities to be
 chosen, rather than requiring viability for a measured ecological distribution.
 
 
+## Proposition RF7.4 — an encounter-frequency floor limits expected rescue
+
+The arity-independent expected ceiling in RF7 is sharp only because world
+frequencies may become arbitrarily concentrated on shallow branches.
+
+Suppose instead that every one of the \(n\) represented worlds has a
+probability of at least
+
+\[
+0<\eta\le1/n.
+\]
+
+Let \(j=C_F\ge2\) and \(p_1=\Pr[T_\pi=1]\) for a guaranteed-resolving
+adaptive policy. Then
+
+\[
+\boxed{p_1\le1-j\eta.}
+\]
+
+### Proof of the root-branch bound
+
+After the policy's first query, call a root outcome *mixed* if it contains
+worlds with different target values. All other root outcomes can terminate
+after one query.
+
+Let the mixed root outcomes contain disjoint sets of \(r_1,\ldots,r_k\)
+worlds, with total
+
+\[
+r=\sum_{i=1}^{k}r_i.
+\]
+
+Since \(j\ge2\), at least one root outcome is mixed (\(k\ge1\)).
+
+Within each mixed set, the guaranteed-resolution decision tree can be
+flattened to at most \(r_i-1\) queries. Taking the root query and the union
+of these fixed subsets resolves the target across every represented world.
+
+Consequently,
+
+\[
+j=C_F
+\le1+\sum_{i=1}^k(r_i-1)
+=1+r-k
+\le r.
+\]
+
+Every mixed-outcome world requires more than one query in the declared policy.
+Each has probability at least \(\eta\), so
+
+\[
+1-p_1\ge r\eta\ge j\eta.
+\]
+
+This proves the claim.
+
+### Frequency-floor expected-value upper bound
+
+For finite nonincreasing completion value \(U\), every realized completion
+path requires at least one query. Paths not terminating after one query require
+at least two.
+
+Therefore
+
+\[
+\mathbb E[U(T_\pi)]
+\le
+p_1U(1)+(1-p_1)U(2).
+\]
+
+Using \(p_1\le1-j\eta\) yields
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+U(1)-U(j)-j\eta[U(1)-U(2)].
+}
+\]
+
+For fixed finite budgets \(n,m\), let \(M=\min\{m,n-1\}\). The bound applies
+to any admissible task and every world distribution satisfying the probability
+floor:
+
+\[
+\boxed{
+R_{\rm expected}
+\le
+\max\left\{
+0,\
+\max_{2\le j\le M}
+\left[
+U(1)-U(j)-j\eta[U(1)-U(2)]
+\right]
+\right\}.
+}
+\]
+
+The extra zero covers a fixed cost of one, where adaptivity cannot create a
+completion-value advantage. This is generally an **upper bound, not a sharp
+envelope**; paths through the mixed subtree may take more than two queries.
+
+### Example: uniform encounters remove the apparent rescue
+
+Take the canonical finite scope
+
+\[
+n=10,\quad m=9,\quad U(c)=e^{-0.3c},
+\]
+
+but now fix uniform world frequencies, so \(\eta=0.1\).
+
+The unconstrained RF7 supremum over freely chosen frequencies is
+
+\[
+U(1)-U(9)\approx0.673613.
+\]
+
+The frequency-floor bound instead gives
+
+\[
+\boxed{
+R_{\rm expected}\le0.500807.
+}
+\]
+
+Therefore architecture cost
+
+\[
+K=0.60
+\]
+
+**cannot** be repaid in expectation under uniform world frequencies, even
+though it is repayable by a finite binary task when encounter probabilities
+may be strongly skewed.
+
+This result begins to constrain expected selection using ecological encounter
+information rather than treating arbitrary prior concentration as free. Its
+purpose is to expose the empirical dependency of RF7, not to claim a new
+sharp expected-value frontier.
+
+
 ## 10. Relation to PAYOFF
 
 The forward **robust** interface is
