@@ -29,6 +29,8 @@ from adaptive_gain.evolutionary_resource_frontier import (
     exponential_near_max_value_scaling,
     finite_scope_expected_value_ceiling,
     finite_scope_one_step_mass_threshold,
+    minimum_expected_evolutionary_resources,
+    exponential_minimum_expected_evolutionary_resources,
 )
 
 
@@ -805,3 +807,80 @@ def test_expected_ceiling_zero_at_one_query_resource():
         ) == pytest.approx(0.0)
     with pytest.raises(ValueError):
         finite_expected_ceiling_witness(5, 1)
+
+
+def test_inverse_expected_corner_is_binary_and_componentwise_minimal():
+    mu = 0.3
+    value = lambda cost: math.exp(-mu * cost)
+    for k, j in ((0.30, 3), (0.60, 7)):
+        exact = exponential_minimum_expected_evolutionary_resources(
+            k, closure_rate=mu, resolution_value=1.0
+        )
+        generic = minimum_expected_evolutionary_resources(
+            k, value, search_limit=20
+        )
+        assert exact == generic
+        assert exact is not None
+        assert exact.required_fixed_cost == j
+        assert exact.minimum_world_count == j + 1
+        assert exact.minimum_query_count == j
+        assert exact.minimum_cue_arity == 2
+        assert finite_scope_expected_value_ceiling(j + 1, j, value) > k
+        assert finite_scope_expected_value_ceiling(j, j, value) <= k
+        assert finite_scope_expected_value_ceiling(j + 1, j - 1, value) <= k
+
+
+def test_inverse_expected_corner_recovered_by_exact_binary_witness():
+    mu, k = 0.3, 0.60
+    corner = exponential_minimum_expected_evolutionary_resources(
+        k, closure_rate=mu
+    )
+    assert corner is not None
+    task = finite_expected_ceiling_witness(
+        corner.minimum_world_count, corner.minimum_query_count
+    )
+    assert len(task.worlds) == 8
+    assert len(task.queries) == 7
+    assert all(len(set(q.outcomes)) <= 2 for q in task.queries)
+    fixed_cost = fixed_minimum_resolution(task).minimum_cost
+    assert fixed_cost == 7
+    p_common = 0.99
+    probs = [p_common] + [(1-p_common)/(len(task.worlds)-1)] * (len(task.worlds)-1)
+    adaptive = discounted_fitness_optimal_policy(
+        task, probs, discount_rate=mu
+    )
+    gain = adaptive.expected_discounted_completion_value - math.exp(-mu*fixed_cost)
+    assert gain > k
+
+
+def test_inverse_expected_corner_no_go_and_strict_boundary():
+    mu = 0.3
+    u1 = math.exp(-mu)
+    u3 = math.exp(-3*mu)
+    assert exponential_minimum_expected_evolutionary_resources(
+        u1, closure_rate=mu
+    ) is None
+    assert exponential_minimum_expected_evolutionary_resources(
+        u1 + 0.01, closure_rate=mu
+    ) is None
+    boundary = exponential_minimum_expected_evolutionary_resources(
+        u1 - u3, closure_rate=mu
+    )
+    assert boundary is not None
+    assert boundary.required_fixed_cost == 4
+    at_zero = exponential_minimum_expected_evolutionary_resources(
+        0.0, closure_rate=mu
+    )
+    assert at_zero is not None and at_zero.required_fixed_cost == 2
+
+
+def test_generic_expected_corner_has_explicit_search_horizon():
+    value = lambda cost: 1.0 / (1.0 + cost)
+    assert minimum_expected_evolutionary_resources(
+        0.2, value, search_limit=2
+    ) is None
+    found = minimum_expected_evolutionary_resources(
+        0.2, value, search_limit=6
+    )
+    assert found is not None
+    assert found.required_fixed_cost == 3
