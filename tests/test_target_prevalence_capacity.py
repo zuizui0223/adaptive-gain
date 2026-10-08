@@ -326,3 +326,86 @@ def test_finite_target_prevalence_edge_cases():
     assert n3binary.expected_value_supremum == pytest.approx(
         n3ternary.expected_value_supremum
     )
+
+
+
+def test_independent_exhaustive_four_world_two_query_target_balance():
+    """Exhaust every 4-world two-query table independently of repo solvers.
+
+    The supremum over positive world frequencies with a 50:50 binary-target
+    marginal is approached by concentrating probability 0.5 on one world of
+    each target. Because expected value is linear in those probabilities for
+    each fixed policy, it suffices to inspect these extreme pairs.
+    """
+    from itertools import combinations, product
+
+    mu = 0.3
+    u1 = math.exp(-mu)
+    u2 = math.exp(-2 * mu)
+
+    def resolves(queries, labels):
+        signatures = {}
+        for i in range(4):
+            signature = tuple(q[i] for q in queries)
+            if signature in signatures and signatures[signature] != labels[i]:
+                return False
+            signatures[signature] = labels[i]
+        return True
+
+    results = {}
+    for arity in (2, 3):
+        patterns = [
+            q for q in product(range(arity), repeat=4)
+            if len(set(q)) > 1
+        ]
+        best = float("-inf")
+        considered = 0
+
+        for qa, qb in combinations(patterns, 2):
+            if qa == qb:
+                continue
+            for labels in product((0, 1), repeat=4):
+                if len(set(labels)) != 2 or not resolves((qa, qb), labels):
+                    continue
+                fixed_cost = (
+                    1 if resolves((qa,), labels) or resolves((qb,), labels)
+                    else 2
+                )
+                for root in (qa, qb):
+                    pure_at_root = {}
+                    for outcome in set(root):
+                        cell = [i for i in range(4) if root[i] == outcome]
+                        pure_at_root[outcome] = len({
+                            labels[i] for i in cell
+                        }) == 1
+                    for a in range(4):
+                        if labels[a] != 0:
+                            continue
+                        for b in range(4):
+                            if labels[b] != 1:
+                                continue
+                            p1 = 0.5 * int(pure_at_root[root[a]]) + (
+                                0.5 * int(pure_at_root[root[b]])
+                            )
+                            value = (
+                                p1 * u1 + (1.0 - p1) * u2
+                                - math.exp(-mu * fixed_cost)
+                            )
+                            best = max(best, value)
+                            considered += 1
+
+        results[arity] = (best, considered)
+
+    binary_theory = finite_target_prevalence_expected_capacity(
+        4, 2, 0.5, max_arity=2,
+        completion_value=lambda t: math.exp(-mu * t)
+    ).expected_value_supremum
+    ternary_theory = finite_target_prevalence_expected_capacity(
+        4, 2, 0.5, max_arity=3,
+        completion_value=lambda t: math.exp(-mu * t)
+    ).expected_value_supremum
+
+    assert results[2][1] > 0
+    assert results[3][1] > results[2][1]
+    assert results[2][0] == pytest.approx(binary_theory, abs=1e-12)
+    assert results[3][0] == pytest.approx(ternary_theory, abs=1e-12)
