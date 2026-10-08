@@ -436,11 +436,14 @@ depends on \(b\).
 But cue arity disappears from the exact finite-scope expected ceiling once
 encounter frequencies can be skewed.
 
-This is a supremum over freely varying encounter distributions, not a
-prediction that arity has no effect at a measured distribution. The limiting
-construction concentrates almost all encounters on a one-query branch; if
-rare-state probabilities cannot approach zero, the branch completion-time
-profile and cue arity may still affect expected performance.
+This is a supremum over freely varying world frequencies **and target-class
+prevalence**, not a prediction that arity has no effect at a measured
+distribution. Fixing the prevalence of both target classes can restore arity
+dependence: with four worlds, two queries and equal target prevalence, the
+binary expected-value supremum is
+\(\tfrac12[U(1)-U(2)]\), whereas ternary queries attain the larger supremum
+\(U(1)-U(2)\). This model-specific contrast is supporting theory, not a
+fourth main result.
 
 
 The finite budget also imposes a quantitative frequency requirement. With
