@@ -162,6 +162,27 @@ def summarize_trials(
             ],
         }
 
+    within_bee = {}
+    for diff in DIFFICULTIES:
+        paired = []
+        for bee in bees:
+            reg = bee["Regular|"+diff]
+            free = bee["Random_Free_Cue|"+diff]
+            if reg["n"] and free["n"]:
+                paired.append(
+                    free["land"]/free["n"] - reg["land"]/reg["n"]
+                )
+        sorted_paired = sorted(paired)
+        within_bee[diff] = {
+            "n_paired": len(paired),
+            "n_missing": n_bees-len(paired),
+            "mean": sum(paired)/len(paired) if paired else None,
+            "median": sorted_paired[len(paired)//2] if paired else None,
+            "positive": sum(x > 0 for x in paired),
+            "negative": sum(x < 0 for x in paired),
+            "zero": sum(x == 0 for x in paired),
+        }
+
     return {
         "source_repository": SOURCE_REPO,
         "source_commit": SOURCE_COMMIT,
@@ -179,6 +200,7 @@ def summarize_trials(
         "groups": overall,
         "request_landing_disagreements": disagreements,
         "landing_comparisons": comparisons,
+        "within_bee_differences": within_bee,
         "uncertainty_method": (
             f"bee cluster bootstrap; B={bootstrap_repetitions}; "
             f"xorshift32 seed={seed}; percentiles 2.5 and 97.5"
