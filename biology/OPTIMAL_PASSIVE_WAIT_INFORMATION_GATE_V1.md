@@ -142,6 +142,47 @@ marginal addition of *optional fresh-signal acquisition* to
 a capable baseline controller, not the complete costs of
 decision machinery versus reflexive behavior.
 
+## Closest ecological precedent: the main sampling question is already tested
+
+Dunlap, Papaj & Dornhaus (2017), *Interface Focus* 7:20160149,
+[DOI: 10.1098/rsfs.2016.0149](https://doi.org/10.1098/rsfs.2016.0149),
+tested how bumblebee sampling of a fluctuating nectar resource
+depends on environmental persistence and relative losses of sampling
+versus failing to notice improved reward. Their factorial experiment
+used four persistence levels (0.99, 0.86, 0.73, 0.60) and three reward
+error-cost ratios, with sampling operationalized as a return to the
+fluctuating resource after its last known state was poor. Bees
+changed their sampling frequency with environmental persistence
+and reward but often tracked the best current resource suboptimally.
+
+**This directly preempts broad claims that environmental
+persistence, information age and reward asymmetry governing
+sampling are unexplored.** The study already tested such
+ecological factors against established foraging theory.
+
+The authors supplied a public **analyzed-data spreadsheet**
+([Figshare DOI 10.6084/m9.figshare.4769539](https://doi.org/10.6084/m9.figshare.4769539),
+22.9 kB). The publicly described source is “Bee choice data,”
+but the current audit has not established trialwise simultaneous
+timestamps of cue acquisition, calibrated observation noise and
+matched waiting-without-information controls. A public spreadsheet
+exists, but its rows were **not reanalyzed here**.
+
+In that experiment, sampling is itself a visit to a reward-bearing
+resource; it may jointly alter expected sucrose gain and knowledge.
+This is **not a criticism of the original authors' question or
+analysis**; it is a different estimand. Our stricter three-way
+comparison asks a narrower causal question: Does the animal benefit
+from paying for *fresh information*, beyond the best payoff obtained
+by timing a no-new-information action?
+
+The useful prospective differentiator is a randomized three-arm
+SKIP / duration-matched SHAM WAIT / informative QUERY contrast,
+with optional querying contingent on the prior cue and a measured
+error/latency trade-off. Dunlap et al.'s study is a strong baseline
+for experiment design and expectation-setting, not a direct
+confirmation of this information-specific comparator.
+
 ## Independent tests and empirical constraints
 
 Implementation:
