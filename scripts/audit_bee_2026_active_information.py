@@ -162,6 +162,28 @@ def summarize_trials(
             ],
         }
 
+    # A mixed-trial field is not guaranteed to retain a single causal
+    # meaning. In Free-Cue trials Info_Requested indicates delivery,
+    # not the physical request action. Quantify the mechanical mixture
+    # explicitly so pooled GLMM users cannot mistake it for behavior.
+    pooled_label_semantics = {}
+    for diff in DIFFICULTIES:
+        reg = overall["Regular|"+diff]
+        free = overall["Random_Free_Cue|"+diff]
+        denominator = reg["n"] + free["n"]
+        pooled_label_semantics[diff] = {
+            "regular_voluntary_request_rate": (
+                reg["land"]/reg["n"]
+            ),
+            "pooled_info_requested_delivery_rate": (
+                (reg["info"] + free["info"])/denominator
+            ),
+            "pooled_actual_platform_landing_rate": (
+                (reg["land"] + free["land"])/denominator
+            ),
+            "free_cue_fraction": free["n"]/denominator,
+        }
+
     within_bee = {}
     for diff in DIFFICULTIES:
         paired = []
@@ -201,6 +223,7 @@ def summarize_trials(
         "request_landing_disagreements": disagreements,
         "landing_comparisons": comparisons,
         "within_bee_differences": within_bee,
+        "pooled_label_semantics": pooled_label_semantics,
         "uncertainty_method": (
             f"bee cluster bootstrap; B={bootstrap_repetitions}; "
             f"xorshift32 seed={seed}; percentiles 2.5 and 97.5"
