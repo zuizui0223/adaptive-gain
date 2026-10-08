@@ -36,6 +36,7 @@ class UniformExpectedEnvelope:
     duplicate_world_count: int
     optimal_expected_gain: float
     evaluated_depth_profiles: int
+    one_world_per_terminal: bool
     scope: str = "exact_uniform_world_binary_expected_gain_m_at_least_n_minus_one"
 
 
@@ -61,12 +62,16 @@ def exact_uniform_expected_envelope(
     world_count: int,
     query_count: int,
     completion_value: Callable[[float], float],
+    *,
+    one_world_per_terminal: bool = False,
 ) -> UniformExpectedEnvelope:
     """Find the sharp uniform-world expected advantage for m >= n-1.
 
     Enumerates distinct binary leaf-depth multisets rather than all ordered
-    tree shapes. It optimizes over C_F=j between 1 and n-1, so it also allows
-    target-equivalent represented worlds to share an early terminal leaf.
+    tree shapes. By default it optimizes over C_F=j between 1 and n-1,
+    permitting target-equivalent represented worlds to share an early terminal
+    leaf. Setting one_world_per_terminal=True restricts to n distinct
+    terminal leaves, separating multiplicity effects from tree-shape effects.
     """
     if type(world_count) is not int or not (2 <= world_count <= 14):
         raise ValueError("world_count must be an integer between 2 and 14")
@@ -88,7 +93,8 @@ def exact_uniform_expected_envelope(
     best_fixed = 0
     best_depths: tuple[int, ...] = ()
     tested = 0
-    for leaf_count in range(2, world_count + 1):
+    first_leaf_count = world_count if one_world_per_terminal else 2
+    for leaf_count in range(first_leaf_count, world_count + 1):
         fixed_cost = leaf_count - 1
         duplicates = world_count - leaf_count
         for depths in _binary_leaf_depth_profiles(leaf_count):
@@ -113,6 +119,7 @@ def exact_uniform_expected_envelope(
         duplicate_world_count=world_count - len(best_depths),
         optimal_expected_gain=best_gain,
         evaluated_depth_profiles=tested,
+        one_world_per_terminal=one_world_per_terminal,
     )
 
 
