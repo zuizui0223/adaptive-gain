@@ -235,7 +235,7 @@ Thus
 is exactly attainable at every feasible \(h\).
 
 The structural problem is therefore not represented by one optimum ratio. It
-is represented by an exact frontier.
+is represented by an exact frontier (Fig. 1A).
 
 ### 2. Natural history re-ranks the structural frontier
 
@@ -277,7 +277,7 @@ Relevant exact frontier points are
 \[
 (2,3),\qquad(3,7),\qquad(4,9).
 \]
-The fixed-to-contingent ratio is largest at \(h=3\).
+The fixed-to-contingent ratio is largest at \(h=3\) (Fig. 1B).
 
 Now let
 \[
@@ -299,7 +299,7 @@ As \(\mu\) increases, the maximizing depth switches
 4\to3\to2.
 \]
 The structural ratio optimum therefore agrees with the biological optimum only
-over an intermediate range.
+over an intermediate range (Fig. 1C).
 
 An even sharper counterexample comes from the exact binary extremal family
 \[
@@ -333,7 +333,7 @@ I_h\ge J_K(h).
 
 The forward value theorem therefore has an exact inverse: natural history and
 architecture cost specify the amount of information structure required for
-evolvability.
+evolvability (Fig. 2A).
 
 This becomes especially informative when world and query counts are allowed to
 grow but cue arity remains bounded.
@@ -367,13 +367,13 @@ K>K_{\rm crit,robust}^{(b)},
 \]
 no finite task with cue arity at most \(b\) can guarantee positive net
 contingent value in every represented world. More environmental states and
-more query resources cannot help.
+more query resources cannot help (Fig. 2B,C).
 
 This gives an exact minimum robust cue arity
 \[
 b_{min}^{\rm robust}
 =
-\min{b\ge2:K<K_{\rm crit,robust}^{(b)}}.
+\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\}.
 \]
 
 For
@@ -460,7 +460,7 @@ p_1>
 \]
 
 This threshold is sharp as a supremum over legal finite tasks and encounter
-distributions, not an estimate of mosquito encounter frequencies.
+distributions (Fig. 3B), not an estimate of mosquito encounter frequencies.
 
 In the unrestricted finite-size limit,
 \[
@@ -482,8 +482,8 @@ U(2)-U_\infty
 <
 U(1)-U_\infty
 \]
-defines a frequency-assisted evolvability band: no finite architecture can be
-positive in every state, yet expected positive value remains possible.
+defines a frequency-assisted evolvability band (Fig. 3A): no finite architecture
+can be positive in every state, yet expected positive value remains possible.
 
 For exponential opportunity value,
 \[
@@ -522,7 +522,8 @@ mosquito data illustrate both objects without yet closing the fitness chain.
 
 First, Chandel et al. (2024) measured *Aedes aegypti* host-seeking activity with
 and without infrared cues during a 300-s assay containing transient CO2 pulses.
-Reanalysis of the public Figure 3a source data shows that the post-pulse
+Reanalysis of Chandel et al.'s original Figure 3a source data (our Fig. 3C2)
+shows that the post-pulse
 infrared advantage is strongly late weighted. Half of the first post-pulse
 signed advantage accumulates only after approximately 46.2 s, and half of the
 second only after approximately 46.5 s. The same aggregate cue effect would
@@ -532,7 +533,8 @@ windows.
 Second, Uehara et al. (2026) provide individual one-minute Probe percentages
 for six mosquito species. Restricting the secondary analysis to individuals
 with zero probing in the -1 to 0 min pre-stimulus bin gives a one-minute
-interval-censored first post-stimulus probing profile. *Aedes albopictus* is
+interval-censored first post-stimulus probing profile (Fig. 3C1).
+*Aedes albopictus* is
 especially delayed: only 10 of 38 individuals (26.3%) show probing in the first
 minute, the discrete cumulative probability reaches 0.50 only by minute 4, and
 15 of 38 remain without observed probing through 8 min. By contrast, first-
