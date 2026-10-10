@@ -256,8 +256,8 @@ def _fig3(directory,manifest):
     s.text(631,344,"Finite n=10,m=9: threshold p1 ≈ 0.6166",size=14,color=MUTED)
 
     section(s,34,385,735,300,"C1","Individual first-probe profiles (1-minute bins)")
-    xy=axes(s,95,494,610,118,xrange=(1,8),yrange=(0,1),
-            xticks=(1,2,3,4,5,6,7,8),yticks=(0,.25,.5,.75,1),
+    xy=axes(s,95,494,610,118,xrange=(0,8),yrange=(0,1),
+            xticks=(0,1,2,3,4,5,6,7,8),yticks=(0,.25,.5,.75,1),
             xlabel="Minute after stimulus (interval end)",
             ylabel="Fraction first probing",format_y=lambda x:f"{x:.2f}")
     raw=_csv(directory/"fig3_uehara_cdf.csv")
@@ -270,26 +270,52 @@ def _fig3(directory,manifest):
         entries=sorted((v for v in raw if v["species"]==name),
                        key=lambda v:float(v["minute_end"]))
         if len(entries)!=8:raise ValueError("missing Uehara intervals")
-        s.path([xy(float(v["minute_end"]),float(v["cdf_first_probe"]))
-                for v in entries],color=color,width=2.5)
-    for x,(_,color,label) in zip((83,306,529),species):
-        s.text(x,667,label,size=14,color=color,weight="bold")
+        # The source observes first probing in (j-1,j]-minute intervals.
+        # A step CDF honestly encodes this discrete resolution; interpolating
+        # between minute ends would invent frame-resolved event times.
+        steps=[xy(0,0.0)]
+        previous=0.0
+        for minute,row in enumerate(entries,start=1):
+            observed=float(row["cdf_first_probe"])
+            if observed+1e-12<previous or observed>1+1e-12:
+                raise ValueError("invalid interval-censored CDF")
+            steps.extend((xy(minute,previous),xy(minute,observed)))
+            previous=observed
+        s.path(steps,color=color,width=2.5)
+        censored=int(entries[-1]["right_censored_8min"])
+        n=int(entries[-1]["n_primary"])
+        if abs(previous-(n-censored)/n)>1e-10:
+            raise ValueError("Uehara CDF and right-censor receipt disagree")
+    for x,(_,color,label) in zip((85,316,538),species):
+        s.text(x,667,label,size=13,color=color,weight="bold")
+    s.text(56,684,"Right-censored at 8 min: 3/28, 15/38, 2/14 (respective species)",
+           size=11,color=MUTED)
 
-    section(s,785,385,381,300,"C2","Aggregate infrared response timing")
+    section(s,785,385,381,300,"C2","Aggregate IR effect: cumulative share")
     source=json.loads((directory/"fig3_chandel_timing.json").read_text(
         encoding="utf-8"))
-    for i,(key,label) in enumerate((
-        ("post_first_pulse","After pulse 1"),
-        ("post_second_pulse","After pulse 2"),
-    )):
+    xy2=axes(s,832,492,291,117,xrange=(0,90),yrange=(0,1),
+             xticks=(0,30,60,90),yticks=(0,.5,1),
+             xlabel="Seconds since CO2 pulse end",
+             ylabel="Fraction of signed effect",format_y=lambda t:f"{t:.1f}")
+    for key,color,name in (
+        ("post_first_pulse",BLUE,"After pulse 1"),
+        ("post_second_pulse",TEAL,"After pulse 2"),
+    ):
         dat=source[key]
-        yy=504+i*88
-        value=float(dat["half_signed_advantage_time_s_after_pulse"])
-        s.text(811,yy,label,size=15)
-        s.text(1116,yy,f"{value:.1f} s",size=21,
-               weight="bold",color=TEAL,anchor="end")
-        s.text(811,yy+23,"Half of signed advantage accumulated",size=12,color=MUTED)
-    s.text(807,674,"Aggregate effect; NOT individual latency",size=12,color=ORANGE)
+        cumulative=dat["cumulative_signed_advantage_fraction"]
+        seq=[(0.0,0.0)]
+        for second in (10,30,45,60,75):
+            seq.append((float(second),float(cumulative[f"{second}s"])))
+        seq.append((90.0,1.0))
+        if any(seq[j][1] > seq[j+1][1]+1e-9
+               for j in range(len(seq)-1)):
+            raise ValueError("unexpected nonmonotone source signed CDF")
+        s.path([xy2(t,value) for t,value in seq],color=color,width=2.5)
+    s.line(*xy2(0,.5),*xy2(90,.5),color=ORANGE,width=1.3,dash="4 5")
+    s.text(806,646,"Pulse 1: 50% at 46.2 s",size=13,color=BLUE)
+    s.text(806,665,"Pulse 2: 50% at 46.5 s",size=13,color=TEAL)
+    s.text(806,681,"Aggregate effect; NOT individual latency",size=11,color=ORANGE)
     s.text(34,724,"Temporal mosquito data are process anchors, not evidence of sensing-architecture fitness.",size=13,color=MUTED)
     return s.finish()
 
