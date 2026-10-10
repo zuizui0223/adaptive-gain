@@ -283,3 +283,44 @@ def test_v6_theory_prior_art_explicitly_covers_query_set_tree_coupling():
     assert "not a fourth independent novelty claim" in boundary
     assert "Minimum query set for decision tree construction" in text
     assert "https://doi.org/10.3390/e23121682" in text
+
+
+
+def test_v6_submission_structure_contains_required_editorial_end_matter():
+    """Evolution Letters current OUP Letter format and author-approval holds."""
+    text = _text(MAIN)
+    required = (
+        "## Methods",
+        "## Results",
+        "## Discussion",
+        "## Data and code availability statement",
+        "## Author contributions",
+        "## Funding",
+        "## Conflict of interest statement",
+        "## Acknowledgements",
+        "## Figure legends",
+        "## References",
+    )
+    for heading in required:
+        assert heading in text
+    for term in (
+        "AUTHOR CONFIRMATION REQUIRED BEFORE SUBMISSION",
+        "permanent DOI remains",
+        "Do not present",
+    ):
+        assert term in text
+    assert text.index("## Figure legends") < text.index("## References")
+    assert _words(_section(text,"## Introduction","## References")) < 5000
+
+
+def test_v6_manuscript_and_figure_legend_source_are_synchronized():
+    """The submission text must contain actual figure titles and legends."""
+    source = _text(LEGENDS)
+    assert source.startswith("# Figure legends")
+    legend_text = source.split("\n",1)[1].strip()
+    manuscript = _text(MAIN)
+    embedded = _section(manuscript,"## Figure legends","## References").strip()
+    assert embedded == legend_text
+    for i in range(1,4):
+        assert embedded.count(f"## Figure {i}.") == 1
+    assert embedded.count("**Alt text:**") == 3
