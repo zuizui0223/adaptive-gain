@@ -226,8 +226,9 @@ Split the panel into two aligned subpanels.
 
 Use Uehara et al. 2026 Supplementary Data Figure 2D/S2.
 
-Plot the one-minute discrete first post-stimulus Probe CDF for the primary
-pre-probe-zero cohorts.
+Plot the one-minute discrete first post-stimulus Probe CDF as a
+**minute-end step function** for the primary pre-probe-zero cohorts;
+never linearly interpolate inferred individual event times.
 
 At minimum highlight:
 
@@ -246,7 +247,9 @@ Do not label the x-axis as frame-resolved latency.
 #### C2 — Aggregate temporal effect shape
 
 Plot the Chandel et al. 2024 post-CO2 IR-minus-no-IR Figure 3a contrast through
-time for the two post-pulse intervals, or plot cumulative signed advantage.
+time for the two post-pulse intervals, or normalized cumulative signed advantage
+from the locked source receipt at 0, 10, 30, 45, 60, 75, 90 seconds;
+joining aggregate knots is a visualization only, not frame-level inference.
 
 Mark the half-area times:
 
