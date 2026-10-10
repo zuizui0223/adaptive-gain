@@ -1,0 +1,55 @@
+{
+  "status": "INDEPENDENT_STRUCTURAL_CHECK_COMPLETE__FOCUSED_CI_PENDING",
+  "model": "finite deterministic unit-cost guaranteed binary-target resolution; universal fixed comparator",
+  "target_prevalence": {
+    "class_0": 0.5,
+    "class_1": 0.5,
+    "rare_total": 0.01,
+    "all_world_probabilities_positive": true
+  },
+  "natural_history": {
+    "U": "exp(-0.3*c)",
+    "mu": 0.3,
+    "architecture_cost_K": 0.68
+  },
+  "sharp_global_expected_ceiling": {
+    "binary": 0.6448149283878721,
+    "ternary_or_higher": 0.7408182206817179,
+    "strict_minimum_expected_arity": 3,
+    "proof_bound": "For C_F>1, a binary root can have at most one target-pure outcome; its one-step probability is at most the majority target-class prevalence. Ternary may have two pure root outcomes plus one mixed continuation."
+  },
+  "explicit_private_pair_witnesses": {
+    "binary": {
+      "world_count": 18,
+      "query_count": 17,
+      "arity": 2,
+      "private_pairs_verified": 17,
+      "root_outcomes": 2,
+      "depths": [
+        1,
+        2,
+        6
+      ],
+      "expected_value_advantage": 0.6339230214206937
+    },
+    "ternary": {
+      "world_count": 18,
+      "query_count": 16,
+      "arity": 3,
+      "private_pairs_verified": 16,
+      "root_outcomes": 3,
+      "depths": [
+        1,
+        5
+      ],
+      "expected_value_advantage": 0.727411593027365
+    }
+  },
+  "conclusion": "K=0.68 exceeds the global binary ceiling but is below the ternary witness value, despite exactly balanced target prevalence.",
+  "claim_ceiling": "Supremal task-design existence with freely adjustable within-target encounter frequencies, not an empirical sensory-fitness estimate. Three-way definite/uncertain triage is known prior art.",
+  "relevant_files": [
+    "theory/TARGET_PREVALENCE_EXPECTED_CAPACITY.md",
+    "adaptive_gain/target_prevalence_capacity.py",
+    "tests/test_target_prevalence_capacity.py"
+  ]
+}

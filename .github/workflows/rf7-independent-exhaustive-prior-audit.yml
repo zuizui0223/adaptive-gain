@@ -1,0 +1,29 @@
+name: rf7-independent-exhaustive-prior-audit
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - scripts/audit_rf7_prior_sensitivity_exhaustive.py
+      - .github/workflows/rf7-independent-exhaustive-prior-audit.yml
+
+jobs:
+  independent-exhaustive-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Independently enumerate all four-world binary tasks
+        run: >-
+          python scripts/audit_rf7_prior_sensitivity_exhaustive.py
+          --output-json validation/rf7_prior_sensitivity_small_exact_v1.json
+      - name: Upload independent audit receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: rf7-prior-sensitivity-exhaustive
+          path: validation/rf7_prior_sensitivity_small_exact_v1.json
+          if-no-files-found: error

@@ -1,0 +1,302 @@
+{
+  "status": "SHARP_ROBUST_EVOLUTIONARY_FRONTIER_NUMERIC_RECEIPT",
+  "structural_scope": {
+    "unit_query_cost": true,
+    "deterministic_queries": true,
+    "guaranteed_target_resolution": true
+  },
+  "finite_binary_example": {
+    "n": 10,
+    "m": 9,
+    "b": 2,
+    "frontier": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        9
+      ]
+    ],
+    "ratio_optimal_depth": 3,
+    "exponential_opportunity": [
+      {
+        "mu": 0.1,
+        "values": {
+          "h2": 0.07791253239626394,
+          "h3": 0.2442329168903084,
+          "h4": 0.2637503862950402
+        },
+        "optimum_h": 4
+      },
+      {
+        "mu": 0.3,
+        "values": {
+          "h2": 0.14224197635342722,
+          "h3": 0.28411323148761725,
+          "h4": 0.23398869917245235
+        },
+        "optimum_h": 3
+      },
+      {
+        "mu": 1,
+        "values": {
+          "h2": 0.08554821486874875,
+          "h3": 0.04887518640230943,
+          "h4": 0.018192229084647498
+        },
+        "optimum_h": 2
+      }
+    ],
+    "analytic_crossings": {
+      "h4_to_h3_mu": 0.15469679775892664,
+      "h3_to_h2_mu": 0.6562559792369758
+    }
+  },
+  "arity_limited_global_ceiling_mu03_v1": [
+    {
+      "b": 2,
+      "optimum_h": 4,
+      "sharp_fixed_cost": 15,
+      "Kcrit_robust": 0.2900852153739598
+    },
+    {
+      "b": 3,
+      "optimum_h": 3,
+      "sharp_fixed_cost": 13,
+      "Kcrit_robust": 0.38632774829479477
+    },
+    {
+      "b": 4,
+      "optimum_h": 3,
+      "sharp_fixed_cost": 21,
+      "Kcrit_robust": 0.40473335496357027
+    },
+    {
+      "b": 10,
+      "optimum_h": 2,
+      "sharp_fixed_cost": 11,
+      "Kcrit_robust": 0.5119284686927864
+    }
+  ],
+  "unrestricted_information_supremum_mu03_v1": 0.5488116360940264,
+  "canonical_minimum_architecture": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.25,
+    "binary": {
+      "first_viable_depth": 3,
+      "minimum_world_count": 8,
+      "minimum_query_count": 7,
+      "required_fixed_cost": 7
+    },
+    "ternary": {
+      "first_viable_depth": 3,
+      "minimum_world_count": 8,
+      "minimum_query_count": 7,
+      "required_fixed_cost": 7
+    },
+    "quaternary": {
+      "first_viable_depth": 2,
+      "minimum_world_count": 8,
+      "minimum_query_count": 5,
+      "required_fixed_cost": 5
+    },
+    "scope": "minimum architecture for positive robust statewise net value, not minimum architecture for positive expected selection"
+  },
+  "binary_global_no_go_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.3,
+    "binary_arity_ceiling": 0.2900852153739598,
+    "conclusion": "No finite deterministic binary task can guarantee positive net adaptive value in every represented world at K=0.30 through this completion-value mechanism. Positive expected value under a skewed world distribution is not excluded."
+  },
+  "exact_extremal_ratio_value_reversal": {
+    "mu": 0.3,
+    "d4": {
+      "C_A": 5,
+      "C_F": 16,
+      "ratio": 3.2,
+      "opportunity_value": 0.2149004130994098
+    },
+    "d5": {
+      "C_A": 6,
+      "C_F": 32,
+      "ratio": 5.333333333333333,
+      "opportunity_value": 0.1652311594850957
+    },
+    "conclusion": "The structural ratio increases while guarantee-level ecological value decreases."
+  },
+  "validation": {
+    "focused_ci_run_37475355329": "26 tests passed",
+    "earlier_frontier_solver_grid_cases": 279,
+    "latest_arity_extensions": "pending latest queued CI at time of receipt creation",
+    "latest_focused_ci": {
+      "run_id": 37613336925,
+      "head_sha": "778f8851c1ad8cfc41302586c321fc828d73b4aa",
+      "conclusion": "success",
+      "includes": [
+        "bounded-arity exact frontier tests",
+        "sharp opportunity envelope tests",
+        "evolutionary resource frontier tests",
+        "explicit finite expected-value ceiling witness tests"
+      ]
+    }
+  },
+  "claim_ceiling": "Robust thresholds are frequency-free, unconstrained expected suprema optimize over arbitrarily skewed priors, and frequency-floor bounds are generally nonsharp. None estimates natural fitness without world frequencies, opportunity survival, and control cost measured in the same system.",
+  "robust_expected_boundary": {
+    "robust": "U(C_A)-U(C_F) is the exact worst-state/frequency-free margin.",
+    "expected": "sum_x p_x U[T_pi(x)]-U(C_F) can exceed the robust margin when common branches finish earlier.",
+    "implication": "Robust viability implies expected viability for every world distribution; failure of robust viability does not imply expected-selection failure."
+  },
+  "minimum_robust_cue_arity_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.3,
+    "binary_ceiling": 0.2900852153739598,
+    "ternary_ceiling": 0.38632774829479477,
+    "b_min_robust": 3,
+    "interpretation": "Binary finite routing cannot guarantee repayment at K=0.30, while ternary routing can."
+  },
+  "robust_expected_global_capacity": {
+    "U": "exp(-0.3*c)",
+    "robust_supremum": 0.5488116360940264,
+    "expected_supremum": 0.7408182206817179,
+    "frequency_assisted_band": [
+      0.5488116360940264,
+      0.7408182206817179
+    ],
+    "example_K": 0.6,
+    "example_one_step_mass_asymptotic_threshold": 0.26659691914156886,
+    "interpretation": "K=0.60 is impossible to repay robustly for any finite information architecture, but can be repaid in expectation by a binary task under sufficiently concentrated one-step encounters."
+  },
+  "scaling_example": {
+    "max_arity": 2,
+    "mu": 0.001,
+    "epsilon": 0.1,
+    "witness_adaptive_depth": 12,
+    "witness_fixed_cost": 4095,
+    "witness_world_count": 4096,
+    "witness_query_count": 4095,
+    "witness_value_fraction": 0.9714159665790219,
+    "asymptotic_orders": {
+      "minimum_adaptive_depth": "Theta(log(1/mu))",
+      "minimum_fixed_world_query_scale": "Theta(1/mu)"
+    }
+  },
+  "finite_expected_rescue_example": {
+    "n": 10,
+    "m": 9,
+    "max_arity": 2,
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.6,
+    "fixed_cost_ceiling": 9,
+    "finite_expected_value_ceiling": 0.673612707941968,
+    "one_step_mass_threshold": 0.6166136276001076,
+    "finite_binary_witness_one_step_mass": 0.65,
+    "conclusion": "Expected repayment is feasible in the finite scope, but requires substantially more one-step encounter mass than the scalable asymptotic threshold."
+  },
+  "scalable_expected_rescue_example": {
+    "U": "exp(-0.3*c)",
+    "architecture_cost_K": 0.6,
+    "robust_global_ceiling": 0.5488116360940264,
+    "expected_global_ceiling": 0.7408182206817179,
+    "one_step_mass_threshold": 0.26659691914156886,
+    "conclusion": "The asymptotic scalable threshold is lower because the rare branch can carry arbitrarily large fixed burden."
+  },
+  "finite_scope_expected_frontier": {
+    "theorem": "sup R_expected(n,m,b)=U(1)-U(min(m,n-1)) for every b>=2",
+    "arity_dependence": "none for the supremum when world frequencies may be arbitrarily skewed",
+    "canonical_exponential_example": {
+      "n": 10,
+      "m": 9,
+      "mu": 0.3,
+      "M": 9,
+      "expected_ceiling": 0.6736127079419681,
+      "K": 0.6,
+      "p1_threshold": 0.6166136276001074
+    },
+    "interpretation": "Cue arity constrains robust statewise value, while encounter-frequency concentration can substitute for branching capacity in expected value."
+  },
+  "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md",
+  "inverse_expected_resource_corner_v1": {
+    "status": "THEOREM_AND_CODE_ADDED_LATEST_CI_PENDING",
+    "scope": "Exact finite deterministic unit-cost target-resolution tasks, binary witness, freely chosen strictly positive world probabilities",
+    "generic_identity": "J_exp(K)=min{j>=2:U(1)-U(j)>K}; (n_min,m_min)=(J_exp+1,J_exp), independent of allowed cue arity b>=2",
+    "opportunity_value": "U(c)=exp(-0.3*c)",
+    "examples": [
+      {
+        "maintenance_cost": 0.3,
+        "minimum_world_count": 4,
+        "minimum_query_count": 3,
+        "minimum_cue_arity": 2,
+        "minimum_fixed_cost": 3,
+        "expected_value_ceiling_at_corner": 0.3342485609411187,
+        "one_step_mass_strict_threshold": 0.821628195644108,
+        "preceding_fixed_cost_ceiling": 0.1920065845876915
+      },
+      {
+        "maintenance_cost": 0.6,
+        "minimum_world_count": 8,
+        "minimum_query_count": 7,
+        "minimum_cue_arity": 2,
+        "minimum_fixed_cost": 7,
+        "expected_value_ceiling_at_corner": 0.618361792428736,
+        "one_step_mass_strict_threshold": 0.9043689440746759,
+        "preceding_fixed_cost_ceiling": 0.5755193324601313
+      }
+    ],
+    "interpretive_boundary": "Expected positive selection is an existence claim over world-frequency distributions, not robust positivity and not an empirical selection estimate",
+    "regression": "tests/test_evolutionary_resource_frontier.py has inverse corner, exact binary witness, strict boundary and finite-search tests"
+  },
+  "encounter_probability_floor_bound_v1": {
+    "status": "PROVEN_GENERAL_UPPER_BOUND; NEW_TESTS_PENDING",
+    "scope": "Nontrivial finite deterministic unit-cost target-resolution tasks, universal fixed comparator, each world has probability >=eta, 0<=eta<=1/n",
+    "inequality": "R_expected <= max(0,max_{j=2..M}[U(1)-U(j)-j*eta*(U(1)-U(2))]), M=min(n-1,m)",
+    "sharpness": "Generally not sharp for strictly decreasing U; valid upper bound only",
+    "canonical_example": {
+      "n": 10,
+      "m": 9,
+      "mu": 0.3,
+      "K": 0.6,
+      "minimum_world_probability": 0.1,
+      "arbitrary_probability_supremum": 0.673612707941968,
+      "probability_floor_upper_bound": 0.5008067818130457,
+      "maximizing_fixed_cost": 9,
+      "conclusion": "K=0.60 is impossible to repay in expectation under uniform world encounters even though the unconstrained expected supremum exceeds K."
+    },
+    "tests": "tests/test_evolutionary_resource_frontier.py: uniform no-go, exact-policy upper-bound controls, invalid probability floors"
+  },
+  "uniform_world_exact_envelope": {
+    "status": "EXACT_CONSTRUCTIVE_BINARY_UNIFORM_PRIOR",
+    "scope": {
+      "n": 10,
+      "m": 9,
+      "b": 2,
+      "query_costs": "unit",
+      "world_probabilities": "uniform",
+      "completion_value": "exp(-0.3*c)",
+      "condition": "m >= n-1"
+    },
+    "distinct_binary_leaf_depth_profiles_enumerated": 115,
+    "sharp_expected_advantage": 0.3328200167641013,
+    "optimal_fixed_cost": 6,
+    "optimal_leaf_depths": [
+      1,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4
+    ],
+    "target_equivalent_worlds_at_earliest_leaf": 3,
+    "one_world_per_terminal_sharp_advantage": 0.29721396786949056,
+    "previous_nonsharp_frequency_floor_upper_bound": 0.5008067818130457,
+    "arbitrary_prior_expected_supremum": 0.673612707941968,
+    "interpretation": "Uniform encounters over represented worlds materially reduce attainable expected advantage. Decision-equivalent multiplicity can still concentrate early completions; this is not equivalent to a uniform distribution over terminal decisions.",
+    "status_validation": "Focused GitHub Actions sharp-opportunity-envelope success run 37745767356 after code/tests changes"
+  }
+}

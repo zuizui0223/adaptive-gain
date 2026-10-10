@@ -1,0 +1,77 @@
+{
+  "schema": "adaptive-gain-bee-2026-cross-experiment-join-gate-v1",
+  "status": "PUBLIC_SOURCE_AUDIT__NO_TRIAL_LEVEL_TIMING_INFORMATION_LINK",
+  "source": {
+    "paper": "Yingying He et al., Uncertainty-Guided Decision-Making in Bumble Bees (2026-09-22 bioRxiv preprint)",
+    "doi": "10.64898/2026.09.15.751944",
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "active_path": "data/4_active_information_seeking_trials.csv",
+    "active_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "latency_path": "data/3_decision_process_metrics.csv",
+    "latency_blob_sha": "833bf8f2f1e15839050bac6a1e217a031390bb5f",
+    "license_note": "External raw observations are not republished by adaptive-gain."
+  },
+  "active_trials": 19200,
+  "latency_trials": 19200,
+  "n_bees_both": 192,
+  "identical_numeric_triplet_keys": 19200,
+  "matching_task_difficulty_at_identical_triplet_keys": 6801,
+  "mismatched_task_difficulty_at_identical_triplet_keys": 12399,
+  "mismatch_fraction": 0.64578125,
+  "task_difficulty_confusion": {
+    "active_Easy": {
+      "latency_Easy": 2990,
+      "latency_Hard": 3133,
+      "latency_Impossible": 1557
+    },
+    "active_Hard": {
+      "latency_Easy": 3053,
+      "latency_Hard": 3051,
+      "latency_Impossible": 1576
+    },
+    "active_Impossible": {
+      "latency_Easy": 1582,
+      "latency_Hard": 1498,
+      "latency_Impossible": 760
+    }
+  },
+  "free_cue_trials_per_bee_histogram": {
+    "20": 192
+  },
+  "trial_order_balance": {
+    "free_cue_mean_trial_number": 50.968229166666674,
+    "regular_mean_trial_number": 50.38294270833334,
+    "free_minus_regular_mean_trial_number": 0.5852864583333334,
+    "free_trial_counts_in_five_20_trial_blocks": [721, 797, 778, 753, 791],
+    "interpretation": "The free-cue condition appears spread across trial order; this diagnostic does not establish assignment randomization."
+  },
+  "descriptive_free_minus_regular_landing_sign_by_20trial_block": {
+    "Easy": ["positive", "positive", "positive", "positive", "positive"],
+    "Hard": ["positive", "positive", "positive", "positive", "positive"],
+    "Impossible": ["negative", "negative", "negative", "negative", "negative"],
+    "interpretation": "Coarse trial-order stratification retains sign of the cross-condition landing contrast; no causal interpretation is licensed."
+  },
+  "bee_level_exploration": {
+    "method": "Per-bee mean Regular-trial request-platform landing propensity in active-info experiment versus per-bee mean latency in separate metacognition timing experiment at same difficulty; Pearson r; bee-label shuffle two-sided permutation B=5000, xorshift32 seed 0x229184; exploratory, three uncorrected contrasts",
+    "Easy": {
+      "n_bees": 192,
+      "pearson_r": 0.0023156899617464604,
+      "permutation_p": 0.9732053589282144
+    },
+    "Hard": {
+      "n_bees": 192,
+      "pearson_r": 0.06120363699070013,
+      "permutation_p": 0.3895220955808838
+    },
+    "Impossible": {
+      "n_bees": 192,
+      "pearson_r": 0.03364111597461438,
+      "permutation_p": 0.6440711857628474
+    },
+    "warning": "The individual-level exploratory correlations do not identify how requesting fresh information changes the latency of the same decision; failure to reject does not establish zero effect."
+  },
+  "verdict": "HOLD_NO_CROSS_EXPERIMENT_TRIAL_LEVEL_LATENCY_JOIN",
+  "claim_ceiling": "Numeric identifiers reused across behavioral experiments cannot be used to assign Decision_Latency_ms to an active information request. The mismatch in difficulty directly disproves common event identity in 12399 nominally matched records. A same-trial timing effect cannot be estimated from these two files.",
+  "recommended_next_step": "Use only within-experiment trial records for action outcomes; request synchronized decision/request timestamps or run a new PASSIVE/SHAM/INFORMATIVE experiment logging state transitions, query choice, post-query wait, terminal latency and actual reward in the same encounter."
+}

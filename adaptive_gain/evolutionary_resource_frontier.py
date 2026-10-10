@@ -1,0 +1,750 @@
+"""Inverse robust statewise-value thresholds for finite routing.
+
+These functions invert U(C_A)-U(C_F)>K, where C_A is a worst-path guarantee.
+They therefore characterize distribution-free robust viability, not the minimum
+structure required for positive expected selection under a particular world
+frequency distribution.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+import math
+from typing import Callable
+
+from .bounded_arity_extremal_bounds import (
+    maximum_bounded_arity_tree_internal_nodes,
+)
+
+
+@dataclass(frozen=True)
+class EvolutionaryDepthRequirement:
+    adaptive_depth: int
+    required_fixed_cost: int | None
+    required_gap: int | None
+    structurally_feasible: bool
+
+
+@dataclass(frozen=True)
+class BinaryEvolutionaryCorner:
+    adaptive_depth: int
+    required_fixed_cost: int
+    required_gap: int
+    minimum_world_count: int
+    minimum_query_count: int
+
+
+@dataclass(frozen=True)
+class BoundedArityEvolutionaryCorner:
+    adaptive_depth: int
+    max_arity: int
+    required_fixed_cost: int
+    required_gap: int
+    minimum_world_count: int
+    minimum_query_count: int
+
+
+
+@dataclass(frozen=True)
+class ExpectedEvolutionaryResourceCorner:
+    """Componentwise minimum (n,m) for positive expected net value.
+
+    Requires a chosen, sufficiently skewed strictly positive world-frequency
+    distribution and comparison against a precommitted universal fixed bundle.
+    """
+    required_fixed_cost: int
+    minimum_world_count: int
+    minimum_query_count: int
+    minimum_cue_arity: int = 2
+
+
+def minimum_expected_evolutionary_resources(
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+    *,
+    search_limit: int,
+) -> ExpectedEvolutionaryResourceCorner | None:
+    """Invert RF7 within a declared finite fixed-cost search horizon.
+
+    Returns None if no j in [2,search_limit] makes U(1)-U(j)>K;
+    this is NOT a global no-go when U has no known asymptotic bound.
+    """
+    if type(search_limit) is not int or search_limit < 2:
+        raise ValueError("search_limit must be an integer at least two")
+    required = required_fixed_cost_for_value(
+        1, architecture_cost, completion_value, search_limit=search_limit
+    )
+    if required is None:
+        return None
+    if required < 2:
+        raise ArithmeticError("nontrivial expected corner must require two queries")
+    return ExpectedEvolutionaryResourceCorner(
+        required_fixed_cost=required,
+        minimum_world_count=required + 1,
+        minimum_query_count=required,
+    )
+
+
+def exponential_minimum_expected_evolutionary_resources(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> ExpectedEvolutionaryResourceCorner | None:
+    """Exact inverse RF7 corner for U(c)=v*exp(-mu*c), or None if impossible."""
+    required_gap = exponential_required_gap(
+        1,
+        architecture_cost,
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if required_gap is None:
+        return None
+    required = 1 + required_gap
+    return ExpectedEvolutionaryResourceCorner(
+        required_fixed_cost=required,
+        minimum_world_count=required + 1,
+        minimum_query_count=required,
+    )
+
+
+def required_fixed_cost_for_value(
+    adaptive_depth: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+    *,
+    search_limit: int,
+) -> int | None:
+    """Minimum j>=h making the robust worst-state value U(h)-U(j) exceed K."""
+    if type(adaptive_depth) is not int or adaptive_depth < 0:
+        raise ValueError("adaptive_depth must be a nonnegative integer")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    if type(search_limit) is not int or search_limit < adaptive_depth:
+        raise ValueError("search_limit must be an integer at least adaptive_depth")
+
+    u_h = float(completion_value(float(adaptive_depth)))
+    if not math.isfinite(u_h):
+        raise ValueError("completion_value must be finite")
+
+    previous = u_h
+    for fixed_cost in range(adaptive_depth, search_limit + 1):
+        value = float(completion_value(float(fixed_cost)))
+        if not math.isfinite(value):
+            raise ValueError("completion_value must be finite")
+        if value > previous + 1e-12:
+            raise ValueError("completion_value must be nonincreasing")
+        previous = value
+        if u_h - value > architecture_cost + 1e-15:
+            return fixed_cost
+    return None
+
+
+
+def minimum_world_count_for_fixed_burden(
+    required_fixed_cost: int,
+    adaptive_depth: int,
+    max_arity: int,
+) -> int | None:
+    """Minimum n with F_b(n,h)>=required_fixed_cost, or None if impossible at h."""
+    if type(required_fixed_cost) is not int or required_fixed_cost < 0:
+        raise ValueError("required_fixed_cost must be a nonnegative integer")
+    if type(adaptive_depth) is not int or adaptive_depth < 1:
+        raise ValueError("adaptive_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if required_fixed_cost < adaptive_depth:
+        raise ValueError("required_fixed_cost cannot be below adaptive_depth")
+
+    absolute_ceiling = full_b_ary_internal_nodes(max_arity, adaptive_depth)
+    if required_fixed_cost > absolute_ceiling:
+        return None
+
+    maximum_worlds = max_arity ** adaptive_depth
+    for world_count in range(adaptive_depth + 1, maximum_worlds + 1):
+        if maximum_bounded_arity_tree_internal_nodes(
+            world_count,
+            adaptive_depth,
+            max_arity,
+        ) >= required_fixed_cost:
+            return world_count
+    raise ArithmeticError("failed to find world count below full-tree leaf ceiling")
+
+
+def bounded_arity_evolutionary_depth_corners(
+    *,
+    max_adaptive_depth: int,
+    max_arity: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+) -> tuple[BoundedArityEvolutionaryCorner, ...]:
+    """Exact minimum (n,m) for robust positive value at each adaptive depth."""
+    if type(max_adaptive_depth) is not int or max_adaptive_depth < 1:
+        raise ValueError("max_adaptive_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+
+    rows: list[BoundedArityEvolutionaryCorner] = []
+    for depth in range(1, max_adaptive_depth + 1):
+        absolute_ceiling = full_b_ary_internal_nodes(max_arity, depth)
+        required = required_fixed_cost_for_value(
+            depth,
+            architecture_cost,
+            completion_value,
+            search_limit=absolute_ceiling,
+        )
+        if required is None:
+            continue
+        n_min = minimum_world_count_for_fixed_burden(
+            required,
+            depth,
+            max_arity,
+        )
+        if n_min is None:
+            continue
+        rows.append(
+            BoundedArityEvolutionaryCorner(
+                adaptive_depth=depth,
+                max_arity=max_arity,
+                required_fixed_cost=required,
+                required_gap=required-depth,
+                minimum_world_count=n_min,
+                minimum_query_count=required,
+            )
+        )
+    return tuple(rows)
+
+
+def binary_evolutionary_resource_corners(
+    *,
+    max_adaptive_depth: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+) -> tuple[BinaryEvolutionaryCorner, ...]:
+    """Exact binary resource corners for positive robust statewise value."""
+    if type(max_adaptive_depth) is not int or max_adaptive_depth < 1:
+        raise ValueError("max_adaptive_depth must be a positive integer")
+
+    candidates: list[BinaryEvolutionaryCorner] = []
+    for depth in range(1, max_adaptive_depth + 1):
+        structural_ceiling = (1 << depth) - 1
+        required = required_fixed_cost_for_value(
+            depth,
+            architecture_cost,
+            completion_value,
+            search_limit=structural_ceiling,
+        )
+        if required is None:
+            continue
+        candidates.append(
+            BinaryEvolutionaryCorner(
+                depth,
+                required,
+                required - depth,
+                required + 1,
+                required,
+            )
+        )
+
+    nondominated = []
+    for row in candidates:
+        dominated = any(
+            other.minimum_world_count <= row.minimum_world_count
+            and other.minimum_query_count <= row.minimum_query_count
+            and (
+                other.minimum_world_count < row.minimum_world_count
+                or other.minimum_query_count < row.minimum_query_count
+            )
+            for other in candidates
+        )
+        if not dominated:
+            nondominated.append(row)
+    return tuple(nondominated)
+
+
+def exponential_required_gap(
+    adaptive_depth: int,
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> int | None:
+    """Closed-form q_h for U(c)=v exp(-mu c), or None if depth is unviable."""
+    if type(adaptive_depth) is not int or adaptive_depth < 0:
+        raise ValueError("adaptive_depth must be a nonnegative integer")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    available = resolution_value * math.exp(-closure_rate * adaptive_depth)
+    if architecture_cost >= available - 1e-15:
+        return None
+    ratio = architecture_cost / available
+    threshold = -math.log1p(-ratio) / closure_rate
+    return math.floor(threshold + 1e-15) + 1
+
+
+def exponential_max_viable_adaptive_depth(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> int | None:
+    """Largest h whose guaranteed completion value can exceed K before fixed contrast."""
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    if architecture_cost == 0:
+        return None  # no finite upper depth ceiling
+    if architecture_cost >= resolution_value:
+        return -1
+
+    bound = math.log(resolution_value / architecture_cost) / closure_rate
+    return math.ceil(bound - 1e-15) - 1
+
+
+
+def full_b_ary_internal_nodes(max_arity: int, adaptive_depth: int) -> int:
+    """Maximum internal-node count of a full b-ary tree of depth h."""
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if type(adaptive_depth) is not int or adaptive_depth < 0:
+        raise ValueError("adaptive_depth must be a nonnegative integer")
+    if adaptive_depth == 0:
+        return 0
+    return (max_arity ** adaptive_depth - 1) // (max_arity - 1)
+
+
+def exponential_arity_limited_cost_ceiling(
+    max_arity: int,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> tuple[float, tuple[int, ...]]:
+    """Exact arity-limited robust K_crit^(b) for U(c)=v exp(-mu c), plus depths.
+
+    The search stops exactly once the upper bound v*exp(-mu*h) for all future
+    depths is no larger than the best value already seen.
+    """
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    best = -1.0
+    maximizing: list[int] = []
+    h = 2
+    while True:
+        fixed = full_b_ary_internal_nodes(max_arity, h)
+        value = resolution_value * (
+            math.exp(-closure_rate * h)
+            - math.exp(-closure_rate * fixed)
+        )
+        if value > best + 1e-15:
+            best = value
+            maximizing = [h]
+        elif math.isclose(value, best, rel_tol=0.0, abs_tol=1e-15):
+            maximizing.append(h)
+
+        next_upper = resolution_value * math.exp(
+            -closure_rate * (h + 1)
+        )
+        if next_upper <= best + 1e-15:
+            break
+        h += 1
+
+    return best, tuple(maximizing)
+
+
+def exponential_unrestricted_information_cost_ceiling(
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float:
+    """Supremal robust K_crit with no finite n,m,b restriction."""
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    return resolution_value * math.exp(-2.0 * closure_rate)
+
+
+
+@dataclass(frozen=True)
+class NearMaxValueScalingReceipt:
+    max_arity: int
+    closure_rate: float
+    epsilon: float
+    lower_adaptive_depth: float
+    upper_adaptive_depth: float
+    required_fixed_cost_lower: float
+    required_world_count_lower: float
+    required_query_count_lower: float
+    witness_adaptive_depth: int
+    witness_fixed_cost: int
+    witness_world_count: int
+    witness_query_count: int
+    witness_value_fraction: float
+
+
+def exponential_near_max_value_scaling(
+    max_arity: int,
+    *,
+    closure_rate: float,
+    epsilon: float,
+) -> NearMaxValueScalingReceipt:
+    """Tight-order near-maximal-value scaling witness for fixed cue arity.
+
+    Returns necessary lower bounds plus one full b-ary witness attaining at
+    least 1-epsilon of the full timely-resolution value whenever the sufficient
+    small-mu condition is met.
+    """
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(epsilon) or not (0.0 < epsilon < 1.0):
+        raise ValueError("epsilon must lie strictly between zero and one")
+
+    mu = closure_rate
+    lower_fixed = math.log(1.0 / epsilon) / mu
+    lower_h = math.log(
+        1.0 + (max_arity - 1) * lower_fixed,
+        max_arity,
+    )
+    upper_h = -math.log(1.0 - epsilon) / mu
+
+    L = math.log(2.0 / epsilon)
+    witness_h = math.ceil(
+        math.log(
+            1.0 + (max_arity - 1) * L / mu,
+            max_arity,
+        )
+        - 1e-15
+    )
+    witness_fixed = full_b_ary_internal_nodes(max_arity, witness_h)
+    witness_worlds = max_arity ** witness_h
+    value_fraction = (
+        math.exp(-mu * witness_h)
+        - math.exp(-mu * witness_fixed)
+    )
+
+    if mu * witness_h > -math.log(1.0 - epsilon / 2.0) + 1e-12:
+        raise ValueError(
+            "closure_rate is not yet in the asymptotic regime required by "
+            "the split-epsilon sufficient construction"
+        )
+
+    if value_fraction < 1.0 - epsilon - 1e-12:
+        raise ArithmeticError("near-maximal-value witness missed target fraction")
+
+    return NearMaxValueScalingReceipt(
+        max_arity=max_arity,
+        closure_rate=mu,
+        epsilon=epsilon,
+        lower_adaptive_depth=lower_h,
+        upper_adaptive_depth=upper_h,
+        required_fixed_cost_lower=lower_fixed,
+        required_world_count_lower=1.0 + lower_fixed,
+        required_query_count_lower=lower_fixed,
+        witness_adaptive_depth=witness_h,
+        witness_fixed_cost=witness_fixed,
+        witness_world_count=witness_worlds,
+        witness_query_count=witness_fixed,
+        witness_value_fraction=value_fraction,
+    )
+
+
+
+def exponential_minimum_robust_cue_arity(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> int | None:
+    """Minimum finite cue arity with robust K_crit^(b) > architecture_cost.
+
+    Returns None when the declared cost is at or above the unrestricted finite-
+    information supremum v*exp(-2*mu), so no finite arity can guarantee positive
+    net value in every represented world.
+    """
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+
+    absolute = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if architecture_cost >= absolute - 1e-15:
+        return None
+
+    # Depth two alone gives a finite upper bound on the required arity.
+    target = math.exp(-2.0 * closure_rate) - architecture_cost / resolution_value
+    if target <= 0:
+        return None
+    threshold = -math.log(target) / closure_rate - 1.0
+    upper = max(2, math.floor(threshold + 1e-15) + 1)
+
+    for arity in range(2, upper + 1):
+        ceiling, _ = exponential_arity_limited_cost_ceiling(
+            arity,
+            closure_rate=closure_rate,
+            resolution_value=resolution_value,
+        )
+        if architecture_cost < ceiling - 1e-15:
+            return arity
+
+    # Strict inequality can require one extra integer beyond a numerical
+    # threshold rounded onto the boundary.
+    arity = upper + 1
+    while True:
+        ceiling, _ = exponential_arity_limited_cost_ceiling(
+            arity,
+            closure_rate=closure_rate,
+            resolution_value=resolution_value,
+        )
+        if architecture_cost < ceiling - 1e-15:
+            return arity
+        arity += 1
+
+
+
+def exponential_unrestricted_expected_cost_ceiling(
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float:
+    """Supremal expected-value control-cost ceiling with arbitrary frequencies.
+
+    This is v*exp(-mu): an adaptive policy must spend at least one query before
+    resolving a nontrivial target, while arbitrarily skewed frequencies can put
+    almost all mass on a one-query pure branch and push fixed burden arbitrarily
+    high in rare branches.
+    """
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    return resolution_value * math.exp(-closure_rate)
+
+
+def exponential_robust_expected_cost_regime(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> str:
+    """Classify unrestricted robust/expected repayment possibility."""
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+    robust = exponential_unrestricted_information_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    expected = exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+    if architecture_cost < robust - 1e-15:
+        return "robust_and_expected_possible"
+    if architecture_cost < expected - 1e-15:
+        return "expected_only_possible"
+    return "neither_possible"
+
+
+
+def exponential_unrestricted_expected_information_cost_ceiling(
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float:
+    """Backward-compatible alias for exponential_unrestricted_expected_cost_ceiling."""
+    return exponential_unrestricted_expected_cost_ceiling(
+        closure_rate=closure_rate,
+        resolution_value=resolution_value,
+    )
+
+
+
+def minimum_one_step_mass_for_expected_repayment(
+    architecture_cost: float,
+    *,
+    value_at_one: float,
+    value_at_two: float,
+    asymptotic_value: float,
+) -> float | None:
+    """Sharp scalable-scope threshold for one-step encounter mass.
+
+    Returns 0 when robust repayment is already possible without any required
+    one-step mass. Returns None when even the absolute expected-value ceiling is
+    insufficient. Otherwise returns the strict threshold p_crit in (0,1).
+    """
+    vals = (
+        float(value_at_one),
+        float(value_at_two),
+        float(asymptotic_value),
+    )
+    if any(not math.isfinite(x) for x in vals):
+        raise ValueError("completion values must be finite")
+    u1, u2, uinf = vals
+    if u1 < u2 - 1e-12 or u2 < uinf - 1e-12:
+        raise ValueError("require U(1) >= U(2) >= U_infinity")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+
+    robust_ceiling = u2 - uinf
+    expected_ceiling = u1 - uinf
+
+    if architecture_cost <= robust_ceiling + 1e-15:
+        return 0.0
+    if architecture_cost >= expected_ceiling - 1e-15:
+        return None
+    if u1 <= u2 + 1e-15:
+        return None
+
+    return (
+        architecture_cost - robust_ceiling
+    ) / (u1 - u2)
+
+
+def exponential_minimum_one_step_mass_for_expected_repayment(
+    architecture_cost: float,
+    *,
+    closure_rate: float,
+    resolution_value: float = 1.0,
+) -> float | None:
+    """RF6 threshold for U(c)=v*exp(-mu*c)."""
+    if not math.isfinite(closure_rate) or closure_rate <= 0:
+        raise ValueError("closure_rate must be finite and positive")
+    if not math.isfinite(resolution_value) or resolution_value <= 0:
+        raise ValueError("resolution_value must be finite and positive")
+    u1 = resolution_value * math.exp(-closure_rate)
+    u2 = resolution_value * math.exp(-2.0 * closure_rate)
+    return minimum_one_step_mass_for_expected_repayment(
+        architecture_cost,
+        value_at_one=u1,
+        value_at_two=u2,
+        asymptotic_value=0.0,
+    )
+
+
+
+def finite_scope_expected_value_ceiling(
+    world_count: int,
+    query_count: int,
+    completion_value: Callable[[float], float],
+) -> float:
+    """Exact finite-scope expected-value supremum U(1)-U(min(m,n-1))."""
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+
+    fixed_ceiling = min(query_count, world_count - 1)
+    u1 = float(completion_value(1.0))
+    uf = float(completion_value(float(fixed_ceiling)))
+    if not math.isfinite(u1) or not math.isfinite(uf):
+        raise ValueError("completion_value must be finite")
+    if u1 < uf - 1e-12:
+        raise ValueError("completion_value must be nonincreasing")
+    return u1 - uf
+
+
+
+def probability_floor_expected_advantage_upper_bound(
+    world_count: int,
+    query_count: int,
+    completion_value: Callable[[float], float],
+    *,
+    minimum_world_probability: float,
+) -> float:
+    """Rigorous (generally nonsharp) expected gain bound with p_x >= eta.
+
+    For any guaranteed-resolving exact policy and universal fixed comparator,
+    C_F=j>=2 implies at least j worlds remain mixed after the root query.
+    Thus P(T=1)<=1-j*eta and the expected benefit is bounded by
+
+       max_j [U(1)-U(j)-j*eta*(U(1)-U(2))].
+
+    When eta=0 this recovers the unrestricted exact RF7 envelope.
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    eta = float(minimum_world_probability)
+    if not math.isfinite(eta) or eta < 0 or eta > 1.0 / world_count + 1e-15:
+        raise ValueError("minimum_world_probability must lie in [0, 1/n]")
+
+    max_fixed = min(query_count, world_count - 1)
+    if max_fixed == 1:
+        return 0.0
+
+    u = [float(completion_value(float(j))) for j in range(1, max_fixed + 1)]
+    if any(not math.isfinite(x) for x in u):
+        raise ValueError("completion_value must be finite")
+    if any(u[j] > u[j - 1] + 1e-12 for j in range(1, len(u))):
+        raise ValueError("completion_value must be nonincreasing")
+
+    u1, u2 = u[0], u[1]
+    return max(
+        [0.0]
+        + [
+            u1 - u[j - 1] - j * eta * (u1 - u2)
+            for j in range(2, max_fixed + 1)
+        ]
+    )
+
+
+def finite_scope_one_step_mass_threshold(
+    world_count: int,
+    query_count: int,
+    architecture_cost: float,
+    completion_value: Callable[[float], float],
+) -> float | None:
+    """Exact fixed-scope p1 threshold for expected repayment.
+
+    Returns 0 when no one-step mass is required, None when even the finite-scope
+    expected ceiling is insufficient, otherwise the strict threshold in (0,1).
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    if not math.isfinite(architecture_cost) or architecture_cost < 0:
+        raise ValueError("architecture_cost must be finite and nonnegative")
+
+    fixed_ceiling = min(query_count, world_count - 1)
+    if fixed_ceiling < 2:
+        return None
+
+    u1 = float(completion_value(1.0))
+    u2 = float(completion_value(2.0))
+    uf = float(completion_value(float(fixed_ceiling)))
+    if any(not math.isfinite(x) for x in (u1, u2, uf)):
+        raise ValueError("completion_value must be finite")
+    if u1 < u2 - 1e-12 or u2 < uf - 1e-12:
+        raise ValueError("completion_value must be nonincreasing")
+
+    baseline = u2 - uf
+    ceiling = u1 - uf
+
+    if architecture_cost <= baseline + 1e-15:
+        return 0.0
+    if architecture_cost >= ceiling - 1e-15:
+        return None
+    if u1 <= u2 + 1e-15:
+        return None
+
+    return (architecture_cost - baseline) / (u1 - u2)

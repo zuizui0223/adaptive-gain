@@ -1,0 +1,163 @@
+{
+  "schema": "adaptive-gain-evolution-letters-v6-fitness-frontier-readiness-v1",
+  "date": "2026-10-10",
+  "target": "Evolution Letters",
+  "article_type": "Letter",
+  "status": "v6_three_result_novelty_spine_empirical_anchor_materialized_not_submission_ready",
+  "headline": "natural history re-ranks adaptive information architectures",
+  "preserved_v5_freeze": {
+    "readiness_ledger": "manuscript/EVOLUTION_LETTERS_V5_ROUTEABILITY_READINESS_V1.json",
+    "preserved": true,
+    "replacement_status": "V5 remains frozen fallback; V6 is a separate theory-development candidate."
+  },
+  "v6_assets": {
+    "manuscript": "manuscript/MANUSCRIPT_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "canonical_spine": "theory/CANONICAL_FITNESS_THEOREM_SPINE_V1.md",
+    "robust_theory": "theory/SHARP_OPPORTUNITY_FITNESS_ENVELOPE.md",
+    "inverse_theory": "theory/EVOLUTIONARY_RESOURCE_FRONTIER.md",
+    "surface_test": "tests/test_evolution_letters_v6_fitness_frontier_surface.py",
+    "robust_receipt": "validation/sharp_opportunity_fitness_envelope_v1.json",
+    "evolutionary_receipt": "validation/evolutionary_resource_frontier_v1.json",
+    "figure_plan": "manuscript/FIGURE_PLAN_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "figure_legends": "manuscript/FIGURE_LEGENDS_EVOLUTION_LETTERS_V6_FITNESS_FRONTIER.md",
+    "uehara_binned_result": "biology/UEHARA_2026_BINNED_FIRST_PROBE_RESULTS_V1.md",
+    "uehara_binned_receipt": "validation/uehara_binned_first_probe_v1.json",
+    "reproducible_svg_renderer": "scripts/render_v6_figures.py",
+    "figure_build_workflow": ".github/workflows/v6-figures.yml",
+    "figure_build_and_visual_qa_gate": "manuscript/V6_FIGURE_BUILD_AND_VISUAL_QA_GATE.md"
+  },
+  "main_results": [
+    "exact attainable fixed-(n,m,b) joint adaptive/fixed frontier at every feasible adaptive depth",
+    "sharp lift of that frontier by arbitrary finite nonincreasing biological completion value, so natural history can re-rank structural architectures",
+    "inverse robust evolutionary thresholds including global bounded-arity no-go and minimum robust cue arity"
+  ],
+  "claim_firewalls": {
+    "CA": "C_A is minimax guaranteed complexity, not fitness or the uniquely evolved policy.",
+    "robust_expected": "Robust value is frequency-free/statewise; expected value additionally depends on branch frequencies and completion profiles.",
+    "comparator": "All adaptive-versus-fixed claims use the declared universal fixed comparator unless another comparator is modeled explicitly.",
+    "Aedes": "Chandel Figure 3a is an aggregate temporal-effect anchor; Uehara Figure 2D/S2 supplies one-minute interval-censored individual first-probe profiles. Neither is a fitness or adaptive/fixed validation.",
+    "prior_art": "Sequential VOI, deadline-weighted utility, adaptivity gaps, tree flattening, prior-weighted expected depth and costly sensory fidelity are not novelty claims.",
+    "expected_value_prior_art": "Prior-weighted expected decision trees and skewed shallow-branch advantages are established; expected-value ceilings are supporting biology, not a fourth novelty theorem.",
+    "fixed_resolver": "Minimum/generalized fixed test-collection problems are established prior art; novelty is not claimed for C_F by itself.",
+    "flattening": "Adaptive-tree flattening into all internal queries is established query-complexity reasoning; novelty is restricted to the sharp fixed-(n,m,b) joint frontier and its biological lift/inverse."
+  },
+  "validation": {
+    "arbitrary_depth_solver_grid_cases": 279,
+    "focused_ci_run_with_RF7_witnesses": 37613648497,
+    "focused_ci_status": "success",
+    "full_matrix_green_head_before_v6_prose": "552c3e24ce8fedeb419bb935ac45b6804f304edb",
+    "latest_full_matrix_status": "last verified success at 96798221744ed92c0862d667a8008fea85c04098 (run 37802355237); post-October-10 journal-format and figure edits now pending",
+    "title_words": 6,
+    "abstract_words": 240,
+    "main_text_words": 2761,
+    "focused_ci_with_finite_expected_grid": 37613648497,
+    "latex_control_character_audit": "PASS: zero non-whitespace ASCII control characters in current V6 manuscript",
+    "citation_pass": "core ecological-information, information-fitness, decision-tree prior-art, Chandel 2024 and Uehara et al. 2026 empirical citations added",
+    "uehara_source_data": {
+      "supplementary_xlsx_sha256": "13b64727b521b09bbf5446411d0e7ef2062edae17ebd93be5c93d12a6a07f3b3",
+      "fig2d_rows_match_exclusion_counts": true,
+      "source_individuals": 233,
+      "primary_pre_probe_zero_individuals": 112,
+      "endpoint": "one-minute interval-censored first post-stimulus probing among individuals with zero probing in -1 to 0 min",
+      "status": "coarse individual source-data result materialized; public workflow rerun remains queued but source file hashes, row-count cross-checks and parser tests are frozen"
+    },
+    "v6_novelty_spine": "MAIN 1-3 only; expected-frequency results demoted to supporting consequence",
+    "fixed_side_prior_art": "Generalized Test Collection Problem added to manuscript/reference boundary",
+    "math_surface": "PASS by model-side block scan at manuscript and canonical-spine post-fix blobs; CI regression introduced to guard delimiters and core theorem relation operators; final HEAD CI pending",
+    "last_verified_complete_matrix": {
+      "status": "success",
+      "run_id": 37802355237,
+      "head_sha": "96798221744ed92c0862d667a8008fea85c04098",
+      "description": "Full Python 3.10/3.11/3.12 matrix green after incorporation of Figure 1-3 callouts and math-symbol repair."
+    },
+    "targeted_prior_art": {
+      "direct_fixed_test_collection": "Douek-Pinkovich, Ben-Gal and Raviv 2021, TOP, DOI 10.1007/s11750-020-00554-1",
+      "direct_query_set_plus_tree": "Wieczorek, Kozak, Strak and Nowakowski 2021, Entropy 23:1682, DOI 10.3390/e23121682",
+      "main_spine_scope": "Only the sharp simultaneous (n,m,b) all-depth joint frontier, its biological-value lift and inverse robust thresholds are proposed as MAIN 1–3; related fixed test cover and joint test-set/decision-tree procedures excluded.",
+      "priority_status": "Targeted search has not yet established a pre-existing identical sharp all-depth joint frontier. Lack of a matching result is not proof of priority."
+    },
+    "figure_artifact_first_build": {
+      "status": "success_first_machine_generated_pass",
+      "run_id": 37801453765,
+      "head_sha": "6701bae91f492349c5dc213820dac8df633a5227",
+      "artifact_name": "evolution-letters-v6-figures",
+      "artifact_id": 11560717072,
+      "svg_count": 3,
+      "xml_parsing": "pass",
+      "source_manifest_generated": true,
+      "content_sha256_recorded": true,
+      "human_visual_review": "NOT_DONE",
+      "submission_figure_approval": "NOT_DONE"
+    },
+    "current_editorial_requirements": {
+      "journal": "Evolution Letters",
+      "verified_source": "https://academic.oup.com/evlett/pages/author-guidelines",
+      "article": "Letter, guideline 5000 words; title<=30 words; abstract<=300 words",
+      "manuscript_required_sections": [
+        "Introduction",
+        "Methods",
+        "Results",
+        "Discussion",
+        "Data and code availability statement",
+        "Author contributions",
+        "Funding",
+        "Conflict of interest statement"
+      ],
+      "figure_formats": "JPEG/JPG, TIFF, EPS or vector PDF. SVG retained as editable working source.",
+      "v6_methods_section_added": true,
+      "v6_legends_embedded_in_main_manuscript": true,
+      "required_declarations": "Placeholders awaiting author verification; do not submit unchanged.",
+      "archival_code_data_doi": "Not yet assigned; must be addressed before final publication."
+    },
+    "figure_artifact_pdf_extension": {
+      "status": "success",
+      "run_id": 38058408560,
+      "head_sha": "260bd9c4531761b55ed318ab2b4316ddb7a6ea3f",
+      "artifact_name": "evolution-letters-v6-figures",
+      "formats": [
+        "editable SVG",
+        "single-page vector PDF"
+      ],
+      "verification": "SVG SHA check, PDF magic, pypdf one page per figure, 900 x 555 pt geometry, upload succeeded",
+      "figure3_encoding": "minute-end step CDFs for Uehara interval-censored first probes; normalized cumulative signed Chandel postpulse aggregate effects from audited source knots",
+      "human_visual_review": "NOT_DONE"
+    }
+  },
+  "promotion_rule": {
+    "new_main_theorem_stop_rule": true,
+    "rule": "Novelty spine is capped at MAIN 1-3. Do not add a fourth main theorem unless it invalidates or strictly strengthens MAIN 1-3.",
+    "submission_gate": [
+      "latest full Python 3.10/3.11/3.12 matrix green at final V6 source head",
+      "targeted prior-art audit of exact all-depth fixed-(n,m,b) joint frontier documented; generic flattening and test-collection results explicitly excluded",
+      "final manuscript math-surface / citation audit",
+      "figure production from frozen numerical and empirical receipts",
+      "human author metadata and approvals"
+    ]
+  },
+  "manuscript_role": {
+    "V5": "environment-centered routeability paper, frozen fallback",
+    "V6": "evolutionary process paper asking when structural routeability becomes robust or expected value"
+  },
+  "figure_story": [
+    "Figure 1: exact structural frontier and natural-history re-ranking",
+    "Figure 2: inverse robust thresholds and cue-arity no-go",
+    "Figure 3: robust-versus-expected frequency rescue plus Uehara individual completion profiles and Chandel aggregate effect timing"
+  ],
+  "submission_gate_status": {
+    "manuscript_length": "pass",
+    "core_references": "pass",
+    "final_full_matrix": "last verified matrix green at 9679822; current HEAD pending after journal-format, Figure 3 semantics and PDF export modifications",
+    "supplementary_data_empirical_gate": "pass at one-minute interval-censored individual level; frame-resolved Uehara latency optional refinement",
+    "prior_art_boundary": "explicitly includes joint query-set plus decision-tree construction; novelty limited to simultaneous sharp all-depth fixed-(n,m,b) theorem, value lift, inverse threshold",
+    "final_math_surface": "manuscript/spine delimiter regression passed before new journal-format edits; recheck final HEAD",
+    "figure_production": "3 SVG and 3 one-page vector PDF successfully built/uploaded run 38058408560; visual/typographic review remains NOT_DONE",
+    "author_approvals": "NOT_RECEIVED: contributions, affiliation/title page, funding, conflicts, corresponding author, figures",
+    "overall": "NOT_SUBMISSION_READY",
+    "journal_format": "Methods, 3 legends, data/code statement now in manuscript; placeholders for author contributions/funding/conflicts must be finalized; separate title page and archived DOI remain author-controlled"
+  },
+  "supporting_biological_consequences": [
+    "frequency-dependent early termination can raise expected value above the robust floor; treated as a claim firewall rather than independent novelty",
+    "Uehara 2026 Supplementary Data provide individual one-minute interval-censored first-probe profiles, including a crossing Anopheles completion-profile pair",
+    "Chandel 2024 Figure 3a provides a complementary high-resolution aggregate temporal-effect-shape anchor"
+  ]
+}

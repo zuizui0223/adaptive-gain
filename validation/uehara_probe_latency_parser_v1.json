@@ -1,0 +1,27 @@
+{
+  "status": "UEHARA_INDIVIDUAL_LATENCY_PARSER_GREEN_DATA_PENDING",
+  "source": {
+    "paper": "Uehara, Dong & Duvall 2026 Communications Biology 9:757",
+    "doi": "10.1038/s42003-026-09987-z",
+    "code_repo": "Duvall-Lab/UeharaDongDuvall2025",
+    "supplementary_data": "42003_2026_9987_MOESM3_ESM.xlsx"
+  },
+  "public_code_contract": {
+    "frame_rate_hz": 60,
+    "default_stimulus_onset_frame": 3600,
+    "default_analysis_end_frame": 32400,
+    "analysis_duration_frames": 28800,
+    "analysis_duration_s": 480,
+    "probe_code": 2,
+    "individual_axis": "one behavior-series column per individual in processed XLSX"
+  },
+  "implementation": {
+    "script": "scripts/analyze_uehara_probe_latency.py",
+    "test": "tests/test_uehara_probe_latency.py",
+    "workflow": ".github/workflows/uehara-probe-latency.yml",
+    "workflow_run": 37614832138,
+    "conclusion": "success",
+    "pytest": "2 passed"
+  },
+  "claim_ceiling": "Parser readiness only. No individual latency result is claimed until a compatible public frame-level behavior XLSX is recovered and its schema matches the notebook contract."
+}
