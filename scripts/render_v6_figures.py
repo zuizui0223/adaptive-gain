@@ -256,7 +256,7 @@ def _fig3(directory,manifest):
     s.text(631,344,"Finite n=10,m=9: threshold p1 ≈ 0.6166",size=14,color=MUTED)
 
     section(s,34,385,735,300,"C1","Individual first-probe profiles (1-minute bins)")
-    xy=axes(s,95,494,610,118,xrange=(0,8),yrange=(0,1),
+    xy=axes(s,95,493,610,95,xrange=(0,8),yrange=(0,1),
             xticks=(0,1,2,3,4,5,6,7,8),yticks=(0,.25,.5,.75,1),
             xlabel="Minute after stimulus (interval end)",
             ylabel="Fraction first probing",format_y=lambda x:f"{x:.2f}")
@@ -286,15 +286,13 @@ def _fig3(directory,manifest):
         n=int(entries[-1]["n_primary"])
         if abs(previous-(n-censored)/n)>1e-10:
             raise ValueError("Uehara CDF and right-censor receipt disagree")
-    for x,(_,color,label) in zip((85,316,538),species):
-        s.text(x,667,label,size=13,color=color,weight="bold")
-    s.text(56,684,"Right-censored at 8 min: 3/28, 15/38, 2/14 (respective species)",
-           size=11,color=MUTED)
+    for x,(_,color,label),censor in zip((73,312,537),species,("3/28","15/38","2/14")):
+        s.text(x,668,f"{label} (censored {censor})",size=12,color=color,weight="bold")
 
     section(s,785,385,381,300,"C2","Aggregate IR effect: cumulative share")
     source=json.loads((directory/"fig3_chandel_timing.json").read_text(
         encoding="utf-8"))
-    xy2=axes(s,832,492,291,117,xrange=(0,90),yrange=(0,1),
+    xy2=axes(s,832,489,291,91,xrange=(0,90),yrange=(0,1),
              xticks=(0,30,60,90),yticks=(0,.5,1),
              xlabel="Seconds since CO2 pulse end",
              ylabel="Fraction of signed effect",format_y=lambda t:f"{t:.1f}")
