@@ -15,6 +15,44 @@ source-data receipts. **Not yet visually signed off for submission.**
 - Content: three SVGs, source-derived CSVs, Chandel timing JSON,
   numerical manifest and SVG SHA-256 manifest (11 files).
 
+## Submission-format extension, 2026-10-10
+
+Evolution Letters' current Oxford Academic author guidelines accept
+JPEG/JPG, TIFF, EPS or PDF figure files and caution that SVG uploads may
+not be accepted. Accordingly **SVG remains the edit/reproducibility
+master**, not the final publisher-upload format.
+
+The repository now also converts the exact source-SVG triptych into
+three separate one-page **vector PDFs**, verified against each SVG's
+SHA-256 and checked with pypdf for PDF integrity and one-page geometry.
+
+- Verified PDF-and-SVG workflow: https://github.com/zuizui0223/adaptive-gain/actions/runs/38058408560
+- Result: SVG generation, CairoSVG conversion, single-page PDF validation
+  and GitHub artifact upload all successful
+- GitHub artifact: evolution-letters-v6-figures (contains the editable
+  SVGs, journal-style one-page PDFs, source tables and both manifests)
+- Export implementation: scripts/export_v6_figures_pdf.py
+- Dedicated workflow: .github/workflows/v6-figures.yml
+- Reproduction from repository root:
+
+      python -m scripts.render_v6_figures --output-dir v6_figures
+      python -m pip install cairosvg pypdf
+      python -m scripts.export_v6_figures_pdf --figure-dir v6_figures
+
+The current Figure 3 renderer corrects two potentially misleading
+visual interpretations: Uehara first-probe profiles are plotted as
+**minute-end step CDFs** with right-censored counts, never linearly
+interpolated individual latencies; and Chandel's aggregate signed
+IR-minus-no-IR response is displayed as **normalized cumulative
+source-receipt curves**, not as individual completion probabilities.
+
+Machine-readable PDF generation does not establish legibility at
+journal printed width, embedded-font adequacy, text overlap freedom
+or final scientific/author approval. Human visual review remains
+a hard submission hold.
+
+Source: https://academic.oup.com/evlett/pages/author-guidelines
+
 ## Generation and verification
 
 Run from the cloned repository root:
