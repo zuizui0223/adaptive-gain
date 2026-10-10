@@ -1,6 +1,6 @@
 {
   "schema": "adaptive-gain-evolution-letters-v6-fitness-frontier-readiness-v1",
-  "date": "2026-10-09",
+  "date": "2026-10-10",
   "target": "Evolution Letters",
   "article_type": "Letter",
   "status": "v6_three_result_novelty_spine_empirical_anchor_materialized_not_submission_ready",
@@ -46,7 +46,7 @@
     "focused_ci_run_with_RF7_witnesses": 37613648497,
     "focused_ci_status": "success",
     "full_matrix_green_head_before_v6_prose": "552c3e24ce8fedeb419bb935ac45b6804f304edb",
-    "latest_full_matrix_status": "pending after V6 manuscript math and targeted prior-art surface edits",
+    "latest_full_matrix_status": "last verified success at 96798221744ed92c0862d667a8008fea85c04098 (run 37802355237); post-October-10 journal-format and figure edits now pending",
     "title_words": 6,
     "abstract_words": 240,
     "main_text_words": 2761,
@@ -65,10 +65,10 @@
     "fixed_side_prior_art": "Generalized Test Collection Problem added to manuscript/reference boundary",
     "math_surface": "PASS by model-side block scan at manuscript and canonical-spine post-fix blobs; CI regression introduced to guard delimiters and core theorem relation operators; final HEAD CI pending",
     "last_verified_complete_matrix": {
-      "head_sha": "2450a1155fd951dd478c8af3b32b3103a42f4c3c",
-      "run_id": 37797938710,
       "status": "success",
-      "description": "Complete Python 3.10/3.11/3.12 CI at last prior head before October 9 manuscript math and priority edits."
+      "run_id": 37802355237,
+      "head_sha": "96798221744ed92c0862d667a8008fea85c04098",
+      "description": "Full Python 3.10/3.11/3.12 matrix green after incorporation of Figure 1-3 callouts and math-symbol repair."
     },
     "targeted_prior_art": {
       "direct_fixed_test_collection": "Douek-Pinkovich, Ben-Gal and Raviv 2021, TOP, DOI 10.1007/s11750-020-00554-1",
@@ -88,6 +88,39 @@
       "content_sha256_recorded": true,
       "human_visual_review": "NOT_DONE",
       "submission_figure_approval": "NOT_DONE"
+    },
+    "current_editorial_requirements": {
+      "journal": "Evolution Letters",
+      "verified_source": "https://academic.oup.com/evlett/pages/author-guidelines",
+      "article": "Letter, guideline 5000 words; title<=30 words; abstract<=300 words",
+      "manuscript_required_sections": [
+        "Introduction",
+        "Methods",
+        "Results",
+        "Discussion",
+        "Data and code availability statement",
+        "Author contributions",
+        "Funding",
+        "Conflict of interest statement"
+      ],
+      "figure_formats": "JPEG/JPG, TIFF, EPS or vector PDF. SVG retained as editable working source.",
+      "v6_methods_section_added": true,
+      "v6_legends_embedded_in_main_manuscript": true,
+      "required_declarations": "Placeholders awaiting author verification; do not submit unchanged.",
+      "archival_code_data_doi": "Not yet assigned; must be addressed before final publication."
+    },
+    "figure_artifact_pdf_extension": {
+      "status": "success",
+      "run_id": 38058408560,
+      "head_sha": "260bd9c4531761b55ed318ab2b4316ddb7a6ea3f",
+      "artifact_name": "evolution-letters-v6-figures",
+      "formats": [
+        "editable SVG",
+        "single-page vector PDF"
+      ],
+      "verification": "SVG SHA check, PDF magic, pypdf one page per figure, 900 x 555 pt geometry, upload succeeded",
+      "figure3_encoding": "minute-end step CDFs for Uehara interval-censored first probes; normalized cumulative signed Chandel postpulse aggregate effects from audited source knots",
+      "human_visual_review": "NOT_DONE"
     }
   },
   "promotion_rule": {
@@ -113,13 +146,14 @@
   "submission_gate_status": {
     "manuscript_length": "pass",
     "core_references": "pass",
-    "final_full_matrix": "last verified complete CI passed at 2450a115; latest modified head pending",
+    "final_full_matrix": "last verified matrix green at 9679822; current HEAD pending after journal-format, Figure 3 semantics and PDF export modifications",
     "supplementary_data_empirical_gate": "pass at one-minute interval-censored individual level; frame-resolved Uehara latency optional refinement",
     "prior_art_boundary": "explicitly includes joint query-set plus decision-tree construction; novelty limited to simultaneous sharp all-depth fixed-(n,m,b) theorem, value lift, inverse threshold",
-    "final_math_surface": "manual syntax defect fixed in 9 display blocks; regression tests added, final GitHub matrix pending",
-    "figure_production": "3 SVG figures machine-generated successfully in GitHub Actions run 37801453765; initial SVG XML checks passed; human visual/content verification pending",
-    "author_approvals": "not supplied",
-    "overall": "NOT_SUBMISSION_READY"
+    "final_math_surface": "manuscript/spine delimiter regression passed before new journal-format edits; recheck final HEAD",
+    "figure_production": "3 SVG and 3 one-page vector PDF successfully built/uploaded run 38058408560; visual/typographic review remains NOT_DONE",
+    "author_approvals": "NOT_RECEIVED: contributions, affiliation/title page, funding, conflicts, corresponding author, figures",
+    "overall": "NOT_SUBMISSION_READY",
+    "journal_format": "Methods, 3 legends, data/code statement now in manuscript; placeholders for author contributions/funding/conflicts must be finalized; separate title page and archived DOI remain author-controlled"
   },
   "supporting_biological_consequences": [
     "frequency-dependent early termination can raise expected value above the robust floor; treated as a claim firewall rather than independent novelty",
