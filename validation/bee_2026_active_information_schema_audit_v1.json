@@ -1,0 +1,154 @@
+{
+  "schema": "adaptive-gain-bee-2026-information-request-semantics-v1",
+  "status": "PUBLIC_TRIAL_LEVEL_DESCRIPTIVE_AUDIT__NO_DIRECT_WAIT_OR_FITNESS_IDENTIFICATION",
+  "source": {
+    "paper": "He et al. (2026), Uncertainty-Guided Decision-Making in Bumble Bees, bioRxiv preprint",
+    "doi": "10.64898/2026.09.15.751944",
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "path": "data/4_active_information_seeking_trials.csv",
+    "blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "url": "https://github.com/Cuixiaojian21/bee_metacognition/blob/7f886394b4de872ecdb19ca4ea214ec321d5dce9/data/4_active_information_seeking_trials.csv",
+    "license_caution": "Repository data directory refers to LICENSE, but license file was not found in root at audit time; raw data are not redistributed."
+  },
+  "contract": {
+    "unit": "trial",
+    "n_trials": 19200,
+    "n_unique_trials": 19200,
+    "n_bees": 192,
+    "trials_per_bee_min": 100,
+    "trials_per_bee_max": 100,
+    "active_request_field": "Actually_Landed_On_Platform",
+    "information_delivery_field": "Info_Requested",
+    "warning": "Free-Cue trials all have Info_Requested=1, whether or not the bee landed. Do not fit information seeking pooled across trial types using Info_Requested as a universal active behavior measure."
+  },
+  "groups": {
+    "Regular|Easy": {
+      "n": 6140,
+      "info": 591,
+      "land": 591
+    },
+    "Regular|Hard": {
+      "n": 6108,
+      "info": 2866,
+      "land": 2866
+    },
+    "Regular|Impossible": {
+      "n": 3112,
+      "info": 2229,
+      "land": 2229
+    },
+    "Random_Free_Cue|Easy": {
+      "n": 1540,
+      "info": 1540,
+      "land": 950
+    },
+    "Random_Free_Cue|Hard": {
+      "n": 1572,
+      "info": 1572,
+      "land": 925
+    },
+    "Random_Free_Cue|Impossible": {
+      "n": 728,
+      "info": 728,
+      "land": 153
+    }
+  },
+  "cross_field_disagreements": {
+    "Regular": 0,
+    "Random_Free_Cue": 1812
+  },
+  "comparison": {
+    "method": "Free-Cue minus Regular landing rate, cluster bootstrap at bee level, B=3000, xorshift32 seed 0x8E4C19, percentiles [2.5,97.5]",
+    "Easy": {
+      "regular": 0.09625407166123778,
+      "free": 0.6168831168831169,
+      "difference": 0.5206290452218791,
+      "bootstrap95": [
+        0.4949544270833333,
+        0.5463229885623718
+      ]
+    },
+    "Hard": {
+      "regular": 0.46922069417157825,
+      "free": 0.5884223918575063,
+      "difference": 0.11920169768592809,
+      "bootstrap95": [
+        0.09123674413943672,
+        0.14641294162317237
+      ]
+    },
+    "Impossible": {
+      "regular": 0.7162596401028277,
+      "free": 0.21016483516483517,
+      "difference": -0.5060948049379925,
+      "bootstrap95": [
+        -0.5428017219980283,
+        -0.468482905982906
+      ]
+    }
+  },
+  "inference_boundaries": [
+    "No independent calibration of dynamic ecological transition rates in this task.",
+    "No randomized same-duration sham WAIT without informative cue.",
+    "Task difficulty (Easy/Hard/Impossible) does not alone establish a Blackwell ordered, temporally stale environmental-state cue family.",
+    "Free-Cue intervention may change salience, motor approach or timing in addition to information access.",
+    "Information request action is not identified by Info_Requested in Free-Cue trials; use Actually_Landed_On_Platform.",
+    "Differences are descriptive trial-type contrasts, not conditional information fitness or genetic selection.",
+    "Raw data remain at original third-party repository; receipt stores only audited aggregates."
+  ],
+  "proposed_followup": "Use this dataset only to motivate and check active-information-seeking measurement. For the dynamic ecology hypothesis, preregister the matched SKIP/SHAM-WAIT/QUERY experiment with state transitions and both final action and post-query timing.",
+  "within_bee_paired_landing_differences": {
+    "method": "Within each bee, free-cue landing proportion minus regular landing proportion, by difficulty; descriptive unweighted individual comparison",
+    "Easy": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": 0.5196976517791217,
+      "median": 0.5333333333333333,
+      "positive": 190,
+      "negative": 2,
+      "zero": 0
+    },
+    "Hard": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": 0.12403074136962357,
+      "median": 0.125,
+      "positive": 147,
+      "negative": 44,
+      "zero": 1
+    },
+    "Impossible": {
+      "n_paired": 192,
+      "n_missing": 0,
+      "mean": -0.49867793649902276,
+      "median": -0.5490196078431373,
+      "positive": 13,
+      "negative": 178,
+      "zero": 1
+    }
+  },
+  "pooled_label_semantics": {
+    "scope": "All 19200 trials, mixing voluntary Regular requests and automatically delivered Free-Cue information.",
+    "note": "A pooled Info_Requested rate is an information-delivery mixture, not a universal active request rate. The paper's core Fig.1E/S3B regular-only requests remain separately interpretable; pooled S3F is not an independent replication of voluntary requesting.",
+    "Easy": {
+      "regular_voluntary_request": 0.09625407166123778,
+      "pooled_info_requested": 0.2774739583333333,
+      "pooled_actual_platform_landing": 0.20065104166666667,
+      "free_cue_fraction": 0.20052083333333334
+    },
+    "Hard": {
+      "regular_voluntary_request": 0.46922069417157825,
+      "pooled_info_requested": 0.5778645833333333,
+      "pooled_actual_platform_landing": 0.49361979166666664,
+      "free_cue_fraction": 0.2046875
+    },
+    "Impossible": {
+      "regular_voluntary_request": 0.7162596401028277,
+      "pooled_info_requested": 0.7700520833333333,
+      "pooled_actual_platform_landing": 0.6203125,
+      "free_cue_fraction": 0.18958333333333333
+    },
+    "model_code_context": "01_conventional_stats/analysis/c_6_1_active_info_seeking_glmm.R pooled model Info_Requested ~ Difficulty + (1|Bee_ID); separate c_6_3 Regular and c_6_5 landing analyses present."
+  }
+}

@@ -7,7 +7,10 @@ from adaptive_gain.bounded_arity_extremal_bounds import (
     sharp_bounded_arity_unit_cost_ratio,
     sharp_bounded_arity_unit_cost_ratio_receipt,
     sharp_bounded_arity_unit_cost_witness,
+    bounded_arity_unit_cost_witness_at_depth,
+    bounded_arity_fixed_cost_bound,
 )
+from adaptive_gain.core import adaptive_minimum_resolution, fixed_minimum_resolution
 from adaptive_gain.unit_cost_extremal_bounds import (
     maximum_productive_tree_internal_nodes,
     sharp_unit_cost_ratio,
@@ -67,3 +70,21 @@ def test_intermediate_arity_sits_between_binary_and_unrestricted_extrema():
             ternary = sharp_bounded_arity_unit_cost_ratio(n, m, 3)
             unrestricted = sharp_bounded_arity_unit_cost_ratio(n, m, n)
             assert binary <= ternary <= unrestricted
+
+
+
+def test_arbitrary_feasible_depth_witness_attains_exact_pair():
+    for arity in (2, 3, 4):
+        for n in range(3, 9):
+            for m in range(2, min(7, n + 2)):
+                for depth in range(1, min(n - 1, m) + 1):
+                    task = bounded_arity_unit_cost_witness_at_depth(
+                        n, m, arity, depth
+                    )
+                    ca = adaptive_minimum_resolution(task).minimum_worst_path_cost
+                    cf = fixed_minimum_resolution(task).minimum_cost
+                    expected_cf = bounded_arity_fixed_cost_bound(
+                        n, m, depth, arity
+                    )
+                    assert ca == depth
+                    assert cf == expected_cf

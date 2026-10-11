@@ -1,0 +1,73 @@
+{
+  "status": "CORE_SHARP_ROBUST_ENVELOPE_GREEN",
+  "branch": "theory/opportunity-fitness-process-v1",
+  "focused_ci": {
+    "workflow": "sharp-opportunity-envelope",
+    "run_id": 37468412968,
+    "head_sha": "9de27198d18ae12a2cfe02aa90b778fd10f29071",
+    "conclusion": "success",
+    "pytest_summary": "15 passed",
+    "command": "python -m pytest -q tests/test_bounded_arity_extremal_bounds.py tests/test_opportunity_extremal_envelope.py"
+  },
+  "exact_frontier": {
+    "theorem": "For every feasible h, (C_A,C_F)=(h,min(m,F_b(n,h))) is constructively attainable.",
+    "regression_scope": {
+      "max_arity": [
+        2,
+        3,
+        4
+      ],
+      "world_count": "3..8",
+      "query_count": "2..min(6,n+1)",
+      "feasible_depths": "1..min(n-1,m)",
+      "exact_pair_cases": 279
+    },
+    "mechanism": "protected deepest child-0 spine plus private opposite-target pairs"
+  },
+  "sharp_lift": {
+    "general_form": "max robust statewise margin = max[U(C_A)-U(C_F)] = max_h[U(h)-U(I_h)] for finite nonincreasing U",
+    "opportunity_special_case": "R_robust,max = v max_h[S(h)-S(I_h)]",
+    "payoff_cost_ceiling": "K_crit^robust = max_h[U(h)-U(I_h)] for positive net value in every represented world",
+    "log_selection_ceiling": "kappa_crit^robust = max_h log((w0+vS(h))/(w0+vS(I_h)))"
+  },
+  "canonical_binary_example": {
+    "n": 10,
+    "m": 9,
+    "b": 2,
+    "frontier": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        9
+      ]
+    ],
+    "ratio_optimal_depth": 3,
+    "exponential_opportunity_performance_switches": {
+      "h4_to_h3_mu": 0.15469679775892664,
+      "h3_to_h2_mu": 0.6562559792369758
+    }
+  },
+  "interpretation": {
+    "main": "Natural history re-ranks an exact finite structural frontier; the ratio-optimal architecture need not maximize robust statewise biological value.",
+    "correction": "Unbounded C_F/C_A does not imply unbounded robust value. Expected branchwise value is a separate estimand.",
+    "comparator_ceiling": "The result is relative to the declared universal fixed comparator unless another architecture class is modeled.",
+    "robust_expected_boundary": "The sharp envelope is exact for worst-state/distribution-free value. It is not an upper bound on positive expected selection under a particular nonuniform world distribution."
+  },
+  "prior_art_boundary": {
+    "established": [
+      "sequential value of information",
+      "deadline-weighted decision utility",
+      "adaptive versus nonadaptive expected-value gaps",
+      "worst versus expected decision-tree cost"
+    ],
+    "candidate_distinctive_result": "sharp composition of the fixed-(n,m,b) guaranteed-resolution frontier with arbitrary monotone completion value, attained by the same constructive witnesses"
+  },
+  "claim_ceiling": "The recorded green tests validate the exact structural frontier and robust guarantee-level envelope. Expected evolutionary value additionally requires world frequencies and branch-specific completion times and is not bounded above by this robust ceiling."
+}

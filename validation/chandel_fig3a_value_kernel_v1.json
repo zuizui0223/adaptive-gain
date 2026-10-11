@@ -1,0 +1,72 @@
+{
+  "status": "DESCRIPTIVE_VALUE_KERNEL_SENSITIVITY_ONLY",
+  "source": {
+    "paper": "Chandel et al. 2024 Nature 633:615-623",
+    "doi": "10.1038/s41586-024-07848-5",
+    "source_data_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-024-07848-5/MediaObjects/41586_2024_7848_MOESM6_ESM.xlsx",
+    "sheet": "Figure 3a",
+    "frame_rate_hz": 10,
+    "frame_count": 3000,
+    "duration_s": 300,
+    "interpretation_level": "aggregate mean IHSI trajectory, not individual latency"
+  },
+  "post_first_pulse": {
+    "interval_s": [
+      90,
+      180
+    ],
+    "unweighted_mean_ir_minus_no_ir": 27.723333333333333,
+    "signed_advantage_auc": 2495.1000000000004,
+    "positive_advantage_auc": 2498.2000000000003,
+    "negative_advantage_auc": 3.1,
+    "positive_advantage_centroid_s_after_pulse": 47.49084140581218,
+    "half_signed_advantage_time_s_after_pulse": 46.2,
+    "cumulative_signed_advantage_fraction": {
+      "10s": 0.03374614243918079,
+      "30s": 0.2558214099635285,
+      "45s": 0.4845897960001603,
+      "60s": 0.6728788425313614,
+      "75s": 0.8465392168650555
+    },
+    "exponential_kernel_weighted_mean_delta": {
+      "tau_5s": 10.393672580242319,
+      "tau_10s": 15.396987658932737,
+      "tau_20s": 21.16790560557004,
+      "tau_30s": 23.66571174913878,
+      "tau_60s": 26.03242091080487,
+      "tau_120s": 26.994412725272436
+    }
+  },
+  "post_second_pulse": {
+    "interval_s": [
+      210,
+      300
+    ],
+    "unweighted_mean_ir_minus_no_ir": 56.07333333333333,
+    "signed_advantage_auc": 5046.6,
+    "positive_advantage_auc": 5046.700000000001,
+    "negative_advantage_auc": 0.1,
+    "positive_advantage_centroid_s_after_pulse": 45.780690352111286,
+    "half_signed_advantage_time_s_after_pulse": 46.5,
+    "cumulative_signed_advantage_fraction": {
+      "10s": 0.06249752308484921,
+      "30s": 0.28207109737248837,
+      "45s": 0.4804026473269132,
+      "60s": 0.6842428565767051,
+      "75s": 0.8885388182142433
+    },
+    "exponential_kernel_weighted_mean_delta": {
+      "tau_5s": 34.29183977765061,
+      "tau_10s": 39.710395413538286,
+      "tau_20s": 47.365323977345746,
+      "tau_30s": 50.912520706427344,
+      "tau_60s": 54.20583060839502,
+      "tau_120s": 55.394137213636235
+    }
+  },
+  "interpretation": {
+    "primary": "The aggregate +IR advantage is strongly late-weighted after CO2 cessation. Only ~3.4% and ~6.2% of signed post-pulse advantage accrue in the first 10 s, while half accrues only after ~46 s.",
+    "kernel_result": "Short value-of-time kernels substantially downweight the observed +IR advantage; longer kernels recover most of the unweighted contrast.",
+    "claim_ceiling": "These are descriptive weightings of aggregate IHSI differences, not individual completion-time CDFs, opportunity distributions, fitness estimates, or adaptive-versus-fixed comparisons."
+  }
+}

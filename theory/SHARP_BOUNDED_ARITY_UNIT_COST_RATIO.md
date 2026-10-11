@@ -183,6 +183,102 @@ R_b(n,m).
 }
 \]
 
+
+## 3b. Corollary — every feasible adaptive depth has an exact frontier witness
+
+The ratio theorem needs only one depth maximizing
+
+\[
+I_h/h,
+\qquad
+I_h=\min\{m,F_b(n,h)\}.
+\]
+
+For downstream ecological value calculations, a stronger fact is useful.
+
+Fix any
+
+\[
+1\le h\le\min(n-1,m).
+\]
+
+Then
+
+\[
+F_b(n,h)\ge h
+\]
+
+because a productive chain of height \(h\) uses \(h\) internal nodes and
+\(h+1\le n\) leaves. Hence
+
+\[
+I_h\ge h.
+\]
+
+Take an \(F_b(n,h)\)-maximizing tree, orient one deepest path as repeated child
+0, and prune only internal nodes outside that protected spine until exactly
+
+\[
+I_h
+\]
+
+internal nodes remain.
+
+The resulting tree still has height exactly \(h\).
+
+Apply the private-pair target construction.
+
+Let \(x_0\) be the leftmost leaf on the protected child-0 spine. For each of the
+\(h\) internal nodes \(v\) on that spine, \(x_0\) is the child-0
+representative \(r_0(v)\). The corresponding private-pair endpoint
+\(r_1(v)\) has the opposite target, and \(q_v\) is their unique separator.
+
+Therefore any adaptive policy when \(x_0\) is the realized world must query all
+\(h\) spine resources. Thus
+
+\[
+C_A\ge h.
+\]
+
+The declared tree resolves in at most \(h\), so
+
+\[
+\boxed{C_A=h.}
+\]
+
+All \(I_h\) internal queries remain fixed-mandatory by their private pairs, so
+
+\[
+\boxed{C_F=I_h.}
+\]
+
+Hence for every feasible depth,
+
+\[
+\boxed{
+(C_A,C_F)
+=
+\left(
+h,
+\min\{m,F_b(n,h)\}
+\right)
+}
+\]
+
+is exactly attainable.
+
+This corollary turns the structural upper-bound curve into an exact attainable
+frontier, not merely a collection of separate cost bounds.
+
+Implementation:
+
+- \`bounded_arity_unit_cost_witness_at_depth(...)\`;
+- protected-spine pruning in
+  \`adaptive_gain/bounded_arity_extremal_bounds.py\`;
+- direct exact-solver regression across small binary, ternary and quaternary
+  grids.
+
+
 ## 4. Endpoint recovery
 
 The theorem contains the two previously closed cases.

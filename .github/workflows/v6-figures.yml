@@ -1,0 +1,73 @@
+name: V6 manuscript figures
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/v6-figures.yml"
+      - "scripts/build_v6_figure_data.py"
+      - "scripts/render_v6_figures.py"
+      - "scripts/export_v6_figures_pdf.py"
+      - "validation/chandel_fig3a_value_kernel_v1.json"
+      - "validation/uehara_binned_first_probe_v1.json"
+      - "adaptive_gain/bounded_arity_extremal_bounds.py"
+      - "adaptive_gain/evolutionary_resource_frontier.py"
+
+permissions:
+  contents: read
+
+jobs:
+  svg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install local theorem package
+        run: python -m pip install -e .
+      - name: Regenerate all three SVG figures from committed receipts
+        run: python -m scripts.render_v6_figures --output-dir v6_figures
+      - name: Validate figure XML and locked numerical anchors
+        run: |
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          d=Path("v6_figures")
+          receipt=json.loads((d/"svg_manifest.json").read_text())
+          assert len(receipt["figures"])==3
+          for item in receipt["figures"].values():
+              ET.parse(d/item["filename"])
+              assert item["content_bytes"] > 2500
+          print("SVG generation, XML parsing and manifest checks passed")
+          PY
+      - name: Install PDF export and validation libraries
+        run: python -m pip install cairosvg pypdf
+      - name: Export separate one-page vector PDF figures
+        run: python -m scripts.export_v6_figures_pdf --figure-dir v6_figures
+      - name: Validate publisher PDF page count and source linkage
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from pypdf import PdfReader
+          d=Path("v6_figures")
+          receipt=json.loads((d/"pdf_manifest.json").read_text())
+          assert len(receipt["figures"]) == 3
+          for key,item in receipt["figures"].items():
+              pdf=d/item["pdf_filename"]
+              reader=PdfReader(str(pdf),strict=True)
+              assert len(reader.pages) == 1, key
+              page=reader.pages[0]
+              assert abs(float(page.mediabox.width)-900) < 1.0, key
+              assert abs(float(page.mediabox.height)-555) < 1.0, key
+              assert item["pdf_bytes"] > 500, key
+          print("All three publisher PDF figures are one-page vector exports")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evolution-letters-v6-figures
+          path: v6_figures/
+          retention-days: 90
+          if-no-files-found: error

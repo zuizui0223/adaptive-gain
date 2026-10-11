@@ -1,0 +1,109 @@
+{
+  "schema": "adaptive-gain-bee-2026-one-trial-lag-v1",
+  "source": {
+    "repository": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "path": "data/4_active_information_seeking_trials.csv",
+    "paper": "He et al. (2026), Uncertainty-Guided Decision-Making in Bumble Bees (bioRxiv)",
+    "doi": "10.64898/2026.09.15.751944"
+  },
+  "n_bees": 192,
+  "n_total_trials": 19200,
+  "regular_following_regular_pairs": 12132,
+  "difficulty": {
+    "Easy": {
+      "raw_fail_minus_success": 0.0007169100985039978,
+      "stratified_fail_minus_success": 0.005997007168295514,
+      "included_strata": 30,
+      "covered_trials": 4877,
+      "bee_cluster_bootstrap_95": [
+        -0.01960979523422126,
+        0.03412643236344427
+      ],
+      "bootstrap_valid_repetitions": 1500
+    },
+    "Hard": {
+      "raw_fail_minus_success": -0.024311206705719512,
+      "stratified_fail_minus_success": -0.02972247154671966,
+      "included_strata": 30,
+      "covered_trials": 4794,
+      "bee_cluster_bootstrap_95": [
+        -0.07673526113580635,
+        0.010427244195594052
+      ],
+      "bootstrap_valid_repetitions": 1500
+    },
+    "Impossible": {
+      "raw_fail_minus_success": 0.009380383769975631,
+      "stratified_fail_minus_success": -0.0001982419263588782,
+      "included_strata": 28,
+      "covered_trials": 2425,
+      "bee_cluster_bootstrap_95": [
+        -0.05537594203044323,
+        0.05031552955884778
+      ],
+      "bootstrap_valid_repetitions": 1500
+    }
+  },
+  "method": "Previous Regular trial correctness versus next Regular trial platform landing, by next difficulty; adjusted standardization over preceding difficulty, preceding request, next trial bin (20-trial quintile), weighted by eligible stratum size. Bee cluster bootstrap B=1500, xorshift32 seed=6220835 (0x5EEC23).",
+  "method_source": "scripts/analyze_bee_2026_lagged_acquisition.py",
+  "source_audit": "independent GitHub line-range pull of five successive chunks of the pinned public file; no raw data copied to repository",
+  "interpretation": "No consistent evidence that the previous-trial error increases the next Regular-trial information-platform landing probability once current difficulty is separated. All descriptive uncertainty intervals include zero. Current difficulty is a dominant observed grouping of requests, already a published result.",
+  "limitations": [
+    "Trial_Number interpreted as sequential within this task, without independent timestamp verification.",
+    "Previous accuracy/outcome is not randomized; cluster uncertainty and strata do not identify a causal learning effect.",
+    "Outcome correctness is structurally in Post or Non columns depending on whether information was delivered/requested, and Regular trials only are used to avoid delivery/request conflation.",
+    "The 28-30 adjusted strata condition on preceding difficulty, preceding request and coarse current trial order. Empty error/success strata are omitted, leaving 2425 of 2461 previous-Regular/current-Impossible pairs covered.",
+    "Zero-containing confidence intervals do not establish absence of trial-history, slower learning or subject-specific effects.",
+    "The separate decision-latency CSV reuses trial identifiers; a same-trial join is blocked (validation/bee_2026_cross_experiment_join_gate_v1.json)."
+  ],
+  "status": "EXPLORATORY_SEQUENCE_ASSOCIATION_NO_CAUSAL_HISTORY_EFFECT",
+  "claim_ceiling": "No inference of dynamic ecological state switches, information-age decay, optimized wait versus query, evolutionary fitness or experimentally induced sequential learning. The prior Free-Cue carryover contrast is an exploratory exposure association, not a causal value of optional information.",
+  "previous_free_cue_exposure": {
+    "next_regular_after_any_previous_type": 15205,
+    "by_current_difficulty": {
+      "Easy": {
+        "raw_free_minus_regular": 0.008299419679144424,
+        "adjusted_free_minus_regular": 0.020635733115483536,
+        "strata": 30,
+        "covered_trials": 6078,
+        "bee_cluster_bootstrap_95": [
+          -0.003281981168047016,
+          0.05176512289084279
+        ],
+        "bootstrap_valid_repetitions": 1500
+      },
+      "Hard": {
+        "raw_free_minus_regular": 0.0008203587818105817,
+        "adjusted_free_minus_regular": -0.00020352296092384967,
+        "strata": 30,
+        "covered_trials": 6044,
+        "bee_cluster_bootstrap_95": [
+          -0.041552341026773895,
+          0.04284524649586571
+        ],
+        "bootstrap_valid_repetitions": 1500
+      },
+      "Impossible": {
+        "raw_free_minus_regular": 0.009941583885462069,
+        "adjusted_free_minus_regular": 0.03854112596977768,
+        "strata": 30,
+        "covered_trials": 3083,
+        "bee_cluster_bootstrap_95": [
+          -0.011127819736216578,
+          0.07438284979528155
+        ],
+        "bootstrap_valid_repetitions": 1500
+      }
+    },
+    "method": "Prior Free-Cue assignment versus prior Regular trial, predicting current Regular-trial platform landing. Stratify over prior difficulty, prior outcome, and current 20-trial order bin; bee cluster bootstrap B=1500, seed=6459249 (0x628F71).",
+    "status": "EXPLORATORY_LAGGED_EXPOSURE_ASSOCIATION_NOT_INFORMATION_CAUSAL_EFFECT",
+    "limitations": [
+      "Previous Free-Cue block condition is interleaved within the experiment but assignment sequence probabilities and carryover exchangeability are not independently established by this audit.",
+      "Free-Cue versus Regular also changes prior sensory stimulation, reward opportunities, and approach behavior; this is not a pure information purchase contrast.",
+      "Bootstrap intervals all include zero and cannot establish absence of carryover, especially for small effects.",
+      "Current request is operationalized as a platform landing in a Regular trial; the prior Info_Requested field is not treated as an active action on free-cue trials."
+    ]
+  }
+}

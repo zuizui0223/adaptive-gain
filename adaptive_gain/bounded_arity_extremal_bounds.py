@@ -279,6 +279,27 @@ def _deepest_internal_depth(tree: BoundedArityTree) -> int:
     return best
 
 
+
+def _orient_deepest_first(tree: BoundedArityTree) -> BoundedArityTree:
+    """Recursively place one deepest child first at every internal node.
+
+    This exposes a child-0 spine whose length equals the tree height.  The
+    private-pair construction then makes the leftmost leaf an endpoint of one
+    unique opposite-target pair for every query on that spine, certifying the
+    adaptive lower bound by a single realized world.
+    """
+    if tree.is_leaf:
+        return tree
+    oriented_children = tuple(_orient_deepest_first(c) for c in tree.children)
+    ordered = tuple(
+        sorted(
+            oriented_children,
+            key=lambda child: (-_height(child), repr(child)),
+        )
+    )
+    return BoundedArityTree(ordered)
+
+
 def _prune_one_deepest(tree: BoundedArityTree) -> BoundedArityTree:
     target_depth = _deepest_internal_depth(tree)
     if target_depth < 0:
@@ -295,6 +316,77 @@ def _prune_one_deepest(tree: BoundedArityTree) -> BoundedArityTree:
     result = walk(tree, 0)
     if not replaced:
         raise ArithmeticError("failed to prune deepest internal node")
+    return result
+
+
+
+def _prune_one_deepest_off_spine(tree: BoundedArityTree) -> BoundedArityTree:
+    """Prune one deepest internal node while protecting a child-0 deepest spine."""
+    oriented = _orient_deepest_first(tree)
+    target_depth = -1
+    target_path: tuple[int, ...] | None = None
+
+    def scan(
+        node: BoundedArityTree,
+        depth: int,
+        path: tuple[int, ...],
+        on_spine: bool,
+    ) -> None:
+        nonlocal target_depth, target_path
+        if node.is_leaf:
+            return
+        if not on_spine and depth > target_depth:
+            target_depth = depth
+            target_path = path
+        for index, child in enumerate(node.children):
+            scan(
+                child,
+                depth + 1,
+                path + (index,),
+                on_spine and index == 0,
+            )
+
+    scan(oriented, 0, (), True)
+    if target_path is None:
+        return oriented
+
+    def replace(
+        node: BoundedArityTree,
+        path: tuple[int, ...],
+    ) -> BoundedArityTree:
+        if not path:
+            return BoundedArityTree()
+        index = path[0]
+        children = list(node.children)
+        children[index] = replace(children[index], path[1:])
+        return BoundedArityTree(tuple(children))
+
+    return _orient_deepest_first(replace(oriented, target_path))
+
+
+def _prune_to_internal_count_preserving_height(
+    tree: BoundedArityTree,
+    target_internal_count: int,
+    target_height: int,
+) -> BoundedArityTree:
+    """Reduce internal-node count without shortening one deepest spine."""
+    if target_internal_count < target_height:
+        raise ValueError("target_internal_count cannot be below target_height")
+    result = _orient_deepest_first(tree)
+    if _height(result) != target_height:
+        raise ValueError("input tree does not have the declared target height")
+
+    while _internal_count(result) > target_internal_count:
+        before = _internal_count(result)
+        result = _prune_one_deepest_off_spine(result)
+        after = _internal_count(result)
+        if after >= before:
+            raise ArithmeticError("no off-spine internal node remained to prune")
+        if _height(result) != target_height:
+            raise ArithmeticError("protected-spine pruning shortened the tree")
+
+    if _internal_count(result) != target_internal_count:
+        raise ArithmeticError("protected-spine pruning missed target internal count")
     return result
 
 
@@ -406,6 +498,322 @@ def _tree_task(tree: BoundedArityTree, world_count: int, query_count: int) -> tu
         if separating != [q_index]:
             raise ArithmeticError("tree query lost unique private-pair necessity")
     return task, len(private_pairs)
+
+
+
+def bounded_arity_unit_cost_witness_at_depth(
+    world_count: int,
+    query_count: int,
+    max_arity: int,
+    adaptive_depth: int,
+) -> FiniteTask:
+    """Construct the private-pair witness at one declared feasible depth.
+
+    The declared depth must be no larger than both the world and query budgets.
+    The construction uses I=min(m,F_b(n,h)) internal queries and pads any
+    remaining declared queries with constants.
+    """
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+    if type(adaptive_depth) is not int or adaptive_depth < 1:
+        raise ValueError("adaptive_depth must be a positive integer")
+    if adaptive_depth > world_count - 1:
+        raise ValueError("adaptive_depth exceeds the nontrivial world-depth bound")
+    if adaptive_depth > query_count:
+        raise ValueError("adaptive_depth exceeds the declared query budget")
+
+    maximum = maximum_bounded_arity_tree_internal_nodes(
+        world_count, adaptive_depth, max_arity
+    )
+    internal_target = min(query_count, maximum)
+    if internal_target < adaptive_depth:
+        raise ValueError("declared depth cannot be preserved by the available queries")
+
+    tree = _prune_to_internal_count_preserving_height(
+        _maximum_tree(world_count, adaptive_depth, max_arity),
+        internal_target,
+        adaptive_depth,
+    )
+    if _height(tree) != adaptive_depth:
+        raise ArithmeticError("depth-preserving bounded-arity pruning failed")
+
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("bounded-arity depth witness private-pair count mismatch")
+    if any(len(set(query.outcomes)) > max_arity for query in task.queries):
+        raise ArithmeticError("bounded-arity depth witness exceeded declared query arity")
+    return task
+
+
+
+def shallow_leaf_expected_value_witness(
+    rare_depth: int,
+    max_arity: int = 2,
+) -> FiniteTask:
+    """Construct one depth-1 leaf plus a full rare-state routing subtree.
+
+    The root has two nonempty children: one single shallow leaf and one full
+    max_arity-ary subtree of height rare_depth. Applying the private-pair
+    target construction makes every internal query fixed-mandatory.
+
+    Thus the common leaf completes in one query, rare leaves complete in
+    rare_depth + 1 queries, and the fixed resolver costs
+
+        1 + (max_arity**rare_depth - 1)/(max_arity - 1).
+
+    This family witnesses expected-value capacity above the robust ceiling.
+    """
+    if type(rare_depth) is not int or rare_depth < 1:
+        raise ValueError("rare_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+
+    def full(depth: int) -> BoundedArityTree:
+        if depth == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            tuple(full(depth - 1) for _ in range(max_arity))
+        )
+
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            full(rare_depth),
+        )
+    )
+    world_count = _leaf_count(tree)
+    query_count = _internal_count(tree)
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != query_count:
+        raise ArithmeticError("shallow-leaf witness lost private-pair necessity")
+    return task
+
+
+def two_shallow_leaf_expected_value_witness(
+    rare_depth: int,
+    max_arity: int = 2,
+) -> FiniteTask:
+    """Construct depth-1 and depth-2 pure leaves plus a rare deep subtree.
+
+    The root child 0 is a one-query leaf. Root child 1 is an internal node
+    whose child 0 is a two-query leaf and whose child 1 contains a full
+    max_arity-ary subtree of height rare_depth. The private-pair target
+    construction makes all internal queries fixed-mandatory.
+
+    This family witnesses the conditional one-step-mass bound in RF6.
+    """
+    if type(rare_depth) is not int or rare_depth < 1:
+        raise ValueError("rare_depth must be a positive integer")
+    if type(max_arity) is not int or max_arity < 2:
+        raise ValueError("max_arity must be an integer at least 2")
+
+    def full(depth: int) -> BoundedArityTree:
+        if depth == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            tuple(full(depth - 1) for _ in range(max_arity))
+        )
+
+    second = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            full(rare_depth),
+        )
+    )
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            second,
+        )
+    )
+    world_count = _leaf_count(tree)
+    query_count = _internal_count(tree)
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != query_count:
+        raise ArithmeticError("two-shallow-leaf witness lost private-pair necessity")
+    return task
+
+
+
+def ternary_target_balance_expected_witness(
+    rare_depth: int,
+) -> FiniteTask:
+    """A three-outcome root with pure targets 0/1 and a rare mixed branch.
+
+    The first two root outcomes are single-leaf pure targets of opposite type;
+    a third root outcome enters a complete binary rare-state subtree.
+    Every internal query has its own opposite-target private pair, so the
+    fixed resolver acquires exactly 2**rare_depth query resources.
+
+    The two common target types can each finish in one query, while positive
+    low-probability rare worlds from both targets preserve fixed necessity.
+    """
+    if type(rare_depth) is not int or rare_depth < 1:
+        raise ValueError("rare_depth must be a positive integer")
+
+    def binary_subtree(depth: int) -> BoundedArityTree:
+        if depth == 0:
+            return BoundedArityTree()
+        return BoundedArityTree((
+            binary_subtree(depth - 1),
+            binary_subtree(depth - 1),
+        ))
+
+    tree = BoundedArityTree((
+        BoundedArityTree(),
+        BoundedArityTree(),
+        binary_subtree(rare_depth),
+    ))
+    world_count = _leaf_count(tree)
+    query_count = _internal_count(tree)
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != query_count:
+        raise ArithmeticError("target-balance witness lost fixed mandatory queries")
+    if task.worlds[0].target == task.worlds[1].target:
+        raise ArithmeticError("one-step root outcomes must represent both targets")
+    if len({w.target for w in task.worlds[2:]}) != 2:
+        raise ArithmeticError("rare subtree must contain both target classes")
+    if len(set(task.queries[0].outcomes)) != 3:
+        raise ArithmeticError("root did not produce exactly three outcomes")
+    if any(len(set(q.outcomes)) > 3 for q in task.queries):
+        raise ArithmeticError("witness exceeded ternary cue arity")
+    return task
+
+
+def finite_expected_ceiling_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Binary witness for the exact finite-scope expected-value ceiling.
+
+    Let M=min(query_count, world_count-1). For M>=2, construct a binary tree
+    with exactly M internal nodes and one target-pure leaf directly below the
+    root. Private-pair targets make all M internal queries fixed-mandatory.
+    Extra worlds are exact duplicates and extra declared queries are constants.
+
+    The distinguished first leaf is therefore resolvable after one query,
+    while C_F=M. This witnesses the supremum U(1)-U(M) as its encounter
+    probability tends to one.
+    """
+    if type(world_count) is not int or world_count < 2:
+        raise ValueError("world_count must be an integer at least 2")
+    if type(query_count) is not int or query_count < 1:
+        raise ValueError("query_count must be a positive integer")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+
+    internal_target = min(query_count, world_count - 1)
+    if internal_target < 2:
+        raise ValueError("strict expected adaptive advantage requires at least two fixed queries")
+
+    def chain(internal_count: int) -> BoundedArityTree:
+        if internal_count == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            (
+                BoundedArityTree(),
+                chain(internal_count - 1),
+            )
+        )
+
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            chain(internal_target - 1),
+        )
+    )
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("finite expected ceiling witness lost fixed necessity")
+    return task
+
+
+def finite_expected_one_step_mass_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Binary witness with one depth-1 leaf, one depth-2 leaf, and rare tail."""
+    if type(world_count) is not int or world_count < 3:
+        raise ValueError("world_count must be an integer at least 3")
+    if type(query_count) is not int or query_count < 2:
+        raise ValueError("query_count must be an integer at least 2")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness is limited by the exact solver's 20-query cap")
+
+    internal_target = min(query_count, world_count - 1)
+
+    def chain(internal_count: int) -> BoundedArityTree:
+        if internal_count == 0:
+            return BoundedArityTree()
+        return BoundedArityTree(
+            (
+                BoundedArityTree(),
+                chain(internal_count - 1),
+            )
+        )
+
+    second = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            chain(internal_target - 2),
+        )
+    )
+    tree = BoundedArityTree(
+        (
+            BoundedArityTree(),
+            second,
+        )
+    )
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != internal_target:
+        raise ArithmeticError("finite one-step-mass witness lost fixed necessity")
+    return task
+
+def finite_target_prevalence_ternary_witness(
+    world_count: int,
+    query_count: int,
+) -> FiniteTask:
+    """Ternary root with two opposite-target pure leaves and rare binary chain.
+
+    Exact fixed cost is M3=min(query_count,world_count-2).
+    Supports strictly positive, freely chosen world probabilities with any
+    target prevalence in (0,1), including exactly balanced target prevalence.
+    """
+    if type(world_count) is not int or world_count < 4:
+        raise ValueError("world_count must be at least 4")
+    if type(query_count) is not int or query_count < 2:
+        raise ValueError("query_count must be at least 2")
+    if query_count > 20:
+        raise ValueError("FiniteTask witness exceeds exact solver query cap")
+    fixed_target = min(query_count, world_count - 2)
+    if fixed_target < 2:
+        raise ValueError("ternary mixed-root witness needs two queries")
+
+    def chain(internals: int) -> BoundedArityTree:
+        if internals == 0:
+            return BoundedArityTree()
+        return BoundedArityTree((
+            BoundedArityTree(),
+            chain(internals - 1),
+        ))
+
+    tree = BoundedArityTree((
+        BoundedArityTree(),
+        BoundedArityTree(),
+        chain(fixed_target - 1),
+    ))
+    task, private_count = _tree_task(tree, world_count, query_count)
+    if private_count != fixed_target:
+        raise ArithmeticError("lost mandatory query certificates")
+    if task.worlds[0].target == task.worlds[1].target:
+        raise ArithmeticError("root pure leaves must have opposite targets")
+    if len({w.target for w in task.worlds[2:]}) != 2:
+        raise ArithmeticError("rare branch must retain both targets")
+    if len(set(task.queries[0].outcomes)) != 3:
+        raise ArithmeticError("root query must be ternary")
+    if any(len(set(q.outcomes)) > 3 for q in task.queries):
+        raise ArithmeticError("query arity above three")
+    return task
 
 
 def sharp_bounded_arity_unit_cost_witness(

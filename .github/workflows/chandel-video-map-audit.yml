@@ -1,0 +1,29 @@
+name: chandel-video-map-audit
+
+on:
+  push:
+    branches:
+      - theory/opportunity-fitness-process-v1
+    paths:
+      - scripts/audit_chandel_video_mapping.py
+      - .github/workflows/chandel-video-map-audit.yml
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install requests beautifulsoup4 openpyxl remotezip
+      - name: Audit video mapping
+        run: python scripts/audit_chandel_video_mapping.py
+      - name: Upload audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: chandel-video-map-audit
+          path: chandel_video_map_audit
+          if-no-files-found: error

@@ -1,0 +1,118 @@
+{
+  "status": "DESCRIPTIVE_AGGREGATE_TIMECOURSE_ONLY",
+  "source": {
+    "paper": "Chandel et al. 2024 Nature 633:615-623",
+    "doi": "10.1038/s41586-024-07848-5",
+    "source_data_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-024-07848-5/MediaObjects/41586_2024_7848_MOESM6_ESM.xlsx",
+    "workbook_sha256": "75b2f22b1b5c83f1cf5f855a9f682de5965300d7db46db5c221cc5dcc4d880c5",
+    "sheet": "Figure 3a",
+    "frame_rate_hz": 10,
+    "frame_count": 3000,
+    "duration_s": 300,
+    "published_replication": "mean IHSI across 18 trials (6 biological x 3 technical replicates)",
+    "pulse_schedule_s": {
+      "pre_first_pulse": [
+        0,
+        60
+      ],
+      "first_co2_pulse": [
+        60,
+        90
+      ],
+      "post_first_pulse": [
+        90,
+        180
+      ],
+      "second_co2_pulse": [
+        180,
+        210
+      ],
+      "post_second_pulse": [
+        210,
+        300
+      ]
+    },
+    "pulse_schedule_provenance": "Craig-Montell-Lab/Chandel_DeBeaubien_2023 Arduino_CO2_Release/PushbottonCO2_LongPulse.ino; exact 60 off / 30 on / 90 off / 30 on / 90 off schedule matching the published two-30-s-pulse design."
+  },
+  "epoch_means": {
+    "pre_first_pulse": {
+      "no_ir": 7.42,
+      "ir": 10.511666666666667,
+      "ir_minus_no_ir": 3.091666666666667,
+      "ir_to_no_ir_ratio": 1.4166666666666667
+    },
+    "first_co2_pulse": {
+      "no_ir": 25.47,
+      "ir": 32.51,
+      "ir_minus_no_ir": 7.04,
+      "ir_to_no_ir_ratio": 1.276403612092658
+    },
+    "post_first_pulse": {
+      "no_ir": 24.337777777777777,
+      "ir": 52.06111111111111,
+      "ir_minus_no_ir": 27.723333333333333,
+      "ir_to_no_ir_ratio": 2.1391070124178233
+    },
+    "second_co2_pulse": {
+      "no_ir": 33.62,
+      "ir": 59.873333333333335,
+      "ir_minus_no_ir": 26.253333333333337,
+      "ir_to_no_ir_ratio": 1.7808843942097958
+    },
+    "post_second_pulse": {
+      "no_ir": 32.45444444444445,
+      "ir": 88.52777777777777,
+      "ir_minus_no_ir": 56.07333333333332,
+      "ir_to_no_ir_ratio": 2.7277551439624768
+    }
+  },
+  "five_second_smoothed_postpulse_peaks": {
+    "post_first_pulse": {
+      "no_ir": {
+        "peak_mean": 46.6,
+        "peak_time_s": 96.6,
+        "seconds_after_pulse_end": 6.6
+      },
+      "ir": {
+        "peak_mean": 65.94,
+        "peak_time_s": 111,
+        "seconds_after_pulse_end": 21
+      }
+    },
+    "post_second_pulse": {
+      "no_ir": {
+        "peak_mean": 59.68,
+        "peak_time_s": 215.3,
+        "seconds_after_pulse_end": 5.3
+      },
+      "ir": {
+        "peak_mean": 109.42,
+        "peak_time_s": 243.8,
+        "seconds_after_pulse_end": 33.8
+      }
+    }
+  },
+  "contrasts": {
+    "post_to_during_mean_ratio_first": {
+      "no_ir": 0.9555468306940628,
+      "ir": 1.6013876072319628
+    },
+    "post_to_during_mean_ratio_second": {
+      "no_ir": 0.9653314825831187,
+      "ir": 1.478584418958542
+    },
+    "second_to_first_post_mean_ratio": {
+      "no_ir": 1.33350073046019,
+      "ir": 1.7004588624479777
+    },
+    "second_to_first_pulse_mean_ratio": {
+      "no_ir": 1.3199842952493128,
+      "ir": 1.841689736491336
+    }
+  },
+  "interpretation": {
+    "primary": "The +IR effect is amplified after CO2 cessation: post-pulse mean IHSI remains at or above pulse values in the IR zone, while the no-IR zone returns to roughly its pulse mean. The second +IR response is also larger and more persistent than the first.",
+    "process_relevance": "This public aggregate timecourse supports treating ecological cue effects as full temporal performance profiles rather than scalar mean decision speed. It is not an individual completion-time CDF.",
+    "claim_ceiling": "No individual latency, trial-level uncertainty, fitness, routing architecture, or adaptive-versus-fixed comparator can be identified from Figure 3a source data alone."
+  }
+}
