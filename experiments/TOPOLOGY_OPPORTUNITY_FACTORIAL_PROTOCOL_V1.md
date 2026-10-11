@@ -17,31 +17,31 @@ Changing only (3) is **not** decision-structural turnover. Network rewiring or t
 
 ## Exact matched topology witness
 
-Five states have the same targets \`(0,1,1,0,0)\`. Three binary unit-cost queries are available in both cases, and all states are presented equally often for the primary contrast.
+Five states have the same targets `(0,1,1,0,0)`. Three binary unit-cost queries are available in both cases, and all states are presented equally often for the primary contrast.
 
 Topology A — routeable:
 
-\`\`\`text
+```text
        w0 w1 w2 w3 w4
 root    0  0  1  1  0
 left    0  1  0  0  0
 right   0  0  0  1  0
-\`\`\`
+```
 
 Topology B — sequential:
 
-\`\`\`text
+```text
          w0 w1 w2 w3 w4
 first     1  0  0  0  0
 second    0  0  0  1  0
 third     1  1  1  1  0
-\`\`\`
+```
 
-Every query in both systems has a private opposite-target pair requiring it in the fixed universal bundle. Hence both have \`C_F=3\`. In A, an adaptive route resolves every state in two queries, \`C_A=2\`. In B, the guarantee remains \`C_A=3\`.
+Every query in both systems has a private opposite-target pair requiring it in the fixed universal bundle. Hence both have `C_F=3`. In A, an adaptive route resolves every state in two queries, `C_A=2`. In B, the guarantee remains `C_A=3`.
 
 ### Exact outcomes, not empirical effect sizes
 
-Let \`M_z(B)\` be the **optimal encounter-weighted mass of states with certain correct target identification** before budget \`B\`, when query choices can be conditioned on outcomes. Unresolved target-mixed branches score zero, even if a guess might be right. The fixed comparator purchases a universal resolving bundle; it may not stop after partly informative fixed queries.
+Let `M_z(B)` be the **optimal encounter-weighted mass of states with certain correct target identification** before budget `B`, when query choices can be conditioned on outcomes. Unresolved target-mixed branches score zero, even if a guess might be right. The fixed comparator purchases a universal resolving bundle; it may not stop after partly informative fixed queries.
 
 | Budget | Optimal adaptive A | Optimal adaptive B | Universal fixed A | Universal fixed B | D(B) |
 |---|---:|---:|---:|---:|---:|
@@ -49,13 +49,13 @@ Let \`M_z(B)\` be the **optimal encounter-weighted mass of states with certain c
 | 2 | 1.0 | 0.4 | 0 | 0 | 0.6 |
 | 3 | 1.0 | 1.0 | 1 | 1 | 0 |
 
-Here \`D(B)=(M_A(B)-F_A(B))-(M_B(B)-F_B(B))\`; the values are computed under equal world probabilities, error-free deterministic cues, unit time per query, and deadline-specific optimal policies. The guarantee-only analysis is distinct: at B=2 the A minimax controller guarantees all worlds, while B cannot.
+Here `D(B)=(M_A(B)-F_A(B))-(M_B(B)-F_B(B))`; the values are computed under equal world probabilities, error-free deterministic cues, unit time per query, and deadline-specific optimal policies. The guarantee-only analysis is distinct: at B=2 the A minimax controller guarantees all worlds, while B cannot.
 
 **Independent check:** a separate state-subset exhaustive enumerator (not importing the repository solver) gives the same 0.2/1.0/1.0 and 0.2/0.4/1.0 sequences.
 
 ## Encounter distribution sensitivity
 
-With prior \`p=(0.5,0.125,0.125,0.125,0.125)\`, while keeping both topologies and targets unchanged:
+With prior `p=(0.5,0.125,0.125,0.125,0.125)`, while keeping both topologies and targets unchanged:
 
 | Budget | Adaptive A | Adaptive B | A minus B |
 |---|---:|---:|---:|
@@ -86,14 +86,14 @@ Fit both intention-to-treat and compliant-policy analyses; do not promote the la
 
 ### Precommitted theory-facing contrasts
 
-- Capacity benchmark at balanced priors: \`D(1)=0, D(2)=0.6, D(3)=0\`. These are exact optimal-policy ceilings under the ideal deterministic model, **not mandatory empirical results**.
+- Capacity benchmark at balanced priors: `D(1)=0, D(2)=0.6, D(3)=0`. These are exact optimal-policy ceilings under the ideal deterministic model, **not mandatory empirical results**.
 - The interaction of topology and deadline on the certified-resolution endpoint is the key mechanistic contrast. A topology effect at B=2 but not at B=3 is compatible with the finite structure; absence at B=2 despite demonstrated cue mastery falsifies the claim that actors exploit the available conditional route in this preparation.
 - If correct actions differ while the certified-resolution endpoint and cue structure do not, do **not** interpret that as evidence of routeability; use guesses, payoffs, strategies, or errors as candidate explanations.
 - Preregister minimum meaningful observed effect, power, exclusion policy, clustering unit and familywise multiplicity before collecting confirmatory trials. The theoretical 0.6 is not a justified empirical effect-size assumption.
 
 ### Value-layer-only subexperiment
 
-Hold topology A and its state frequencies constant; independently change the hard deadline B between 1, 2 and 3 while keeping cue cost and target reward fixed. With a controller maintenance debit \`K=0.2\` and guaranteed-success payoff 1, the **guarantee-level** adaptive-minus-fixed net value at these budgets is \`(-0.2,+0.8,-0.2)\`. This uses a different, worst-case performance endpoint from the encounter-weighted masses above.
+Hold topology A and its state frequencies constant; independently change the hard deadline B between 1, 2 and 3 while keeping cue cost and target reward fixed. With a controller maintenance debit `K=0.2` and guaranteed-success payoff 1, the **guarantee-level** adaptive-minus-fixed net value at these budgets is `(-0.2,+0.8,-0.2)`. This uses a different, worst-case performance endpoint from the encounter-weighted masses above.
 
 The two reversals are an algebraic construct, not an observation of natural selection. An evolutionary test additionally needs realized reward and maintenance-cost measures, heritable alternative architectures, and their frequency or invasion dynamics; a one-session behavioral test alone cannot demonstrate evolutionary maintenance.
 
@@ -109,8 +109,8 @@ The two reversals are an algebraic construct, not an observation of natural sele
 
 ## Repository reproducibility
 
-- \`adaptive_gain/deadline_factorial.py\` computes the exact finite-budget certain-resolution envelope, with explicit validation and dynamic programming.
-- \`tests/test_deadline_factorial.py\` checks topology costs, deadline profiles, prior shift and input guards.
-- \`tests/test_ecological_topology_opportunity_separation.py\` separately checks that deadlines can reverse net value with fixed topology.
+- `adaptive_gain/deadline_factorial.py` computes the exact finite-budget certain-resolution envelope, with explicit validation and dynamic programming.
+- `tests/test_deadline_factorial.py` checks topology costs, deadline profiles, prior shift and input guards.
+- `tests/test_ecological_topology_opportunity_separation.py` separately checks that deadlines can reverse net value with fixed topology.
 
 No freeze/ manuscript, V6 theorem spine, or natural-network identification ledger is modified. Treat this as mechanism-design support, not an extra paper-level theorem.
