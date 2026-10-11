@@ -14,7 +14,21 @@ from adaptive_gain.deadline_factorial import (
     optimal_deadline_correct_choice_mass,
     optimal_timely_resolution_mass,
 )
-from test_deadline_factorial import task_for_topology, TARGETS, UNIFORM
+TARGETS = (0, 1, 1, 0, 0)
+UNIFORM = (0.2,) * 5
+
+
+def task_for_topology(name):
+    if name == "routeable":
+        vectors = ((0, 0, 1, 1, 0), (0, 1, 0, 0, 0), (0, 0, 0, 1, 0))
+    elif name == "sequential":
+        vectors = ((1, 0, 0, 0, 0), (0, 0, 0, 1, 0), (1, 1, 1, 1, 0))
+    else:
+        raise ValueError(name)
+    return FiniteTask(
+        tuple(World(f"world_{i}", target) for i, target in enumerate(TARGETS)),
+        tuple(Query(f"q_{j}", 1, vec) for j, vec in enumerate(vectors)),
+    )
 
 
 def exhaustive_policy_leaf_scores(task, prior, *, budget, guessing):
