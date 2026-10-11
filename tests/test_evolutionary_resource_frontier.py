@@ -939,3 +939,41 @@ def test_frequency_floor_bound_rejects_invalid_probability_floors():
         probability_floor_expected_advantage_upper_bound(
             6, 5, value, minimum_world_probability=-0.1
         )
+
+
+
+def test_arity_limited_no_go_includes_exact_cost_equality():
+    """Strict positive net value fails at equality, not only above ceiling.
+
+    The extremal b-ary construction ATTAINS the maximum margin. Therefore
+    at K=Kcrit its best possible net value equals zero; the inverse b_min
+    must skip that arity while accepting one with strictly higher margin.
+    """
+    mu = 0.3
+    binary, maximizing = exponential_arity_limited_cost_ceiling(
+        2, closure_rate=mu, resolution_value=1.0,
+    )
+    assert maximizing == (4,)
+    for h in range(2, 22):
+        fixed=(2**h-1)
+        value=math.exp(-mu*h)-math.exp(-mu*fixed)
+        assert value - binary <= 1e-12
+    assert (
+        math.exp(-mu*4)-math.exp(-mu*15)-binary
+    ) == pytest.approx(0, abs=1e-15)
+
+    # At equality binary gives zero net value, but ternary remains viable.
+    assert exponential_minimum_robust_cue_arity(
+        binary, closure_rate=mu, resolution_value=1
+    ) == 3
+    ternary, _ = exponential_arity_limited_cost_ceiling(
+        3, closure_rate=mu, resolution_value=1,
+    )
+    assert ternary > binary
+
+    global_ceiling=exponential_unrestricted_information_cost_ceiling(
+        closure_rate=mu, resolution_value=1,
+    )
+    assert exponential_minimum_robust_cue_arity(
+        global_ceiling, closure_rate=mu, resolution_value=1,
+    ) is None
