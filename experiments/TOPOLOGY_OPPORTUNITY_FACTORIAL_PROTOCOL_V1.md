@@ -51,7 +51,22 @@ Let `M_z(B)` be the **optimal encounter-weighted mass of states with certain cor
 
 Here `D(B)=(M_A(B)-F_A(B))-(M_B(B)-F_B(B))`; the values are computed under equal world probabilities, error-free deterministic cues, unit time per query, and deadline-specific optimal policies. The guarantee-only analysis is distinct: at B=2 the A minimax controller guarantees all worlds, while B cannot.
 
-**Independent check:** a separate state-subset exhaustive enumerator (not importing the repository solver) gives the same 0.2/1.0/1.0 and 0.2/0.4/1.0 sequences.
+### Critical endpoint distinction: an unobserved guess can be correct
+
+The preceding table counts only *certain* target resolution. A realistic actor can guess a target before the cue history uniquely identifies it. If any target guess is allowed and maximizes correctness under the known prior, the Bayes-optimal **correct-choice** probabilities under exactly the same balanced conditions are:
+
+| Budget | Guess-permitting choice A | Guess-permitting choice B |
+|---|---:|---:|
+| 0 | 0.6 | 0.6 |
+| 1 | 0.8 | 0.6 |
+| 2 | 1.0 | 0.8 |
+| 3 | 1.0 | 1.0 |
+
+In particular, the no-cue majority-target guess is already 0.6 accurate because three of the five states share target 0. A cue that does not completely resolve a branch can nevertheless improve expected classification. Hence **observed correct flower choice is not a valid direct estimator of certain resolution**. This is the main observation-versus-theorem ambiguity in this experiment.
+
+The two envelopes ask different biological questions: cue-history certification tests actual exploitation of a sufficient information route, whereas correct-choice accuracy tests behavior under imperfect information and includes guesses. No positive accuracy contrast alone identifies adaptive routeability.
+
+**Independent check:** a separate state-subset exhaustive enumerator (not importing the repository solver) gives the same 0.2/1.0/1.0 and 0.2/0.4/1.0 certain-resolution sequences, and 0.6/0.8/1.0/1.0 and 0.6/0.6/0.8/1.0 correct-choice sequences.
 
 ## Encounter distribution sensitivity
 
@@ -77,7 +92,7 @@ Present trial-by-trial target state in randomized balanced blocks; independently
 
 ### Primary and diagnostic endpoints
 
-1. **Primary behavioral endpoint:** probability of verified correct target action within deadline. Incorrect, absent, and timeout actions are separately reported.
+1. **Primary behavioral endpoint:** probability of verified correct target action within deadline. Incorrect, absent, and timeout actions are separately reported. Because correct guesses are possible, benchmark this against the guess-permitting Bayes-optimal rather than the certified-resolution envelope.
 2. **Mechanistic diagnostic endpoint:** probability of *certified certain resolution* based on the observed cue history, with an unresolved-mixed branch assigned zero. This matches the theorem but is not equivalent to biological success; a participant may guess correctly without certainty.
 3. **Process endpoints:** chosen cue order, conditional change in query choice after each outcome, total queries, elapsed time and reaction latency.
 4. **Error/detection diagnostics:** cue-recognition accuracy, unobserved/missed actions, dropout, observer agreement, and state-specific detection probability.
@@ -107,10 +122,21 @@ The two reversals are an algebraic construct, not an observation of natural sele
 6. If deadlines change encounter probabilities or prey/flower behavior, report the joint intervention rather than assigning the effect to opportunity alone.
 7. If state-specific detection is unidentified, do not assert a latent ecological-rewiring mechanism from apparent gain/loss.
 
+## Experimental prior art and novelty boundary
+
+Artificial-flower learning, multimodal discrimination and cue-based decision strategy changes are **not new by themselves**:
+
+- Spaethe et al. (2026), *Science Advances*, DOI: [10.1126/sciadv.adw9320](https://doi.org/10.1126/sciadv.adw9320), experimentally examined flexible decision strategies as cue information content and perceptual discriminability varied.
+- Lawson et al. (2018), *Proceedings of the Royal Society B*, DOI: [10.1098/rspb.2018.0661](https://doi.org/10.1098/rspb.2018.0661), showed learning of floral scent patterns and cross-modal transfer to corresponding visual patterns.
+- *The value of information in floral cues: bumblebee learning of floral size cues* (2015), *Behavioral Ecology*, DOI: [10.1093/beheco/arv061](https://doi.org/10.1093/beheco/arv061), showed learned cue informativeness need not produce a preference for the informative flower type.
+
+The distinctive proposed empirical contrast is **not** that animals use multiple cues, learn flexible strategies, or save time. It is a preregistered crossed intervention on **target-conditioned cue partitions versus opportunity budget**, with identical world/target marginals and separate certain-resolution, guess-permitting accuracy, and observed-activity estimands. Priority for this particular experimental design remains to be audited; this protocol does not assert novelty by absence of a found antecedent.
+
 ## Repository reproducibility
 
-- `adaptive_gain/deadline_factorial.py` computes the exact finite-budget certain-resolution envelope, with explicit validation and dynamic programming.
+- `adaptive_gain/deadline_factorial.py` computes both the exact finite-budget certain-resolution envelope and the distinct Bayes-optimal guess-permitting correct-choice envelope, with input validation and dynamic programming.
 - `tests/test_deadline_factorial.py` checks topology costs, deadline profiles, prior shift and input guards.
+- `tests/test_deadline_factorial_oracle.py` independently enumerates all finite policy trees and terminal actions to verify both endpoint envelopes.
 - `tests/test_ecological_topology_opportunity_separation.py` separately checks that deadlines can reverse net value with fixed topology.
 
 No freeze/ manuscript, V6 theorem spine, or natural-network identification ledger is modified. Treat this as mechanism-design support, not an extra paper-level theorem.
