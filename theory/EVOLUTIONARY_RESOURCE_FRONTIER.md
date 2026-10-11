@@ -715,7 +715,7 @@ Therefore
 
 \[
 \boxed{
-K>K_{\rm crit,robust}^{(b)}
+K\ge K_{\rm crit,robust}^{(b)}
 \Longrightarrow
 \text{no finite task with arity }\le b\text{ can guarantee positive net adaptive value in every world.}
 }
@@ -724,7 +724,7 @@ K>K_{\rm crit,robust}^{(b)}
 This **robust no-go** is independent of world count and query count.
 
 Adding more ecological states or more sensor resources cannot overcome a
-control cost above the arity-limited ceiling if positive value is required in
+control cost at or above the arity-limited ceiling if positive value is required in
 every represented world. It does not exclude positive expected value under a
 specific nonuniform encounter distribution.
 
