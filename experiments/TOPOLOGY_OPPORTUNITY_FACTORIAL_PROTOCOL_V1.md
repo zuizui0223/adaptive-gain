@@ -78,7 +78,15 @@ With prior `p=(0.5,0.125,0.125,0.125,0.125)`, while keeping both topologies and 
 | 2 | 1.0 | 0.625 | 0.375 |
 | 3 | 1.0 | 1.0 | 0 |
 
-Thus the direction of a short-deadline contrast can reverse with encounter frequencies alone. Balanced experimental assignment identifies the structural capacity contrast; natural encounter frequencies must be measured before extrapolation to expected selection.
+Thus the direction of a short-deadline **certified-resolution** contrast can reverse with encounter frequencies alone. Balanced experimental assignment identifies the structural capacity contrast; natural encounter frequencies must be measured before extrapolation to expected selection.
+
+### New endpoint-ranking reversal at the same fixed prior
+
+With this same skew prior and one-query deadline, the **certified-resolution** criterion favors B over A: `0.50 > 0.125`. But the **guess-permitting correct-choice** criterion favors A over B: `0.875 > 0.75`.
+
+This is a strict reversal of the ranking of the two topologies **without changing states, target labels, probabilities, cue inventories or deadline**; only the scientific endpoint differs. Both results are attained by explicitly optimized contingent policies. Consequently, a high observed visit accuracy cannot be taken as evidence that an architecture certifies more states before the deadline, and routeability capacity cannot be promoted to a universal predictor of observed choice accuracy.
+
+The model's different policies are allowed to optimize different stated goals. If behavior is assessed with a *fixed, pre-trained policy* rather than a separately re-optimized policy for each endpoint, policy transport and transfer costs are additional empirical requirements.
 
 ## Proposed randomized 2 × 3 × 2 controlled experiment
 
