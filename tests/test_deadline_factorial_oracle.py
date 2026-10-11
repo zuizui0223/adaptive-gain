@@ -124,3 +124,21 @@ def test_costly_query_and_invalid_prior():
             optimal_deadline_correct_choice_mass(task, bad, budget=1)
     with pytest.raises(ValueError):
         optimal_deadline_correct_choice_mass(task, UNIFORM, budget=-1)
+
+
+def test_same_skew_prior_flips_topology_rank_between_certainty_and_guessing():
+    prior = (0.5, 0.125, 0.125, 0.125, 0.125)
+    easy = task_for_topology("routeable")
+    sequential = task_for_topology("sequential")
+    certified = (
+        optimal_timely_resolution_mass(easy, prior, budget=1),
+        optimal_timely_resolution_mass(sequential, prior, budget=1),
+    )
+    correct = (
+        optimal_deadline_correct_choice_mass(easy, prior, budget=1),
+        optimal_deadline_correct_choice_mass(sequential, prior, budget=1),
+    )
+    assert certified == pytest.approx((0.125, 0.5), abs=1e-12)
+    assert correct == pytest.approx((0.875, 0.75), abs=1e-12)
+    assert certified[0] < certified[1]  # B certifies more worlds in one cue.
+    assert correct[0] > correct[1]  # A is more accurate when guesses are allowed.
