@@ -125,3 +125,55 @@ def optimal_deadline_correct_choice_mass(
         return best
 
     return recurse((1 << n_worlds) - 1, (1 << len(task.queries)) - 1, budget)
+
+
+def optimal_nonadaptive_deadline_mass(
+    task: FiniteTask,
+    world_probabilities: Sequence[float],
+    *,
+    budget: int,
+    allow_guess: bool = False,
+) -> float:
+    """Best budget-limited PRECOMMITTED query subset with no conditional choice.
+
+    Unlike the all-or-nothing universal resolving bundle (cost C_F), this
+    comparator may use an incomplete fixed subset and report only its
+    identifiable states, or make the Bayesian best guess. It is the fair
+    deadline-matched nonadaptive policy class: no outcome-contingent
+    next-query selection, but no artificially forbidden early decisions.
+    """
+    from itertools import combinations
+
+    if type(budget) is not int or budget < 0:
+        raise ValueError("budget must be a nonnegative integer")
+    if type(allow_guess) is not bool:
+        raise ValueError("allow_guess must be boolean")
+    if len(world_probabilities) != len(task.worlds):
+        raise ValueError("one probability required per represented world")
+    weights = tuple(float(p) for p in world_probabilities)
+    if any(not math.isfinite(p) or p <= 0 for p in weights):
+        raise ValueError("world probabilities must be finite and strictly positive")
+    if not math.isclose(sum(weights), 1.0, rel_tol=0.0, abs_tol=1e-9):
+        raise ValueError("world probabilities must sum to one")
+
+    targets = tuple(w.target for w in task.worlds)
+    best = 0.0
+    for size in range(len(task.queries) + 1):
+        for subset in combinations(range(len(task.queries)), size):
+            if sum(task.queries[j].cost for j in subset) > budget:
+                continue
+            outcomes: dict[tuple[object, ...], list[int]] = {}
+            for i in range(len(task.worlds)):
+                signature = tuple(task.queries[j].outcomes[i] for j in subset)
+                outcomes.setdefault(signature, []).append(i)
+            score = 0.0
+            for group in outcomes.values():
+                if allow_guess:
+                    score += max(
+                        sum(weights[i] for i in group if targets[i] == target)
+                        for target in {targets[i] for i in group}
+                    )
+                elif len({targets[i] for i in group}) == 1:
+                    score += sum(weights[i] for i in group)
+            best = max(best, score)
+    return best
