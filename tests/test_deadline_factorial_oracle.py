@@ -198,3 +198,74 @@ def test_contingent_advantage_not_artifact_of_forcing_fixed_full_bundle():
     )
     assert cert_advantage == pytest.approx((0.4, 0.0), abs=1e-12)
     assert accuracy_advantage == pytest.approx((0.2, 0.0), abs=1e-12)
+
+
+@pytest.mark.parametrize("t", (0.21, 0.25, 1.0 / 3.0, 0.5, 0.75, 0.95))
+def test_strict_endpoint_rank_reversal_over_open_encounter_family(t):
+    # The one-cue ranking flip is an objective effect, not an adaptive-control
+    # effect: with only one cue, contingent and fixed-subset access coincide.
+    q = (1.0 - t) / 4.0
+    prior = (t, q, q, q, q)
+    a = task_for_topology("routeable")
+    b = task_for_topology("sequential")
+    certain_a = optimal_timely_resolution_mass(a, prior, budget=1)
+    certain_b = optimal_timely_resolution_mass(b, prior, budget=1)
+    guess_a = optimal_deadline_correct_choice_mass(a, prior, budget=1)
+    guess_b = optimal_deadline_correct_choice_mass(b, prior, budget=1)
+    assert certain_a == pytest.approx(q)
+    assert certain_b == pytest.approx(t)
+    assert guess_a == pytest.approx(t + 3*q)
+    assert guess_b == pytest.approx(t + 2*q)
+    assert certain_b - certain_a == pytest.approx((5*t-1)/4)
+    assert guess_a - guess_b == pytest.approx((1-t)/4)
+    assert certain_b > certain_a
+    assert guess_a > guess_b
+    for task in (a, b):
+        for guessing, adaptive in (
+            (False, optimal_timely_resolution_mass),
+            (True, optimal_deadline_correct_choice_mass),
+        ):
+            assert adaptive(task, prior, budget=1) == pytest.approx(
+                optimal_nonadaptive_deadline_mass(
+                    task, prior, budget=1, allow_guess=guessing
+                ),
+                abs=1e-12,
+            )
+
+
+@pytest.mark.parametrize("t", (0.21, 0.25, 1.0 / 3.0, 0.5, 0.75, 0.95))
+def test_true_two_query_adaptivity_premium_over_same_encounter_family(t):
+    q = (1-t)/4
+    prior = (t,q,q,q,q)
+    a=task_for_topology("routeable")
+    b=task_for_topology("sequential")
+    a_cert=optimal_timely_resolution_mass(a,prior,budget=2)
+    af_cert=optimal_nonadaptive_deadline_mass(a,prior,budget=2)
+    a_guess=optimal_deadline_correct_choice_mass(a,prior,budget=2)
+    af_guess=optimal_nonadaptive_deadline_mass(a,prior,budget=2,allow_guess=True)
+    b_cert=optimal_timely_resolution_mass(b,prior,budget=2)
+    bf_cert=optimal_nonadaptive_deadline_mass(b,prior,budget=2)
+    b_guess=optimal_deadline_correct_choice_mass(b,prior,budget=2)
+    bf_guess=optimal_nonadaptive_deadline_mass(b,prior,budget=2,allow_guess=True)
+    assert a_cert==pytest.approx(1)
+    assert af_cert==pytest.approx(t+2*q)
+    assert a_cert-af_cert==pytest.approx(2*q)
+    assert a_guess==pytest.approx(1)
+    assert af_guess==pytest.approx(t+3*q)
+    assert a_guess-af_guess==pytest.approx(q)
+    assert b_cert==pytest.approx(bf_cert)
+    assert b_guess==pytest.approx(bf_guess)
+
+
+def test_maximin_prior_within_declared_one_parameter_family():
+    # For 1/5<t<1, the two strict reversal margins are t-q and q.
+    # Their minimum is maximized where t-q=q => t=1/3.
+    t=1/3
+    q=(1-t)/4
+    gap_cert=t-q
+    gap_guess=q
+    assert gap_cert==pytest.approx(1/6)
+    assert gap_guess==pytest.approx(1/6)
+    for other_t in (0.21,0.25,0.3,0.4,0.5,0.7,0.9):
+        other_q=(1-other_t)/4
+        assert min(other_t-other_q,other_q)<min(gap_cert,gap_guess)
