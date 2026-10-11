@@ -109,6 +109,31 @@ This is a strict reversal of the ranking of the two topologies **without changin
 
 The model's different policies are allowed to optimize different stated goals. If behavior is assessed with a *fixed, pre-trained policy* rather than a separately re-optimized policy for each endpoint, policy transport and transfer costs are additional empirical requirements.
 
+### Analytic encounter-frequency family: an open interval of endpoint reversal
+
+The example is not isolated to the single skew prior. Define
+`p(t)=(t,q,q,q,q)`, where `q=(1-t)/4`, and retain the same two topology matrices and the same unit-cost deadline `B=1`. For every `1/5<t<1`, exact optimization gives:
+
+| One-query endpoint | Topology A | Topology B | Signed advantage |
+|---|---:|---:|---:|
+| Certain identification | `q` | `t` | B minus A = `t-q=(5t-1)/4 >0` |
+| Correct choice, allowing guesses | `t+3q` | `t+2q` | A minus B = `q=(1-t)/4 >0` |
+
+Both rankings are **strict and opposed throughout an open set** of encounter frequencies (an interval within the declared one-parameter family). This does not establish an open ball throughout the four-dimensional probability simplex; continuity would give local robustness around interior strict witnesses, but that extension is not a separate asserted theorem.
+
+**Essential causal boundary:** with only one possible query, adaptive and nonadaptive choice of *which query to acquire* are identical. The one-query endpoint reversal concerns **what counts as success**, not the gain from contingent cue routing. It is therefore an observation/estimand warning, not direct evidence for conditional information acquisition.
+
+At budget `B=2`, the **genuine adaptivity premium** against the budget-matched precommitted partial-subset policy has an exact family-wide form:
+
+| Two-query adaptivity premium | Topology A | Topology B |
+|---|---:|---:|
+| Certain identification | `2q=(1-t)/2` | `0` |
+| Guess-permitting correct choice | `q=(1-t)/4` | `0` |
+
+This establishes a clean division: the one-query comparison demonstrates endpoint non-equivalence, while the two-query comparison isolates an actual advantage of conditioning the second cue on the first outcome.
+
+Within this *restricted prior family*, the balanced two-endpoint reversal margin `min(t-q,q)` is maximized exactly at `t=1/3`, `q=1/6`; each margin is `1/6`. This is an analytically convenient design alternative to `t=1/2`, **not** a power-optimal design over all possible priors, observer error, and policy-learning effects. It does not maximize the two-query adaptivity premium, which decreases as t increases.
+
 ## Proposed randomized 2 × 3 × 2 controlled experiment
 
 Cross topology A/B, deadline 1/2/3 cue-acquisitions, and strategy availability:
