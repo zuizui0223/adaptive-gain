@@ -106,8 +106,9 @@ At adaptive depth (h), define
 \[
 J_K(h)
 =
-\min\{j\ge h:U(h)-U(j)>K\}.
+\min\{j\ge h:U(h)-U(j)>K\},
 \]
+where \(J_K(h)=\infty\) if this set is empty.
 
 Positive robust value at that depth is possible exactly when
 
@@ -135,7 +136,7 @@ K_{\rm crit,robust}^{(b)}
 }
 \]
 
-If (K>K_{\rm crit,robust}^{(b)}), then no finite task with query arity at most
+If \(K\ge K_{\rm crit,robust}^{(b)}\), then no finite task with query arity at most
 (b) can guarantee positive net adaptive value in every represented state.
 Adding more worlds or more query resources cannot rescue it.
 
@@ -148,6 +149,8 @@ b_{min}^{\rm robust}
 \min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\}.
 }
 \]
+Set \(b_{\min}^{\rm robust}=\infty\) if this set is empty;
+strict equality at the cost ceiling cannot repay the controller.
 
 For (U(c)=e^{-0.3c}) and (K=0.30),
 
