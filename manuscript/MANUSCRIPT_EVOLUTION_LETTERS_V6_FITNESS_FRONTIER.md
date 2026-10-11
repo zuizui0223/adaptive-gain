@@ -652,9 +652,13 @@ present contribution, not claims of novelty. In particular, the fixed resolver
 is closely related to a test collection: V6's mathematical claim is the exact
 joint frontier with contingent worst-case depth under simultaneous finite
 world, query and query-arity constraints, not the fixed test-set problem by
-itself. The earlier query-set/tree combination does not, by itself, assert
-our sharp all-depth joint extremum; nevertheless it sharply restricts
-claims that coupling fixed tests with sequential decision trees is new.
+itself. Wieczorek et al. (2021) first select a minimum query set by
+integer linear programming, then optimize its ordering into a decision tree
+with a genetic algorithm. That existing construction is distinct from
+proving a simultaneously sharp upper and lower joint \((C_A,C_F)\)
+extremum at **every** feasible depth under fixed \((n,m,b)\). Conversely,
+our frontier does not claim to invent the coupling of fixed tests with
+sequential decision trees or to improve that paper's empirical classifier.
 
 The proposed MAIN contribution is restricted to three results:
 
