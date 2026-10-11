@@ -324,8 +324,9 @@ At adaptive depth \(h\), define
 \[
 J_K(h)
 =
-\min\{j\ge h:U(h)-U(j)>K\}.
+\min\{j\ge h:U(h)-U(j)>K\},
 \]
+with \(J_K(h)=\infty\) when the defining set is empty.
 Then positive robust architecture value at depth \(h\) is possible exactly when
 \[
 I_h\ge J_K(h).
@@ -363,7 +364,7 @@ K_{\rm crit,robust}^{(b)}
 
 If
 \[
-K>K_{\rm crit,robust}^{(b)},
+K\ge K_{\rm crit,robust}^{(b)},
 \]
 no finite task with cue arity at most \(b\) can guarantee positive net
 contingent value in every represented world. More environmental states and
@@ -373,8 +374,11 @@ This gives an exact minimum robust cue arity
 \[
 b_{min}^{\rm robust}
 =
-\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\}.
+\min\{b\ge2:K<K_{\rm crit,robust}^{(b)}\},
 \]
+using \(b_{\min}^{\rm robust}=\infty\) if no finite cue arity
+repays the cost strictly. Equality at the robust-cost ceiling yields zero,
+not positive, net value.
 
 For
 \[
