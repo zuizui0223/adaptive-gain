@@ -324,3 +324,21 @@ def test_v6_manuscript_and_figure_legend_source_are_synchronized():
     for i in range(1,4):
         assert embedded.count(f"## Figure {i}.") == 1
     assert embedded.count("**Alt text:**") == 3
+
+
+
+def test_v6_strict_cost_no_go_closes_at_equality_and_empty_sets():
+    """A positive net advantage uses >, so equality is a no-go.
+
+    Manuscript, canonical theorem spine, and full proof must agree.
+    Undefined minimum sets are represented by infinity rather than
+    silently implying that some architecture always exists.
+    """
+    proof = _text(ROOT / "theory" / "EVOLUTIONARY_RESOURCE_FRONTIER.md")
+    for source in (_text(MAIN),_text(SPINE),proof):
+        assert r"K\ge K_{\rm crit,robust}^{(b)}" in source
+        assert r"K>K_{\rm crit,robust}^{(b)}" not in source
+    for source in (_text(MAIN),_text(SPINE)):
+        assert r"J_K(h)=\infty" in source
+        assert r"b_{\min}^{\rm robust}=\infty" in source
+    assert "Equality at the robust-cost ceiling yields zero" in _text(MAIN)
