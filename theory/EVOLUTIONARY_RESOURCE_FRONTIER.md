@@ -711,6 +711,15 @@ U(h)-U(J_b(h))
 Depth \(h=1\) is excluded because strict adaptive advantage is impossible when
 one query already resolves the target: the same query is a fixed resolver.
 
+The maximum is well defined, not merely a supremum: monotonicity and the
+lower bound imply \(U(c)\to U_\infty\) as \(c\to\infty\). Since
+\(h\to\infty\) and \(J_b(h)\to\infty\), the nonnegative differences
+\(U(h)-U(J_b(h))\to0\). If any difference is positive, a positive
+maximum occurs among finitely many early depths; otherwise the maximum is
+zero. For any task the gain is at most this maximum. Because viability
+requires a **strict** improvement \(U(C_A)-U(C_F)>K\), equality
+\(K=K_{\rm crit,robust}^{(b)}\) cannot yield a positive net gain.
+
 Therefore
 
 \[
