@@ -51,6 +51,27 @@ Let `M_z(B)` be the **optimal encounter-weighted mass of states with certain cor
 
 Here `D(B)=(M_A(B)-F_A(B))-(M_B(B)-F_B(B))`; the values are computed under equal world probabilities, error-free deterministic cues, unit time per query, and deadline-specific optimal policies. The guarantee-only analysis is distinct: at B=2 the A minimax controller guarantees all worlds, while B cannot.
 
+### A fairer ecological nonadaptive comparator
+
+The theoretical `C_F=3` requires a **universally resolving** precommitted bundle. A real organism need not wait for that bundle to finish: it may use a shorter outcome-independent fixed subset and then make a decision, or simply report no certain identification. Denying the nonadaptive organism the ability to use incomplete information would artificially magnify adaptivity.
+
+Use a separate *budget-matched nonadaptive* policy class: select the cue subset before seeing any outcomes, subject to the same total acquisition budget; after the fixed cues are acquired, use the joint observed outcomes either to certify a target or to make the Bayesian best guess. Only the **choice of which cues to acquire** is prohibited from depending on preceding outcomes.
+
+Its exact balanced-prior envelope is:
+
+| Budget | Nonadaptive certified A | Nonadaptive certified B | Nonadaptive best-guess A | Nonadaptive best-guess B |
+|---|---:|---:|---:|---:|
+| 0 | 0 | 0 | 0.6 | 0.6 |
+| 1 | 0.2 | 0.2 | 0.8 | 0.6 |
+| 2 | 0.6 | 0.4 | 0.8 | 0.8 |
+| 3 | 1.0 | 1.0 | 1.0 | 1.0 |
+
+Against this **fair nonadaptive baseline**, the true added value of conditional cue choice at budget 2 is:
+- certified resolution: **0.4 in topology A**, **0 in topology B**;
+- guess-permitting correct choice: **0.2 in topology A**, **0 in topology B**.
+
+At budgets 1 and 3, both adaptive-minus-nonadaptive advantages are zero in these matched examples. Consequently, the discriminating deadline is still B=2, but the honest adaptivity gap is smaller than the initial universal-bundle contrast. Report both estimands; the universal-bundle cost and the fair partial-subset decision performance must never be labeled as the same `fixed` comparator.
+
 ### Critical endpoint distinction: an unobserved guess can be correct
 
 The preceding table counts only *certain* target resolution. A realistic actor can guess a target before the cue history uniquely identifies it. If any target guess is allowed and maximizes correctness under the known prior, the Bayes-optimal **correct-choice** probabilities under exactly the same balanced conditions are:
@@ -92,7 +113,9 @@ The model's different policies are allowed to optimize different stated goals. I
 
 Cross topology A/B, deadline 1/2/3 cue-acquisitions, and strategy availability:
 - **Contingent:** participant may choose the next cue based on earlier cue outcomes;
-- **Universal fixed:** an outcome-independent precommitted set of queries must resolve all five possible targets, and the fixed-bundle cost counts in full. No retrospective branch shortcuts.
+- **Nonadaptive partial:** participant precommits a subset and/or acquisition order before seeing outcomes, may make a guess within the same deadline, but may not choose the next cue conditionally.
+
+The **universal fixed bundle** is a separate, deliberately stricter theoretical comparator used to audit the worst-case `C_F` requirement, not the causal comparison arm for observed accuracy. If a fixed subset is presented as an experimental control, it must be precommitted before the trial and the analysis must verify the selected cues do not change after observing outcomes.
 
 The participant may be a human pilot, trained animal, or a physical/artificial agent. Use a human or simulator pilot first to confirm trial implementation and payoffs. Only move to a pollinator/consumer preparation if separate training can establish the target labels and cue discriminability. These abstract bit patterns are **not** asserted to be biologically natural flower signals.
 
@@ -109,7 +132,8 @@ Fit both intention-to-treat and compliant-policy analyses; do not promote the la
 
 ### Precommitted theory-facing contrasts
 
-- Capacity benchmark at balanced priors: `D(1)=0, D(2)=0.6, D(3)=0`. These are exact optimal-policy ceilings under the ideal deterministic model, **not mandatory empirical results**.
+- **Universal-bundle structural benchmark** at balanced priors: `D(1)=0, D(2)=0.6, D(3)=0`. This is a distinct idealized comparator, not the preferred ecological accuracy control.
+- **Primary fair-policy benchmark** at balanced priors: adaptive minus budget-matched precommitted-partial advantage at deadline 2 equals 0.4 (A) versus 0 (B) for certified resolution, and 0.2 (A) versus 0 (B) for guess-permitting correct choice. Both contrasts vanish at deadlines 1 and 3. These are deterministic optimal-policy ceilings, **not mandatory empirical effects**.
 - The interaction of topology and deadline on the certified-resolution endpoint is the key mechanistic contrast. A topology effect at B=2 but not at B=3 is compatible with the finite structure; absence at B=2 despite demonstrated cue mastery falsifies the claim that actors exploit the available conditional route in this preparation.
 - If correct actions differ while the certified-resolution endpoint and cue structure do not, do **not** interpret that as evidence of routeability; use guesses, payoffs, strategies, or errors as candidate explanations.
 - Preregister minimum meaningful observed effect, power, exclusion policy, clustering unit and familywise multiplicity before collecting confirmatory trials. The theoretical 0.6 is not a justified empirical effect-size assumption.
@@ -125,7 +149,7 @@ The two reversals are an algebraic construct, not an observation of natural sele
 1. Set target, cue partitions, deadlines and data-quality standards before trial outcomes; do not infer topology from observed successful choices.
 2. Verify cue perception/accuracy in independent calibration trials. Probabilistic cue errors require a stochastic model; they are not an established deterministic topology change.
 3. Distinguish exact simulator success (expected) from behavioral success (unknown), and certify no apparent interaction outcome is simply a detection-effort contrast.
-4. If the fixed comparator can adapt order and stop early, it is no longer the registered universal fixed bundle. Report such a comparator under a different estimand.
+4. A nonadaptive *precommitted partial* cue subset is distinct from the universal fixed resolving bundle, even if it permits early decisions or guessing. Outcome-contingent choice of the next cue is adaptive and invalidates that nonadaptive comparator.
 5. If a topology intervention changes cue salience, access cost or reward simultaneously, the structural causal claim is not identified.
 6. If deadlines change encounter probabilities or prey/flower behavior, report the joint intervention rather than assigning the effect to opportunity alone.
 7. If state-specific detection is unidentified, do not assert a latent ecological-rewiring mechanism from apparent gain/loss.
@@ -142,7 +166,7 @@ The distinctive proposed empirical contrast is **not** that animals use multiple
 
 ## Repository reproducibility
 
-- `adaptive_gain/deadline_factorial.py` computes both the exact finite-budget certain-resolution envelope and the distinct Bayes-optimal guess-permitting correct-choice envelope, with input validation and dynamic programming.
+- `adaptive_gain/deadline_factorial.py` computes exact contingent certain-resolution and guess-permitting correct-choice envelopes, plus budget-matched nonadaptive partial-query subset envelopes; the three comparator semantics are declared explicitly.
 - `tests/test_deadline_factorial.py` checks topology costs, deadline profiles, prior shift and input guards.
 - `tests/test_deadline_factorial_oracle.py` independently enumerates all finite policy trees and terminal actions to verify both endpoint envelopes.
 - `tests/test_ecological_topology_opportunity_separation.py` separately checks that deadlines can reverse net value with fixed topology.
