@@ -12,6 +12,7 @@ import pytest
 from adaptive_gain.core import FiniteTask, Query, World
 from adaptive_gain.deadline_factorial import (
     optimal_deadline_correct_choice_mass,
+    optimal_nonadaptive_deadline_mass,
     optimal_timely_resolution_mass,
 )
 TARGETS = (0, 1, 1, 0, 0)
@@ -142,3 +143,58 @@ def test_same_skew_prior_flips_topology_rank_between_certainty_and_guessing():
     assert correct == pytest.approx((0.875, 0.75), abs=1e-12)
     assert certified[0] < certified[1]  # B certifies more worlds in one cue.
     assert correct[0] > correct[1]  # A is more accurate when guesses are allowed.
+
+
+@pytest.mark.parametrize(
+    ("name", "certified", "guessed"),
+    (
+        ("routeable", (0.0, 0.2, 0.6, 1.0), (0.6, 0.8, 0.8, 1.0)),
+        ("sequential", (0.0, 0.2, 0.4, 1.0), (0.6, 0.6, 0.8, 1.0)),
+    ),
+)
+def test_fair_nonadaptive_partial_query_baseline_uniform(name, certified, guessed):
+    task = task_for_topology(name)
+    assert tuple(
+        optimal_nonadaptive_deadline_mass(task, UNIFORM, budget=b)
+        for b in range(4)
+    ) == pytest.approx(certified, abs=1e-12)
+    assert tuple(
+        optimal_nonadaptive_deadline_mass(task, UNIFORM, budget=b, allow_guess=True)
+        for b in range(4)
+    ) == pytest.approx(guessed, abs=1e-12)
+
+
+@pytest.mark.parametrize("name", ("routeable", "sequential"))
+@pytest.mark.parametrize(
+    "prior", (UNIFORM, (0.5, 0.125, 0.125, 0.125, 0.125))
+)
+def test_adaptive_information_policy_dominates_budget_matched_nonadaptive(name, prior):
+    task = task_for_topology(name)
+    for b in range(4):
+        assert optimal_timely_resolution_mass(task, prior, budget=b) + 1e-12 >= (
+            optimal_nonadaptive_deadline_mass(task, prior, budget=b)
+        )
+        assert optimal_deadline_correct_choice_mass(task, prior, budget=b) + 1e-12 >= (
+            optimal_nonadaptive_deadline_mass(task, prior, budget=b, allow_guess=True)
+        )
+
+
+def test_contingent_advantage_not_artifact_of_forcing_fixed_full_bundle():
+    a = task_for_topology("routeable")
+    b = task_for_topology("sequential")
+    # At two queries, A has a conditional advantage against a fair partial
+    # nonadaptive query plan; B does not.
+    cert_advantage = (
+        optimal_timely_resolution_mass(a, UNIFORM, budget=2)
+        - optimal_nonadaptive_deadline_mass(a, UNIFORM, budget=2),
+        optimal_timely_resolution_mass(b, UNIFORM, budget=2)
+        - optimal_nonadaptive_deadline_mass(b, UNIFORM, budget=2),
+    )
+    accuracy_advantage = (
+        optimal_deadline_correct_choice_mass(a, UNIFORM, budget=2)
+        - optimal_nonadaptive_deadline_mass(a, UNIFORM, budget=2, allow_guess=True),
+        optimal_deadline_correct_choice_mass(b, UNIFORM, budget=2)
+        - optimal_nonadaptive_deadline_mass(b, UNIFORM, budget=2, allow_guess=True),
+    )
+    assert cert_advantage == pytest.approx((0.4, 0.0), abs=1e-12)
+    assert accuracy_advantage == pytest.approx((0.2, 0.0), abs=1e-12)
