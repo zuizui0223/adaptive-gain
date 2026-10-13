@@ -1,0 +1,69 @@
+{
+  "schema": "budget_limited_noise_identifiability_v1",
+  "base_head": "bb2ad17c1a1f63152fbab626e919fe4cc0b4f7f8",
+  "base_head_ci": {
+    "run_id": 38350901141,
+    "python_versions": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "conclusion": "success"
+  },
+  "scope": "finite five-world static nonreactive readouts, three binary unit-cost cues, hard budget, no repeat observations, reward 1/wrong loss 4/free abstention",
+  "sufficiency_proposition": "If all world-conditional readout marginals coincide on each affordable query subset, expected reward of every deterministic/randomized adaptive or precommitted policy coincides.",
+  "triple_only_witness": {
+    "single_flip_probability": "1/10",
+    "each_pair_coflip": "9/200",
+    "triple_coflip_a_range": [
+      "0",
+      "9/200"
+    ],
+    "budget2_adaptive_payoff": "7/15",
+    "budget2_fixed_payoff": "11/30",
+    "budget2_gross_premium": "1/10",
+    "budget3_full_information_payoff_a_zero": "517/600",
+    "budget3_full_information_payoff_a_max": "49/100"
+  },
+  "pair_mean_identification_counterexample": {
+    "single_flip_probability": "1/10",
+    "mean_pair_coflip": "9/200",
+    "triple_coflip": "1/50",
+    "error_number_histogram": [
+      "163/200",
+      "9/100",
+      "3/40",
+      "1/50"
+    ],
+    "coflip_pairs_order": "root_left,root_right,left_right",
+    "channel_X_pairs": [
+      "1/25",
+      "7/100",
+      "1/40"
+    ],
+    "channel_Y_pairs": [
+      "1/25",
+      "1/40",
+      "7/100"
+    ],
+    "channel_X_adaptive": "8/15",
+    "channel_X_fixed": "7/20",
+    "channel_X_gross_premium": "11/60",
+    "channel_X_net_cost_point_one": "1/12",
+    "channel_Y_adaptive": "13/30",
+    "channel_Y_fixed": "7/20",
+    "channel_Y_gross_premium": "1/12",
+    "channel_Y_net_cost_point_one": "-1/60"
+  },
+  "verification": {
+    "local_focused_tests": 20,
+    "local_partial_harness_tests": 440,
+    "local_failures": 0,
+    "local_harness_is_full_repo": false,
+    "new_head_full_ci": "PENDING",
+    "test_blob_sha": "ae3ee139431c2564ce18be136d3880dc95b45f1d",
+    "doc_blob_sha": "3b3e133e6933ca0488c3fcd59629300e373286af"
+  },
+  "prior_art_scope": "k-wise query indistinguishability and higher-order neuronal correlations are not claimed as novel; no natural pollinator sensory or fitness data analyzed",
+  "outcome": "precise ecological calibration requirement: state-conditioned labeled pairwise cue readout distributions suffice at budget2; pooled average does not"
+}
