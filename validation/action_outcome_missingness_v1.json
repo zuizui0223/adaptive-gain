@@ -51,14 +51,15 @@
     "simple_at_error_cost_three": {
       "HT_completion_lower": "-3/25",
       "HT_completion_upper": "17/25"
-    }
+    },
+    "target_diversity": "both target labels occur in every context x assigned-cue arm (25 each)"
   },
   "correct_interpretation": "Endpoints sharp over missing action completions of the finite sample Horvitz-Thompson score; not confidence/credible intervals or sharp population causal identified set; no clustering uncertainty",
   "estimator": "adaptive_gain/action_outcome_bounds.py",
   "validation": {
     "local_python": "3.13",
-    "focused_tests": 26,
-    "local_partial_harness_tests": 578,
+    "focused_tests": 27,
+    "local_partial_harness_tests": 579,
     "local_failures": 0,
     "new_head_full_CI": "PENDING",
     "base_git_blobs": {
@@ -68,8 +69,8 @@
     },
     "files_sha256": {
       "adaptive_gain/action_outcome_bounds.py": "9e5adf25444d6d73ab5176e36dd8b1c6ece1f2c8b1c162b5edc382079e97fcf6",
-      "tests/test_action_outcome_bounds.py": "7c087807a18974af41c34df705387bf9361d1b70460490f4c34e2ddf571d93ba",
-      "experiments/ACTION_OUTCOME_MISSINGNESS_GATE_V1.md": "9a8a028e636d94f38175261f84cf3bdf6760aba3d2b6c670ff56efc348b25524"
+      "tests/test_action_outcome_bounds.py": "e51bf5639ea47aa05e8e2560a4c52b576ca06e26fb6e2545b241fff1f43c1968",
+      "experiments/ACTION_OUTCOME_MISSINGNESS_GATE_V1.md": "ade635e2053599e3996e5d20ceedff71106312b4f5574e68879910a15fb0c1b3"
     }
   },
   "prior_art": "Horowitz-Manski-style missing-outcome bounds and inverse-probability weighting are established; no bee data or new theorem."

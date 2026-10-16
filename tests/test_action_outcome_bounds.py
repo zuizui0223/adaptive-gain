@@ -37,12 +37,13 @@ def synthetic_records(*, include_abstention=False):
                 statuses=['choice']*50
                 decisions=[1]*25 + [0]*25
             assert len(statuses) == len(decisions) == 50
-            for status, is_correct in zip(statuses, decisions):
-                # Target=0 throughout the artificial list; action=0 is correct.
-                action = (0 if is_correct else 1) if is_correct is not None else None
+            for k, (status, is_correct) in enumerate(zip(statuses, decisions)):
+                # Each context/cue arm includes both independently known targets.
+                target = k % 2
+                action = (target if is_correct else 1-target) if is_correct is not None else None
                 rows.append(ActionOutcomeTrial(
                     trial_id=f'trial{len(rows):03d}', bee_id=f'bee{len(rows)//5:03d}',
-                    target=0, context_bit=a, second_cue=assigned,
+                    target=target, context_bit=a, second_cue=assigned,
                     assignment_probability=0.5,
                     outcome_status=status, final_action=action,
                 ))
@@ -60,8 +61,9 @@ def test_partial_identification_interval_contains_two_extreme_completions():
     assert r.width==pytest.approx(.20)
     assert r.ess_matched==pytest.approx(100)
     assert r.unique_bees==40
-    for missing_action, expected in ((0,.92),(1,.72)):
-        observed=[replace(t,outcome_status='choice',final_action=missing_action)
+    for fill_correct, expected in ((True,.92),(False,.72)):
+        observed=[replace(t,outcome_status='choice',
+                          final_action=t.target if fill_correct else 1-t.target)
                   if t.outcome_status=='unobserved' else t for t in trials]
         exact=bound_randomized_action_policy(observed,POLICY)
         assert exact.lower_ht==pytest.approx(expected)
@@ -99,7 +101,7 @@ def test_full_report_estimator_matches_prior_module_for_same_action():
     trials=[]
     for t in synthetic_records():
         if t.outcome_status=='unobserved':
-            t=replace(t,outcome_status='choice',final_action=0)
+            t=replace(t,outcome_status='choice',final_action=t.target)
         trials.append(t)
     bounded=bound_randomized_action_policy(trials,POLICY)
     cue=[CueReportTrial(t.trial_id,t.bee_id,t.target,t.context_bit,
@@ -187,3 +189,11 @@ def test_non_half_assignment_probabilities_are_used_as_logged():
     assert r.matched_trials == 90
     assert r.lower_ht==r.upper_ht==pytest.approx(.8)
     assert r.ess_matched < 90
+
+
+def test_synthetic_randomized_trial_truth_is_not_a_single_known_class():
+    rows=synthetic_records()
+    for a in (0,1):
+        for assigned in (1,2):
+            truth={r.target for r in rows if r.context_bit==a and r.second_cue==assigned}
+            assert truth == {0,1}

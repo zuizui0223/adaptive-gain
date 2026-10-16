@@ -42,7 +42,7 @@ The code rejects duplicate trials, illegal status/action combinations, invalid o
 
 ## 4. Independent synthetic counterexample
 
-Construct 200 **synthetic randomized trial records, not 200 independent bees**, with 50 records per `(A-context, assigned second cue)` combination and `mu=.5`. Exactly 100 records match the target policy `pi(0)=C, pi(1)=B`.
+Construct 200 **synthetic randomized trial records, not 200 independent bees**, with 50 records per `(A-context, assigned second cue)` combination (25 trials for each experimentally known target label in every combination) and `mu=.5`. Exactly 100 records match the target policy `pi(0)=C, pi(1)=B`.
 
 Case I: 80 matched actions recorded (72 correct, 8 wrong), 20 matched actions unobserved. Correct fraction among recorded actions: **90%**. With payoff `v=1,L=0`, the worst/best completed HT scores are **`0.72` to `0.92`**, both attainable by making all missing matched actions wrong or correct. Against a *stipulated* comparison value `0.75` and controller cost `K=0.05`, the score contrast lies in **`[-0.08,+0.12]`**. **The sign is not established by this log.**
 
@@ -65,7 +65,7 @@ Record for **every randomized offer**, regardless of whether the bee visits: tri
 ## 6. Reproducibility and exclusions
 
 - `adaptive_gain/action_outcome_bounds.py`: strict action-status intake and finite-sample HT missing-outcome score bounds.
-- `tests/test_action_outcome_bounds.py`: 26 synthetic tests, including two extreme missing completions, abstention separation, error-loss widening, invalid data, nonuniform assignment and agreement with the prior cue-report estimator on complete records.
+- `tests/test_action_outcome_bounds.py`: 27 synthetic tests, including two extreme missing completions, abstention separation, error-loss widening, invalid data, nonuniform assignment and agreement with the prior cue-report estimator on complete records.
 - Previous PR #68 commit `0074a6b3cc0d4bb94baa2c6a386503cd3d1e1c17` passed full Python 3.10/3.11/3.12 CI.
-- Local partial reproduction environment: **578 tests passed** (includes the 26 new tests). The local environment is **not** a full GitHub clone; the new-head full CI is a separate gate.
+- Local partial reproduction environment: **579 tests passed** (includes the 27 new tests). The local environment is **not** a full GitHub clone; the new-head full CI is a separate gate.
 - No existing solver, frozen manuscript or main novelty theorem is modified.
