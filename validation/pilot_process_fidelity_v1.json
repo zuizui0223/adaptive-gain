@@ -1,0 +1,47 @@
+{
+  "schema": "pilot_cue_process_fidelity_v1",
+  "status": "synthetic_fixture_only_no_pollinator_data",
+  "baseline_head": "223cc22426cb0f18c2bb9d4bcb36f950a2d9c145",
+  "baseline_ci": {
+    "run": 38923908237,
+    "python": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "conclusion": "success"
+  },
+  "unit": "randomized bee with colony blocking",
+  "primary": "ITT correct final action before deadline computed unchanged by pilot_itt",
+  "secondary": "cue identity/order/time/process fidelity, descriptive conditional second-cue identity",
+  "gates": [
+    "pre-trial externally archived fixed plans",
+    "every enrolled bee and planned slot retained",
+    "cue acquisition step and time validated",
+    "wrong arm/over-budget/after-deadline/missing perceived report counted not excluded",
+    "conditional branch choice remains descriptive not causal proof"
+  ],
+  "synthetic_validation": {
+    "enrolled_bees": 8,
+    "colonies": 2,
+    "planned_slots": 16,
+    "contingent_branch_counts": {
+      "A0_B": 4,
+      "A0_C": 0,
+      "A1_B": 0,
+      "A1_C": 4
+    },
+    "new_focused_tests": 19,
+    "local_partial_harness_tests": 628,
+    "local_partial_harness_failed": 0
+  },
+  "sha256": {
+    "adaptive_gain/pilot_process.py": "06debed62a909aae05c61ac396833e4126278ad948dc760ae0982d57c3eecba3",
+    "tests/test_pilot_process.py": "a8f25c9a8fadb1871dad1a273fc32a01f9e09ac92257cadb717e83d2db1b0db0",
+    "experiments/BEE_PILOT_CUE_TRACE_FIDELITY_PROTOCOL_V1.md": "e74bddcbc43ad7c5e39ef37836a466f1f0f034c3f304a475e277114d67579930",
+    "experiments/templates/pilot_cue_events_schema.csv": "355b567353bafaa104220ac3bc00924cc75a186d0a7e54510cfacc4380787629",
+    "experiments/templates/pilot_fixed_plans_schema.csv": "d8b800f977828949ef04269edff88459e07332db40cd233009a35081ad0d731b"
+  },
+  "new_head_full_CI": "PENDING",
+  "claim_ceiling": "not a causal test of sensor perception or fitness, no real bee data and no new theory"
+}
