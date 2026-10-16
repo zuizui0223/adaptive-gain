@@ -1,0 +1,9 @@
+bee_id,colony_id,assigned_access
+colony_1_contingent_0,colony_1,contingent
+colony_1_contingent_1,colony_1,contingent
+colony_1_precommitted_0,colony_1,precommitted
+colony_1_precommitted_1,colony_1,precommitted
+colony_2_contingent_0,colony_2,contingent
+colony_2_contingent_1,colony_2,contingent
+colony_2_precommitted_0,colony_2,precommitted
+colony_2_precommitted_1,colony_2,precommitted

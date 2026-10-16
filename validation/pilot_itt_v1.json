@@ -1,0 +1,60 @@
+{
+  "schema": "bee_level_randomized_policy_access_pilot_v1",
+  "status": "synthetic_fixture_only_no_real_bee_data",
+  "baseline_pr": "https://github.com/zuizui0223/adaptive-gain/pull/68",
+  "baseline_git_sha": "a6f7b57235f1f57c5798074c18798ea2dc9b59b6",
+  "baseline_ci": {
+    "workflow_run": 38919240477,
+    "python_matrix": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "conclusion": "success"
+  },
+  "data_required": {
+    "unit": "bee",
+    "blocking": "colony",
+    "planned_slots_per_enrolled_bee": 4,
+    "arms": [
+      "contingent",
+      "precommitted"
+    ],
+    "outcomes": [
+      "choice",
+      "abstain",
+      "unobserved"
+    ]
+  },
+  "local_validation": {
+    "python": "3.13.5",
+    "new_test_cases": 29,
+    "partial_harness_tests": 608,
+    "failed": 0,
+    "complete_repository_checkout": false
+  },
+  "synthetic_example": {
+    "bees": 8,
+    "colonies": 2,
+    "planned_trials": 32,
+    "correct": 18,
+    "wrong": 14,
+    "arm_means": {
+      "contingent": 0.75,
+      "precommitted": 0.375
+    },
+    "colony_block_standardized_itt": 0.375,
+    "exact_sharp_null_permutation_p": "1/9",
+    "assignment_configurations": 36,
+    "note": "these are synthetic trial records, not independent bees; the p-value is a code verification fixture, not an empirical significance result"
+  },
+  "claim_ceiling": "primary ITT is correct action before deadline; missing completion bounds are point-score intervals not confidence bounds; Fisher p tests sharp null and needs complete outcomes; no fitness/selection estimation",
+  "sha256": {
+    "adaptive_gain/pilot_itt.py": "43b4acf6e1b4403bcfa6b7817f380dd5a82b7b45f1e19604beee66fc03974ab7",
+    "tests/test_pilot_itt.py": "64f9d54a4b7f9f1a31a14c8c7be2747e7a41ec1aeaad96d5281d780fc7370a0a",
+    "experiments/BEE_POLICY_ACCESS_PILOT_PREREG_V1.md": "f4bc8f35db6908dfb1f75a216c0836c0a6da9b4e5da0bd1e39abe9c54566b65b",
+    "experiments/templates/pilot_bee_roster_example.csv": "d29bf26de262815ba62ec09d099660873d136f919617525cb9aba49eb7dc4280",
+    "experiments/templates/pilot_trial_log_example.csv": "aa089ded38114151a1339b1fb323c688c30266bfc5699fb90bebceb75bdcb0fe"
+  },
+  "new_head_full_ci": "PENDING_NEW_BRANCH_HEAD"
+}
