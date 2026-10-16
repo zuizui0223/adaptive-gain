@@ -50,7 +50,7 @@ python -m adaptive_gain.pilot_itt \
 
 Expected synthetic results: 4 bees per arm, 18 correct target choices out of 32 scheduled trials, arm success rates 0.750 and 0.375, colony-block-standardized ITT contrast **+0.375**, and exact two-sided Fisher sharp-null p-value **1/9** over **36** within-colony bee assignment configurations. A large displayed effect but weak exact evidence in a tiny demonstration is not an estimate of pollinator behavior, a sample-size calculation, or a reason to infer a confirmed effect.
 
-The test harness also demonstrates that technical missingness produces **outcome completion bounds** and suppresses the exact permutation test; confirmed abstentions count as 0 rather than missing. Entirely disappeared bees or planned slots without rows cause a hard failure. Cross-arm apparatus delivery is retained in the ITT assignment group but reported as noncompliance.
+The test harness also demonstrates that technical missingness produces **outcome completion bounds** and suppresses the exact permutation test; confirmed abstentions count as 0 rather than missing. Entirely disappeared bees or planned slots without rows cause a hard failure. Cross-arm apparatus delivery is retained in the ITT assignment group but reported as noncompliance. Confirmed apparatus nondelivery (`not_delivered`) and missing delivery information (blank) are **counted separately** rather than conflated.
 
 ## Implementation gates / decision rules
 

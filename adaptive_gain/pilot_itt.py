@@ -63,6 +63,7 @@ class PilotITTReceipt:
     abstain: int
     unobserved: int
     noncompliant_delivered_trials: int
+    not_delivered_trials: int
     unknown_delivery_trials: int
     contingent_lower: float
     contingent_upper: float
@@ -103,7 +104,7 @@ def _validate(roster: Sequence[PilotBee], trials: Sequence[PilotTrial], n: int):
     ids: set[str] = set()
     slots: dict[str, dict[int, PilotTrial]] = {b: {} for b in members}
     counts = {'correct': 0, 'wrong': 0, 'abstain': 0, 'unobserved': 0}
-    n_mismatch = n_unknown_delivery = 0
+    n_mismatch = n_not_delivered = n_unknown_delivery = 0
     for trial in trials:
         _nonempty(trial.trial_id, 'trial_id')
         if trial.trial_id in ids:
@@ -136,8 +137,10 @@ def _validate(roster: Sequence[PilotBee], trials: Sequence[PilotTrial], n: int):
             counts['unobserved'] += 1
         if trial.delivered_access not in ('', 'not_delivered') + _ARMS:
             raise ValueError('delivered_access must be one of contingent, precommitted, not_delivered, blank')
-        if trial.delivered_access in ('', 'not_delivered'):
+        if trial.delivered_access == '':
             n_unknown_delivery += 1
+        elif trial.delivered_access == 'not_delivered':
+            n_not_delivered += 1
         elif trial.delivered_access != members[trial.bee_id].assigned_access:
             n_mismatch += 1
         slots[trial.bee_id][trial.slot] = trial
@@ -145,7 +148,7 @@ def _validate(roster: Sequence[PilotBee], trials: Sequence[PilotTrial], n: int):
     for bee, observed in slots.items():
         if set(observed) != required:
             raise ValueError(f'planned slot coverage incomplete for enrolled bee {bee}; create explicit unobserved placeholders')
-    return members, by_colony, slots, counts, n_mismatch, n_unknown_delivery
+    return members, by_colony, slots, counts, n_mismatch, n_not_delivered, n_unknown_delivery
 
 
 def _rates(slots: dict[str, dict[int, PilotTrial]], n: int):
@@ -221,7 +224,7 @@ def analyze_pilot_itt(
         raise ValueError('exact_randomization must be boolean')
     if type(max_assignments) is not int or max_assignments < 1:
         raise ValueError('max_assignments must be a positive integer')
-    members, by_colony, slots, counts, mismatch, unknown_delivery = _validate(
+    members, by_colony, slots, counts, mismatch, not_delivered, unknown_delivery = _validate(
         bee_roster, trials, planned_trials_per_bee
     )
     intervals = _rates(slots, planned_trials_per_bee)
@@ -244,6 +247,7 @@ def analyze_pilot_itt(
         correct=counts['correct'], wrong=counts['wrong'], abstain=counts['abstain'],
         unobserved=counts['unobserved'],
         noncompliant_delivered_trials=mismatch,
+        not_delivered_trials=not_delivered,
         unknown_delivery_trials=unknown_delivery,
         contingent_lower=float(lo['contingent']), contingent_upper=float(hi['contingent']),
         precommitted_lower=float(lo['precommitted']), precommitted_upper=float(hi['precommitted']),

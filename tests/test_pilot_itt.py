@@ -286,3 +286,16 @@ def test_synthetic_fixture_validation_receipt_matches_exact_results():
     assert result.effect_lower == receipt['synthetic_example']['colony_block_standardized_itt']
     assert result.exact_randomization_assignments == receipt['synthetic_example']['assignment_configurations']
     assert result.exact_randomization_p == pytest.approx(Fraction(receipt['synthetic_example']['exact_sharp_null_permutation_p']))
+
+
+def test_known_nondelivery_is_separate_from_unknown_delivery_and_cross_arm_noncompliance():
+    roster, trials = example()
+    updated = [replace(t, delivered_access='not_delivered') if t == trials[0]
+               else replace(t, delivered_access='') if t == trials[1]
+               else replace(t, delivered_access='precommitted') if t == trials[2]
+               else t for t in trials]
+    report = analyze_pilot_itt(roster, updated, planned_trials_per_bee=4)
+    assert report.not_delivered_trials == 1
+    assert report.unknown_delivery_trials == 1
+    assert report.noncompliant_delivered_trials == 1
+    assert report.effect_lower == report.effect_upper == pytest.approx(0.375)

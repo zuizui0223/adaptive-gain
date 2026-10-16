@@ -28,8 +28,8 @@
   },
   "local_validation": {
     "python": "3.13.5",
-    "new_test_cases": 29,
-    "partial_harness_tests": 608,
+    "new_test_cases": 30,
+    "partial_harness_tests": 609,
     "failed": 0,
     "complete_repository_checkout": false
   },
@@ -50,9 +50,9 @@
   },
   "claim_ceiling": "primary ITT is correct action before deadline; missing completion bounds are point-score intervals not confidence bounds; Fisher p tests sharp null and needs complete outcomes; no fitness/selection estimation",
   "sha256": {
-    "adaptive_gain/pilot_itt.py": "43b4acf6e1b4403bcfa6b7817f380dd5a82b7b45f1e19604beee66fc03974ab7",
-    "tests/test_pilot_itt.py": "64f9d54a4b7f9f1a31a14c8c7be2747e7a41ec1aeaad96d5281d780fc7370a0a",
-    "experiments/BEE_POLICY_ACCESS_PILOT_PREREG_V1.md": "f4bc8f35db6908dfb1f75a216c0836c0a6da9b4e5da0bd1e39abe9c54566b65b",
+    "adaptive_gain/pilot_itt.py": "d246e1040051ffb5ccaa9db3b34c50d91d9593222b3f2ab22504cd3984e14bfb",
+    "tests/test_pilot_itt.py": "5487eaefdce5d54449e3355196bd05ceb7765836d1c8cbaf115aead3b8282af1",
+    "experiments/BEE_POLICY_ACCESS_PILOT_PREREG_V1.md": "5a3a03958d83233ba49ee57de50575ea916ec8d04dce828c33b178d911746745",
     "experiments/templates/pilot_bee_roster_example.csv": "d29bf26de262815ba62ec09d099660873d136f919617525cb9aba49eb7dc4280",
     "experiments/templates/pilot_trial_log_example.csv": "aa089ded38114151a1339b1fb323c688c30266bfc5699fb90bebceb75bdcb0fe"
   },
