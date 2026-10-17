@@ -1,0 +1,60 @@
+{
+  "schema": "ordered_readout_identification_v1",
+  "baseline_head": "f5693c2d60b8082a53c1ab1cca2442068ea41fe3",
+  "baseline_ci": {
+    "run_id": 38362112114,
+    "python_versions": ["3.10", "3.11", "3.12"],
+    "conclusion": "success"
+  },
+  "scope": "finite fixed-world target choice; order/history-conditioned binary readout kernels; each cue acquired at most once; hard budget; free abstention; no direct per-query utility debit",
+  "witness": {
+    "world_count": 2,
+    "query_count": 3,
+    "budget": 2,
+    "target_prior": ["1/2", "1/2"],
+    "context_cue_target_information": "zero",
+    "standalone_B_C_correct_probability": "3/4",
+    "primed_full_support_correct_probability": "9/10",
+    "degraded_full_support_correct_probability": "3/5",
+    "calibration_matches": "first-cue conditionals; stipulated passive simultaneous pair laws; marginal accuracy per cue and serial position pooled over prior outcomes",
+    "zero_error_loss": {
+      "stable_adaptive": "3/4",
+      "stable_precommitted": "3/4",
+      "reactive_adaptive": "9/10",
+      "reactive_precommitted": "3/4",
+      "reactive_premium": "3/20"
+    },
+    "error_loss_three": {
+      "stable_adaptive": "3/8",
+      "stable_precommitted": "3/8",
+      "reactive_adaptive": "3/5",
+      "reactive_precommitted": "3/8",
+      "reactive_premium": "9/40"
+    },
+    "full_support_loss_nine": {
+      "reactive_adaptive": 0,
+      "reactive_precommitted": 0
+    },
+    "perfect_priming_zero_loss": {
+      "reactive_adaptive": 1,
+      "reactive_precommitted": "3/4",
+      "reactive_premium": "1/4"
+    }
+  },
+  "identification_boundary": "passive or unordered joint cue calibration does not identify an acquisition-induced sequential channel. Ordered, state-conditional path laws on every affordable cue sequence are sufficient under a fixed latent world, even with reactive observation kernels.",
+  "verification": {
+    "local_focused_test_command": "PYTHONPATH=. pytest -q tests/test_ordered_readout.py",
+    "local_focused_passed": 83,
+    "local_partial_harness_command": "PYTHONPATH=. pytest -q",
+    "local_partial_harness_passed": 523,
+    "local_partial_harness_failed": 0,
+    "full_repository_checkout": false,
+    "full_repository_new_head_ci": "PENDING"
+  },
+  "sha256": {
+    "adaptive_gain/ordered_readout.py": "bd8a2208a7ad9bed8bf7176d6e108c4ed5f3d98aeaed38ac7f502bef78a70df5",
+    "tests/test_ordered_readout.py": "648d979ac4efb4717e8cd7a604f7ccd832b849545414786520d5316445ae8395",
+    "experiments/SEQUENTIAL_CUE_ORDER_IDENTIFICATION_AUDIT_V1.md": "37db256f62d4ed35bae850d72de86fbcaf56206a71b9ba599964a6887c8a4172"
+  },
+  "claim_limit": "synthetic toy model only, no bee order-dependent sensory estimates, no realized fitness or field ecological network inference, not general novelty for sequential Bayesian information acquisition"
+}

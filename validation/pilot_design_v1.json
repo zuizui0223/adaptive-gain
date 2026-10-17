@@ -1,0 +1,64 @@
+{
+  "baseline_ci": {
+    "conclusion": "success",
+    "python_matrix": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "run_id": 38928138974
+  },
+  "baseline_head": "6505bb04a2775b547dc1412d865362c4f64a2791",
+  "baseline_pr": 68,
+  "baseline_repo": "zuizui0223/adaptive-gain",
+  "claim_ceiling": "Demonstration of plan generation and byte-reverification only; SHA digests alone do not prove timing or true biological randomization; not a valid power or fitness claim",
+  "generator_constraints": {
+    "allocation": "exact_half_in_each_colony",
+    "block": "colony",
+    "fixed_schedule": "target x A_context_truth x B_or_C fully crossed per fixed bee",
+    "min_bees_per_colony": 4,
+    "randomization_unit": "bee",
+    "slots_per_bee_multiple_of": 8,
+    "target_context_assignment_independent": true
+  },
+  "schema": "bee_pilot_preexposure_design_validation_v1",
+  "source_sha256": {
+    "adaptive_gain/pilot_design.py": "bf21f220d4b7f6b06b54f67068a2b2a2f4f8bd4c5562e0a7e33c7934742658af",
+    "experiments/BEE_PILOT_BLOCK_RANDOMIZATION_RUNPLAN_V1.md": "2f18fc2dba8bcff3bd133e3dfb5ad94c29cb3df7b4a232a8de10ae22f2d34bf0",
+    "experiments/templates/pilot_inventory_example.csv": "478d50a5d54745bf61723cca56541f1e96a887e99d736dbe091d24b0c43d9a87",
+    "tests/test_pilot_design.py": "813a92cd5fc6bd354e3a6d3bb0afd1d0ad8c25d18974d16efcb79eb4b4c13490"
+  },
+  "status": "synthetic_inventory_and_offline_plan_only_no_real_bee_trials",
+  "synthetic_demo": {
+    "bees": 8,
+    "colonies": 2,
+    "colony_assignments": {
+      "colony_1": {
+        "contingent": 2,
+        "precommitted": 2
+      },
+      "colony_2": {
+        "contingent": 2,
+        "precommitted": 2
+      }
+    },
+    "fixed_plan_rows": 32,
+    "has_actual_trial_results": false,
+    "locked_csv_sha256": {
+      "bee_fixed_plans.csv": "be583b61c9c7f79167e06d5729d95df712c67f7654a05283d4df71f4d19879ab",
+      "bee_roster.csv": "a607d027a210de89885bb1bd6b2783325d9bd36a913cb58ffbc1a164ddb1d5a4",
+      "stimulus_schedule.csv": "81869c7af74130f4d8d8676271147e967b60c3ebbe2ac25d2d4f968de119d8ba"
+    },
+    "seed_sha256_commitment": "630dcd2966c4336691125448bbb25b4ff412a49c732db2c8abc1b8581bd710dd",
+    "slot_count": 64,
+    "verified_locked_bytes": true
+  },
+  "verification": {
+    "complete_repo_checkout": false,
+    "failures": 0,
+    "full_pr_ci_at_new_head": "PENDING",
+    "local_partial_harness_tests": 661,
+    "local_python": "3.13.5",
+    "new_focused_tests": 33
+  }
+}

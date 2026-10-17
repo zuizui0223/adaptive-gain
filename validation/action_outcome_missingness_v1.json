@@ -1,0 +1,77 @@
+{
+  "schema": "action_outcome_missingness_gate_v1",
+  "base_head": "0074a6b3cc0d4bb94baa2c6a386503cd3d1e1c17",
+  "base_full_CI": {
+    "run_id": 38915623965,
+    "python_versions": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "conclusion": "success"
+  },
+  "scope": "synthetic randomized 2-stage known-propensity trial action reward; prespecified context-to-cue policy; no general causal identification claims",
+  "outcome_labels": {
+    "choice": "observed final action 0 or 1",
+    "abstain": "confirmed no-choice with declared zero payoff",
+    "unobserved": "cannot score final action; require worst-best sensitivity"
+  },
+  "synthetic_population_log": {
+    "randomized_rows": 200,
+    "distinct_synthetic_bee_ids": 40,
+    "matched_rows": 100,
+    "context_counts_matched": {
+      "0": 50,
+      "1": 50
+    },
+    "assigned_probability": "1/2",
+    "unobserved_matched": 20,
+    "simple": {
+      "correct": 72,
+      "incorrect": 8,
+      "abstain": 0,
+      "observed_choice_accuracy": "9/10",
+      "HT_completion_lower": "18/25",
+      "HT_completion_upper": "23/25",
+      "stipulated_baseline": "3/4",
+      "stipulated_maintenance_cost": "1/20",
+      "net_score_completion_range": [
+        "-2/25",
+        "3/25"
+      ]
+    },
+    "with_abstention": {
+      "correct": 63,
+      "incorrect": 7,
+      "abstain": 10,
+      "observed_choice_accuracy": "9/10",
+      "HT_completion_lower": "63/100",
+      "HT_completion_upper": "83/100"
+    },
+    "simple_at_error_cost_three": {
+      "HT_completion_lower": "-3/25",
+      "HT_completion_upper": "17/25"
+    },
+    "target_diversity": "both target labels occur in every context x assigned-cue arm (25 each)"
+  },
+  "correct_interpretation": "Endpoints sharp over missing action completions of the finite sample Horvitz-Thompson score; not confidence/credible intervals or sharp population causal identified set; no clustering uncertainty",
+  "estimator": "adaptive_gain/action_outcome_bounds.py",
+  "validation": {
+    "local_python": "3.13",
+    "focused_tests": 27,
+    "local_partial_harness_tests": 579,
+    "local_failures": 0,
+    "new_head_full_CI": "PENDING",
+    "base_git_blobs": {
+      "adaptive_gain/core.py": "93e91ef08097e91cb9003823601bc5d706452ba7",
+      "adaptive_gain/policy_support.py": "3438ed640c07d3a3edffdc98b63d7ae95a2af15f",
+      "adaptive_gain/ordered_readout.py": "64ea54fe767d26b8322e7ca75d27f5305c9c051d"
+    },
+    "files_sha256": {
+      "adaptive_gain/action_outcome_bounds.py": "9e5adf25444d6d73ab5176e36dd8b1c6ece1f2c8b1c162b5edc382079e97fcf6",
+      "tests/test_action_outcome_bounds.py": "e51bf5639ea47aa05e8e2560a4c52b576ca06e26fb6e2545b241fff1f43c1968",
+      "experiments/ACTION_OUTCOME_MISSINGNESS_GATE_V1.md": "ade635e2053599e3996e5d20ceedff71106312b4f5574e68879910a15fb0c1b3"
+    }
+  },
+  "prior_art": "Horowitz-Manski-style missing-outcome bounds and inverse-probability weighting are established; no bee data or new theorem."
+}

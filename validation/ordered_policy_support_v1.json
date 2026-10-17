@@ -1,0 +1,50 @@
+{
+  "schema": "ordered_policy_support_v1",
+  "scope": "two fixed target worlds; three sequential binary cues; two acquisition budget; precommitted ordered versus contingent next cue",
+  "model": {
+    "prior": ["1/2", "1/2"],
+    "historical_policy": "always acquire A then B",
+    "context_cue_A": "fair independent bit",
+    "B_correct_across_all_histories": "3/4",
+    "C_first_correct": "3/4",
+    "C_after_A0_correct": "s",
+    "C_after_A1_correct": "3/2 - s",
+    "restricted_s_range": ["1/2", "1"],
+    "aggregated_C_after_A_accuracy": "3/4"
+  },
+  "on_policy_joint_log": {
+    "truth_context_B_correct_entry_mass": "3/16",
+    "truth_context_B_error_entry_mass": "1/16",
+    "identical_for_all_s": true
+  },
+  "identified_set_within_restricted_model": {
+    "fixed_optimal_reward": "3/4",
+    "adaptive_optimal_reward": "3/4 + abs(s-3/4)/2",
+    "gross_premium_range": ["0", "1/8"],
+    "controller_cost": "1/20",
+    "net_controller_premium_range": ["-1/20", "3/40"],
+    "s_at_nine_tenths": {
+      "adaptive_reward": "33/40", "fixed_reward": "3/4",
+      "gross_premium": "3/40", "net_premium": "1/40"
+    }
+  },
+  "randomized_exploration": {
+    "positivity": "0 < P(J=C|A=a) < 1 for every a in {0,1}",
+    "evaluation_policy": "choose C after A=0 and B after A=1, then report observed second-cue bit",
+    "ipw_population_value_s_nine_tenths": "33/40",
+    "ipw_population_value_s_three_quarters": "3/4",
+    "pooled_accuracy_under_equal_exploration": "3/4 for every s",
+    "synthetic_exact_population_census_rows": 160,
+    "synthetic_independent_bees": "NO - synthetic table rows are not bees"
+  },
+  "verification": {
+    "test_files": ["tests/test_ordered_policy_support.py", "tests/test_ordered_policy_support_estimator.py"],
+    "focused_passed": 29,
+    "local_partial_harness_passed": 552,
+    "local_partial_harness_failed": 0,
+    "baseline_full_repo_sha": "90b6b5b4f3b267ddc9b5a1a94ebca9075c843a41",
+    "baseline_full_repo_ci": 38911998581,
+    "latest_full_ci": "PENDING"
+  },
+  "claim_ceiling": "standard support and randomized off-policy evaluation principles; no original causal identification method, real bumblebee evidence or selection coefficient"
+}

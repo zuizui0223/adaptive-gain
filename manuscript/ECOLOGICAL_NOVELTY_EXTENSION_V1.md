@@ -155,14 +155,39 @@ The distinction creates a simple 2 × 2 conceptual map.
 | --- | --- | --- |
 | low | low | community composition and interaction-accessibility structure are both approximately conserved |
 | high | low | species replacement occurs largely within corresponding decision-equivalence classes; composition changes while the focal accessibility architecture can remain similar |
-| low | high | the same or nearly the same species set faces a changed branch structure, cue relevance or ecological budget; accessibility can change without much compositional turnover |
+| low | high | the same or nearly the same species set faces a changed target map or declared query-outcome partition; its decision-equivalence classes or contingent branch structure can change |
 | high | high | community replacement and focal decision structure change together |
 
 The second regime is the strongest expression of the V5 quotient result: large taxonomic turnover need not create large decision novelty.
 
-The third regime is equally important because it shows the converse. Interaction structure can become decision-novel even without substantial species replacement. Environmental change can alter cue reliability, encounter context, resource state or the effective budget while the same species remain present. In that case, the set of behaviorally accessible links can change and **rewiring may follow**, even though species turnover is low.
+The third regime is equally important because it shows the converse. The same species set can face a different target map or a different deterministic partition of ecological states by declared cues, changing the focal decision problem without species replacement. This is **structural decision novelty**. A change in cue *reliability* alone requires an explicitly stochastic observation model before it can be diagnosed as a change in decision structure; the deterministic theorem does not establish such a diagnosis.
 
-The last statement is a mechanistic prediction, not an exact theorem about observed network turnover.
+An ecological deadline, opportunity survival distribution, reward, or maintenance cost can change **without changing the declared target-and-query topology**. Such changes can change behavioral accessibility and selection, but they are **value-layer change**, not automatically decision-structural turnover. Observed rewiring may follow from either mechanism, or from unrelated abundance and detection changes. Neither the topology theorem nor the opportunity-value formula alone predicts realized network rewiring. This is not an exact theorem about observed network turnover, and requires independent observation and detection validation.
+
+### Fixed topology, changing ecological opportunity: a separating witness
+
+Consider four represented states `w0,w1,w2,w3` with focal targets `(0,1,1,0)`. Three binary unit-cost cues have outcome vectors
+
+```text
+             w0  w1  w2  w3
+root         0   0   1   1
+left         0   1   0   0
+right        0   0   0   1
+```
+
+The adaptive policy acquires `root`, then `left` or `right` conditionally, so its guaranteed resolution cost is `C_A=2`. Every cue is required by a distinct opposite-target pair for the fixed universal bundle, so `C_F=3`. This task, its represented species, all query outcomes and both costs remain fixed.
+
+Let correct resolution have unit benefit and a deterministic opportunity budget `B`. Then the guaranteed contingent-minus-fixed advantage is
+
+\[
+\Delta(B)=\mathbf{1}\{B\ge2\}-\mathbf{1}\{B\ge3\}.
+\]
+
+For `B=1`, `B=2`, and `B=3`, the values are respectively `0`, `1`, and `0`. With controller maintenance cost `K=0.2`, net advantages are `-0.2`, `+0.8`, and `-0.2`: selection reverses twice **with zero compositional and zero decision-structural turnover**.
+
+This example uses guarantee-level completion and a deterministic opportunity limit. It does not identify individual timing, fitness, network links, or observed rewiring. It establishes the logical need to measure three separate layers: (i) species-state composition, (ii) target-conditioned cue partitions, and (iii) realized opportunity/reward/cost processes. Repeated behavioral and detection observations are additionally needed to connect these layers to actual interaction turnover.
+
+The separating witness is an application of the existing adaptive/fixed and opportunity-budget results, not a new theorem family.
 
 ### Relation to rewiring under global change
 
@@ -250,6 +275,8 @@ It also sharpens the V5 headline:
 - Do not claim every introduced species increases effective complexity.
 - Do not claim every within-class species loss is ecologically unimportant; the invariance is only for the declared focal decision problem.
 - Do not call decision novelty a universal community metric. It remains task-specific and relational.
+- Do not treat a changed ecological budget or reward as evidence of decision-structural turnover when the target-and-query topology is unchanged.
+- Do not infer decision-structural turnover from observed binary network rewiring without measuring the target-conditioned cue structure and accounting for detectability.
 - No new theorem is introduced; all formal support comes from the existing target-relevant reduction.
 
 ## References

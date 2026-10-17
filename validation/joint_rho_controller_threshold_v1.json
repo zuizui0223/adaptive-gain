@@ -1,0 +1,33 @@
+{
+  "schema": "joint_rho_controller_threshold_v1",
+  "scope": "five worlds, topology A, target vector (0,1,1,0,0), three binary unit-cost cues, at most two acquisitions, prior (1/3,1/6,1/6,1/6,1/6)",
+  "channel": "independent epsilon=1/10 errors mixed with fully shared epsilon=1/10 errors with common-mode weight rho in [0,1]",
+  "payoff": {"correct": "1", "error_loss": "4", "abstain": "0", "controller_maintenance_cost": "1/10"},
+  "all_policy_lines": {"adaptive": 385, "nonadaptive_precommitted_partial_subset": 208},
+  "sharp_reward_envelopes": {
+    "adaptive": [
+      {"rho_range": ["0", "1/3"], "intercept": "28/75", "slope": "21/100"},
+      {"rho_range": ["1/3", "3/8"], "intercept": "97/300", "slope": "9/25"},
+      {"rho_range": ["3/8", "1"], "intercept": "7/30", "slope": "3/5"}
+    ],
+    "nonadaptive": [
+      {"rho_range": ["0", "1/3"], "intercept": "3/10", "slope": "3/20"},
+      {"rho_range": ["1/3", "2/3"], "intercept": "1/4", "slope": "3/10"},
+      {"rho_range": ["2/3", "1"], "intercept": "3/20", "slope": "9/20"}
+    ]
+  },
+  "gross_adaptive_premium": [
+    {"rho_range": ["0", "3/8"], "intercept": "11/150", "slope": "3/50"},
+    {"rho_range": ["3/8", "2/3"], "intercept": "-1/60", "slope": "3/10"},
+    {"rho_range": ["2/3", "1"], "intercept": "1/12", "slope": "3/20"}
+  ],
+  "unique_strict_maintenance_threshold": "rho>7/18",
+  "boundary_correspondence_at_epsilon_one_tenth": {
+    "joint_pair_coerror": "9/200",
+    "pair_error_disagreement": "11/100"
+  },
+  "identifiability_boundary": "single-cue marginals do not identify rho; same-encounter joint errors do within the mixture if true cue values and perceived reports are known; three-cue law is otherwise unconstrained",
+  "independent_certificate": "all 385 and 208 affine candidate policy lines dominated at exact segment endpoints with Fraction arithmetic, plus 101-point comparison against production optimizer",
+  "verification": {"focused_tests": 5, "local_partial_harness_passed": 420, "full_repos_ci_at_previous_head": 38151614444, "full_repos_ci_at_new_head": "PENDING"},
+  "claim_ceiling": "finite model and prospective paired-calibration design, not a pollinator fitness measurement or general sensory-noise theorem"
+}
