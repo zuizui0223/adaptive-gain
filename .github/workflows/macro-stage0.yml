@@ -1,0 +1,21 @@
+name: macro-cue-architecture-stage0
+on:
+  pull_request:
+    paths:
+      - research/macro_cue_architecture/**
+      - .github/workflows/macro-stage0.yml
+  workflow_dispatch:
+jobs:
+  synthetic-source-audit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install pytest
+      - run: python -m pytest -q research/macro_cue_architecture/tests
+      - run: python research/macro_cue_architecture/verify_matched_cues.py
