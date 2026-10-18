@@ -1,0 +1,315 @@
+{
+  "registry_date": "2026-10-18",
+  "scope": "One real 30-study primary event archive directly parsed and audited; remaining 15 datasets remain metadata-only/unanalysed candidates, not pooled raw observations.",
+  "search_freeze_plan": "Systematically enumerate Dryad, Zenodo, Figshare, OSF, DataCite/OpenAlex-linked IPD and event-level studies through 2026-10-18; deduplicate DOI/study/site/event and log rejected records",
+  "sources": [
+    {
+      "id": "Schwarz_temporal_30",
+      "track": "macro_interaction_events",
+      "system": "plant-pollinator networks; 30 studies in 9 countries",
+      "doi": "10.5061/dryad.qz612jmbp",
+      "url": "https://doi.org/10.5061/dryad.qz612jmbp",
+      "files": [
+        "OIK-07303_database.csv",
+        "OIK-07303_original_studies.xlsx",
+        "OIK-07303_network_aggregation.R"
+      ],
+      "unit": "study/site/date/plant/pollinator event",
+      "effort": "heterogeneous, inspect original protocols",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "not generally documented in compiled positive-only network",
+      "role": "sampling-aware macro network temporal dynamics; source study registry",
+      "caution": "site/date modified in compilation; reacquire original effort methods and acknowledge authors",
+      "status": "RAW_PARSED_STAGE0_NOT_ROUTEABILITY",
+      "raw_csv_source": "https://zenodo.org/records/4744654/files/OIK-07303_database.csv?download=1",
+      "actual_audit": "validation/schwarz_stage0_remote_live_20261018.json",
+      "actual_rows": 150914,
+      "actual_studies": 30,
+      "site_dates": 3270,
+      "eligible_record_pairs": 479,
+      "eligible_studies": 16,
+      "eligible_site_ids": 105,
+      "caution_addendum": "positive-only visit rows and compiled dates, 182-day southern-hemisphere shift and pooled sites; no observation time denominator or cue order"
+    },
+    {
+      "id": "UK_PoMS_FIT",
+      "track": "macro_effort_corrected_visitation",
+      "system": "UK flower-visitor guild counts 2017-2023",
+      "doi": "10.5285/d706088c-9d48-4be5-b156-6ed6ad5e0618",
+      "url": "https://doi.org/10.5285/d706088c-9d48-4be5-b156-6ed6ad5e0618",
+      "files": [
+        "EIDC FIT event tables and documentation"
+      ],
+      "unit": "10 minute counted flower patch and pollinator guild",
+      "effort": "standard ten minutes; flowers and basic environmental conditions",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "yes for counted visits",
+      "role": "independent effort-based macro external validation",
+      "caution": "broad guild labels; volunteer site-selection bias; observer ten-minute time != animal sensing budget",
+      "status": "ZIP_URL_VERIFIED_RAW_NOT_OPENED",
+      "zip_url": "https://data-package.ceh.ac.uk/sd/d706088c-9d48-4be5-b156-6ed6ad5e0618.zip",
+      "raw_rows": null
+    },
+    {
+      "id": "DoPI_UK",
+      "track": "macro_discovery_only",
+      "system": "UK published flower-visitor interactions",
+      "doi": "10.1002/ecy.3801",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9786240/",
+      "files": [
+        "DoPI event data, see original datasource"
+      ],
+      "unit": "plant-visitor pair records with occasional date/site",
+      "effort": "often unknown",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "mostly no",
+      "role": "primary study discovery and geographic external reference",
+      "caution": "do not model latent absence from positive-only records"
+    },
+    {
+      "id": "Villavicencio_time_series",
+      "track": "macro_detection_negative_control",
+      "system": "longitudinal plant-pollinator observations in PR65",
+      "doi": "10.5061/dryad.8cz8w9gm1",
+      "url": "https://doi.org/10.5061/dryad.8cz8w9gm1",
+      "files": [
+        "annual raw network workbook; Figshare raw visitor logs referenced in PR65"
+      ],
+      "unit": "5-minute focal-plant census by site/date/plant",
+      "effort": "raw census count reconstructed in PR65",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "reconstructable to some extent",
+      "role": "pre-existing worked effort/detection case; NOT routeability proof",
+      "caution": "effort heterogeneity and latent link nonidentifiability, no new positive rewiring claim"
+    },
+    {
+      "id": "Western_Ghats_seasonal",
+      "track": "macro_phenology_cues",
+      "system": "Kaas plateau plants and flower visitation in 2018–2020",
+      "doi": "10.5061/dryad.h9w0vt4w0",
+      "url": "https://doi.org/10.5061/dryad.h9w0vt4w0",
+      "files": [
+        "Dataset_phenology.xlsx",
+        "Dataset_Network_matrices.xlsx"
+      ],
+      "unit": "plant species/seasonal sampling round and plant-pollinator networks",
+      "effort": "requires workbook inspection",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "flower abundance by species/time",
+      "role": "independent phenology and coarse color cue strata",
+      "caution": "floral color labels alone not organism-specific cue perception; nectar reward unknown"
+    },
+    {
+      "id": "Dryland_gradient_2026",
+      "track": "macro_opportunity",
+      "system": "dryland elevational plant-pollinator weekly study 2021–2022",
+      "doi": "10.5061/dryad.j0zpc86s2",
+      "url": "https://doi.org/10.5061/dryad.j0zpc86s2",
+      "files": [
+        "temporal_cooccurrence_data.csv",
+        "plant_pollinator_synchrony_data.csv",
+        "Plant_pollinator_interaction_data_redacted.csv"
+      ],
+      "unit": "weekly transect and dyad presence/cooccurrence",
+      "effort": "weekly site-transect schedule; check raw methods",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "temporal plant presence and floral abundance",
+      "role": "site-climate and observed opportunity windows",
+      "caution": "interaction ABUNDANCE REDACTED: no weighted visit rate from redacted file"
+    },
+    {
+      "id": "Pantanal_temporal_2019",
+      "track": "macro_network_phenology",
+      "system": "tropical seasonal plant-pollinator networks",
+      "doi": "10.5061/dryad.5g10870",
+      "url": "https://doi.org/10.5061/dryad.5g10870",
+      "files": [
+        "Souza_et_al.2018-Journal_of_Ecology_Suplementar_file_species_data_networks.xlsx"
+      ],
+      "unit": "species x season interaction",
+      "effort": "inspect original survey schedule",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "unknown",
+      "role": "seasonal non-UK out-of-domain validation",
+      "caution": "may overlap sources in Schwarz 30; strict dedup"
+    },
+    {
+      "id": "Kent_Island_cognition",
+      "track": "trial_level_cognition_not_causal_routeability",
+      "system": "six Hymenoptera species with independent floral network and spectral measures",
+      "doi": "10.5061/dryad.9p8cz8wtm",
+      "url": "https://doi.org/10.5061/dryad.9p8cz8wtm",
+      "files": [
+        "Learning_Experiment.csv",
+        "2019_2023_Kent_Island_Plant_Pollinator_Network.csv",
+        "Floral_Reflectance_Kent_Island_Plants.csv",
+        "Plant_Phenology.csv"
+      ],
+      "unit": "insect_id x trial_number and site/year/plant observations",
+      "effort": "individual training and choice trials, natural network opportunistic",
+      "target_known": true,
+      "cue_sequence": false,
+      "null_counts": "correct/incorrect within learning trials; missing must be audited",
+      "role": "learning response and natural resource-color discriminability",
+      "caution": "single-color learning NOT randomized contingent vs fixed cue acquisition; six species from one study NOT six independent experiments",
+      "status": "PUBLIC_SCHEMA_ONLY_RAW_UNANALYSED",
+      "raw_rows": null
+    },
+    {
+      "id": "Latty_artificial_flowers",
+      "track": "trial_cue_factorial",
+      "system": "wild insect approach/landing/feeding on multi-attribute artificial flowers",
+      "doi": "10.5061/dryad.jsxksn0h5",
+      "url": "https://doi.org/10.5061/dryad.jsxksn0h5",
+      "files": [
+        "artificial_flower_data.csv",
+        "multinom_visitation.csv"
+      ],
+      "unit": "site/stimulus combination and approach/landing/feeding observation",
+      "effort": "inspect observation unit and durations",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "counts",
+      "role": "multicue effects; diversity of respondents",
+      "caution": "no counterfactual order-conditional access; no actual internal cue reports",
+      "status": "DRYAD_VERSION_METADATA_ANONYMOUS_DOWNLOAD_401",
+      "dryad_version": 264694,
+      "csv_file_ids": {
+        "artificial_flower_data.csv": 2711153,
+        "multinom_visitation.csv": 2711156
+      },
+      "raw_rows": null
+    },
+    {
+      "id": "Bee_cage_individual_visits",
+      "track": "individual_forage_sequences",
+      "system": "Bumblebee artificial flower flight cage over 5 days",
+      "doi": "PMC6383269",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6383269/",
+      "files": [
+        "Dataset S1, Additional file 2 CSV"
+      ],
+      "unit": "individual bee x ordered flower visit",
+      "effort": "five-day observation and flower reward-state definitions",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "visitation sequences only",
+      "role": "sequential foraging transition analysis",
+      "caution": "visiting flower sequentially is NOT observing Q1 then deciding Q2; do not estimate causal adaptivity premium"
+    },
+    {
+      "id": "Kawaguchi_bandwagon_2026",
+      "track": "individual_social_context_behavior",
+      "system": "bee patch choice in a floral market",
+      "doi": "10.5061/dryad.qfttdz0qv",
+      "url": "https://doi.org/10.5061/dryad.qfttdz0qv",
+      "files": [
+        "CageExpData.csv",
+        "ConsecutiveLandings.csv",
+        "Approach_to_Landing.csv"
+      ],
+      "unit": "BeeID/Colony x experimental patch choice",
+      "effort": "experimenter-defined choices and non-switches",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "choice/non-shift encoded",
+      "role": "social/context effects on subsequent resource choice",
+      "caution": "bandwagon context is not randomized ability to choose different sensory query identities"
+    },
+    {
+      "id": "Aedes_IR_CO2_hostseeking",
+      "track": "cross_taxon_multicue_behavior",
+      "system": "Aedes aegypti host-seeking CO2 human odor and thermal IR",
+      "doi": "10.1038/s41586-024-07848-5",
+      "url": "https://doi.org/10.1038/s41586-024-07848-5",
+      "files": [
+        "paper source data figures 2/3 and raw videos doi:10.5061/dryad.547d7wmh3"
+      ],
+      "unit": "biological replicate/time or mosquito position and preference",
+      "effort": "known recording windows and stimulus pulses",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "time-series host seeking response",
+      "role": "timing and multisensory interaction externality",
+      "caution": "co-present stimuli and CO2 pulses are NOT necessarily a chosen adaptive cue route"
+    },
+    {
+      "id": "Camera_human_detection_2026",
+      "track": "method_bias_and_detection",
+      "system": "apple/caraway flower camera vs human observation",
+      "doi": "10.5061/dryad.q573n5v02",
+      "url": "https://doi.org/10.5061/dryad.q573n5v02",
+      "files": [
+        "Apple_flower_visits_CAM.csv",
+        "Apple_flower_visits_HUM.csv",
+        "Caraway_flower_visits_CAM.csv",
+        "Caraway_flower_visits_HUM.csv"
+      ],
+      "unit": "site/date/hour/minute and camera 10-second frames versus human 15-minute observations",
+      "effort": "explicit periods with documented camera interruption",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "method exposure known",
+      "role": "sampling and observer detection sensitivity",
+      "caution": "not evidence of individual cue inspection order"
+    },
+    {
+      "id": "FloRes_resources",
+      "track": "independent_plant_reward_traits_candidate",
+      "system": "842 floral resource taxa raw; variable coverage",
+      "doi": "10.5281/zenodo.6963646",
+      "url": "https://zenodo.org/records/6963646",
+      "files": [
+        "Floral resources trait database and five R workflow scripts"
+      ],
+      "unit": "plant taxon x flowering/nectar/pollen traits",
+      "effort": "species data extracted from literature; not interactions",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "many missing",
+      "role": "independent reward labels where reliably measured",
+      "caution": "ONLY 27 taxa with all eight traits, never assume full global reward coverage"
+    },
+    {
+      "id": "FReD_spectra",
+      "track": "independent_visual_cue_traits_candidate",
+      "system": "UV-visible flower reflectance across taxa",
+      "doi": "10.1371/journal.pone.0014287",
+      "url": "https://doi.org/10.1371/journal.pone.0014287",
+      "files": [
+        "species reflectance curves, 300–700nm"
+      ],
+      "unit": "flower specimen/part x wavelength",
+      "effort": "sampling metadata varies",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "n/a",
+      "role": "physically measured color cues with bee visual transforms",
+      "caution": "coverage and taxon receptor assumptions/illumination background not uniform"
+    },
+    {
+      "id": "GloBI_broad_discovery",
+      "track": "study_discovery_and_taxonomy",
+      "system": "global biotic interaction repository including flower visitors",
+      "doi": "10.5281/zenodo.3950589",
+      "url": "https://www.globalbioticinteractions.org/data",
+      "files": [
+        "versioned indexed interaction datasets"
+      ],
+      "unit": "curated interaction rows with source citation",
+      "effort": "unknown for many original sources",
+      "target_known": false,
+      "cue_sequence": false,
+      "null_counts": "mostly positive records",
+      "role": "provenance-discovery and geographic coverage",
+      "caution": "never treat incidental nonrecord as observed absence; dedupe original sources"
+    }
+  ]
+}

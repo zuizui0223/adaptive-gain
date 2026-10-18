@@ -1,0 +1,12 @@
+{
+  "date":"2026-10-18",
+  "actual_analysis":{
+    "Schwarz_temporal_30":{"original_event_rows":150914,"live_raw_source":"https://zenodo.org/records/4744654/files/OIK-07303_database.csv?download=1","analysis_level":"30 studies/343 site IDs/3270 site-date units; strict 479 pairs in 16 studies","real_data_analyzed":true,"raw_bytes_bundled":false}
+  },
+  "data_metadata_retrieved_but_rows_not_analyzed":{
+    "UK_PoMS_FIT":{"page":"https://catalogue.ceh.ac.uk/documents/d706088c-9d48-4be5-b156-6ed6ad5e0618","archive":"https://data-package.ceh.ac.uk/sd/d706088c-9d48-4be5-b156-6ed6ad5e0618.zip","reason":"bulk zip inaccessible to executable analysis in current environment","real_data_analyzed":false},
+    "Latty_artificial_flowers":{"page":"https://datadryad.org/dataset/doi%3A10.5061/dryad.jsxksn0h5","version_file_api":"https://datadryad.org/api/v2/versions/264694/files","csv_file_ids":[2711153,2711156],"reason":"anonymous Dryad API /files/<id>/download returned HTTP 401","real_data_analyzed":false},
+    "Kent_Island_cognition":{"page":"https://datadryad.org/dataset/doi%3A10.5061/dryad.9p8cz8wtm","reason":"public README/schema reviewed, raw experimental CSV not acquired","real_data_analyzed":false}
+  },
+  "governance":{"do_not_pool":"different information estimands and observation grains","do_not_claim":"natural routeability or conditional cue choice from Schwarz positive-only flower visiting logs","doi_source":"10.5061/dryad.qz612jmbp","source_md5_advertised_not_recomputed":"7a70c3e2356611b0871c163a2f9aed4a"}
+}
