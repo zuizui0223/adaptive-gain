@@ -7,7 +7,18 @@
   "source_md5_published_not_locally_recomputed": "7a70c3e2356611b0871c163a2f9aed4a",
   "source_access": "Source text fetched and analyzed directly in hosted web-extraction JS; raw source not copied into analysis container; reproducible standalone Python script requires independent file download and digest check",
   "source_text_characters": 18987400,
-  "observed_schema": ["study", "cdate", "sSite", "allSites", "lower", "higher", "freq", "sgrain", "sgrainID", "largestgrain"],
+  "observed_schema": [
+    "study",
+    "cdate",
+    "sSite",
+    "allSites",
+    "lower",
+    "higher",
+    "freq",
+    "sgrain",
+    "sgrainID",
+    "largestgrain"
+  ],
   "observed_counts": {
     "data_rows": 150914,
     "header_mismatch_rows": 0,
@@ -18,10 +29,21 @@
     "plant_name_strings": 1537,
     "pollinator_name_strings": 4385,
     "identical_repeated_rows_not_removed": 81675,
-    "date_range_compiled": ["1888-04-06", "2017-09-20"],
+    "date_range_compiled": [
+      "1888-04-06",
+      "2017-09-20"
+    ],
     "missing_higher": 1,
-    "record_grain": {"day": 114966, "week": 12482, "month": 23466},
-    "study_site_date_grain": {"day": 2086, "week": 462, "month": 722}
+    "record_grain": {
+      "day": 114966,
+      "week": 12482,
+      "month": 23466
+    },
+    "study_site_date_grain": {
+      "day": 2086,
+      "week": 462,
+      "month": 722
+    }
   },
   "strict_adjacent_day_filter": {
     "grain": "day",
@@ -46,31 +68,61 @@
     "pearson_day_gap_raw_dissimilarity": 0.3667363631497918,
     "pearson_day_gap_rarefied_dissimilarity": 0.3256884149462282,
     "day_gap_bins": [
-      {"days": "1-7", "n": 335, "full_raw": 0.7896426600781307, "equal_record": 0.8349585934558325},
-      {"days": "8-14", "n": 80, "full_raw": 0.8403699104271138, "equal_record": 0.8820595338964757},
-      {"days": "15-30", "n": 64, "full_raw": 0.8771539998799355, "equal_record": 0.8940581744713013}
+      {
+        "days": "1-7",
+        "n": 335,
+        "full_raw": 0.7896426600781307,
+        "equal_record": 0.8349585934558325
+      },
+      {
+        "days": "8-14",
+        "n": 80,
+        "full_raw": 0.8403699104271138,
+        "equal_record": 0.8820595338964757
+      },
+      {
+        "days": "15-30",
+        "n": 64,
+        "full_raw": 0.8771539998799355,
+        "equal_record": 0.8940581744713013
+      }
     ]
   },
   "exploratory_study_fixed_effects": {
     "observations": 479,
     "study_clusters": 16,
-    "predictors": ["log1p(day_gap)", "log(max(record_count_day1,record_count_day2)/min(record_count_day1,record_count_day2))"],
+    "predictors": [
+      "log1p(day_gap)",
+      "log(max(record_count_day1,record_count_day2)/min(record_count_day1,record_count_day2))"
+    ],
     "cluster_se_type": "CR1 study-cluster sandwich, df=15, study FE within-demean",
     "raw_dissimilarity": {
       "gap_beta": 0.056757612384557565,
       "gap_study_cluster_se": 0.008002087314524347,
-      "gap_cluster_t95_interval": [0.03970, 0.07381],
+      "gap_cluster_t95_interval": [
+        0.0397,
+        0.07381
+      ],
       "record_ratio_beta": 0.04134934804286705,
       "record_ratio_study_cluster_se": 0.015880014245246567,
-      "record_ratio_cluster_t95_interval": [0.00750, 0.07520]
+      "record_ratio_cluster_t95_interval": [
+        0.0075,
+        0.0752
+      ]
     },
     "rarefied_dissimilarity": {
       "gap_beta": 0.04929656349802646,
       "gap_study_cluster_se": 0.006243051950918631,
-      "gap_cluster_t95_interval": [0.03599, 0.06260],
+      "gap_cluster_t95_interval": [
+        0.03599,
+        0.0626
+      ],
       "record_ratio_beta": 0.01847616919803587,
       "record_ratio_study_cluster_se": 0.0126120723503585,
-      "record_ratio_cluster_t95_interval": [-0.00841, 0.04536]
+      "record_ratio_cluster_t95_interval": [
+        -0.00841,
+        0.04536
+      ]
     }
   },
   "limitations": [
@@ -79,7 +131,46 @@
     "No independently calibrated animal-available cue sequence, alternate resources, payoff target or cue-acquisition cost is recorded.",
     "Longitudinal comparisons share site dates; study-cluster variance with 16 clusters is exploratory, not a valid universal ecological prevalence inference.",
     "Consequently this does not identify latent link gain/loss, ecological rewiring, adaptive-gain utility, or animal cognition.",
-    "The distributed study data are heterogeneous and may overlap other source registries; source-study IDs must be preserved."
+    "The distributed study data are heterogeneous and may overlap other source registries; source-study IDs must be preserved.",
+    "Site-fixed-effect sensitivity also uses study-clustered SE on 16 independent source studies; not a confirmatory test and within-site temporal autocorrelation is not explicitly modeled."
   ],
-  "status": "source_directly_analyzed_and_descriptive_audit_performed_not_routeability_validation"
+  "status": "source_directly_analyzed_and_descriptive_audit_performed_not_routeability_validation",
+  "exploratory_site_fixed_effects": {
+    "observations": 479,
+    "site_fixed_effect_groups": 105,
+    "study_clusters": 16,
+    "predictors": [
+      "log1p(day_gap)",
+      "log(max(recordcountA,recordcountB)/min(recordcountA,recordcountB))"
+    ],
+    "cluster_se_type": "CR1 study-cluster sandwich, df=15; within-site demean",
+    "raw_dissimilarity": {
+      "gap_beta": 0.057003370616381006,
+      "gap_study_cluster_se": 0.010254460831051788,
+      "gap_cluster_t95_interval": [
+        0.035146504737662676,
+        0.07886023649509934
+      ],
+      "record_ratio_beta": 0.04848381989147384,
+      "record_ratio_study_cluster_se": 0.019030797896889527,
+      "record_ratio_cluster_t95_interval": [
+        0.007920634361743215,
+        0.08904700542120446
+      ]
+    },
+    "rarefied_dissimilarity": {
+      "gap_beta": 0.0474451263892849,
+      "gap_study_cluster_se": 0.006929563621885392,
+      "gap_cluster_t95_interval": [
+        0.03267511115621099,
+        0.06221514162235881
+      ],
+      "record_ratio_beta": 0.021548982159845933,
+      "record_ratio_study_cluster_se": 0.01685953547683992,
+      "record_ratio_cluster_t95_interval": [
+        -0.014386267071291595,
+        0.057484231390983465
+      ]
+    }
+  }
 }

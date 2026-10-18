@@ -4,7 +4,7 @@
 
 - 30-study Schwarz primary event table read directly from the Zenodo-hosted public CSV URL. Exactly 150,914 rows and 10 identified columns. 343 study/site identifiers, 3,270 study-site/date units.
 - Prospective dated comparisons: 16 original studies, 105 site identifiers, 479 adjacent pairs meeting **day-grain / <=30 days / >=20 positive records on both dates / freq ==1 in compared rows**.
-- Observed link sets measured and row-based 20-draw Monte Carlo rarefaction run with an exact reproduced Mulberry32 seed. Raw mean Jaccard dissimilarity 0.809807; standardized mean 0.850722. Study-FE/CR1 exploratory regressions run and recorded in the receipt.
+- Observed link sets measured and row-based 20-draw Monte Carlo rarefaction run with an exact reproduced Mulberry32 seed. Raw mean Jaccard dissimilarity 0.809807; standardized mean 0.850722. Study-FE AND site-FE/CR1 exploratory regressions run and recorded in the receipt.
 - 6-state cue-by-target-marginal-matched deterministic pair reproduced independently with exact Fractions and 135 constrained synthetic designs enumerated.
 
 ## What has NOT passed

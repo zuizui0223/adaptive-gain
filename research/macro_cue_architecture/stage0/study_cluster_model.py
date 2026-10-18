@@ -26,24 +26,26 @@ def _mul2(a,b):
     return [[sum(a[i][k]*b[k][j] for k in range(2)) for j in range(2)] for i in range(2)]
 
 
-def study_fixed_effect_regression(pairs, *, outcome):
+def study_fixed_effect_regression(pairs, *, outcome, fixed_effects='study'):
     if outcome not in ('raw','rarefied'):
         raise ValueError('outcome must be raw or rarefied')
+    if fixed_effects not in ('study','site'):
+        raise ValueError('fixed_effects must be study or site')
     grouped=defaultdict(list)
-    for record in pairs:grouped[record['study']].append(record)
-    studies=list(grouped)
+    for record in pairs:grouped[record[fixed_effects]].append(record)
+    studies=list({record['study'] for record in pairs})
     if len(studies)<3:
         raise ValueError('at least 3 study clusters required')
     X=[];Y=[];clusters=[]
-    for st,records in grouped.items():
+    for fe_id,records in grouped.items():
         raw=[[math.log1p(r['gap']),r['imbalance']] for r in records]
         vals=[r[outcome] for r in records]
         mu=[sum(row[j] for row in raw)/len(raw) for j in range(2)]
         my=sum(vals)/len(vals)
         for row,value in zip(raw,vals):
             X.append([row[j]-mu[j] for j in range(2)])
-            Y.append(value-my);clusters.append(st)
-    n=len(Y);g=len(studies);k=g+2
+            Y.append(value-my);clusters.append(records[0]['study'])
+    n=len(Y);g=len(studies);k=len(grouped)+2
     a=sum(row[0]**2 for row in X);b=sum(row[0]*row[1] for row in X)
     c=sum(row[1]**2 for row in X);det=a*c-b*b
     if det<=1e-14:
@@ -62,7 +64,7 @@ def study_fixed_effect_regression(pairs, *, outcome):
     df=g-1
     critical=_T975[df] if df<len(_T975) else None
     ci=[[beta[j]-critical*se[j],beta[j]+critical*se[j]] for j in range(2)] if critical else None
-    return {'n_pairs':n,'n_studies':g,'outcome':outcome,
+    return {'n_pairs':n,'n_studies':g,'n_fixed_effect_groups':len(grouped),'fixed_effects':fixed_effects,'outcome':outcome,
       'predictors':['log1p_day_gap','log_positive_record_count_ratio'],
       'beta':beta,'cluster_study_se':se,'ci95_t_cluster_df':ci,'df':df,
       'conditional_meaning':'observed-link dissimilarity; no causal routeability or detection correction'}

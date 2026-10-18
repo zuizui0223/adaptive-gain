@@ -238,8 +238,9 @@ def main():
     if args.study_cluster_model and report['comparisons']['n']:
         from study_cluster_model import study_fixed_effect_regression
         report['exploratory_models']={
-            outcome:study_fixed_effect_regression(report['comparisons']['pairs'],outcome=outcome)
-            for outcome in ('raw','rarefied')
+            fixed: {outcome:study_fixed_effect_regression(report['comparisons']['pairs'],outcome=outcome,fixed_effects=fixed)
+                    for outcome in ('raw','rarefied')}
+            for fixed in ('study','site')
         }
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
