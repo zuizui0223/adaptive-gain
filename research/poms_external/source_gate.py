@@ -9,7 +9,7 @@ from collections import Counter
 
 DOI = "10.5285/d706088c-9d48-4be5-b156-6ed6ad5e0618"
 UUID = "d706088c-9d48-4be5-b156-6ed6ad5e0618"
-DATA_URL = "https://data-package.ceh.ac.uk/data/" + UUID
+DATA_URL = "https://data-package.ceh.ac.uk/data/" + UUID + ".zip"
 SUPPORT_URL = "https://data-package.ceh.ac.uk/sd/" + UUID + ".zip"
 MAX_DOWNLOAD = 300_000_000
 MAX_UNCOMPRESSED = 700_000_000
