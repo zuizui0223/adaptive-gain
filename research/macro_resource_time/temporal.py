@@ -77,6 +77,34 @@ def download(raw):
     (raw/'provenance.json').write_text(json.dumps(receipt,indent=2))
     return receipt
 
+def permutation_support(counts, blocks=None):
+    """Whether fixed-margin shuffling can vary within the declared blocks.
+
+    A block contributes only if observed visits span >=2 dates and >=2 plants.
+    Lack of such a block is a no-test situation, NOT evidence of no segregation.
+    """
+    a = np.asarray(counts, dtype=np.int64)
+    if a.ndim != 2 or (a < 0).any() or a.sum() <= 0:
+        raise ValueError('nonempty 2D nonnegative counts required')
+    if blocks is None:
+        block_ids = np.zeros(a.shape[0], dtype=np.int64)
+    else:
+        block_ids = np.asarray(blocks)
+        if len(block_ids) != a.shape[0]:
+            raise ValueError('one block per date required')
+    informative = 0
+    permutable_visits = 0
+    for block in np.unique(block_ids):
+        b = a[block_ids == block]
+        if np.count_nonzero(b.sum(axis=1)) >= 2 and np.count_nonzero(b.sum(axis=0)) >= 2:
+            informative += 1
+            permutable_visits += int(b.sum())
+    return {'testable': informative > 0,
+            'informative_blocks': informative,
+            'permutable_visits': permutable_visits,
+            'permutable_visit_fraction': permutable_visits / int(a.sum())}
+
+
 def read_source_csv(path):
     """Parse verified original bytes without lossy replacement.
 
@@ -100,6 +128,14 @@ def summarize(g):
     for f in fields:
         ans[f+'_median']=float(g[f].median());ans[f+'_mean']=float(g[f].mean())
     for w in ['global','7d','14d','28d']:
+        if 'testable_'+w in g:
+            testable = g['testable_'+w].astype(bool)
+            ans[w+'_testable_panels'] = int(testable.sum())
+            ans[w+'_testable_fraction'] = float(testable.mean())
+            ans[w+'_p_le_005_among_testable'] = (
+                float((g.loc[testable,'p_'+w] <= .05).mean()) if testable.any() else None
+            )
+            ans[w+'_permutable_visits_fraction_median'] = float(g['permutable_fraction_'+w].median())
         ans[w+'_positive_fraction']=float((g['excess_'+w]>1e-10).mean())
         ans[w+'_p_le_005_fraction']=float((g['p_'+w]<=.05).mean())
     ans['four_week_adjusted_factor_median']=float(np.exp(g.excess_28d).median())
@@ -155,6 +191,10 @@ def main(argv=None):
         for j,window in enumerate([None,7,14,28]):
             label='global' if window is None else str(window)+'d'
             blocks=None if window is None else ordinal//window
+            support=permutation_support(counts,blocks)
+            row['testable_'+label]=support['testable']
+            row['informative_blocks_'+label]=support['informative_blocks']
+            row['permutable_fraction_'+label]=support['permutable_visit_fraction']
             null=permutation_null(counts,args.reps,seed+j,blocks)
             row['null_'+label]=float(null.mean());row['excess_'+label]=float(obs['I']-null.mean())
             row['p_'+label]=float((1+np.sum(null>=obs['I']-1e-12))/(args.reps+1))
