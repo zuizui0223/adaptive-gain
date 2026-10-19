@@ -46,7 +46,7 @@ def load(z,design):
     flowers=pd.to_numeric(df.floral_unit_count,errors="coerce")
     is_other=target.str.contains("Other - please describe",case=False,na=True)
     all_counts=df[list(GUILDS)+["all_insects_total"]].apply(pd.to_numeric,errors="coerce")
-    valid=~is_other &target.notna()&dates.notna()&flowers.gt(0)&
+    valid=((~is_other) &target.notna()&dates.notna()&flowers.gt(0)&
         all_counts.notna().all(axis=1)&all_counts.ge(0).all(axis=1)&
         np.isclose(all_counts[list(GUILDS)].sum(axis=1),all_counts.all_insects_total)
     site=df["location_code"].astype("string") if design=="1km" else df["x1km_square"].astype("string")
