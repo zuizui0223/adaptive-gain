@@ -1,0 +1,30 @@
+name: poms-source-gate
+on:
+  push:
+    paths:
+      - 'research/poms_external/**'
+      - '.github/workflows/poms-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-data-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source script syntax check
+        run: python -m py_compile research/poms_external/source_gate.py
+      - name: Retrieve official UK PoMS FIT archive and audit schema
+        run: python -u research/poms_external/source_gate.py
+      - name: Upload provenance and field/zero profile only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-original-data-source-gate
+          path: poms_source_gate/source_gate.json
+          retention-days: 90
+          if-no-files-found: warn
