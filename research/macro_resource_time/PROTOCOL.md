@@ -17,6 +17,10 @@ Compare observed I against 199 label permutations preserving the total number of
 
 Primary eligibility fixed before results: >=40 recorded visits, >=4 recorded dates and >=3 recorded plant partners. Retain exclusion tables for EVERY daily panel. Keep all source studies in the source inventory even if no panel qualifies. Display group-level permutation tail rates descriptively; visitor panels within study/site/year are not independent experimental replicates. Equal-source summaries, not event-pool significance, are the first macro comparison. Shared-origin source datasets must be audited before treating source labels as independent meta-analysis units.
 
+## Post-first-run audit: permutation support (2026-10-19)
+
+The initial 199-replicate complete-data analysis succeeded with 457 eligible visitor-site-season panels (20 source labels), but interpreting differences between 7/14/28-day blocked-null p-value fractions requires an additional **testability denominator**. When a panel has no multi-date, multi-plant block at a given resolution, its permutation distribution is degenerate, so p=1 means *no shuffle was possible*, not *no short-timescale temporal organization*. The follow-up run reports the number of testable panels and the recorded-visit fraction in permutable blocks for each resolution, and p<=.05 among those testable panels. This diagnostic was added after examining the initial results and is labeled exploratory. It does not redefine the initial inclusion criteria, fixed margins or 199 replicates.
+
 ## Interpretation boundary and competing explanations
 Positive excess segregation beyond fixed margins means the observed partner composition is more time-organized than the chosen conditional exchangeability null. It may reflect plant or visitor phenology, resource availability, temporal habitat sampling, floral observation allocation, colony/individual turnover, or behavior. Positive 14-day-block excess is not proof that phenology or effort is controlled. This file does not infer C_A, C_F, perceived cues, profitable resource labels, latent network rewiring or adaptive fitness.
 
