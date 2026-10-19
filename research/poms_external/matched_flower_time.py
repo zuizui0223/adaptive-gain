@@ -41,7 +41,7 @@ def load(z,design):
     date=pd.to_datetime(df.date,errors="coerce",dayfirst=True)
     floral=pd.to_numeric(df.floral_unit_count,errors="coerce")
     numeric=df[list(GUILDS)+["all_insects_total"]].apply(pd.to_numeric,errors="coerce")
-    mask=(~is_other)&date.notna()&floral.gt(0)&target.notna()&
+    mask=((~is_other)&date.notna()&floral.gt(0)&target.notna()&
       numeric.notna().all(axis=1)&numeric.ge(0).all(axis=1)&
       np.isclose(numeric[list(GUILDS)].sum(axis=1),numeric.all_insects_total))
     site=(df.location_code if design=="1km" else df.x1km_square).astype("string")
