@@ -179,7 +179,7 @@ def main():
                      "flower-unit exposure proportional-rate model is an assumption",
                      "site-month weather may differ despite within7day restriction",
                      "public x1km_square may contain spatially different observer patches",
-                     "199 EIDC label inspections are not empirical outcome validation",
+                     "archive field checks are not causal outcome validation",
                      "post-schema exploratory gate; no preregistered confirmatory p values"],"designs":{}}
     for design in ("1km","public"):
         w,q=load(z,design)
