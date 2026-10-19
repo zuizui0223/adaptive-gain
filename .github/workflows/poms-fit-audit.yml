@@ -1,0 +1,29 @@
+name: poms-fit-audit
+on:
+  push:
+    paths:
+      - 'research/poms_external/audit_fit.py'
+      - '.github/workflows/poms-fit-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-data-exposure-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Zero counts, schema and crossed-flower survey exposure
+        run: python -u research/poms_external/audit_fit.py
+      - name: Archive non-sensitive provenance and eligibility only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-fit-exposure-audit
+          path: poms_fit_audit/profile.json
+          if-no-files-found: warn
+          retention-days: 90
