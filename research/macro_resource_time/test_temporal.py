@@ -2,7 +2,7 @@ import unittest
 import tempfile
 from pathlib import Path
 import numpy as np
-from temporal import entropy_parts, permutation_null, read_source_csv
+from temporal import entropy_parts, permutation_null, read_source_csv, permutation_support
 
 class TemporalTests(unittest.TestCase):
     def test_independence(self):
@@ -26,6 +26,26 @@ class TemporalTests(unittest.TestCase):
         z=permutation_null(a,19,8,np.array([0,0,1,1]));np.testing.assert_allclose(z,np.log(2))
     def test_singleton_blocks_are_identical(self):
         a=np.array([[2,3],[8,1]]);z=permutation_null(a,9,8,np.array([0,1]));np.testing.assert_allclose(z,entropy_parts(a)['I'])
+
+    def test_local_null_cannot_shuffle_single_date_blocks(self):
+        a = np.array([[10, 0], [0, 10]])
+        result = permutation_support(a, np.array([0, 1]))
+        self.assertFalse(result['testable'])
+        self.assertEqual(result['informative_blocks'], 0)
+        self.assertEqual(result['permutable_visit_fraction'], 0.0)
+
+    def test_local_null_support_counts_only_informative_visits(self):
+        a = np.array([[8, 0], [0, 8], [12, 0]])
+        result = permutation_support(a, np.array([0, 0, 1]))
+        self.assertTrue(result['testable'])
+        self.assertEqual(result['informative_blocks'], 1)
+        self.assertEqual(result['permutable_visits'], 16)
+        self.assertAlmostEqual(result['permutable_visit_fraction'], 16/28)
+
+    def test_same_plant_multiple_dates_is_not_testable(self):
+        a = np.array([[2, 0], [3, 0]])
+        result = permutation_support(a)
+        self.assertFalse(result['testable'])
 
     def test_verified_source_text_reading_preserves_legacy_bytes(self):
         with tempfile.TemporaryDirectory() as tmp:
