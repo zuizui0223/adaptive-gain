@@ -7,7 +7,7 @@ nulls also preserve these margins within calendar blocks. Detection and focal
 plant effort varying between dates are NOT removed by these nulls.
 """
 from __future__ import annotations
-import argparse, hashlib, json, math, platform, time, urllib.request
+import argparse, hashlib, io, json, math, platform, time, urllib.request
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -77,6 +77,23 @@ def download(raw):
     (raw/'provenance.json').write_text(json.dumps(receipt,indent=2))
     return receipt
 
+def read_source_csv(path):
+    """Parse verified original bytes without lossy replacement.
+
+    Some identifiers in the archived CSV contain non-UTF-8 bytes. Prefer strict
+    UTF-8 if it works; otherwise Latin-1 maps every source byte reversibly to
+    a code point. Do not mutate the archived file or silently drop rows.
+    The chosen codec is reported in the quality receipt.
+    """
+    original = Path(path).read_bytes()
+    try:
+        original.decode('utf-8')
+        encoding = 'utf-8'
+    except UnicodeDecodeError:
+        encoding = 'latin-1'
+    return pd.read_csv(io.BytesIO(original), encoding=encoding), encoding
+
+
 def summarize(g):
     fields=['I','Dpool','Dwithin','ratio','excess_global','excess_7d','excess_14d','excess_28d']
     ans={'panels':len(g),'visits':int(g.visits.sum()),'site_years':int(g[['site','year']].drop_duplicates().shape[0]),'visitor_labels':int(g.visitor.nunique())}
@@ -92,11 +109,12 @@ def main(argv=None):
     ap=argparse.ArgumentParser();ap.add_argument('--out',default='macro_results');ap.add_argument('--reps',type=int,default=199)
     ap.add_argument('--min-visits',type=int,default=40);ap.add_argument('--min-days',type=int,default=4);ap.add_argument('--min-plants',type=int,default=3)
     args=ap.parse_args(argv);out=Path(args.out);out.mkdir(parents=True,exist_ok=True)
-    provenance=download(out/'raw');df=pd.read_csv(out/'raw/OIK-07303_database.csv')
+    provenance=download(out/'raw');df,source_encoding=read_source_csv(out/'raw/OIK-07303_database.csv')
     required=['study','cdate','sSite','allSites','lower','higher','freq','sgrain']
     if not set(required)<=set(df):raise ValueError(f'missing columns: {df.columns}')
     freq=pd.to_numeric(df.freq,errors='coerce');date=pd.to_datetime(df.cdate,errors='coerce')
-    profile={'raw_rows':len(df),'columns':list(df),'source_studies':int(df.study.nunique()),'sum_freq':float(freq.sum()),
+    profile={'raw_rows':len(df),'columns':list(df),'source_text_encoding':source_encoding,
+             'source_text_policy':'strict UTF-8 or reversible Latin-1, with verified original raw bytes retained','source_studies':int(df.study.nunique()),'sum_freq':float(freq.sum()),
              'zero_freq':int((freq==0).sum()),'negative_freq':int((freq<0).sum()),'noninteger_freq':int((freq.dropna()%1!=0).sum()),
              'duplicate_full_rows':int(df.duplicated().sum()),'missing_by_column':{k:int(v) for k,v in df.isna().sum().items()},
              'sgrain_counts':{str(k):int(v) for k,v in df.sgrain.value_counts(dropna=False).items()},
