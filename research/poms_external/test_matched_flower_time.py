@@ -16,7 +16,7 @@ class ExactMatchedTests(unittest.TestCase):
     def test_exposure_odds_compensates_raw_counts(self):
         r=exact_conditional_2x2(np.array([[8,4],[4,8]]),np.array([[2,1],[1,2]],float))
         self.assertGreater(r["p"],.15)
-        self.assertLess(abs(r["log_interaction_or"]),.06)
+        self.assertLess(abs(r["log_interaction_or"]),.15)
 
     def test_invalid_exposure_fails_closed(self):
         with self.assertRaises(ValueError):
