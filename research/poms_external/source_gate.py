@@ -49,24 +49,21 @@ def read_download(url, name, directory):
 
 def csv_member_profile(z, member):
     """Only return header, row count, missing and numeric-zero rates; never rows."""
-    with z.open(member) as raw:
-        # Reversible, lossless fallback rather than dropping records.
-        sample=raw.read(4096)
-        try:sample.decode("utf-8");encoding="utf-8"
-        except UnicodeDecodeError:encoding="latin-1"
-    # Reading via wrapper retains memory bounds.
-    total=0; header=[]; samples=[]; missing=Counter()
-    with z.open(member) as raw:
-        stream=io.TextIOWrapper(raw,encoding=encoding,newline="",errors="strict")
-        reader=csv.reader(stream)
-        try:header=next(reader)
-        except StopIteration:return {"rows":0,"columns":[]}
-        for record in reader:
-            if len(record)!=len(header): raise ValueError("CSV_FIELD_COUNT_MISMATCH:"+member)
-            total+=1
-            for k,v in enumerate(record):
-                if not v.strip():missing[header[k]]+=1
-            if len(samples)<2000:samples.append(record)
+    # The original PoMS CSV can contain non-UTF8 Windows smart quotes beyond
+    # the first few kB. Validate *the entire member* before selecting a codec.
+    data=z.read(member)
+    try:decoded=data.decode("utf-8");encoding="utf-8"
+    except UnicodeDecodeError:decoded=data.decode("latin-1");encoding="latin-1"
+    total=0;header=[];samples=[];missing=Counter()
+    reader=csv.reader(io.StringIO(decoded,newline=""))
+    try:header=next(reader)
+    except StopIteration:return {"rows":0,"columns":[]}
+    for record in reader:
+        if len(record)!=len(header): raise ValueError("CSV_FIELD_COUNT_MISMATCH:"+member)
+        total+=1
+        for k,v in enumerate(record):
+            if not v.strip():missing[header[k]]+=1
+        if len(samples)<2000:samples.append(record)
     numeric={}
     for j,name in enumerate(header):
         good=0;zero=0;nonempty=0;negative=0
@@ -114,6 +111,12 @@ def main():
             except Exception as exc:entry["status"]="SCHEMA_ERROR";entry["error"]=str(exc)[:600]
         results[key]=entry
         print("ACCESS_GATE",key,entry["status"],entry.get("bytes"),entry.get("error",""),flush=True)
+        for member in entry.get("inventory",{}).get("files",[]):
+            cp=member.get("csv_profile",{})
+            print("ZIP_MEMBER",json.dumps({"archive":key,"name":member["name"],
+                "bytes":member["uncompressed_bytes"],"rows":cp.get("rows"),
+                "columns":cp.get("columns"),"encoding":cp.get("encoding"),
+                "numeric_zero_sample":cp.get("sample_numeric_zero_summary")},ensure_ascii=False),flush=True)
     (directory/"source_gate.json").write_text(json.dumps(results,indent=2,ensure_ascii=False))
     if results["data"]["status"]=="ZIP_DOWNLOADED":
         print("POMS_SOURCE_GATE_COMPLETE",flush=True)
