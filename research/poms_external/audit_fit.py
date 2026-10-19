@@ -55,10 +55,13 @@ def intersections(df):
         if months>=2:out["site_year_ge2_months"]+=1
         if plants>=2:out["site_year_ge2_plants"]+=1
         if months>=2 and plants>=2:out["site_year_ge2_months_ge2_plants"]+=1
-        wide=pd.crosstab(g.target,g.month)
-        if int((wide.gt(0).sum(axis=1)>=2).sum())>=2:
-            out["site_year_with_crossed_2plant_2month_support"]+=1
-            out["surveys_in_crossed_site_years"]+=len(g)
+        if months>=2 and plants>=2:
+            # Skip the expensive contingency table for singleton-site/season
+            # groups; such groups cannot have crossed flower-month support.
+            wide=pd.crosstab(g.target,g.month)
+            if int((wide.gt(0).sum(axis=1)>=2).sum())>=2:
+                out["site_year_with_crossed_2plant_2month_support"]+=1
+                out["surveys_in_crossed_site_years"]+=len(g)
     out["sampled_target_month_cells"]=int(df.groupby(["site","year","month","target"],dropna=False).ngroups)
     return out
 
