@@ -1,6 +1,8 @@
 import unittest
+import tempfile
+from pathlib import Path
 import numpy as np
-from temporal import entropy_parts, permutation_null
+from temporal import entropy_parts, permutation_null, read_source_csv
 
 class TemporalTests(unittest.TestCase):
     def test_independence(self):
@@ -24,5 +26,23 @@ class TemporalTests(unittest.TestCase):
         z=permutation_null(a,19,8,np.array([0,0,1,1]));np.testing.assert_allclose(z,np.log(2))
     def test_singleton_blocks_are_identical(self):
         a=np.array([[2,3],[8,1]]);z=permutation_null(a,9,8,np.array([0,1]));np.testing.assert_allclose(z,entropy_parts(a)['I'])
+
+    def test_verified_source_text_reading_preserves_legacy_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "legacy.csv"
+            source.write_bytes(b"name,value\nT\xccst,3\n")
+            data, codec = read_source_csv(source)
+            self.assertEqual(codec, "latin-1")
+            self.assertEqual(len(data), 1)
+            self.assertEqual(data.loc[0, "name"].encode("latin-1"), b"T\xccst")
+            self.assertEqual(int(data.loc[0, "value"]), 3)
+
+    def test_verified_source_text_prefers_strict_utf8(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "utf8.csv"
+            source.write_bytes("name,value\n東京,4\n".encode("utf-8"))
+            data, codec = read_source_csv(source)
+            self.assertEqual(codec, "utf-8")
+            self.assertEqual(data.loc[0, "name"], "東京")
 
 if __name__=='__main__':unittest.main()
