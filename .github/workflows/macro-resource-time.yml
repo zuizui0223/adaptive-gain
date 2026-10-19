@@ -1,0 +1,32 @@
+name: macro-resource-time
+on:
+  pull_request:
+    paths:
+      - 'research/macro_resource_time/**'
+      - '.github/workflows/macro-resource-time.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-data-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Independent numerical controls
+        working-directory: research/macro_resource_time
+        run: python -m unittest test_temporal -v
+      - name: Download verified complete source and analyze all eligible panels
+        run: python -u research/macro_resource_time/temporal.py --out macro_results --reps 199
+      - name: Preserve raw bytes, provenance, exclusions and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macro-resource-time-original-data-and-results
+          path: macro_results/
+          if-no-files-found: warn
+          retention-days: 90
