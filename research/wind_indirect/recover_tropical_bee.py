@@ -41,7 +41,7 @@ def main():
     if not zipfile.is_zipfile(io.BytesIO(data)):raise ValueError("NOT_ZIP")
     archive=dest/"CrallEtAl_OrchidBeeWindEcology.zip";archive.write_bytes(data)
     with zipfile.ZipFile(io.BytesIO(data)) as z:
-        files=[member_details(z,n) for n in z.namelist() if not n.endswith("/")]
+        files=[member_details(z,n) for n in z.namelist() if not n.endswith("/") and not any(p=="__MACOSX" or p.startswith(".") for p in n.split("/"))]
     summary={"original_url":URL,"md5":EXPECTED_MD5,"sha256":hashlib.sha256(data).hexdigest(),
              "bytes":len(data),"source":"10.5281/zenodo.3675327","files":files}
     (dest/"receipt.json").write_text(json.dumps(summary,indent=2,ensure_ascii=False))
