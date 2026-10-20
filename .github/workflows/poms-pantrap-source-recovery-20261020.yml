@@ -1,0 +1,40 @@
+name: poms-pantrap-source-recovery-20261020
+on:
+  push:
+    paths:
+      - '.github/workflows/poms-pantrap-source-recovery-20261020.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download official open archive and record its manifest
+        run: |
+          python - <<'PY'
+          import urllib.request, pathlib, hashlib, zipfile, json
+          out=pathlib.Path('pantrap_recovery');out.mkdir()
+          url='https://data-package.ceh.ac.uk/data/5841bfae-471b-498c-af89-c30e5140d6c5.zip'
+          req=urllib.request.Request(url,headers={'User-Agent':'adaptive-gain-poms-seasonal-composition/1.0'})
+          with urllib.request.urlopen(req,timeout=120) as r:
+              data=r.read(100_000_001)
+          if len(data)>100_000_000:raise ValueError('size limit exceeded')
+          p=out/'poms_pantrap_original_2017_2023.zip';p.write_bytes(data)
+          if not zipfile.is_zipfile(p):raise ValueError('not ZIP; no data analysis')
+          with zipfile.ZipFile(p) as z:
+              receipt={'source':url,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'files':[{'name':i.filename,'bytes':i.file_size} for i in z.infolist()]}
+          (out/'receipt.json').write_text(json.dumps(receipt,indent=2))
+          print(json.dumps(receipt));print('SOURCE_RECOVERY_COMPLETE')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: poms-pantrap-original-source-20261020
+          path: pantrap_recovery/
+          retention-days: 14
+          if-no-files-found: error
