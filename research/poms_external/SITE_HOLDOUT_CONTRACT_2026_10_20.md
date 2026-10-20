@@ -1,0 +1,13 @@
+# PoMS site-heldout interaction test: execution contract
+
+Continuation of the accepted post-matched design, fixed before examining site-heldout outcomes. Canonical entrypoint: site_holdout_model.py. Original-data SHA256 checks retain the exact 2017-2023 source previously profiled. Raw source, source sampling rights, and required UK PoMS acknowledgement remain those in PROTOCOL.md and the EIDC record.
+
+Question: does plant-category x month structure improve prediction in entirely held-out sites beyond plant, month, year, flower exposure, weather and observation context? The primary outcome is the site-equal difference in held-out Poisson negative log likelihood (baseline minus interaction, positive is better). Zero visits at performed counts stay in the response. An unsurveyed flower is never made a zero. Plant categories and insect guilds are not individual animals or finely resolved species.
+
+Primary count-scale ridge alpha=0.25, with predeclared 10-fold lower/higher sensitivities alpha=0.025 and 2.5. These are sensitivity checks, not validation-set hyperparameter tuning. Two flower-exposure models: a fitted log1p(flower count) covariate and a fixed proportional flower-count offset. Global exposure-unit changes must not change offset predictions; weighted-rate alpha is count-scale alpha divided by mean training exposure.
+
+Under ridge, adding full joint-category dummies also duplicates main-effect directions. Joint columns are therefore residualized against the entire baseline matrix using TRAINING data only, and the same projection is applied to test rows. This is a model-specific interaction contrast, not a general causal test.
+
+Five grouped folds hold out whole sites. Eligibility is based on observed covariate/exposure support, not guild outcomes; its thresholds remain from the previous script. Train-only encoders/projections and every test row's train-support status are audited. Per-site scores and fold diagnostics are archived. Convergence warnings fail execution instead of being suppressed.
+
+Uncertainty: 95% bootstrap intervals resample already-computed site scores. They do not refit the overlapping training folds, correct residual spatial dependence, or control multiplicity across the ten guilds. Use these as exploratory score-spread diagnostics, not definitive significance tests. Neither predictive performance nor its change demonstrates within-individual preference, all-flower availability, adaptive sensory routing, or fitness. Main positive conclusions require consistency across exposure definitions and the declared alpha sensitivity range; failure to generalize is reported rather than selecting a favorable variant.

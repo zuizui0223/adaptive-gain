@@ -1,0 +1,54 @@
+name: poms-site-holdout
+on:
+  push:
+    paths:
+      - 'research/poms_external/site_holdout_model.py'
+      - 'research/poms_external/test_site_holdout_model.py'
+      - '.github/workflows/poms-site-holdout.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-data-site-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'scipy==1.15.3' 'scikit-learn==1.8.0'
+      - name: Independent regression and leakage controls
+        working-directory: research/poms_external
+        run: python -m unittest -v test_site_holdout_model
+      - name: Primary and declared penalty sensitivities on original PoMS counts
+        run: |
+          mkdir -p poms_site_holdout_results
+          for alpha in 0.25 0.025 2.5; do
+            echo "START_ALPHA ${alpha}"
+            python -u research/poms_external/site_holdout_model.py --alpha "$alpha" --out "poms_site_holdout_results/alpha_${alpha}" > "poms_site_holdout_results/alpha_${alpha}.log" 2>&1 || { tail -80 "poms_site_holdout_results/alpha_${alpha}.log"; exit 1; }
+            grep 'SITE_HO_SUPPORT\|SITE_HO_ANALYSIS_COMPLETE' "poms_site_holdout_results/alpha_${alpha}.log"
+          done
+          python - <<'PY'
+          import json,pathlib
+          for path in sorted(pathlib.Path('poms_site_holdout_results').glob('alpha_*/summary.json')):
+              s=json.loads(path.read_text());a=s['model']['alpha']
+              print('RECEIPT',json.dumps({'alpha':a,'sha256_zip':s['sha256_original_zip'],'versions':s['versions']}))
+              for design,d in s['designs'].items():
+                  for mode,rr in d.get('results',{}).items():
+                      for r in rr:
+                          print('HO_RESULT',json.dumps({'alpha':a,'design':design,'mode':mode,'guild':r['guild'],'surveys':d['final_surveys'],'sites':r['site_n'],'delta':r['site_equal_delta_positive_is_better'],'relative':r['site_equal_relative_improvement'],'ci95':r['site_equal_ci95'],'positive_folds':r['positive_folds'],'positive_sites':r['positive_site_fraction'],'unknown':r['unknown_target_month_test_rows'],'max_iter':r['maximum_solver_iterations']}))
+          print('ALL_SITE_HOLDOUT_ANALYSES_COMPLETE')
+          PY
+      - name: Archive summaries, hashed-site scores and full calculation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-site-holdout-results
+          path: poms_site_holdout_results/
+          if-no-files-found: warn
+          retention-days: 90

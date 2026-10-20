@@ -6,12 +6,14 @@ recording class, flower amount/units, weather. Critically, NEVER treat an
 unsurveyed flower as a zero or infer individual sensory/fitness routeability.
 """
 from __future__ import annotations
-import argparse, hashlib, io, json, math, urllib.request, warnings, zipfile
+import argparse, hashlib, io, json, math, urllib.request, warnings, zipfile, platform
+import sklearn, scipy
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy import sparse
+from scipy.linalg import lstsq
 from scipy.special import gammaln
 from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import OneHotEncoder
@@ -27,6 +29,9 @@ CATEGORICAL=("target","month","year","country","recorder_type","habitat_type",
  "flower_cover","flower_context","floral_unit","cloud_cover","sunshine","wind_speed")
 ALPHA=0.25
 SEED=20261019
+SOURCE_CSV_SHA256={
+    "1km":"29d3deb757c053774c26ece0a7683081a4b4fe81d9497877fe1179f232182e52",
+    "public":"bcd2ef780d3208a5a4aba5c191178900ccef705e5b569dc0160b27d00652dc3c"}
 
 def original_source():
     req=urllib.request.Request(URL,headers={"User-Agent":"adaptive-gain-original-PoMS-site-HO-v1.0"})
@@ -36,9 +41,13 @@ def original_source():
 
 def load(z,design):
     source=z.read(CSV[design])
+    if hashlib.sha256(source).hexdigest()!=SOURCE_CSV_SHA256[design]:
+        raise ValueError("SOURCE_CSV_CHANGED: independent review required")
     try:source.decode("utf-8");encoding="utf-8"
     except UnicodeDecodeError:encoding="latin-1"
     df=pd.read_csv(io.BytesIO(source),encoding=encoding,low_memory=False)
+    if df.sample_id.isna().any() or df.sample_id.duplicated().any():
+        raise ValueError("MISSING_OR_DUPLICATED_SAMPLE_ID")
     target=df.target_flower_corrected.astype("string").str.strip()
     original=df.target_flower.astype("string").str.strip()
     target=target.mask(target.eq("")).fillna(original.mask(original.eq("")))
@@ -83,7 +92,7 @@ def filter_common_support(w,design):
          "eligible_targets":int(x.target.nunique()),"eligible_sites":int(x.site.nunique())}
 
 def features(train,test,interaction,mode):
-    columns=list(CATEGORICAL)+(["target_month"] if interaction else [])
+    columns=list(CATEGORICAL)
     train_cat=train[columns].fillna("not_recorded").astype(str)
     test_cat=test[columns].fillna("not_recorded").astype(str)
     encoder=OneHotEncoder(handle_unknown="ignore",sparse_output=True,dtype=np.float64)
@@ -94,11 +103,27 @@ def features(train,test,interaction,mode):
         mean=float(raw_train.mean());sd=float(raw_train.std()) or 1.
         aa=sparse.hstack([aa,sparse.csr_matrix(((raw_train-mean)/sd).reshape(-1,1))],format="csr")
         bb=sparse.hstack([bb,sparse.csr_matrix(((raw_test-mean)/sd).reshape(-1,1))],format="csr")
+    if interaction:
+        joint=OneHotEncoder(handle_unknown="ignore",sparse_output=False,dtype=np.float64)
+        za=joint.fit_transform(train[["target_month"]].astype(str))
+        zb=joint.transform(test[["target_month"]].astype(str))
+        ba=np.column_stack([np.ones(len(train)),aa.toarray()])
+        bt=np.column_stack([np.ones(len(test)),bb.toarray()])
+        # Remove the training baseline span: adding redundant main-effect
+        # columns under ridge must not masquerade as a plant-month interaction.
+        projection=lstsq(ba,za,cond=1e-10,lapack_driver="gelsd")[0]
+        za=za-ba@projection;zb=zb-bt@projection
+        za[np.abs(za)<1e-12]=0.;zb[np.abs(zb)<1e-12]=0.
+        aa=sparse.hstack([aa,sparse.csr_matrix(za)],format="csr")
+        bb=sparse.hstack([bb,sparse.csr_matrix(zb)],format="csr")
     return aa,bb
 
 def score(y,pred):
-    p=np.maximum(np.asarray(pred,dtype=float),1e-8)
-    y=np.asarray(y,dtype=float)
+    p=np.asarray(pred,dtype=float);y=np.asarray(y,dtype=float)
+    if (p.shape!=y.shape or not np.isfinite(p).all() or (p<=0).any()
+            or not np.isfinite(y).all() or (y<0).any()):
+        raise ValueError("finite nonnegative counts and positive predictions required")
+    p=np.maximum(p,1e-8)
     return p-y*np.log(p)+gammaln(y+1)
 
 def folds(df,k=5):
@@ -116,19 +141,35 @@ def site_ci(values,seed=SEED,reps=1000):
     bs=vals[rng.integers(len(vals),size=(reps,len(vals)))].mean(axis=1)
     return [float(v) for v in np.quantile(bs,[.025,.975])]
 
-def fit_eval(df,parts,guild,mode):
-    losses_a=np.empty(len(df));losses_b=np.empty(len(df))
+def fit_eval(df,parts,guild,mode,alpha=ALPHA,feature_cache=None):
+    if mode not in ("floral_covariate","floral_offset") or alpha<=0:
+        raise ValueError("invalid exposure mode or nonpositive penalty")
+    all_test=np.concatenate([np.asarray(te,dtype=int) for tr,te in parts])
+    if len(all_test)!=len(df) or not np.array_equal(np.sort(all_test),np.arange(len(df))):
+        raise ValueError("test folds must cover every row exactly once")
     for tr,te in parts:
+        if set(df.iloc[tr].site)&set(df.iloc[te].site):
+            raise ValueError("site leakage")
+    losses_a=np.empty(len(df));losses_b=np.empty(len(df))
+    predictions_a=np.empty(len(df));predictions_b=np.empty(len(df))
+    fold_id=np.full(len(df),-1,dtype=int);iterations=[];unknown=0
+    for fi,(tr,te) in enumerate(parts):
+        fold_id[te]=fi
         train=df.iloc[tr];test=df.iloc[te]
+        unknown+=int((~test.target_month.isin(train.target_month)).sum())
         yy=train[guild].to_numpy(float)
         if yy.sum()<=0:raise RuntimeError("NO_POSITIVE_TRAIN_RESPONSE")
         exposure=train.flowers.to_numpy(float)
         ex_test=test.flowers.to_numpy(float)
         for interaction,out in ((False,losses_a),(True,losses_b)):
-            X,Y=features(train,test,interaction,mode)
-            reg=PoissonRegressor(alpha=ALPHA,max_iter=400,tol=1e-6)
+            X,Y=features(train,test,interaction,mode) if feature_cache is None else feature_cache[(fi,interaction)]
+            # Weighted-rate deviance is normalized by sum(exposure), not n.
+            # alpha/mean(exposure) preserves the declared count-scale penalty
+            # and predictions under a global change in exposure units.
+            fit_alpha=alpha/float(exposure.mean()) if mode=="floral_offset" else alpha
+            reg=PoissonRegressor(alpha=fit_alpha,max_iter=2000,tol=1e-9)
             with warnings.catch_warnings():
-                warnings.simplefilter("ignore",ConvergenceWarning)
+                warnings.simplefilter("error",ConvergenceWarning)
                 if mode=="floral_offset":
                     # Weighted-rate representation of a Poisson count model
                     # with fixed log(exposure) offset.
@@ -137,10 +178,33 @@ def fit_eval(df,parts,guild,mode):
                 else:
                     reg.fit(X,yy)
                     predicted=reg.predict(Y)
+            if interaction:predictions_b[te]=predicted
+            else:predictions_a[te]=predicted
+            iterations.append(int(reg.n_iter_))
             out[te]=score(test[guild].to_numpy(float),predicted)
     perrow=losses_a-losses_b
-    sites=pd.DataFrame({"site":df.site,"delta":perrow}).groupby("site").delta.mean()
-    return {"guild":guild,"mean_baseline_nll":float(losses_a.mean()),
+    audit=pd.DataFrame({"site":df.site,"fold":fold_id,"baseline_nll":losses_a,
+                        "interaction_nll":losses_b,"delta":perrow})
+    grouped=audit.groupby("site",sort=True).agg(
+        delta=("delta","mean"),baseline=("baseline_nll","mean"),
+        interaction=("interaction_nll","mean"),fold=("fold","first"),n=("delta","size"))
+    sites=grouped.delta
+    fold_deltas=grouped.groupby("fold").delta.mean()
+    serialized=[]
+    for sid,r in grouped.iterrows():
+        serialized.append({"site_hash":hashlib.sha256(str(sid).encode()).hexdigest()[:16],
+                           "fold":int(r['fold']),"surveys":int(r['n']),
+                           "baseline_nll":float(r['baseline']),
+                           "interaction_nll":float(r['interaction']),"delta":float(r['delta'])})
+    return {"guild":guild,"alpha_count_scale":alpha,
+        "mean_baseline_nll":float(losses_a.mean()),
+        "site_equal_baseline_nll":float(grouped.baseline.mean()),
+        "site_equal_relative_improvement":float(sites.mean()/grouped.baseline.mean()),
+        "fold_site_equal_deltas":[float(x) for x in fold_deltas],
+        "positive_folds":int((fold_deltas>0).sum()),
+        "unknown_target_month_test_rows":unknown,
+        "maximum_solver_iterations":max(iterations),"fit_count":len(iterations),
+        "site_scores":serialized,
         "mean_interaction_nll":float(losses_b.mean()),
         "pooled_delta_positive_is_better":float(perrow.mean()),
         "site_equal_delta_positive_is_better":float(sites.mean()),
@@ -151,16 +215,21 @@ def fit_eval(df,parts,guild,mode):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--out",default="poms_holdout_results")
     parser.add_argument("--designs",default="1km,public")
+    parser.add_argument("--alpha",type=float,default=ALPHA)
     args=parser.parse_args();dest=Path(args.out);dest.mkdir(exist_ok=True,parents=True)
     raw,z=original_source()
     result={"analysis":"out-of-site predictive interaction comparison, NOT causal cue choice",
       "status":"EXPLORATORY_POST_MATCHED_SCHEMA","source":URL,
       "sha256_original_zip":hashlib.sha256(raw).hexdigest(),
-      "model":{"alpha":ALPHA,"folds":5,"group":"site (not rows)",
+      "versions":{"python":platform.python_version(),"numpy":np.__version__,
+                  "pandas":pd.__version__,"scipy":scipy.__version__,"sklearn":sklearn.__version__},
+      "uncertainty":"exploratory bootstrap of fixed out-of-fold site scores; not full refit or spatial/block uncertainty; unadjusted across 10 guilds",
+      "model":{"alpha":args.alpha,"folds":5,"group":"site (not rows)",
         "baseline":"plant + month + year + context + weather + flower exposure",
-        "interaction":"baseline + categorical plant:month",
+        "interaction":"baseline + training-only baseline-orthogonal plant:month block",
         "primary_exposure":"log1p floral_unit_count as fitted covariate",
         "sensitivity":"floral_unit_count as fixed linear Poisson offset",
+        "penalty_scale":"count-scale alpha; weighted-rate alpha is alpha/mean(training exposure)",
         "interpretation":"out-of-site held-out Poisson log likelihood; no unsurveyed zeros"},
       "designs":{}}
     for design in args.designs.split(","):
@@ -173,9 +242,12 @@ def main():
         splits=folds(w)
         rr={}
         for mode in ("floral_covariate","floral_offset"):
+            cache={(fi,inter):features(w.iloc[tr],w.iloc[te],inter,mode)
+                   for fi,(tr,te) in enumerate(splits) for inter in (False,True)}
             rows=[]
             for g in GUILDS:
-                r=fit_eval(w,splits,g,mode)
+                r=fit_eval(w,splits,g,mode,alpha=args.alpha,feature_cache=cache)
+                pd.DataFrame(r.pop("site_scores")).to_csv(dest/f"{design}_{mode}_{g}_site_scores.csv",index=False)
                 rows.append(r)
             rr[mode]=rows
             print("SITE_HO_RESULT",design,mode,json.dumps(rows),flush=True)
