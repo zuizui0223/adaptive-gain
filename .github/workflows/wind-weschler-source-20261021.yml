@@ -18,6 +18,22 @@ jobs:
           python-version: '3.11'
       - run: python -m py_compile research/wind_indirect/recover_weschler.py
       - run: python -u research/wind_indirect/recover_weschler.py
+      - name: Verify weather block count and direct interaction gate
+        run: |
+          python -m pip install pandas==2.2.3
+          python -u research/wind_indirect/weschler_no_go_gate.py \
+            --source weschler_original/WindPollinatorData110823.csv \
+            --out weschler_original/no_go.json
+          python - <<'PY'
+          import json
+          x=json.load(open('weschler_original/no_go.json'))
+          assert x['behavior_rows']==472
+          assert x['independent_weather_site_dates']==15
+          assert x['within_site_date_wind_variation']==0
+          assert x['interspecific_flag_rows']==5
+          assert x['gate']=='NO_GO_INTERSPECIFIC_WIND_MEDIATION'
+          print('WESCHLER_SOURCE_AND_GRAIN_VERIFIED')
+          PY
       - if: always()
         uses: actions/upload-artifact@v4
         with:
