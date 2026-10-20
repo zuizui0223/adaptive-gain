@@ -1,0 +1,30 @@
+name: poms-eupolltrait-source
+on:
+  push:
+    paths:
+      - 'research/poms_wind_hierarchy/recover_eupolltrait.py'
+      - '.github/workflows/poms-eupolltrait-source-20261020.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax check
+        run: python -m py_compile research/poms_wind_hierarchy/recover_eupolltrait.py
+      - name: Fetch/verify 3052-species original trait dataset
+        run: python -u research/poms_wind_hierarchy/recover_eupolltrait.py
+      - name: Preserve unmodified source and content manifest for analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eupolltrait-original-source-20261020
+          path: eupoll_source/
+          if-no-files-found: warn
+          retention-days: 30
