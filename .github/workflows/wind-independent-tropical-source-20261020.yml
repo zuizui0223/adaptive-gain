@@ -1,0 +1,29 @@
+name: wind-independent-tropical-source
+on:
+  push:
+    paths:
+      - 'research/wind_indirect/recover_tropical_bee.py'
+      - '.github/workflows/wind-independent-tropical-source-20261020.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile research/wind_indirect/recover_tropical_bee.py
+      - name: Fetch published MD5-locked original and inspect CSV schemas
+        run: python -u research/wind_indirect/recover_tropical_bee.py
+      - name: Retain source bytes and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-tropical-original-and-schema-20261020
+          path: wind_indirect_tropical/
+          if-no-files-found: warn
+          retention-days: 30
