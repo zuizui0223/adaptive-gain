@@ -1,0 +1,27 @@
+name: wind-weschler-source-verified
+on:
+  push:
+    paths:
+      - 'research/wind_indirect/recover_weschler.py'
+      - '.github/workflows/wind-weschler-source-20261021.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile research/wind_indirect/recover_weschler.py
+      - run: python -u research/wind_indirect/recover_weschler.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-weschler-original-20261021
+          path: weschler_original/
+          retention-days: 30
+          if-no-files-found: warn
