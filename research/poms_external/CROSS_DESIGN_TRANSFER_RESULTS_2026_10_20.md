@@ -15,7 +15,7 @@ Official UK Pollinator Monitoring Scheme (2026), Flower-Insect Timed Count data 
 - Monitoring CSV SHA256: `29d3deb757c053774c26ece0a7683081a4b4fe81d9497877fe1179f232182e52`.
 - Public CSV SHA256: `bcd2ef780d3208a5a4aba5c191178900ccef705e5b569dc0160b27d00652dc3c`.
 - Recovered source-model commit: `395422122d14346de267bfce9b0a4458c99e4e07`; model file SHA256: `7448ddf7369356071d4c501beb28549b6dca004599519e91e90837091f0f5b37`.
-- Transfer fitting ran locally on the recovered originals, NOT in the recovery workflow. Python 3.11.8, NumPy 2.3.5, pandas 2.2.3, SciPy 1.17.0, scikit-learn 1.8.0. The exact Python version is recorded in the machine-readable result; do not use the recovery runner version as the fitting version.
+- Transfer fitting ran locally on the recovered originals, NOT in the recovery workflow. Verified fitting runtime: **Python 3.13.5**, NumPy 2.3.5, pandas 2.2.3, SciPy 1.17.0, scikit-learn 1.8.0. These match the versions in the machine-readable result, rather than the separate source-recovery runner.
 
 ## Matched population and leakage controls
 
