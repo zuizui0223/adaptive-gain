@@ -1,0 +1,30 @@
+name: wind-indirect-raw-source
+on:
+  push:
+    paths:
+      - 'research/wind_indirect/source_recover.py'
+      - '.github/workflows/wind-indirect-source-20261020.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-predator-experiments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate source reader syntax
+        run: python -m py_compile research/wind_indirect/source_recover.py
+      - name: Download and record all original raw source bytes
+        run: python -u research/wind_indirect/source_recover.py
+      - name: Preserve full original sources and reproducibility receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-tritrophic-independent-originals-20261020
+          path: wind_indirect_original/
+          if-no-files-found: warn
+          retention-days: 30
