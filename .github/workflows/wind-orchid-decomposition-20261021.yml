@@ -1,0 +1,55 @@
+name: wind-orchid-abundance-versus-composition
+on:
+  push:
+    paths:
+      - 'research/wind_indirect/orchid_reproduce.py'
+      - 'research/wind_indirect/test_orchid_reproduce.py'
+      - 'research/wind_indirect/recover_tropical_bee.py'
+      - '.github/workflows/wind-orchid-decomposition-20261021.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verified-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical dependencies
+        run: python -m pip install 'numpy==2.3.5' 'pandas==2.2.3' 'scipy==1.17.0' 'statsmodels==0.14.6'
+      - name: Four block and composition invariants
+        working-directory: research/wind_indirect
+        run: python -m unittest -v test_orchid_reproduce
+      - name: Recover exact original Zenodo bytes with checksum
+        run: python -u research/wind_indirect/recover_tropical_bee.py
+      - name: Run original-data wind, count and composition tests
+        run: |
+          python -u research/wind_indirect/orchid_reproduce.py \
+            --source wind_indirect_tropical/CrallEtAl_OrchidBeeWindEcology.zip \
+            --reps 4999 --out orchid_wind_results/summary.json
+      - name: Verify matched original rows and independent local reference
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('orchid_wind_results/summary.json'))
+          q=x['source_qc']
+          assert q['sessions']==70 and q['sites']==9 and q['bee_count']==409
+          assert q['matched_specimens']==409 and q['unmatched_specimens']==41
+          assert q['true_zero_sessions']==3 and q['species']==23
+          assert abs(x['wind_per_doubling_rr']-1.3708937974769337)<1e-6
+          assert abs(x['count_perm_p_two_sided']-0.0236)<.011
+          assert abs(x['composition_perm_p_right_tail']-0.509)<.025
+          print('ORCHID_SOURCE_AND_REFERENCES_VERIFIED')
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-orchid-original-and-quantitative-receipt
+          path: |
+            wind_indirect_tropical/receipt.json
+            orchid_wind_results/summary.json
+          if-no-files-found: warn
+          retention-days: 30
