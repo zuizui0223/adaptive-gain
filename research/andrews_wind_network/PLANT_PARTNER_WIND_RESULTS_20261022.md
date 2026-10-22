@@ -65,4 +65,6 @@ PoMSでは同時捕獲した「別昆虫群」の追加情報価値が小さく�
 - 独立実装は許容ラベルの全組合せを直接列挙し、Hを `E[δ²]−E[δ]²` の別の式で計算。
 - 再現パッケージには公開原CSV（変更なし）、元ハッシュ、実行コード、7テスト、独立監査コード、全4条件の機械可読結果、観測機会の集計を保存。リポジトリ全体の別系統テストが緑とは主張しない。
 
+**CI reproduction:** https://github.com/zuizui0223/adaptive-gain/actions/runs/39724828656 — full original-data download with SHA1 verification, 7/7 focused tests, 9,999 label permutations for all variants, independent original-row audit completed. WATCH is a phenological survey-period code; the analytic 15-min unit is the exact combination of SAMPLEDATE × PLOT_ID × WATCH, not WATCH alone.
+
 Data credits: H.J. Andrews Experimental Forest LTER (Seo et al. 2022), NSF LTER, USFS PNW, Oregon State University. 原データは公開元利用規約を確認し、二次公開・論文投稿時は元の識別子および謝辞を保持する。
