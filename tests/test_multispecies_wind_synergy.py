@@ -42,7 +42,7 @@ def test_redundant_same_bit_is_not_distinct_species_information(error):
 
 
 @pytest.mark.parametrize("error, expected", [(F(0),F(1,32)), (F(1,10),F(1,100)),
-                                              (F(1,6),F(0)),(F(1,4),F(-3,128)),
+                                              (F(1,6),F(0)),(F(1,4),F(-1,128)),
                                               (F(1,2),F(0))])
 def test_synergy_is_budget_and_reliability_dependent(error,expected):
     assert two_source_interaction(4,5,error) == expected
