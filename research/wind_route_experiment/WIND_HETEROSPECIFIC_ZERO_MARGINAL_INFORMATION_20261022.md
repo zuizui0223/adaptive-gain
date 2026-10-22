@@ -70,6 +70,16 @@ Set still-native e0=.05; wind-native cue unavailable (equivalently completely un
 
 The between-weather difference-in-differences attributable to adding the branch-indicator cue is **+0.200**. At B=1 the best correct-decision probability is 0.75 regardless of the other-species cue, while at B=3 an available perfect direct assay yields 1.0 in all contexts. Hence this constructed species-cue rescue is **restricted to the intermediate information budget**; it cannot be inferred from flight speed.
 
+## Explicit net-payoff and fitness identification ceiling
+
+An improvement in target-choice accuracy is **not itself** an improvement in ecological fitness. Let \(\Delta R\) be the *measured* reward difference between a correct and an incorrect resource choice, and let \(k\) be any extra time/energy/exposure cost of obtaining the heterospecific cue rather than following the baseline two-query route. In the same assumed model, expected net payoff improvement is algebraically
+
+\[
+\Delta \Pi = \tfrac12\max(0,e_w-e_h)\,\Delta R - k.
+\]
+
+Thus the conditional routing cue can improve decision correctness and **still lower expected net benefit** when acquiring the cue is sufficiently costly. Neither \(\Delta R\) nor \(k\) is available from the cited PoMS, Andrews or honeybee flight datasets. Avoid converting model accuracy into measured pollen delivery, energetic efficiency, demographic growth or selection coefficients.
+
 ## Empirical falsification experiment: wind × other-species indicator × cue order × deadline
 
 Primary experimental target: demonstrate a *measured* **other-species branch indicator**, not just an insect community correlation. A credible controlled assay should (1) randomly assign wind condition, (2) independently manipulate species indicator present versus sham/absent, (3) preserve four independently randomized B×T resource states with the same 50% target prevalence in every cell, and (4) measure the cue's conditional reliability e_h separately from any flower reward outcome. Don't import the illustrative 5%/10% errors as expected field parameters.
