@@ -1,0 +1,56 @@
+name: wind-cue-cost-phase-exact
+on:
+  push:
+    paths:
+      - 'adaptive_gain/multispecies_wind_synergy.py'
+      - 'tests/test_wind_cue_cost_phase.py'
+      - 'research/wind_route_experiment/wind_cost_independent_audit.py'
+      - 'research/wind_route_experiment/WIND_CUE_COST_PHASE_20261023.md'
+      - '.github/workflows/wind-cue-cost-phase-20261023.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  heterogeneous-costs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test framework
+        run: python -m pip install pytest==8.4.2
+      - name: Check new cost scenarios AND inherited two-source results
+        run: python -m pytest -q tests/test_wind_cue_cost_phase.py tests/test_multispecies_wind_synergy.py
+      - name: Independently re-evaluate 60 exact latent-posterior cases
+        run: python research/wind_route_experiment/wind_cost_independent_audit.py
+      - name: Save compact machine-verifiable cost phase receipt
+        run: |
+          mkdir -p wind_cost_receipt
+          python - <<'PY'
+          import json
+          from fractions import Fraction as F
+          from adaptive_gain.multispecies_wind_synergy import optimal,costly_two_source_interaction
+          cheap=costly_two_source_interaction(4,5,F(1,10),costs=(1,1))
+          costlier=costly_two_source_interaction(4,5,F(1,10),costs=(1,2))
+          assert cheap['AB']==F(643,800) and cheap['synergy']==F(1,100)
+          assert costlier['AB']==F(29,40) and costlier['synergy']==-F(1,80)
+          assert costlier['AB']==costlier['A']
+          assert cheap['AB']-costlier['AB']==F(63,800)
+          out={'scope':'synthetic Bayesian decision; not measured wind/fitness',
+               'worlds':32,'budget':5,'source_error':'1/10',
+               'cost_1_1':{k:str(v) for k,v in cheap.items()},
+               'cost_1_2':{k:str(v) for k,v in costlier.items()},
+               'loss_in_accuracy_when_B_cost_doubles':'63/800',
+               'posterior_audit_cases':60}
+          with open('wind_cost_receipt/summary.json','w') as f:json.dump(out,f,indent=2)
+          print('WIND_COST_EXACT_RECEIPT_PASS')
+          PY
+      - name: Retain source-locked numeric claims
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-cost-phase-exact-receipt-20261023
+          path: wind_cost_receipt/
+          retention-days: 60
+          if-no-files-found: error
