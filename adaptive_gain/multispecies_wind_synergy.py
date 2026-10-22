@@ -12,7 +12,7 @@ pollen transfer, evolution, wind exposure, or biological fitness.
 """
 from fractions import Fraction
 from functools import lru_cache
-from itertools import product
+from itertools import product, combinations
 from math import lcm
 
 
@@ -31,7 +31,14 @@ def _check(d, budget, bits, error, joint):
     return bits, e, q
 
 
-def optimal(d, budget, bits=(), error=Fraction(0), joint=None):
+def _cost_tuple(bits, costs):
+    value=(1,)*len(bits) if costs is None else tuple(costs)
+    if len(value)!=len(bits) or any(type(v) is not int or v<=0 for v in value):
+        raise ValueError("one positive integer acquisition cost per source")
+    return value
+
+
+def optimal(d, budget, bits=(), error=Fraction(0), joint=None, *, costs=None):
     """Bayes-optimal success across ALL adaptive cue orders and stop decisions.
 
     Dynamic programming uses integer likelihood masses. Both-other-source error
@@ -41,6 +48,7 @@ def optimal(d, budget, bits=(), error=Fraction(0), joint=None):
     posterior mass dominates the remaining T=1 mass pointwise in B.
     """
     bits, e, q = _check(d, budget, bits, error, joint)
+    costs = _cost_tuple(bits, costs)
     n = 1 << d
     probabilities = (1-2*e+q, e-q, e-q, q)  # E0 + 2*E1
     denom = lcm(*(x.denominator for x in probabilities))
@@ -78,11 +86,11 @@ def optimal(d, budget, bits=(), error=Fraction(0), joint=None):
             answer = max(answer, candidate)
         for s in range(len(bits)):
             flag = 1 << s
-            if seen_sources & flag:
+            if seen_sources & flag or costs[s]>left:
                 continue
             nxt = seen_sources | flag
-            candidate = (best(tested_flowers, nxt, outcomes & ~flag, left-1)
-                         + best(tested_flowers, nxt, outcomes | flag, left-1))
+            candidate = (best(tested_flowers, nxt, outcomes & ~flag, left-costs[s])
+                         + best(tested_flowers, nxt, outcomes | flag, left-costs[s]))
             answer = max(answer, candidate)
         return answer
 
@@ -115,6 +123,44 @@ def two_source_interaction(d, budget, error=Fraction(0), joint=None):
     b = optimal(d, budget, (1,), error, joint)
     both = optimal(d, budget, (0, 1), error, joint)
     return both - a - b + base
+
+
+
+def perfect_cost_formula(d, budget, bits=(0, 1), costs=(1, 1)):
+    """Exact branch-coverage candidate for perfect, distinct habitat bits.
+
+    Compared against exhaustive DP on a declared finite grid. This is specific
+    to F_j=1 iff (B=j,T=1), independent-uniform B and T, and unit floral costs.
+    """
+    declared, _, _ = _check(d, budget, bits, Fraction(0), Fraction(0))
+    costs = _cost_tuple(declared, costs)
+    if len(set(declared)) != len(declared):
+        raise ValueError("perfect coverage assumes distinct source bits")
+    n = 1 << d
+    covered = 0
+    for count in range(len(declared)+1):
+        for ids in combinations(range(len(declared)), count):
+            spent=sum(costs[i] for i in ids)
+            covered=max(covered,min(n,2**count*max(0,budget-spent)))
+    return Fraction(1,2)+Fraction(covered,2*n)
+
+
+def costly_two_source_interaction(d, budget, error=Fraction(0), joint=None,
+                                  costs=(1,1)):
+    """Accuracy complementarity with distinct source-specific query costs.
+
+    Negative complementarity does NOT mean the optional second species reduces
+    the optimal accuracy: it means the two separate gains are subadditive.
+    """
+    costs = _cost_tuple((0,1), costs)
+    base = optimal(d,budget,(),error,joint)
+    a = optimal(d,budget,(0,),error,joint,costs=(costs[0],))
+    b = optimal(d,budget,(1,),error,joint,costs=(costs[1],))
+    both = optimal(d,budget,(0,1),error,joint,costs=costs)
+    if both < max(base,a,b):
+        raise ArithmeticError("optional source reduced optimal decision accuracy")
+    return {'none':base,'A':a,'B':b,'AB':both,
+            'synergy':both-a-b+base,'adaptive_vs_fixed':both-fixed(d,budget)}
 
 
 def independent_of_target(d, error=Fraction(0), joint=None):
