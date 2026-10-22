@@ -1,0 +1,16 @@
+# Outcome-component decomposition of inflorescence-to-flower ratios
+
+Registered 2026-10-22 after verifying Dryad original schema and support **before inspecting wind-regression results**.
+
+Data: Balfour & Ratnieks original `Balfouretal_Inflorescence_Switch_Rate_DataDryad.csv` (210 rows, 22 observed dates, all source-named species, 3 bee types, 3 plant species); official SHA256 `f47ba91ebca47433a3bc709d23771fd0c3b380100b5e3a9109b47458df5da53d`. Both `Inflorences` (source misspelling) and `Flowers` are positive integer counts with `Inflorences<=Flowers` on all rows.
+
+The original paper inconsistently describes 'switch rate' as flowers/inflorescences in Methods but inflorescences/flowers in figure and includes a one-minute observation window. Therefore label `I/F` literally *visited inflorescences per visited flower* (an exposure-conditioned movement proxy); it is not a direct observed proportion of switches between distinct plant individuals or per-flight time.
+
+**Predeclared exact mechanical decomposition:**
+`log(I/F)=log(I)-log(F)`. Fit each of these three responses with IDENTICAL design, `wind_m_s + categorical bee_species + categorical flower_species + categorical date + temperature + location`, with OLS and date-clustered uncertainty; do not choose regressors separately for favorable estimates. Report algebraic identity of all three wind coefficients to 1e-10, which is not an independent ecological replication. Main question: if ratio trend is positive, is it because **actual number of distinct inflorescences visited per minute increases**, or because **number of flowers visited per minute decreases**? Positive ratio cannot be interpreted as absolute increases in switches.
+
+Daily-cluster uncertainty: 4999 full-date bootstrap refits (only if ≥10 usable independent dates; when a date is repeated, bootstrap cluster with replacement, preserve observations). Permutation sensitivity: within-date random reassignment of measured wind across bee observations 4999 times, holding plant/bee/date/count rows fixed, by residualized FWL slope with a fixed covariate design; annotate wind is nonrandom and correlated with minute/time/observation selection, so p is observational. Compare three effects under the SAME rows.
+
+Secondary one-minute foraging sample (329 source observations, 3 bee taxa/3 plants): sign of log flowers/min versus wind, using same date/bee/plant/location/temp adjustment; report separate sample, and any 'zApis mellifera' original taxon typo correction explicitly. Do not combine 329 and 210 as independent replication because likely overlapping observation sequences, no individual identifiers.
+
+**Stop conditions:** no claim of routeability, actual visited *plant individual* identity, resource choice sets, fitness, predator mediation, or wind causal behavior outside the randomized wind-tunnel experiment. All wind field results are observational and from an original paper that already documented a wind effect. Independent scientific advance can be a corrected interpretation of numerator/denominator only if data support it and source authors' conclusions did not already state the same.
