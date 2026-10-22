@@ -1,0 +1,61 @@
+name: wind-route-two-system-analysis
+on:
+  push:
+    paths:
+      - 'research/wind_route_experiment/route_wind.py'
+      - 'research/wind_route_experiment/field_wind.py'
+      - 'research/wind_route_experiment/test_route_wind.py'
+      - 'research/wind_route_experiment/test_field_wind.py'
+      - 'research/wind_route_experiment/independent_audit.py'
+      - '.github/workflows/wind-route-two-system-analysis.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-randomized-wind-versus-field-bee-movement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned scientific Python
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'scipy==1.15.3' 'statsmodels==0.14.6'
+      - name: Recover and checksum-verify official original randomized wind study
+        run: python -u research/wind_route_experiment/source_gate.py
+      - name: Recover and checksum-verify official observational floral movements study
+        run: python -u research/wind_route_experiment/source_balfour.py
+      - name: Stage verified originals without modifying repository source
+        run: |
+          cp wind_route_original/Bee_route_choice_in_wind.csv research/wind_route_experiment/
+          cp balfour_original/Balfouretal_*.csv research/wind_route_experiment/
+      - name: Test source locks, no pseudo-replication, ratio identity, date permutation
+        working-directory: research/wind_route_experiment
+        run: python -m unittest -v test_route_wind test_field_wind
+      - name: Refit original 548 flights by individual, height and wind condition
+        working-directory: research/wind_route_experiment
+        run: python -u route_wind.py --source Bee_route_choice_in_wind.csv --out results
+      - name: Refit original 210 observed bee inflorescence and flower counts
+        working-directory: research/wind_route_experiment
+        run: python -u field_wind.py --source-dir . --out field_results
+      - name: Independent Statsmodels and bee pivot checks
+        working-directory: research/wind_route_experiment
+        run: python independent_audit.py
+      - name: Preserve immutable provenance and output data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-route-and-floral-ratio-real-original-results
+          path: |
+            wind_route_original/
+            balfour_original/
+            research/wind_route_experiment/results/
+            research/wind_route_experiment/field_results/
+            research/wind_route_experiment/independent_audit.json
+          retention-days: 60
+          if-no-files-found: warn
