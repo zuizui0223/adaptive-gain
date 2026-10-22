@@ -1,0 +1,47 @@
+name: wind-heterospecific-routing-exact
+on:
+  push:
+    paths:
+      - 'adaptive_gain/weather_species_routeability.py'
+      - 'tests/test_weather_species_routeability.py'
+      - '.github/workflows/wind-heterospecific-routing-exact.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-weather-heterospecific:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pytest
+        run: python -m pip install 'pytest==8.4.2'
+      - name: Exact finite-core plus novel Bayes decision tests
+        run: python -m pytest -q tests/test_weather_species_routeability.py tests/test_core.py
+      - name: Save 4-context exact and noisy-Bayes receipts
+        run: python -m adaptive_gain.weather_species_routeability > /tmp/wind_heterospecific_result.json
+      - name: Validate receipt and internal arithmetic
+        run: |
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/wind_heterospecific_result.json'))
+          x=j['exact_deterministic']
+          assert x['wind_0_species_0']['adaptive_cost']==2
+          assert x['wind_1_species_0']['adaptive_cost']==3
+          assert x['wind_1_species_1']['adaptive_cost']==2
+          assert all(v['fixed_cost']==3 for v in x.values())
+          did=j['context_bayes']['species_x_wind_difference_in_differences']
+          assert did['num']==1 and did['den']==5
+          assert all(row['fixed']['num']==3 and row['fixed']['den']==4 for row in j['uncertainty_curve'])
+          print('EXACT_WIND_HETEROSPECIES_RECEIPT_PASS')
+          PY
+      - name: Archive machine-readable reproducibility receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-heterospecific-exact-and-noisy-budget-receipt
+          path: /tmp/wind_heterospecific_result.json
+          retention-days: 60
+          if-no-files-found: error
