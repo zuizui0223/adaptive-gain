@@ -1,0 +1,45 @@
+name: wind-multispecies-decision-synergy
+on:
+  push:
+    paths:
+      - 'adaptive_gain/multispecies_wind_synergy.py'
+      - 'tests/test_multispecies_wind_synergy.py'
+      - '.github/workflows/wind-multispecies-synergy-20261023.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-dp-and-multispecies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'pytest==8.4.2'
+      - name: Prior four-world solver and 32-world branch-source test
+        run: python -m pytest -q tests/test_multispecies_wind_synergy.py tests/test_flower_cue_topology.py
+      - name: Capture exact rational outcomes and factorial error cases
+        run: python -m adaptive_gain.multispecies_wind_synergy > multispecies_wind_receipt.json
+      - name: Check sharp 32-world witness and signed correlation sensitivity
+        run: |
+          python - <<'PY'
+          import json
+          j=json.load(open('multispecies_wind_receipt.json'))
+          assert j['budget_5_accuracy']==['21/32','29/40','29/40','643/800']
+          assert j['budget_5_synergy']=='1/100'
+          assert j['budget_6_synergy']=='3/100'
+          assert j['two_species_joint_target_information_zero'] is True
+          rows={(x['error'],x['dependence']):x['interaction'] for x in j['correlated_error_cases']}
+          assert rows[('3/20','exclusive')]=='-1/160'
+          assert rows[('3/20','fully_shared')]=='1/20'
+          print('EXACT_HIERARCHY_AND_NOISE_INTERACTION_CERTIFIED')
+          PY
+      - name: Save machine-readable exact results
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-multispecies-32world-exact-receipt
+          path: multispecies_wind_receipt.json
+          retention-days: 60
+          if-no-files-found: error
