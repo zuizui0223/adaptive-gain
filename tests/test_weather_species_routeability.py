@@ -73,3 +73,15 @@ def test_weather_may_mask_cue_without_changing_worlds_or_target_labels():
     assert len({tuple(w.target for w in t.worlds) for t in tasks})==1
     assert len({tuple(w.name for w in t.worlds) for t in tasks})==1
     assert all(len(t.worlds)==4 and len(t.queries)==5 for t in tasks)
+
+
+@pytest.mark.parametrize("native_error",[Fraction(i,20) for i in range(11)])
+@pytest.mark.parametrize("other_error",[Fraction(j,20) for j in range(11)])
+def test_two_branch_cues_use_better_accuracy_or_no_rescue(native_error,other_error):
+    adaptive=optimal_accuracy(2,native_error=native_error,
+                              heterospecific_error=other_error)
+    assert adaptive == Fraction(1)-min(native_error,other_error)/2
+    assert fixed_accuracy(2,native_error=native_error,
+                          heterospecific_error=other_error)==Fraction(3,4)
+    without=optimal_accuracy(2,native_error=native_error)
+    assert adaptive-without == max(Fraction(0),(native_error-other_error)/2)
