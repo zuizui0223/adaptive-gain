@@ -1,0 +1,46 @@
+name: andrews-wind-plant-partner
+on:
+  push:
+    paths:
+      - 'research/andrews_wind_network/flower_partner_wind.py'
+      - 'research/andrews_wind_network/test_flower_partner_wind.py'
+      - 'research/andrews_wind_network/independent_partner_audit.py'
+      - '.github/workflows/andrews-wind-plant-partner.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bloom-conditioned-wind-partner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned numerical dependencies
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Check exact conditional null invariants
+        working-directory: research/andrews_wind_network
+        run: python -m unittest -v test_flower_partner_wind
+      - name: Download source-verified 74,942 original watches and 23,642 original flower rows
+        run: python -u research/andrews_wind_network/source_gate.py
+      - name: Run preregistered within-day wind permutations and original-data sensitivity tests
+        run: python -u research/andrews_wind_network/flower_partner_wind.py --source-dir andrews_original --out andrews_plant_wind_results --reps 9999
+      - name: Independent raw-row exact enumeration audit
+        run: |
+          cp -r andrews_original research/andrews_wind_network/source
+          mkdir -p research/andrews_wind_network/results
+          cp andrews_plant_wind_results/summary.json research/andrews_wind_network/results/summary.json
+          python -u research/andrews_wind_network/independent_partner_audit.py
+          cp research/andrews_wind_network/results/independent_audit.json andrews_plant_wind_results/independent_audit.json
+      - name: Preserve original byte digests, paired flower opportunities and all results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: andrews-wind-bloom-conditioned-partner-results
+          path: |
+            andrews_original/receipt.json
+            andrews_plant_wind_results/
+          retention-days: 90
+          if-no-files-found: warn
