@@ -1,0 +1,30 @@
+name: andrews-wind-original-source
+on:
+  push:
+    paths:
+      - 'research/andrews_wind_network/source_gate.py'
+      - '.github/workflows/andrews-wind-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check reader syntax
+        run: python -m py_compile research/andrews_wind_network/source_gate.py
+      - name: Fetch official SA026 public DataONE originals and validate bytes/schema
+        run: python -u research/andrews_wind_network/source_gate.py
+      - name: Retain immutable source bytes and QC receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: andrews-SA026-original-data-v8
+          path: andrews_original/
+          retention-days: 30
+          if-no-files-found: warn
