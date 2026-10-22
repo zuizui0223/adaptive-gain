@@ -1,0 +1,28 @@
+name: wind-balfour-original
+on:
+  push:
+    paths:
+      - 'research/wind_route_experiment/source_balfour.py'
+      - '.github/workflows/wind-balfour-original.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile research/wind_route_experiment/source_balfour.py
+      - name: Fetch public source and validate nested archive and CSV tables
+        run: python -u research/wind_route_experiment/source_balfour.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-balfour-flower-transfer-original
+          path: balfour_original/
+          retention-days: 60
+          if-no-files-found: warn
