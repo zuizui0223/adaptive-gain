@@ -1,0 +1,30 @@
+name: wind-bee-route-source
+on:
+  push:
+    paths:
+      - 'research/wind_route_experiment/source_gate.py'
+      - '.github/workflows/wind-bee-route-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax check
+        run: python -m py_compile research/wind_route_experiment/source_gate.py
+      - name: Recover Dryad 548-flight wind experiment version and checksum
+        run: python -u research/wind_route_experiment/source_gate.py
+      - name: Archive original source and receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-bee-route-original-Dryad-171277
+          path: wind_route_original/
+          if-no-files-found: warn
+          retention-days: 60
