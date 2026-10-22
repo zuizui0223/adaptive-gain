@@ -1,0 +1,50 @@
+name: wind-floral-cue-topology-census
+on:
+  push:
+    paths:
+      - 'adaptive_gain/flower_cue_topology.py'
+      - 'tests/test_flower_cue_topology.py'
+      - 'research/wind_route_experiment/independent_flower_cue_audit.py'
+      - '.github/workflows/wind-floral-cue-topology-census.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exhaustive-four-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install testing dependencies
+        run: python -m pip install 'pytest==8.4.2'
+      - name: Test 256 signal arrangements, noise curves and existing deterministic core
+        run: python -m pytest -q tests/test_flower_cue_topology.py tests/test_weather_species_routeability.py tests/test_core.py
+      - name: Enumerate all 256 cue-pairs with exact fractions
+        run: python -m adaptive_gain.flower_cue_topology --out /tmp/floral_cue_topology
+      - name: Independently enumerate every contingent and precommitted policy
+        run: |
+          python research/wind_route_experiment/independent_flower_cue_audit.py             /tmp/floral_cue_topology/256_flower_cue_architectures.csv             --out /tmp/floral_cue_topology/independent_audit.json
+      - name: Verify reported classification against machine receipt
+        run: |
+          python - <<'PY'
+          import json
+          root='/tmp/floral_cue_topology/'
+          c=json.load(open(root+'summary.json'))
+          assert c['all_pairs']==256 and c['branch_specific_pairs']==64
+          assert c['branch_specific']['gain_none']==36
+          assert c['branch_specific']['source_helps_fixed_only']==4
+          assert c['branch_specific']['strict_adaptive_over_fixed']==24
+          a=json.load(open(root+'independent_audit.json'))
+          assert a['n_architectures']==256 and a['max_exact_difference']=='0'
+          print('ALL_256_FLORAL_CUE_INFORMATION_TOPOLOGIES_VERIFIED')
+          PY
+      - name: Archive exact CSV, statistics, independent audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-exhaustive-floral-cue-topology-census
+          path: /tmp/floral_cue_topology/
+          retention-days: 60
+          if-no-files-found: error
