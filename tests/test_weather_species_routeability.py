@@ -85,3 +85,11 @@ def test_two_branch_cues_use_better_accuracy_or_no_rescue(native_error,other_err
                           heterospecific_error=other_error)==Fraction(3,4)
     without=optimal_accuracy(2,native_error=native_error)
     assert adaptive-without == max(Fraction(0),(native_error-other_error)/2)
+
+
+@pytest.mark.parametrize("wind,species",[(False,False),(False,True),(True,False),(True,True)])
+def test_no_routing_gain_if_both_floral_channels_jointly_resolve_target(wind,species):
+    """A structural falsifier: joint floral cues can make the species router redundant."""
+    task=example_finite_task(wind,species,offbranch_floral_1=0)
+    receipt=adaptive_gain_receipt(task)
+    assert (receipt.adaptive_cost,receipt.fixed_cost)==(2,2)
