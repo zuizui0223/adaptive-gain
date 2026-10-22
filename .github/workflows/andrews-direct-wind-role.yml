@@ -1,0 +1,38 @@
+name: andrews-direct-wind-role
+on:
+  push:
+    paths:
+      - 'research/andrews_wind_network/direct_wind_analysis.py'
+      - 'research/andrews_wind_network/test_direct_wind_analysis.py'
+      - '.github/workflows/andrews-direct-wind-role.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observed-wind-roles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned numerical dependencies
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Check new statistical invariants
+        working-directory: research/andrews_wind_network
+        run: python -m unittest -v test_direct_wind_analysis
+      - name: Fetch exact original watch and flower CSVs and validate all bytes
+        run: python -u research/andrews_wind_network/source_gate.py
+      - name: Run whole-watch within-day randomization with 9999 permutations
+        run: python -u research/andrews_wind_network/direct_wind_analysis.py --source-dir andrews_original --out andrews_direct_role_results --reps 9999
+      - name: Keep source checksum receipt, original data and real-results JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: andrews-direct-wind-role-original-and-results
+          path: |
+            andrews_original/
+            andrews_direct_role_results/
+          retention-days: 30
+          if-no-files-found: warn
