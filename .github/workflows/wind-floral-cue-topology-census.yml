@@ -5,6 +5,8 @@ on:
       - 'adaptive_gain/flower_cue_topology.py'
       - 'tests/test_flower_cue_topology.py'
       - 'research/wind_route_experiment/independent_flower_cue_audit.py'
+      - 'research/wind_route_experiment/continuous_noise_certificate.py'
+      - 'tests/test_flower_cue_continuous_certificate.py'
       - '.github/workflows/wind-floral-cue-topology-census.yml'
   workflow_dispatch:
 permissions:
@@ -21,12 +23,14 @@ jobs:
       - name: Install testing dependencies
         run: python -m pip install 'pytest==8.4.2'
       - name: Test 256 signal arrangements, noise curves and existing deterministic core
-        run: python -m pytest -q tests/test_flower_cue_topology.py tests/test_weather_species_routeability.py tests/test_core.py
+        run: python -m pytest -q tests/test_flower_cue_topology.py tests/test_flower_cue_continuous_certificate.py tests/test_weather_species_routeability.py tests/test_core.py
       - name: Enumerate all 256 cue-pairs with exact fractions
         run: python -m adaptive_gain.flower_cue_topology --out /tmp/floral_cue_topology
       - name: Independently enumerate every contingent and precommitted policy
         run: |
           python research/wind_route_experiment/independent_flower_cue_audit.py             /tmp/floral_cue_topology/256_flower_cue_architectures.csv             --out /tmp/floral_cue_topology/independent_audit.json
+      - name: Certify continuous error range for all 64 valid architectures
+        run: python -m research.wind_route_experiment.continuous_noise_certificate --out /tmp/floral_cue_topology/continuous_noise_certificate.json
       - name: Verify reported classification against machine receipt
         run: |
           python - <<'PY'
@@ -39,6 +43,8 @@ jobs:
           assert c['branch_specific']['strict_adaptive_over_fixed']==24
           a=json.load(open(root+'independent_audit.json'))
           assert a['n_architectures']==256 and a['max_exact_difference']=='0'
+          z=json.load(open(root+'continuous_noise_certificate.json'))
+          assert z['n_branch_valid']==64 and z['regime_counts']['noise_only_adaptive_value']==16
           print('ALL_256_FLORAL_CUE_INFORMATION_TOPOLOGIES_VERIFIED')
           PY
       - name: Archive exact CSV, statistics, independent audit
