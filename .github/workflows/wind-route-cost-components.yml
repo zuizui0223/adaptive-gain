@@ -1,0 +1,49 @@
+name: wind-route-cost-components
+on:
+  push:
+    paths:
+      - 'research/wind_route_experiment/route_cost_decomposition.py'
+      - 'research/wind_route_experiment/test_route_cost_decomposition.py'
+      - 'research/wind_route_experiment/independent_route_cost_audit.py'
+      - '.github/workflows/wind-route-cost-components.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  route-components:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install compatible numerical runtime
+        run: python -m pip install 'numpy==2.3.5' 'pandas==2.2.3'
+      - name: Verify synthetic invariants
+        working-directory: research/wind_route_experiment
+        run: python -m unittest -v test_route_cost_decomposition
+      - name: Recover exact published source from Dryad and SHA-256-check
+        run: python -u research/wind_route_experiment/source_gate.py
+      - name: Recompute full bee-cluster uncertainty and route decomposition
+        run: |
+          python -u research/wind_route_experiment/route_cost_decomposition.py \
+            --source wind_route_original/Bee_route_choice_in_wind.csv \
+            --out wind_route_components_results \
+            --reps 9999
+      - name: Independent raw-row audit and 21-bee leave-one-out
+        run: |
+          python -u research/wind_route_experiment/independent_route_cost_audit.py \
+            --source wind_route_original/Bee_route_choice_in_wind.csv \
+            --summary wind_route_components_results/summary.json \
+            --out wind_route_components_results/independent_audit.json
+      - name: Retain validated originals and result receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-route-cost-decomposition-original-and-audit
+          path: |
+            wind_route_original/
+            wind_route_components_results/
+          retention-days: 30
+          if-no-files-found: warn
