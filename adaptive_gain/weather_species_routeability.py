@@ -191,7 +191,7 @@ def ecological_contexts(calm_native_error: Fraction = Fraction(1, 20),
     return rows
 
 
-def example_finite_task(windy: bool, heterospecific_present: bool):
+def example_finite_task(windy: bool, heterospecific_present: bool, *,\n                        offbranch_floral_1: int = 1):
     """Construct repo's exact deterministic finite task, conditional on context.
 
     Wind and species-cue presence are EXTERNAL experimentally set contexts,
@@ -203,7 +203,7 @@ def example_finite_task(windy: bool, heterospecific_present: bool):
     def native(s, t): return s if not windy else 0
     def other(s, t): return s if heterospecific_present else 0
     def flower0(s, t): return t if s == 0 else 0
-    def flower1(s, t): return t if s == 1 else 1
+    def flower1(s, t): return t if s == 1 else offbranch_floral_1
     queries = tuple(Query(name, cost, tuple(fn(*x) for x in _STATES))
                     for name, cost, fn in (
                         ("native_branch", 1, native),
