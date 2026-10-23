@@ -4,6 +4,7 @@ on:
     paths:
       - 'adaptive_gain/stochastic_weather.py'
       - 'adaptive_gain/deadline_mixture.py'
+      - 'adaptive_gain/wind_opportunity_standardize.py'
       - 'tests/test_wind_stochastic_deadline.py'
       - '.github/workflows/wind-stochastic-deadline.yml'
   workflow_dispatch:
@@ -19,7 +20,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Source syntax
-        run: python -m py_compile adaptive_gain/stochastic_weather.py adaptive_gain/deadline_mixture.py tests/test_wind_stochastic_deadline.py
+        run: python -m py_compile adaptive_gain/stochastic_weather.py adaptive_gain/deadline_mixture.py adaptive_gain/wind_opportunity_standardize.py tests/test_wind_stochastic_deadline.py
       - name: Exact model and existing deterministic solver integration
         run: python -m unittest discover -s tests -p 'test_wind_stochastic_deadline.py' -v
       - name: Install pytest for original repo's pytest-style tests
@@ -34,6 +35,7 @@ jobs:
           from fractions import Fraction as F
           from adaptive_gain.stochastic_weather import four_contexts
           from adaptive_gain.deadline_mixture import mixed_contexts
+          from adaptive_gain.wind_opportunity_standardize import matched_results
           rows={}
           for p in [F(1,10),F(1,2),F(9,10)]:
               certain=four_contexts(4,5,p)
@@ -43,7 +45,8 @@ jobs:
                                    ('known3or7',mixed['announced']),
                                    ('hidden3or7',mixed['hidden'])]}
           with open('/tmp/wind_deadline/exact_values.json','w') as f:
-              json.dump({'model_only':True,'worlds':32,'rows':rows},f,indent=2)
+              json.dump({'model_only':True,'worlds':32,'rows':rows,
+                         'equal_expected_completed_time':matched_results()},f,indent=2)
           assert rows['1/2']['hidden3or7']['AB']=='77375740429/128000000000'
           print('EXACT_DEADLINE_WIND_BRANCHES_VALIDATED')
           PY
