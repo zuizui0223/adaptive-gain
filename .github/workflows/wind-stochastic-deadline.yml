@@ -1,0 +1,54 @@
+name: wind-stochastic-deadline
+on:
+  push:
+    paths:
+      - 'adaptive_gain/stochastic_weather.py'
+      - 'adaptive_gain/deadline_mixture.py'
+      - 'tests/test_wind_stochastic_deadline.py'
+      - '.github/workflows/wind-stochastic-deadline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-deadline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source syntax
+        run: python -m py_compile adaptive_gain/stochastic_weather.py adaptive_gain/deadline_mixture.py tests/test_wind_stochastic_deadline.py
+      - name: Exact model and existing deterministic solver integration
+        run: python -m unittest discover -s tests -p 'test_wind_stochastic_deadline.py' -v
+      - name: Original four-world core safety tests
+        run: python -m unittest discover -s tests -p 'test_core.py' -q
+      - name: Create fully rational experimental receipt
+        run: |
+          mkdir -p /tmp/wind_deadline
+          python - <<'PY'
+          import json
+          from fractions import Fraction as F
+          from adaptive_gain.stochastic_weather import four_contexts
+          from adaptive_gain.deadline_mixture import mixed_contexts
+          rows={}
+          for p in [F(1,10),F(1,2),F(9,10)]:
+              certain=four_contexts(4,5,p)
+              mixed=mixed_contexts(4,((3,F(1,2)),(7,F(1,2))),stay=p)
+              rows[str(p)]={mode:{key:str(val) for key,val in v.items()}
+                    for mode,v in [('certain5',certain),
+                                   ('known3or7',mixed['announced']),
+                                   ('hidden3or7',mixed['hidden'])]}
+          with open('/tmp/wind_deadline/exact_values.json','w') as f:
+              json.dump({'model_only':True,'worlds':32,'rows':rows},f,indent=2)
+          assert rows['1/2']['hidden3or7']['AB']=='77375740429/128000000000'
+          print('EXACT_DEADLINE_WIND_BRANCHES_VALIDATED')
+          PY
+      - name: Publish read-only receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: exact-wind-deadline-rational-receipt
+          path: /tmp/wind_deadline/exact_values.json
+          retention-days: 60
+          if-no-files-found: error
