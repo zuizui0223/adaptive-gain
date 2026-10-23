@@ -54,4 +54,17 @@ class StochasticWeatherTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             hidden_deadline_accuracy(((3,F(1,3)),(7,F(1,3))))
 
+
+    def test_standardized_opportunity_timelines_remain_distinct(self):
+        from adaptive_gain.wind_opportunity_standardize import matched_results
+        rows=matched_results()
+        self.assertEqual(len(rows),3)
+        from fractions import Fraction as F
+        target=F('2.5565696')
+        for row in rows:
+            self.assertLess(abs(F(row['expected_ticks'])-target),F(1,100000))
+        self.assertNotEqual(F(rows[0]['P_AB']),F(rows[2]['P_AB']))
+        self.assertGreater(F(rows[0]['scale']),1)
+        self.assertLess(F(rows[2]['scale']),1)
+
 if __name__=='__main__':unittest.main()
