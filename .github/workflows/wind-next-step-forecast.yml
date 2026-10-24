@@ -1,0 +1,61 @@
+name: wind-next-step-forecast
+on:
+  push:
+    paths:
+      - 'adaptive_gain/wind_forecast_routing.py'
+      - 'adaptive_gain/deadline_mixture.py'
+      - 'adaptive_gain/stochastic_weather.py'
+      - 'tests/test_wind_forecast_routing.py'
+      - '.github/workflows/wind-next-step-forecast.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-wind-lookahead:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax check
+        run: python -m py_compile adaptive_gain/wind_forecast_routing.py tests/test_wind_forecast_routing.py
+      - name: Exact forecast and original stochastic-deadline tests
+        run: python -m unittest discover -s tests -p test_wind_forecast_routing.py -v
+      - name: Upstream original exact-deadline regression checks
+        run: python -m unittest discover -s tests -p test_wind_stochastic_deadline.py -v
+      - name: Persist four context exact Bayesian receipt
+        run: |
+          mkdir -p forecast_receipt
+          python - <<'PY'
+          import json
+          from fractions import Fraction as F
+          from adaptive_gain.wind_forecast_routing import forecast_accuracy,cue_contexts
+          contexts={}
+          mixed=((3,F(1,2)),(7,F(1,2)))
+          for p in [F(1,10),F(1,2),F(9,10)]:
+              variants={}
+              for noise in [F(0),F(1,10),F(1,4),F(1,2)]:
+                  variants[str(noise)]={k:str(v) for k,v in cue_contexts(
+                      mixed,stay=p,forecast_error=noise).items()}
+              contexts[str(p)]=variants
+          v,policy=forecast_accuracy(mixed,4,(0,1),source_costs=((1,1),(1,2)),
+                                     forecast_error=F(0),stats=True)
+          assert v==F(2484991535819,4096000000000)
+          assert contexts['1/2']['1/2']['AB']==str(F(77375740429,128000000000))
+          assert policy['reachable_policy_states']>100
+          out={'source_scope':'synthetic conditional Bayesian routeability, not measured wildlife',
+               'forecast_condition_grid':contexts,
+               'policy_witness':policy}
+          with open('forecast_receipt/forecast_contexts.json','w') as f:
+              json.dump(out,f,indent=2)
+          print("EXACT_NEXT_WIND_FORECAST_RECEIPT_VERIFIED")
+          PY
+      - name: Archive exact fraction and reachable policy evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: adaptive-gain-next-wind-forecast-fraction-receipt
+          path: forecast_receipt/
+          retention-days: 60
+          if-no-files-found: error
