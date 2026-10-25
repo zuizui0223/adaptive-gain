@@ -66,12 +66,19 @@ def direct_posterior_accuracy(distribution,d=2,bits=(0,1),
                    for t in (0,1))
 
     def outcomes(m,kind,index):
+        """Full world-by-world posterior split, no compressed group statistics."""
         parts=[]
-        for value in (0,1):
-            parts.append(tuple(m[i] if (
-               (int(b==index and t==1) if kind=="flower"
-                else (((b>>bits[index])&1)^((latent>>index)&1)))==value
-               else F(0) for i,(b,t,latent) in enumerate(worlds)))
+        for reported in (0,1):
+            cells=[]
+            for weight,(b,target,latent) in zip(m,worlds):
+                if kind=="flower":
+                    observed=int(b==index and target==1)
+                elif kind=="source":
+                    observed=((b>>bits[index])&1)^((latent>>index)&1)
+                else:
+                    raise ValueError("unknown audit action")
+                cells.append(weight if observed==reported else F(0))
+            parts.append(tuple(cells))
         return tuple(parts)
 
     @lru_cache(None)
