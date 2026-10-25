@@ -33,7 +33,8 @@ def forecast_joint_kernel(c,forecast_error,Q,powers):
 def forecast_accuracy(distribution,d=4,bits=(),error=F(1,10),joint=None,
        source_costs=((),()),survival=(F(19,20),F(13,20)),
        stay=F(1,2),initial=(F(1,2),F(1,2)),
-       forecast_error=F(1,2),stats=False):
+       forecast_error=F(1,2),stats=False,
+       available_from_tick=0,forecast_ticks=None):
     """Bayesian maximum P(correct T) at an unknown hard cap and wind hazard.
 
     Exactly optimizes after every new weather forecast and after all previous
@@ -46,13 +47,26 @@ def forecast_accuracy(distribution,d=4,bits=(),error=F(1,10),joint=None,
     survival,stay,initial=validate_weather(survival,stay,initial)
     fe=F(forecast_error)
     if not 0<=fe<=F(1,2):raise ValueError("forecast error must be in [0,1/2]")
+    if type(available_from_tick) is not int or available_from_tick < 0:
+        raise ValueError("forecast arrival must be a nonnegative integer tick")
+    if forecast_ticks is not None and (
+        type(forecast_ticks) is not tuple
+        or any(type(t) is not int or t < 0 for t in forecast_ticks)
+        or len(set(forecast_ticks)) != len(forecast_ticks)
+    ):
+        raise ValueError("forecast schedule must contain unique nonnegative integer ticks")
+    def has_forecast(t):
+        return (t >= available_from_tick and
+                (forecast_ticks is None or t in forecast_ticks))
     n=1<<d;r=len(bits);n_groups=1<<r;per_group=n//n_groups
     latent=(1-2*e+q,e-q,e-q,q)
     D=lcm(*(v.denominator for v in latent))
     noise=tuple(int(v*D) for v in latent)
     Q=weather_kernel(survival,stay)
     powers=kernel_powers(Q,Kmax)
-    hk={c:forecast_joint_kernel(c,fe,Q,powers) for c in range(1,Kmax+1)}
+    hk_active={c:forecast_joint_kernel(c,fe,Q,powers) for c in range(1,Kmax+1)}
+    hk_hidden={c:forecast_joint_kernel(c,F(1,2),Q,powers)
+               for c in range(1,Kmax+1)}
     cap=tuple(sum((pr for k,pr in distribution if k>=t),F(0)) for t in range(Kmax+1))
     assert cap[0]==1
     first={}
@@ -77,6 +91,7 @@ def forecast_accuracy(distribution,d=4,bits=(),error=F(1,10),joint=None,
         gm=masses(read,reported);start=(counts==(0,)*n_groups and
                                        read==0 and reported==0 and elapsed==0)
         result=F(0);chosen={}
+        hk=hk_active if has_forecast(elapsed) else hk_hidden
         for z in (0,1):
             scores=[("stop",F(0))]
             if elapsed+1<=Kmax and cap[elapsed+1]:
@@ -122,13 +137,15 @@ def forecast_accuracy(distribution,d=4,bits=(),error=F(1,10),joint=None,
         if key in visited or key not in policies:continue
         visited.add(key)
         choices=policies[key]
+        hk=hk_active if has_forecast(t) else hk_hidden
+        current_error=fe if has_forecast(t) else F(1,2)
         if not set(choices[0]).intersection(choices[1]):
             witnesses.append({"elapsed":t,"wind":w,"source_read_mask":read,
                 "source_read_values":reported,"floral_count_per_group":counts,
                 "forecast_calm":list(choices[0]),
                 "forecast_gust":list(choices[1])})
         for z in (0,1):
-            pz=sum((Q[w][v2]/survival[w]*(1-fe if z==v2 else fe)
+            pz=sum((Q[w][v2]/survival[w]*(1-current_error if z==v2 else current_error)
                     for v2 in (0,1)),F(0)) if survival[w]>0 else F(0)
             if not pz:continue
             action=choices[z][0]
@@ -147,7 +164,9 @@ def forecast_accuracy(distribution,d=4,bits=(),error=F(1,10),joint=None,
                         reachable.append((cs,rs,os,wn,t+c))
     return v,{"initial_policy":first,"reachable_policy_states":len(visited),
               "strict_forecast_action_switch_examples":witnesses[:15],
-              "total_dp_states":solve.cache_info().currsize}
+              "total_dp_states":solve.cache_info().currsize,
+              "available_from_tick":available_from_tick,
+              "forecast_ticks":forecast_ticks}
 
 
 def cue_contexts(distribution=((3,F(1,2)),(7,F(1,2))),
