@@ -1,0 +1,56 @@
+name: wind-forecast-decision-timing
+on:
+  push:
+    paths:
+      - 'adaptive_gain/wind_forecast_routing.py'
+      - 'research/wind_forecast/independent_timed_posterior.py'
+      - 'research/wind_forecast/run_timing_study.py'
+      - 'tests/test_wind_forecast_timing.py'
+      - 'tests/test_wind_forecast_timing_audit.py'
+      - '.github/workflows/wind-forecast-decision-timing.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-timing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pytest
+        run: python -m pip install 'pytest==8.4.2'
+      - name: Validate syntax
+        run: |
+          python -m py_compile adaptive_gain/wind_forecast_routing.py research/wind_forecast/independent_timed_posterior.py research/wind_forecast/run_timing_study.py
+      - name: New timing, independent 135-case Bayes and previous exact-core tests
+        run: |
+          python -m pytest -q tests/test_wind_forecast_timing.py tests/test_wind_forecast_timing_audit.py tests/test_wind_forecast_routing.py tests/test_wind_stochastic_deadline.py tests/test_core.py
+      - name: Produce fully rational 84-scenario timing sweep
+        run: python -m research.wind_forecast.run_timing_study --out wind_timing_results
+      - name: Check key endpoint values and artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from fractions import Fraction as F
+          from pathlib import Path
+          data=json.loads(Path('wind_timing_results/summary.json').read_text())
+          assert data['grid_rows']==84
+          p=data['wind_persistence']['1/2']['0']
+          assert F(p['baseline'])==F(77375740429,128000000000)
+          assert F(p['continuous'])==F(2484991535819,4096000000000)
+          assert F(p['single_tick_1'])==F(2484914895671,4096000000000)
+          assert F(p['two_forecasts_at_1_4'])==F(p['continuous'])
+          assert F(p['t1_share_of_total'])>F(99,100)
+          print('TIMING_SOURCE_LOCKED_RECEIPT_PASS')
+          PY
+          sha256sum wind_timing_results/summary.json wind_timing_results/timing_grid.csv
+      - name: Save exact results
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-forecast-timing-84-exact-results
+          path: wind_timing_results/
+          if-no-files-found: error
+          retention-days: 60
