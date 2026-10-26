@@ -28,12 +28,16 @@ from fit_associations import (
 COMPARATORS = ('hoverflies', 'other_flies', 'butterflies_moths')
 BASELINE = 'Leaves still/moving occasionally'
 
-def _design_formula():
+def _design_formula(surface='one_km'):
+    if surface not in ('one_km','public'):
+        raise ValueError('unknown survey mode')
+    controls=(' + C(location_code)' if surface=='one_km'
+              else ' + C(country) + C(habitat_type)')
     return (
         "C(wind_speed, Treatment(reference='Leaves still/moving occasionally'))"
         " + log_flower_units + C(floral_unit) + C(target_flower_corrected)"
         " + C(year) + C(sunshine)"
-        " + bs(day_of_year, df=4, degree=3) + C(location_code)"
+        " + bs(day_of_year, df=4, degree=3)" + controls
     )
 
 def _wind_test(model, names):
@@ -52,10 +56,13 @@ def _wind_test(model, names):
     except Exception as exc:
         return {'status': 'joint_wald_failed', 'error': str(exc)}
 
-def fit_guild_pair(all_surveys: pd.DataFrame, comparator: str):
+def fit_guild_pair(all_surveys: pd.DataFrame, comparator: str, surface='one_km'):
     if comparator not in COMPARATORS:
         raise ValueError('unregistered post-hoc guild contrast')
-    required = {'bumblebees', comparator, 'location_code'}
+    if surface not in ('one_km','public'):
+        raise ValueError('unknown FIT survey surface')
+    cluster=('location_code' if surface=='one_km' else 'x1km_square')
+    required = {'bumblebees', comparator, cluster}
     if not required <= set(all_surveys):
         raise ValueError('missing guild or site fields')
     # prepare has already validated all_insects_total source values, zero visits,
@@ -71,22 +78,22 @@ def fit_guild_pair(all_surveys: pd.DataFrame, comparator: str):
     d = data.loc[eligible].copy()
     n_all = len(data)
     result = {
-        'comparator': comparator, 'focal':'bumblebees',
+        'comparator': comparator, 'focal':'bumblebees', 'surface':surface,
         'status':'not_run', 'all_valid_source_surveys': n_all,
         'pair_observed_surveys': len(d),
         'pair_absent_surveys_excluded': int((valid_counts & ~pair.gt(0)).sum()),
         'pair_missing_surveys_excluded': int((~valid_counts).sum()),
         'focal_visit_total': int(d['bumblebees'].sum()),
         'comparator_visit_total': int(d[comparator].sum()),
-        'site_clusters': int(d.location_code.nunique()),
+        'site_clusters': int(d[cluster].nunique()),
         'claim_boundary':'posthoc within-census relative composition conditional on pair detection, not causal sorting, individual behavior or sensory routeability',
-        'design_formula':_design_formula()
+        'design_formula':_design_formula(surface)
     }
-    if len(d) < 100 or d.location_code.nunique() < 15:
+    if len(d) < 100 or d[cluster].nunique() < 15:
         result['status'] = 'insufficient_sample'
         return result
     try:
-        X = patsy.dmatrix(_design_formula(), d, return_type='dataframe')
+        X = patsy.dmatrix(_design_formula(surface), d, return_type='dataframe')
         if len(X) != len(d):
             raise ValueError('design matrix silently dropped visits')
         # Aggregated binomial *paired counts* avoid expanding individual
@@ -97,7 +104,7 @@ def fit_guild_pair(all_surveys: pd.DataFrame, comparator: str):
             warnings.simplefilter('always')
             model = sm.GLM(y, X, family=sm.families.Binomial()).fit(
                 maxiter=160, cov_type='cluster',
-                cov_kwds={'groups': d.location_code.astype(str).to_numpy()}
+                cov_kwds={'groups': d[cluster].astype(str).to_numpy()}
             )
         result['fit_warnings'] = [str(w.message) for w in warn][-8:]
         result['converged'] = bool(model.converged)
