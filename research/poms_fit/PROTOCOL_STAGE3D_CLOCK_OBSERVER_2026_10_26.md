@@ -1,0 +1,9 @@
+# Stage 3d: Time-of-day and recorder classification stress test (post-hoc)
+
+**Exploratory after Stage 3b and Stage 3c effects were inspected; no confirmatory or independent causal status.**
+
+Question: Could the reported strong-wind shift in relative bumblebee versus other-fly counts be explained by unequal survey time-of-day, recorder taxonomic confidence or focal flower cover? In both original FIT data surfaces, retain the previous conditional pair-count definition and the same source record exclusions. Parse observed count_start_time strictly, document its original source formats, and avoid guessing missing or unparseable times. Add preselected clock categories (<10, 10–12, 12–14, 14–16, >=16), recorder_type (missing as a separate category), and flower_cover (not recorded as its own original category) to the previous adjusted binomial model. Keep spatial site fixed effects for 1km, country/habitat for public, target flower identity, floral_unit type/quantity, year, sunshine and day-of-year spline. Cluster-robust covariance stays at location_code for 1km and x1km_square for public.
+
+Report parsing validity and exact excluded surveys; if time parsability is <95% in either mode, do not fit that mode until parser/schema are audited. If design rank deficient, nonfinite CI, missing wind category or failure, do not promote a numerical estimate; preserve the failure receipt. Compare the originally reported OR to the additional-controls OR, direction and 95% site-cluster CI. This is a sensitivity analysis, not a causal intervention or a new discovery. The survey is still a 10-minute observation of one preselected flowering target, not a simultaneous choice opportunity.
+
+Controlling timing and self-reported recorder proficiency is not sufficient to identify wind-specific sensory perception, competitive displacement or adaptive decision cost. The same-data programme and posthoc nature remain clearly labelled.
