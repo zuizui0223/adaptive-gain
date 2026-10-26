@@ -74,9 +74,10 @@ def source_wind_support(d,surface):
     return {'sites':int(len(v)),'sites_with_ge2_wind_levels':int((v>=2).sum()),
             'surveys_in_such_sites':int(d[key].isin(v[v>=2].index).sum())}
 
-def formula(surface):
+def formula(surface,drop_redundant_unit=False):
+    flower_term="" if drop_redundant_unit else " + C(floral_unit)"
     f=("y ~ C(wind_speed, Treatment(reference='Leaves still/moving occasionally'))"
-       " + log_flower_units + C(floral_unit) + C(target_flower_corrected)"
+       " + log_flower_units" + flower_term + " + C(target_flower_corrected)"
        " + C(year) + C(sunshine) + bs(day_of_year, df=4, degree=3)")
     return f+(' + C(location_code)' if surface=='one_km' else ' + C(country) + C(habitat_type)')
 
@@ -89,13 +90,14 @@ def wald(fit,names):
         return {'status':'ok','statistic':float(x.statistic),'df':len(names),'p':float(x.pvalue)}
     except Exception as e:return {'status':'nonidentifiable','error':str(e)}
 
-def fit(d,surface,family_variant='poisson'):
+def fit(d,surface,family_variant='poisson',drop_redundant_unit=False):
     cl='location_code' if surface=='one_km' else 'x1km_square'
     if family_variant not in ('poisson','nb_alpha1','nb_alpha2'):
         raise ValueError('undeclared family variant')
     result={'status':'not_fit','family_variant':family_variant,
+            'redundant_floral_unit_removed':bool(drop_redundant_unit),
             'n':len(d),'cluster_count':int(d[cl].nunique()),
-            'formula':formula(surface)}
+            'formula':formula(surface,drop_redundant_unit)}
     if len(d)<100 or d[cl].nunique()<15 or d.y.sum()<=0:
         result['status']='insufficient';return result
     with warnings.catch_warnings(record=True) as issues:
@@ -176,7 +178,10 @@ def main(argv=None):
                     'design_diagnostic':{
                         'all_named_targets_have_one_floral_unit_type':bool((units_per_target==1).all()),
                         'target_units_nunique_by_label':{str(k):int(v) for k,v in units_per_target.items()},
-                        'interpretation':'Nested floral-unit and target indicators may be aliased; keep the declared failed model as failed.'}}
+                        'interpretation':'Nested floral-unit and target indicators are exactly aliased; retain the failed predeclared full specification.'}}
+                if bool((units_per_target==1).all()):
+                    entry['models']['total_exclude_other']['posthoc_exact_alias_repair']=fit(
+                        d,surface,drop_redundant_unit=True)
             report['surfaces'][surface]=entry
     (out/'fit_associations_results.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
     for surface,e in report['surfaces'].items():
