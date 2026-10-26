@@ -1,6 +1,6 @@
 # Post-hoc Stage 2: community-day conditional partner/time audit (2026-10-26)
 
-**Status:** exploratory audit implementation; **NOT** a completed new natural-data result until the exact original-data workflow prints \`COMMUNITY_DAY_ANALYSIS_COMPLETE\` and its receipts are inspected. The original 2026-10-19 protocol, 457-panel eligibility thresholds and frozen paper surfaces are unchanged.
+**Status:** exploratory audit completed on the archived original data; both the source checksum and `COMMUNITY_DAY_ANALYSIS_COMPLETE` are confirmed in GitHub Actions run 40262199253. The conditional null and source-origin assessment remain post-hoc and non-causal. The original 2026-10-19 protocol, 457-panel eligibility thresholds and frozen paper surfaces are unchanged.
 
 ## Why this is different from the first temporal null
 
@@ -23,11 +23,11 @@ Strong signals appearing only under expanded visits may be dominated by within-r
 
 ## Controls, consistency and review gates
 
-- Input must be the complete published OIK-07303 raw CSV, MD5 \`7a70c3e2356611b0871c163a2f9aed4a\`.
+- Input must be the complete published OIK-07303 raw CSV, MD5 `7a70c3e2356611b0871c163a2f9aed4a`.
 - Only the 2026-10-19 eligible key set is analyzed; the visit-unit event totals and I(plant;date) must agree *exactly up to numerical precision* with the original per-panel output. Fail loudly on missing, duplicate or unmatched keys.
 - Each eligible panel is evaluated with both observational-unit policies, and the null pool includes all visitors sharing its compiled site-year, not only the common taxa.
 - Repeated seed and synthetic controls include community-wide shifting partners, visitor-specific seasonal switching, static visitor specialization, low-frequency pool inclusion and differing freq/row observational units.
-- All-source run emits \`community_day_panels.csv\`, \`community_day_by_source.csv\`, \`community_day_summary.json\`, raw provenance, eligibility files, workflow logs and the completion marker.
+- All-source run emits `community_day_panels.csv`, `community_day_by_source.csv`, `community_day_summary.json`, raw provenance, eligibility files, workflow logs and the completion marker.
 - Source labels are **not yet established statistically independent original-study units**; do not pool their tail probabilities into a meta-analytic p-value. The supplied original-studies workbook and any multi-year label overlap must be audited before a source-independent meta-analysis.
 - Some compiled dates were shifted by 182 days and sSite may pool original sites. Do not infer real-day climate or wind from those date identifiers.
 
