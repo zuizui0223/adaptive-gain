@@ -60,6 +60,9 @@ def prepare_interaction(df, surface, include_other=False):
     pair=d["bumblebees"]+d["other_flies"]
     rec["pair_absent_surveys_excluded"]=int((pair==0).sum())
     d=d.loc[pair>0].copy()
+    # A fixed clock-bin dictionary may contain levels with no surveys after
+    # the pair-positive conditioning. Drop only empty columns, never records.
+    d["clock_bin"]=d["clock_bin"].cat.remove_unused_categories()
     if not len(d):
         rec["status"]="NO_GO_NO_PAIR_POSITIVE_SURVEYS";return None,rec
     d["closed"]=d["structure"].eq(CLOSED).astype(int)
