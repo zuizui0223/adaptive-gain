@@ -16,17 +16,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install 'pandas==2.2.3'
+      - run: python -m pip install 'pandas==2.2.3' 'numpy==2.2.6' 'python-docx==1.2.0'
       - name: Zero-inclusive source parser unit tests
         working-directory: research/poms_fit
-        run: python -m unittest test_stage3_source_audit -v
+        run: python -m unittest test_stage3_source_audit test_stage3_full_profile -v
       - name: Download original PoMS 2017-2023 and enumerate source schemas
         run: python -u research/poms_fit/stage3_source_audit.py --out stage3_poms_audit --download-support
+      - name: Zero inclusive all-record profile and provider field definitions
+        run: python -u research/poms_fit/stage3_full_profile.py --out stage3_poms_audit
       - name: Retain provenance and schema inventory (exclude potentially identifying original records)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: poms-fit-stage3-schema-and-provenance
-          path: stage3_poms_audit/source_schema_audit.json
+          path: |
+            stage3_poms_audit/source_schema_audit.json
+            stage3_poms_audit/full_zero_inclusive_profile.json
           if-no-files-found: warn
           retention-days: 90
