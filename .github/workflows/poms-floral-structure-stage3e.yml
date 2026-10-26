@@ -1,0 +1,38 @@
+name: poms-floral-structure-stage3e
+on:
+  push:
+    branches:
+      - analysis/poms-flower-structure-interaction-20261026
+    paths:
+      - 'research/poms_fit/**'
+      - '.github/workflows/poms-floral-structure-stage3e.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-morphology-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'statsmodels==0.14.5' 'scipy==1.15.3' 'patsy==1.0.1'
+      - name: Synthetic structure and support controls
+        working-directory: research/poms_fit
+        run: python -m unittest test_floral_structure_audit -v
+      - name: Verify original source and native schemas
+        run: python -u research/poms_fit/stage3_source_audit.py --out stage3e_results
+      - name: Source-native flower morphology, wind and guild support
+        run: python -u research/poms_fit/floral_structure_audit.py --out stage3e_results
+      - name: Archive non-identifying source and support receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-floral-structure-stage3e
+          path: |
+            stage3e_results/source_schema_audit.json
+            stage3e_results/floral_structure_audit.json
+          if-no-files-found: warn
+          retention-days: 90
