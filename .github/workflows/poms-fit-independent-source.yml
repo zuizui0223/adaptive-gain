@@ -19,13 +19,15 @@ jobs:
       - run: python -m pip install 'pandas==2.2.3' 'numpy==2.2.6' 'python-docx==1.2.0' 'statsmodels==0.14.5' 'scipy==1.15.3' 'patsy==1.0.1'
       - name: Zero-inclusive source parser unit tests
         working-directory: research/poms_fit
-        run: python -m unittest test_stage3_source_audit test_stage3_full_profile test_fit_associations -v
+        run: python -m unittest test_stage3_source_audit test_stage3_full_profile test_fit_associations test_guild_composition -v
       - name: Download original PoMS 2017-2023 and enumerate source schemas
         run: python -u research/poms_fit/stage3_source_audit.py --out stage3_poms_audit --download-support
       - name: Zero inclusive all-record profile and provider field definitions
         run: python -u research/poms_fit/stage3_full_profile.py --out stage3_poms_audit
       - name: Fit wind and seasonal visit rates with site-clustered standard errors
         run: python -u research/poms_fit/fit_associations.py --out stage3_poms_audit
+      - name: Exploratory posthoc within-census guild composition by wind
+        run: python -u research/poms_fit/guild_composition.py --out stage3_poms_audit
       - name: Retain provenance and schema inventory (exclude potentially identifying original records)
         if: always()
         uses: actions/upload-artifact@v4
@@ -35,5 +37,6 @@ jobs:
             stage3_poms_audit/source_schema_audit.json
             stage3_poms_audit/full_zero_inclusive_profile.json
             stage3_poms_audit/fit_associations_results.json
+            stage3_poms_audit/guild_composition_results.json
           if-no-files-found: warn
           retention-days: 90
