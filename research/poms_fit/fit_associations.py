@@ -13,7 +13,10 @@ import statsmodels.formula.api as smf
 from stage3_source_audit import DATASET_DOI
 from stage3_full_profile import TABLES
 
-SOURCE_SHA256='9e30b02e640279f0c777526f1d4e0cf057ae9ab7991da5e9a5936659f1d5dcfb'
+# The publisher generates packaging HTML dynamically, so full ZIP hashes change.
+# Pin actual data CSV bytes separately rather than incorrectly pinning ZIP bytes.
+SOURCE_DATA_CRC32={'one_km':'4eb3f12d','public':'fdd5e69f'}
+SOURCE_DATA_BYTES={'one_km':1690496,'public':6712935}
 WIND=['Leaves still/moving occasionally','Leaves moving gently all the time','Leaves moving strongly']
 SUN=['Entirely in sunshine','Partly in sun and partly shaded','Entirely shaded']
 GUILDS=['bumblebees','hoverflies','other_flies','butterflies_moths']
@@ -124,12 +127,17 @@ def main(argv=None):
     a=ap.parse_args(argv);out=Path(a.out)
     path=out/'poms_fit_2017_2023_source.zip'
     digest=hashlib.sha256(path.read_bytes()).hexdigest()
-    if digest!=SOURCE_SHA256:raise ValueError('source checksum changed')
     report={'status':'observational_only','doi':DATASET_DOI,
-            'source_sha256':digest,'no_routeability_inference':True,'surfaces':{}}
+            'source_zip_sha256_receipt_not_a_pinned_digest':digest,
+            'no_routeability_inference':True,'data_member_sha256':{},'surfaces':{}}
     with zipfile.ZipFile(path) as z:
         for surface,member in [('one_km',TABLES['one_km']),('public',TABLES['public'])]:
-            data,encoding=read_source(z.read(member))
+            info=z.getinfo(member)
+            if f'{info.CRC:08x}'!=SOURCE_DATA_CRC32[surface] or info.file_size!=SOURCE_DATA_BYTES[surface]:
+                raise ValueError(f'official original CSV member changed: {surface}')
+            member_bytes=z.read(member)
+            report['data_member_sha256'][surface]=hashlib.sha256(member_bytes).hexdigest()
+            data,encoding=read_source(member_bytes)
             entry={'raw_surveys':len(data),'encoding':encoding,'models':{}}
             outcomes=['all_insects_total']+GUILDS if surface=='one_km' else ['all_insects_total']
             for outcome in outcomes:
