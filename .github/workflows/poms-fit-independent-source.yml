@@ -1,0 +1,32 @@
+name: poms-fit-independent-source
+on:
+  pull_request:
+    paths:
+      - 'research/poms_fit/**'
+      - '.github/workflows/poms-fit-independent-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'pandas==2.2.3'
+      - name: Zero-inclusive source parser unit tests
+        working-directory: research/poms_fit
+        run: python -m unittest test_stage3_source_audit -v
+      - name: Download original PoMS 2017-2023 and enumerate source schemas
+        run: python -u research/poms_fit/stage3_source_audit.py --out stage3_poms_audit --download-support
+      - name: Retain provenance and schema inventory (exclude potentially identifying original records)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-fit-stage3-schema-and-provenance
+          path: stage3_poms_audit/source_schema_audit.json
+          if-no-files-found: warn
+          retention-days: 90
