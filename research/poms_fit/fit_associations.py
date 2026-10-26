@@ -126,6 +126,16 @@ def fit(d,surface,family_variant='poisson',drop_redundant_unit=False):
     seasonal=[n for n in m.params.index if 'bs(day_of_year' in n]
     result['wind_wald']=wald(m,wind);result['season_wald']=wald(m,seasonal)
     ci=m.conf_int()
+    if wind and not np.isfinite(ci.loc[wind].to_numpy()).all():
+        result['status']='nonidentifiable_robust_intervals'
+        result['wind_point_IRR_only']={n:float(np.exp(m.params[n])) for n in wind}
+        result['wind_terms']={}
+        return result
+    if wind and np.any(np.abs(ci.loc[wind].to_numpy())>100):
+        result['status']='nonidentifiable_extreme_robust_intervals'
+        result['wind_point_IRR_only']={n:float(np.exp(m.params[n])) for n in wind}
+        result['wind_terms']={}
+        return result
     result['wind_terms']={n:{
         'IRR':float(np.exp(m.params[n])),'CI95_low':float(np.exp(ci.loc[n,0])),
         'CI95_high':float(np.exp(ci.loc[n,1])),'cluster_p':float(m.pvalues[n])} for n in wind}
@@ -172,21 +182,26 @@ def main(argv=None):
             if surface=='one_km':
                 d,flow=prepare(data,surface,'all_insects_total',exclude_other=True)
                 units_per_target=d.groupby('target_flower_corrected').floral_unit.nunique()
+                exact_alias=bool((units_per_target==1).all())
+                original_fit=({'status':'nonidentifiable_exact_floral_unit_target_alias',
+                               'n':len(d),'formula':formula(surface),
+                               'note':'Original predeclared model has an exact rank deficit. Refuse invalid covariance inference.'}
+                              if exact_alias else fit(d,surface))
                 entry['models']['total_exclude_other']={'eligibility':flow,
                     'wind_overlap':source_wind_support(d,surface),
-                    'descriptive_by_wind':raw_wind(d),'fit':fit(d,surface),
+                    'descriptive_by_wind':raw_wind(d),'fit':original_fit,
                     'design_diagnostic':{
                         'all_named_targets_have_one_floral_unit_type':bool((units_per_target==1).all()),
                         'target_units_nunique_by_label':{str(k):int(v) for k,v in units_per_target.items()},
                         'interpretation':'Nested floral-unit and target indicators are exactly aliased; retain the failed predeclared full specification.'}}
-                if bool((units_per_target==1).all()):
+                if exact_alias:
                     entry['models']['total_exclude_other']['posthoc_exact_alias_repair']=fit(
                         d,surface,drop_redundant_unit=True)
             report['surfaces'][surface]=entry
-    (out/'fit_associations_results.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
+    (out/'fit_associations_results.json').write_text(json.dumps(report,indent=2,ensure_ascii=False,allow_nan=False))
     for surface,e in report['surfaces'].items():
         for outcome,r in e['models'].items():
-            print('POMS_ASSOCIATION '+json.dumps({'surface':surface,'outcome':outcome,**r}),flush=True)
+            print('POMS_ASSOCIATION '+json.dumps({'surface':surface,'outcome':outcome,**r},allow_nan=False),flush=True)
     print('POMS_ASSOCIATION_COMPLETE',flush=True)
 
 if __name__=='__main__':main()
