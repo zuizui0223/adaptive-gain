@@ -112,7 +112,13 @@ def fit(d,surface,family_variant='poisson'):
     result['converged']=bool(m.converged)
     result['overdispersion']=float(m.pearson_chi2/m.df_resid)
     result['zero_rate_observed']=float(d.y.eq(0).mean())
-    result['zero_rate_poisson_fitted']=float(np.exp(-m.predict(d)).mean())
+    mu=np.asarray(m.predict(d),dtype=float)
+    if family_variant=='poisson':
+        zero_pred=np.exp(-mu)
+    else:
+        alpha=(1.0 if family_variant=='nb_alpha1' else 2.0)
+        zero_pred=(1.0+alpha*mu)**(-1.0/alpha)
+    result['zero_rate_under_fitted_family']=float(zero_pred.mean())
     result['warnings']=[str(w.message) for w in issues][-8:]
     wind=[n for n in m.params.index if n.startswith('C(wind_speed')]
     seasonal=[n for n in m.params.index if 'bs(day_of_year' in n]
