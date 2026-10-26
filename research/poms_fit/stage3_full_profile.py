@@ -95,6 +95,16 @@ def parse_docx_metadata(content):
     return {'relevant_metadata_excerpt':lines[:100], 'matched_blocks':len(lines),
             'document_paragraphs':len(doc.paragraphs),'document_tables':len(doc.tables)}
 
+def read_original_csv_bytes(raw: bytes):
+    """Strict decode, with an explicit non-lossy compatibility fallback."""
+    for encoding in ('utf-8', 'cp1252', 'latin-1'):
+        try:
+            text = raw.decode(encoding, errors='strict')
+            return pd.read_csv(io.StringIO(text), low_memory=False), encoding
+        except UnicodeDecodeError:
+            continue
+    raise ValueError('no reversible text decoder available')
+
 def main():
     import argparse
     ap=argparse.ArgumentParser()
@@ -109,9 +119,10 @@ def main():
     with zipfile.ZipFile(archive) as z:
         ids={}
         for surface,member in TABLES.items():
-            with z.open(member) as f: df=pd.read_csv(f,low_memory=False)
+            df, source_encoding = read_original_csv_bytes(z.read(member))
             ids[surface]=set(df.sample_id.dropna())
             report[surface]=profile_table(df,surface)
+            report[surface]['source_text_encoding']=source_encoding
         report['sample_id_overlap_public_1km']=len(ids['public']&ids['one_km'])
         metadata='supporting-documents/ukpoms_fitcountdata_2017-2023_metadata.docx'
         report['field_metadata']=parse_docx_metadata(z.read(metadata))
