@@ -1,0 +1,48 @@
+name: poms-fit-independent-source
+on:
+  pull_request:
+    paths:
+      - 'research/poms_fit/**'
+      - '.github/workflows/poms-fit-independent-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'pandas==2.2.3' 'numpy==2.2.6' 'python-docx==1.2.0' 'statsmodels==0.14.5' 'scipy==1.15.3' 'patsy==1.0.1'
+      - name: Zero-inclusive source parser unit tests
+        working-directory: research/poms_fit
+        run: python -m unittest test_stage3_source_audit test_stage3_full_profile test_fit_associations test_guild_composition test_guild_sensitivities test_guild_clock_observer -v
+      - name: Download original PoMS 2017-2023 and enumerate source schemas
+        run: python -u research/poms_fit/stage3_source_audit.py --out stage3_poms_audit --download-support
+      - name: Zero inclusive all-record profile and provider field definitions
+        run: python -u research/poms_fit/stage3_full_profile.py --out stage3_poms_audit
+      - name: Fit wind and seasonal visit rates with site-clustered standard errors
+        run: python -u research/poms_fit/fit_associations.py --out stage3_poms_audit
+      - name: Exploratory posthoc within-census guild composition by wind
+        run: python -u research/poms_fit/guild_composition.py --out stage3_poms_audit
+      - name: Posthoc falsification of selected wind-guild contrast
+        run: python -u research/poms_fit/guild_sensitivities.py --out stage3_poms_audit
+      - name: Posthoc clock and recorder classification sensitivity
+        run: python -u research/poms_fit/guild_clock_observer.py --out stage3_poms_audit
+      - name: Retain provenance and schema inventory (exclude potentially identifying original records)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-fit-stage3-schema-and-provenance
+          path: |
+            stage3_poms_audit/source_schema_audit.json
+            stage3_poms_audit/full_zero_inclusive_profile.json
+            stage3_poms_audit/fit_associations_results.json
+            stage3_poms_audit/guild_composition_results.json
+            stage3_poms_audit/guild_stress_tests.json
+            stage3_poms_audit/guild_clock_observer_sensitivity.json
+          if-no-files-found: warn
+          retention-days: 90
