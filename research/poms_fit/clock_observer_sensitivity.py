@@ -55,7 +55,7 @@ def parse_clock(value):
     return None,"unrecognized"
 
 def label_clock(minutes):
-    if minutes is None: return None
+    if minutes is None or pd.isna(minutes): return None
     edges=(600,720,840,960)
     return CLOCK_BINS[sum(minutes>=t for t in edges)]
 
