@@ -48,6 +48,14 @@ class FitAssociationTests(unittest.TestCase):
         self.assertEqual(source_wind_support(d,'one_km')['sites'],24)
         strong=[q for k,q in z['wind_terms'].items() if WIND[2] in k][0]
         self.assertLess(strong['IRR'],1)
+    def test_exploratory_negative_binomial_model_is_separate(self):
+        x=self.fixture()
+        d,_=prepare(x,'one_km')
+        a=fit(d,'one_km','nb_alpha1')
+        self.assertEqual(a['status'],'fitted')
+        self.assertEqual(a['family_variant'],'nb_alpha1')
+        self.assertTrue(0<a['zero_rate_under_fitted_family']<1)
+
     def test_invalid_insect_count_is_not_used(self):
         x=self.fixture()
         x.loc[1,'all_insects_total']=-5
