@@ -28,7 +28,11 @@ def profile_table(df, surface):
     n=len(df)
     num = df[COUNT_COLS].apply(pd.to_numeric,errors='coerce')
     invalid={c:int((num[c].notna() & ((num[c]<0) | (num[c]%1!=0))).sum()) for c in COUNT_COLS}
-    if any(invalid.values()):raise ValueError(f'negative/fractional counts not valid: {invalid}')
+    # Visits are literal insect counts; floral_unit_count may be an estimate
+    # or an anomalous fractional observation. Profile it rather than silently
+    # coercing it to an integer or rejecting all source records.
+    if any(invalid[k] for k in GROUPS+['all_insects_total']):
+        raise ValueError(f'negative/fractional insect counts: {invalid}')
     complete=num[GROUPS+['all_insects_total']].notna().all(axis=1)
     consistency=num.loc[complete,GROUPS].sum(axis=1)-num.loc[complete,'all_insects_total']
     date=pd.to_datetime(df['date'],errors='coerce',dayfirst=True)
@@ -47,6 +51,9 @@ def profile_table(df, surface):
         'total_insect_group_sum_mismatches':int((consistency!=0).sum()),
         'insect_total_mismatch_example_diffs':sorted(consistency.loc[consistency!=0].unique().tolist())[:8],
         'recorded_flower_units_zero':int(num.floral_unit_count.eq(0).sum()),
+        'flower_unit_fractional_rows':int((num.floral_unit_count.notna()&(num.floral_unit_count%1!=0)).sum()),
+        'flower_unit_negative_rows':int((num.floral_unit_count<0).sum()),
+        'flower_unit_fractional_values':sorted(num.loc[num.floral_unit_count.notna()&(num.floral_unit_count%1!=0),'floral_unit_count'].drop_duplicates().astype(float).tolist())[:15],
         'recorded_flower_units_missing':int(num.floral_unit_count.isna().sum()),
         'flower_units_median_positive':float(num.loc[num.floral_unit_count.gt(0),'floral_unit_count'].median()),
         'flower_cover_levels':{str(k):int(v) for k,v in df.flower_cover.value_counts(dropna=False).head(20).items()},
