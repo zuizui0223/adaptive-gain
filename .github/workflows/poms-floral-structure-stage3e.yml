@@ -21,11 +21,13 @@ jobs:
       - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'statsmodels==0.14.5' 'scipy==1.15.3' 'patsy==1.0.1'
       - name: Synthetic structure and support controls
         working-directory: research/poms_fit
-        run: python -m unittest test_floral_structure_audit -v
+        run: python -m unittest test_floral_structure_audit test_floral_wind_guild_interaction -v
       - name: Verify original source and native schemas
         run: python -u research/poms_fit/stage3_source_audit.py --out stage3e_results
       - name: Source-native flower morphology, wind and guild support
         run: python -u research/poms_fit/floral_structure_audit.py --out stage3e_results
+      - name: Fit audited posthoc wind × floral morphology interaction
+        run: python -u research/poms_fit/floral_wind_guild_interaction.py --out stage3e_results
       - name: Archive non-identifying source and support receipts
         if: always()
         uses: actions/upload-artifact@v4
@@ -34,5 +36,6 @@ jobs:
           path: |
             stage3e_results/source_schema_audit.json
             stage3e_results/floral_structure_audit.json
+            stage3e_results/floral_wind_guild_interaction.json
           if-no-files-found: warn
           retention-days: 90
