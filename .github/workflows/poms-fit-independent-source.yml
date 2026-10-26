@@ -1,5 +1,11 @@
 name: poms-fit-independent-source
 on:
+  push:
+    branches:
+      - analysis/poms-stage3d-clock-recorder-20261026
+    paths:
+      - 'research/poms_fit/**'
+      - '.github/workflows/poms-fit-independent-source.yml'
   pull_request:
     paths:
       - 'research/poms_fit/**'
