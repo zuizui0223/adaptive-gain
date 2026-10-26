@@ -89,16 +89,21 @@ def wald(fit,names):
         return {'status':'ok','statistic':float(x.statistic),'df':len(names),'p':float(x.pvalue)}
     except Exception as e:return {'status':'nonidentifiable','error':str(e)}
 
-def fit(d,surface):
+def fit(d,surface,family_variant='poisson'):
     cl='location_code' if surface=='one_km' else 'x1km_square'
-    result={'status':'not_fit','n':len(d),'cluster_count':int(d[cl].nunique()),
+    if family_variant not in ('poisson','nb_alpha1','nb_alpha2'):
+        raise ValueError('undeclared family variant')
+    result={'status':'not_fit','family_variant':family_variant,
+            'n':len(d),'cluster_count':int(d[cl].nunique()),
             'formula':formula(surface)}
     if len(d)<100 or d[cl].nunique()<15 or d.y.sum()<=0:
         result['status']='insufficient';return result
     with warnings.catch_warnings(record=True) as issues:
         warnings.simplefilter('always')
         try:
-            m=smf.glm(result['formula'],data=d,family=sm.families.Poisson()).fit(
+            fam=(sm.families.Poisson() if family_variant=='poisson' else
+                 sm.families.NegativeBinomial(alpha=(1.0 if family_variant=='nb_alpha1' else 2.0)))
+            m=smf.glm(result['formula'],data=d,family=fam).fit(
                 maxiter=120,cov_type='cluster',
                 cov_kwds={'groups':d[cl].astype(str).to_numpy()})
         except Exception as e:
@@ -152,11 +157,20 @@ def main(argv=None):
                 entry['models'][outcome]={'eligibility':flow,
                     'wind_overlap':source_wind_support(d,surface),
                     'descriptive_by_wind':raw_wind(d),'fit':fit(d,surface)}
+                if outcome=='all_insects_total':
+                    entry['models'][outcome]['posthoc_nb_sensitivity']={
+                        'alpha1':fit(d,surface,'nb_alpha1'),
+                        'alpha2':fit(d,surface,'nb_alpha2')}
             if surface=='one_km':
                 d,flow=prepare(data,surface,'all_insects_total',exclude_other=True)
+                units_per_target=d.groupby('target_flower_corrected').floral_unit.nunique()
                 entry['models']['total_exclude_other']={'eligibility':flow,
                     'wind_overlap':source_wind_support(d,surface),
-                    'descriptive_by_wind':raw_wind(d),'fit':fit(d,surface)}
+                    'descriptive_by_wind':raw_wind(d),'fit':fit(d,surface),
+                    'design_diagnostic':{
+                        'all_named_targets_have_one_floral_unit_type':bool((units_per_target==1).all()),
+                        'target_units_nunique_by_label':{str(k):int(v) for k,v in units_per_target.items()},
+                        'interpretation':'Nested floral-unit and target indicators may be aliased; keep the declared failed model as failed.'}}
             report['surfaces'][surface]=entry
     (out/'fit_associations_results.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
     for surface,e in report['surfaces'].items():
