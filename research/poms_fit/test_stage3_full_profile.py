@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from stage3_full_profile import GROUPS, profile_table
+from stage3_full_profile import GROUPS, profile_table, read_original_csv_bytes
 
 class FullProfileTests(unittest.TestCase):
     def _test_rows(self):
@@ -16,6 +16,14 @@ class FullProfileTests(unittest.TestCase):
         data['bumblebees']=[0,1,2]
         data['all_insects_total']=[0,1,2]
         return pd.DataFrame(data)
+    def test_legacy_windows_text_is_not_silently_replaced(self):
+        source=b'target_flower,all_insects_total\n' + bytes([0x93]) + b'Flower' + bytes([0x94])+b',0\n'
+        df, codec = read_original_csv_bytes(source)
+        self.assertEqual(codec,'cp1252')
+        self.assertEqual(len(df),1)
+        self.assertIn('Flower',df.loc[0,'target_flower'])
+        self.assertEqual(df.loc[0,'all_insects_total'],0)
+
     def test_true_zero_census_retained(self):
         d=profile_table(self._test_rows(),'one_km')
         self.assertEqual(d['rows'],3)
