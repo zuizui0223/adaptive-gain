@@ -67,7 +67,13 @@ def audit_archive(zip_path, *, max_uncompressed=MAX_UNCOMPRESSED):
         if total_size > max_uncompressed:
             raise ValueError(f'archive expansion cap violated: {total_size}')
         for info in infos:
+            member_hash = hashlib.sha256()
+            if not info.is_dir():
+                with z.open(info) as stream:
+                    for piece in iter(lambda: stream.read(1024*1024), b''):
+                        member_hash.update(piece)
             entries.append({'file':info.filename, 'bytes':info.file_size,
+                            'sha256_uncompressed_member':member_hash.hexdigest(),
                             'compressed_bytes':info.compress_size,
                             'extension':Path(info.filename).suffix.lower(),
                             'crc32':f'{info.CRC:08x}'})
