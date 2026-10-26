@@ -17,6 +17,10 @@ from stage3_full_profile import TABLES
 # Pin actual data CSV bytes separately rather than incorrectly pinning ZIP bytes.
 SOURCE_DATA_CRC32={'one_km':'4eb3f12d','public':'fdd5e69f'}
 SOURCE_DATA_BYTES={'one_km':1690496,'public':6712935}
+SOURCE_DATA_SHA256={
+ 'one_km':'29d3deb757c053774c26ece0a7683081a4b4fe81d9497877fe1179f232182e52',
+ 'public':'bcd2ef780d3208a5a4aba5c191178900ccef705e5b569dc0160b27d00652dc3c'
+}
 WIND=['Leaves still/moving occasionally','Leaves moving gently all the time','Leaves moving strongly']
 SUN=['Entirely in sunshine','Partly in sun and partly shaded','Entirely shaded']
 GUILDS=['bumblebees','hoverflies','other_flies','butterflies_moths']
@@ -136,7 +140,10 @@ def main(argv=None):
             if f'{info.CRC:08x}'!=SOURCE_DATA_CRC32[surface] or info.file_size!=SOURCE_DATA_BYTES[surface]:
                 raise ValueError(f'official original CSV member changed: {surface}')
             member_bytes=z.read(member)
-            report['data_member_sha256'][surface]=hashlib.sha256(member_bytes).hexdigest()
+            member_digest=hashlib.sha256(member_bytes).hexdigest()
+            if member_digest != SOURCE_DATA_SHA256[surface]:
+                raise ValueError(f'original source CSV SHA-256 changed: {surface}')
+            report['data_member_sha256'][surface]=member_digest
             data,encoding=read_source(member_bytes)
             entry={'raw_surveys':len(data),'encoding':encoding,'models':{}}
             outcomes=['all_insects_total']+GUILDS if surface=='one_km' else ['all_insects_total']
