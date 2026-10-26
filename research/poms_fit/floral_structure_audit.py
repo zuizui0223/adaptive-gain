@@ -45,7 +45,7 @@ def profile_structure(source,surface):
     for label,g in d.groupby("structure_normalized",dropna=False,observed=True):
         subset={"source_structure":str(label),
                 "all_surveys":len(g),
-                "named_target_surveys":int(~g["target_flower_corrected"].eq(OTHER).sum()) if False else int((g["target_flower_corrected"]!=OTHER).sum()),
+                "named_target_surveys":int(g["target_flower_corrected"].ne(OTHER).sum()),
                 "distinct_corrected_targets":int(g["target_flower_corrected"].nunique()),
                 "pair_positive_surveys":int(g["pair_positive"].sum()),
                 "pair_positive_named_target_surveys":int((g["pair_positive"] & g["target_flower_corrected"].ne(OTHER)).sum()),
