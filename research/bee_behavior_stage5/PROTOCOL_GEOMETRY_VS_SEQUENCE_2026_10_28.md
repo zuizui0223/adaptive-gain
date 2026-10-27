@@ -1,0 +1,34 @@
+# Stage 5 — physical flower geometry versus bee-specific sequence history
+
+**Protocol date: 2026-10-28. Registered before inspecting Stage 5 geometry-model results. This is exploratory relative to positive Stage 4.**
+
+## Background
+Original data: Pasquaretta et al. (2019), *Movement Ecology* 7:4 DOI 10.1186/s40462-019-0150-z, Supplementary Dataset S1, exact 61,316 bytes SHA256 `0d30b0957c4b18602beebf60a915e03bee26142a8593f252badd77881b5e9dfe`.
+
+Stage 4 established in one original colony and one 10-flower cage that per-bee previous-flower Markov transitions predict last-day visits beyond static per-bee flower-use margins (10 bees, 1,550 within-bout day-5 transitions; mean gain +0.20653 nats per transition). Crucial unresolved alternative: **physical flower positions and frequent same-flower repeats can create apparent sequence memory without any cognitive cue ordering.**
+
+The published experimental arrangement is a regular **10-flower polygonal array**, printed with **label-specific meter coordinates in original Fig. 2**. Nearest neighbors ~9m (example F1–F4), second-nearest ~15.8m (F1–F6), and paper estimates flower visual detection range ~9.6m. This is not a strict hard perceptual cutoff. First **verify original Fig. 2 coordinates**, identity labels and meters; do not invent node coordinates from typical polygons or numeric flower-ID order. Figure reconstruction must include source URI, original figure SHA256, coordinates as read and expected exemplar distances **F1–F4 ~9±0.75m**, **F1–F6 ~15.8±0.75m**, with ten distinct mapped IDs. If exact coordinates cannot be verified, return `NO_GO_UNVERIFIED_FIGURE2_COORDINATES`, and report only the already verified no-geometry sequence result. Do not fabricate geometry.
+
+## Frozen same-data evaluation once original coordinates are independently verified
+
+All models trained on original source days **1–4**, score entire original day **5**; use precisely the same **881 bouts, 6,205 visits, 5,324 genuine within-bout adjacent flower pairs**, same 10 bees and 1,550 day-5 transitions. Do not create between-bout pairs. Source day-5 records NEVER affect the model-fit weights or geometry calibration. Work with the unrounded meter coordinates and ten physical labels exactly as printed.
+
+1. `M0` static preference `P_b(next)`: earlier-day bee-specific visit count + Dirichlet α=0.5 per physical flower. Identical to Stage 4 M0.
+2. `Mgeo` static bee preference *physical Euclidean distance*. `P_b(next | prev, λ) ∝ P_b(next) exp(-λ d(prev,next))`. **Global pooled λ** selected on days 1–4 **only**, maximizing proper conditional log likelihood across original within-bout training transitions. Candidate grid is fixed: **λ ∈ {0,0.025,0.05,0.1,0.2,0.4,0.8} per metre**, ties to smallest λ. λ=0 exactly recovers M0. Self visits are distance zero, but **do not** use a zero-probability "visible-only" cutoff.
+3. `M1` bee-specific source transition counts by previous flower, smoothed by predeclared β=5 toward each bee's M0, identical to Stage 4 M1. Fit on days 1–4 only.
+4. `Mgeo+history`: same bee-specific transition count shrinkage with **β=5** but shrink toward its bee-specific `Mgeo(next|prev)`, rather than toward M0. This is a practical nested predictive comparison, not a structural causal decomposition. Same train-only transitions, no heldout choice of hyperparameters.
+
+Main unit for summary is *individual bee* (n=10 from one colony), with held-out mean **proper negative log loss** in nats per next flower. Compare (Mgeo−M1), (Mgeo−Mgeo+history), and (M0−Mgeo). Report signs of differences by bee and all models' heldout NLL; not merely one significance-threshold or a handpicked scenario. An advantage beyond physical distance is not proof of cognitive memory; paths, landmarks, direction, learning and flight constraints are unobserved.
+
+### Separating movement from repeats
+The all-transitions endpoint includes consecutive occurrences of **the same flower** in the source. Decompose raw 1,550 held-out transitions into self and between-flower, with counts by bee. Then report two predeclared descriptive sub-analyses: (a) **within-flower same-flower repeat** binary probability under each model; (b) **conditional distinct-flower destination log loss** on transitions with `next ≠ prev`. For (b), renormalize each model's 10-flower probabilities to its nine other possible destinations; estimate no extra parameters. Keep the original heldout population and per-bee sample sizes explicit. For fair comparison conditional on switching, M0 is also renormalized to nine other flowers. No retrospective deletion of actual repeat records from the main endpoint.
+
+### Source quality and fragile interpretation
+The exact original Fig. 2 label geometry must be checked against published meter distances, and the image's actual **source** is retained as a digest+link. No automatic "distance from numeric flower labels", no guess about "north", equal distances, obstacle perception or weather. Original experimental cage 44×20m, 10 flowers, single colony and mostly short (<9.6m visible) neighbor routes. The fixed 10 flowers are physically presented but not necessarily simultaneously **perceived**. "Mgeo beats M0" is not enough to imply optimal foraging fitness. "Mgeo+history beats Mgeo" is not sensory cue-order evidence. No measured wind; do not promote to field wind generalization or previously frozen V5/V6 mechanism paper.
+
+## Control and no-go
+- Complete exact original Fig2 source verification and 10-label position mapping before any geometry outcome fit; if figure cannot be read, log NO_GO and do not fit speculative geometry.
+- Require equal exact source day-5 transition count and ten bee identity tags across M0, Mgeo, M1, Mgeo+history.
+- Check each predicted distribution normalizes to one, every source flower has positive mass, no future visits influence trained Mgeo global λ.
+- Record within-day temporal split, source diagrams, meter-distance checks, zero/positive self counts and rank/distance map symmetry.
+- All findings are exploratory on *one source experiment*. 10 bee tags are not 10 independent colony samples. Frozen V5/V6 manuscript surfaces untouched.
