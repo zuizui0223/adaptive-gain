@@ -96,11 +96,9 @@ def parse_bouts(records,meta):
         "published_physical_array_size":len(PHYSICAL_FLOWERS),
         "source_data_days":sorted({b["day"] for b in bouts}),
         "per_day_bouts":dict(sorted(Counter(b["day"] for b in bouts).items())),
-        "per_day_visits":dict(sorted(Counter(
-            {day:sum(len(b["flowers"]) for b in bouts if b["day"]==day)
-             for day in {b["day"] for b in bouts}}).items())) if False else {
-             str(day):sum(len(b["flowers"]) for b in bouts if b["day"]==day)
-             for day in sorted({b["day"] for b in bouts})},
+        "per_day_visits":{
+            str(day):sum(len(b["flowers"]) for b in bouts if b["day"]==day)
+            for day in sorted({b["day"] for b in bouts})},
         "bout_visit_count_median":sorted(len(b["flowers"]) for b in bouts)[len(bouts)//2],
         "max_recorded_flower_visits_per_bout":max(map(lambda b:len(b["flowers"]),bouts)),
         "empty_flower_visit_bouts":sum(not b["flowers"] for b in bouts),
