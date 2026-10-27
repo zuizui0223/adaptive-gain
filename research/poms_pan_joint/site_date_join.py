@@ -39,6 +39,17 @@ def safe_source_csv(z:zipfile.ZipFile,name,expected_hash:str):
         except UnicodeDecodeError:continue
     raise ValueError("original CSV not decodable")
 
+def parse_original_dates(series):
+    """Do not accidentally reinterpret ISO yyyy-mm-dd as mm/dd under dayfirst."""
+    raw=series.astype("string").str.strip()
+    iso=raw.str.match(r"^\d{4}-\d{2}-\d{2}(?:[ T].*)?$",na=False)
+    out=pd.Series(pd.NaT,index=series.index,dtype="datetime64[ns]")
+    if iso.any():
+        out.loc[iso]=pd.to_datetime(raw.loc[iso],errors="coerce",format="ISO8601")
+    if (~iso).any():
+        out.loc[~iso]=pd.to_datetime(raw.loc[~iso],errors="coerce",format="mixed",dayfirst=True)
+    return out.dt.normalize()
+
 def clean_keys(df,site_columns=KEYS):
     x=df.copy()
     for key in ["location_code","x1km_square"]:
@@ -46,7 +57,7 @@ def clean_keys(df,site_columns=KEYS):
         x[key]=x[key].astype("string").str.strip()
         x.loc[x[key].isin(MISSING),key]=pd.NA
     if "date" not in x:raise ValueError("source date is missing")
-    x["date"]=pd.to_datetime(x["date"],errors="coerce",dayfirst=True).dt.normalize()
+    x["date"]=parse_original_dates(x["date"])
     x["year_from_date"]=x["date"].dt.year
     if "sample_id" not in x:raise ValueError("missing native sample identifier")
     x["sample_id"]=x["sample_id"].astype("string").str.strip()
