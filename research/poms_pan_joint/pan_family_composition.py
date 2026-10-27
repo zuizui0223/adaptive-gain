@@ -56,7 +56,7 @@ def build_pan_family_context(samples:pd.DataFrame, flowers:pd.DataFrame):
     # labels must agree. Explicitly do NOT convert an unknown to a new taxon.
     taxoncols=[*KEYS,"source_taxon_id"]
     known=f[f.native_family.ne(NA_FAMILY)]
-    known_card=known.groupby(taxoncols,observed=True).native_family.nunique()
+    known_card=known.groupby("source_taxon_id",observed=True).native_family.nunique()
     bad=known_card[known_card>1]
     if len(bad):
         raise ValueError(f"source Pan taxa map to conflicting known families: {len(bad)}")
@@ -76,9 +76,6 @@ def build_pan_family_context(samples:pd.DataFrame, flowers:pd.DataFrame):
     daily_sizes=taxa.groupby(KEYS,observed=True).source_taxon_id.nunique().rename("taxon_count")
     # A station found with repeated occurrences of the same taxon must be
     # counted only once for richness and family composition.
-    frequency=taxa.groupby("family",observed=True).agg(
-        site_days=("date","size"),distinct_taxa=("source_taxon_id","nunique")
-    ).reset_index()
     by_family=taxa.groupby([*KEYS,"family"],observed=True).size().rename("taxa").reset_index()
     frequency=by_family.groupby("family",observed=True).agg(
         unique_site_days=("date","size"),
@@ -99,6 +96,12 @@ def build_pan_family_context(samples:pd.DataFrame, flowers:pd.DataFrame):
     day_family.columns=[*KEYS,*FEATURES]
     day_family=day_family.merge(
         daily_sizes.reset_index(),on=KEYS,validate="one_to_one")
+    reconcile=day_family.merge(
+        pan_valid[KEYS+["pan_recorded_flowering_taxa"]],
+        on=KEYS,validate="one_to_one")
+    if not np.array_equal(reconcile.taxon_count.to_numpy(dtype=int),
+                          reconcile.pan_recorded_flowering_taxa.to_numpy(dtype=int)):
+        raise ValueError("Pan distinct flowering taxa differ from Stage3f provenance")
     for field in FEATURES:
         day_family[field]=day_family[field].astype(float)/day_family.taxon_count
     if (day_family[list(FEATURES)].lt(0)|day_family[list(FEATURES)].gt(1)).any().any():
@@ -122,7 +125,7 @@ def build_pan_family_context(samples:pd.DataFrame, flowers:pd.DataFrame):
     meta={
         "source_pan_station_and_flower_foreign_key_receipt":pan_source,
         "original_pan_flower_occurrence_rows":original,
-        "source_orphan_flower_occurrences_quarantined":original-len(f)+0 if False else int(pan_source["orphan_flower_occurrence_rows"]),
+        "source_orphan_flower_occurrences_quarantined":int(pan_source["orphan_flower_occurrence_rows"]),
         "five_station_site_days_with_named_taxa":len(pan_valid),
         "taxon_families_in_source":int(frequency.family.nunique()),
         "unknown_family_site_day_taxa":int(taxa.family.eq(NA_FAMILY).sum()),
@@ -139,7 +142,8 @@ def build_pan_family_context(samples:pd.DataFrame, flowers:pd.DataFrame):
     return pan_full,meta
 
 
-def make_matched_family_data(fit:pd.DataFrame,pan_full:pd.DataFrame,metadata):
+def make_matched_family_data(fit:pd.DataFrame,pan_full:pd.DataFrame,metadata,
+                             expected_stage3f=(2210,95)):
     d,support=prepare_matched_context(fit,pan_full)
     support["families_selected_source_only"]=metadata["families_selected_source_only"]
     support["matched_family_missing_columns"]={
@@ -149,7 +153,7 @@ def make_matched_family_data(fit:pd.DataFrame,pan_full:pd.DataFrame,metadata):
         return d,support
     fail=[]
     site_n=d.location_code.nunique()
-    if len(d)!=2210 or site_n!=95:
+    if expected_stage3f is not None and (len(d),site_n)!=tuple(expected_stage3f):
         # Stage 3f source set is frozen. Changing FIT coverage is a real
         # data-lineage regression, not a license to fit another population.
         fail.append(f"Stage3f count/site reconciliation changed: n={len(d)}, sites={site_n}")
