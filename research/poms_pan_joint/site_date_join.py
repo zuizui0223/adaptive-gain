@@ -161,6 +161,11 @@ def nearest_site_date(fit:pd.DataFrame,pan:pd.DataFrame,window_days=7):
     Earlier Pan date wins ties; do not interpolate missing flowering.
     """
     if fit.sample_id.duplicated().any():raise ValueError("duplicate FIT sample IDs")
+    # Pan site-date aggregate is deliberately one row per square/day and may
+    # not contain an explicit year column. Derive the same-year constraint
+    # from the validated Pan date, never from a missing column name.
+    pan=pan.copy()
+    pan["year_from_date"]=pd.to_datetime(pan["date"]).dt.year
     groups={}
     for (site,grid,year),g in pan.groupby(
         ["location_code","x1km_square","year_from_date"],observed=True,dropna=False):
