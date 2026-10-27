@@ -49,8 +49,13 @@ def parse_bouts(records,meta):
         end=as_source_integer(r["end_time"],"END")
         duration=as_source_integer(r["duration"],"DURATION")
         if not bee:raise ValueError("NO_GO_EMPTY_BEE_ID")
-        if not (1<=day<=366 and 0<=start<=86400 and 0<=end<=86400 and end>=start):
-            raise ValueError("NO_GO_BOUT_TIME_RANGE")
+        # Native start/end are an experiment-wide numeric clock: actual
+        # original values exceed 86,400 on later observation days. They are
+        # NOT time-of-day seconds. Bound nonnegative finite source indices
+        # without inventing a daily wall-clock origin or midnight reset.
+        if not (1<=day<=366 and 0<=start<=1000000000 and
+                0<=end<=1000000000 and end>=start):
+            raise ValueError("NO_GO_BOUT_SOURCE_TIME_RANGE")
         if (bee,day,boutno) in seen:
             raise ValueError("NO_GO_DUPLICATED_BOUT_ID")
         seen.add((bee,day,boutno))
