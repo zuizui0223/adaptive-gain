@@ -89,8 +89,18 @@ def build_pan_environment(samples,flowers):
     invalid=s.loc[~keys_notnull]
     if len(invalid):
         raise ValueError(f"Pan sample locations/dates missing: {len(invalid)}")
-    unmatched=f.loc[~f.sample_id.isin(s.sample_id)]
-    if len(unmatched):raise ValueError(f"orphan flowering occurrences: {len(unmatched)}")
+    unmatched=f.loc[~f.sample_id.isin(s.sample_id)].copy()
+    orphan_receipt={
+        "original_flower_occurrence_rows":int(len(f)),
+        "orphan_flower_occurrence_rows":int(len(unmatched)),
+        "orphan_unique_station_ids":int(unmatched.sample_id.nunique(dropna=True)),
+        "orphan_missing_station_ids":int(unmatched.sample_id.isna().sum()),
+        "orphan_years":{str(k):int(v) for k,v in unmatched.year.value_counts(dropna=False).items()},
+        "interpretation":"Original occurrence records without a matching original Pan station are quarantined from spatial/temporal context; not treated as observed local flowers at any FIT site."
+    }
+    # Quarantine original orphan rows with a visible source-quality receipt.
+    # They cannot legally acquire a site/date without a parent station record.
+    f=f.loc[f.sample_id.isin(s.sample_id)].copy()
     labelled=[taxon_id(r) for _,r in f.iterrows()]
     f["taxon_identity"]=[v[0] for v in labelled]
     f["identity_rule"]=[v[1] for v in labelled]
@@ -100,7 +110,8 @@ def build_pan_environment(samples,flowers):
     if f["occurrence_id"].notna().any() and f["occurrence_id"].dropna().duplicated().any():
         raise ValueError("duplicate Pan flower occurrence_id")
     label_summary={
-        "floral_occurrence_rows":len(f),
+        **orphan_receipt,
+        "floral_occurrence_rows_linkable":len(f),
         "with_version_key":int(f.identity_rule.eq("version_key").sum()),
         "with_fallback_name":int(f.identity_rule.eq("taxon_source_fallback").sum()),
         "without_plant_name":int(f.identity_rule.eq("missing_taxon_label").sum()),
