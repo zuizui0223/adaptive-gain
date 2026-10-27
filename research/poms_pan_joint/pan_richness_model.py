@@ -160,10 +160,29 @@ def _fit_one(d, mode):
             result["status"]="NO_GO_NONCONVERGED";return result
         terms=[n for n in m.params.index if n.startswith("C(wind_speed")]
         strong=[n for n in terms if "Leaves moving strongly" in n]
-        if len(terms)!=2 or len(strong)!=1 or not np.isfinite(m.conf_int()).all().all():
-            result["status"]="NO_GO_UNSTABLE_WIND_INTERVALS";return result
-        if np.max(np.abs(m.conf_int().loc[terms].to_numpy()))>100:
-            result["status"]="NO_GO_EXTREME_WIND_INTERVALS";return result
+        required=[*terms,"pan_rich_center"]
+        if mode=="wind_by_richness":
+            required.extend(["pan_gentle_x_rich","pan_strong_x_rich"])
+        ci=m.conf_int()
+        result["all_parameter_nonfinite_ci_cells"]=int(
+            (~np.isfinite(ci.to_numpy())).sum())
+        result["required_contrast_coefficients"]=required
+        if len(terms)!=2 or len(strong)!=1 or not set(required)<=set(ci.index):
+            result["status"]="NO_GO_MISSING_WIND_OR_CONTEXT_COEFFICIENT";return result
+        target_ci=ci.loc[required].to_numpy()
+        target_cov=m.cov_params().loc[required,required].to_numpy()
+        result["required_contrast_nonfinite_ci_cells"]=int(
+            (~np.isfinite(target_ci)).sum())
+        result["required_contrast_nonfinite_cov_cells"]=int(
+            (~np.isfinite(target_cov)).sum())
+        # Nuisance fixed-effect coefficients may be poorly identified; the
+        # study estimand is the declared wind/richness contrast. Never claim
+        # a finite or meaningful interaction unless ALL needed coefficient
+        # intervals and the COMPLETE small contrast covariance are finite.
+        if not np.isfinite(target_ci).all() or not np.isfinite(target_cov).all():
+            result["status"]="NO_GO_NONFINITE_DECLARED_CONTRAST";return result
+        if np.max(np.abs(target_ci))>100:
+            result["status"]="NO_GO_EXTREME_DECLARED_CONTRAST_CI";return result
         strong=strong[0]
         result["status"]="FITTED"
         result["strong_vs_calm_at_median_richness"]=_estimate(m,[strong],[1])
