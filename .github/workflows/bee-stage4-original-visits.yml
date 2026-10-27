@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
       - name: Validate real-source parsers against synthetic data
         working-directory: research/bee_behavior_stage4
-        run: python -m unittest test_source_audit -v
+        run: python -m unittest test_source_audit test_heldout_flower_history -v
       - name: Fetch the open original published bee flower-visit data
         run: python -u research/bee_behavior_stage4/source_audit.py --out bee_stage4_source
       - name: Archive only content-hash and schema audit (not original individual visits)
