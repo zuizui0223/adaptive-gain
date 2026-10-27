@@ -20,14 +20,18 @@ jobs:
           python-version: '3.11'
       - name: Validate real-source parsers against synthetic data
         working-directory: research/bee_behavior_stage4
-        run: python -m unittest test_source_audit test_heldout_flower_history -v
+        run: python -m unittest test_source_audit test_heldout_flower_history test_bout_transition_analysis -v
       - name: Fetch the open original published bee flower-visit data
         run: python -u research/bee_behavior_stage4/source_audit.py --out bee_stage4_source
+      - name: Source-faithful individual bee bout sequence holdout prediction
+        run: python -u research/bee_behavior_stage4/run_original_bouts.py --out bee_stage4_source
       - name: Archive only content-hash and schema audit (not original individual visits)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bee-stage4-original-publisher-data-receipt
-          path: bee_stage4_source/original_publisher_source_audit.json
+          path: |
+            bee_stage4_source/original_publisher_source_audit.json
+            bee_stage4_source/bee_bout_history_heldout_result.json
           if-no-files-found: warn
           retention-days: 90
