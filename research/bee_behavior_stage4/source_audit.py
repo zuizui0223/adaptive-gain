@@ -91,18 +91,33 @@ def parse_original_csv(raw:bytes):
     rows=list(reader)
     if len(rows)<3 or len(rows)>MAX_DATA_ROWS:
         raise ValueError(f"NO_GO_SOURCE_ROW_GRAIN, lines={len(rows)}")
-    header=[x.strip() for x in rows[0]]
-    if len(header)<2 or len(set(header))!=len(header):
-        raise ValueError("NO_GO_HEADER_DUPLICATE_OR_INSUFFICIENT")
-    if any(not h for h in header):
-        raise ValueError("NO_GO_HEADER_EMPTY_NAME")
+    raw_header=[x.strip() for x in rows[0]]
+    # Source format established from an original byte-level SHA256 receipt:
+    # each physical CSV row is one foraging *bout*, with six named metadata
+    # fields followed by anonymous positional visit slots. They are NOT
+    # duplicate named columns; never discard/order visits by dataframe names.
+    bout_prefix=["day","bee","foraging bout","start_time","end_time","duration"]
+    is_wide_bouts=(raw_header[:6]==bout_prefix and len(raw_header)>6 and
+                   all(not c for c in raw_header[6:]))
+    if is_wide_bouts:
+        header=raw_header[:6]+[
+            f"visit_slot_{i:03d}" for i in range(1,len(raw_header)-5)]
+    else:
+        header=raw_header
+        if len(header)<2 or len(set(header))!=len(header):
+            raise ValueError("NO_GO_HEADER_DUPLICATE_OR_INSUFFICIENT")
+        if any(not h for h in header):
+            raise ValueError("NO_GO_HEADER_EMPTY_NAME")
     sizes=Counter(len(row) for row in rows[1:])
     bad=sum(n for s,n in sizes.items() if s!=len(header))
     if bad:
         raise ValueError(f"NO_GO_RAGGED_SOURCE: {bad} rows incorrect length: {dict(sizes)}")
     table=[dict(zip(header,r)) for r in rows[1:]]
     return table,{"encoding":enc,"delimiter":repr(delim),
-                  "columns":header,"data_rows":len(table),
+                  "columns":header,"source_layout":"one_foraging_bout_per_row_ordered_unnamed_visit_slots" if is_wide_bouts else "ordinary_named_columns",
+                  "source_original_first_six_columns":raw_header[:6],
+                  "source_unnamed_ordered_visit_slots":len(header)-6 if is_wide_bouts else 0,
+                  "data_rows":len(table),
                   "row_width_histogram":dict(sorted(sizes.items()))}
 
 def profile_original_table(records:list[dict],meta:dict):
