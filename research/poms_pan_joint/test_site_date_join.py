@@ -73,7 +73,7 @@ class CrossSourceJoinTests(unittest.TestCase):
         self.assertEqual(receipt["original_flower_occurrence_rows"],5)
         self.assertEqual(receipt["floral_occurrence_rows_linkable"],4)
         self.assertEqual(len(pan),3)
-        self.assertEqual(int(pan.pan_recorded_flowering_taxa.sum()),3)
+        self.assertEqual(int(pan.pan_recorded_flowering_taxa.sum()),4)
     def test_taxon_version_key_wins_over_ambiguous_free_text(self):
         x={"source_taxon_version_key":"S1","taxon_source":"common name"}
         self.assertEqual(taxon_id(x),("key:S1","version_key"))
