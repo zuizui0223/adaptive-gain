@@ -45,7 +45,7 @@ The original paper confirms sequential visit data are provided in S1, with bout-
 
 ### Frozen bout-level adapter and prediction
 - Preserve source CSV bout rows as source-owned grains, rename anonymous visit columns only as positional `visit_slot_001…` preserving original left-to-right order.
-- Parse day, bee tag, bout number, source start_time, end_time, duration as native source fields. Validate nonnegative seconds, within-day ranges and unique (bee, day, bout). Flag source time anomalies; no per-visit timestamp interpolation.
+- Parse day, bee tag, bout number, source start_time, end_time, duration as native source fields. Validate nonnegative source-experiment cumulative seconds (values exceed 86,400 on later days), end >= start, recorded duration and unique (bee, day, bout); **do not interpret numerical source times as HH:MM:SS or force a midnight reset**. Flag source time anomalies; no per-visit timestamp interpolation.
 - Source physical alternatives are exactly **10 artificial flowers**, denoted native `1…10`. Their fixed presence in the experiment is known, **not** simultaneous sensory accessibility. Use all 10 as possible destinations with positive smoothing, including flowers not observed in training for a given bee.
 - **Reset every transition at bout boundaries.** Within each original bout, score `(flower[k-1], flower[k])` only. No transitions between different trips, between nest and flowers, or between days; no inferred choice at a time when the bee's flight path is unrecorded.
 - Freeze `M0` to each bee's static earlier-day flower frequency with symmetric **Dirichlet α=0.5 per available flower**.
