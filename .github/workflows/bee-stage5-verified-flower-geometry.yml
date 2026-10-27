@@ -1,0 +1,35 @@
+name: bee-stage5-verified-flower-geometry
+on:
+  push:
+    branches:
+      - analysis/bee-spatial-geometric-baseline-20261028
+    paths:
+      - 'research/bee_behavior_stage5/**'
+      - '.github/workflows/bee-stage5-verified-flower-geometry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-actual-figure2-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original PDF figure renderer (fallback)
+        run: python -m pip install 'pymupdf==1.26.6'
+      - name: Retrieve original original figure 2 or article PDF page
+        run: python -u research/bee_behavior_stage5/figure_source_audit.py --out bee_stage5_geo_source
+      - name: Retain original source figure diagnostic for label/meter validation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage5-original-figure2-private-verification
+          path: |
+            bee_stage5_geo_source/figure_source_receipt.json
+            bee_stage5_geo_source/*.png
+            bee_stage5_geo_source/*.jpg
+          if-no-files-found: warn
+          retention-days: 7
