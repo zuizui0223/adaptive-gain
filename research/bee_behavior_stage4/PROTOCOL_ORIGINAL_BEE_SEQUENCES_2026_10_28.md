@@ -34,3 +34,24 @@ The original publication reports **6,205 flower visits and 628 bee-bee encounter
 - Temporal train/held-out evaluation must not leak later observations or unseen bee-specific flower margins back into the training model. No random-row cross-validation.
 - Report results per bee and guard against missing flower IDs, unequal visit effort, reward refill timing, nest returns and physical interaction-induced preference changes.
 - No modifications of the frozen V5/V6 manuscripts or the PoMS Stage 3f/g results. Branch from `main` into a distinct draft PR for this separate experiment. Primary hypothesis/limitations committed *before* inspecting raw experimental records.
+
+
+## Source schema resolved (after original-byte receipt, before Stage 4 outcome tests)
+The publisher's *exact* CSV was retrieved via HTTP 200, bytes **61,316**, SHA-256 **`0d30b0957c4b18602beebf60a915e03bee26142a8593f252badd77881b5e9dfe`**. Its original first six column headers are:
+`day, bee, foraging bout, start_time, end_time, duration`
+followed by **35 unlabeled ordered flower-visit slots**. It is **not** a conventional one-visit-per-CSV-row event table. Example native first row: day 1, bee w25, bout 1, start_time 43893, end_time 46307, duration 2414, then numerical flower labels `2,2,2,2,2,7,7,7,7,8,8,5`. Each physical flower identity is an integer in the original 1–10 array. The repeated `2` is repeated visits **within a single foraging bout**, not duplicated source rows.
+
+The original paper confirms sequential visit data are provided in S1, with bout-level start/stop timestamps. **Precise start/end times of every individual flower visit and source-labelled displacement outcome are absent from this CSV.** These cannot be reconstructed from a bout's duration or repeated flower number. Stage 4 P2 social displacement is therefore **NO_GO_WITH_THIS_ORIGINAL_TABLE** and not an estimated causal effect.
+
+### Frozen bout-level adapter and prediction
+- Preserve source CSV bout rows as source-owned grains, rename anonymous visit columns only as positional `visit_slot_001…` preserving original left-to-right order.
+- Parse day, bee tag, bout number, source start_time, end_time, duration as native source fields. Validate nonnegative seconds, within-day ranges and unique (bee, day, bout). Flag source time anomalies; no per-visit timestamp interpolation.
+- Source physical alternatives are exactly **10 artificial flowers**, denoted native `1…10`. Their fixed presence in the experiment is known, **not** simultaneous sensory accessibility. Use all 10 as possible destinations with positive smoothing, including flowers not observed in training for a given bee.
+- **Reset every transition at bout boundaries.** Within each original bout, score `(flower[k-1], flower[k])` only. No transitions between different trips, between nest and flowers, or between days; no inferred choice at a time when the bee's flight path is unrecorded.
+- Freeze `M0` to each bee's static earlier-day flower frequency with symmetric **Dirichlet α=0.5 per available flower**.
+- Freeze `M1` to that same bee's observed earlier-day within-bout first-order transitions, smoothed by **β=5 equivalents of M0**. No held-out hyperparameter fitting.
+- Primary cutoff is the **globally last native source day**, not an optimistically selected day. Each bee must have >=20 earlier-day flower visits and >=5 final-day within-bout transitions; >=5 evaluable bee tags for a descriptive group score. Per-bee mean improvement in strictly later negative log likelihood (nats/transition) is primary; pooled visit-weighted score is only a descriptive secondary. Sign-flip exact conditional p, when <=16 tags, treats bee tags as analysis units **within a single colony** and cannot be generalized to independent colonies.
+- A positive M1 improvement could be spatial adjacency/local continuity, individual motor habits or learned route fidelity; without data on the *perceptual sequence of cues*, this does not identify decision-topology routeability or its fitness value. A negative improvement limits the generalization of individual-order memory under fixed smoothing.
+- **Scientific zero inference guard:** original CSV does not contain competitors' labeled encounters, instantaneous floral depletion, per-flower landing times, or randomized perceptual cue order. Never back-calculate these from elapsed bout duration.
+
+The source-specific parser, 10-flower population, original record counts and held-out performance must be validated by dedicated CI before result promotion.
