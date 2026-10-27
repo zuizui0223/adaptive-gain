@@ -39,7 +39,7 @@ class CrossSourceJoinTests(unittest.TestCase):
         pan,receipt,station=build_pan_environment(self.stations(),self.flowers())
         self.assertEqual(receipt["unique_pan_station_sample_ids"],4)
         self.assertEqual(len(pan),3)
-        self.assertEqual(receipt["floral_occurrence_rows"],5)
+        self.assertEqual(receipt["original_flower_occurrence_rows"],5)
         a=pan[(pan.location_code=="C1")&(pan.date==pd.Timestamp("2022-06-10"))].iloc[0]
         self.assertEqual(a.stations,2)
         self.assertEqual(a.pan_recorded_flowering_taxa,2)  # do NOT count duplicate Rosa twice
