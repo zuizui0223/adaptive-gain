@@ -24,3 +24,24 @@ Require successful exact FIT CSV digest and verifiable pan source original CSV d
 Do not fit ecological explanatory models until original columns, matching keys and the proportion of matched FIT surveys are inspected and a join can be coded with explicit safeguards. If matched Pan local flowers are present, they are at best **square-date floral-environment proxies**, not alternative flowers actually evaluated by FIT insect individuals. Do not estimate adaptation, competition, behavioral rewiring, ecological wind cascades, wind direction, or adaptive-gain `C_A/C_F`.
 
 This stage is independent data-source linkage but **not independent ecological programme replication**. It preserves the frozen V5/V6 and stacked PR #70–74 manuscript surfaces.
+
+
+## Source-first join implementation locked 2026-10-27 (before numerical join results)
+The original pan provider ZIP was obtained and original CSV columns were inspected; stable member hashes:
+- Pan station/survey table `data/ukpoms_1kmpantrapdata_2017-2023_samples.csv`: SHA256 `70f3429e5ed9022d3d7b80fc3f24c589ecc5faff608393bc53febfac49788277`.
+- Pan identified insect occurrences `data/ukpoms_1kmpantrapdata_2017-2023_insects.csv`: SHA256 `2423bc370f388a0dafd05c4bd3a7af7491909311ffe6bf4d6607a3697213dcb9` (inventory only; do not blend six-hour pan insect catches with 10-min FIT visits).
+- Pan flowering-plant occurrences `data/ukpoms_1kmpantrapdata_2017-2023_flowers.csv`: SHA256 `53daa167282092b7081190de00e020b4e2635fa5e7d4fc63d3454f7c338951ba`.
+
+Pan station records have native `sample_id`, `location_code`, `x1km_square`, `date`, `year`, `pan_trap_station`; flowering occurrence rows have `sample_id`, native `taxon_source`, `source_taxon_version_key`, `floral_unit`, `total_floral_units`. FIT 1km surveys have `sample_id`, `location_code`, `x1km_square`, `date`, `year`. **Only Pan `sample_id`→flower occurrence is a source-owned foreign-key relationship**. Do not join Pan sample IDs directly to FIT sample IDs.
+
+### Deterministic, auditable join
+- Confirm original Pan sample IDs are unique, every flower occurrence sample_id refers to exactly one Pan station row and each location_code maps to a declared square/year. Record invalid keys rather than discarding.
+- Create exactly one Pan environmental record per (`location_code`, `x1km_square`, `date`) by grouping stations for that site-day. Record number of stations (expected up to 5), plant taxon labels (use provider taxon version key where present; fallback to source name only as an explicitly flagged legacy taxon), and number of distinct **recorded** flowering plant labels.
+- Exact same-day FIT match must equal ALL THREE (`location_code`, `x1km_square`, `date`). An alternate grid+date-only diagnostic can reveal namespace collisions but is **never silently adopted**.
+- Nearest-date (<=7 days, same year, same verified location_code and x1km_square) is a distinctly labelled context sensitivity. Choose minimum day separation, earlier Pan date in ties, retain at most **one** Pan context per FIT sample_id.
+- Track FIT distinct sample IDs and source visit counts before/after; never multiply FIT observations by station count or flower occurrence count; store site- and year-level coverage, number of Pan sites, full 5-station coverage, and context taxon labels.
+- Do not equate varying `floral_unit` across plant taxa. Mixed-type total floral-unit sums are noncomparable and cannot be a direct common-currency abundance measure.
+- Treat Pan station with no linked flowering occurrence rows as `unrecorded` rather than `no flowering plants` until source metadata establishes explicit zero-complete survey semantics.
+
+### Inference admission
+If exact-date linkage passes >=10 unique sites AND >=100 distinct FIT pair-positive surveys AND source joins verify one-to-one at FIT grain, consider a **future separate** site-date contextual sensitivity model with Pan recorded flowering richness and station-coverage control, retaining full Stage 3d temporal/spatial/plant model and the preselected bumblebee/other-fly relative-count endpoint. This is not a confirmatory causal test. **Never refit a model if join coverage is inadequate, and do not choose a broader matching window based on significance.**
