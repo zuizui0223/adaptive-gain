@@ -177,7 +177,7 @@ def make_matched_family_data(fit:pd.DataFrame,pan_full:pd.DataFrame,metadata,
 
 def fit_family_control(d:pd.DataFrame):
     """Site-clustered grouped binomial model, same source sample as Stage 3f."""
-    rhs=stage3d_formula("one_km")+" + pan_rich_center + "+" + "+".join(FEATURES)
+    rhs = stage3d_formula("one_km") + " + pan_rich_center + " + " + ".join(FEATURES)
     result={"status":"not_run","n":len(d),"sites":int(d.location_code.nunique()),
             "rhs":rhs,"covariance":"cluster site location_code",
             "outcome":"paired bumblebee, other_flies recorded visits, conditional >=1"}
