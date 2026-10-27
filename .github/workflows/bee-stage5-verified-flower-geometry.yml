@@ -20,16 +20,20 @@ jobs:
           python-version: '3.11'
       - name: Install original PDF figure renderer (fallback)
         run: python -m pip install 'pymupdf==1.26.6'
-      - name: Retrieve original original figure 2 or article PDF page
+      - name: Verify fixed physical coordinate graph and synthetic train/test leakage guards
+        working-directory: research/bee_behavior_stage5
+        run: python -m unittest test_geo_history_holdout -v
+      - name: Retrieve original Fig 2 or article PDF page
         run: python -u research/bee_behavior_stage5/figure_source_audit.py --out bee_stage5_geo_source
-      - name: Retain original source figure diagnostic for label/meter validation
+      - name: Score real last-day bee routes against original publisher meter distances
+        run: python -u research/bee_behavior_stage5/run_geo_history.py --out bee_stage5_geo_source
+      - name: Retain original figure provenance and geometry-model receipt
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bee-stage5-original-figure2-private-verification
+          name: bee-stage5-geometric-route-model-source-receipt
           path: |
             bee_stage5_geo_source/figure_source_receipt.json
-            bee_stage5_geo_source/*.png
-            bee_stage5_geo_source/*.jpg
+            bee_stage5_geo_source/original_geometry_history_heldout.json
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 90
