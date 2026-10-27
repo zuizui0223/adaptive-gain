@@ -48,7 +48,7 @@ class HeldoutIndividualBeeTests(unittest.TestCase):
             paired_predict(self.fixture(),["F1","F2"],last_day=2)
     def test_unknown_flower_does_not_get_invented(self):
         with self.assertRaisesRegex(ValueError,"absent from physical array"):
-            paired_predict(self.fixture(),["F1"])
+            paired_predict(self.fixture(),["F1","F3"])
     def test_no_go_fewer_five_bees_even_with_many_visits(self):
         base=[x for x in self.fixture() if x["bee"] in {f"bee{i}" for i in range(4)}]
         got=paired_predict(base,["F1","F2"])
