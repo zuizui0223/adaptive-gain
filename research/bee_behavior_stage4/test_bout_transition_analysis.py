@@ -65,6 +65,14 @@ class OriginalBoutTransitionTests(unittest.TestCase):
         r[1]["foraging bout"]=r[0]["foraging bout"]
         with self.assertRaisesRegex(ValueError,"NO_GO_DUPLICATED_BOUT_ID"):
             parse_bouts(r,m)
+    def test_original_experiment_wide_timestamp_larger_than_86400_is_valid(self):
+        r,m=self.fixture()
+        r[0]["start_time"]="380753"
+        r[0]["end_time"]="380853"
+        r[0]["duration"]="100"
+        bouts,structure=parse_bouts(r,m)
+        self.assertEqual(bouts[0]["start_time_seconds"],380753)
+
     def test_duration_inconsistency_is_reported_not_an_arrival_time(self):
         r,m=self.fixture()
         r[0]["duration"]="101"
