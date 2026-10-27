@@ -18,16 +18,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install source-level analysis dependencies
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
       - name: Independent source-shape and no-imputed-absence tests
         working-directory: research/poms_pan_joint
-        run: python -m unittest test_source_inventory -v
+        run: python -m unittest test_source_inventory test_site_date_join -v
       - name: Download both official PoMS source datasets and verify FIT member
         run: python -u research/poms_pan_joint/source_inventory.py --out poms_pan_joint_output
+      - name: Exact Pan station-flower/FIT same-site same-date join coverage
+        run: python -u research/poms_pan_joint/site_date_join.py --out poms_pan_joint_output
       - name: Retain source-grain inventory and original data hashes only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: poms-pan-source-schema-hashes
-          path: poms_pan_joint_output/pan_and_fit_source_inventory.json
+          path: |
+            poms_pan_joint_output/pan_and_fit_source_inventory.json
+            poms_pan_joint_output/site_date_flower_linkage_audit.json
           if-no-files-found: warn
           retention-days: 90
