@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 
 from site_date_join import (
-    build_pan_environment, match_pan_fit, nearest_site_date, taxon_id
+    build_pan_environment, match_pan_fit, nearest_site_date, taxon_id, parse_original_dates
 )
 
 class CrossSourceJoinTests(unittest.TestCase):
@@ -28,6 +28,13 @@ class CrossSourceJoinTests(unittest.TestCase):
           {"sample_id":"F3","location_code":"C2","x1km_square":"SQ2","date":"2022-06-10","year":2022,"bumblebees":0,"other_flies":0},
           {"sample_id":"F4","location_code":"C1","x1km_square":"SQ9","date":"2022-06-10","year":2022,"bumblebees":4,"other_flies":2},
         ])
+    def test_iso_dates_do_not_swap_day_and_month(self):
+        values=pd.Series(["2022-06-10","2022-06-16","16/06/2022"])
+        v=parse_original_dates(values)
+        self.assertEqual(str(v.iloc[0].date()),"2022-06-10")
+        self.assertEqual(str(v.iloc[1].date()),"2022-06-16")
+        self.assertEqual(str(v.iloc[2].date()),"2022-06-16")
+
     def test_pan_foreign_key_and_richness_not_multiplying_census(self):
         pan,receipt,station=build_pan_environment(self.stations(),self.flowers())
         self.assertEqual(receipt["unique_pan_station_sample_ids"],4)
