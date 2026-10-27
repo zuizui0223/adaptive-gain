@@ -153,7 +153,34 @@ def main(argv=None):
     args=parser.parse_args(argv)
     out=Path(args.out)
     raw,receipt=download_source(out)
-    records,meta=parse_original_csv(raw)
+    print("BEE_STAGE4_SOURCE_RECEIPT "+json.dumps(receipt,ensure_ascii=False),flush=True)
+    try:
+        records,meta=parse_original_csv(raw)
+    except Exception as exc:
+        # Emit bounded original *format* diagnostics before rejecting the
+        # manuscript claim; never turn arbitrary first rows into invented
+        # event fields. This diagnostic lives only in CI logs/artifact.
+        prefix=raw[:450]
+        diag={
+            "status":"NO_GO_SCHEMA_FORMAT",
+            "reason":str(exc),
+            "source_url":receipt["source_url"],
+            "bytes":len(raw),"sha256":receipt["sha256"],
+            "first_450_bytes_repr":repr(prefix),
+            "first_line_len":len(raw.splitlines()[0]) if raw.splitlines() else 0,
+            "first_line_delimiter_counts":{
+                "comma":raw.splitlines()[0].count(b",") if raw.splitlines() else 0,
+                "semicolon":raw.splitlines()[0].count(b";") if raw.splitlines() else 0,
+                "tab":raw.splitlines()[0].count(b"\t") if raw.splitlines() else 0,
+            }
+        }
+        (out/"original_publisher_source_audit.json").write_text(
+            json.dumps({"publisher_receipt":receipt,
+                        "schema_audit_diagnostic":diag},
+                       indent=2,ensure_ascii=False))
+        print("BEE_STAGE4_SOURCE_DIAGNOSTIC "+
+              json.dumps(diag,ensure_ascii=False),flush=True)
+        raise
     audit=profile_original_table(records,meta)
     report={"publisher_receipt":receipt,"schema_audit":audit,
             "outcome_gate":"SCHEMA_INSPECTION_ONLY",
