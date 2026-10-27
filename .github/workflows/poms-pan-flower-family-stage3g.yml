@@ -1,0 +1,42 @@
+name: poms-pan-flower-family-stage3g
+on:
+  push:
+    branches:
+      - analysis/poms-pan-family-composition-20261028
+    paths:
+      - 'research/poms_pan_joint/**'
+      - '.github/workflows/poms-pan-flower-family-stage3g.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-family-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact analytical dependencies
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'statsmodels==0.14.5' 'scipy==1.15.3' 'patsy==1.0.1'
+      - name: Original-source, join, and new family-composition numerical tests
+        working-directory: research/poms_pan_joint
+        run: python -m unittest test_source_inventory test_site_date_join test_pan_richness_model test_pan_family_composition -v
+      - name: Download original PoMS FIT and Pan source with hashes
+        run: python -u research/poms_pan_joint/source_inventory.py --out stage3g_data
+      - name: Independently verify prior exact administrative Pan and FIT linkage
+        run: python -u research/poms_pan_joint/site_date_join.py --out stage3g_data
+      - name: Frozen three-family compositional adjustment from Pan source only
+        run: python -u research/poms_pan_joint/pan_family_composition.py --out stage3g_data
+      - name: Retain source receipts and nonidentifying Stage3g model summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-pan-stage3g-source-family-model
+          path: |
+            stage3g_data/pan_and_fit_source_inventory.json
+            stage3g_data/site_date_flower_linkage_audit.json
+            stage3g_data/pan_family_composition_model.json
+          if-no-files-found: warn
+          retention-days: 90
