@@ -1,0 +1,33 @@
+name: bee-stage4-original-visits
+on:
+  push:
+    branches:
+      - analysis/bee-behavior-route-sequences-20261028
+    paths:
+      - 'research/bee_behavior_stage4/**'
+      - '.github/workflows/bee-stage4-original-visits.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-publisher-data-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate real-source parsers against synthetic data
+        working-directory: research/bee_behavior_stage4
+        run: python -m unittest test_source_audit -v
+      - name: Fetch the open original published bee flower-visit data
+        run: python -u research/bee_behavior_stage4/source_audit.py --out bee_stage4_source
+      - name: Archive only content-hash and schema audit (not original individual visits)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage4-original-publisher-data-receipt
+          path: bee_stage4_source/original_publisher_source_audit.json
+          if-no-files-found: warn
+          retention-days: 90
