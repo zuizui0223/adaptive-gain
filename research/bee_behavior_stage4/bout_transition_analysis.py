@@ -180,7 +180,11 @@ def history_holdout_on_bouts(bouts,flowers=PHYSICAL_FLOWERS):
     if len(perbee)<MIN_ELIGIBLE_BEES:return report
     values=[b["M1_minus_M0_gain_nats"] for b in perbee]
     report["mean_per_bee_gain_nats"]=sum(values)/len(values)
-    report["median_per_bee_gain_nats"]=sorted(values)[len(values)//2]
+    rank=sorted(values)
+    halfway=len(rank)//2
+    report["median_per_bee_gain_nats"]=(
+        rank[halfway] if len(rank)%2 else
+        (rank[halfway-1]+rank[halfway])/2)
     report["bees_with_positive_gain"]=sum(x>0 for x in values)
     report["bees_with_negative_gain"]=sum(x<0 for x in values)
     report["heldout_within_bout_transitions_total"]=sum(
