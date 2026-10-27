@@ -23,12 +23,20 @@ from clock_observer_sensitivity import (
 )
 from site_date_join import (
     safe_source_csv, build_pan_environment, clean_keys,
-    PAN_PARTS, FIT_MEMBER, FIT_HASH, KEYS
+    PAN_PARTS, FIT_MEMBER, FIT_HASH, KEYS, parse_original_dates
 )
 
 def prepare_matched_context(fit_original, pan_daily):
     """One FIT per row: exact site/date and exactly five nearby Pan stations."""
-    fit,fit_flow=prepare(fit_original,"one_km",outcome="all_insects_total")
+    # The pre-existing FIT parser supplies dayfirst=True, which can be
+    # ambiguous for ISO YYYY-MM-DD strings if inferred from one row.
+    # Decode the source's actual date format first, while keeping every
+    # original observation and all earlier eligibility rules intact.
+    source_fit=fit_original.copy()
+    source_fit["date"]=parse_original_dates(source_fit["date"])
+    if source_fit["date"].isna().any():
+        raise ValueError("unparseable FIT source dates, cannot infer calendar")
+    fit,fit_flow=prepare(source_fit,"one_km",outcome="all_insects_total")
     fit=clean_keys(fit)
     if fit.sample_id.duplicated().any():raise ValueError("duplicate FIT sample_id")
     if fit[KEYS].isna().any().any():raise ValueError("unidentified 1km FIT key/date")
@@ -52,6 +60,10 @@ def prepare_matched_context(fit_original, pan_daily):
     missing_clock=int(matched.clock_bin.isna().sum())
     matched=matched.loc[matched.clock_bin.notna()].copy()
     matched["clock_bin"]=matched["clock_bin"].cat.remove_unused_categories()
+    # Patsy/statsmodels cannot interpret pandas StringDtype ("string[python]")
+    # as a categorical design factor. Coerce valid, already-audited site labels
+    # to native Python object strings only AFTER strict geospatial matching.
+    matched["location_code"]=matched["location_code"].astype(object)
     matched["recorder_type_audited"]=matched.recorder_type.fillna("__SOURCE_MISSING__").astype(str)
     matched["flower_cover_audited"]=matched.flower_cover.fillna("__SOURCE_MISSING__").astype(str)
     matched["pan_logrich"]=np.log1p(matched.pan_recorded_flowering_taxa.astype(float))
