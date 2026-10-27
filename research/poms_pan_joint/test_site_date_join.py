@@ -63,11 +63,17 @@ class CrossSourceJoinTests(unittest.TestCase):
         evidence=match_pan_fit(self.fit(),pan,receipt)
         self.assertEqual(evidence["grid_date_only_matches"],2)
         self.assertEqual(evidence["same_site_grid_within_7_days_fit"],3)
-    def test_orphan_flowers_fail_closed(self):
+    def test_orphan_flowers_quarantined_with_original_count_receipt(self):
         x=self.flowers().copy()
+        x["year"]=2022
         x.loc[0,"sample_id"]="nonexistent"
-        with self.assertRaisesRegex(ValueError,"orphan"):
-            build_pan_environment(self.stations(),x)
+        pan,receipt,stations=build_pan_environment(self.stations(),x)
+        self.assertEqual(receipt["orphan_flower_occurrence_rows"],1)
+        self.assertEqual(receipt["orphan_unique_station_ids"],1)
+        self.assertEqual(receipt["original_flower_occurrence_rows"],5)
+        self.assertEqual(receipt["floral_occurrence_rows_linkable"],4)
+        self.assertEqual(len(pan),3)
+        self.assertEqual(int(pan.pan_recorded_flowering_taxa.sum()),3)
     def test_taxon_version_key_wins_over_ambiguous_free_text(self):
         x={"source_taxon_version_key":"S1","taxon_source":"common name"}
         self.assertEqual(taxon_id(x),("key:S1","version_key"))
