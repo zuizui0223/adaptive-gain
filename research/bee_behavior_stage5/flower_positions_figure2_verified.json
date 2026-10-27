@@ -1,0 +1,62 @@
+{
+  "source": "Pasquaretta et al. (2019), Movement Ecology 7:4 original Fig.2 labeled Cartesian coordinates in metres",
+  "source_doi": "10.1186/s40462-019-0150-z",
+  "original_figure_pdf_url": "https://d-nb.info/1181293162/34",
+  "original_figure_pdf_sha256": "7f275a219fe0128d30f70cf6d812ab41d4b64727a740102549e8362b83d4ff8b",
+  "original_figure_page_index_zero_based": 2,
+  "original_figure_caption": "Coordinates (x,y) of nest box, pre-training flower and F1-F10 in metres",
+  "position_units": "metres",
+  "reference_distances": {
+    "F1_F4_m": 9,
+    "F1_F6_m": 15.8
+  },
+  "published_visual_detection_estimate_m": 9.6,
+  "coordinates": {
+    "1": [
+      10,
+      14.5
+    ],
+    "2": [
+      2,
+      19
+    ],
+    "3": [
+      18,
+      19
+    ],
+    "4": [
+      10,
+      23.5
+    ],
+    "5": [
+      2,
+      28
+    ],
+    "6": [
+      18,
+      28
+    ],
+    "7": [
+      10,
+      32.5
+    ],
+    "8": [
+      2,
+      37
+    ],
+    "9": [
+      18,
+      37
+    ],
+    "10": [
+      10,
+      41.5
+    ]
+  },
+  "pretraining_flower": [
+    10,
+    4
+  ],
+  "note": "Coordinates manually transcribed from original Figure 2 and verified against F1–F4 ~9m and F1–F6 ~15.8m; 2D distances are positions, NOT measured bee visibility or chosen flight paths. Do not include nest/pretraining as one of ten available test flowers.",
+  "verified_date": "2026-10-28"
+}
