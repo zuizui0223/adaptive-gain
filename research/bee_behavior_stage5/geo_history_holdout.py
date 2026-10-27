@@ -10,6 +10,8 @@ import itertools
 import json
 import math
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"bee_behavior_stage4"))
 
 from heldout_flower_history import ALPHA,BETA,MIN_TRAIN_VISITS,MIN_TEST_TRANSITIONS,MIN_ELIGIBLE_BEES
 from heldout_flower_history import static_probs,transition_probs
@@ -153,7 +155,7 @@ def _signflip(values):
         if v+1e-12>=observed:count+=1
     return count/(2**len(values))
 
-def analyze_geo(bouts,dist,geo_audit):
+def analyze_geo(bouts,dist,geo_audit,expected_day5=(1550,10)):
     cutoff,per_bee=split_bouts(bouts)
     lam,training_grid=choose_global_lambda(per_bee,dist)
     perbee=[]
@@ -248,7 +250,7 @@ def analyze_geo(bouts,dist,geo_audit):
         "primary_qualifying_bee_tags":len(supported),
         "narrative_firewall":"One colony and one static geometric 10-flower array; no measured flight trajectories, sensory query ordering or fitness"
     }
-    if source_total!=1550 or len(perbee)!=10:
+    if expected_day5 is not None and (source_total,len(perbee))!=tuple(expected_day5):
         report["status"]="NO_GO_SOURCE_STAGE4_POPULATION_DISAGREEMENT"
         return report
     if len(supported)<MIN_ELIGIBLE_BEES:
