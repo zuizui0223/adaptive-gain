@@ -35,6 +35,16 @@ class PublisherSequenceAuditTests(unittest.TestCase):
     def test_header_duplicate_fails_closed(self):
         with self.assertRaisesRegex(ValueError,"NO_GO_HEADER_DUPLICATE"):
             parse_original_csv(b"bee,bee\nA,1\nA,2\n")
+    def test_publisher_original_bout_wide_unnamed_visits_preserve_order(self):
+        src=("day,bee,foraging bout,start_time,end_time,duration,,,,\n"
+             "1,w25,1,43893,46307,2414,2,2,7,\n"
+             "1,w25,2,46722,47651,929,8,5,,\n").encode()
+        rows,meta=parse_original_csv(src)
+        self.assertEqual(meta["source_layout"],"one_foraging_bout_per_row_ordered_unnamed_visit_slots")
+        self.assertEqual(meta["source_unnamed_ordered_visit_slots"],4)
+        self.assertEqual([rows[0][f"visit_slot_{i:03d}"] for i in range(1,5)],
+                         ["2","2","7",""])
+        self.assertEqual(rows[1]["start_time"],"46722")
     def test_semicolon_and_native_bee_tags(self):
         data="bee;flower;day\nA;F1;1\nB;F2;1\n".encode()
         rows,meta=parse_original_csv(data)
