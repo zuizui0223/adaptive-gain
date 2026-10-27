@@ -1,0 +1,33 @@
+name: poms-pan-floral-source-gate
+on:
+  push:
+    branches:
+      - analysis/poms-pan-flower-availability-20261027
+    paths:
+      - 'research/poms_pan_joint/**'
+      - '.github/workflows/poms-pan-floral-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-pan-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent source-shape and no-imputed-absence tests
+        working-directory: research/poms_pan_joint
+        run: python -m unittest test_source_inventory -v
+      - name: Download both official PoMS source datasets and verify FIT member
+        run: python -u research/poms_pan_joint/source_inventory.py --out poms_pan_joint_output
+      - name: Retain source-grain inventory and original data hashes only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poms-pan-source-schema-hashes
+          path: poms_pan_joint_output/pan_and_fit_source_inventory.json
+          if-no-files-found: warn
+          retention-days: 90
