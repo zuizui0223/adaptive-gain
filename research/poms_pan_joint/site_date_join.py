@@ -95,7 +95,9 @@ def build_pan_environment(samples,flowers):
         "orphan_flower_occurrence_rows":int(len(unmatched)),
         "orphan_unique_station_ids":int(unmatched.sample_id.nunique(dropna=True)),
         "orphan_missing_station_ids":int(unmatched.sample_id.isna().sum()),
-        "orphan_years":{str(k):int(v) for k,v in unmatched.year.value_counts(dropna=False).items()},
+        "orphan_years":({str(k):int(v) for k,v in
+                         unmatched["year"].value_counts(dropna=False).items()}
+                        if "year" in unmatched.columns else {}),
         "interpretation":"Original occurrence records without a matching original Pan station are quarantined from spatial/temporal context; not treated as observed local flowers at any FIT site."
     }
     # Quarantine original orphan rows with a visible source-quality receipt.
