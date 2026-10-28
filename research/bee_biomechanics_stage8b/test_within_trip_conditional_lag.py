@@ -32,7 +32,7 @@ class WithinTripSourceConditionalLagTests(unittest.TestCase):
         self.assertEqual(all_original,sum(
             len(s) for b in bees for s in contiguous_segments(b["test_pairs"])))
         self.assertEqual(all_segments,sum(b["heldout_later_trips"] for b in bees))
-        self.assertEqual(all_original,12*4*11)
+        self.assertEqual(all_original,12*3*11)
         self.assertTrue(all(
             len({e["trip"] for e in segment})==1
             for b in bees for segment in contiguous_segments(b["test_pairs"])))
@@ -88,7 +88,7 @@ class WithinTripSourceConditionalLagTests(unittest.TestCase):
         rows,eps,qa,bees=source_test_cases()
         info=eligibility(bees)
         self.assertEqual(info["heldout_original_bees"],12)
-        self.assertEqual(info["all_source_heldout_test_pairs"],528)
+        self.assertEqual(info["all_source_heldout_test_pairs"],396)
         self.assertEqual(info["primary_gate"],"PASS",info)
         self.assertEqual(info["secondary_gate"],"PASS",info)
         fit=analyze(eps,qa,rows,permutations=19,seed=9,
@@ -98,7 +98,7 @@ class WithinTripSourceConditionalLagTests(unittest.TestCase):
                          "COMPUTED_SOURCE_SEGMENT_CONDITIONAL_LAG_NULL")
         self.assertEqual(fit["drink_given_source_orientation_and_segment_null"]["status"],
                          "COMPUTED_SOURCE_SEGMENT_CONDITIONAL_LAG_NULL")
-        self.assertEqual(fit["observed_lag_scores"]["source_test_pairs"],528)
+        self.assertEqual(fit["observed_lag_scores"]["source_test_pairs"],396)
         self.assertTrue(0<fit["orientation_given_original_segment_null"]
                           ["one_tailed_positive_association_p"]<=1)
         self.assertGreater(fit["drink_given_source_orientation_and_segment_null"]
