@@ -121,7 +121,7 @@ def download_source_file(info,folder):
     # identifier actually returned by this dataset's API manifest and ONLY
     # if the original provider's checksum passes. No guessed file ID.
     native=info["download_url"]
-    match=re.fullmatch(r"https://datadryad.org/api/v2/files/(\\d+)/download",native)
+    match=re.fullmatch(r"https://datadryad.org/api/v2/files/(\d+)/download",native)
     if not match:
         raise ValueError("NO_GO_DOWNLOAD_URL_NOT_ACTUAL_PROVIDER_FILE_IDENTIFIER")
     provider_id=match.group(1)
