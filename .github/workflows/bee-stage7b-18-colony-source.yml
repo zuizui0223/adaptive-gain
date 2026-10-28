@@ -20,11 +20,13 @@ jobs:
           python-version: '3.11'
       - name: Validate exact data grain and source parser
         working-directory: research/bee_multicolony_stage7b
-        run: python -m unittest test_source_audit test_source_semantics -v
+        run: python -m unittest test_source_audit test_source_semantics test_reproduce_original_sensor_cleaning -v
       - name: Retrieve original published KU Leuven Dataverse dataset file identifiers and source data
         run: python -u research/bee_multicolony_stage7b/source_audit.py --out rdr_multicolony_source
       - name: Audit original colony time, flower, sensor and published R processing
         run: python -u research/bee_multicolony_stage7b/source_semantics.py --out rdr_multicolony_source
+      - name: Reproduce original paper 2-second same-robot event merging and exact cleaned counts
+        run: python -u research/bee_multicolony_stage7b/reproduce_original_sensor_cleaning.py --out rdr_multicolony_source
       - name: Preserve source byte checks and nonidentifying schema only
         if: always()
         uses: actions/upload-artifact@v4
@@ -33,5 +35,6 @@ jobs:
           path: |
             rdr_multicolony_source/rdr_multicolony_source_audit.json
             rdr_multicolony_source/rdr_multicolony_semantic_quality.json
+            rdr_multicolony_source/rdr_reconstructed_published_sensor_visits.json
           if-no-files-found: warn
           retention-days: 90
