@@ -2,6 +2,9 @@ import math
 import random
 import unittest
 from collections import Counter
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"bee_biomechanics_stage8"))
 
 from episode_audit import source_episode_audit
 from heldout_experience_choice import (
