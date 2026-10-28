@@ -74,7 +74,7 @@ def source_semantics(rows,r_code:str):
     devices=Counter((r["colony"],r["date"],r["Flower"]) for r in valid)
     # Source code search is a qualitative code-method audit only, not model fitting.
     expressions=re.compile(
-        r"duplicat|250|2\\s*sec|difftime|prob|filter\\(|arrange\\(|distinct\\(|group_by|visit|drop_na|trt|querc|second",
+        "duplicat|250|difftime|prob|filter|arrange|distinct|group_by|visit|drop_na|trt|querc|second",
         re.I)
     matches=[
         {"source_line":i+1,"excerpt":line.strip()[:190]}
