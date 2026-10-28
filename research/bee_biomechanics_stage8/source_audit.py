@@ -80,7 +80,16 @@ def _unpack_search_results(obj):
     # hold the actual item. Never take arbitrary first matching result.
     embedded=obj.get("_embedded",{})
     results=embedded.get("searchResult",embedded.get("searchResults",[]))
-    if not isinstance(results,list):raise ValueError("NO_GO_DSPACE_SEARCH_HAL_SHAPE")
+    # DSpace Discovery exposes a HAL "searchResult" collection wrapper.
+    # Newer versions nest the actual entries below _embedded.objects.
+    if isinstance(results,dict):
+        results=results.get("_embedded",{}).get(
+            "objects",results.get("_embedded",{}).get("searchResults",[]))
+    if not isinstance(results,list):
+        raise ValueError("NO_GO_DSPACE_SEARCH_HAL_SHAPE "+
+                         json.dumps({"root":list(obj.keys()),
+                                     "embedded":list(embedded.keys()),
+                                     "wrapper_type":str(type(results))}))
     items=[]
     for result in results:
         payload=result.get("_embedded",{}).get("indexableObject") or result
