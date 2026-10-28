@@ -148,11 +148,40 @@ def discover_item():
                                 "http":getattr(exc,"code",None),
                                 "reason":str(exc)[:240]})
     unique={url:item for url,item in found}
-    if len(unique)!=1:
-        raise ValueError("NO_GO_CAMBRIDGE_ITEM_NOT_UNIQUELY_DISCOVERED "+
+    if not unique:
+        raise ValueError("NO_GO_CAMBRIDGE_ITEM_NOT_DISCOVERED "+
                          json.dumps(diagnostics))
-    item_url,summary=next(iter(unique.items()))
-    metadata,receipt=get_json(item_url)
+    # A paper and the deposited source data can share the same title.
+    # Resolve both native items and choose ONLY the record whose *own*
+    # identifier/handle equals the source dataset DOI/handle; a related
+    # article mentioning this DOI is not the original primary data.
+    exact=[]
+    candidate_info=[]
+    for url,summary in unique.items():
+        obj,http=get_json(url)
+        meta=obj.get("metadata",{})
+        identifiers=[]
+        for key,values in meta.items():
+            if not ("identifier" in key or key=="dc.identifier.uri"):
+                continue
+            if isinstance(values,list):
+                identifiers.extend((key,str(v.get("value","")))
+                                   for v in values if isinstance(v,dict))
+        selected=[(k,v) for k,v in identifiers
+                  if k in ("dc.identifier.doi","dc.identifier.uri",
+                           "dc.identifier.handle","dc.identifier.other",
+                           "dc.identifier") and
+                  (DOI.lower() in v.lower() or HANDLE in v)]
+        candidate_info.append({"url":url,"name":obj.get("name"),
+                               "self_identifiers":identifiers[:12],
+                               "strict_exact_identifier_matches":selected})
+        if selected:
+            exact.append((url,obj,http))
+    if len(exact)!=1:
+        raise ValueError("NO_GO_CAMBRIDGE_SOURCE_DATA_RECORD_ID_NOT_UNIQUE "+
+                         json.dumps({"query_diagnostics":diagnostics,
+                                     "same_title_items":candidate_info}))
+    item_url,metadata,receipt=exact[0]
     if not _is_target_item(metadata):
         raise ValueError("NO_GO_DSPACE_ITEM_IDENTITY_NOT_SOURCE_DOI")
     audit={"item_url":item_url,"item_uuid":metadata.get("uuid"),
