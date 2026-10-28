@@ -19,8 +19,9 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"bee_behavior_stage4")
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"bee_behavior_stage5"))
 from heldout_flower_history import (
     MIN_ELIGIBLE_BEES,MIN_TEST_TRANSITIONS,MIN_TRAIN_VISITS,
-    PHYSICAL_FLOWERS,static_probs
+    static_probs
 )
+from bout_transition_analysis import PHYSICAL_FLOWERS
 from geo_history_holdout import (
     verify_geometry,geo_probs,geo_history_probs,
     split_bouts,choose_global_lambda,conditional_switch_probability
@@ -153,9 +154,10 @@ def _predict_for_source_event(event,static,counts,dist,coords,kappa):
     return predictions
 
 
-def fit_direction_models(bouts,coordinates,dist,expected_anchor=(1550,10)):
+def fit_direction_models(bouts,coordinates,dist,expected_anchor=(1550,10),
+                         expected_lambda=FROZEN_LAMBDA,expected_days=(1,2,3,4,5)):
     final,bee_training=split_bouts(bouts)
-    if sorted({r["day"] for r in bouts})!=[1,2,3,4,5]:
+    if expected_days is not None and tuple(sorted({r["day"] for r in bouts}))!=tuple(expected_days):
         raise ValueError("NO_GO_WRONG_ORIGINAL_SOURCE_DAYS")
     event_train,train_receipt=source_triplets(
         [r for r in bouts if r["day"]<final])
@@ -165,7 +167,7 @@ def fit_direction_models(bouts,coordinates,dist,expected_anchor=(1550,10)):
         if (test_receipt["within_bout_adjacent_pairs"],len(bee_training))!=tuple(expected_anchor):
             raise ValueError("NO_GO_STAGE5_ORIGINAL_DAY5_SOURCE_ANCHOR_CHANGED")
     lam,loss=choose_global_lambda(bee_training,dist)
-    if abs(lam-FROZEN_LAMBDA)>1e-10:
+    if expected_lambda is not None and abs(lam-expected_lambda)>1e-10:
         raise ValueError("NO_GO_STAGE5_TRAIN_ONLY_DISTANCE_LAMBDA_CHANGED")
     kappa,kgrid=choose_kappa(event_train,bee_training,dist,coordinates)
     train_static={bee:static_probs(data["early_visits"],PHYSICAL_FLOWERS)
