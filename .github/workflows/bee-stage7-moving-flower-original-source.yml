@@ -1,0 +1,35 @@
+name: bee-stage7-moving-flower-original-source
+on:
+  push:
+    branches:
+      - analysis/bee-moving-flower-kinematics-20261028
+    paths:
+      - 'research/bee_motion_stage7/**'
+      - '.github/workflows/bee-stage7-moving-flower-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-dryad-motion-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install verified archive reader
+        run: python -m pip install 'py7zr==1.0.0'
+      - name: Test source API and no invented download
+        working-directory: research/bee_motion_stage7
+        run: python -m unittest test_source_audit -v
+      - name: Download real Dryad 2025 two-hive moving-flower data
+        run: python -u research/bee_motion_stage7/source_audit.py --out moving_flower_source
+      - name: Preserve source metadata, original file hashes and 7z listing only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage7-dryad-original-source-receipt
+          path: moving_flower_source/moving_flower_source_manifest.json
+          if-no-files-found: warn
+          retention-days: 90
