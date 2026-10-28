@@ -20,11 +20,13 @@ jobs:
           python-version: '3.11'
       - name: Test source-level Cambridge DSpace discovery and unmodified byte checks
         working-directory: research/bee_biomechanics_stage8
-        run: python -m unittest test_source_audit test_episode_audit -v
+        run: python -m unittest test_source_audit test_episode_audit test_heldout_experience_choice -v
       - name: Discover and verify original Cambridge 3-colony tagged-bee event data
         run: python -u research/bee_biomechanics_stage8/source_audit.py --out bee_stage8_source
       - name: Reconstruct actual source flower visit episodes and action categories
         run: python -u research/bee_biomechanics_stage8/episode_audit.py --out bee_stage8_source
+      - name: Score published individual bee next flower orientation on genuinely later trip holdouts
+        run: python -u research/bee_biomechanics_stage8/heldout_experience_choice.py --out bee_stage8_source
       - name: Retain only checksum+schema receipts (not individual visit microdata)
         if: always()
         uses: actions/upload-artifact@v4
@@ -33,5 +35,6 @@ jobs:
           path: |
             bee_stage8_source/original_cambridge_source_audit.json
             bee_stage8_source/cambridge_behavior_episode_qa.json
+            bee_stage8_source/bee_stage8_heldout_experience_choice.json
           if-no-files-found: warn
           retention-days: 90
