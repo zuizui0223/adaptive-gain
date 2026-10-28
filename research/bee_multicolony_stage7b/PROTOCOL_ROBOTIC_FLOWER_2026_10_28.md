@@ -1,0 +1,24 @@
+# Stage 7b — independent multi-colony robotic flower source audit and state-dependence gate
+
+**Date:** 2026-10-28. **Pre-data protocol; exploratory given prior Stage 4–6 single-colony positive route-order findings.** The first moving-target 2025 Dryad source has been independently identified and fingerprinted, but its server returned 401/403 for individual and bundle downloads to the CI runner. **No 2025 kinematic empirical result has been derived**, and no invented second-source replication will be claimed.
+
+## New independent original source
+Debeuckelaere et al. (2026), `Data and code from a self-medication experiment: pathogen exposure-dependent foraging decisions of bumblebees`, KU Leuven RDR Dataverse, dataset DOI **https://doi.org/10.48804/UIIVLP**, public v1.0, **CC BY-NC-SA 4.0**. The project independently sampled **18 colonies (six controls, six fungal exposure, six bacterial exposure)**, 5 days per colony, automated robotic flowers offering a control nectar or the phytochemical quercetin, and **more than 54,000 recorded visitation events**.
+
+Public original files include `data_selfmed.csv` (~6.9 MB, publisher MD5 `3a3578d61d7633635615d43829df3f3c`), `00_README.md` (MD5 `b05dd7324c909f8f65d95ae938c68aca`), `Data_analysis_selfmed.R` (~56 KB) and solar records. **These MD5 values are provider listing labels, not yet independently verified original bytes.**
+
+The robotic flowers record infrared-triggered feeding events. There is **no assumption** that a visiting bee is individually identifiable; the event stream may be *colony-wide* rather than animal trajectories. Source row count, actual `bee_id` field if any, `flower_id`, clock, colony ID, reward treatment, source day and trial order must be inspected before fitting any individual route model.
+
+## Mandatory source/grain/measurement gate
+1. Via **Dataverse native `api/datasets/:persistentId/?persistentId=doi:10.48804/UIIVLP`**, locate the exact published original dataset file records, verifying source filenames and official numeric file IDs. Download only the original README, raw CSV and if necessary original analysis code using `api/access/datafile/{id}`. Validate source MD5 and compute SHA-256; no arbitrary non-provider links or invented file IDs. Never commit original event rows.
+2. Inspect original README and source CSV columns, native timestamps and timezone, number of event rows, distinct colonies, colony×day cells, flower IDs, original experimental treatment groups, missingness, repeated records/sensor artifacts and whether any **explicit animal identifier** exists. **Do not manufacture one animal from a colony or assume consecutive visits to different robotic flowers came from the same bee**.
+3. If no individual ID, Stage4–6 individual memory/routing replication is **NO_GO_ANIMAL_ID_NOT_OBSERVED**. Continue only with explicitly renamed *colony-level aggregate preference / collective event-level time-series* measurements, whose independent unit is **the experimental colony**, and never call it a bee movement or experienced choice sequence.
+4. Check whether original robotic flower IDs are tied consistently to reward types; an infrared beam event is not automatically a unique completed nectar intake, and the original source may include calibration/test/sensor-fault events. Match source annotation and original analysis script filters without selective exclusions.
+
+## Scientific analysis plan to freeze after source schema, before empirical endpoint
+If source records colony/time/reward-type and day, primary new generalization question: Does the **temporal dependence of colony-wide use of alternative artificial flowers** persist after conditioning on experimental colony, reward-type availability, time-of-day/day and pathogen treatment? An adjusted model must use colony-disjoint replication or colony-level bootstrap, not treat 54,000 events as 54,000 independent colonies. **Do not model individual bees' behavioral route, direct flight heading, floral accessibility or adaptive sensory query order.** Predefine once actual schema identifies event grain and support; report no-go if event timestamp/date/colony/reward labels are not linkable.
+
+### Strong interpretation ceiling
+This is a separate original study of colony-level nectar preferences with treatment-driven physiological state, **not a new test of field wind, direct insect flight inertial heading or natural plant-plant competition**. Even a positive colony memory/time association cannot establish adaptive routeability decision costs `C_A,C_F`, fitness or species-level universal behavior. The original experiment's scientific question was pathogen-triggered quercetin choice, already described by authors; replication of that headline alone has no novelty.
+
+Keep PoMS Stages3e–g, original Stage4–6 heldout geometry results, and frozen V5/V6 manuscripts unchanged. This new source audit is isolated in a draft research PR.
