@@ -29,8 +29,8 @@ class SourceAuthorSensorCleaningTests(unittest.TestCase):
         self.assertTrue(receipt["requires_explicit_individual_animal_identifier_for_route_replication"])
     def test_original_exact_duplicate_and_strict250_filter(self):
         a=self.row(time="10:05:00",prob="250")
-        b=self.row(time="10:09:00",prob="1")
-        c=self.row(time="10:10:00",prob="0")
+        b=self.row(time="10:10:00",prob="1")
+        c=self.row(time="10:11:00",prob="0")
         result,receipt=build_original_clustered_events([a,a,b,c])
         self.assertEqual(receipt["source_exact_duplicate_rows"],1)
         self.assertEqual(receipt["after_original_R_distinct_and_drop_na"],3)
@@ -41,7 +41,7 @@ class SourceAuthorSensorCleaningTests(unittest.TestCase):
         b=self.row(time="10:00:04",prob="2",colony="R1")
         result,receipt=build_original_clustered_events([a,b])
         self.assertEqual(receipt["experiment_flower_group_cross_colony_count"],1)
-        self.assertEqual(receipt["multiple_colony_in_merged_cluster_count"],0)
+        self.assertEqual(receipt["multiple_colony_in_merged_cluster_count"],1)  # flagged, never reported as one animal
     def test_filter_nonempty_source_rows_with_na(self):
         a=self.row()
         b=self.row(time="#N/A",flower="device")
