@@ -115,7 +115,32 @@ def retrieve_file_record():
 def download_source_file(info,folder):
     name=info["path"]
     limit=MAX_ARCHIVE if name==ARCHIVE_NAME else MAX_RESPONSE
-    data,metadata=read_https(info["download_url"],cap=limit)
+    # Dryad's public v2 metadata can be read anonymously even when its
+    # REST file/download endpoint returns 401. A second provider-supported
+    # *public web* download route is allowed, but ONLY with the numeric file
+    # identifier actually returned by this dataset's API manifest and ONLY
+    # if the original provider's checksum passes. No guessed file ID.
+    native=info["download_url"]
+    match=re.fullmatch(r"https://datadryad.org/api/v2/files/(\\d+)/download",native)
+    if not match:
+        raise ValueError("NO_GO_DOWNLOAD_URL_NOT_ACTUAL_PROVIDER_FILE_IDENTIFIER")
+    provider_id=match.group(1)
+    candidates=[native,
+        "https://datadryad.org/stash/downloads/file_stream/"+provider_id]
+    failed=[]
+    for attempt_url in candidates:
+        try:
+            data,metadata=read_https(attempt_url,cap=limit)
+            successful_url=attempt_url
+            break
+        except Exception as exc:
+            failed.append({"provider_download_route":attempt_url,
+                           "failure_class":type(exc).__name__,
+                           "http_status":getattr(exc,"code",None),
+                           "reason":str(exc)[:180]})
+    else:
+        raise RuntimeError("NO_GO_ALL_PUBLIC_DRYAD_PROVIDER_DOWNLOAD_ROUTES "+
+                           json.dumps(failed))
     expected_size=info["api_record"].get("size")
     if expected_size is not None and int(expected_size)!=len(data):
         raise ValueError(f"NO_GO_SOURCE_SIZE_MISMATCH {name}: {expected_size} != {len(data)}")
@@ -124,7 +149,7 @@ def download_source_file(info,folder):
     if provider:
         if dtype=="md5":
             if hashlib.md5(data).hexdigest()!=provider:raise ValueError("NO_GO_DRYAD_MD5_MISMATCH")
-        elif dtype=="sha256":
+        elif dtype in ("sha256","sha-256"):
             if hashlib.sha256(data).hexdigest()!=provider:raise ValueError("NO_GO_DRYAD_SHA256_MISMATCH")
         else:
             raise ValueError("NO_GO_UNKNOWN_SOURCE_DIGEST_TYPE "+dtype)
@@ -134,7 +159,8 @@ def download_source_file(info,folder):
             "source_sha256":hashlib.sha256(data).hexdigest(),
             "api_digest":provider,"api_digest_type":dtype,
             "http_source":metadata,
-            "resolved_provider_download_url":info["download_url"]}
+            "resolved_provider_download_url":successful_url,
+            "failed_before_successful_provider_routes":failed}
 
 def inspect_7z(path):
     import py7zr
