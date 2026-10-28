@@ -169,8 +169,29 @@ def run(outdir):
     receipt={"source":"Dryad API v2",
              "doi":DOI,"manifest":audit,
              "file_receipts":{}}
+    (outdir/"moving_flower_source_manifest.json").write_text(
+        json.dumps(receipt,indent=2,ensure_ascii=False,allow_nan=False))
+    print("STAGE7_DRYAD_PROVIDER_MANIFEST "+
+          json.dumps({
+            "version_url":audit["version_url"],
+            "files":[{"name":name,
+                      "file_api_metadata":info["api_record"],
+                      "file_url_path":info["download_url"].split("?",1)[0]}
+                    for name,info in manifest.items()]},ensure_ascii=False),flush=True)
     for name,info in manifest.items():
-        file_record=download_source_file(info,outdir)
+        try:
+            file_record=download_source_file(info,outdir)
+        except Exception as exc:
+            receipt["source_download_failure"]={
+                "attempted_filename":name,
+                "exception_type":type(exc).__name__,
+                "http_status":getattr(exc,"code",None),
+                "message":str(exc)[:600]}
+            (outdir/"moving_flower_source_manifest.json").write_text(
+                json.dumps(receipt,indent=2,ensure_ascii=False,allow_nan=False))
+            print("STAGE7_DRYAD_DOWNLOAD_BLOCK "+
+                  json.dumps(receipt["source_download_failure"]),flush=True)
+            raise
         receipt["file_receipts"][name]=file_record
         print("STAGE7_DRYAD_FILE "+json.dumps(file_record,ensure_ascii=False),flush=True)
     receipt["readme_text"]= (outdir/README_NAME).read_text(
