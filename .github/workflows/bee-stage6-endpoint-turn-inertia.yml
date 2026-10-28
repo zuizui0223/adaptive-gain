@@ -1,0 +1,33 @@
+name: bee-stage6-endpoint-turn-inertia
+on:
+  push:
+    branches:
+      - analysis/bee-turn-inertia-vs-history-20261028
+    paths:
+      - 'research/bee_behavior_stage6/**'
+      - '.github/workflows/bee-stage6-endpoint-turn-inertia.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-bee-directional-prediction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify publisher-labelled geometry and original triplet/norm/holdout tests
+        working-directory: research/bee_behavior_stage6
+        run: python -m unittest test_turn_inertia_heldout -v
+      - name: Verify original 2019 bee publisher S1 and compare geometry plus turn vs personal memory on day 5
+        run: python -u research/bee_behavior_stage6/run_turn_inertia.py --out bee_stage6_result
+      - name: Preserve source hashes, support gates, matched NLLs and conditional heading null only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage6-original-turn-inertia-results
+          path: bee_stage6_result/bee_stage6_heldout_turn_inertia.json
+          if-no-files-found: warn
+          retention-days: 90
