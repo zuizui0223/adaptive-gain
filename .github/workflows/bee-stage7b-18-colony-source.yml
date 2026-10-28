@@ -1,0 +1,43 @@
+name: bee-stage7b-18-colony-robotic-flower-source
+on:
+  push:
+    branches:
+      - analysis/bee-multicolony-robotic-flowers-20261028
+    paths:
+      - 'research/bee_multicolony_stage7b/**'
+      - '.github/workflows/bee-stage7b-18-colony-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-multicolony-dataverse-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate exact data grain and source parser
+        working-directory: research/bee_multicolony_stage7b
+        run: python -m unittest test_source_audit test_source_semantics test_reproduce_original_sensor_cleaning test_colony_temporal_persistence -v
+      - name: Retrieve original published KU Leuven Dataverse dataset file identifiers and source data
+        run: python -u research/bee_multicolony_stage7b/source_audit.py --out rdr_multicolony_source
+      - name: Audit original colony time, flower, sensor and published R processing
+        run: python -u research/bee_multicolony_stage7b/source_semantics.py --out rdr_multicolony_source
+      - name: Reproduce original paper 2-second same-robot event merging and exact cleaned counts
+        run: python -u research/bee_multicolony_stage7b/reproduce_original_sensor_cleaning.py --out rdr_multicolony_source
+      - name: Test fixed original-colony five-minute reward use against exact within-hour bin-order null
+        run: python -u research/bee_multicolony_stage7b/colony_temporal_persistence.py --out rdr_multicolony_source
+      - name: Preserve source byte checks and nonidentifying schema only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage7b-source-quality-receipt
+          path: |
+            rdr_multicolony_source/rdr_multicolony_source_audit.json
+            rdr_multicolony_source/rdr_multicolony_semantic_quality.json
+            rdr_multicolony_source/rdr_reconstructed_published_sensor_visits.json
+            rdr_multicolony_source/colony_reward_temporal_persistence.json
+          if-no-files-found: warn
+          retention-days: 90
