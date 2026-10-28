@@ -1,0 +1,40 @@
+name: bee-stage8b-cambridge-bout-conditioned-lag-null
+on:
+  push:
+    branches:
+      - analysis/bee-trip-conditioned-history-null-20261028
+    paths:
+      - 'research/bee_biomechanics_stage8b/**'
+      - '.github/workflows/bee-stage8b-cambridge-bout-conditioned-null.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-cambridge-lag-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit-test source-rest episode segments, frozen temporal split and previous-state shuffles
+        working-directory: research/bee_biomechanics_stage8b
+        run: python -m unittest test_within_trip_conditional_lag -v
+      - name: Verify and download original Cambridge Apollo author files by native source checksums
+        run: python -u research/bee_biomechanics_stage8/source_audit.py --out bee_stage8b_source
+      - name: Reconstruct genuine original author 36-bee visits and source chronology
+        run: python -u research/bee_biomechanics_stage8/episode_audit.py --out bee_stage8b_source
+      - name: Reconcile source original 36-bee score, then run 199 source-trip-conditioned lag shuffles
+        run: python -u research/bee_biomechanics_stage8b/run_original_source.py --out bee_stage8b_source
+      - name: Save byte receipts, episode QA and source-conditional lag null results only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage8b-cambridge-conditional-lag-results
+          path: |
+            bee_stage8b_source/original_cambridge_source_audit.json
+            bee_stage8b_source/cambridge_behavior_episode_qa.json
+            bee_stage8b_source/stage8b_trip_conditioned_lag_null_results.json
+          if-no-files-found: warn
+          retention-days: 90
