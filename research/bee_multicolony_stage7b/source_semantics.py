@@ -118,6 +118,13 @@ def run(folder):
     out=folder/"rdr_multicolony_semantic_quality.json"
     out.write_text(json.dumps(audit,indent=2,ensure_ascii=False,allow_nan=False))
     print("BEE_STAGE7B_SOURCE_SEMANTICS "+json.dumps(audit,ensure_ascii=False),flush=True)
+    # Focused source-author preprocessing excerpt, for internal source
+    # methods verification before implementing any independent estimator.
+    raw_script=rfile.read_text(encoding="utf-8-sig",errors="strict")
+    excerpts=[{"line":i+1,"source":v.strip()} for i,v in enumerate(raw_script.splitlines())
+              if (63<=i+1<=96 or 150<=i+1<=212)]
+    print("BEE_STAGE7B_ORIGINAL_R_FILTERS "+
+          json.dumps(excerpts,ensure_ascii=False),flush=True)
     print("BEE_STAGE7B_SEMANTICS_COMPLETE",flush=True)
     return valid,audit
 
