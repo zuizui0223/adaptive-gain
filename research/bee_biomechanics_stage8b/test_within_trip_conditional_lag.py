@@ -103,6 +103,13 @@ class WithinTripSourceConditionalLagTests(unittest.TestCase):
                           ["one_tailed_positive_association_p"]<=1)
         self.assertGreater(fit["drink_given_source_orientation_and_segment_null"]
                            ["actual_minus_null_mean_nats"],0)
+        for key in ("orientation_given_original_segment_null",
+                    "drink_given_source_orientation_and_segment_null"):
+            self.assertEqual(len(fit[key]["source_colony_null_receipts"]),3)
+            self.assertEqual(
+                fit[key]["source_colonies_with_actual_above_null_mean"],
+                sum(x["actual_minus_null_mean"]>0 for x in
+                    fit[key]["source_colony_null_receipts"]))
     def test_fewer_bees_no_go_no_invented_extra_colonies(self):
         rows=fixture(colonies=1,bees_per_colony=4,trips=12,episodes_per_trip=12)
         eps,qa=source_episode_audit(rows,source_expected=None)
