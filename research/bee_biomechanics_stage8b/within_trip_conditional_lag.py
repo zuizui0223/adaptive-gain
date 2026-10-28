@@ -200,6 +200,7 @@ def _one_null(bees,models,actual,mode,permutations,seed,primary):
                        "M1_to_M2_gain_colony_equal"]
     empirical=[]
     changed=[]
+    percol_null=defaultdict(list)
     for trial in range(permutations):
         val=_signed_effect(bees,models,mode=mode,rng=rng)
         # M0 must remain identical even under primary; M1 must remain
@@ -211,10 +212,32 @@ def _one_null(bees,models,actual,mode,permutations,seed,primary):
         empirical.append(val["M0_to_M1_gain_colony_equal" if primary
                             else "M1_to_M2_gain_colony_equal"])
         changed.append(val["source_previous_labels_reassigned"])
+        for row in val["per_colony"]:
+            key=("M0_to_M1_mean" if primary else "M1_to_M2_mean")
+            percol_null[row["colony"]].append(row[key])
     empirical.sort()
     mnull=mean(empirical)
+    bycolony=[]
+    for source in actual["per_colony"]:
+        colony=source["colony"]
+        key=("M0_to_M1_mean" if primary else "M1_to_M2_mean")
+        baseline=source[key]
+        placebo=percol_null[colony]
+        if len(placebo)!=permutations:
+            raise ValueError("NO_GO_COLONY_LEVEL_SHUFFLE_RECEIPT_INCOMPLETE")
+        bycolony.append({
+            "colony":colony,"source_bees":source["source_bees"],
+            "actual_gain":baseline,
+            "null_mean_gain":mean(placebo),
+            "actual_minus_null_mean":baseline-mean(placebo),
+            "within_colony_conditional_one_tail_p_descriptive":(
+                1+sum(x>=baseline-1e-12 for x in placebo))/(permutations+1)
+        })
     return {
         "status":"COMPUTED_SOURCE_SEGMENT_CONDITIONAL_LAG_NULL",
+        "source_colony_null_receipts":bycolony,
+        "source_colonies_with_actual_above_null_mean":sum(
+            x["actual_minus_null_mean"]>0 for x in bycolony),
         "mode":mode,"permutations":permutations,"seed":seed,
         "actual_colony_equal_gain":actual_gain,
         "mean_null_colony_equal_gain":mnull,
