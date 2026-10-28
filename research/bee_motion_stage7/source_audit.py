@@ -8,6 +8,8 @@ The 17.31 MB .7z stays ephemeral; CI uploads schema/hash receipts only.
 from __future__ import annotations
 import argparse
 import hashlib
+import io
+import zipfile
 import json
 import re
 from pathlib import Path
@@ -22,6 +24,7 @@ ARCHIVE_NAME="data_bumblebee_landing_moving_flower.7z"
 README_NAME="README.md"
 MAX_RESPONSE=8*1024*1024
 MAX_ARCHIVE=32*1024*1024
+MAX_DATASET_BUNDLE=40*1024*1024
 MAX_UNCOMPRESSED=850*1024*1024
 ACCEPT={"README.md",ARCHIVE_NAME}
 
@@ -162,6 +165,48 @@ def download_source_file(info,folder):
             "resolved_provider_download_url":successful_url,
             "failed_before_successful_provider_routes":failed}
 
+def download_official_dataset_bundle(folder,manifest):
+    """Last published alternative: the documented *dataset* download API.
+
+    This endpoint may remain blocked for the same access reason as individual
+    file URLs. If so emit an explicit blocker; do NOT substitute fabricated
+    observations or use unverified external file mirrors.
+    """
+    public=f"{API}/datasets/{ENC}/download"
+    raw,transport=read_https(public,cap=MAX_DATASET_BUNDLE)
+    if not zipfile.is_zipfile(io.BytesIO(raw)):
+        raise ValueError("NO_GO_PROVIDER_DATASET_BUNDLE_NOT_ZIP")
+    receipt={"source_endpoint":public,
+             "zip_bytes":len(raw),
+             "zip_sha256":hashlib.sha256(raw).hexdigest(),
+             "download_transport":transport,
+             "members":{}}
+    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        files=z.infolist()
+        for name,info in manifest.items():
+            match=[x for x in files if x.filename.rsplit("/",1)[-1]==name and not x.is_dir()]
+            if len(match)!=1:
+                raise ValueError("NO_GO_PROVIDER_BUNDLE_MEMBER_AMBIGUOUS_"+name)
+            file=match[0]
+            cap=MAX_ARCHIVE if name==ARCHIVE_NAME else MAX_RESPONSE
+            if file.file_size>cap:raise ValueError("NO_GO_PROVIDER_BUNDLE_EXPANDED_OVERSIZE")
+            b=z.read(file.filename)
+            if len(b)!=int(info["api_record"]["size"]):
+                raise ValueError("NO_GO_PROVIDER_BUNDLE_MEMBER_SIZE_MISMATCH")
+            digest=info["api_record"].get("digest")
+            dtype=str(info["api_record"].get("digestType") or "").lower()
+            if digest and dtype in ("sha-256","sha256"):
+                if hashlib.sha256(b).hexdigest()!=digest:
+                    raise ValueError("NO_GO_PROVIDER_BUNDLE_MEMBER_SOURCE_DIGEST_MISMATCH")
+            elif digest and dtype=="md5":
+                if hashlib.md5(b).hexdigest()!=digest:
+                    raise ValueError("NO_GO_PROVIDER_BUNDLE_MEMBER_MD5_MISMATCH")
+            else:raise ValueError("NO_GO_PROVIDER_BUNDLE_UNKNOWN_DIGEST")
+            (folder/name).write_bytes(b)
+            receipt["members"][name]={"original_source_sha256":hashlib.sha256(b).hexdigest(),
+                                       "bytes":len(b),"provider_digest":digest}
+    return receipt
+
 def inspect_7z(path):
     import py7zr
     if not py7zr.is_7zfile(path):
@@ -204,12 +249,33 @@ def run(outdir):
                       "file_api_metadata":info["api_record"],
                       "file_url_path":info["download_url"].split("?",1)[0]}
                     for name,info in manifest.items()]},ensure_ascii=False),flush=True)
+    file_failure=None
     for name,info in manifest.items():
         try:
             file_record=download_source_file(info,outdir)
         except Exception as exc:
+            file_failure={"attempted_filename":name,
+                          "exception_type":type(exc).__name__,
+                          "http_status":getattr(exc,"code",None),
+                          "message":str(exc)[:600]}
+            print("STAGE7_DRYAD_FILE_ROUTE_BLOCK "+
+                  json.dumps(file_failure),flush=True)
+            break
+        receipt["file_receipts"][name]=file_record
+        print("STAGE7_DRYAD_FILE "+json.dumps(file_record,ensure_ascii=False),flush=True)
+    if file_failure is not None:
+        receipt["original_individual_file_route_failure"]=file_failure
+        try:
+            receipt["official_dataset_bundle"]=download_official_dataset_bundle(
+                outdir,manifest)
+            for name,record in receipt["official_dataset_bundle"]["members"].items():
+                receipt["file_receipts"][name]=record
+            print("STAGE7_DRYAD_FULL_DATASET_BUNDLE_SUCCESS "+
+                  json.dumps(receipt["official_dataset_bundle"]),flush=True)
+        except Exception as exc:
             receipt["source_download_failure"]={
-                "attempted_filename":name,
+                "attempted_provider_route":"documented dataset-level bundle",
+                "source_url":f"{API}/datasets/{ENC}/download",
                 "exception_type":type(exc).__name__,
                 "http_status":getattr(exc,"code",None),
                 "message":str(exc)[:600]}
@@ -217,9 +283,7 @@ def run(outdir):
                 json.dumps(receipt,indent=2,ensure_ascii=False,allow_nan=False))
             print("STAGE7_DRYAD_DOWNLOAD_BLOCK "+
                   json.dumps(receipt["source_download_failure"]),flush=True)
-            raise
-        receipt["file_receipts"][name]=file_record
-        print("STAGE7_DRYAD_FILE "+json.dumps(file_record,ensure_ascii=False),flush=True)
+            raise RuntimeError("NO_GO_ALL_PUBLIC_PROVIDER_DATA_ROUTES") from exc
     receipt["readme_text"]= (outdir/README_NAME).read_text(
         encoding="utf-8-sig",errors="strict")[:30000]
     receipt["archive_profile"]=inspect_7z(outdir/ARCHIVE_NAME)
