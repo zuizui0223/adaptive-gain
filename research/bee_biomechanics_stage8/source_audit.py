@@ -22,7 +22,8 @@ API="https://api.repository.cam.ac.uk/server/api"
 REPOSITORY="https://www.repository.cam.ac.uk"
 DOI="10.17863/CAM.100572"
 HANDLE="1810/357732"
-SOURCE_FOCUS=("TradeOffData.csv","BeeMasses.csv")
+SOURCE_FOCUS=("Observation_data.csv","Bee_masses.csv",
+              "README_observation_data.txt","README_bee_masses.txt")
 SOURCE_CSV_LIMIT=35*1024*1024
 JSON_CAP=5*1024*1024
 MAX_OBSERVATIONS=500000
@@ -338,7 +339,15 @@ def run(folder):
             raise
         (folder/name).write_bytes(data)
         receipts[name]={"source_download":download_rcpt,**checksum}
-        schemas[name]=inspect_csv(data)
+        if name.lower().endswith(".csv"):
+            schemas[name]=inspect_csv(data)
+        else:
+            try:
+                text=data.decode("utf-8-sig",errors="strict")
+            except UnicodeDecodeError:
+                text=data.decode("cp1252",errors="strict")
+            schemas[name]={"source_original_readme_text":text[:24000],
+                           "source_instructions_complete":len(text)<=24000}
         print("BEE_STAGE8_ORIGINAL_FILE "+json.dumps({
             "file":name,**receipts[name],
             "schema":schemas[name]
