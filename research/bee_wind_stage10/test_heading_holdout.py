@@ -31,7 +31,8 @@ class WindHeadingStage10MethodTests(unittest.TestCase):
             a[i,0:3]=[x,-.001,0]
             a[i,3:6]=[x,.001,0]
             a[i,6:9]=[x,0,0]
-            a[i,18:21]=[0.,0.,0.]
+        # The ORIGINAL data semantics: one observed flower landmark per file.
+        a[0,18:21]=[0.,0.,0.]
         return a
     def test_true_early_then_late_landing_is_chronological(self):
         a=self.make_source()
@@ -50,7 +51,20 @@ class WindHeadingStage10MethodTests(unittest.TestCase):
         a[:,18:21]=np.nan
         row,reason=trial_features(a,{"bee":1,"tag":123,"s":0,"p":0,"w":0},"synthetic.csv")
         self.assertIsNone(row)
-        self.assertEqual(reason,"missing_true_bee_triangle_or_flower")
+        self.assertEqual(reason,"not_exactly_one_native_observed_flower_landmark")
+    def test_single_real_source_landmark_can_be_on_nonbee_frame(self):
+        a=self.make_source()
+        # The original landmark is only encoded at a trial-level source row.
+        a[0,:9]=np.nan
+        row,reason=trial_features(a,{"bee":1,"tag":123,"s":0,"p":0,"w":0},"synthetic.csv")
+        self.assertIsNone(reason)
+        self.assertLess(row["last_early_frame"],row["first_late_frame"])
+    def test_ambiguous_multiple_source_landmarks_fail_closed(self):
+        a=self.make_source()
+        a[1,18:21]=[0.,0.,0.]
+        row,reason=trial_features(a,{"bee":1,"tag":123,"s":0,"p":0,"w":0},"synthetic.csv")
+        self.assertIsNone(row)
+        self.assertEqual(reason,"not_exactly_one_native_observed_flower_landmark")
     def test_no_temporal_crossing_returns_explicit_no_go(self):
         a=self.make_source()
         # Remove actual bee/flower detections in landing ring.
