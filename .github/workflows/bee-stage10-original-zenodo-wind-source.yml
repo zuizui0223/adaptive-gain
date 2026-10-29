@@ -18,13 +18,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Confirm ZIP and source-contract gates without real data
+      - name: Install numerical kernel for source-native 3D kinematic validation
+        run: python -m pip install 'numpy==2.2.6'
+      - name: Confirm ZIP, original schema, and synthetic no-leakage test controls
         working-directory: research/bee_wind_stage10
-        run: python -m unittest test_source_audit test_native_schema -v
+        run: python -m unittest test_source_audit test_native_schema test_heading_holdout -v
       - name: Fetch author original Zenodo 2016 archive and verify original MD5 and native formats
         run: python -u research/bee_wind_stage10/source_audit.py --out bee_stage10_original
       - name: Verify native author README, tracked-point columns and explicit experiment identifiers
         run: python -u research/bee_wind_stage10/inspect_native_schema.py --out bee_stage10_original
+      - name: Fit prespecified measured-heading models with original BEEtag bee-ID heldout
+        run: python -u research/bee_wind_stage10/heading_holdout.py --out bee_stage10_original
       - name: Keep only bounded source manifest and checksum as CI artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -33,5 +37,6 @@ jobs:
           path: |
             bee_stage10_original/zenodo60234_source_audit.json
             bee_stage10_original/zenodo60234_native_schema.json
+            bee_stage10_original/stage10_real_heading_LOBO_results.json
           if-no-files-found: warn
           retention-days: 90
