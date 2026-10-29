@@ -29,6 +29,8 @@ jobs:
         run: python -u research/bee_wind_stage10/inspect_native_schema.py --out bee_stage10_original
       - name: Audit original point7 flower landmark synchronization against source-author code
         run: python -u research/bee_wind_stage10/audit_landmark_semantics.py --out bee_stage10_original
+      - name: Estimate frozen measured heading controls with all source bees held out
+        run: python -u research/bee_wind_stage10/heading_holdout.py --out bee_stage10_original
       - name: Keep only bounded source manifest and checksum as CI artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -38,5 +40,6 @@ jobs:
             bee_stage10_original/zenodo60234_source_audit.json
             bee_stage10_original/zenodo60234_native_schema.json
             bee_stage10_original/stage10_original_point7_qa.json
+            bee_stage10_original/stage10_real_heading_LOBO_results.json
           if-no-files-found: warn
           retention-days: 90
