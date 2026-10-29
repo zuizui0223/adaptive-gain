@@ -61,12 +61,19 @@ def trial_features(source_array,metadata,source_name):
         return None,"source_original_matrix_shape"
     pts=a.reshape((len(a),7,3))
     valid_bee=np.all(np.isfinite(pts[:,:3,:]),axis=(1,2))
-    valid_flower=np.all(np.isfinite(pts[:,6,:]),axis=1)
-    good=valid_bee & valid_flower
+    # Source-authored point7 is ONE observed reference coordinate per trial;
+    # it is not a time-indexed flower trajectory. The authors subtract it
+    # from every bee coordinate using bsxfun. See source-only QA receipt.
+    flower_rows=pts[:,6,:]
+    recorded_flower=np.all(np.isfinite(flower_rows),axis=1)
+    if int(recorded_flower.sum())!=1:
+        return None,"not_exactly_one_native_observed_flower_landmark"
+    flower_reference=flower_rows[recorded_flower][0]
+    good=valid_bee
     if good.sum()<2*MIN_CONTIGUOUS_FRAMES:
-        return None,"missing_true_bee_triangle_or_flower"
+        return None,"missing_native_bee_triangle_frames"
     bee=pts[:,:3,:].mean(axis=1)
-    target=pts[:,6,:]
+    target=np.broadcast_to(flower_reference,bee.shape)
     dist=np.linalg.norm(bee-target,axis=1)
     early=(good & (dist>=EARLY_RING_M[0]) & (dist<=EARLY_RING_M[1]))
     late=(good & (dist>=LATE_RING_M[0]) & (dist<=LATE_RING_M[1]))
