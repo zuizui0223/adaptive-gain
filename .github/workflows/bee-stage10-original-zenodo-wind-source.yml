@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
       - name: Confirm ZIP and source-contract gates without real data
         working-directory: research/bee_wind_stage10
-        run: python -m unittest test_source_audit -v
+        run: python -m unittest test_source_audit test_native_schema -v
       - name: Fetch author original Zenodo 2016 archive and verify original MD5 and native formats
         run: python -u research/bee_wind_stage10/source_audit.py --out bee_stage10_original
       - name: Verify native author README, tracked-point columns and explicit experiment identifiers
