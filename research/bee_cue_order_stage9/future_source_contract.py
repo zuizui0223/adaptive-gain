@@ -86,6 +86,20 @@ def audit_real_trial_telemetry(assignment,source_telemetry,calibrated_ranges,
         actual_wind=original.get("measured_wind_m_s")
         if not isinstance(actual_wind,(int,float)) or not math.isfinite(actual_wind) or actual_wind<0:
             raise ValueError("NO_GO_REAL_NO_LOCAL_ANEMOMETER_MEASUREMENT")
+        # Require actual instrumented 3D airflow, not only an operator's
+        # categorical wind label or a scalar fan preset.
+        vector=original.get("measured_wind_xyz_m_s")
+        turbulence=original.get("measured_wind_turbulence_sd_m_s")
+        if (not isinstance(vector,(tuple,list)) or len(vector)!=3 or
+            not all(isinstance(x,(int,float)) and math.isfinite(x)
+                    for x in vector)):
+            raise ValueError("NO_GO_REAL_MISSING_3D_WIND_DIRECTION")
+        if (not isinstance(turbulence,(int,float)) or
+            not math.isfinite(turbulence) or turbulence<0):
+            raise ValueError("NO_GO_REAL_MISSING_WIND_TURBULENCE")
+        vector_speed=math.sqrt(sum(x*x for x in vector))
+        if abs(vector_speed-actual_wind)>.10:
+            raise ValueError("NO_GO_REAL_WIND_VECTOR_AND_SPEED_INCONSISTENT")
         sync=original.get("max_camera_anemometer_clock_error_ms")
         if not isinstance(sync,(int,float)) or not math.isfinite(sync) or sync<0:
             raise ValueError("NO_GO_REAL_MISSING_SENSOR_SYNCHRONIZATION_RECORD")
@@ -158,6 +172,8 @@ def make_synthetic_QA_telemetry(assignments,outcomes,
             "left_accessible_at_release":True,
             "right_accessible_at_release":True,
             "measured_wind_m_s":calm if r["assigned_wind"]=="calm" else crosswind,
+            "measured_wind_xyz_m_s":[0.0,calm if r["assigned_wind"]=="calm" else crosswind,0.0],
+            "measured_wind_turbulence_sd_m_s":0.02,
             "max_camera_anemometer_clock_error_ms":2.0})
     return raw
 
