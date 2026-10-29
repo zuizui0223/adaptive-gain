@@ -1,0 +1,48 @@
+name: bee-stage9b-history-challenge-original-source
+on:
+  push:
+    branches:
+      - analysis/bee-direction-history-control-20261029
+    paths:
+      - 'research/bee_multiarray_stage9/**'
+      - '.github/workflows/bee-stage9b-history-challenge-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-2017-history-challenger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original Figure1 source validation dependency
+        run: python -m pip install 'pillow==11.3.0'
+      - name: Frozen synthetic source tests and unchanged original direction tests
+        working-directory: research/bee_multiarray_stage9
+        run: python -m unittest test_source_audit test_bout_grain test_external_turn_transfer test_history_challenger -v
+      - name: Fetch exact original 2017 publisher supplementary CSV datasets
+        run: python -u research/bee_multiarray_stage9/source_audit.py --out bee_stage9_original
+      - name: Verify original published physical flower Figure1 image
+        run: python -u research/bee_multiarray_stage9/figure_source.py --out bee_stage9_original
+      - name: Rebuild true 29-bee by 3-array original bouts
+        run: python -u research/bee_multiarray_stage9/bout_grain.py --out bee_stage9_original
+      - name: Reproduce full original parent Stage9 heldout scores before extension
+        run: python -u research/bee_multiarray_stage9/run_external_direction.py --out bee_stage9_original
+      - name: Fit train-only Markov route histories and compare external frozen direction over exactly same real holdouts
+        run: python -u research/bee_multiarray_stage9/run_history_challenger.py --out bee_stage9_original
+      - name: Keep hashes and derived results, never original individual bee source rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage9b-history-original-source-derived-receipts
+          path: |
+            bee_stage9_original/klein2017_source_gate.json
+            bee_stage9_original/klein2017_true_bout_grain.json
+            bee_stage9_original/klein2017_figure1_source_receipt.json
+            bee_stage9_original/2017_three_array_external_direction_results.json
+            bee_stage9_original/2017_three_array_history_conditioned_direction_stage9b.json
+          if-no-files-found: warn
+          retention-days: 90

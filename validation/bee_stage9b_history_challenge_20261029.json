@@ -1,0 +1,101 @@
+{
+  "study": "Klein2017",
+  "date": "2026-10-29",
+  "source_run_id": 40862355605,
+  "source_workflow_status": "SUCCESS",
+  "focused_tests": 25,
+  "model": "first order per bee B->C switched counts with beta=5, source-independent kappa=1, geometry trained original bouts1-15 only, final16-20 heldout",
+  "original_total_true_triplets": 1958,
+  "original_bees": 29,
+  "original_colonies": 2,
+  "fixed_order_arrays": [
+    1,
+    2,
+    3
+  ],
+  "posthoc": true,
+  "six_of_six_colony_array_direction_gains_positive": true,
+  "original_hashes": {
+    "S1": "e1b660125c389fc873a70eaf0edaaec053637cc814d8bcb50f1a61a01b7e3e04",
+    "S2": "68e663f50d7d741c3a162f67b03db89499aff4c328aecf09361cf15955440535",
+    "Figure1": "4277dcc8ec52598037a7a4fd6d6bc47d4877a68593a400723508a2d7c0cd40ac"
+  },
+  "panels": [
+    {
+      "array": "1",
+      "heldout_true_triplets": 608,
+      "bees": 29,
+      "colonies": 2,
+      "nll": {
+        "Mgeo": 1.0076719685060798,
+        "Mhistory": 0.9248187668169585,
+        "Mturn": 0.8480693398487475,
+        "Mhistory_plus_turn": 0.8137654656643505
+      },
+      "positive_bees_direction_over_history": 22,
+      "gains": {
+        "history_over_geo": 0.08285320168912119,
+        "direction_over_geo": 0.15960262865733224,
+        "direction_over_history": 0.11105330115260809,
+        "history_over_direction": 0.03430387418439704
+      },
+      "source_colony_gains": {
+        "jimmy": 0.10861614202960419,
+        "tristan": 0.11332798300074508
+      },
+      "conditional_null_actual_minus_mean": 0.13199435930108383,
+      "conditional_null_p": 0.005
+    },
+    {
+      "array": "2",
+      "heldout_true_triplets": 687,
+      "bees": 29,
+      "colonies": 2,
+      "nll": {
+        "Mgeo": 1.0722004836582093,
+        "Mhistory": 0.9932515040550194,
+        "Mturn": 1.0087195627047558,
+        "Mhistory_plus_turn": 0.960349663079671
+      },
+      "positive_bees_direction_over_history": 18,
+      "gains": {
+        "history_over_geo": 0.07894897960318996,
+        "direction_over_geo": 0.06348092095345358,
+        "direction_over_history": 0.032901840975348415,
+        "history_over_direction": 0.0483698996250848
+      },
+      "source_colony_gains": {
+        "jimmy": 0.021036717720818006,
+        "tristan": 0.04397595601291013
+      },
+      "conditional_null_actual_minus_mean": 0.0739090624453389,
+      "conditional_null_p": 0.005
+    },
+    {
+      "array": "3",
+      "heldout_true_triplets": 663,
+      "bees": 29,
+      "colonies": 2,
+      "nll": {
+        "Mgeo": 1.029742824779867,
+        "Mhistory": 0.908745395495162,
+        "Mturn": 0.9419885279001091,
+        "Mhistory_plus_turn": 0.8848412027749655
+      },
+      "positive_bees_direction_over_history": 19,
+      "gains": {
+        "history_over_geo": 0.120997429284705,
+        "direction_over_geo": 0.08775429687975791,
+        "direction_over_history": 0.023904192720196525,
+        "history_over_direction": 0.057147325125143617
+      },
+      "source_colony_gains": {
+        "jimmy": 0.034750552750464916,
+        "tristan": 0.01378092335861268
+      },
+      "conditional_null_actual_minus_mean": 0.0798908716178798,
+      "conditional_null_p": 0.005
+    }
+  ],
+  "note": "Values from successful immutable GitHub Actions source run stdout; per-bee and original source QA data held in the workflow artifact; 2017 arrays repeat original bees, not independent field studies; original source raw rows not committed."
+}
