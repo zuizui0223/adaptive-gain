@@ -92,10 +92,15 @@ def decode_and_audit_csv(data):
         except UnicodeDecodeError:
             pass
     if txt is None:raise ValueError("NO_GO_ORIGINAL_SOURCE_DECODING")
-    try:
-        delim=csv.Sniffer().sniff(txt[:12000],delimiters=",;\t").delimiter
-    except csv.Error:
-        delim=","
+    # Source-first delimiter: a damaged later row can mislead Sniffer into
+    # interpreting a valid header's ';' as a one-column CSV. Freeze the
+    # actual first header line delimiter and *report* later row mismatches.
+    headerline=txt.splitlines()[0] if txt.splitlines() else ""
+    sep_counts={s:headerline.count(s) for s in (",",";","\t")}
+    delim=max(sep_counts,key=lambda s:sep_counts[s])
+    if sep_counts[delim]==0:
+        try:delim=csv.Sniffer().sniff(txt[:12000],delimiters=",;\t").delimiter
+        except csv.Error:delim=","
     reader=csv.reader(io.StringIO(txt,newline=""),delimiter=delim)
     head=next(reader,None)
     if not head:raise ValueError("NO_GO_ORIGINAL_SOURCE_HAS_NO_HEADER")
