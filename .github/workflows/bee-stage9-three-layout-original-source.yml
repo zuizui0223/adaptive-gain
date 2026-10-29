@@ -20,14 +20,18 @@ jobs:
           python-version: '3.11'
       - name: Source-only anti-fabrication and CSV-schema tests
         working-directory: research/bee_multiarray_stage9
-        run: python -m unittest test_source_audit -v
+        run: python -m unittest test_source_audit test_bout_grain -v
       - name: Retrieve original 2017 publisher supplementary datasets S1 and S2
         run: python -u research/bee_multiarray_stage9/source_audit.py --out bee_stage9_original
+      - name: Reconstruct exact 29-bee two-colony three-array original source bouts and S1/S2 join
+        run: python -u research/bee_multiarray_stage9/bout_grain.py --out bee_stage9_original
       - name: Save original SHA256 and source-grain quality receipt only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bee-stage9-original-multiarray-source-receipt
-          path: bee_stage9_original/klein2017_source_gate.json
+          path: |
+            bee_stage9_original/klein2017_source_gate.json
+            bee_stage9_original/klein2017_true_bout_grain.json
           if-no-files-found: warn
           retention-days: 90
