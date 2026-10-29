@@ -128,11 +128,15 @@ def native_trials(zipfile_path):
             by_condition[cond]+=1
             with z.open(path) as member:
                 raw=member.read()
-            with io.BytesIO(raw) as blob:
-                h=blob.readline().decode("utf-8-sig",errors="strict").strip().split(",")
+            # Some original 2016 CSVs use classic CR-only row breaks.
+            # Normalize the line-endings IN MEMORY without changing numerical
+            # tokens or the provider-verified raw source archive/checksum.
+            source_text=raw.decode("utf-8-sig",errors="strict")
+            normalized=source_text.replace("\r\n","\n").replace("\r","\n")
+            h=normalized.split("\n",1)[0].strip().split(",")
             if tuple(h)!=EXACT_HEADER:
                 raise ValueError("NO_GO_SOURCE_COORDINATE_COLUMN_NAME_DIFFERENCE "+json.dumps({"file":name,"length":len(h),"source_head":h[:4],"source_tail":h[-4:],"expected_length":len(EXACT_HEADER),"expected_head":EXACT_HEADER[:4],"expected_tail":EXACT_HEADER[-4:]}))
-            a=np.genfromtxt(io.BytesIO(raw),skip_header=1,delimiter=",",dtype=float)
+            a=np.genfromtxt(io.StringIO(normalized),skip_header=1,delimiter=",",dtype=float)
             record,reason=trial_features(a,metadata,name)
             if reason:
                 counts[(cond,reason)]+=1
