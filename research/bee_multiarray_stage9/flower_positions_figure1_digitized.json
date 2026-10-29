@@ -1,0 +1,73 @@
+{
+  "study_doi": "10.1038/s41598-017-04919-8",
+  "source_figure_original_jpg": "41598_2017_4919_Fig1_HTML.jpg",
+  "source_figure_sha256": "4277dcc8ec52598037a7a4fd6d6bc47d4877a68593a400723508a2d7c0cd40ac",
+  "source_jpg_width": 675,
+  "source_jpg_height": 675,
+  "original_publisher_url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-017-04919-8/MediaObjects/41598_2017_4919_Fig1_HTML.jpg",
+  "coordinates_are": "approximate manual 2D digitization from printed source plot to nearest 10 centimetres; NOT exact original measured positions",
+  "plotted_original_units": "centimetres",
+  "nominal_digitization_absolute_error_per_coordinate_cm": 10,
+  "source_plot_axes_description": "three 0–650cm x, 0–500cm y axes; panels b,c,d are arrays 1,2,3",
+  "arrays_cm": {
+    "1": {
+      "1": [
+        600,
+        200
+      ],
+      "2": [
+        400,
+        100
+      ],
+      "3": [
+        100,
+        200
+      ],
+      "4": [
+        150,
+        450
+      ]
+    },
+    "2": {
+      "1": [
+        550,
+        100
+      ],
+      "2": [
+        350,
+        100
+      ],
+      "3": [
+        100,
+        100
+      ],
+      "4": [
+        300,
+        300
+      ]
+    },
+    "3": {
+      "1": [
+        620,
+        50
+      ],
+      "2": [
+        50,
+        150
+      ],
+      "3": [
+        100,
+        350
+      ],
+      "4": [
+        400,
+        450
+      ]
+    }
+  },
+  "actual_insect_vision_or_continuous_flight_path_measured": false,
+  "source_landmark_geometry_modeled": false,
+  "original_array_order_fixed_not_randomized": true,
+  "outcome_has_not_been_inspected_at_figure_digitization_time": true,
+  "source_amendment": "ORIGINAL_SOURCE_AMENDMENT_BEFORE_MODEL_2026_10_29.md"
+}
