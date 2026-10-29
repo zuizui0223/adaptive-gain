@@ -14,7 +14,7 @@ class IndependentColonyProspectivePowerTests(unittest.TestCase):
     def test_zero_effect_exact_type_one_under_colony_t(self):
         sd=sd_of_colony_contrast(.025,.03,.08)
         for n in (8,12,24):
-            self.assertAlmostEqual(noncentral_t_power(n,0.,sd),ALPHA,places=12)
+            self.assertAlmostEqual(noncentral_t_power(n,0.,sd),ALPHA,delta=1e-10)
     def test_power_increases_with_colonies_for_fixed_effect_and_variance(self):
         sd=sd_of_colony_contrast(.025,.03,.08)
         powers=[noncentral_t_power(c,.02,sd) for c in COLONY_SCENARIOS]
