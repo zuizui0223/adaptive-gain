@@ -349,3 +349,12 @@ def run(root):
     if result["status"]!="COMPLETED_CROSSCOLONY_BEE_ORIENTATION_TRANSFER":
         raise ValueError("NO_GO_STAGE9_TRANSFER_SOURCE_SUPPORT")
     return result
+
+if __name__=="__main__":
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--out",default="bee_stage9_source")
+    args=parser.parse_args()
+    result=run(Path(args.out))
+    if result["status"]!="COMPLETED_CROSSCOLONY_BEE_ORIENTATION_TRANSFER":
+        raise SystemExit(2)
