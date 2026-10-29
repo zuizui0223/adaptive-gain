@@ -22,13 +22,15 @@ jobs:
         run: python -m pip install 'pillow==11.3.0'
       - name: Source-only anti-fabrication and CSV-schema tests
         working-directory: research/bee_multiarray_stage9
-        run: python -m unittest test_source_audit test_bout_grain -v
+        run: python -m unittest test_source_audit test_bout_grain test_external_turn_transfer -v
       - name: Retrieve original 2017 publisher supplementary datasets S1 and S2
         run: python -u research/bee_multiarray_stage9/source_audit.py --out bee_stage9_original
       - name: Retrieve the actual published Figure1 with labeled physical flower positions
         run: python -u research/bee_multiarray_stage9/figure_source.py --out bee_stage9_original
       - name: Reconstruct exact 29-bee two-colony three-array original source bouts and S1/S2 join
         run: python -u research/bee_multiarray_stage9/bout_grain.py --out bee_stage9_original
+      - name: Test externally frozen 2019 direction coefficient on actual 2017 final-five trips for all three arrays
+        run: python -u research/bee_multiarray_stage9/run_external_direction.py --out bee_stage9_original
       - name: Save original SHA256 and source-grain quality receipt only
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,5 +41,6 @@ jobs:
             bee_stage9_original/klein2017_true_bout_grain.json
             bee_stage9_original/klein2017_figure1_source_receipt.json
             bee_stage9_original/2017_original_source_figure1.jpg
+            bee_stage9_original/2017_three_array_external_direction_results.json
           if-no-files-found: warn
           retention-days: 90
