@@ -1,0 +1,45 @@
+name: bee-stage10-original-zenodo-wind-source
+on:
+  push:
+    branches:
+      - analysis/bee-wind-trajectory-20261029
+    paths:
+      - 'research/bee_wind_stage10/**'
+      - '.github/workflows/bee-stage10-original-zenodo-wind-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-wind-trajectory-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical kernel for source-native 3D kinematic validation
+        run: python -m pip install 'numpy==2.2.6'
+      - name: Confirm ZIP, original schema, and synthetic no-leakage test controls
+        working-directory: research/bee_wind_stage10
+        run: python -m unittest test_source_audit test_native_schema test_heading_holdout -v
+      - name: Fetch author original Zenodo 2016 archive and verify original MD5 and native formats
+        run: python -u research/bee_wind_stage10/source_audit.py --out bee_stage10_original
+      - name: Verify native author README, tracked-point columns and explicit experiment identifiers
+        run: python -u research/bee_wind_stage10/inspect_native_schema.py --out bee_stage10_original
+      - name: Audit original point7 flower landmark synchronization against source-author code
+        run: python -u research/bee_wind_stage10/audit_landmark_semantics.py --out bee_stage10_original
+      - name: Estimate frozen measured heading controls with all source bees held out
+        run: python -u research/bee_wind_stage10/heading_holdout.py --out bee_stage10_original
+      - name: Keep only bounded source manifest and checksum as CI artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage10-original-zenodo-source-manifest
+          path: |
+            bee_stage10_original/zenodo60234_source_audit.json
+            bee_stage10_original/zenodo60234_native_schema.json
+            bee_stage10_original/stage10_original_point7_qa.json
+            bee_stage10_original/stage10_real_heading_LOBO_results.json
+          if-no-files-found: warn
+          retention-days: 90

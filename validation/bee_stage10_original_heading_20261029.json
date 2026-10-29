@@ -1,0 +1,121 @@
+{
+  "source_name": "Chang Crall Combes 2016 original 3D bumblebee landing trajectories",
+  "source_original_doi": "10.1242/jeb.137976",
+  "original_public_archive": "https://zenodo.org/records/60234",
+  "original_source_workflow_url": "https://github.com/zuizui0223/adaptive-gain/actions/runs/40866068451",
+  "original_source_execution_sha": "2da8c7e90402ecde65650b3abe23121123310434",
+  "frozen_protocol": "research/bee_wind_stage10/PROTOCOL_TRUE_HEADING_HOLDOUT_2026_10_29.md",
+  "original_source_native_tracking": "1000 Hz, three BEEtag xyz points and one flower landmark per source trial",
+  "preoutcome_corrected_source_semantics": "Point7 trial-level observed landmark; CR-only original CSV line endings handled without data-token changes; no synthetic source observations",
+  "support_thresholds": {
+    "min_tracks": 60,
+    "min_original_bees": 16,
+    "min_bees_per_wind": 12
+  },
+  "result": {
+    "status": "REAL_2016_MEASURED_HEADING_LOBO_EVALUATED",
+    "source_quality": {
+      "source_archive_verified_md5": "22bbc8286fecd2535d3f284679aed87b",
+      "source_archive_verified_sha256": "9a2881e5aaf4d7bb9556c9118c45d2e2ed6a2a8b22b80d4d762a5626fdd918ec",
+      "original_native_xyz_csv_trials": 157,
+      "original_distinct_tagged_bees": 28,
+      "source_trial_condition_counts": {
+        "S0P0W0": 25,
+        "S0P0W1": 29,
+        "S0P1W0": 13,
+        "S0P1W1": 27,
+        "S1P0W0": 6,
+        "S1P0W1": 23,
+        "S1P1W0": 12,
+        "S1P1W1": 22
+      },
+      "source_eligible_trials": 133,
+      "source_eligible_bees": 28,
+      "eligible_bees_by_wind": {
+        "0": 25,
+        "1": 26
+      },
+      "quality_gates_by_original_source_condition": {
+        "S0P0W0": {
+          "near_zero_original_planar_velocity": 1,
+          "no_complete_original_early_ring": 4,
+          "passed": 20
+        },
+        "S0P0W1": {
+          "no_complete_original_early_ring": 1,
+          "passed": 28
+        },
+        "S0P1W0": {
+          "near_zero_original_planar_velocity": 2,
+          "no_complete_original_early_ring": 3,
+          "passed": 8
+        },
+        "S0P1W1": {
+          "passed": 27
+        },
+        "S1P0W0": {
+          "no_complete_original_early_ring": 2,
+          "passed": 4
+        },
+        "S1P0W1": {
+          "near_zero_original_planar_velocity": 4,
+          "no_complete_original_early_ring": 1,
+          "passed": 18
+        },
+        "S1P1W0": {
+          "no_complete_original_early_ring": 4,
+          "passed": 8
+        },
+        "S1P1W1": {
+          "near_zero_original_planar_velocity": 1,
+          "no_complete_original_early_ring": 1,
+          "passed": 20
+        }
+      },
+      "eligible_trial_counts_by_wind": {
+        "0": 40,
+        "1": 93
+      },
+      "eligibility_cutoffs_frozen_before_outcome": true,
+      "author_primary_112_figure_tracks_NOT_equated_to_raw_157": true,
+      "scientific_support_gate": "PASS"
+    },
+    "model_baseline": "Original wind, orientation, stiffness 2^3, early source position/radial distance/speed",
+    "model_augmented": "Baseline plus measured early XY direction and wind×direction, no future frames",
+    "holdout": "all original trials from one tagged bee excluded from its train fit",
+    "ridge_alpha": 5,
+    "primary_gain_bee_equal_sq_error": -0.014176991019060461,
+    "bees_with_positive_gain": 8,
+    "bees_total": 28,
+    "wind_group_source_bee_equal": {
+      "0": {
+        "original_source_bees": 25,
+        "original_source_trials": 40,
+        "bee_equal_loss_gain": -0.024897922929296077,
+        "bees_with_positive_gain": 10
+      },
+      "1": {
+        "original_source_bees": 26,
+        "original_source_trials": 93,
+        "bee_equal_loss_gain": -0.012619791855197795,
+        "bees_with_positive_gain": 10
+      }
+    },
+    "headwind_minus_still_predictive_gain": 0.012278131074098282,
+    "one_original_study_not_multiple_colony_replication": true,
+    "not_same_as_discrete_flower_choice_or_adaptive_query_gain": true,
+    "not_direct_causal_internal_heading_memory": true
+  },
+  "observed_reanalysis_interpretation": "Measured early-XY-heading features do not improve heldout late-XY-heading MSE beyond frozen environmental, position and speed baseline in this one source; not a proof of absent cognition or direct comparison with Stage9b.",
+  "risk_notes": [
+    "Only one original experimental source",
+    "Original trial vs original bee nested replication",
+    "W0 and W1 original conditions and trial counts unbalanced",
+    "One observed original static flower landmark per trial; no measured dynamic flower position",
+    "No simultaneous between-flower choice or adaptation reward",
+    "The 2016 authors had already reported wind-related flight behavior; no novelty claim for that published observation",
+    "Specific prespecified model and rings cannot rule out other mechanisms"
+  ],
+  "study_stage": "Stage10 post-hoc secondary reanalysis of published original data",
+  "computation_status": "SOURCE_VERIFIED_RUN_SUCCESS_17_SYNTHETIC_TESTS"
+}
