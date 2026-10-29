@@ -1,0 +1,33 @@
+name: bee-stage9-klein-three-layout-source
+on:
+  push:
+    branches:
+      - analysis/bee-multiarray-crosslayout-20261029
+    paths:
+      - 'research/bee_multiarray_stage9/**'
+      - '.github/workflows/bee-stage9-three-layout-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-original-2017-three-arrays:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-only anti-fabrication and CSV-schema tests
+        working-directory: research/bee_multiarray_stage9
+        run: python -m unittest test_source_audit -v
+      - name: Retrieve original 2017 publisher supplementary datasets S1 and S2
+        run: python -u research/bee_multiarray_stage9/source_audit.py --out bee_stage9_original
+      - name: Save original SHA256 and source-grain quality receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage9-original-multiarray-source-receipt
+          path: bee_stage9_original/klein2017_source_gate.json
+          if-no-files-found: warn
+          retention-days: 90
