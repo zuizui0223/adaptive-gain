@@ -1,0 +1,42 @@
+name: bee-stage9-prospective-cue-order-wind-design
+on:
+  push:
+    branches:
+      - design/bee-cue-order-wind-factorial-20261029
+    paths:
+      - 'research/bee_cue_order_stage9/**'
+      - '.github/workflows/bee-stage9-prospective-cue-order-wind-design.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-design-validation-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install analytic Student t distribution (not an animal-data model)
+        run: python -m pip install 'scipy==1.15.3'
+      - name: Test concealed-ready factorial randomization, independent-colony power, and ITT estimator
+        working-directory: research/bee_cue_order_stage9
+        run: python -m unittest test_randomization test_power_assumptions test_colony_contrast -v
+      - name: Run deterministic synthetic-only 24-colony design allocation audit
+        run: python -u research/bee_cue_order_stage9/randomization.py --out stage9_design_outputs
+      - name: Calculate transparent assumed-variance independent-colony sample size sensitivity
+        run: python -u research/bee_cue_order_stage9/power_assumptions.py --out stage9_design_outputs
+      - name: Check future 2x2 primary contrast estimator only with injected SYNTHETIC outcomes
+        run: python -u research/bee_cue_order_stage9/colony_contrast.py --out stage9_design_outputs
+      - name: Retain protocol QA and hypothetical power reports without assignments or raw animal outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage9-prospective-design-QA-NOT-EMPIRICAL
+          path: |
+            stage9_design_outputs/cue_order_wind_randomization_qa_receipt.json
+            stage9_design_outputs/bee_stage9_assumption_only_power.json
+            stage9_design_outputs/bee_stage9_synthetic_colony_estimator_QA.json
+          if-no-files-found: warn
+          retention-days: 90
