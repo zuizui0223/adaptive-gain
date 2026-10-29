@@ -23,11 +23,15 @@ jobs:
         run: python -m unittest test_source_audit -v
       - name: Fetch author original Zenodo 2016 archive and verify original MD5 and native formats
         run: python -u research/bee_wind_stage10/source_audit.py --out bee_stage10_original
+      - name: Verify native author README, tracked-point columns and explicit experiment identifiers
+        run: python -u research/bee_wind_stage10/inspect_native_schema.py --out bee_stage10_original
       - name: Keep only bounded source manifest and checksum as CI artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bee-stage10-original-zenodo-source-manifest
-          path: bee_stage10_original/zenodo60234_source_audit.json
+          path: |
+            bee_stage10_original/zenodo60234_source_audit.json
+            bee_stage10_original/zenodo60234_native_schema.json
           if-no-files-found: warn
           retention-days: 90
