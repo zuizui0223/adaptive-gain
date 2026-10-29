@@ -37,7 +37,9 @@ def pinned_csv(path:Path,sha,columns):
     if digest!=sha:
         raise ValueError("NO_GO_ORIGINAL_2017_SOURCE_SHA256_CHANGED "+path.name)
     txt=raw.decode("utf-8-sig",errors="strict")
-    reader=csv.DictReader(io.StringIO(txt),delimiter=",")
+    # Original Springer CSV uses carriage-return line endings; preserve them
+    # with newline="" so the csv module, not StringIO, handles record lines.
+    reader=csv.DictReader(io.StringIO(txt,newline=""),delimiter=",")
     if tuple(reader.fieldnames)!=tuple(columns):
         raise ValueError("NO_GO_ORIGINAL_2017_CSV_HEADER_CHANGED "+path.name)
     rows=list(reader)
