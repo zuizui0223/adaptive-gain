@@ -1,0 +1,40 @@
+name: bee-stage9-colony-heldout-history-transfer
+on:
+  push:
+    branches:
+      - analysis/bee-cross-colony-transfer-20261029
+    paths:
+      - 'research/bee_biomechanics_stage9/**'
+      - '.github/workflows/bee-stage9-colony-heldout-transfer.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-cambridge-crosscolony-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently check original source role, fixed smoothing, real trip split and two-donor colony exclusion
+        working-directory: research/bee_biomechanics_stage9
+        run: python -m unittest test_cross_colony_transfer -v
+      - name: Retrieve original Cambridge DOI source from provider and validate MD5 plus SHA256
+        run: python -u research/bee_biomechanics_stage8/source_audit.py --out bee_stage9_source
+      - name: Recompute source original action-to-actual-visit-episode data quality
+        run: python -u research/bee_biomechanics_stage8/episode_audit.py --out bee_stage9_source
+      - name: Apply original source three-colony heldout transfer and 199 within-trip conditional shuffles
+        run: python -u research/bee_biomechanics_stage9/cross_colony_transfer.py --out bee_stage9_source
+      - name: Archive source hash and nonidentifying full heldout colony model ledger only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage9-original-cross-colony-transfer-results
+          path: |
+            bee_stage9_source/original_cambridge_source_audit.json
+            bee_stage9_source/cambridge_behavior_episode_qa.json
+            bee_stage9_source/bee_stage9_crosscolony_transfer_results.json
+          if-no-files-found: warn
+          retention-days: 90
