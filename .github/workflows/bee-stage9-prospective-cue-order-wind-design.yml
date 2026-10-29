@@ -22,7 +22,7 @@ jobs:
         run: python -m pip install 'scipy==1.15.3'
       - name: Test concealed-ready factorial randomization, independent-colony power, and ITT estimator
         working-directory: research/bee_cue_order_stage9
-        run: python -m unittest test_randomization test_power_assumptions test_colony_contrast -v
+        run: python -m unittest test_randomization test_power_assumptions test_colony_contrast test_future_source_contract -v
       - name: Run deterministic synthetic-only 24-colony design allocation audit
         run: python -u research/bee_cue_order_stage9/randomization.py --out stage9_design_outputs
       - name: Calculate transparent assumed-variance independent-colony sample size sensitivity
