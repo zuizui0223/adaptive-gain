@@ -74,6 +74,7 @@ def validate_bouts(rows,expected=True):
     missing_source_details=Counter()
     original_sequence_shapes=Counter()
     parsed=[]
+    source_boundary_anomalies=[]
     for idx,row in enumerate(rows):
         bee=row["bee_ID"].strip()
         col=row["colony"].strip()
@@ -89,9 +90,25 @@ def validate_bouts(rows,expected=True):
         original_sequence_symbols=list(seq)
         if seq[0]!="0" or seq[-1]!="0":
             source_stats["bouts_without_explicit_source_nest_start_and_end"]+=1
+            source_boundary_anomalies.append({
+                "kind":"missing_nest_start_or_end",
+                "colony":col,"bee_tag":bee,"array":array,"bout":bout,
+                "source_line":idx+2,
+                "original_source_string_repr":repr(source_seq),
+                "cleaned_native_symbols":seq,
+                "source_reported_nb_flower":row["nb_flower"].strip()
+            })
         internal=seq[1:-1]
         if "0" in internal:
             extra_zero_pos+=1
+            source_boundary_anomalies.append({
+                "kind":"internal_nest_marker",
+                "colony":col,"bee_tag":bee,"array":array,"bout":bout,
+                "source_line":idx+2,
+                "original_source_string_repr":repr(source_seq),
+                "cleaned_native_symbols":seq,
+                "source_reported_nb_flower":row["nb_flower"].strip()
+            })
         for k in ("nb_flower","imm_revisit","non_imm_revisit","speed","body"):
             if not row[k].strip():missing_source_details[k]+=1
         keys=(col,bee,array,bout)
@@ -134,6 +151,8 @@ def validate_bouts(rows,expected=True):
         "source_flower_id_visit_frequency":dict(sorted(flower_visits.items())),
         "original_unbalanced_outer_ascii_quotes":{str(k):v for k,v in original_sequence_shapes.items()},
         "source_bouts_with_extra_internal_nest_marker":extra_zero_pos,
+        "source_boundary_anomalies":source_boundary_anomalies[:30],
+        "anomalies_count_no_silent_imputation":len(source_boundary_anomalies),
         "source_sequence_length_distribution":dict(sorted(length_hist.items(),key=lambda x:int(x[0]))),
         "original_nullable_nonsequence_fields":dict(missing_source_details),
         "source_grain":"one authentic bee per array per foraging bout, full raw nest→flower...→nest sequence",
@@ -159,7 +178,7 @@ def validate_bouts(rows,expected=True):
 def source_run(folder):
     s1,receipt1=pinned_csv(folder/SOURCE_S1,SHA_S1,HEAD_S1)
     s2,receipt2=pinned_csv(folder/SOURCE_S2,SHA_S2,HEAD_S2)
-    parsed,qa=validate_bouts(s1)
+    parsed,qa=validate_bouts(s1,expected=False)
     s2keys=Counter((r["colony"].strip(),r["bee_ID"].strip(),r["array"].strip()) for r in s2)
     s1keys=set((x["colony"],x["bee"],x["array"]) for x in parsed)
     qa["source_S2_rows"]=len(s2)
@@ -168,7 +187,10 @@ def source_run(folder):
     qa["source_S2_original_sha256"]=SHA_S2
     if len(s2)!=87 or not qa["source_S2_aligned_with_S1_bee_array_keys"] or qa["source_S2_duplicate_bee_array_cells"]:
         raise ValueError("NO_GO_SOURCE_S1_S2_BEE_ARRAY_RECONCILIATION")
-    report={"status":"ORIGINAL_2017_BOUTS_AND_S1_S2_MATCHED",
+    status=("ORIGINAL_2017_BOUTS_AND_S1_S2_MATCHED"
+            if qa["original_grain_gate"]=="PASS" else
+            "NO_GO_ORIGINAL_NEST_MARKER_BOUNDARIES")
+    report={"status":status,
             "source_doi":"10.1038/s41598-017-04919-8",
             "publisher_original_S1":receipt1,
             "publisher_original_S2":receipt2,
@@ -178,6 +200,8 @@ def source_run(folder):
         json.dumps(report,indent=2,ensure_ascii=False))
     print("STAGE9_ORIGINAL_BOUT_GRAIN "+json.dumps(report,ensure_ascii=False),flush=True)
     print("STAGE9_ORIGINAL_BOUT_GRAIN_COMPLETE",flush=True)
+    if status!="ORIGINAL_2017_BOUTS_AND_S1_S2_MATCHED":
+        raise ValueError("NO_GO_ORIGINAL_SEQUENCE_BOUNDARY_SEMANTICS_UNRESOLVED")
     return parsed,report
 if __name__=="__main__":
     import argparse
