@@ -14,7 +14,7 @@ from pathlib import Path
 from source_audit import FILENAME,EXPECTED_MD5
 import hashlib
 
-PATTERN=re.compile(r"^B(?P<bee>\\d+)_BC(?P<tag>\\d+)_F(?P<flight>\\d+)_S(?P<s>\\d+)_P(?P<p>\\d+)_T(?P<trial>\\d+)_W(?P<w>\\d+)_C(?P<c>\\d+)H(?P<h>\\d+)S(?P<ss>\\d+)xyzpts\\.csv$")
+PATTERN=re.compile(r"^B(?P<bee>\d+)_BC(?P<tag>\d+)_F(?P<flight>\d+)_S(?P<s>\d+)_P(?P<p>\d+)_T(?P<trial>\d+)_W(?P<w>\d+)_C(?P<c>\d+)H(?P<h>\d+)S(?P<ss>\d+)xyzpts\.csv$")
 
 def schema(root):
     file=root/FILENAME
