@@ -1,0 +1,29 @@
+name: stage11-wind-reward-original
+on:
+  push:
+    branches: [analysis/wind-reward-stage11-20261030]
+    paths: ['research/wind_reward_stage11/**', '.github/workflows/stage11-wind-reward-original.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test original provider integrity and source grain
+        working-directory: research/wind_reward_stage11
+        run: python -m unittest test_source_gate -v
+      - name: Inspect actual original files with provider checksums
+        run: python -u research/wind_reward_stage11/source_gate.py --out stage11_original
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage11-source-receipts
+          path: stage11_original/source_receipt.json
+          if-no-files-found: warn
+          retention-days: 90
