@@ -1,0 +1,25 @@
+# Stage13 frozen historical 2016 social-cue landing order test — SOURCE-CONDITIONAL ONLY
+
+**Frozen 2026-10-30 AFTER source-only original checksum, bee-ID, colony, trial, and visit list checks; BEFORE any Stage13 serial-dependence statistic is calculated on the original test choices.** This is secondary analysis of published Smolla et al. 2016 data, not a preregistered study or a new animal experiment. The original authors already established reward-contingent social cue *first-choice* preferences.
+
+## True source population and biological limits
+Smolla et al. 2016 Dryad DOI 10.5061/dryad.3jb68, original version 19480, source `beeLandings.csv` SHA256 `248b8257ac4a756a16704eaedbabd3909f24be1d8bd6d4a64e6bcbb100ee8e65`, 114 complete native source rows from **57 tagged original bumblebees**. Each animal has exactly one `dummy_last` training and one `test_easy` or `test_diff` trial. Source-independent replicate ceiling is **THREE original colonies** (a=4, b=35, c=18 tagged bees), not 57 independent colonies. Native test sequence lengths range 2–65 visit events, 1,308 source test landings (725 easy, 583 diff); the source also contains 498 training landings. All 114 rows have exactly four cued flower indices of twelve possible. In test phases original `reward` is `na na` for every bee; do NOT invent individual test rewards or handling payoffs. Native `firstLanding`/`lastLanding` time conventions are ambiguous (one `5:47` vs 113 dotted), so no latency endpoint.
+
+The only effect target is the source **TEST** ordered visitation path, not the nonrandom training/test phase difference. Cue `clay` vs `green` and original reward-variation group will be reported descriptively but NEVER used to select positive animals or conduct multiple primary tests. No wind variable is measured.
+
+## One primary temporal-order statistic
+For each original test bee i, let `V_i = [v_1,...,v_n]` be the genuine ordered sequence of original flower IDs 1..12, with four distinct original cued IDs `C_i`. Let `c_i(v) = 1[v in C_i]`.
+
+Calculate `A_i = number of genuinely switched consecutive flower pairs (v_t != v_{t+1}) where c(v_t)=c(v_{t+1}) / number of genuinely switched consecutive flower pairs`. **Identical consecutive flower IDs are excluded from both numerator and denominator** (a repeated landing at the same flower does not establish a flower-to-flower routing decision). Source test animal is eligible if at least 2 distinct original flower IDs occur; otherwise record it as pre-outcome technical exclusion, never create pseudo-transition. This is cue-state *persistence among transitions*, NOT an optimal adaptive information query.
+
+Primary group aggregation is **equal bees within original colony, then equal across the 3 actual colonies**. Every eligible animal gets one statistic regardless of how many visit events it has.
+
+## One source-conditional frozen permutation null (not 999 new biological experiments)
+For each eligible bee, keep the **actual first visited flower fixed** (because original authors analyzed first-choice cue preference) and **permute only the suffix original visit identities** `[v_2,...,v_n]` at each of 999 fixed-seed `20261030` Monte Carlo replicates. This preserves every bee's exact original flower-use frequencies, all source cue placements, cue preference marginals, original experimental group/colony, source sequence length and first-choice flower, while destroying the remaining visit order. Recompute the same switched-only A_i on each permuted order, and equally average bees within colony then colonies.
+
+**Primary:** source-conditional excess cue-state persistence `T_actual − mean(T_null)`. Single fixed one-sided p = `(1 + #null_stat>=T_actual)/(999+1)` for a positive excess. A nonpositive contrast is a failed primary. The Monte Carlo p is **not a population-level colony p**; there are only 3 original colonies, one with 4 individuals. Report all three per-colony actual−null differences and the number of genuine switched source transitions. The positive or null primary is frozen regardless of sign and is NOT a biological learning mechanism without measured spatial geometry, cue visibility or reward.
+
+## Hard claim firewall and no retuning
+No alternative shuffle unit, first-choice removal/reintroduction, dropping colonies, varying minimum animal sequence length, adjusting repeated-flower treatment, selecting only `clay` or `test_diff`, more permutations, or adding predictors after seeing the result. The fixed permutation is a *conditional descriptive source null* on individual visitation frequency, and it cannot isolate bee-shaped cue attention from flower spatial geometry, within-bout memory or movement constraints. It does not establish causal sensory acquisition order, actual field co-occurrence, wind gating, energetic payoff, adaptive advantage or evolutionary selection.
+
+Do not merge this retrospective result into the already-frozen V5/V6 or Stage9b/10/11/12 empirical claims. Full numerical source verification, original checksums and programmatic fixture tests are required before promoting any new outcome.
