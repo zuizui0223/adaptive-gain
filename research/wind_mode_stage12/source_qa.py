@@ -51,7 +51,12 @@ def checked_numeric(source,fields,kind="COUNT"):
         raise ValueError("NO_GO_MISSING_NONFINITE_"+kind)
     if kind=="COUNT":
         if np.any(vals<0) or np.any(vals!=np.floor(vals)):
-            raise ValueError("INVALID_SOURCE_BEHAVIOR_COUNT")
+            bad=np.argwhere((vals<0)|(vals!=np.floor(vals)))
+            examples=[{"survey":str(source.iloc[int(i)]["survey"]),
+                       "field":str(cols.columns[int(j)]),
+                       "native_value":str(source.iloc[int(i)][cols.columns[int(j)]])}
+                      for i,j in bad[:12]]
+            raise ValueError("INVALID_SOURCE_BEHAVIOR_COUNT "+json.dumps(examples))
     return cols
 
 def _one_value(df,column):
