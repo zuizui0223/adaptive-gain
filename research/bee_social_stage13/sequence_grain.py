@@ -67,10 +67,20 @@ def audit_rows(rows,expected_original=True):
         raise ValueError("NO_GO_ORIGINAL_SOURCE_BEE_GRAIN_CHANGED")
     test_bees=sum(any(x["phase"].startswith("test_") for x in items) for items in pair.values())
     train_bees=sum(any(x["phase"]=="dummy_last" for x in items) for items in pair.values())
+    per_colony=Counter(key[0] for key in pair)
+    test_by_colony=defaultdict(Counter)
+    for (colony,bee),entries in pair.items():
+        for entry in entries:
+            if entry["phase"].startswith("test_"):
+                test_by_colony[colony][entry["phase"]]+=1
     return {
        "status":"SOURCE_ONLY_ORIGINAL_BEE_AND_EVENT_GRAIN_VERIFIED",
        "original_rows":len(rows),"original_bees":len(pair),
        "source_train_bees":train_bees,"source_test_bees":test_bees,
+       "original_independent_source_colonies":len(per_colony),
+       "source_bees_per_colony":dict(sorted(per_colony.items())),
+       "test_reward_group_bees_per_colony":{col:dict(sorted(v.items()))
+              for col,v in sorted(test_by_colony.items())},
        "unique_one_train_one_test_per_bee":True,
        "original_group_rows":dict(sorted(groups.items())),
        "original_cue_types_by_phase":{
