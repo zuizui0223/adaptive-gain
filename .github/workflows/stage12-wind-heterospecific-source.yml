@@ -26,6 +26,8 @@ jobs:
         run: python -u research/wind_reward_stage11/source_gate.py --out stage12_original
       - name: Audit source survey movement categories and insect community records without effect estimation
         run: python -u research/wind_mode_stage12/source_qa.py --out stage12_original
+      - name: Fit one frozen wind-by-nonhoneybee-share movement-mode association on original surveys
+        run: python -u research/wind_mode_stage12/model.py --out stage12_original
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -33,5 +35,8 @@ jobs:
           path: |
             stage12_original/source_receipt.json
             stage12_original/source_grain_qa.json
+            stage12_original/original_count_diagnostics.json
+            stage12_original/stage12_mode_cohort.csv
+            stage12_original/stage12_mode_interaction_result.json
           if-no-files-found: warn
           retention-days: 90
