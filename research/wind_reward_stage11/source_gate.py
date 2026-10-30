@@ -54,12 +54,15 @@ def link(obj,key):
     if not isinstance(item,dict) or not item.get('href'): raise ValueError('MISSING_PROVIDER_LINK:'+key)
     return urllib.parse.urljoin(ORIGIN,item['href'])
 
+def dataset_url(doi):
+    return ORIGIN+'/api/v2/datasets/'+urllib.parse.quote('doi:'+doi,safe='')
+
 def main(root:Path):
     root.mkdir(parents=True,exist_ok=True)
     report={'dataset_doi':DOI,'status':'SOURCE_PENDING','biological_outcome_fitted':False}
     out=root/'source_receipt.json'
     try:
-        dataset=json.loads(get(ORIGIN+'/api/v2/datasets/doi:'+DOI))
+        dataset=json.loads(get(dataset_url(DOI)))
         version_url=link(dataset,'stash:version')
         version=json.loads(get(version_url))
         files_url=link(version,'stash:files')
