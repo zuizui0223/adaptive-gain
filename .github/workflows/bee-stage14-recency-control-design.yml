@@ -1,0 +1,49 @@
+name: bee-stage14-recency-balanced-cue-order-synthetic-design
+on:
+  push:
+    branches:
+      - design/bee-cue-order-recency-control-20261030
+    paths:
+      - 'research/bee_recency_stage14/**'
+      - '.github/workflows/bee-stage14-recency-control-design.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recency-balanced-synthetic-design-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install analytic Student t only - no animal data
+        run: python -m pip install 'scipy==1.15.3'
+      - name: Test sham-refresh, cue visibility, factor balance, colony estimator, and future instrument gate
+        working-directory: research/bee_recency_stage14
+        run: python -m unittest discover -p 'test_*.py' -v
+      - name: Audit 24-colony synthetic 2x2x2 allocation, without publishing individual schedules
+        working-directory: research/bee_recency_stage14
+        run: python -u allocation.py --out design_outputs
+      - name: Estimate injected synthetic-only effect for balanced final cue recency
+        working-directory: research/bee_recency_stage14
+        run: python -u estimator.py --out design_outputs
+      - name: Compare illustrative 8-per-cell versus old 16-per-cell power
+        working-directory: research/bee_recency_stage14
+        run: python -u power.py --out design_outputs
+      - name: Validate full mock telemetry contract with fake source wind and luminance
+        working-directory: research/bee_recency_stage14
+        run: python -u telemetry_qa.py --out design_outputs
+      - name: Upload only synthetic summary receipts, never individual assignments or raw animals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bee-stage14-synthetic-only-recency-control-QA
+          path: |
+            research/bee_recency_stage14/design_outputs/stage14_synthetic_allocation_receipt.json
+            research/bee_recency_stage14/design_outputs/stage14_synthetic_colony_estimator_receipt.json
+            research/bee_recency_stage14/design_outputs/stage14_assumed_power_receipt.json
+            research/bee_recency_stage14/design_outputs/stage14_synthetic_hardware_contract.json
+          if-no-files-found: warn
+          retention-days: 90
