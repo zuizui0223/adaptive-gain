@@ -1,6 +1,6 @@
 """Test provider integrity and native sequence representation, synthetic only."""
-import unittest,hashlib
-from source_qa import verify,original_table_schema
+import unittest,hashlib,io,zipfile
+from source_qa import verify,original_table_schema,select_member
 
 class Stage13SourceTests(unittest.TestCase):
     def test_sha256_only_exact_provider_bytes_pass(self):
@@ -20,6 +20,20 @@ class Stage13SourceTests(unittest.TestCase):
     def test_duplicate_header_fails_closed(self):
         with self.assertRaisesRegex(ValueError,"REPEATED_CSV_COLUMN_NAMES"):
             original_table_schema(b"group,group\na,b\n")
+    def test_legacy_dryad_version_zip_path_selected_uniquely(self):
+        buf=io.BytesIO()
+        with zipfile.ZipFile(buf,"w") as z:
+            z.writestr("doi/beeLandings.csv","group,bee\\na,1\\n")
+        with zipfile.ZipFile(io.BytesIO(buf.getvalue())) as z:
+            self.assertEqual(select_member(z,"beeLandings.csv"),"doi/beeLandings.csv")
+    def test_legacy_version_zip_duplicate_source_rejected(self):
+        buf=io.BytesIO()
+        with zipfile.ZipFile(buf,"w") as z:
+            z.writestr("a/beeLandings.csv","a")
+            z.writestr("b/beeLandings.csv","b")
+        with zipfile.ZipFile(io.BytesIO(buf.getvalue())) as z:
+            with self.assertRaisesRegex(ValueError,"AMBIGUOUS_ORIGINAL_FILE"):
+                select_member(z,"beeLandings.csv")
     def test_blank_file_fails_closed(self):
         with self.assertRaisesRegex(ValueError,"EMPTY_ORIGINAL"):
             original_table_schema(b"")
