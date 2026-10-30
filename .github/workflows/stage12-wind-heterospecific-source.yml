@@ -18,10 +18,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install fixed source-audit dependencies
-        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'scipy==1.15.3' 'statsmodels==0.14.6'
       - name: Test survey-grain and insect source join with synthetic cases
         working-directory: research/wind_mode_stage12
-        run: python -m unittest test_source_qa -v
+        run: python -m unittest test_source_qa test_model -v
       - name: Fetch actual source and match provider SHA256 before parsing
         run: python -u research/wind_reward_stage11/source_gate.py --out stage12_original
       - name: Audit source survey movement categories and insect community records without effect estimation
