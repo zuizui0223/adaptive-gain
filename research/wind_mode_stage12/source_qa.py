@@ -73,7 +73,7 @@ def assemble(forage,weather,insects):
        "original_insect_surveys":int(i.survey.nunique()),
        "original_nonhoneybee_taxon_categories":cats,
        "no_biological_effect_fitted":True,
-       "exclusions":excluded,
+       "excluded":excluded,
        "metadata_alerts":raw_issues,
        "nesting":"original behavior observations within survey, weather and insect counts joined only at survey-level",
     }
