@@ -41,9 +41,12 @@ def audit_rows(rows,expected_original=True):
         attached=parse_positions(row["cue"])
         if len(set(attached))!=len(attached):
             raise ValueError("NO_GO_REPEATED_CUE_FLOWER_WITHIN_BOUT")
-        try:early=float(row["firstLanding"]);last=float(row["lastLanding"])
-        except Exception as e:raise ValueError("NO_GO_ORIGINAL_LATENCY_UNPARSEABLE") from e
-        if not (0<=early<=last):raise ValueError("NO_GO_ORIGINAL_LATENCY_OUT_OF_ORDER")
+        # Native author time semantics are unresolved (one 5:47, many 1.07).
+        # We only require presence and NEVER convert or use the values.
+        native_first=str(row["firstLanding"]).strip()
+        native_last=str(row["lastLanding"]).strip()
+        if native_first.lower() in ("","na","nan") or native_last.lower() in ("","na","nan"):
+            raise ValueError("NO_GO_MISSING_ORIGINAL_LATENCY_FIELD")
         pair[key].append({"phase":gid,"cue_type":row["cueType"].strip()})
         groups[gid]+=1
         cues[(gid,row["cueType"].strip())]+=1
