@@ -19,11 +19,13 @@ jobs:
           python-version: '3.11'
       - name: Validate source integrity and sequence schema on synthetic data
         working-directory: research/bee_social_stage13
-        run: python -m unittest test_source_qa test_sequence_grain -v
+        run: python -m unittest test_source_qa test_sequence_grain test_cue_sequence_null -v
       - name: Verify author-original 2016 bee landing sequences and source analysis code
         run: python -u research/bee_social_stage13/source_qa.py --out stage13_original
       - name: Validate 57 original bees paired training/test and original visit sequence integers
         run: python -u research/bee_social_stage13/sequence_grain.py --out stage13_original
+      - name: Evaluate frozen 999 first-choice-fixed cue-state sequence permutations on original test records
+        run: python -u research/bee_social_stage13/cue_sequence_null.py --out stage13_original
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -31,5 +33,6 @@ jobs:
           path: |
             stage13_original/smolla2016_original_source_receipt.json
             stage13_original/smolla2016_original_sequence_grain.json
+            stage13_original/smolla2016_cue_sequence_test.json
           if-no-files-found: warn
           retention-days: 90
