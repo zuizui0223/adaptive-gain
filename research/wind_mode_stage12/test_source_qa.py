@@ -48,11 +48,15 @@ class Stage12SourceTests(unittest.TestCase):
         d,q=assemble(f,w,i)
         self.assertEqual(list(d.survey),["C1"])
         self.assertEqual(q["excluded"][0]["reason"],"no_recorded_flight_or_walk")
-    def test_negative_original_count_fails_closed(self):
+    def test_invalid_original_count_quarantines_entire_survey(self):
         f,w,i=fixture()
         f.loc[0,"number of walks"]=-1
-        with self.assertRaisesRegex(ValueError,"INVALID_SOURCE_BEHAVIOR_COUNT"):
-            assemble(f,w,i)
+        d,q=assemble(f,w,i)
+        self.assertEqual(list(d.survey),["C2"])
+        self.assertEqual(q["excluded"][0]["survey"],"C1")
+        self.assertEqual(q["excluded"][0]["reason"],"original_count_semantic_invalid")
+        self.assertEqual(q["excluded"][0]["foraging_rows"],2)
+        self.assertEqual(q["excluded"][0]["invalid_native_records"][0]["field"],"number of walks")
     def test_metadata_change_not_silently_harmonized(self):
         f,w,i=fixture()
         i.loc[0,"plant"]="Brassica species"
