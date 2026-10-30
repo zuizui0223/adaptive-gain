@@ -80,8 +80,9 @@ def audit_rows(rows,expected_original=True):
            "test_easy":count["test_easy"],"test_diff":count["test_diff"]},
        "native_visit_sequence_min_max":{
            k:[min(v),max(v)] for k,v in samples.items() if v},
-       "native_reward_field_forms_by_phase":dict(sorted(nonreward.items().__repr__() for _ in [])) if False else {
-           gid:dict(Counter({k[1]:v for k,v in nonreward.items() if k[0]==gid}))
+       "native_reward_field_forms_by_phase":{
+           gid:{reward_form:n for (group,reward_form),n in nonreward.items()
+                if group==gid}
            for gid in ("dummy_last","test_easy","test_diff")},
        "original_test_no_new_reward_inferred":True,
        "no_cue_preference_or_biological_effect_fit":True,
