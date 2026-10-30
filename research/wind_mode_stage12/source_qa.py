@@ -91,6 +91,21 @@ def assemble(forage,weather,insects):
         if any(not _one_value(g,c) for c in ("date","site","location","plant")):
             drop("source_foraging_metadata_conflict")
             continue
+        # Only *whole-survey* quarantine is allowed for source-invalid
+        # movement counts; the first fully original-source QA had exactly
+        # one impossible -6 in native N51. No imputation or sign-flipping.
+        v=g[list(MOVEMENT)].apply(pd.to_numeric,errors="coerce")
+        numeric=v.to_numpy(dtype=float)
+        invalid=(~np.isfinite(numeric))|(numeric<0)|(numeric!=np.floor(numeric))
+        if np.any(invalid):
+            flagged=[{"field":str(v.columns[j]),
+                      "original":str(g.iloc[int(i)][v.columns[j]]),
+                      "native_row_index":int(g.index[int(i)])}
+                     for i,j in np.argwhere(invalid)]
+            excluded.append({"survey":survey,"foraging_rows":len(g),
+                             "reason":"original_count_semantic_invalid",
+                             "invalid_native_records":flagged})
+            continue
         wg=w[w.survey==survey]
         ig=i[i.survey==survey]
         if wg.empty:
