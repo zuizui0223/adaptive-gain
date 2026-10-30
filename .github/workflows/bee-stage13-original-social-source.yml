@@ -19,13 +19,17 @@ jobs:
           python-version: '3.11'
       - name: Validate source integrity and sequence schema on synthetic data
         working-directory: research/bee_social_stage13
-        run: python -m unittest test_source_qa -v
+        run: python -m unittest test_source_qa test_sequence_grain -v
       - name: Verify author-original 2016 bee landing sequences and source analysis code
         run: python -u research/bee_social_stage13/source_qa.py --out stage13_original
+      - name: Validate 57 original bees paired training/test and original visit sequence integers
+        run: python -u research/bee_social_stage13/sequence_grain.py --out stage13_original
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: bee-stage13-original-social-cue-source-metadata
-          path: stage13_original/smolla2016_original_source_receipt.json
+          path: |
+            stage13_original/smolla2016_original_source_receipt.json
+            stage13_original/smolla2016_original_sequence_grain.json
           if-no-files-found: warn
           retention-days: 90
