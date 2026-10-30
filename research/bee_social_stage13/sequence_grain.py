@@ -96,6 +96,19 @@ def run(root):
     try:txt=raw.decode("utf-8-sig")
     except UnicodeDecodeError:txt=raw.decode("latin-1")
     rows=list(csv.DictReader(txt.splitlines()))
+    # First inspect native latency strings before imposing minute/second semantics.
+    time_audit={}
+    for key in ("firstLanding","lastLanding"):
+        examples={}
+        for row in rows:
+            v=str(row.get(key,"")).strip()
+            group=("colon" if ":" in v else "decimal_point" if "." in v
+                   else "integer" if v.isdigit() else "unrecognized")
+            examples.setdefault(group,[]).append(v)
+        time_audit[key]={"count_by_native_notation":{k:len(v) for k,v in examples.items()},
+                         "representative_values":{k:sorted(set(v))[:7] for k,v in examples.items()}}
+    print("STAGE13_ORIGINAL_LATENCY_NOTATION_DIAGNOSTICS "+
+          json.dumps(time_audit,ensure_ascii=False),flush=True)
     report=audit_rows(rows)
     report["original_file_sha256"]=ORIGINAL_SHA256
     report["source_doi"]="10.5061/dryad.3jb68"
