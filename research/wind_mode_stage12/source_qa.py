@@ -237,6 +237,9 @@ def run(root):
     print("STAGE12_RAW_COUNT_DIAGNOSTICS "+json.dumps(diag),flush=True)
     d,q=assemble(raw["forage.csv"],raw["weather.csv"],raw["insect_surveys.csv"])
     # Derived selected survey counts only: raw original insect rows not committed.
+    # One row per original survey; no raw original insect or bee events
+    # are written to Git. This is the inspectable derived analysis cohort.
+    d.to_csv(root/"stage12_mode_cohort.csv",index=False)
     (root/"source_grain_qa.json").write_text(json.dumps(q,indent=2,ensure_ascii=False))
     print("STAGE12_SOURCE_GRAIN_AUDIT "+json.dumps(q,ensure_ascii=False),flush=True)
     print("STAGE12_SOURCE_GRAIN_AUDIT_COMPLETE",flush=True)
