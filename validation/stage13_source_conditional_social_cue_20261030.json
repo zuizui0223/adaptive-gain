@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-30",
+  "original_source_run_id": 41037702916,
+  "original_executed_commit_sha": "84aa8c8bf8dbc3badbd5c091f602b821986ba2bf",
+  "source_original_provider_version": "19480",
+  "original_source_MD5": "35a9d6c258e001f7c8222d90c84dfee6",
+  "study_original_doi": "10.1098/rsbl.2016.0188",
+  "protocol": "research/bee_social_stage13/PROTOCOL_FROZEN_SEQUENCE_TEST_20261030.md",
+  "empirical_source_test_result": {
+    "status": "ORIGINAL_SOURCE_CONDITIONAL_CUE_SEQUENCE_ORDER_EVALUATED",
+    "original_source": "Smolla et al 2016 Dryad 10.5061/dryad.3jb68 version 19480",
+    "source_test_bee_rows": 57,
+    "source_test_landing_events": 1308,
+    "source_eligible_bees": 57,
+    "source_eligible_genuine_switched_transitions": 1233,
+    "source_colonies": 3,
+    "source_bees_by_colony": {
+      "a": 4,
+      "b": 35,
+      "c": 18
+    },
+    "source_eligible_bees_by_colony": {
+      "a": 4,
+      "b": 35,
+      "c": 18
+    },
+    "source_source_technical_exclusions": [],
+    "original_test_groups": {
+      "test_diff": 28,
+      "test_easy": 29
+    },
+    "permutations": 999,
+    "source_conditional_random_seed": 20261030,
+    "first_original_visit_held_fixed_per_bee": true,
+    "all_original_flower_use_frequencies_held_fixed_per_bee": true,
+    "source_real_flower_switch_only": true,
+    "actual_colony_equal_cue_state_persistence": 0.4838662979909009,
+    "null_mean_colony_equal_cue_state_persistence": 0.5096104660789736,
+    "actual_minus_null_mean": -0.025744168088072727,
+    "null_q05": 0.47912337073786393,
+    "null_q95": 0.5403116215195489,
+    "one_sided_source_conditional_p": 0.918,
+    "actual_by_colony": {
+      "a": 0.4494728190011904,
+      "b": 0.5084866418005717,
+      "c": 0.4936394331709407
+    },
+    "null_mean_by_colony": {
+      "a": 0.5049980824310937,
+      "b": 0.5218872134739095,
+      "c": 0.5019461023319148
+    },
+    "colony_actual_minus_null": {
+      "a": -0.05552526342990327,
+      "b": -0.013400571673337858,
+      "c": -0.008306669160974112
+    },
+    "no_source_cue_attention_or_adaptive_query_order_identified": true,
+    "no_wind_or_fitness_endpoint_measured": true,
+    "only_three_original_colonies_not_population_inference": true,
+    "source_conditional_statistical_null_not_physical_intervention": true,
+    "original_source_file_sha256": "248b8257ac4a756a16704eaedbabd3909f24be1d8bd6d4a64e6bcbb100ee8e65",
+    "pre_outcome_frozen_protocol": "PROTOCOL_FROZEN_SEQUENCE_TEST_20261030.md"
+  },
+  "review_status": "original_source_validated; one-sided source-null conditional only",
+  "interpretation": "No positive cue-state serial persistence beyond within-bee original flower visit frequency and first flower. Does not refute published first-choice copying; does not identify sensory query chronology, wind, fitness or interspecific causal mechanism.",
+  "not_population_level_p_due_to_only_3_colonies": true
+}
