@@ -1,0 +1,121 @@
+{
+  "stage": 12,
+  "date": "2026-10-30",
+  "source_doi": "10.5061/dryad.9kd51c608",
+  "source_version": 456836,
+  "source_grain_run_id": 41034949444,
+  "model_run_id": 41035508706,
+  "source": "Harris et al. 2026 original weather, honeybee behavior and insect community field samples",
+  "prior_scope": "Stage9b/Stage10/Stage11 frozen outcomes unaffected",
+  "original_sha256": {
+    "forage.csv": "c5bb7b67780b8749014cb645fa43fc35bc1ffe8a4b1c8edcb5637d07a5146f61",
+    "weather.csv": "c7b09eaef978b4bc8bbd6bf093c2872130c8a6038ec206a4f36fa365896a9641",
+    "insect_surveys.csv": "f0f899655d671f311f47100745790ae8618b57777a9cd8e5a35f0d0854619ee3"
+  },
+  "source_population": {
+    "raw_surveys": 123,
+    "raw_60second_observations": 1227,
+    "retained_surveys": 113,
+    "retained_60second_observations": 1130,
+    "flights": 10026,
+    "walks": 6652,
+    "all_between_flower_moves": 16678,
+    "distinct_cities": 2,
+    "plant_labels": 18,
+    "other_insect_taxon_categories": 34,
+    "city_date_clusters": 73,
+    "zero_walk_surveys": 11
+  },
+  "source_only_exclusions": {
+    "insect_metadata_mismatch": [
+      "C2",
+      "C3",
+      "C5",
+      "C9",
+      "N1",
+      "N4",
+      "N6",
+      "N8"
+    ],
+    "no_original_weather": [
+      "N24"
+    ],
+    "invalid_original_flight_count": [
+      "N51"
+    ]
+  },
+  "source_invalid_count_details": {
+    "survey": "N51",
+    "original_row_index": 902,
+    "field": "number of flights",
+    "native_value": "-6",
+    "policy": "exclude whole original survey; no imputation"
+  },
+  "protocol": "research/wind_mode_stage12/PROTOCOL_FIRST_OUTCOME_20261030.md",
+  "primary_outcome": "log((survey_total_flights +0.5)/(survey_total_walks +0.5))",
+  "predictor": "plant-centered Beaufort × plant-centered other share/within-plant pooled SD",
+  "other_share_sd": 0.1664644083375667,
+  "inference": {
+    "unit": "one original survey equal weight",
+    "clusters": "city × original date",
+    "G": 73,
+    "design_columns": 27,
+    "design_rank": 27,
+    "residual_df": 86,
+    "t_df": 72,
+    "CR1": true
+  },
+  "primary_interaction": {
+    "beta": 0.053496430059871175,
+    "cluster_se": 0.09452658996887735,
+    "ci95": [
+      -0.13493888312387137,
+      0.24193174324361372
+    ],
+    "p": 0.5731938721982699,
+    "source_status": "NOT_SUPPORTED_NOT_EQUIVALENCE"
+  },
+  "secondary_conditionals": {
+    "h_minus_one": {
+      "beta": 0.077559090193241,
+      "ci95": [
+        -0.10876200420258461,
+        0.2638801845890666
+      ],
+      "p": 0.40938877162859466
+    },
+    "h_mean": {
+      "beta": 0.13105552025311218,
+      "ci95": [
+        -0.009200100538041545,
+        0.2713111410442659
+      ],
+      "p": 0.06658378337048197
+    },
+    "h_plus_one": {
+      "beta": 0.18455195031298335,
+      "ci95": [
+        -0.0904816160375185,
+        0.45958551666348524
+      ],
+      "p": 0.18522187133852094
+    }
+  },
+  "independent_statsmodels": {
+    "max_beta_absolute_diff": 2.0060342276195797e-14,
+    "max_covariance_absolute_diff": 4.3298697960381105e-13,
+    "primary_p_absolute_diff": 6.217248937900877e-15
+  },
+  "focused_tests_passed": 10,
+  "execution": "https://github.com/zuizui0223/adaptive-gain/actions/runs/41035508706",
+  "scientific_limitations": [
+    "observational simultaneous wind and other-insect composition",
+    "not cues directly observed by individual honeybees",
+    "no unique longitudinal bee IDs",
+    "not randomized wind or interspecific interactions",
+    "limited wind range in original source",
+    "conditional on movements actually recorded",
+    "not individual fitness or optimal adaptive information query cost"
+  ],
+  "unretuned_result": true
+}
