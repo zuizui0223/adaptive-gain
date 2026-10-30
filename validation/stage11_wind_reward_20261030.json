@@ -1,0 +1,36 @@
+{
+  "stage": 11,
+  "date": "2026-10-30",
+  "source_doi": "10.5061/dryad.9kd51c608",
+  "source_version": 456836,
+  "first_source_model_run": 41009518135,
+  "first_source_model_sha": "fbd2dff2379820b14e35825b62abbef5db06110e",
+  "independent_verification_run": 41009707657,
+  "independent_verification_sha": "b6300e9d5b09bb9f68afe1ebeee6fcabb845a090",
+  "independent_verification_artifact": 12957241239,
+  "provenance": "Selected numerical values from successful original-source Actions stdout; complete numerical results and original aggregate cohort are retained in the cited run artifacts. Re-execution is reproducibility, not a biological replicate.",
+  "sample": {"raw_observation_rows":1227,"raw_surveys":123,"eligible_observation_rows":1140,"eligible_surveys":114,"plant_labels":18,"city_date_clusters":74,"cities":2,"design_rank":27,"design_columns":27,"residual_df":87},
+  "exclusions": {"nectar_metadata_mismatch":["C2","C3","C5","N1","N4","N6","N8"],"nectar_not_directly_sampled":["C52"],"no_weather_source":["N24"]},
+  "metadata_resolution_note": "Seven excluded surveys have forage plant Prunus spp. versus nectar Prunus avium. Dates and locations agree. This is a taxonomic-resolution mismatch, not evidence of incompatible plant samples. The frozen exact-label primary analysis does not silently upgrade a genus-level behavior record to species identity.",
+  "published_count_reconciliation": {"raw_weather_matched_surveys":122,"raw_weather_matched_behavior_rows":1217,"unmatched_survey":"N24","authors_actual_exclusion_reason_not_independently_confirmed":true},
+  "within_plant_log_reward_sd":0.26673830490828626,
+  "interaction": {
+    "pooled":{"beta":0.014231941123352968,"se":0.01845485564633156,"ci95":[-0.02254853313849799,0.05101241538520393],"p":0.4430916616042524,"surveys":114,"clusters":74,"role":"single prespecified primary in an exploratory secondary analysis"},
+    "Brighton":{"beta":0.03133275131795904,"se":0.02007863595683458,"ci95":[-0.009566091753714229,0.07223159438963231],"p":0.1284778199808417,"surveys":52,"clusters":33,"role":"prespecified descriptive city fit"},
+    "Edinburgh":{"beta":-0.012001585165084257,"se":0.03246541628905384,"ci95":[-0.07761663906293939,0.05361346873277087],"p":0.7135762248720532,"surveys":62,"clusters":41,"role":"prespecified descriptive city fit"}
+  },
+  "secondary_wind_slopes_at_within_plant_mean_reward": {
+    "pooled":{"beta":-0.029548666135705948,"ci95":[-0.052295160126570914,-0.006802172144840978],"p_nominal":0.011611071238364547},
+    "Brighton":{"beta":-0.06827614981325476,"ci95":[-0.09713430435763684,-0.03941799526887269],"p_nominal":3.358342972454074e-05},
+    "Edinburgh":{"beta":-0.004063116637495999,"ci95":[-0.041994638036485434,0.033868404761493436],"p_nominal":0.8297047273951159}
+  },
+  "independent_max_absolute_covariance_difference":4.9460435747050724e-14,
+  "independent_max_primary_p_difference":2.1316282072803006e-14,
+  "interpretation":"Primary wind-by-reward interaction not supported, not an equivalence finding. Secondary adjusted wind association is negative in pooled and Brighton estimates but not clearly reproduced in Edinburgh; not a causal effect or statistical test of city differences.",
+  "response":"log1p(survey mean observed probes per 60 seconds)",
+  "wind":"ordinal Beaufort, within-plant centered, not m/s",
+  "reward":"sampled potential nectar J per flower, log1p and within-plant centered/SD-scaled, not observed intake",
+  "focused_tests_passed":14,
+  "no_model_or_sample_retuned_after_outcome":true,
+  "frozen_prior_stage9b_stage10_manuscripts_unchanged":true
+}

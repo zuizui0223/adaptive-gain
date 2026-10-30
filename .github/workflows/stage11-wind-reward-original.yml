@@ -1,0 +1,42 @@
+name: stage11-wind-reward-original
+on:
+  push:
+    branches: [analysis/wind-reward-stage11-20261030]
+    paths: ['research/wind_reward_stage11/**', '.github/workflows/stage11-wind-reward-original.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned numerical libraries
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'scipy==1.15.3' 'statsmodels==0.14.6'
+      - name: Test source integrity, joins, and independent clustered numerical oracle
+        working-directory: research/wind_reward_stage11
+        run: python -m unittest test_source_gate test_dataset_url test_cohort test_association -v
+      - name: Inspect actual original files with provider checksums
+        run: python -u research/wind_reward_stage11/source_gate.py --out stage11_original
+      - name: Derive source-verified survey cohort with explicit exclusion ledger
+        run: python -u research/wind_reward_stage11/cohort.py --out stage11_original
+      - name: Evaluate the frozen single wind by reward interaction
+        run: python -u research/wind_reward_stage11/association.py --out stage11_original
+      - name: Independently verify fixed real-data covariance and original excluded metadata
+        run: python -u research/wind_reward_stage11/verify_frozen_result.py --out stage11_original
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage11-source-and-model-receipts
+          path: |
+            stage11_original/source_receipt.json
+            stage11_original/cohort_receipt.json
+            stage11_original/survey_cohort.csv
+            stage11_original/association_results.json
+            stage11_original/independent_verification.json
+          if-no-files-found: warn
+          retention-days: 90
