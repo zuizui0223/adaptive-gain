@@ -202,6 +202,24 @@ def run(root):
         if hashlib.sha256(data).hexdigest()!=sha:
             raise ValueError("NO_GO_ORIGINAL_SOURCE_SHA256_CHANGED "+fname)
         raw[fname]=pd.read_csv(root/fname)
+    source=raw["forage.csv"].copy();source.columns=[c.strip() for c in source.columns]
+    issue_rows=[]
+    for fld in MOVEMENT:
+        v=pd.to_numeric(source[fld],errors="coerce")
+        invalid=v.isna() | ~np.isfinite(v.to_numpy(dtype=float)) | (v<0) | (v!=np.floor(v))
+        for idx in np.flatnonzero(invalid.to_numpy()):
+            issue_rows.append({"survey":str(source.iloc[idx]["survey"]),
+                               "column":fld,"original":str(source.iloc[idx][fld]),
+                               "source_row_index":int(idx)})
+    m=(pd.to_numeric(source["number of flights"],errors="coerce")+
+       pd.to_numeric(source["number of walks"],errors="coerce"))
+    p=pd.to_numeric(source["flowers probed"],errors="coerce")
+    diag={"noninteger_negative_missing_original_counts":issue_rows,
+          "native_episodes_more_transfers_than_probes":int((m>p).sum()),
+          "original_total_behavior_rows":len(source),
+          "only_source_contract_QA_no_biological_effect":True}
+    (root/"original_count_diagnostics.json").write_text(json.dumps(diag,indent=2))
+    print("STAGE12_RAW_COUNT_DIAGNOSTICS "+json.dumps(diag),flush=True)
     d,q=assemble(raw["forage.csv"],raw["weather.csv"],raw["insect_surveys.csv"])
     # Derived selected survey counts only: raw original insect rows not committed.
     (root/"source_grain_qa.json").write_text(json.dumps(q,indent=2,ensure_ascii=False))
