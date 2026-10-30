@@ -116,6 +116,9 @@ def run(root):
                 expected=f.get("digest");kind=f.get("digestType")
                 if not expected or not kind:raise ValueError("NO_GO_PROVIDER_CHECKSUM_MISSING")
                 verify(raw,expected,kind)
+                # Ephemeral original data are available to the source QA job;
+                # Git/CI artifacts retain ONLY metadata and derived checks.
+                (root/name).write_bytes(raw)
                 if f.get("size") is not None and len(raw)!=int(f["size"]):
                     raise ValueError("NO_GO_ORIGINAL_FILE_BYTES_CHANGED")
                 receipt={"name":name,"bytes":len(raw),
