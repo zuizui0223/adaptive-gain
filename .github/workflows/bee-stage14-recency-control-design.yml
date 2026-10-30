@@ -35,6 +35,9 @@ jobs:
       - name: Validate full mock telemetry contract with fake source wind and luminance
         working-directory: research/bee_recency_stage14
         run: python -u telemetry_qa.py --out design_outputs
+      - name: Prove external-order experiment does not identify self-directed information querying
+        working-directory: research/bee_recency_stage14
+        run: python -u identifiability_witness.py --out design_outputs
       - name: Upload only synthetic summary receipts, never individual assignments or raw animals
         if: always()
         uses: actions/upload-artifact@v4
@@ -45,5 +48,6 @@ jobs:
             research/bee_recency_stage14/design_outputs/stage14_synthetic_colony_estimator_receipt.json
             research/bee_recency_stage14/design_outputs/stage14_assumed_power_receipt.json
             research/bee_recency_stage14/design_outputs/stage14_synthetic_hardware_contract.json
+            research/bee_recency_stage14/design_outputs/stage14_passive_primacy_counterexample.json
           if-no-files-found: warn
           retention-days: 90
