@@ -1,0 +1,31 @@
+name: bee-stage13-original-social-information-source
+on:
+  push:
+    branches: [analysis/bee-social-cue-sequences-20261030]
+    paths:
+      - 'research/bee_social_stage13/**'
+      - '.github/workflows/bee-stage13-original-social-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate source integrity and sequence schema on synthetic data
+        working-directory: research/bee_social_stage13
+        run: python -m unittest test_source_qa -v
+      - name: Verify author-original 2016 bee landing sequences and source analysis code
+        run: python -u research/bee_social_stage13/source_qa.py --out stage13_original
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bee-stage13-original-social-cue-source-metadata
+          path: stage13_original/smolla2016_original_source_receipt.json
+          if-no-files-found: warn
+          retention-days: 90
