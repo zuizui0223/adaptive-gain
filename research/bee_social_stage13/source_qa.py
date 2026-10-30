@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import io
+import zipfile
 import json
 import urllib.parse
 import urllib.request
@@ -41,6 +42,12 @@ def api_link(data,key):
     if not isinstance(v,dict) or not v.get("href"):
         raise ValueError("NO_GO_MISSING_PROVIDER_LINK_"+key)
     return urllib.parse.urljoin(ORIGIN,v["href"])
+
+def select_member(z,name):
+    found=[n for n in z.namelist() if n.split("/")[-1]==name
+           and "__MACOSX" not in n and "/._" not in n and not n.endswith("/")]
+    if len(found)!=1:raise ValueError("NO_GO_AMBIGUOUS_ORIGINAL_FILE "+name)
+    return found[0]
 
 def original_table_schema(raw):
     try:text=raw.decode("utf-8-sig")
@@ -91,29 +98,38 @@ def run(root):
             raise ValueError("NO_GO_MISSING_AUTHOR_ORIGINAL_BEE_LANDINGS")
         report.update({"provider_version":version_url.rsplit("/",1)[-1],
                        "provider_files_available":names})
+        # Old Dryad versions may reject public individual-file API links
+        # with 401 although the complete original published version ZIP
+        # remains publicly downloadable. Use only the provider's version
+        # download, then hash every selected member against file metadata.
+        full_zip=fetch(version_url+"/download",limit=20_000_000)
+        if not zipfile.is_zipfile(io.BytesIO(full_zip)):
+            raise ValueError("NO_GO_ORIGINAL_PROVIDER_VERSION_NOT_ZIP")
         source_rows={}
-        for f in files:
-            name=f.get("path","").split("/")[-1]
-            if name not in EXPECTED:continue
-            dest=api_link(f,"stash:download")
-            raw=fetch(dest)
-            expected=f.get("digest");kind=f.get("digestType")
-            if not expected or not kind:raise ValueError("NO_GO_PROVIDER_CHECKSUM_MISSING")
-            verify(raw,expected,kind)
-            if f.get("size") is not None and len(raw)!=int(f["size"]):
-                raise ValueError("NO_GO_ORIGINAL_FILE_BYTES_CHANGED")
-            receipt={"name":name,"bytes":len(raw),
-                     "provider_digest":expected,"digest_type":kind,
-                     "actual_sha256":hashlib.sha256(raw).hexdigest()}
-            if name=="beeLandings.csv":
-                receipt["source_schema"]=original_table_schema(raw)
-            else:
-                try:code=raw.decode("utf-8-sig")
-                except UnicodeDecodeError:code=raw.decode("latin-1")
-                receipt["original_R_script_headings"]=[s.strip()[:160] for s in code.splitlines()
-                    if ("read.csv" in s or "subset(" in s or "firstLanding" in s or
-                        "Landed" in s or "dummy_last" in s)][:35]
-            source_rows[name]=receipt
+        with zipfile.ZipFile(io.BytesIO(full_zip)) as z:
+            if z.testzip() is not None:
+                raise ValueError("NO_GO_ORIGINAL_VERSION_ZIP_CRC")
+            for f in files:
+                name=f.get("path","").split("/")[-1]
+                if name not in EXPECTED:continue
+                raw=z.read(select_member(z,name))
+                expected=f.get("digest");kind=f.get("digestType")
+                if not expected or not kind:raise ValueError("NO_GO_PROVIDER_CHECKSUM_MISSING")
+                verify(raw,expected,kind)
+                if f.get("size") is not None and len(raw)!=int(f["size"]):
+                    raise ValueError("NO_GO_ORIGINAL_FILE_BYTES_CHANGED")
+                receipt={"name":name,"bytes":len(raw),
+                         "provider_digest":expected,"digest_type":kind,
+                         "actual_sha256":hashlib.sha256(raw).hexdigest()}
+                if name=="beeLandings.csv":
+                    receipt["source_schema"]=original_table_schema(raw)
+                else:
+                    try:code=raw.decode("utf-8-sig")
+                    except UnicodeDecodeError:code=raw.decode("latin-1")
+                    receipt["original_R_script_headings"]=[s.strip()[:160] for s in code.splitlines()
+                        if ("read.csv" in s or "subset(" in s or "firstLanding" in s or
+                            "Landed" in s or "dummy_last" in s)][:35]
+                source_rows[name]=receipt
         report.update({"status":"SOURCE_VERIFIED_NATIVE_SMOLLA2016_SCHEMAS",
                        "author_original_sources":source_rows})
     except Exception as e:
