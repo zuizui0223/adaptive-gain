@@ -7,7 +7,7 @@ from model import add_within_plant, design, scores, fit_stage12
 def synthetic(n=130):
     rng=np.random.default_rng(872)
     plant=np.array(["A","B","C","D"])[np.arange(n)%4]
-    site=np.array(["Brighton","Edinburgh"])[np.arange(n)%2]
+    site=np.array(["Brighton","Edinburgh"])[rng.integers(0,2,n)]
     rawwind=rng.integers(0,5,n).astype(float)
     other=rng.uniform(.05,.85,n)
     flight=rng.integers(4,50,n)
