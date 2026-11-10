@@ -1,0 +1,946 @@
+{
+  "status": "EXACT_MATH_NO_REAL_BEES",
+  "date": "2026-11-11",
+  "source_code": "research/bee_active_stage16/decision_frontier.py",
+  "original_executable_audit": "https://github.com/zuizui0223/adaptive-gain/actions/runs/42912930880",
+  "source_population": {
+    "uniform_iid_binary_worlds": 8,
+    "root_reliability_range": [
+      0.5,
+      1
+    ],
+    "perfect_leaf_perception_assumed": true
+  },
+  "separate_choice_sets": {
+    "optional_first": "first leaf may be declined and no-query guess used",
+    "mandatory_first": "Stage15 frozen first leaf required even at high cost"
+  },
+  "math_equations": {
+    "L": "(1+s)/2",
+    "optional_contingent": "max(.5,L-c)",
+    "optional_precommit": "max(.5,.75-c,L-1.5*c)",
+    "mandatory_contingent": "L-c",
+    "mandatory_precommit": "max(.75-c,L-1.5*c)",
+    "mandatory_gain": "min((s-.5)/2,c/2)",
+    "max_optional_by_s": "(s-.5)/2 for s<=.75, s/6 for s>=.75",
+    "global_max_optional_gain": "1/6 at s=1,c=1/3"
+  },
+  "independent_test_grid": {
+    "n_reliabilities": 8,
+    "n_costs": 13,
+    "n_cases": 104,
+    "oracle_validation": "Python independent posterior optimizer over actual 8 worlds; 11 focused tests passed"
+  },
+  "selected_examples": [
+    {
+      "s": 0.5,
+      "c": 0.1,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.65,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.6,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.7000000000000001,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.6,
+      "c": 0.2,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.6000000000000001,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 0.6,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 1,
+      "optimal_optional_precommit_net": 1
+    },
+    {
+      "s": 1,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.9,
+      "optimal_optional_precommit_net": 0.85
+    },
+    {
+      "s": 1,
+      "c": 0.2,
+      "optional_gain": 0.10000000000000009,
+      "mandatory_gain": 0.10000000000000009,
+      "optimal_optional_contingent_net": 0.8,
+      "optimal_optional_precommit_net": 0.7
+    },
+    {
+      "s": 1,
+      "c": 0.4,
+      "optional_gain": 0.09999999999999998,
+      "mandatory_gain": 0.20000000000000007,
+      "optimal_optional_contingent_net": 0.6,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.25,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    }
+  ],
+  "full_compact_grid": [
+    {
+      "s": 0.5,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.75
+    },
+    {
+      "s": 0.5,
+      "c": 0.01,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.74,
+      "optimal_optional_precommit_net": 0.74
+    },
+    {
+      "s": 0.5,
+      "c": 0.05,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.7,
+      "optimal_optional_precommit_net": 0.7
+    },
+    {
+      "s": 0.5,
+      "c": 0.1,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.65,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.5,
+      "c": 0.15,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.6,
+      "optimal_optional_precommit_net": 0.6
+    },
+    {
+      "s": 0.5,
+      "c": 0.2,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.55,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 0.5,
+      "c": 0.25,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.3,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.3333333333333333,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.35,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.5,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.775,
+      "optimal_optional_precommit_net": 0.775
+    },
+    {
+      "s": 0.55,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.765,
+      "optimal_optional_precommit_net": 0.76
+    },
+    {
+      "s": 0.55,
+      "c": 0.05,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.725,
+      "optimal_optional_precommit_net": 0.7
+    },
+    {
+      "s": 0.55,
+      "c": 0.1,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.675,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.55,
+      "c": 0.15,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.625,
+      "optimal_optional_precommit_net": 0.6
+    },
+    {
+      "s": 0.55,
+      "c": 0.2,
+      "optional_gain": 0.02499999999999991,
+      "mandatory_gain": 0.02499999999999991,
+      "optimal_optional_contingent_net": 0.575,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 0.55,
+      "c": 0.25,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.525,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.3,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.3333333333333333,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.35,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.55,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.8,
+      "optimal_optional_precommit_net": 0.8
+    },
+    {
+      "s": 0.6,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.79,
+      "optimal_optional_precommit_net": 0.785
+    },
+    {
+      "s": 0.6,
+      "c": 0.05,
+      "optional_gain": 0.02499999999999991,
+      "mandatory_gain": 0.02499999999999991,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.7250000000000001
+    },
+    {
+      "s": 0.6,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.7000000000000001,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.6,
+      "c": 0.15,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.65,
+      "optimal_optional_precommit_net": 0.6
+    },
+    {
+      "s": 0.6,
+      "c": 0.2,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.6000000000000001,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 0.6,
+      "c": 0.25,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.55,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.3,
+      "optional_gain": 0,
+      "mandatory_gain": 0.04999999999999999,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.3333333333333333,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.35,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.6,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.85,
+      "optimal_optional_precommit_net": 0.85
+    },
+    {
+      "s": 0.7,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.84,
+      "optimal_optional_precommit_net": 0.835
+    },
+    {
+      "s": 0.7,
+      "c": 0.05,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.7999999999999999,
+      "optimal_optional_precommit_net": 0.7749999999999999
+    },
+    {
+      "s": 0.7,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.7
+    },
+    {
+      "s": 0.7,
+      "c": 0.15,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.07499999999999996,
+      "optimal_optional_contingent_net": 0.7,
+      "optimal_optional_precommit_net": 0.625
+    },
+    {
+      "s": 0.7,
+      "c": 0.2,
+      "optional_gain": 0.09999999999999987,
+      "mandatory_gain": 0.09999999999999987,
+      "optimal_optional_contingent_net": 0.6499999999999999,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 0.7,
+      "c": 0.25,
+      "optional_gain": 0.09999999999999998,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.6,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.3,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.10000000000000003,
+      "optimal_optional_contingent_net": 0.55,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.3333333333333333,
+      "optional_gain": 0.016666666666666607,
+      "mandatory_gain": 0.09999999999999992,
+      "optimal_optional_contingent_net": 0.5166666666666666,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.35,
+      "optional_gain": 0,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.7,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.875,
+      "optimal_optional_precommit_net": 0.875
+    },
+    {
+      "s": 0.75,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.865,
+      "optimal_optional_precommit_net": 0.86
+    },
+    {
+      "s": 0.75,
+      "c": 0.05,
+      "optional_gain": 0.02499999999999991,
+      "mandatory_gain": 0.02499999999999991,
+      "optimal_optional_contingent_net": 0.825,
+      "optimal_optional_precommit_net": 0.8
+    },
+    {
+      "s": 0.75,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.775,
+      "optimal_optional_precommit_net": 0.725
+    },
+    {
+      "s": 0.75,
+      "c": 0.15,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.07499999999999996,
+      "optimal_optional_contingent_net": 0.725,
+      "optimal_optional_precommit_net": 0.65
+    },
+    {
+      "s": 0.75,
+      "c": 0.2,
+      "optional_gain": 0.10000000000000009,
+      "mandatory_gain": 0.10000000000000009,
+      "optimal_optional_contingent_net": 0.675,
+      "optimal_optional_precommit_net": 0.575
+    },
+    {
+      "s": 0.75,
+      "c": 0.25,
+      "optional_gain": 0.125,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.625,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.3,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.12499999999999994,
+      "optimal_optional_contingent_net": 0.575,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.3333333333333333,
+      "optional_gain": 0.04166666666666674,
+      "mandatory_gain": 0.12500000000000006,
+      "optimal_optional_contingent_net": 0.5416666666666667,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.35,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.525,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.75,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.9,
+      "optimal_optional_precommit_net": 0.9
+    },
+    {
+      "s": 0.8,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.89,
+      "optimal_optional_precommit_net": 0.885
+    },
+    {
+      "s": 0.8,
+      "c": 0.05,
+      "optional_gain": 0.025000000000000022,
+      "mandatory_gain": 0.025000000000000022,
+      "optimal_optional_contingent_net": 0.85,
+      "optimal_optional_precommit_net": 0.825
+    },
+    {
+      "s": 0.8,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.8,
+      "optimal_optional_precommit_net": 0.75
+    },
+    {
+      "s": 0.8,
+      "c": 0.15,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.07499999999999996,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.675
+    },
+    {
+      "s": 0.8,
+      "c": 0.2,
+      "optional_gain": 0.09999999999999998,
+      "mandatory_gain": 0.09999999999999998,
+      "optimal_optional_contingent_net": 0.7,
+      "optimal_optional_precommit_net": 0.6
+    },
+    {
+      "s": 0.8,
+      "c": 0.25,
+      "optional_gain": 0.125,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.65,
+      "optimal_optional_precommit_net": 0.525
+    },
+    {
+      "s": 0.8,
+      "c": 0.3,
+      "optional_gain": 0.10000000000000009,
+      "mandatory_gain": 0.15000000000000002,
+      "optimal_optional_contingent_net": 0.6000000000000001,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0.3333333333333333,
+      "optional_gain": 0.06666666666666665,
+      "mandatory_gain": 0.14999999999999997,
+      "optimal_optional_contingent_net": 0.5666666666666667,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0.35,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.15000000000000002,
+      "optimal_optional_contingent_net": 0.55,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0.4,
+      "optional_gain": 0,
+      "mandatory_gain": 0.15000000000000002,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.15000000000000002,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.8,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.15000000000000002,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 0.95,
+      "optimal_optional_precommit_net": 0.95
+    },
+    {
+      "s": 0.9,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.94,
+      "optimal_optional_precommit_net": 0.9349999999999999
+    },
+    {
+      "s": 0.9,
+      "c": 0.05,
+      "optional_gain": 0.02499999999999991,
+      "mandatory_gain": 0.02499999999999991,
+      "optimal_optional_contingent_net": 0.8999999999999999,
+      "optimal_optional_precommit_net": 0.875
+    },
+    {
+      "s": 0.9,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.85,
+      "optimal_optional_precommit_net": 0.7999999999999999
+    },
+    {
+      "s": 0.9,
+      "c": 0.15,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.07499999999999996,
+      "optimal_optional_contingent_net": 0.7999999999999999,
+      "optimal_optional_precommit_net": 0.725
+    },
+    {
+      "s": 0.9,
+      "c": 0.2,
+      "optional_gain": 0.10000000000000009,
+      "mandatory_gain": 0.10000000000000009,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.6499999999999999
+    },
+    {
+      "s": 0.9,
+      "c": 0.25,
+      "optional_gain": 0.125,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.7,
+      "optimal_optional_precommit_net": 0.575
+    },
+    {
+      "s": 0.9,
+      "c": 0.3,
+      "optional_gain": 0.1499999999999999,
+      "mandatory_gain": 0.1499999999999999,
+      "optimal_optional_contingent_net": 0.6499999999999999,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0.3333333333333333,
+      "optional_gain": 0.1166666666666667,
+      "mandatory_gain": 0.16666666666666674,
+      "optimal_optional_contingent_net": 0.6166666666666667,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0.35,
+      "optional_gain": 0.09999999999999998,
+      "mandatory_gain": 0.17499999999999993,
+      "optimal_optional_contingent_net": 0.6,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0.4,
+      "optional_gain": 0.04999999999999993,
+      "mandatory_gain": 0.19999999999999996,
+      "optimal_optional_contingent_net": 0.5499999999999999,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.19999999999999996,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 0.9,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.19999999999999996,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0,
+      "optional_gain": 0,
+      "mandatory_gain": 0,
+      "optimal_optional_contingent_net": 1,
+      "optimal_optional_precommit_net": 1
+    },
+    {
+      "s": 1,
+      "c": 0.01,
+      "optional_gain": 0.0050000000000000044,
+      "mandatory_gain": 0.0050000000000000044,
+      "optimal_optional_contingent_net": 0.99,
+      "optimal_optional_precommit_net": 0.985
+    },
+    {
+      "s": 1,
+      "c": 0.05,
+      "optional_gain": 0.02499999999999991,
+      "mandatory_gain": 0.02499999999999991,
+      "optimal_optional_contingent_net": 0.95,
+      "optimal_optional_precommit_net": 0.925
+    },
+    {
+      "s": 1,
+      "c": 0.1,
+      "optional_gain": 0.050000000000000044,
+      "mandatory_gain": 0.050000000000000044,
+      "optimal_optional_contingent_net": 0.9,
+      "optimal_optional_precommit_net": 0.85
+    },
+    {
+      "s": 1,
+      "c": 0.15,
+      "optional_gain": 0.07499999999999996,
+      "mandatory_gain": 0.07499999999999996,
+      "optimal_optional_contingent_net": 0.85,
+      "optimal_optional_precommit_net": 0.775
+    },
+    {
+      "s": 1,
+      "c": 0.2,
+      "optional_gain": 0.10000000000000009,
+      "mandatory_gain": 0.10000000000000009,
+      "optimal_optional_contingent_net": 0.8,
+      "optimal_optional_precommit_net": 0.7
+    },
+    {
+      "s": 1,
+      "c": 0.25,
+      "optional_gain": 0.125,
+      "mandatory_gain": 0.125,
+      "optimal_optional_contingent_net": 0.75,
+      "optimal_optional_precommit_net": 0.625
+    },
+    {
+      "s": 1,
+      "c": 0.3,
+      "optional_gain": 0.1499999999999999,
+      "mandatory_gain": 0.1499999999999999,
+      "optimal_optional_contingent_net": 0.7,
+      "optimal_optional_precommit_net": 0.55
+    },
+    {
+      "s": 1,
+      "c": 0.3333333333333333,
+      "optional_gain": 0.16666666666666674,
+      "mandatory_gain": 0.16666666666666674,
+      "optimal_optional_contingent_net": 0.6666666666666667,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0.35,
+      "optional_gain": 0.15000000000000002,
+      "mandatory_gain": 0.17499999999999993,
+      "optimal_optional_contingent_net": 0.65,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0.4,
+      "optional_gain": 0.09999999999999998,
+      "mandatory_gain": 0.20000000000000007,
+      "optimal_optional_contingent_net": 0.6,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0.5,
+      "optional_gain": 0,
+      "mandatory_gain": 0.25,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    },
+    {
+      "s": 1,
+      "c": 0.6,
+      "optional_gain": 0,
+      "mandatory_gain": 0.25,
+      "optimal_optional_contingent_net": 0.5,
+      "optimal_optional_precommit_net": 0.5
+    }
+  ],
+  "no_individual_animal_data_used": true,
+  "not_actual_biological_reward_or_cost": true,
+  "no_actual_calibrated_query_delay": true,
+  "not_an_experiment_or_recruitment_plan": true
+}
