@@ -1,0 +1,33 @@
+name: bee-stage16-exact-query-value-frontier
+on:
+  push:
+    branches:
+      - theory/bee-query-value-stage16-20261111
+    paths:
+      - 'research/bee_active_stage16/**'
+      - '.github/workflows/bee-stage16-query-value.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-bayesian-information-value:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Match closed-form optimal values against independent eight-state Bayes oracle
+        working-directory: research/bee_active_stage16
+        run: python -m unittest test_decision_frontier -v
+      - name: Freeze source-free root-error and query-cost decision-value grid
+        working-directory: research/bee_active_stage16
+        run: python -u decision_frontier.py --out stage16_exact_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage16-exact-no-bee-query-value-frontier
+          path: research/bee_active_stage16/stage16_exact_outputs/stage16_exact_query_value_frontier.json
+          if-no-files-found: warn
+          retention-days: 90
