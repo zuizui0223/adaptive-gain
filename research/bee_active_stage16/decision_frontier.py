@@ -65,8 +65,39 @@ def best_values(root_reliability,leaf_cost):
         "precommit_candidate_values":precommit_options,
         "root_only_guessing_value":0.5,
         "leaf_observation_accuracy_assumed":1.0,
+        "may_skip_first_leaf":True,
         "empirical":False,
         "not_a_model_of_any_observed_animal":True,
+    }
+
+
+
+def mandatory_first_leaf_values(root_reliability,leaf_cost):
+    """Actual Stage15 mandatory-first-request policy class, no root-only stop.
+
+    The first leaf has already been committed or selected in the original
+    design; the animal cannot choose to forgo it. It can skip a SECOND
+    request after seeing the first. This is different from the optional-
+    start rational benchmark in best_values.
+    """
+    _check(root_reliability,leaf_cost)
+    s=float(root_reliability);c=float(leaf_cost)
+    contingent=(1+s)/2-c
+    precommit=max(.75-c,(1+s)/2-1.5*c)
+    gain=contingent-precommit
+    expected=min((s-.5)/2,c/2)
+    if abs(gain-expected)>1e-10:
+        raise ValueError("NO_GO_MANDATORY_QUERY_CLOSED_FORM_FAILED")
+    return {
+        "root_reliability":s,
+        "leaf_cost_in_correctness_reward_units":c,
+        "contingent_net":contingent,
+        "precommit_net":precommit,
+        "value_of_contingency":max(0.,gain),
+        "may_skip_first_leaf":False,
+        "precommit_can_decline_second_leaf":True,
+        "mandatory_high_cost_utilities_can_be_negative":True,
+        "empirical":False,
     }
 
 
@@ -103,7 +134,9 @@ def theoretical_ceiling(root_reliability):
 def decision_grid():
     reliabilities=(.5,.55,.6,.7,.75,.8,.9,1.)
     costs=(0.,.01,.05,.10,.15,.20,.25,.30,1/3,.35,.4,.50,.6)
-    rows=[best_values(s,c) for s in reliabilities for c in costs]
+    rows=[{**best_values(s,c),
+           "mandatory_first_leaf_comparator":mandatory_first_leaf_values(s,c)}
+          for s in reliabilities for c in costs]
     return {
         "status":"EXACT_ANALYTICAL_BAYES_DECISION_FRONTIER",
         "worlds":8,
@@ -114,6 +147,8 @@ def decision_grid():
         "no_real_animals":True,
         "no_behavioral_effect_estimated":True,
         "no_real_cost_units_calibrated":True,
+        "stage15_existing_protocol_makes_first_leaf_mandatory":True,
+        "optional_first_leaf_model_requires_a_different_future_ability_to_decline":True,
         "no_root_or_leaf_errors_measured_from_any_animals":True,
     }
 
