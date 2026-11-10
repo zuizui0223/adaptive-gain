@@ -22,7 +22,9 @@ def main(root):
     modeled=estimate(source,verified)
     if modeled['status']!='SYNTHETIC_ESTIMATOR_QA_ONLY':
         raise ValueError('NO_GO_SYNTHETIC_ITT_ESTIMATOR')
-    if abs(modeled['precommit_minus_contingent_leaf_requests']-.5)>1e-12:
+    # Only the mathematical EXPECTATION is exactly .5; an independently
+    # randomized finite mock assignment will deviate around that value.
+    if abs(modeled['precommit_minus_contingent_leaf_requests']-.5)>.03:
         raise ValueError('NO_GO_PERFECT_POLICY_QUERY_SAVING')
     result={
       'status':'STAGE15_EXACT_MATH_AND_SYNTHETIC_PROTOCOL_VERIFIED',
@@ -52,7 +54,7 @@ def main(root):
          'real_bees':result['studies_or_live_animals_executed'],
          'synthetic_trials':allocation['n_trials'],
          'source_worlds':exact['n_worlds'],
-         'theorem_query_saving':exact['query_saving'],
+         'theorem_expected_query_saving':exact['query_saving'],
          'simulated_query_saving':modeled['precommit_minus_contingent_leaf_requests'],
          'mock_consumption_difference_not_real':modeled['primary_contingent_minus_precommit_sucrose_mg_per_fixed_30s'],
          'n_focused_tests_are_separately_verified':True

@@ -13,7 +13,7 @@ class EstimatorTests(unittest.TestCase):
     def test_mock_accurate_policy_recovers_half_query_saving(self):
         a,v=self.source(12,2)
         d=estimate(a,v)
-        self.assertAlmostEqual(d['precommit_minus_contingent_leaf_requests'],.5,places=12)
+        self.assertAlmostEqual(d['precommit_minus_contingent_leaf_requests'],.5,delta=.05)
         self.assertEqual(d['actual_correct_target_rate_by_arm']['contingent'],1)
         self.assertEqual(d['actual_correct_target_rate_by_arm']['precommit'],1)
         self.assertEqual(d['n_independent_colonies'],12)

@@ -1,6 +1,6 @@
 import unittest
 from collections import Counter, defaultdict
-from allocation import generate, audit, audit_world_balance
+from allocation import generate, audit, audit_mode_balance
 
 class AllocationTests(unittest.TestCase):
     def test_four_colony_balance_of_mode_and_concealed_eight_worlds(self):
@@ -16,12 +16,20 @@ class AllocationTests(unittest.TestCase):
             for block in range(1,5):
                 b=[r for r in sub if r['block']==block]
                 self.assertEqual(len(b),16)
-                for mode in ('contingent','precommit'):
-                    assert set((x['r'],x['u'],x['v']) for x in b if x['access_mode']==mode)==set((r,u,v) for r in (0,1) for u in (0,1) for v in (0,1))
-    def test_wrong_world_balance_fails(self):
+                self.assertEqual(sum(x['access_mode']=='contingent' for x in b),8)
+                self.assertEqual(sum(x['access_mode']=='precommit' for x in b),8)
+    def test_independent_with_replacement_worlds_have_repeated_states(self):
         rows=generate(2,2,seed=17)
-        rows[0]['u']=1-rows[0]['u']
-        with self.assertRaisesRegex(ValueError,'WORLD'):audit(rows)
+        groups=defaultdict(list)
+        for x in rows:
+            groups[x['colony_id'],x['bee_id'],x['block'],x['access_mode']].append((x['r'],x['u'],x['v']))
+        repeated=sum(len(set(v))<len(v) for v in groups.values())
+        self.assertGreater(repeated,0)
+        self.assertEqual(audit(rows)['world_sampling'],'iid_with_replacement_per_trial')
+    def test_wrong_mode_balance_fails(self):
+        rows=generate(2,2,seed=17)
+        rows[0]['access_mode']='precommit' if rows[0]['access_mode']=='contingent' else 'contingent'
+        with self.assertRaisesRegex(ValueError,'MODE'):audit(rows)
     def test_world_target_is_not_a_predictive_visual_leak(self):
         r=generate(2,2,seed=17)
         self.assertTrue(all(x['world_concealed_from_subject'] for x in r))

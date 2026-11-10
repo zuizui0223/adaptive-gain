@@ -30,9 +30,13 @@ def generate(n_colonies=24,bees_per_colony=12,seed=PUBLIC_QA_SEED):
             bee=f'QA_B{b+1:03d}'
             sequence=WIND_SEQUENCES[(c+b)%2]
             for block,wind in enumerate(sequence,1):
-                design=[(mode,r,u,v) for mode in MODES for (r,u,v) in WORLDS]
+                # Balance mode assignment, but draw each hidden world with
+                # replacement. Exhausting an 8-state deck would let animals
+                # infer remaining worlds from prior trial history.
+                design=[mode for mode in MODES for _ in range(8)]
                 rng.shuffle(design)
-                for t,(mode,r,u,v) in enumerate(design,1):
+                for t,mode in enumerate(design,1):
+                    r,u,v=(rng.randrange(2) for _ in range(3))
                     rows.append({
                         'trial_id':f'{colony}_{bee}_T{(block-1)*16+t:03d}',
                         'colony_id':colony,'bee_id':bee,
@@ -46,11 +50,10 @@ def generate(n_colonies=24,bees_per_colony=12,seed=PUBLIC_QA_SEED):
     return rows
 
 
-def audit_world_balance(trials):
-    target={(m,r,u,v) for m in MODES for (r,u,v) in WORLDS}
-    actual=Counter((x['access_mode'],x['r'],x['u'],x['v']) for x in trials)
-    if set(actual)!=target or any(n!=1 for n in actual.values()):
-        raise ValueError('NO_GO_WORLD_BALANCE_WITHIN_WIND_BLOCK')
+def audit_mode_balance(trials):
+    counts=Counter(x['access_mode'] for x in trials)
+    if len(trials)!=TRIALS_PER_BLOCK or counts!=Counter({'contingent':8,'precommit':8}):
+        raise ValueError('NO_GO_MODE_BALANCE_WITHIN_WIND_BLOCK')
     return True
 
 
@@ -91,23 +94,27 @@ def audit(rows,expected_colonies=None,expected_bees=None):
                 ws={a['assigned_wind'] for a in vals}
                 if len(ws)!=1:raise ValueError('NO_GO_WIND_SWITCHED_INSIDE_BLOCK')
                 winds.append(next(iter(ws)))
-                audit_world_balance(vals)
+                audit_mode_balance(vals)
             if tuple(winds) not in WIND_SEQUENCES:
                 raise ValueError('NO_GO_NOT_COUNTERBALANCED_BLOCKS')
             sequences[tuple(winds)]+=1
             for mode in MODES:
                 for wind in WINDS:
                     vals=[a for a in trials if a['access_mode']==mode and a['assigned_wind']==wind]
-                    counts=Counter((a['r'],a['u'],a['v']) for a in vals)
-                    if set(counts)!=set(WORLDS) or any(v!=2 for v in counts.values()):
-                        raise ValueError('NO_GO_WORLD_2_EACH_PER_BEE_CELL')
+                    if len(vals)!=16:
+                        raise ValueError('NO_GO_SOURCE_MODE_WIND_CELL_NOT_16_TRIALS')
         if set(sequences)!=set(WIND_SEQUENCES) or abs(sequences[WIND_SEQUENCES[0]]-sequences[WIND_SEQUENCES[1]])>1:
             raise ValueError('NO_GO_WITHIN_COLONY_WIND_BLOCK_SEQUENCE_BIAS')
     return {
        'status':'SYNTHETIC_2x2_CONTINGENT_QUERY_WIND_ALLOCATION_VERIFIED',
        'n_trials':len(rows),'n_bees':len(bybee),'n_independent_colonies':len(bycol),
        'cell_counts':{'__'.join(k):v for k,v in sorted(bycell.items())},
-       'trials_per_bee':TRIALS_PER_BEE,'eight_worlds_twice_in_every_bee_arm':True,
+       'trials_per_bee':TRIALS_PER_BEE,
+       'world_sampling':'iid_with_replacement_per_trial',
+       'all_eight_worlds_not_forced_to_appear_in_each_block':True,
+       'world_counts_by_arm':{
+           '__'.join(map(str,(wind,mode,r,u,v))):int(sum(x['assigned_wind']==wind and x['access_mode']==mode and (x['r'],x['u'],x['v'])==(r,u,v) for x in rows))
+           for wind in WINDS for mode in MODES for r,u,v in WORLDS},
        'real_animal_assignments_generated':False,
        'all_world_bits_are_source_only_concealed_until_cue':True}
 
