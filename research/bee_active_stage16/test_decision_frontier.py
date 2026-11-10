@@ -4,7 +4,7 @@ Synthetic/math only: no animal behavior or empirical cue learning outcomes.
 """
 import itertools
 import unittest
-from decision_frontier import best_values, theoretical_ceiling, decision_grid
+from decision_frontier import best_values, mandatory_first_leaf_values, theoretical_ceiling, decision_grid
 
 STATES=list(itertools.product((0,1), repeat=3))
 
@@ -97,6 +97,31 @@ class DecisionFrontierTests(unittest.TestCase):
         self.assertTrue(g["no_behavioral_effect_estimated"])
         self.assertGreater(len(g["rows"]),30)
         self.assertTrue(all(z["value_of_contingency"]>=-1e-12 for z in g["rows"]))
+    def test_stage15_mandatory_first_request_differs_from_optional_skip_game(self):
+        forced=mandatory_first_leaf_values(1.,.8)
+        option=best_values(1.,.8)
+        self.assertAlmostEqual(forced["contingent_net"],.2)
+        self.assertAlmostEqual(forced["precommit_net"],-.05)
+        self.assertAlmostEqual(forced["value_of_contingency"],.25)
+        self.assertAlmostEqual(option["contingent_net"],.5)
+        self.assertAlmostEqual(option["precommit_net"],.5)
+        self.assertAlmostEqual(option["value_of_contingency"],0.)
+        self.assertFalse(forced["may_skip_first_leaf"])
+        self.assertTrue(option["may_skip_first_leaf"])
+    def test_forced_first_leaf_gain_is_min_of_root_advantage_and_second_query_cost(self):
+        for reliability in (.5,.6,.75,1.):
+            for cost in (0,.05,.1,.2,.4,.6,1.):
+                with self.subTest(s=reliability,c=cost):
+                    r=mandatory_first_leaf_values(reliability,cost)
+                    self.assertAlmostEqual(r["value_of_contingency"],
+                         min((reliability-.5)/2,cost/2),places=11)
+    def test_optional_first_policy_dominates_forced_first_policy(self):
+        for reliability in (.5,.6,.8,1.):
+            for cost in (0,.1,.3,.6,1.):
+                a=best_values(reliability,cost)
+                b=mandatory_first_leaf_values(reliability,cost)
+                self.assertGreaterEqual(a["contingent_net"]+1e-10,b["contingent_net"])
+                self.assertGreaterEqual(a["precommit_net"]+1e-10,b["precommit_net"])
     def test_invalid_root_reliability_or_cost_fails_closed(self):
         for args in [(.49,.1),(1.01,.1),(.9,-.1),(.9,float("nan")),("0.9",.1)]:
             with self.subTest(args=args):
