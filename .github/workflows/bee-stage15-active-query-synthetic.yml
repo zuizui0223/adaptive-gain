@@ -1,0 +1,35 @@
+name: bee-stage15-self-directed-query-synthetic-only
+on:
+  push:
+    branches:
+      - design/bee-self-directed-query-stage15-20261111
+    paths:
+      - 'research/bee_active_stage15/**'
+      - '.github/workflows/bee-stage15-active-query-synthetic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-math-and-synthetic-study-design:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install statistical t distribution for synthetic colony QA only
+        run: python -m pip install 'scipy==1.15.3'
+      - name: Test exact 8-world restricted routing bound, balanced randomization, animal-origin source gates and mock ITT
+        working-directory: research/bee_active_stage15
+        run: python -m unittest discover -p 'test_*.py' -v
+      - name: Verify original finite-game theorem and synthetic-only bee query design without living animals
+        working-directory: research/bee_active_stage15
+        run: python -u run_all.py --out stage15_design_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage15-not-empirical-exact-math-and-synthetic-receipt
+          path: research/bee_active_stage15/stage15_design_outputs/stage15_synthetic_design_receipt.json
+          if-no-files-found: warn
+          retention-days: 90
