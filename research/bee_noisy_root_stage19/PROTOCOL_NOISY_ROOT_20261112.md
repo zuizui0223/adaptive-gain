@@ -55,3 +55,22 @@ At this stage there is **no actual measurement of s or q, no pilot source video,
 
 ## Research stop
 Stage19 proves a *condition* for prospective routeability of a finite decision procedure under imperfect initial information. It does not prove evolved animal cognition, causal use of root information by pollinators in the wild, a general macroecological law, or observed fitness differences. Stage18's perfect-root mathematics remains valid as its s=1 special case.
+
+
+## Exact one-parameter family at the SAME c=1/4 (generalized before real animal data)
+
+The q=.2 example extends **without altering the model** to every \(0\le q\le1/4\), holding cost c=1/4 and symmetric root recognition s. In this region Z0 always optimally SKIPs; the precommitted first action can SKIP with value \(3/4-q/2\). Z1 prefers its V cue over SKIP exactly when
+
+\[
+\boxed{s>s_\mathrm{crit}(q)=\frac{3/4-q}{1-q}.}
+\]
+
+The exact access gain is
+
+\[
+\boxed{\Delta(q,s)=\max\{0,((1-q)s+q-3/4)/2\}.}
+\]
+
+For q=0, the strict recognition threshold is 75%; for q=.1, 72.22%; for q=.2, **68.75%**; and for q=.25, **66.67%**. Therefore, in this family, **making the easy branch still more predictable (decreasing q) actually raises the required root recognition accuracy**: erroneous invocation of the V request can become relatively more costly. At a perfect root signal s=1, the maximum gain equals exactly **1/8 regardless of q in [0,.25]**, despite differing recognition thresholds.
+
+This is a **sharp parametric mathematical property**, not a measured interspecies variation in sensory processing. It is NOT claimed for q>.25, a different cost c, asymmetric root errors, noisy leaf reveals, unequal cost of U and V, learning failures, or any natural ecological decision.
