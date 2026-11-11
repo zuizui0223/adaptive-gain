@@ -60,6 +60,20 @@ class OptionalFirstSourceTests(unittest.TestCase):
         self.assertIn(one["final_target_choice"],(0,1,"no_choice"))
         self.assertEqual(one["root_anchor_s"],1.)
         self.assertEqual(one["intake_window_s"],30.)
+    def test_physical_reward_target_must_match_hidden_correct_bit(self):
+        a,recs=self.source()
+        one=recs[0]
+        self.assertEqual(one["rewarded_target_bit_source"],a[0]["correct_target"])
+        self.assertGreater(one["source_calibrated_nominal_high_mg"],
+                           one["source_calibrated_nominal_low_mg"])
+        one["rewarded_target_bit_source"]=1-one["rewarded_target_bit_source"]
+        with self.assertRaisesRegex(ValueError,"REWARD_TARGET"):
+            validate_mock_source(a,recs,FAKE_TIERS)
+    def test_reward_odor_and_visual_identity_must_be_masked_before_choice(self):
+        a,recs=self.source()
+        recs[0]["source_reward_location_cues_masked"]=False
+        with self.assertRaisesRegex(ValueError,"REWARD_MAPPING"):
+            validate_mock_source(a,recs,FAKE_TIERS)
     def test_no_early_leaf_reveal_before_root(self):
         a,recs=self.source()
         one=next(x for x in recs if x["source_leaf_events"])
