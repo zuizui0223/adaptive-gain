@@ -76,6 +76,13 @@ def make_mock_source(assignments,inject_middle_only_mg=2.,seed=20261111):
             "final_choice_time_s":gate+.10,
             "both_target_options_accessible":True,
             "target_zero_side_source":r["target_zero_side"],
+            # Both nominal offered rewards are FAKE source QA fixtures;
+            # actual dose and leak-free calibration require a new pilot.
+            "rewarded_target_bit_source":r["correct_target"],
+            "source_calibrated_nominal_high_mg":50.0,
+            "source_calibrated_nominal_low_mg":30.0,
+            "source_high_low_recipe_original_device_verified":True,
+            "source_reward_location_cues_masked":True,
             "predictive_cue_visible_at_feeder":False,
             "root_anchor_s":ROOT_TIME,
             "intake_window_s":WINDOW,
@@ -184,6 +191,15 @@ def validate_mock_source(assignments,source,pilot_delays):
             type(target_time) not in (float,int) or
             not gate<=target_time<ROOT_TIME+WINDOW):
             raise ValueError("NO_GO_FEEDER_RELEASE_CHRONOLOGY")
+        if row.get("rewarded_target_bit_source")!=assigned["correct_target"]:
+            raise ValueError("NO_GO_PHYSICAL_REWARD_TARGET_BIT_MISMATCH")
+        high=row.get("source_calibrated_nominal_high_mg")
+        low=row.get("source_calibrated_nominal_low_mg")
+        if (type(high) not in (float,int) or type(low) not in (float,int) or
+            not math.isfinite(high) or not math.isfinite(low) or not (0<=low<high) or
+            row.get("source_high_low_recipe_original_device_verified") is not True or
+            row.get("source_reward_location_cues_masked") is not True):
+            raise ValueError("NO_GO_PHYSICAL_REWARD_MAPPING_NOT_BLINDED_OR_CALIBRATED")
         if row.get("target_zero_side_source")!=assigned["target_zero_side"] or (
             row.get("both_target_options_accessible") is not True or
             row.get("predictive_cue_visible_at_feeder") is not False):
