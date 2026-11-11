@@ -1,0 +1,67 @@
+{
+  "study": "Stage17 optional-first synthetic-only design",
+  "date": "2026-11-11",
+  "real_animal_count": 0,
+  "study_status": "DESIGN_AND_SYNTHETIC_SOFTWARE_QA_ONLY",
+  "source_run": "https://github.com/zuizui0223/adaptive-gain/actions/runs/42960734263",
+  "focused_tests_passed": 17,
+  "original_demo_sample": {
+    "fake_colonies": 24,
+    "fake_bees": 288,
+    "fake_trials": 13824,
+    "arms": 6,
+    "events_per_cell": 2304,
+    "source_world_sampling": "iid_uniform_3bits_with_replacement",
+    "cost_sequence": "all_six_permutations_counterbalanced",
+    "trials_per_mock_bee": 48,
+    "cost_blocks": 3,
+    "mode_eight_per_16trial_block": true
+  },
+  "fake_telemetry": {
+    "explicit_skip": 4608,
+    "original_leaf_reveals": 11436,
+    "fake_device_delay_seconds_by_tier": {
+      "low": 0.2,
+      "medium": 1,
+      "high": 3
+    },
+    "fake_delays_are_NOT_pilot_calibration": true,
+    "no_real_honeybee_source_video_verified": true
+  },
+  "mock_injected_mid_cost_contingent_effect_mg": 2,
+  "mock_recovered_middle_vs_extremes_contrast_mg": 1.9965547722042893,
+  "mock_mean_leaf_requests_by_tier": {
+    "low": 1.2411024305555556,
+    "medium": 1.2406684027777777,
+    "high": 0
+  },
+  "mock_skip_fraction_by_tier": {
+    "low": 0,
+    "medium": 0,
+    "high": 1
+  },
+  "primary_planned_contrast": "K=(contingent-precommit)_medium-0.5*((contingent-precommit)_low+(contingent-precommit)_high)",
+  "experimental_unit": "independent_colony; bee-equal nested, trial repeats not independent",
+  "caveats": [
+    "K>0 does not by itself establish D_medium>0; it is a middle-versus-extremes contrast",
+    "source waiting time is not theoretical normalized reward cost",
+    "cost levels must be independently calibrated before any animal effect",
+    "real animal ability to learn and use SKIP U V unknown",
+    "precommit psychological commitment not isolated",
+    "mock high tier no-queries cannot itself validate high-tier physical waiting time",
+    "all source telemetry flags are fake QA",
+    "24 colonies used for mock QA only, not a calibrated power target",
+    "no clinical/animal ethical approval or subject recruitment"
+  ],
+  "reward_assignment_source_validation": {
+    "source_rewarded_target_matches_hidden_correct_bit": true,
+    "source_nominal_high_low_reward_offer_qA_mg": {
+      "high": 50,
+      "low": 30
+    },
+    "masked_visual_and_odor_reward_location_is_tested_only_in_mock": true,
+    "original_fielder_calibration_completed": false,
+    "correct_vs_incorrect_biological_reward_still_unmeasured": true,
+    "original_hidden_reward_bit_equals_source_target": true
+  }
+}

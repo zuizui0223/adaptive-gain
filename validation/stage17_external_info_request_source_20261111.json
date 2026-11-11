@@ -1,0 +1,62 @@
+{
+  "status": "EXTERNAL_SOURCE_DATA_GRAIN_AND_NOVELTY_AUDIT_ONLY",
+  "date": "2026-11-11",
+  "preprint_doi": "10.64898/2026.09.15.751944",
+  "preprint_peer_review_status": "bioRxiv PREPRINT not assumed peer-reviewed",
+  "source_repository": "Cuixiaojian21/bee_metacognition",
+  "source_commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+  "source_file": "data/4_active_information_seeking_trials.csv",
+  "source_git_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+  "author_control_code": "01_conventional_stats/analysis/c_6_5_Random_Free_Cue_info_seeking_glmm.R",
+  "author_control_code_git_blob_sha": "07d2c57196e16355cf674af05b7fa3e21bc60f22",
+  "original_trials": 19200,
+  "distinct_bees": 192,
+  "trials_per_bee": 100,
+  "unique_trials": 19200,
+  "repeat_trial_id_count": 0,
+  "regular": {
+    "Easy": {
+      "n": 6140,
+      "Info_Requested_1": 591,
+      "actual_landed": 591
+    },
+    "Hard": {
+      "n": 6108,
+      "Info_Requested_1": 2866,
+      "actual_landed": 2866
+    },
+    "Impossible": {
+      "n": 3112,
+      "Info_Requested_1": 2229,
+      "actual_landed": 2229
+    }
+  },
+  "Random_Free_Cue": {
+    "Easy": {
+      "n": 1540,
+      "Info_Requested_1": 1540,
+      "actual_landed": 950
+    },
+    "Hard": {
+      "n": 1572,
+      "Info_Requested_1": 1572,
+      "actual_landed": 925
+    },
+    "Impossible": {
+      "n": 728,
+      "Info_Requested_1": 728,
+      "actual_landed": 153
+    }
+  },
+  "all_trial_info_requested_1": 9526,
+  "all_actual_landed": 7714,
+  "source_disagreement_rows": 1812,
+  "free_cue_info_delivered_not_same_as_voluntary_request": true,
+  "source_has_colony_id": false,
+  "source_has_U_or_V_individual_request_ids": false,
+  "source_has_randomized_cost_delay_tiers": false,
+  "model_effect_fitted": false,
+  "no_hypothesis_test_conducted": true,
+  "missing_novelty_boundary": "Costly bee information requests already observed; randomized choice of WHICH source after R vs before R with optional SKIP remains untested.",
+  "real_source_own_published_effects_not_new_findings": true
+}
