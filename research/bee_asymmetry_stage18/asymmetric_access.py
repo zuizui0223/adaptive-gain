@@ -44,6 +44,12 @@ def values(q,c):
     first=max(precommit,key=lambda k:precommit[k])
     pre_value=precommit[first]
     gain=contingent-pre_value
+    # Mandatory-first access permits no SKIP; the subject must pay for a
+    # relevant root-conditional leaf, or for a source-committed first leaf.
+    # These are NOT the same treatment choice sets as optional access.
+    mandatory_contingent=1-c
+    mandatory_precommit=max(precommit["U"],precommit["V"])
+    mandatory_gain=mandatory_contingent-mandatory_precommit
     if gain<-1e-11:
         raise ValueError("NO_GO_ADAPTIVE_VALUE_ORDERING")
     return {
@@ -55,6 +61,11 @@ def values(q,c):
           (best0=="SKIP")!=(best1=="SKIP"),
       "contingent_value":contingent,
       "precommit_value":pre_value,
+      "mandatory_contingent_value":mandatory_contingent,
+      "mandatory_precommit_value":mandatory_precommit,
+      "mandatory_access_gain":mandatory_gain,
+      "optional_minus_mandatory_access_gain":max(0.,gain)-mandatory_gain,
+      "mandatory_first_query_cannot_be_declined":True,
       "precommit_best_initial_action":first,
       "precommit_all_initial_actions":precommit,
       "root0_candidate_values":root0,
