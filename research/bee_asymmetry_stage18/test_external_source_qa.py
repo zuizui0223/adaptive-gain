@@ -22,6 +22,7 @@ def fixture():
         row(1,'b1','Easy','Regular',0,0),
         row(2,'b1','Hard','Regular',1,1),
         row(3,'b1','Impossible','Regular',1,1),
+        row(9,'b1','Hard','Regular',0,0),
         row(4,'b1','Easy','Random_Free_Cue',1,0),
         row(5,'b2','Easy','Regular',0,0),
         row(6,'b2','Hard','Regular',0,0),
@@ -32,7 +33,7 @@ def fixture():
 class SourceAuditTests(unittest.TestCase):
     def test_distinguishes_auto_info_flag_from_animal_request(self):
         result=audit_rows(fixture(),strict_original=False)
-        self.assertEqual(result['total_rows'],8)
+        self.assertEqual(result['total_rows'],9)
         self.assertEqual(result['source_bees'],2)
         self.assertEqual(result['free_cue_info_requested_unconditional'],2)
         self.assertEqual(result['free_cue_actual_landed'],1)
