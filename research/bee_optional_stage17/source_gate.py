@@ -164,11 +164,11 @@ def validate_mock_source(assignments,source,pilot_delays):
             else:
                 if not (last_reveal<t_req<=t_disp):
                     raise ValueError("NO_GO_SOURCE_QUERY_CHRONOLOGY")
+            if not pilot_delays[tier][0]<=cost<=pilot_delays[tier][1]:
+                raise ValueError("NO_GO_SOURCE_COST_DELAY_OUTSIDE_PILOT")
             if not (t_disp>ROOT_TIME and t_reveal>t_disp and
                     abs((t_reveal-t_disp)-cost)<TOLERANCE):
                 raise ValueError("NO_GO_SOURCE_QUERY_CHRONOLOGY")
-            if not pilot_delays[tier][0]<=cost<=pilot_delays[tier][1]:
-                raise ValueError("NO_GO_SOURCE_COST_DELAY_OUTSIDE_PILOT")
             if e.get("observed_value")!=(assigned["u"] if leaf=="U" else assigned["v"]):
                 raise ValueError("NO_GO_SOURCE_LEAF_VALUE_NOT_ORIGINAL")
             first_reveal=t_reveal if index==0 else first_reveal
