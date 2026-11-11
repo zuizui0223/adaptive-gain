@@ -7,7 +7,7 @@ from fractions import Fraction as F
 from itertools import product
 import unittest
 
-from root_noisy import optimal_values, threshold_witness, decision_grid
+from root_noisy import optimal_values, threshold_witness, threshold_family, decision_grid
 
 WORLDS=list(product((0,1),repeat=3))
 ACTIONS=("SKIP","U","V")
@@ -99,6 +99,34 @@ class Stage19Tests(unittest.TestCase):
         self.assertTrue(grid["no_root_cue_confusion_matrix_measured"])
         self.assertTrue(grid["not_an_actual_recruitment_or_fitness_estimate"])
         self.assertGreaterEqual(len(grid["grid"]),150)
+    def test_sharp_threshold_curve_for_easy_branch_family_at_quarter_cost(self):
+        # For R0 target U~Bern(q) with q<=1/4 and cost c=1/4,
+        # sharp root-recognition threshold is (3/4-q)/(1-q).
+        for q in (0,.05,.10,.15,.20,.24,.25):
+            with self.subTest(q=q):
+                record=threshold_family(q)
+                threshold=(.75-q)/(1-q)
+                self.assertAlmostEqual(record["minimum_s_for_strict_positive_gain"],threshold,places=11)
+                self.assertAlmostEqual(record["max_gain_at_perfect_root"],.125,places=12)
+                for s in (.5,.6,.65,.6875,.7,.75,.8,.9,1.):
+                    result=optimal_values(q,.25,s)
+                    predicted=max(0,((1-q)*s+q-.75)/2)
+                    self.assertAlmostEqual(result["contingent_minus_precommit"],predicted,places=11)
+                s_below=(.5+threshold)/2
+                s_above=(threshold+1.)/2
+                self.assertAlmostEqual(optimal_values(q,.25,s_below)["contingent_minus_precommit"],0,places=12)
+                self.assertGreater(optimal_values(q,.25,s_above)["contingent_minus_precommit"],0)
+    def test_more_predictable_easy_branch_requires_more_reliable_root_at_fixed_cost(self):
+        q0=threshold_family(0)
+        q20=threshold_family(.2)
+        q25=threshold_family(.25)
+        self.assertAlmostEqual(q0["minimum_s_for_strict_positive_gain"],.75)
+        self.assertAlmostEqual(q20["minimum_s_for_strict_positive_gain"],.6875)
+        self.assertAlmostEqual(q25["minimum_s_for_strict_positive_gain"],2/3)
+        self.assertGreater(q0["minimum_s_for_strict_positive_gain"],
+                           q20["minimum_s_for_strict_positive_gain"])
+        self.assertGreater(q20["minimum_s_for_strict_positive_gain"],
+                           q25["minimum_s_for_strict_positive_gain"])
     def test_invalid_parameter_or_root_signal_fails(self):
         for q,c,s in ((-.1,.25,1),(.51,.25,1),(.2,-.1,1),(.2,.25,.49),(.2,.25,1.01),
                       (.2,.25,float('nan'))):
