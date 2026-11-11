@@ -1,0 +1,33 @@
+name: bee-stage19-noisy-root-exact-threshold
+on:
+  push:
+    branches:
+      - theory/bee-noisy-root-threshold-stage19-20261112
+    paths:
+      - 'research/bee_noisy_root_stage19/**'
+      - '.github/workflows/bee-stage19-noisy-root.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-eight-world-posterior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compare independent normalized-posterior oracle with exact joint-mass optimization
+        working-directory: research/bee_noisy_root_stage19
+        run: python -m unittest test_root_noisy -v
+      - name: Verify exact asymmetric-state recognition threshold and math-only grid
+        working-directory: research/bee_noisy_root_stage19
+        run: python -u root_noisy.py --out stage19_exact_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage19-exact-noisy-root-math-no-bee-data
+          path: research/bee_noisy_root_stage19/stage19_exact_outputs/stage19_exact_noisy_root_threshold.json
+          if-no-files-found: warn
+          retention-days: 90
