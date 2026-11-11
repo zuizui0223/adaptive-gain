@@ -1,0 +1,64 @@
+{
+  "stage": 18,
+  "date": "2026-11-11",
+  "status": "EXACT_MATHEMATICAL_ROOT_CONTENT_DEPENDENT_STOP_AND_READ_ONLY_PRIOR_ART",
+  "source_ci": "https://github.com/zuizui0223/adaptive-gain/actions/runs/42967801326",
+  "proposition": {
+    "R": "Bernoulli(.5)",
+    "U": "Bernoulli(q)",
+    "V": "Bernoulli(.5)",
+    "target": "U if R=0, else V",
+    "worlds_independent_with_replacement": true,
+    "root_reliability_assumed": 1,
+    "leaf_perception_assumed": 1,
+    "correct_payoff": 1,
+    "incorrect_payoff": 0,
+    "leaf_cost": "dimensionless normalized correctness reward"
+  },
+  "illustrative_example": {
+    "q": 0.2,
+    "c": 0.25,
+    "R0": "SKIP",
+    "R1": "request V",
+    "optional_contingent": 0.775,
+    "optional_precommit": 0.65,
+    "optional_gain": 0.125,
+    "mandatory_contingent": 0.75,
+    "mandatory_precommit": 0.65,
+    "mandatory_gain": 0.1,
+    "optional_extra_gain": 0.025
+  },
+  "sharp_max": {
+    "q_leq_quarter": "1/8 at c=1/4",
+    "q_geq_quarter": "(q+1/2)/6 at c=(q+1/2)/3",
+    "symmetric_q_half": 0.16666666666666666,
+    "asymmetric_q_point_two": 0.125
+  },
+  "oracle_validation": {
+    "test_count": 13,
+    "math_tests": 9,
+    "prior_data_source_tests": 4,
+    "source_ci": "42967801326",
+    "q_x_cost_cases": 112
+  },
+  "prior_author_source": {
+    "repo": "Cuixiaojian21/bee_metacognition",
+    "commit": "7f886394b4de872ecdb19ca4ea214ec321d5dce9",
+    "git_blob_sha": "26259c9071c6d73141d56b9bedd396cab1a04491",
+    "csv_sha256": "0f722a0a13ee8dd08aa62b92624394f4ea81853d12f448913c46f7e61ad639f5",
+    "bee_ids": 192,
+    "source_trials": 19200,
+    "Hard_voluntary_greater_than_Easy_bees": 192,
+    "strict_Easy_Hard_Impossible_bees": 181,
+    "auto_free_cue_trials": 3840,
+    "actual_auto_free_cue_landings": 2028,
+    "flag_vs_landing_disagreements": 1812,
+    "author_preprint_doi": "10.64898/2026.09.15.751944",
+    "new_statistical_effect_fitted": false
+  },
+  "real_stage18_animals": 0,
+  "calibrated_bee_cost_c": false,
+  "trained_asymmetric_prior_verified": false,
+  "actual_root_conditioned_skip_tested": false,
+  "requires_separately_piloted_animal_study": true
+}
