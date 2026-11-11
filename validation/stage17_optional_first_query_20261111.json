@@ -3,8 +3,8 @@
   "date": "2026-11-11",
   "real_animal_count": 0,
   "study_status": "DESIGN_AND_SYNTHETIC_SOFTWARE_QA_ONLY",
-  "source_run": "https://github.com/zuizui0223/adaptive-gain/actions/runs/42959593839",
-  "focused_tests_passed": 15,
+  "source_run": "https://github.com/zuizui0223/adaptive-gain/actions/runs/42960734263",
+  "focused_tests_passed": 17,
   "original_demo_sample": {
     "fake_colonies": 24,
     "fake_bees": 288,
@@ -52,5 +52,16 @@
     "all source telemetry flags are fake QA",
     "24 colonies used for mock QA only, not a calibrated power target",
     "no clinical/animal ethical approval or subject recruitment"
-  ]
+  ],
+  "reward_assignment_source_validation": {
+    "source_rewarded_target_matches_hidden_correct_bit": true,
+    "source_nominal_high_low_reward_offer_qA_mg": {
+      "high": 50,
+      "low": 30
+    },
+    "masked_visual_and_odor_reward_location_is_tested_only_in_mock": true,
+    "original_fielder_calibration_completed": false,
+    "correct_vs_incorrect_biological_reward_still_unmeasured": true,
+    "original_hidden_reward_bit_equals_source_target": true
+  }
 }
