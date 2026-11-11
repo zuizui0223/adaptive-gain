@@ -19,14 +19,19 @@ jobs:
           python-version: '3.11'
       - name: Compare exact asymmetric root-branch stop rule to independent 8-state posterior optimizer
         working-directory: research/bee_asymmetry_stage18
-        run: python -m unittest test_asymmetric_access -v
+        run: python -m unittest test_asymmetric_access test_external_source_qa -v
       - name: Freeze source-free exact benefit surface and iid mock world receipt
         working-directory: research/bee_asymmetry_stage18
         run: python -u asymmetric_access.py --out stage18_exact_outputs
+      - name: Read original preprint trial records and audit voluntary request semantics without fitting effects
+        working-directory: research/bee_asymmetry_stage18
+        run: python -u external_source_qa.py --out stage18_exact_outputs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: bee-stage18-no-animals-asymmetric-access-math
-          path: research/bee_asymmetry_stage18/stage18_exact_outputs/stage18_asymmetry_decision_surface.json
+          path: |
+            research/bee_asymmetry_stage18/stage18_exact_outputs/stage18_asymmetry_decision_surface.json
+            research/bee_asymmetry_stage18/stage18_exact_outputs/stage18_external_information_request_source_qa.json
           if-no-files-found: warn
           retention-days: 90
