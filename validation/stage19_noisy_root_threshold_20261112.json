@@ -4,7 +4,7 @@
   "source_repo": "zuizui0223/adaptive-gain",
   "status": "EXACT_NOISY_ROOT_RECOGNITION_THRESHOLD_NO_REAL_ANIMALS",
   "full_source_ci": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43049021716",
-  "source_test_count": 8,
+  "source_test_count": 10,
   "independent_posterior_cases": 175,
   "source_free_grid_cases": 315,
   "math_model": {
@@ -80,5 +80,34 @@
     "prospective_animal_approval_not_done": true
   },
   "does_not_change_stage18_or_stage17": true,
-  "not_a_general_bee_threshold": true
+  "not_a_general_bee_threshold": true,
+  "source_ci": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43050503589",
+  "generalized_family": {
+    "domain": "q between 0 and 1/4 inclusive; fixed leaf cost c=1/4; root accuracy s in [1/2,1]",
+    "source_R0_prior": "U~Bernoulli(q)",
+    "strict_positive_threshold_formula": "s > (3/4-q)/(1-q)",
+    "exact_contingent_minus_precommit_gain": "max(0,((1-q)*s+q-3/4)/2)",
+    "max_gain_at_s1": "1/8 for every q in [0,1/4]",
+    "q_threshold_examples": [
+      {
+        "q": 0,
+        "strict_s_threshold": 0.75
+      },
+      {
+        "q": 0.1,
+        "strict_s_threshold": 0.7222222222222222
+      },
+      {
+        "q": 0.2,
+        "strict_s_threshold": 0.6875
+      },
+      {
+        "q": 0.25,
+        "strict_s_threshold": 0.6666666666666666
+      }
+    ],
+    "nontrivial_monotonicity": "decreasing q raises the recognition accuracy threshold, even though perfect-root peak gain is constant",
+    "generalization_boundaries": "Only fixed cost 1/4, symmetric root recognition errors, perfect leaf readout, iid hidden states and this optional first query choice set",
+    "observed_bee_thresholds": 0
+  }
 }
