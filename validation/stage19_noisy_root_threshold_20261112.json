@@ -1,0 +1,84 @@
+{
+  "stage": 19,
+  "date": "2026-11-12",
+  "source_repo": "zuizui0223/adaptive-gain",
+  "status": "EXACT_NOISY_ROOT_RECOGNITION_THRESHOLD_NO_REAL_ANIMALS",
+  "full_source_ci": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43049021716",
+  "source_test_count": 8,
+  "independent_posterior_cases": 175,
+  "source_free_grid_cases": 315,
+  "math_model": {
+    "hidden_R": "Bern(0.5)",
+    "hidden_U": "Bern(q)",
+    "hidden_V": "Bern(0.5)",
+    "root_observation_Z": "symmetric noisy copy of R with P(Z=R)=s",
+    "target": "U when R0, V when R1",
+    "cost": "c normalized correct-choice reward, not seconds/mg",
+    "root_accuracy_ranged": [
+      0.5,
+      1
+    ],
+    "perfect_leaf_recognition_assumed": true,
+    "precommit_first_action_bound_before_root": true,
+    "precommit_second_query_optional": true,
+    "contingent_first_action_after_root": true,
+    "skip_allowed_in_both": true,
+    "worlds_independent_with_replacement": true
+  },
+  "sharp_example": {
+    "q": 0.2,
+    "c": 0.25,
+    "threshold_fraction": "11/16",
+    "threshold_percent": 68.75,
+    "contingent_gain_formula": "max(0,2*s/5-11/40)",
+    "precommit_optimal_value": 0.65,
+    "selected": [
+      {
+        "s": 0.5,
+        "gain": 0,
+        "uncalibrated_fixed_policy_minus_precommit": -0.075
+      },
+      {
+        "s": 0.6,
+        "gain": 0,
+        "uncalibrated_fixed_policy_minus_precommit": -0.035
+      },
+      {
+        "s": 0.6875,
+        "gain": 0,
+        "uncalibrated_fixed_policy_minus_precommit": 0
+      },
+      {
+        "s": 0.7,
+        "gain": 0.005,
+        "uncalibrated_fixed_policy_minus_precommit": 0.005
+      },
+      {
+        "s": 0.75,
+        "gain": 0.025,
+        "uncalibrated_fixed_policy_minus_precommit": 0.025
+      },
+      {
+        "s": 0.9,
+        "gain": 0.085,
+        "uncalibrated_fixed_policy_minus_precommit": 0.085
+      },
+      {
+        "s": 1,
+        "gain": 0.125,
+        "uncalibrated_fixed_policy_minus_precommit": 0.125
+      }
+    ]
+  },
+  "experiment_gate": {
+    "root_true_bit_confusion_by_class_not_recorded": true,
+    "recognition_accuracy_not_measured": true,
+    "learned_asymmetric_prior_not_measured": true,
+    "correct_target_reward_and_learning_not_calibrated": true,
+    "individual_SKIPPED_OR_UV_choice_not_measured": true,
+    "independent_colonies_not_recruited": true,
+    "prospective_animal_approval_not_done": true
+  },
+  "does_not_change_stage18_or_stage17": true,
+  "not_a_general_bee_threshold": true
+}
