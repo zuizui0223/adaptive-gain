@@ -85,6 +85,17 @@ class AsymmetricSourceTests(unittest.TestCase):
             self.assertAlmostEqual(values(q,cost)["access_value_gain"],gain,places=11)
             for i in range(101):
                 self.assertGreaterEqual(gain+1e-9,values(q,i/100)["access_value_gain"])
+    def test_source_switching_and_optional_skipping_have_distinct_contributions(self):
+        z=values(.2,.25)
+        self.assertAlmostEqual(z["mandatory_contingent_value"],.75)
+        self.assertAlmostEqual(z["mandatory_precommit_value"],.65)
+        self.assertAlmostEqual(z["mandatory_access_gain"],.10)
+        self.assertAlmostEqual(z["optional_minus_mandatory_access_gain"],.025)
+        self.assertGreater(z["optional_minus_mandatory_access_gain"],0.)
+        high=values(.2,.50)
+        self.assertAlmostEqual(high["access_value_gain"],0.)
+        self.assertGreater(high["mandatory_access_gain"],0.)
+        self.assertLess(high["optional_minus_mandatory_access_gain"],0.)
     def test_free_and_unaffordable_queries_both_erase_value(self):
         for q in (0,.05,.20,.3,.5):
             self.assertAlmostEqual(values(q,0)["access_value_gain"],0)
