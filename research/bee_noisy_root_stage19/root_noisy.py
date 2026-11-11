@@ -176,6 +176,44 @@ def threshold_witness():
     }
 
 
+
+def threshold_family(q):
+    """Exact s threshold with c=1/4 and easy branch U~Bern(q), 0<=q<=1/4.
+
+    The precommitment optimum is SKIP at V_F=3/4-q/2.
+    Root Z0 likewise SKIPs, while observed Z1 buys V exactly when
+    s>(3/4-q)/(1-q). This generalized sensitivity does NOT apply to
+    other query costs, asymmetric Z-confusion matrices, or leaf errors.
+    """
+    qq=_parameter("easy_branch_prior",q,Fraction(0),Fraction(1,4))
+    cost=Fraction(1,4)
+    threshold=(Fraction(3,4)-qq)/(Fraction(1)-qq)
+    base=Fraction(3,4)-qq/Fraction(2)
+    validation_points=(Fraction(1,2), threshold,
+                       (threshold+Fraction(1))/Fraction(2),Fraction(1))
+    for s in validation_points:
+        branches,cont,pre,_,_= _raw_optimal(qq,cost,s)
+        formula=max(Fraction(0),((1-qq)*s+qq-Fraction(3,4))/2)
+        if pre!=base or cont-pre!=formula:
+            raise ValueError("NO_GO_NONUNIFORM_RECOGNITION_THRESHOLD_FAMILY")
+        if _best_action(branches[0])!="SKIP":
+            raise ValueError("NO_GO_ROOT0_FAMILY_NOT_SKIP")
+        if _best_action(branches[1])!=("V" if s>threshold else "SKIP"):
+            raise ValueError("NO_GO_ROOT1_FAMILY_THRESHOLD")
+    return {
+        "q_fraction":str(qq),
+        "q":float(qq),
+        "source_leaf_cost_fraction":"1/4",
+        "minimum_s_for_strict_positive_gain":float(threshold),
+        "s_threshold_exact_fraction":str(threshold),
+        "precommit_value_exact_fraction":str(base),
+        "family_formula":"max(0,((1-q)*s+q-3/4)/2)",
+        "max_gain_at_perfect_root":float(Fraction(1,8)),
+        "only_q_in_zero_to_one_quarter":True,
+        "not_plant_pollinator_original_measurement":True,
+    }
+
+
 def decision_grid():
     q_values=(0.,.10,.20,.35,.50)
     cost_values=(0.,.05,.1,.2,.25,.4,.6)
@@ -184,6 +222,8 @@ def decision_grid():
         "status":"STAGE19_EXACT_NOISY_ROOT_DECISION_SURFACE",
         "description":"Source-free Bayesian decision surface; independent original trials hypothetical",
         "test_example":threshold_witness(),
+        "sharp_family_at_fixed_cost_one_quarter":[
+            threshold_family(q) for q in (0.,.05,.10,.15,.20,.24,.25)],
         "source_parameter_grid":{
             "q":q_values,"normalized_leaf_cost":cost_values,
             "root_recognition_accuracy":s_values},
