@@ -1,0 +1,33 @@
+name: bee-stage20-root-confusion-matrix-exact
+on:
+  push:
+    branches:
+      - theory/bee-asymmetric-root-errors-stage20-20261112
+    paths:
+      - 'research/bee_root_confusion_stage20/**'
+      - '.github/workflows/bee-stage20-asymmetric-root.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-two-class-root-confusion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent normalized posterior oracle versus production exact joint masses
+        working-directory: research/bee_root_confusion_stage20
+        run: PYTHONPATH=../bee_noisy_root_stage19:. python -m unittest test_asymmetric_root -v
+      - name: Export mathematical decision plane, and warn that no confusion matrix has been observed
+        working-directory: research/bee_root_confusion_stage20
+        run: PYTHONPATH=../bee_noisy_root_stage19:. python -u asymmetric_root.py --out stage20_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage20-exact-two-class-sensory-errors-no-real-animal-data
+          path: research/bee_root_confusion_stage20/stage20_outputs/stage20_two_class_confusion_frontier.json
+          if-no-files-found: warn
+          retention-days: 90
