@@ -1,0 +1,38 @@
+name: bee-stage21-noisy-leaf-bayesian-decision
+on:
+  push:
+    branches:
+      - theory/bee-noisy-leaf-channel-stage21-20261112
+    paths:
+      - 'research/bee_leaf_noise_stage21/**'
+      - '.github/workflows/bee-stage21-noisy-leaf.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-source-free-leaf-channel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact noisy leaf dynamic program against independent posterior Bayesian oracle
+        working-directory: research/bee_leaf_noise_stage21
+        run: PYTHONPATH=../bee_root_confusion_stage20:../bee_noisy_root_stage19:. python -m unittest test_leaf_channel test_pilot_leaf_gate -v
+      - name: Export complete synthetic-only noisy-leaf reliability value grid and strict stop rules
+        working-directory: research/bee_leaf_noise_stage21
+        run: PYTHONPATH=../bee_root_confusion_stage20:../bee_noisy_root_stage19:. python -u leaf_channel.py --out stage21_exact_outputs
+      - name: Verify mock original U/V leaf recognition by true bit and independent colony
+        working-directory: research/bee_leaf_noise_stage21
+        run: PYTHONPATH=../bee_root_confusion_stage20:../bee_noisy_root_stage19:. python -u pilot_leaf_gate.py --out stage21_exact_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bee-stage21-no-living-animal-leaf-information-frontier
+          path: |
+            research/bee_leaf_noise_stage21/stage21_exact_outputs/stage21_noisy_leaf_decision_grid.json
+            research/bee_leaf_noise_stage21/stage21_exact_outputs/stage21_mock_leaf_pilot_qa.json
+          if-no-files-found: warn
+          retention-days: 90

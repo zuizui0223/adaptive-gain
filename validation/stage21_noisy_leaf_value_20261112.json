@@ -1,0 +1,92 @@
+{
+  "stage": 21,
+  "date": "2026-11-12",
+  "status": "EXACT_NOISY_LEAF_CHANNELS_AND_SYNTHETIC_READOUT_QA",
+  "base_pr": 98,
+  "branch": "theory/bee-noisy-leaf-channel-stage21-20261112",
+  "exact_QA_url": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43216365839",
+  "focused_tests_passed": 17,
+  "math_grid_cells": 480,
+  "mathematical_assumptions": {
+    "hidden_world": "R~Bern(.5),U~Bern(q),V~Bern(.5), independent fresh original trial states",
+    "root_cue_class_correctness": "s0=P(Z0|R0), s1=P(Z1|R1) in [1/2,1]",
+    "U_leaf_channel": "aU=P(readout_U=U) in [1/2,1] with symmetric binary errors",
+    "V_leaf_channel": "aV=P(readout_V=V) in [1/2,1] with symmetric binary errors",
+    "leaf_cost": "c normalized correct decision reward units; not source-calibrated seconds or mg",
+    "true_target": "U if true R0, else V",
+    "correct_utility": 1,
+    "wrong_utility": 0,
+    "first_request_choice": "SKIP/U/V before root for precommit; after root for contingent",
+    "second_distinct_leaf_request_optional": true,
+    "no_real_animal_fitness_measured": true
+  },
+  "fixed_example": {
+    "q": 0.2,
+    "c": 0.25,
+    "exact_gain": "max(0,(s1*(aV-3/4) - (11/20)*(1-s0))/2)",
+    "strict_positive_condition": "aV > 3/4 + (11/20)*(1-s0)/s1",
+    "U_accuracy_does_not_affect_this_restricted_q_c_result": true,
+    "s0": 0.8,
+    "s1": 0.6,
+    "sharp_v_accuracy_threshold_fraction": "14/15",
+    "sharp_v_accuracy_threshold_percent": 93.33333333333333,
+    "example_v_accuracies_and_gains": [
+      {
+        "aV": 0.8,
+        "gain": 0
+      },
+      {
+        "aV": 0.9,
+        "gain": 0
+      },
+      {
+        "aV": 0.9333333333333333,
+        "gain": 0
+      },
+      {
+        "aV": 0.94,
+        "gain": 0.002
+      },
+      {
+        "aV": 0.95,
+        "gain": 0.005
+      },
+      {
+        "aV": 1,
+        "gain": 0.02
+      }
+    ]
+  },
+  "same_mean_channel_counterexample": [
+    {
+      "aU": 0.8,
+      "aV": 1,
+      "mean": 0.9,
+      "source_free_optimal_gain": 0.02
+    },
+    {
+      "aU": 1,
+      "aV": 0.8,
+      "mean": 0.9,
+      "source_free_optimal_gain": 0
+    }
+  ],
+  "synthetic_pilot": {
+    "mock_trials": 40,
+    "fake_bees": 2,
+    "fake_colonies": 2,
+    "U_pooled_accuracy": 0.9,
+    "V_pooled_accuracy": 0.9,
+    "math_gain_at_pooled_leaf_rates": 0,
+    "equal_colony_mean_idealized_gain": 0.01,
+    "source_true_0_and_true_1_class_checks": true,
+    "root_and_reward_masked_during_cue_classification": true,
+    "all_data_fake": true,
+    "asymmetric_bit_errors_require_separately_fitted_four_class_confusion": true
+  },
+  "real_bees_in_stage21": 0,
+  "independent_animal_colony_recruitment": 0,
+  "ethical_prospective_approval": false,
+  "not_an_empirical_or_fitness_effect": true,
+  "original_prior_stages_unchanged": true
+}
