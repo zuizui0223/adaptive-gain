@@ -20,14 +20,19 @@ jobs:
           python-version: '3.11'
       - name: Independent normalized posterior oracle versus production exact joint masses
         working-directory: research/bee_root_confusion_stage20
-        run: PYTHONPATH=../bee_noisy_root_stage19:. python -m unittest test_asymmetric_root -v
+        run: PYTHONPATH=../bee_noisy_root_stage19:. python -m unittest test_asymmetric_root test_pilot_root_gate -v
       - name: Export mathematical decision plane, and warn that no confusion matrix has been observed
         working-directory: research/bee_root_confusion_stage20
         run: PYTHONPATH=../bee_noisy_root_stage19:. python -u asymmetric_root.py --out stage20_outputs
+      - name: Audit synthetic per-bee per-root-class confusion matrices without interpreting them as animals
+        working-directory: research/bee_root_confusion_stage20
+        run: PYTHONPATH=../bee_noisy_root_stage19:. python -u pilot_root_gate.py --out stage20_outputs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: stage20-exact-two-class-sensory-errors-no-real-animal-data
-          path: research/bee_root_confusion_stage20/stage20_outputs/stage20_two_class_confusion_frontier.json
+          path: |
+            research/bee_root_confusion_stage20/stage20_outputs/stage20_two_class_confusion_frontier.json
+            research/bee_root_confusion_stage20/stage20_outputs/stage20_mock_root_pilot_quality.json
           if-no-files-found: warn
           retention-days: 90
