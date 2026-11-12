@@ -1,0 +1,94 @@
+{
+  "stage": 20,
+  "date": "2026-11-12",
+  "status": "EXACT_ASYMMETRIC_ROOT_CONFUSION_NO_REAL_BEES",
+  "parent_stage19_pr": 97,
+  "mathematical_world": "R~Bern(.5),U~Bern(.2),V~Bern(.5) iid by trial; hidden target U when R0 otherwise V",
+  "root_confusion": {
+    "s0": "P(Z=0|R=0)",
+    "s1": "P(Z=1|R=1)",
+    "input_range": "each in [.5,1]",
+    "PZ0": "(1+s0-s1)/2",
+    "PZ1": "(1-s0+s1)/2"
+  },
+  "source_payoff": {
+    "correct": 1,
+    "incorrect": 0,
+    "leaf_cost": 0.25,
+    "root_signal_free_and_common": true,
+    "leaf_readout_perfect_assumed": true,
+    "first_skip_possible": true,
+    "second_leaf_optional": true
+  },
+  "exact_result": {
+    "optimal_precommit_value": 0.65,
+    "strict_positive_condition": "11*s0+5*s1>11",
+    "gain_formula": "max(0,(11*s0+5*s1-11)/40)",
+    "source_z0_action": "SKIP",
+    "source_z1_action": "V only if sharp condition holds; otherwise SKIP",
+    "symmetric_reduction": "s>11/16"
+  },
+  "matched_balanced_accuracy_examples": [
+    {
+      "s0": 0.8,
+      "s1": 0.6,
+      "balanced_accuracy": 0.7,
+      "gain": 0.02
+    },
+    {
+      "s0": 0.6,
+      "s1": 0.8,
+      "balanced_accuracy": 0.7,
+      "gain": 0
+    },
+    {
+      "s0": 0.9,
+      "s1": 0.7,
+      "balanced_accuracy": 0.8,
+      "gain": 0.06
+    },
+    {
+      "s0": 0.7,
+      "s1": 0.9,
+      "balanced_accuracy": 0.8,
+      "gain": 0.03
+    }
+  ],
+  "hypothetical_equal_bee_comparison": {
+    "two_class_pairs": [
+      [
+        0.9,
+        0.9
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "mean_individual_gain": 0.0425,
+    "gain_at_pooled_classes": 0.005,
+    "source_bees_real": 0
+  },
+  "root_pilot_mock": {
+    "total_fake_trials": 40,
+    "total_fake_colonies": 2,
+    "total_fake_bees": 2,
+    "s0_mock_pooled": 0.7,
+    "s1_mock_pooled": 0.7,
+    "source_feedback_is_after_classification": true,
+    "fake_leaf_channel_unavailable": true,
+    "source_data_not_actual_animal": true
+  },
+  "test_receipt": {
+    "CI": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43125720023",
+    "focused_tests": 14,
+    "posterior_cases": 192,
+    "exact_grid": 121
+  },
+  "real_bees_sampled": 0,
+  "real_sensitivities_measured": false,
+  "q_and_query_cost_not_empirically_calibrated": true,
+  "individual_colony_inference_missing": true,
+  "theorem_does_not_establish_real_fitness": true,
+  "prior_theory_stages_unmodified": true
+}
