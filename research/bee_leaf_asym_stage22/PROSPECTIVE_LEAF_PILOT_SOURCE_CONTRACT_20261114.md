@@ -21,3 +21,8 @@ Mock quality gate \`pilot_leaf_class_gate.py\` produces 80 entirely fabricated r
 These are **injected mock classification outcomes**, not a real bee population comparison. In an actual pilot, never require exactly symmetric errors; rather, estimate every class-specific rate and interval, then use the correct four-channel model under independently measured q and query costs.
 
 The theorem should not be promoted from “conditional model predicts value” to “bees benefit from selecting information” until actual animal-origin requests, target-choice accuracy and calibrated intake are recorded under a prospectively fixed causal comparison. A toy positive number is not a biological experiment.
+
+
+## Additional pilot uncertainty acceptance rule
+
+The source-free interval checker propagates s0,s1,aV0,aV1 bounds to a sharp theoretical gain range, using the 16 vertices of a multi-affine expression. It rejects missing, nonfinite, reversed and out-of-domain bounds. The original mock 80 records have NO inferential confidence interval, and no statistical coverage claim. In a future pilot, class recognition needs interval uncertainty by original animals and independent colonies; if the robust gain lower bound is zero, a positive point estimate should remain unresolved rather than an empirical confirmation of adaptive routeability.

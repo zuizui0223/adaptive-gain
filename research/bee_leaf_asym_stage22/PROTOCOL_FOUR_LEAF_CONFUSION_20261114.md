@@ -27,3 +27,10 @@ Do not require *exact equality* of class errors in an actual finite pilot; the p
 
 ## Hard claim ceiling
 The above values follow a finite invented Bayesian game and do not imply bee perception, sensory bias, Darwinian fitness or a universal macroecological principle. The positive benefit is conditional on the fixed q,c and source channel assumptions. Future conclusions require an actually approved prospective study with independent colonies, verified rewards and query events. Do not tune cost or prior after biological outcomes to rescue the result.
+
+
+## Conditional source uncertainty rule, before any real data
+
+Even if a hypothetical classifier has point rates s0=.8,s1=.6,aV0=1,aV1=.9 (mathematical gain +.008), a wider uncertainty region around these rates may include ZERO gain. The exact robustness checker propagates explicit root and V true-bit recognition bounds through the theorem via all 16 corners. Only a strictly positive worst-case signed gain is labeled as positive for all assumed parameter values. It never converts a point estimate into evidence automatically.
+
+A real animal study must define how these four input confidence/credible limits were estimated, accounting for per-bee and independent-colony replication, joint coverage and dependence. Without real data and coverage calibration, the intervals are ASSUMED scenarios rather than sensory confidence intervals. The frozen q=.2,c=.25 theoretical utility is not calibrated sucrose or seconds.
