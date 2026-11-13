@@ -1,0 +1,126 @@
+{
+  "stage": 22,
+  "date": "2026-11-14",
+  "status": "EXACT_EIGHT_WORLD_FOUR_CLASS_LEAF_ERROR_THEOREM_AND_MOCK_SOURCE_QA",
+  "source_run": "https://github.com/zuizui0223/adaptive-gain/actions/runs/43459449790",
+  "original_repository": "zuizui0223/adaptive-gain",
+  "theoretical_world": {
+    "R": "Bern(1/2)",
+    "U": "Bern(q)",
+    "V": "Bern(1/2)",
+    "target": "U iff true R0, else V",
+    "resampling": "iid with replacement per original trial",
+    "root_s0": "P(Z0|R0)",
+    "root_s1": "P(Z1|R1)",
+    "U0": "P(Uobs0|Utrue0)",
+    "U1": "P(Uobs1|Utrue1)",
+    "V0": "P(Vobs0|Vtrue0)",
+    "V1": "P(Vobs1|Vtrue1)",
+    "domains": "q∈[0,1/2], c≥0, root and leaf class rates∈[1/2,1]",
+    "normalized_correct_reward": 1,
+    "normalized_wrong_reward": 0,
+    "first_action": "SKIP/U/V before or after Z",
+    "second_distinct_leaf_optional": true
+  },
+  "fixed_sharp_theorem": {
+    "q": 0.2,
+    "c": 0.25,
+    "precommit_value": 0.65,
+    "precommit_first_action": "SKIP",
+    "contingent_after_Z0": "SKIP",
+    "contingent_after_Z1": "V only for strict positive gain; otherwise SKIP",
+    "formula": "max(0,s1*(v0+v1-3/2)/4+(1-s0)*(3*v0/20-3*v1/20-11/40))",
+    "symmetric_reduction": "max(0,(s1*(aV-3/4)-(11/20)*(1-s0))/2)",
+    "U_class_accuracies_irrelevant_in_this_q_c_game": true
+  },
+  "worked_example": {
+    "s0": 0.8,
+    "s1": 0.6,
+    "gain": "max(0,.18*v0+.12*v1-.28)",
+    "equal_mean_V_accuracy": 0.95,
+    "V0_1_V1_point9_gain": 0.008,
+    "V0_point9_V1_1_gain": 0.002,
+    "fourfold_difference_if_theoretical_positive": true,
+    "all_numbers_assumed_not_bee_measurements": true
+  },
+  "verification": {
+    "focused_tests": 19,
+    "independent_normalized_posterior_oracle_cases": 240,
+    "additional_sharp_formula_cases": 240,
+    "exact_grid": 108,
+    "synthetic_original_leaf_classification_rows": 80,
+    "fake_bees": 2,
+    "fake_colonies": 2,
+    "source_pilot_true_classes": [
+      "U0",
+      "U1",
+      "V0",
+      "V1"
+    ],
+    "mock_pooled_rates": {
+      "U0": 0.85,
+      "U1": 0.75,
+      "V0": 0.95,
+      "V1": 0.95
+    },
+    "fake_individual_colony_gains": {
+      "MOCK_C1": 0.008,
+      "MOCK_C2": 0.002
+    }
+  },
+  "scientific_limitations": {
+    "live_bees_tested": 0,
+    "actual_sensory_confusion_measured": false,
+    "independent_colony_replication_real": 0,
+    "actual_paid_query_cost_calibrated": false,
+    "animal_ethical_permission_obtained": false,
+    "physiological_or_fitness_effect_measured": false,
+    "real_root_and_leaf_learning_pilot": false,
+    "upstream_scientific_PRs_modified": false
+  },
+  "robustness": {
+    "source_file": "research/bee_leaf_asym_stage22/interval_robustness.py",
+    "sharp_extrema": "multi-affine signed gain, 16 parameter-box vertices",
+    "source_only_extra_tests": 5,
+    "broad_mock_parameters": {
+      "s0": [
+        0.79,
+        0.81
+      ],
+      "s1": [
+        0.59,
+        0.61
+      ],
+      "v0": [
+        0.92,
+        1
+      ],
+      "v1": [
+        0.85,
+        0.95
+      ],
+      "zero_is_possible": true
+    },
+    "tight_mock_parameters": {
+      "s0": [
+        0.8,
+        0.8
+      ],
+      "s1": [
+        0.6,
+        0.6
+      ],
+      "v0": [
+        0.99,
+        1
+      ],
+      "v1": [
+        0.96,
+        1
+      ],
+      "worst_theoretical_gain": 0.0134
+    },
+    "boundaries_are_assumed_not_statistical_intervals": true,
+    "independent_colony_classification_uncertainty_not_measured": true
+  }
+}
