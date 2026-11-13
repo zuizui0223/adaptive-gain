@@ -19,13 +19,16 @@ jobs:
           python-version: '3.11'
       - name: Test exact joint-mass source against independent normalized-posterior oracle
         working-directory: research/bee_leaf_asym_stage22
-        run: PYTHONPATH=../bee_leaf_noise_stage21:. python -m unittest test_leaf_bit_confusion test_pilot_leaf_class_gate -v
+        run: PYTHONPATH=../bee_leaf_noise_stage21:. python -m unittest test_leaf_bit_confusion test_pilot_leaf_class_gate test_interval_robustness -v
       - name: Generate source-free four-class leaf error decision frontier
         working-directory: research/bee_leaf_asym_stage22
         run: PYTHONPATH=../bee_leaf_noise_stage21:. python -u leaf_bit_confusion.py --out stage22_exact_outputs
       - name: Audit blinded four-leaf-bit source classes using mock animals only
         working-directory: research/bee_leaf_asym_stage22
         run: PYTHONPATH=../bee_leaf_noise_stage21:. python -u pilot_leaf_class_gate.py --out stage22_exact_outputs
+      - name: Propagate hypothetical four-source recognition intervals into sharp decision-value bounds
+        working-directory: research/bee_leaf_asym_stage22
+        run: PYTHONPATH=../bee_leaf_noise_stage21:. python -u interval_robustness.py --out stage22_exact_outputs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -33,5 +36,6 @@ jobs:
           path: |
             research/bee_leaf_asym_stage22/stage22_exact_outputs/stage22_four_leaf_errors_math.json
             research/bee_leaf_asym_stage22/stage22_exact_outputs/stage22_mock_four_class_pilot.json
+            research/bee_leaf_asym_stage22/stage22_exact_outputs/stage22_assumed_parameter_rectangle_bounds.json
           if-no-files-found: warn
           retention-days: 90
