@@ -1,0 +1,64 @@
+name: floral-stage41-independent-cutoff-and-point-speed-sensitivity
+on:
+  push:
+    branches: [analysis/floral-landing-preprocess-robustness-stage41-20261115]
+    paths:
+      - 'research/floral_landing_sensitivity_stage41/**'
+      - '.github/workflows/floral-stage41-preprocessing.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-real-original-trajectory-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install 3D-signal-processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Precommitted synthetic-only regression tests
+        working-directory: research/floral_landing_sensitivity_stage41
+        run: python -m unittest -v test_preprocessing_sensitivity
+      - name: Exact original-archive source checksum and independent six-specification re-fit
+        working-directory: research/floral_landing_sensitivity_stage41
+        run: python -u preprocessing_sensitivity.py
+      - name: Enforce original-source counts and separate motor mechanics from plant fitness
+        working-directory: research/floral_landing_sensitivity_stage41
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          r=json.loads(Path('stage41_aggregate_receipts/six_source_specifications.json').read_text())
+          assert r['status']=='ORIGINAL_157_ARCHIVED_TRACKS_SIX_METHOD_SENSITIVITY'
+          assert r['source_W0_W1_filename_counts']=={'W0':56,'W1':101}
+          assert r['published_primary_112']=={'calm':60,'wind':52}
+          assert r['source_W0_less_than_paper_calm_60']
+          assert r['original_112_file_selection_not_recovered']
+          assert r['filters_hz_prespecified']==[50,100,150]
+          assert r['speed_methods_prespecified']==['three_tag_mean','point2_only']
+          assert len(r['specifications'])==6
+          assert r['not_original_published_mixed_model']
+          assert r['not_independent_colony_level_inference']
+          assert r['not_failures_or_pollen_or_seeds_or_fitness']
+          assert r['no_raw_track_rows_or_author_code_redistributed']
+          for s in r['specifications']:
+              for w in ('W0','W1'):
+                  x=s['wind_group_track_means'][w]
+                  assert x['n_eligible_tracks']>0
+                  assert math.isfinite(x['near_flower_mean_m_s'])
+              for k in ('near_flower','landing_minus_approach'):
+                  x=s['B_S_P_matched'][k]
+                  assert 1<x['n_paired_B_labels']<=28
+                  assert math.isfinite(x['equal_B_mean_W1_minus_W0_m_s'])
+          print('STAGE41_6_ORIGINAL_METHODS_AUDITED_WITHOUT_ASSUMING_SIGN')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage41-original-Chang-6-method-aggregate-receipt
+          path: research/floral_landing_sensitivity_stage41/stage41_aggregate_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
