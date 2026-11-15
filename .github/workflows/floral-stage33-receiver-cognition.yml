@@ -38,6 +38,13 @@ jobs:
           assert q['slow_learning_is_not_random_behavior'] is True
           assert q['numeric_learning_rate_effects_extracted']==0
           assert q['cross_task_efficiency_or_fitness_measured'] is False
+          context=x['original_table1_design']
+          assert context['taxa_checked']==8
+          assert context['honey_odor_added_to_bees_and_hoverflies_only'] is True
+          assert context['sucrose_bees_and_hoverflies_percent']==40
+          assert context['sucrose_butterflies_percent']==10
+          assert context['Bombus_ignitus_one_colony_reported'] is True
+          assert context['cannot_identify_order_or_sociality_effect_separately_from_these_design_factors_in_one_study'] is True
           z=x['mathematical_examples']
           assert z['high_cue_use_low_transfer_plant_gain']=='9/100'
           assert z['lower_cue_use_high_transfer_plant_gain']=='27/250'
