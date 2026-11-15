@@ -78,13 +78,13 @@ def extract_source_tables(archive_blob):
     if not {"site","wind.mean","count","keep"}.issubset(integration[0]):
         raise ValueError("NO_GO_INTEGRATED_SOURCE_SCHEMA")
     import re
-    patterns=re.compile(r"glmer\s*\(|glm\s*\(|count\s*~|wind\.mean|rel\.wind\.KE|filter\s*\(|keep\s*==",re.I)
-    formula_lines=[line.strip()[:180] for line in script.splitlines()
-                   if patterns.search(line)]
+    tokens={pat:bool(re.search(pat,script,re.I)) for pat in (
+       r"glmer\s*\(",r"glm\s*\(",r"wind\.mean",r"rel\.wind\.KE",
+       r"keep\s*==",r"count\s*~")}
     return {
         "sessions":sessions,"integrated":integration,"bees":bees,
         "original_source_file_sha256":hashes,
-        "original_R_analysis_excerpts":formula_lines[:45],
+        "original_R_model_tokens_detected":tokens,
         "original_R_full_content_not_redistributed":True
     }
 
@@ -313,7 +313,7 @@ def analyze_original_archive(archive_blob,permutations=4000,bootstrap=4000):
       "paper_doi":"10.1098/rsbl.2020.0103",
       "source_record_id":AUTHOR_RECORD_ID,
       "source_file_sha256":tables["original_source_file_sha256"],
-      "author_R_analysis_excerpts":tables["original_R_analysis_excerpts"],
+      "original_R_model_tokens_detected":tables["original_R_model_tokens_detected"],
       "study_grain":_summary(rows),
       "input_collectionMetadata_original_rows":len(tables["sessions"]),
       "input_integratedSpatialWindData_original_rows":len(integ),
