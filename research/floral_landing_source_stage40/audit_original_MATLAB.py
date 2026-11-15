@@ -141,7 +141,7 @@ def main(argv=None):
             if len(code_paths)!=1:
                 raise ValueError('NO_GO_PRIMARY_ORIGINAL_SCRIPT_AMBIGUOUS')
             code_lines=z.read(code_paths[0]).decode('latin1',errors='replace').splitlines()
-            for first,last in ((1,34),(68,90),(175,225)):
+            for first,last in ((22,68),(90,160),(227,241)):
                 for j in range(first,min(last,len(code_lines))+1):
                     line=code_lines[j-1].strip()
                     if line:
