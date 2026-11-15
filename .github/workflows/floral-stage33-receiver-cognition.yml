@@ -1,0 +1,70 @@
+name: floral-stage33-receiver-cognition-route-gate
+on:
+  push:
+    branches: [analysis/floral-receiver-cognition-guild-stage33-20261115]
+    paths:
+      - 'research/floral_receiver_stage33/**'
+      - '.github/workflows/floral-stage33-receiver-cognition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cognition-efficiency-separation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run receiver-learning and plant-transfer exact source-free checks
+        working-directory: research/floral_receiver_stage33
+        run: python -m unittest test_receiver_cognition_route_value -v
+      - name: Write exact eight-species scoping and constructive counterexample receipt
+        working-directory: research/floral_receiver_stage33
+        run: |
+          mkdir -p stage33_source_free_receipts
+          python -u receiver_cognition_route_value.py > stage33_source_free_receipts/stage33_cognition_efficiency_contrast.json
+      - name: Prohibit fictional numeric learning rates or cross-paper causal mediation
+        working-directory: research/floral_receiver_stage33
+        run: |
+          python - <<'PY'
+          import json
+          import csv
+          from pathlib import Path
+          x=json.loads(Path('stage33_source_free_receipts/stage33_cognition_efficiency_contrast.json').read_text())
+          q=x['qualitative_evidence']
+          assert q['eight_species']==8 and q['reported_learning_present_for_all_eight']
+          assert q['slow_learning_is_not_random_behavior'] is True
+          assert q['numeric_learning_rate_effects_extracted']==0
+          assert q['cross_task_efficiency_or_fitness_measured'] is False
+          context=x['original_table1_design']
+          assert context['taxa_checked']==8
+          assert context['honey_odor_added_to_bees_and_hoverflies_only'] is True
+          assert context['sucrose_bees_and_hoverflies_percent']==40
+          assert context['sucrose_butterflies_percent']==10
+          assert context['Bombus_ignitus_one_colony_reported'] is True
+          assert context['cannot_identify_order_or_sociality_effect_separately_from_these_design_factors_in_one_study'] is True
+          z=x['mathematical_examples']
+          assert z['high_cue_use_low_transfer_plant_gain']=='9/100'
+          assert z['lower_cue_use_high_transfer_plant_gain']=='27/250'
+          assert z['all_parameters_assumed_source_free'] is True
+          p=Path('KANDORI_2021_EIGHT_TAXA_TASK_ATLAS.csv')
+          with p.open(newline='') as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==8
+          assert all(row['rate_numeric_extracted']=='no' for row in rows)
+          assert all(row['pollen_transfer_same_animals']=='no' for row in rows)
+          with Path('COMPARATIVE_RECEIVER_EVIDENCE_LEDGER.csv').open(newline='') as f:
+            sources=list(csv.DictReader(f))
+          assert len(sources)>=10
+          assert len({row['evidence_id'] for row in sources})==len(sources)
+          print('STAGE33_SOURCE_ATLAS_AND_EXACT_NONIDENTITY_CONFIRMED_NO_ANIMAL_FITNESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage33-source-free-cue-use-versus-pollen-efficiency
+          path: research/floral_receiver_stage33/stage33_source_free_receipts/stage33_cognition_efficiency_contrast.json
+          if-no-files-found: error
+          retention-days: 90
