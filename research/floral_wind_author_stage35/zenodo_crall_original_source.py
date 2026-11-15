@@ -129,9 +129,22 @@ def _safe_zip_inventory(blob):
             if Path(name).suffix.lower() in (".csv",".tsv"):
                 raw=archive.read(file)
                 record["raw_sha256"]=_sha(raw)
-                record["csv"]= _csv_profile(raw) if name.lower().endswith(".csv") else {
-                    "status":"TSV_NOT_A_CSV",
-                    "source_uncompressed_bytes":file.file_size}
+                if name.lower().endswith(".csv"):
+                    try:
+                        record["csv"]=_csv_profile(raw)
+                        record["csv"]["status"]="PARSED_ORIGINAL_CSV"
+                    except ValueError as err:
+                        # Preserve a malformed/empty CSV source and its exact
+                        # hash; do NOT invalidate other legitimate files.
+                        record["csv"]={
+                           "status":"CSV_SOURCE_QA_FAILURE",
+                           "diagnostic":str(err)[:180],
+                           "n_records":None,
+                           "header":None}
+                else:
+                    record["tsv"]={
+                      "status":"TSV_SOURCE_NOT_PROFILED_AS_CSV",
+                      "source_uncompressed_bytes":file.file_size}
             files.append(record)
     return files
 
@@ -205,12 +218,18 @@ def _probe(record_id):
             profile["zip_integrity"]=validation
             profile["zip_original_file_profiles"]=manifest
             profile["original_source_bytes_obtained"]=True
-            profile["original_csv_count"]=sum("csv" in x for x in manifest)
+            profile["original_csv_count"]=sum(
+                x.get("csv",{}).get("status")=="PARSED_ORIGINAL_CSV" for x in manifest)
+            profile["csv_qa_failure_count"]=sum(
+                x.get("csv",{}).get("status")=="CSV_SOURCE_QA_FAILURE" for x in manifest)
             profile["observed_effects_estimated"]=False
             profile["experimental_wind_by_scent_on_off_identified"]=False
             profile["single_visit_pollen_transfer_identified"]=False
             profile["raw_original_data_redistributed"]=False
-            profile["status"]="VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN_ONLY"
+            profile["status"]=(
+                "VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN_WITH_CSV_QA_WARNINGS"
+                if profile["csv_qa_failure_count"] else
+                "VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN_ONLY")
             return profile
         except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError,OSError,
                 ValueError,zipfile.BadZipFile) as err:
@@ -238,7 +257,7 @@ def run():
               "original_source_bytes_obtained":False
             }
         outcomes.append(result)
-    successes=[x for x in outcomes if x.get("status")=="VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN_ONLY"]
+    successes=[x for x in outcomes if x.get("status","").startswith("VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN")]
     return {
        "status":"VERIFIED_ONE_OR_MORE_AUTHOR_ARCHIVES" if successes else "NO_GO_NO_ORIGINAL_ZENODO_ARCHIVE",
        "source_article_doi":DOI_PAPER,
@@ -268,6 +287,7 @@ def main():
           "available_zip_candidates":len(r.get("zip_candidates",[])),
           "download_failures":r.get("attempted_downloads",[]),
           "raw_csv_count":r.get("original_csv_count"),
+          "qa_csv_failures":r.get("csv_qa_failure_count"),
           "files":[{
              "path":x["path"],"row_count":x.get("csv",{}).get("n_records"),
              "header":x.get("csv",{}).get("header")
