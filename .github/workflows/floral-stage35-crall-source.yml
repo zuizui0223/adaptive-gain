@@ -1,0 +1,60 @@
+name: floral-stage35-Crall-Zenodo-original-source-grain
+on:
+  push:
+    branches: [analysis/floral-crall-zenodo-source-stage35-20261115]
+    paths:
+      - 'research/floral_wind_author_stage35/**'
+      - '.github/workflows/floral-stage35-crall-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-actual-Zenodo-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No-source and source-grain invariant regression tests
+        working-directory: research/floral_wind_author_stage35
+        run: python -m unittest test_zenodo_crall_original_source -v
+      - name: Attempt original Zenodo archived wind session records
+        working-directory: research/floral_wind_author_stage35
+        run: python -u zenodo_crall_original_source.py
+      - name: Check source download truthfully before any ecological statistics
+        working-directory: research/floral_wind_author_stage35
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage35_source_receipts/stage35_zenodo_original_source_manifest.json')
+          r=json.loads(p.read_text())
+          assert r['status'] in ('VERIFIED_ONE_OR_MORE_AUTHOR_ARCHIVES','NO_GO_NO_ORIGINAL_ZENODO_ARCHIVE')
+          assert r['author_referenced_record_id']==3743898
+          assert r['alternate_indexed_record_id']==3675327
+          assert r['ecological_effect_estimates_extracted']==0
+          assert r['no_original_file_redistribution'] is True
+          assert r['wind_by_odor_interaction_empirically_tested'] is False
+          for item in r['record_receipts']:
+              if item['status'].startswith('VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN'):
+                  assert item['original_source_bytes_obtained']
+                  assert item['source_metadata_version_verified']
+                  assert item['zip_original_file_profiles']
+                  print('SOURCE_ARCHIVE',item['record_id_requested'],item['selected_zip_filename'])
+                  for f in item['zip_original_file_profiles']:
+                      print('SOURCE_FILE',f['path'])
+                      if 'csv' in f and 'n_records' in f['csv']:
+                          print('ORIGINAL_CSV_GRAIN',f['csv']['n_records'],f['csv']['header'])
+              else:
+                  print('NO_GO_SOURCE',item['record_id_requested'],item['status'],item.get('http_status'))
+          print('STAGE35_SOURCE_ONLY_AUDIT_AND_NO_UNSUPPORTED_META_EFFECT_COMPLETE')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: floral-stage35-original-zenodo-metadata-only
+          path: research/floral_wind_author_stage35/stage35_source_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
