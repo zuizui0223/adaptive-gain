@@ -40,8 +40,20 @@ ALLOWED_COLUMNS={
    'wind.mean.direction','turbInt','turbInt.3d'),
 }
 
+def _utf8_compatible(raw):
+    try:
+        raw.decode('utf-8-sig')
+        return True
+    except UnicodeDecodeError:
+        return False
+
 def _read_rows(raw):
-    text=raw.decode('utf-8-sig')
+    try:
+        text=raw.decode('utf-8-sig')
+    except UnicodeDecodeError:
+        # The author's original R-exported CSV includes non-UTF-8 note text.
+        # Retain the original byte SHA and log the decoding fallback.
+        text=raw.decode('latin-1')
     source=csv.reader(io.StringIO(text))
     header=next(source,None)
     if header is None:raise ValueError('NO_GO_EMPTY_CSV')
@@ -114,6 +126,7 @@ def audit_archive(blob, metadata, source_file='CrallEtAl_OrchidBeeWindEcology.zi
               'n_rows':len(rows),'n_header_cols':len(header),
               'original_columns':header,
               'raw_sha256':hashlib.sha256(raw[name]).hexdigest(),
+              'input_encoding':'utf-8-sig' if _utf8_compatible(raw[name]) else 'latin-1'
             }
             if key!='beedata.csv':
                 for col in ('count','wind.mean','rel.wind.KE','wind.KE','rel.bee.count','cover200m'):
