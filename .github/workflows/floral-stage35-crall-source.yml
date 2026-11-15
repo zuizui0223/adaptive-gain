@@ -38,7 +38,7 @@ jobs:
           assert r['no_original_file_redistribution'] is True
           assert r['wind_by_odor_interaction_empirically_tested'] is False
           for item in r['record_receipts']:
-              if item['status']=='VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN_ONLY':
+              if item['status'].startswith('VERIFIED_AUTHOR_ARCHIVE_SOURCE_GRAIN'):
                   assert item['original_source_bytes_obtained']
                   assert item['source_metadata_version_verified']
                   assert item['zip_original_file_profiles']
