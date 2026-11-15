@@ -98,3 +98,25 @@ H5. Display enlargement can raise total arrival yet lower per-flower pollen qual
 ## Scientific stop
 
 Only the eight published comparative taxa, qualitative ordering and separately sourced SVE prior art are identified; ZERO original paired cognitive-learning-and-pollen-transfer measurements or new meta effect sizes extracted. No original pollen deposition, animal energetic processing costs, adaptive flower evolution or fitness effects estimated here. The separate Stage32 Dryad UV raw workbook still returned HTTP 401 in official API request; don't pretend it has been read. Full CI must be separately verified. Draft only; no merge.
+
+
+## Original Kandori 2021 Table 1 design audit: important cross-taxon confounding
+
+The original *paper*, not just its abstract, was checked. Table 1 reports that all four B. ignitus/O. orientalis/Eristalis experiments used **40% sucrose and honey odor near the artificial array**, while the four butterfly experiments used **10% sucrose without odor**. The flower disks were 2–5 cm, tested with **different color pairs** and different indoor-room/indoor-cage/outdoor-cage dimensions. The B. ignitus experiment reports workers obtained from **one colony**. The original authors explicitly acknowledge the cross-species design differences (though they argue they are unlikely to explain all observed ranking). Therefore, **order/sociality/cognition cannot be uniquely isolated from these design factors in one eight-species comparison**. Additional original experiments with matched visual/olfactory contrast, reward and apparatus or calibrated experiment effects are required.
+
+The qualitative rank also needs detail: *E. cerealis* is **intermediate** and was not significantly different from the four neighboring groups in the reported post hoc comparisons. B. ignitus was significantly faster than any other tested species, but this is task-specific colour-reward learning, not a global intelligence score. The reported species effect GLM Wald chi-squared=281.560, df=7; color effect chi-squared=9.186, df=1. These are **reported analysis results**, not the original per-individual learning coefficients with sample SEs needed for a new independent quantitative synthesis. The 2021 paper notes replacing learning preference P=1 by .99 in nonlinear parameter fitting; a future extraction should evaluate this fitting choice as a robustness moderator.
+
+The source-specific methods are recorded, with each of 8 species, in the new table KANDORI_2021_PUBLISHED_DESIGN_CONTEXT_TABLE1.csv. No raw original learning observations or pollen transfer trial data are reproduced.
+
+## Key non-Bombus empirical counterexamples — explicit stage separation
+
+**Pieris rapae crucivora** (Kandori & Ohsaki 1998, DOI 10.1303/aez.33.35): naive butterflies preferentially probed at a colored spot acting as an artificial nectar guide, which helped locate nectar. With experience, butterflies associated the marking with its reward source and improved foraging efficiency. This is DIRECT behavioral evidence for an innate component and a learned component in a non-bee, not a claim of measured pollen deposition or plant fitness.
+
+**Eristalis tenax** (An et al. 2018, DOI 10.1242/jeb.184788): landing in droneflies was sensitive to bright yellow stimuli and UV-absorbing alternatives, while proboscis extension was triggered by a narrower yellow signal strongly absorbing blue and UV. Training did not completely override the innate yellow preference. This is DIRECT evidence that even one supposedly "slower-learning" hoverfly uses **different signal channels at landing and probing stages**. Calling its flower choices "random" or treating learning speed as a proxy for stage-specific sensory competence would discard a core mechanism.
+
+Stage33 therefore preserves **three receiver pathways** as measurable alternative hypotheses:
+- Learned cue users (experience-dependent updates in correctly directed landing/probing).
+- Innate or reflex cue users (strong stage-specific cue response despite little measured associative learning in a given task).
+- Weak or stochastic cue users (quantified repeatability and cue discrimination compatible with zero, after controlling sensory contrast and observation opportunities).
+
+Do not assign these groups from guild names alone. The same taxon can use learned responses at one stage and innate responses at another. New experimental meta-data should record cue-naive versus trained trials, the same original bee/fly/butterfly ID, and the stage of the response, not one cognitive rank per species.
