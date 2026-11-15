@@ -1,0 +1,13 @@
+evidence_id,year,kind,original_receiver_taxon_scope,core_measured_dimension,can_estimate_cue_use,can_estimate_pollen_deposition_same_individual,raw_numeric_response_available_in_this_branch,source_url,scope_warning
+C01,2021,experimental_eight_taxa,Bombus_Osmia_Eristalis_butterflies,relative_color_reward_learning_rate,no,no,no,https://doi.org/10.1111/1440-1703.12249,all_eight_learned_no_generic_low_intelligence_class
+C02,1991,experimental_two_bees,Bombus_bimaculatus_Xylocopa_virginica,learning_rate_and_over_night_memory,no,no,no,https://doi.org/10.1016/S0003-3472(05)80558-5,task_and_memory_endpoint_not_a_universal_cognitive_rank
+C03,2015,experimental_butterfly,Danaus_plexippus,color_vs_shape_reward_learning,no,no,no,https://doi.org/10.1007/s10905-015-9519-z,innate_preferences_and_task_difficulty_alter_observed_choice
+C04,2016,experimental_moth,Manduca_sexta,innate_scent_matching_proboscis_cost,no,no,no,https://doi.org/10.1038/ncomms11644,naive_moth_scent_orientation_is_not_random
+C05,2018,experimental_multimodal_bumblebee,Bombus_terrestris,spatial_scent_visual_pattern_learning,no,no,no,https://doi.org/10.1098/rspb.2018.0661,not_direct_pollen_transfer
+C06,2012,review_bee_cognition,bees_general,flower_constancy_vs_information_cost,no,no,no,https://pmc.ncbi.nlm.nih.gov/articles/PMC3306322/,review_is_not_numeric_data
+C07,2024,review_cross_pollinators,bees_and_other_pollinators,complex_reward_decision_learning,no,no,no,https://doi.org/10.1016/j.tree.2024.06.008,review_is_not_independent_effect
+C08,2025,experimental_or_theory_bumblebee,bumblebees,flower_constancy_memory_travel_tradeoff,no,no,no,https://doi.org/10.1111/1365-2435.70008,confirm_study_effect_type_from_full_original
+C09,2021,quantitative_meta_analysis,Apis_mellifera_and_other_flower_visitors,per_visit_pollination_effectiveness,no,not_linked_to_learning,no,https://doi.org/10.1002/ajb2.1764,168_studies_1564_measurements_240_plant_species_different_design
+C10,2023,simulation_model,bee_social_agents,flower_constancy_and_social_information,no,no,no,https://doi.org/10.1111/1365-2656.13861,simulation_not_independent_pollinator_efficiency
+C11,2019,review_cognition,flower_visiting_invertebrates,foraging_plasticity_and_cognition,no,no,no,https://pmc.ncbi.nlm.nih.gov/articles/PMC6688568/,review_not_original_learning_trial
+C12,2009,book_chapter,flies_beetles_moths_butterflies,vision_and_learning_in_non_bee_visitors,no,no,no,https://doi.org/10.1017/CBO9780511542268.010,not_random_class_and_no_numeric_guide_effect
