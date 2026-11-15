@@ -17,11 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install original kinematics signal-processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
       - name: Source-free source-method validator tests
         working-directory: research/floral_landing_source_stage40
         run: |
           PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
-          python -m unittest test_audit_original_MATLAB test_static_landmark_gate -v
+          python -m unittest test_audit_original_MATLAB test_static_landmark_gate test_reconstruct_3d_approach_landing -v
       - name: Verify authentic original 2016 Zenodo ZIP and inspect author MATLAB selection/calibration hints
         working-directory: research/floral_landing_source_stage40
         run: |
@@ -58,6 +60,45 @@ jobs:
           print('TRACK_GEOMETRY',x['pt2_approach_per_track'],x['pt2_landing_per_track'])
           print('CONSECUTIVE_FRAMES',x['consecutive_valid_frame_pairs_for_1000fps_speed'])
           PY
+      - name: Independently reconstruct wind-labeled exploratory m/s in source archive with correct 3-point physics
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u reconstruct_3d_approach_landing.py
+      - name: Audit 157 archived source original m/s, bee-cluster design and 112-selection nonidentification
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          p=Path('stage40_kinematic_refit_receipts/stage40_original_157_archived_exploratory_kinematics.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='ORIGINAL_157_ARCHIVED_TRACKS_EXPLORATORY_KINEMATIC_REFIT'
+          assert x['original_archive_tracks']==157
+          assert x['original_filename_B_labels']==28
+          assert x['original_W0_W1_counts']=={'W0':56,'W1':101}
+          assert x['original_frames_per_second_from_author_MATLAB']==1000
+          assert x['author_MATLAB_Butterworth_order']==5
+          assert x['author_MATLAB_Butterworth_cutoff_hz']==100
+          assert x['original_tag3_and_static_flower_geometry_verified'] is True
+          assert x['stage_eligible_tracks']>100
+          assert x['published_112_selected_tracks_not_identified'] is True
+          assert x['not_author_published_GLMM_reproduction'] is True
+          assert x['no_attempted_landing_failure_denominator'] is True
+          assert x['no_flow_to_pollen_or_seed_fitness_estimated'] is True
+          assert x['not_external_source_original_raw_data_redistributed'] is True
+          assert x['no_wind_by_scent_on_off_interaction'] is True
+          for W in ('W0','W1'):
+              z=x['wind_stratified_descriptive'][W]
+              assert z['valid_stage_tracks']>0
+              for key in ('mean_approach_m_s_exploratory','mean_near_flower_m_s_exploratory',
+                          'within_track_speed_change_m_s_exploratory'):
+                  assert math.isfinite(z[key]['mean'])
+          print('STAGE40_REAL_ARCHIVED_TRACKS_KINEMATICS_CONDITIONAL_ON_SELECTED_AVAILABLE_FILES_SUCCESS')
+          print('N_ELIGIBLE',x['stage_eligible_tracks'])
+          print('RECONSTRUCTED_SPEED_BY_W',json.dumps(x['wind_stratified_descriptive'],sort_keys=True))
+          print('ORIGINAL_B_LABEL_PAIRED_SENSITIVITY',json.dumps(x['within_original_B_label_paired_descriptive'],sort_keys=True))
+          PY
       - name: Require source-only scientific limits
         working-directory: research/floral_landing_source_stage40
         run: |
@@ -80,6 +121,8 @@ jobs:
         if: always()
         with:
           name: stage40-original-Chang-MATLAB-script-sha-and-line-pointers-only
-          path: research/floral_landing_source_stage40/stage40_method_source_receipts/*.json
+          path: |
+            research/floral_landing_source_stage40/stage40_method_source_receipts/*.json
+            research/floral_landing_source_stage40/stage40_kinematic_refit_receipts/*.json
           if-no-files-found: error
           retention-days: 90
