@@ -1,0 +1,54 @@
+name: floral-stage40-original-MATLAB-selection-and-calibration
+on:
+  push:
+    branches: [analysis/floral-chang-matlab-selection-stage40-20261115]
+    paths:
+      - 'research/floral_landing_source_stage40/**'
+      - '.github/workflows/floral-stage40-matlab-method.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-source-method-without-pseudoreplication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free source-method validator tests
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -m unittest test_audit_original_MATLAB -v
+      - name: Verify authentic original 2016 Zenodo ZIP and inspect author MATLAB selection/calibration hints
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u audit_original_MATLAB.py --debug-limited-excerpts --out stage40_method_source_receipts
+      - name: Require source-only scientific limits
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('stage40_method_source_receipts/stage40_original_MATLAB_calibration_pointers.json').read_text())
+          assert a['status']=='ORIGINAL_AUTHOR_MATLAB_SOURCE_POINTERS_ONLY'
+          assert a['original_record_id']==60234
+          assert a['original_public_archive_md5']=='22bbc8286fecd2535d3f284679aed87b'
+          assert 'analyzeTrackingData.m' in a['script_inventory']
+          assert not a['source_code_debug_hints']
+          assert a['no_source_MATLAB_code_or_raw_data_redistributed'] is True
+          assert a['physical_m_per_s_difference_estimated'] is False
+          assert a['author_published_112_tracks_selection_recovered'] is False
+          assert a['original_frame_index_for_each_csv_row_verified'] is False
+          print('STAGE40_ORIGINAL_SCRIPT_SOURCE_NOT_YET_KINEMATICS_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage40-original-Chang-MATLAB-script-sha-and-line-pointers-only
+          path: research/floral_landing_source_stage40/stage40_method_source_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
