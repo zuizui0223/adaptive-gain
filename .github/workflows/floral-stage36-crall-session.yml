@@ -43,10 +43,49 @@ jobs:
           assert x['no_raw_author_rows_or_code_uploaded'] is True
           print('STAGE36_ORIGINAL_SESSION_DESIGN_AUDITED_WITHOUT_FAKE_INFERENCE')
           PY
+      - name: Source-free closed-form conditional Poisson unit tests
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -m unittest test_conditional_site_poisson -v
+      - name: Independently refit original 70 sessions, site-stratified, and sensitivity checks
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -u conditional_site_poisson.py
+      - name: Verify actual original-data count and honor GLMM-versus-fixed-site inference ceiling
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          path=Path('stage36_refit_receipts/stage36_source_locked_within_site_poisson.json')
+          result=json.loads(path.read_text())
+          assert result['status']=='CRALL_REAL_SESSION_SITE_CONDITIONAL_POISSON_REFIT_WITH_LIMITS',result
+          assert result['source_sessions']==70
+          assert result['source_sites']==9
+          assert result['source_dates']==29
+          assert result['source_total_visit_count']==409
+          assert result['scent_observation_counts']=={'cin':67,'meth':3}
+          assert result['actual_model_is_NOT_author_random_site_and_date_GLMM'] is True
+          assert result['primary_site_conditional_poisson']['modelbased_se_not_site_cluster_robust'] is True
+          assert result['primary_site_conditional_poisson']['date_random_effect_not_fitted'] is True
+          assert result['no_original_author_rows_redistributed'] is True
+          assert result['scent_free_control_sessions']==0
+          assert result['landing_traces_or_pollen_transfer_records']==0
+          assert result['plant_seed_or_fitness_records']==0
+          assert math.isfinite(result['primary_site_conditional_poisson']['predictors']['log_wind']['beta'])
+          print('STAGE36_ORIGINAL_70_SESSION_SITE_CONDITIONAL_WIND_REFIT_WITH_NO_CAUSAL_CLAIM')
+          w=result['primary_site_conditional_poisson']['predictors']['log_wind']
+          print('OBSERVED_WIND_BETA',w['beta'])
+          print('OBSERVED_WIND_IRR_DOUBLING',w['within_site_rate_ratio_per_wind_doubling'])
+          print('MODEL_BASED_WIND_IRR_CI',w['modelbased_95ci_IRR_wind_doubling'])
+          print('SITE_LOO',result['leave_one_site_out_logwind_beta'])
+          print('BETWEEN_SITE',result['between_site_site_mean_descriptive_only'])
+          print('OVERDISPERSION',result['primary_site_conditional_poisson']['pearson_deviance_overdispersion_ratio'])
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: stage36-source-verified-session-grain-and-model-identifier-only
-          path: research/floral_wind_refit_stage36/stage36_original_receipts/*.json
+          path: |
+            research/floral_wind_refit_stage36/stage36_original_receipts/*.json
+            research/floral_wind_refit_stage36/stage36_refit_receipts/*.json
           if-no-files-found: error
           retention-days: 90
