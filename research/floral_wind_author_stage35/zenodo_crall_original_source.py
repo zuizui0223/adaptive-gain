@@ -62,10 +62,18 @@ def _csv_profile(source):
     reader=csv.reader(io.StringIO(text,newline=""))
     try:
         header=next(reader)
+        while not header and reader.line_num<10:
+            header=next(reader)
     except StopIteration:
         raise ValueError("NO_GO_CSV_EMPTY")
-    if not header or any(not s.strip() for s in header):
+    if not header or all(not cell.strip() for cell in header):
         raise ValueError("NO_GO_CSV_NO_HEADER")
+    if not header[0].strip() and all(c.strip() for c in header[1:]):
+        # write.csv(row.names=TRUE) produces a blank first header;
+        # this is an original ROW INDEX, not an unmeasured variable.
+        header[0]="<original_unnamed_row_index>"
+    if any(not cell.strip() for cell in header):
+        raise ValueError("NO_GO_CSV_AMBIGUOUS_HEADER")
     if len(header)>256:
         raise ValueError("NO_GO_CSV_TOO_MANY_COLUMNS")
     counts=[0]*len(header)
@@ -126,6 +134,12 @@ def _safe_zip_inventory(blob):
             if name.startswith("/") or ".." in Path(name).parts:
                 raise ValueError("NO_GO_UNSAFE_ZIP_PATH")
             record={"path":name,"source_uncompressed_bytes":file.file_size}
+            if (name.startswith("__MACOSX/") or
+                Path(name).name.startswith("._") or
+                Path(name).name==".DS_Store"):
+                record["status"]="ZIP_OS_SIDECAR_NOT_RESEARCH_DATA"
+                files.append(record)
+                continue
             if Path(name).suffix.lower() in (".csv",".tsv"):
                 raw=archive.read(file)
                 record["raw_sha256"]=_sha(raw)
