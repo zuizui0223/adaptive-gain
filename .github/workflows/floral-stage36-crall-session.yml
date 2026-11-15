@@ -1,0 +1,52 @@
+name: floral-stage36-Crall-original-session-model-design
+on:
+  push:
+    branches: [analysis/floral-crall-within-site-wind-stage36-20261115]
+    paths:
+      - 'research/floral_wind_refit_stage36/**'
+      - '.github/workflows/floral-stage36-crall-session.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-session-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free fake ZIP and model-grain tests
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -m unittest test_audit_original_session_design -v
+      - name: Download canonical Crall 2020 original Zenodo archive and audit session design
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -u audit_original_session_design.py
+      - name: STOP before fitting on unspecified inclusion counts and contrasts
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage36_original_receipts/stage36_crall_original_session_design.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='ORIGINAL_AUTHOR_SESSION_DESIGN_AUDITED_NOT_STATISTICAL_REFIT',x
+          assert x['author_record_id']==3743898
+          assert x['files']['integratedSpatialWindData.csv']['n_rows']==70
+          assert x['files']['collectionMetadata.csv']['n_rows']==70
+          assert x['files']['beedata.csv']['n_rows']==450
+          assert x['session_is_primary_analysis_unit_not_bee_row']
+          assert x['visitation_effect_estimated'] is False
+          assert x['scent_on_off_randomized_in_this_experiment'] is False
+          assert x['plant_pollen_transfer_measured'] is False
+          assert x['no_raw_author_rows_or_code_uploaded'] is True
+          print('STAGE36_ORIGINAL_SESSION_DESIGN_AUDITED_WITHOUT_FAKE_INFERENCE')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage36-source-verified-session-grain-and-model-identifier-only
+          path: research/floral_wind_refit_stage36/stage36_original_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
