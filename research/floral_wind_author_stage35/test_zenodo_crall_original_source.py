@@ -60,7 +60,7 @@ class ZenodoSourceGrainTests(unittest.TestCase):
     def test_empty_csv_is_explicit_qa_failure_not_invented_data(self):
         z=io.BytesIO()
         with zipfile.ZipFile(z,"w",zipfile.ZIP_DEFLATED) as a:
-            a.writestr("legitimate/session.csv","site,wind,bees\\nMOCK,0.1,3\\n")
+            a.writestr("legitimate/session.csv","site,wind,bees\nMOCK,0.1,3\n")
             a.writestr("legitimate/empty.csv","")
         # Preserve all source filenames and byte hashes, but never
         # pretend that an empty CSV contains original observations.
