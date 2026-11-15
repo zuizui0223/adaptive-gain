@@ -145,6 +145,28 @@ def _paired_by_bee(tracks,key):
     return paired
 
 
+def _matched_bee_stiffness_position(tracks,key):
+    """Condition on B, original S(stiffness), P(flower position) BEFORE wind."""
+    cells=defaultdict(lambda:defaultdict(list))
+    for row in tracks:
+        v=row.get(key)
+        if v is not None:
+            cells[(row['B'],row['S'],row['P'])][row['W']].append(v)
+    matched=defaultdict(list)
+    for (B,S,P),both in cells.items():
+        if both.get('W0') and both.get('W1'):
+            matched[B].append((statistics.mean(both['W0']),
+                               statistics.mean(both['W1'])))
+    # Each original B contributes ONCE; each matched S/P cell within B
+    # receives equal weight, not one pseudoreplicate per trajectory.
+    out=[]
+    for B,values in sorted(matched.items()):
+        calm=statistics.mean(x[0] for x in values)
+        windy=statistics.mean(x[1] for x in values)
+        out.append((B,calm,windy,windy-calm))
+    return out
+
+
 def _bootstrap_pairs(paired,replicates=BOOT_REPLICATES,seed=BOOT_SEED):
     if not paired:
         return None
@@ -211,12 +233,16 @@ def analyze_original_zip(blob):
                [r['speed_change_landing_minus_approach_m_per_s'] for r in z])
         }
 
-    pairs={stage:_bootstrap_pairs(_paired_by_bee(valid,key)) for stage,key in (
+    stage_keys=(
         ('approach_speed','approach_m_per_s_exploratory'),
         ('landing_speed','near_flower_m_per_s_exploratory'),
         ('landing_minus_approach_speed','speed_change_landing_minus_approach_m_per_s'),
         ('source_style_peak_decel','source_style_peak_deceleration_m_per_s2')
-    )}
+    )
+    pairs={stage:_bootstrap_pairs(_paired_by_bee(valid,key))
+           for stage,key in stage_keys}
+    strictly_matched={stage:_bootstrap_pairs(_matched_bee_stiffness_position(valid,key))
+                      for stage,key in stage_keys}
     cross=Counter(f"S{x['S']}_P{x['P']}_W{x['W'][-1]}" for x in valid)
     return {
        'status':'ORIGINAL_157_ARCHIVED_TRACKS_EXPLORATORY_KINEMATIC_REFIT',
@@ -232,6 +258,8 @@ def analyze_original_zip(blob):
        'eligible_S_P_W_combinations':dict(sorted(cross.items())),
        'wind_stratified_descriptive':by_W,
        'within_original_B_label_paired_descriptive':pairs,
+       'within_B_and_same_stiffness_position_matched_descriptive':strictly_matched,
+       'matched_original_source_design_B_S_P_before_comparing_W':True,
        'published_112_selected_tracks_not_identified':True,
        'W0_W1_paper_selected_n_unreconciled':True,
        'source_stiffness_and_flower_position_not_matched_between_conditions':True,
