@@ -5,7 +5,7 @@ import unittest
 
 from receiver_cognition_route_value import (
   receiver_cue_value,whole_route_decomposition,source_species_atlas,
-  compare_joint_evidence,source_free_counterexamples
+  compare_joint_evidence,source_free_counterexamples,original_design_context_audit
 )
 
 HERE=Path(__file__).resolve().parent
@@ -21,6 +21,18 @@ class ReceiverCognitionVsPollinationTest(unittest.TestCase):
         self.assertEqual(x['numeric_learning_rate_effects_extracted'],0)
         self.assertFalse(x['cross_task_efficiency_or_fitness_measured'])
         self.assertTrue(x['not_a_global_cognitive_ranking'])
+
+    def test_original_published_8_species_odor_reward_arena_confounding(self):
+        x=original_design_context_audit(HERE/'KANDORI_2021_PUBLISHED_DESIGN_CONTEXT_TABLE1.csv')
+        self.assertEqual(x['status'],'PUBLISHED_ORIGINAL_TABLE1_CONFONDERS_DOCUMENTED')
+        self.assertEqual(x['taxa_checked'],8)
+        self.assertEqual(x['sucrose_bees_and_hoverflies_percent'],40)
+        self.assertEqual(x['sucrose_butterflies_percent'],10)
+        self.assertTrue(x['honey_odor_added_to_bees_and_hoverflies_only'])
+        self.assertTrue(x['different_training_color_pairs_across_species'])
+        self.assertTrue(x['different_flower_sizes_and_arenas_across_species'])
+        self.assertTrue(x['Bombus_ignitus_one_colony_reported'])
+        self.assertTrue(x['cannot_identify_order_or_sociality_effect_separately_from_these_design_factors_in_one_study'])
 
     def test_higher_cue_use_is_not_necessarily_higher_pollen_gain(self):
         x=source_free_counterexamples()
