@@ -277,6 +277,59 @@ def permutation_within_sites(rows,replicates=4000,seed=20261115):
             "not_randomized_wind_assignment":True}
 
 
+def slope_site_and_date_fixed_effects(rows):
+    """Two-way categorical fixed effects by alternating group demeaning.
+
+    This is an OLS Frisch-Waugh-Lovell calculation on log(1+count),
+    NOT the authors' Poisson mixed model. Fixed date blocks might
+    absorb much temporal variation and can leave little identified wind
+    contrast. Return a NO_GO, never an arbitrary zero slope, if the
+    residualized wind has negligible variance.
+    """
+    if len(rows)<5:
+        raise ValueError("NO_GO_DATE_FE_TOO_FEW_SESSIONS")
+    def residualize(key):
+        values=[float(r[key]) for r in rows]
+        groups=[]
+        for term in ("site","date"):
+            index=defaultdict(list)
+            for i,r in enumerate(rows):
+                index[r[term]].append(i)
+            groups.append(list(index.values()))
+        converged=False
+        for _ in range(2000):
+            before=values[:]
+            for group_set in groups:
+                for idx in group_set:
+                    mu=sum(values[i] for i in idx)/len(idx)
+                    for i in idx:
+                        values[i]-=mu
+            if max(abs(a-b) for a,b in zip(before,values))<1e-11:
+                converged=True
+                break
+        if not converged:
+            raise ValueError("NO_GO_SITE_DATE_RESIDUALIZATION_NOT_CONVERGED")
+        return values
+    w=residualize("wind")
+    y=residualize("y")
+    sww=sum(v*v for v in w)
+    if sww<1e-12:
+        return {
+            "status":"NO_GO_WIND_COLLINEAR_WITH_SITE_AND_DATE",
+            "source_sessions":len(rows),
+            "date_groups":len(set(r["date"] for r in rows)),
+            "not_original_mixed_model":True}
+    return {
+        "status":"SITE_AND_DATE_FIXED_EFFECT_LOG1P_ASSOCIATION",
+        "slope_per_0p1_m_s":.1*sum(a*b for a,b in zip(w,y))/sww,
+        "site_groups":len(set(r["site"] for r in rows)),
+        "date_groups":len(set(r["date"] for r in rows)),
+        "n_sessions":len(rows),
+        "not_original_mixed_model":True,
+        "not_causal":True
+    }
+
+
 def _summary(rows):
     sites=_groups(rows)
     scent_counts=dict(Counter(r["scent"] for r in rows))
@@ -303,6 +356,11 @@ def analyze_original_archive(archive_blob,permutations=4000,bootstrap=4000):
     within=slope_site_demeaned(rows)
     between=slope_between_site_means(rows)
     part=slope_partial_turbulence(rows)
+    date_fe=slope_site_and_date_fixed_effects(rows)
+    cineole=[r for r in rows if r["scent"]=="cin"]
+    cineole_only=(slope_site_demeaned(cineole)
+                  if len(cineole)>=45 else
+                  {"status":"NO_GO_TOO_FEW_CINEOLE_SESSIONS"})
     loo=[]
     sites=sorted(_groups(rows))
     for one in sites:
@@ -326,6 +384,8 @@ def analyze_original_archive(archive_blob,permutations=4000,bootstrap=4000):
       "wind_within_site_association_log1p":within,
       "wind_between_site_association_log1p":between,
       "wind_within_site_turbulence_sensitivity":part,
+      "wind_within_site_and_date_fixed_effect_sensitivity":date_fe,
+      "cineole_only_within_site_sensitivity":cineole_only,
       "leave_one_original_site_out_wind_beta_0p1_range":[min(loo),max(loo)],
       "site_cluster_bootstrap":cluster_bootstrap_sites(rows,bootstrap),
       "site_stratified_permutation":permutation_within_sites(rows,permutations),
@@ -373,6 +433,8 @@ def main():
        "status","study_grain","wind_within_site_association_log1p",
        "wind_between_site_association_log1p",
        "wind_within_site_turbulence_sensitivity",
+       "wind_within_site_and_date_fixed_effect_sensitivity",
+       "cineole_only_within_site_sensitivity",
        "leave_one_original_site_out_wind_beta_0p1_range",
        "site_cluster_bootstrap","site_stratified_permutation",
        "integrated_keep_flag_distribution",
