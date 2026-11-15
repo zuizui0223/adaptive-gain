@@ -86,7 +86,7 @@ def profile_track(raw):
         text=raw.decode('utf-8-sig')
     except UnicodeDecodeError as err:
         raise ValueError('NO_GO_SOURCE_TRACK_UNEXPECTED_ENCODING') from err
-    source=csv.reader(io.StringIO(text))
+    source=csv.reader(io.StringIO(text,newline=''))
     header=tuple(next(source,[]))
     if header!=MEASURED_HEADER:
         raise ValueError('NO_GO_TRACK_MARKER_HEADER_NOT_VALIDATED')
