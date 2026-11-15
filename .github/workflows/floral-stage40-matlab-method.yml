@@ -21,12 +21,43 @@ jobs:
         working-directory: research/floral_landing_source_stage40
         run: |
           PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
-          python -m unittest test_audit_original_MATLAB -v
+          python -m unittest test_audit_original_MATLAB test_static_landmark_gate -v
       - name: Verify authentic original 2016 Zenodo ZIP and inspect author MATLAB selection/calibration hints
         working-directory: research/floral_landing_source_stage40
         run: |
           PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
           python -u audit_original_MATLAB.py --debug-limited-excerpts --debug-primary-windows --out stage40_method_source_receipts
+      - name: Independently verify sparse columns encode one flower reference per track
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u static_landmark_gate.py --out stage40_method_source_receipts
+      - name: Reject unsupported multi-point moving-body centroid and absent primary selection
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('stage40_method_source_receipts/stage40_static_flower_landmark_source_audit.json')
+          x=json.loads(path.read_text())
+          assert x['status']=='ORIGINAL_STATIC_FLOWER_LANDMARK_ENCODING_CONFIRMED',x
+          assert x['source_archive_file_count']==157
+          assert x['wind_file_codes']=={'W0':56,'W1':101}
+          assert x['pt7_records_per_original_trajectory_distribution']=={'1':157}
+          assert x['original_7point_table_not_seven_moving_body_markers'] is True
+          assert x['original_MATLAB_uses_pt7_as_single_flower_origin'] is True
+          assert x['pt4_7_record_totals']==dict.fromkeys(
+            ('pt4_nonmissing_frame_total','pt5_nonmissing_frame_total',
+             'pt6_nonmissing_frame_total','pt7_nonmissing_frame_total'),157)
+          assert x['original_track_frames_counted']==95153
+          assert x['published_calm_tracks_exceed_archived_W0_if_one_file_per_path'] is True
+          assert x['no_verified_original_112_track_selection'] is True
+          assert x['physical_wind_effect_not_fit_by_this_audit'] is True
+          print('STAGE40_ONE_STATIC_FLOWER_CENTER_PER_TRACK_CONFIRMED')
+          print('APPROACH_ELIGIBILITY',x['wind_group_eligibility'])
+          print('TRACK_GEOMETRY',x['pt2_approach_per_track'],x['pt2_landing_per_track'])
+          print('CONSECUTIVE_FRAMES',x['consecutive_valid_frame_pairs_for_1000fps_speed'])
+          PY
       - name: Require source-only scientific limits
         working-directory: research/floral_landing_source_stage40
         run: |
