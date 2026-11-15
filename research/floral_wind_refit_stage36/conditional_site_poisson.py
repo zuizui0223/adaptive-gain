@@ -21,6 +21,7 @@ import hashlib
 import io
 import json
 import math
+from statistics import median
 from decimal import Decimal,InvalidOperation
 from collections import defaultdict
 from pathlib import Path
@@ -258,18 +259,31 @@ def conditional_poisson(rows,predictors=('log_wind','relative_tke')):
     inv=_inverse(H)
     residual=sum(((y-mu)**2)/mu for site,y,mu in expected if mu>0)
     df=len(expected)-len(groups)-dim
+    dispersion=residual/df if df>0 else None
     eta={p:{
          'beta':beta[j],
          'modelbased_se':math.sqrt(inv[j][j]) if inv[j][j]>=0 else None,
          'modelbased_95ci':[beta[j]-1.96*math.sqrt(inv[j][j]),
                             beta[j]+1.96*math.sqrt(inv[j][j])],
         } for j,p in enumerate(predictors)}
+    if dispersion is not None:
+        # Classical quasi-Poisson *descriptive* inflation. This does not
+        # correct serial/day or nine-site cluster dependence.
+        inflate=math.sqrt(max(1.,dispersion))
+        for j,p in enumerate(predictors):
+            qse=math.sqrt(inv[j][j])*inflate
+            eta[p]['quasi_poisson_scaled_se']=qse
+            eta[p]['quasi_poisson_95ci']=[beta[j]-1.96*qse,beta[j]+1.96*qse]
+            eta[p]['quasi_ci_ignores_site_and_date_cluster_dependence']=True
     wind=eta.get('log_wind')
     if wind:
         d=math.log10(2)
         wind['within_site_rate_ratio_per_wind_doubling']=math.exp(wind['beta']*d)
         wind['modelbased_95ci_IRR_wind_doubling']=[
             math.exp(v*d) for v in wind['modelbased_95ci']]
+        if 'quasi_poisson_95ci' in wind:
+            wind['quasi_poisson_95ci_IRR_wind_doubling']=[
+                math.exp(v*d) for v in wind['quasi_poisson_95ci']]
     return {
         'status':'CONDITIONAL_POISSON_SITE_FIXED_REFIT_NOT_ORIGINAL_GLMM',
         'specification':'condition on each site total; independent Poisson sessions; logged wind and original relative TKE; dates NOT modeled as random intercept',
@@ -280,7 +294,7 @@ def conditional_poisson(rows,predictors=('log_wind','relative_tke')):
         'n_conditioned_sessions':len(expected),
         'total_visits':sum(y for site,y,mu in expected),
         'log_likelihood_without_constant':likelihood,
-        'pearson_deviance_overdispersion_ratio':residual/df if df>0 else None,
+        'pearson_deviance_overdispersion_ratio':dispersion,
         'modelbased_se_not_site_cluster_robust':True,
         'date_random_effect_not_fitted':True,
         'original_forest_cover_absorbed_by_site_fixed_strata':True,
@@ -333,7 +347,7 @@ def fitted_source_refit(source_blob):
        'source_sites':len({r['site'] for r in rows}),
        'source_dates':len({r['date'] for r in rows}),
        'source_total_visit_count':sum(r['count'] for r in rows),
-       'median_original_wind_m_s':sorted(r['wind'] for r in rows)[len(rows)//2],
+       'median_original_wind_m_s':median(r['wind'] for r in rows),
        'scent_observation_counts':{
           'cin':sum(r['scent']=='cin' for r in rows),
           'meth':sum(r['scent']=='meth' for r in rows)},
