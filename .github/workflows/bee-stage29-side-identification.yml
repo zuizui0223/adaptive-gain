@@ -1,0 +1,85 @@
+name: bee-stage29-fair-side-source-identification-gate
+on:
+  push:
+    branches: [analysis/bee-impossible-randomization-identification-stage29-20261115]
+    paths:
+      - 'research/bee_identification_stage29/**'
+      - '.github/workflows/bee-stage29-side-identification.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conditional-chance-source-no-go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free tests of binomial arithmetic, martingale assumptions, and source no-go
+        working-directory: research/bee_identification_stage29
+        run: PYTHONPATH=../bee_original_audit_stage26:. python -m unittest test_conditional_chance_source_audit -v
+      - name: Retrieve THREE pinned author CSVs and verify byte-identical Git blobs
+        working-directory: research/bee_identification_stage29
+        run: |
+          mkdir -p author_source_temp
+          base='https://raw.githubusercontent.com/Cuixiaojian21/bee_metacognition/7f886394b4de872ecdb19ca4ea214ec321d5dce9/data'
+          curl --fail --location --retry 3 --silent --show-error "$base/4_active_information_seeking_trials.csv" -o author_source_temp/4_active_information_seeking_trials.csv
+          curl --fail --location --retry 3 --silent --show-error "$base/5_cross_modal_tactile_generalization_trials.csv" -o author_source_temp/5_cross_modal_tactile_generalization_trials.csv
+          curl --fail --location --retry 3 --silent --show-error "$base/6_cross_domain_memory_generalization_trials.csv" -o author_source_temp/6_cross_domain_memory_generalization_trials.csv
+          test "$(git hash-object author_source_temp/4_active_information_seeking_trials.csv)" = '26259c9071c6d73141d56b9bedd396cab1a04491'
+          test "$(git hash-object author_source_temp/5_cross_modal_tactile_generalization_trials.csv)" = 'a5d895061565c06b7d2045bc128773000d2778e5'
+          test "$(git hash-object author_source_temp/6_cross_domain_memory_generalization_trials.csv)" = '355e3cc6a5908e33671ea18ffd6f1bf8edd31cd3'
+          echo 'STAGE29_ALL_THREE_AUTHOR_SOURCE_BLOBS_VERIFIED'
+      - name: Recalculate 883-trial conditional ideal-fair null and missing-side schema audit
+        working-directory: research/bee_identification_stage29
+        run: |
+          PYTHONPATH=../bee_original_audit_stage26:. python -u conditional_chance_source_audit.py \
+            --input author_source_temp/4_active_information_seeking_trials.csv \
+            --crossmodal author_source_temp/5_cross_modal_tactile_generalization_trials.csv \
+            --memory author_source_temp/6_cross_domain_memory_generalization_trials.csv \
+            --out stage29_source_diagnostic_receipts
+      - name: Check inference NO_GO, source provenance, exact conditional arithmetic and data gaps
+        working-directory: research/bee_identification_stage29
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage29_source_diagnostic_receipts/stage29_conditional_chance_source_no_go.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='STRICT_HYPOTHETICAL_FAIR_ASSIGNMENT_NULL_REJECTED_BUT_SOURCE_IDENTIFICATION_NO_GO'
+          assert x['source_rows']==19200 and x['bee_ids']==192
+          y=x['impossible_regular_nocue']
+          assert y['n']==883 and y['correct']==183
+          assert y['per_bee']['below_half']==170
+          assert y['early_late']['Early']=={'n':442,'correct':81,'accuracy':81/442}
+          assert y['early_late']['Late']=={'n':441,'correct':102,'accuracy':102/441}
+          tail=x['ideal_IID_fair_label_conditional_tail']
+          assert abs(tail['lower_tail_probability']/3.36948282844465e-72-1)<1e-9
+          assert tail['not_a_confirmatory_inference'] is True
+          m=x['predictable_selection_fixed_lambda_diagnostic']
+          assert 1e66<m['e_value']<2e66
+          assert m['SOURCE_RANDOMIZATION_NOT_VERIFIED'] is True
+          assert m['RETROSPECTIVE_CALCULATION_NOT_PREREGISTERED'] is True
+          assert m['NOT_EMPIRICAL_ANIMAL_P_VALUE'] is True
+          assert all(not x['source_column_presence'][k] for k in ('target_side','chosen_side','colony_id','randomization'))
+          assert x['other_author_experiment_schema']['cross_modal']['has_correct_answer'] is True
+          assert x['other_author_experiment_schema']['memory']['has_correct_answer'] is True
+          assert x['other_author_experiment_schema']['memory']['has_bee_choice'] is True
+          assert x['stage24_optimal_information_fitness_empirically_validated'] is False
+          assert x['not_proof_of_animal_maladaptation'] is True
+          assert x['not_allegation_of_publication_misconduct'] is True
+          assert x['no_new_live_animals'] is True
+          assert x['no_original_csv_redistributed'] is True
+          print('STAGE29_SIDE_IDENTIFICATION_NO_GO_AND_CONDITIONAL_NULL_VERIFIED')
+          print(json.dumps({'observed':y,'side_bias':x['side_balance_sensitivity_IF_target_side_independent_of_choice'],
+            'conditional_p':tail['lower_tail_probability'],'source_fields_present':x['source_column_presence']},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage29-public-author-conditional-chance-aggregate-audit-only
+          path: research/bee_identification_stage29/stage29_source_diagnostic_receipts/stage29_conditional_chance_source_no_go.json
+          if-no-files-found: error
+          retention-days: 90
