@@ -70,6 +70,13 @@ class CrallSourceStructureTest(unittest.TestCase):
         self.assertEqual(len(rows),2)
         self.assertEqual(rows[1]['site'],'B')
 
+    def test_original_non_utf8_notes_preserved_without_byte_mutation(self):
+        header,rows=_read_rows(
+            b'site,notes,wind.mean\nA,caf\xe9,0.12\n')
+        self.assertEqual(header,['site','notes','wind.mean'])
+        self.assertEqual(rows[0]['notes'],'café')
+        self.assertAlmostEqual(float(rows[0]['wind.mean']),.12)
+
     def test_numeric_missingness_and_categories(self):
         rows=[{'a':'0.1','b':'TRUE'}, {'a':'','b':'FALSE'}, {'a':'NaN','b':'TRUE'}]
         x=_range_by(rows,'a')
