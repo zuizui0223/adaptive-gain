@@ -66,7 +66,7 @@ class ScentByWindStageTest(unittest.TestCase):
             full_factorial({k:v for k,v in all4.items() if k!='calm_scent_off'})
         with self.assertRaisesRegex(ValueError,'OUT_OF_RANGE'):
             full_factorial(dict(all4,wind_scent_on=dict(s,discovery=F(5,4))))
-        with self.assertRaisesRegex(ValueError,'NON_EXACT'):
+        with self.assertRaisesRegex(ValueError,'NO_SOURCE_EXACT_PROBABILITY'):
             full_factorial(dict(all4,wind_scent_on=dict(s,discovery=.5)))
 
     def test_prior_studies_are_not_joined_into_fictitious_factorial(self):
