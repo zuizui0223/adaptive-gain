@@ -178,6 +178,49 @@ def compare_joint_evidence(evidence):
             'source_matching_by_taxon_or_guild_insufficient':True}
 
 
+def original_design_context_audit(path):
+    """Check reported Table 1 confounders; NEVER estimate cognition from them."""
+    with Path(path).open(encoding='utf-8',newline='') as handle:
+        rd=csv.DictReader(handle)
+        rows=list(rd)
+    taxa={x['taxon'] for x in rows}
+    expected={'Bombus ignitus','Osmia orientalis','Eristalis cerealis',
+              'Eristalis tenax','Idea leuconoe','Argyreus hyperbius',
+              'Pieris rapae','Lycaena phlaeas'}
+    if len(rows)!=8 or taxa!=expected:
+        raise ValueError('NO_GO_ORIGINAL_DESIGN_TAXON_MISMATCH')
+    flying_bee_or_fly={x for x in expected if x.startswith(
+        ('Bombus','Osmia','Eristalis'))}
+    butterflies=expected-flying_bee_or_fly
+    for row in rows:
+        if row['source_locator']!='https://doi.org/10.1111/1440-1703.12249':
+            raise ValueError('NO_GO_INCORRECT_ORIGINAL_TABLE1_SOURCE')
+        if row['design_is_identical_across_species']!='no':
+            raise ValueError('NO_GO_UNSUPPORTED_UNIFORM_PROTOCOL')
+        category='fly_or_bee' if row['taxon'] in flying_bee_or_fly else 'butterfly'
+        expect_scent='yes' if category=='fly_or_bee' else 'no'
+        expect_sugar='40' if category=='fly_or_bee' else '10'
+        if row['honey_odor_near_array']!=expect_scent or row['sucrose_concentration_percent']!=expect_sugar:
+            raise ValueError('NO_GO_DIFFERENT_EXPERIMENTAL_TREATMENT_SCOPE')
+        if not row['arena_dimensions_m'] or not row['training_color_1'] or not row['training_color_2']:
+            raise ValueError('NO_GO_UNRECORDED_ARENA_OR_COLOR')
+    by_taxon={x['taxon']:x for x in rows}
+    if by_taxon['Bombus ignitus']['original_colony_replication']!='one_bumblebee_colony_reported':
+        raise ValueError('NO_GO_BOMBUS_ORIGINAL_COLONY_SCOPE')
+    return {
+      'status':'PUBLISHED_ORIGINAL_TABLE1_CONFONDERS_DOCUMENTED',
+      'taxa_checked':8,
+      'honey_odor_added_to_bees_and_hoverflies_only':True,
+      'sucrose_bees_and_hoverflies_percent':40,
+      'sucrose_butterflies_percent':10,
+      'different_training_color_pairs_across_species':True,
+      'different_flower_sizes_and_arenas_across_species':True,
+      'Bombus_ignitus_one_colony_reported':True,
+      'cannot_identify_order_or_sociality_effect_separately_from_these_design_factors_in_one_study':True,
+      'no_new_phenotypic_or_learning_rate_effect':True
+    }
+
+
 def source_free_counterexamples():
     """Constructive counterexamples; NOT measurements from Bombus or hoverflies."""
     high_use=receiver_cue_value(
@@ -217,5 +260,6 @@ if __name__=='__main__':
         if isinstance(v,dict):return {k:plain(a) for k,a in v.items()}
         return v
     print(json.dumps(plain({'qualitative_evidence':source_species_atlas(path),
+                           'original_table1_design':original_design_context_audit(Path(__file__).with_name('KANDORI_2021_PUBLISHED_DESIGN_CONTEXT_TABLE1.csv')),
                            'mathematical_examples':source_free_counterexamples()}),
                      indent=2,sort_keys=True))
