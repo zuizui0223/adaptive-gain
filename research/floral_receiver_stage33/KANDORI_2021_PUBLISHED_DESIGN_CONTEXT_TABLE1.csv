@@ -1,0 +1,9 @@
+taxon,arena_category,arena_dimensions_m,artificial_flower_diameter_cm,sucrose_concentration_percent,honey_odor_near_array,training_color_1,training_color_2,original_colony_replication,design_is_identical_across_species,source_locator
+Bombus ignitus,indoor_room,2.7x1.8x2.0,5,40,yes,light_blue,yellow,one_bumblebee_colony_reported,no,https://doi.org/10.1111/1440-1703.12249
+Osmia orientalis,indoor_cage,0.45x0.45x0.45,2,40,yes,blue,purple,original_independent_colonies_not_verified,no,https://doi.org/10.1111/1440-1703.12249
+Eristalis cerealis,indoor_cage,0.45x0.45x0.45,2,40,yes,light_blue,brown,original_independent_colonies_not_verified,no,https://doi.org/10.1111/1440-1703.12249
+Eristalis tenax,indoor_cage,0.45x0.45x0.45,2,40,yes,blue,yellow_green,original_independent_colonies_not_verified,no,https://doi.org/10.1111/1440-1703.12249
+Idea leuconoe,indoor_room,2.7x1.8x2.0,5,10,no,red,orange,not_a_colony_species,no,https://doi.org/10.1111/1440-1703.12249
+Argyreus hyperbius,outdoor_cage,1.9x1.9x1.9,5,10,no,orange,white,not_a_colony_species,no,https://doi.org/10.1111/1440-1703.12249
+Pieris rapae,outdoor_cage,1.9x1.9x1.9,4,10,no,yellow,blue,not_a_colony_species,no,https://doi.org/10.1111/1440-1703.12249
+Lycaena phlaeas,outdoor_cage,1.9x1.9x1.9,3,10,no,yellow,orange,not_a_colony_species,no,https://doi.org/10.1111/1440-1703.12249
