@@ -1,0 +1,78 @@
+name: bee-stage28-published-cue-outcome-chance-source-QA
+on:
+  push:
+    branches: [analysis/bee-impossible-no-cue-source-qa-stage28-20261115]
+    paths:
+      - 'research/bee_outcome_stage28/**'
+      - '.github/workflows/bee-stage28-outcome-source-QA.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-cue-outcome-source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free regression and safety controls on invented trials only
+        working-directory: research/bee_outcome_stage28
+        run: PYTHONPATH=../bee_original_audit_stage26:../bee_estimand_stage27:. python -m unittest test_outcome_chance_audit -v
+      - name: Download public author file at immutable commit, check actual Git blob
+        working-directory: research/bee_outcome_stage28
+        run: |
+          mkdir -p source_input
+          curl --fail --location --retry 3 --silent --show-error \
+            'https://raw.githubusercontent.com/Cuixiaojian21/bee_metacognition/7f886394b4de872ecdb19ca4ea214ec321d5dce9/data/4_active_information_seeking_trials.csv' \
+            -o source_input/existing_author_trials.csv
+          actual="$(git hash-object source_input/existing_author_trials.csv)"
+          test "$actual" = '26259c9071c6d73141d56b9bedd396cab1a04491'
+          echo "STAGE28_AUTHOR_BLOB_VERIFIED $actual"
+      - name: Reanalyze twelve source-stratified outcome rates with 192 bee-cluster bootstrap
+        working-directory: research/bee_outcome_stage28
+        run: |
+          PYTHONPATH=../bee_original_audit_stage26:../bee_estimand_stage27:. \
+          python -u outcome_chance_audit.py \
+            --input source_input/existing_author_trials.csv \
+            --bootstrap-reps 10000 \
+            --out stage28_source_outcome_receipt
+      - name: Confirm source anomaly and avoid invented biological inferences
+        working-directory: research/bee_outcome_stage28
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('stage28_source_outcome_receipt/stage28_chance_baseline_outcomes.json').read_text())
+          assert v['status']=='PINNED_AUTHOR_SOURCE_OUTCOME_AND_NEGATIVE_CONTROL_AUDIT'
+          assert v['n_author_trial_rows']==19200 and v['n_unique_bee_ids']==192
+          ctrl=v['impossible_no_cue_negative_control']
+          assert ctrl['trials']==883 and ctrl['correct']==183
+          assert ctrl['status']=='SOURCE_SIDE_RANDOMIZATION_UNIDENTIFIABLE'
+          assert ctrl['original_target_side_not_in_csv'] is True
+          assert ctrl['original_choice_side_not_in_csv'] is True
+          assert v['per_bee_negative_control']['n_below_50pct']==170
+          free=v['source_specific_accuracy']['Impossible']['Free_Cue_No_Landing']
+          assert free['correct']==532 and free['trials']==575
+          assert v['bee_unit_bootstrap']['repetitions']==10000
+          assert v['bee_unit_bootstrap']['independent_colony_variance_unavailable'] is True
+          assert all(v['early_late_source_check'][p]['Impossible|Regular_No_Cue']['accuracy']<0.5 for p in ('Early','Late'))
+          reward=v['hypothetical_reward_proxy_not_fitness']
+          assert reward['Impossible']['paid_minus_no_cue_correct_reward_proxy_at_K0']>0
+          assert reward['Impossible_if_unobserved_no_cue_chance_is_0point5']['paid_minus_no_cue_correct_reward_proxy_K0']<0
+          assert v['stage24_8world_model_empirically_validated'] is False
+          assert v['no_causal_paid_query_reward_gain_claim'] is True
+          assert v['raw_author_trial_data_not_redistributed'] is True
+          print('STAGE28_SOURCE_CHANCE_NO_CUE_ANOMALY_AND_PAYOFF_IDENTIFICATION_NO_GO_SUCCESS')
+          print(json.dumps({'control':ctrl,'bootstrap95':v['bee_unit_bootstrap']['percentile95'],
+                            'reward':{k:reward[k] for k in ('Easy','Hard','Impossible',
+                              'Impossible_if_unobserved_no_cue_chance_is_0point5')}},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage28-aggregate-only-chance-baseline-QA-no-original-records
+          path: research/bee_outcome_stage28/stage28_source_outcome_receipt/stage28_chance_baseline_outcomes.json
+          if-no-files-found: error
+          retention-days: 90
