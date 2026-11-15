@@ -25,6 +25,8 @@ We fitted simple source-audited log(1 + count) OLS contrasts, not the authors' R
 | Wind association BETWEEN site averages | 9 site means | **−0.15608025** log(1+count) per 0.1 m/s; site Pearson r=−0.43849 |
 | Within-site, adjusting original relative turbulence | 70 sessions, two within-site regressors | **+0.23562366** wind slope per 0.1 m/s |
 | Leave-one-site-out within-slope range | nine site-exclusion fits | **+0.14507123 to +0.28902624** |
+| Two-way fixed-effects sensitivity, original 9 sites and 29 dates | 70 sessions | **+0.19952240** |
+| Cineole-only bait, removing all 3 methyl-salicylate sessions | 67 sessions, 9 sites | **+0.24858269** |
 
 The within-site sign remains positive after including turbulence and in each site deletion, but a strong *population generalization* cannot be asserted on these checks alone. Across-site slope need not have the same sign, and could be confounded by forest cover/site-level population and habitat context.
 
@@ -44,7 +46,7 @@ The previously constructed Stage34 four-cell wind×scent mathematical proof is S
 
 ## Robustness still subject to original design limitation
 
-The analysis code also records optional **site + date categorical fixed-effect** and **cineole-only** sensitivity when their original data identify the comparison. These contrasts are different from the source article's random-date Poisson model. If a source date pattern and site are collinear, the calculation must return a NO_GO rather than force a coefficient; record the actual pipeline receipt to determine whether sensitivity is identifiable.
+The source-verified 70-session rerun identified a two-way **site + date categorical fixed-effect** slope of +0.19952240 per 0.1 m/s (29 dates), and the **cineole-only** subset slope of +0.24858269 per 0.1 m/s (67/70 sessions), both positive. They remain observational associations, NOT the authors' random-date Poisson mixed model or randomized wind coefficients. The source-free regression code explicitly returns NO_GO if date effects make wind collinear and nonidentifiable; the real original source had residual within-date variation. All 13 current focused unit tests use artificial data; source-supplied effects are computed only by the dedicated original-download job.
 
 The original author R script and all original source CSV rows remain external and unredistributed. Only original file hashes, aggregate summaries, model status and uncertainty are retained in project artifacts. The PR stays Draft until dedicated-source workflow and Python 3.10–3.12 whole-repo matrix are verified on its final head.
 
