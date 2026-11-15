@@ -216,6 +216,7 @@ def _probe(record_id):
                 ValueError,zipfile.BadZipFile) as err:
             profile["attempted_downloads"].append({
                "file":filename,"error":type(err).__name__,
+               "diagnostic":str(err)[:350],
                "http_status":getattr(err,"code",None)})
     profile["status"]="NO_GO_ZENODO_ARCHIVE_NOT_RETRIEVED"
     profile["original_source_bytes_obtained"]=False
