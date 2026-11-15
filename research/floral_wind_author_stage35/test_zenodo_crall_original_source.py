@@ -57,6 +57,20 @@ class ZenodoSourceGrainTests(unittest.TestCase):
         self.assertEqual(t["column_profiles"][1]["numeric_max"],.2)
         self.assertTrue(t["no_individual_original_rows_redistributed"])
 
+    def test_empty_csv_is_explicit_qa_failure_not_invented_data(self):
+        z=io.BytesIO()
+        with zipfile.ZipFile(z,"w",zipfile.ZIP_DEFLATED) as a:
+            a.writestr("legitimate/session.csv","site,wind,bees\\nMOCK,0.1,3\\n")
+            a.writestr("legitimate/empty.csv","")
+        # Preserve all source filenames and byte hashes, but never
+        # pretend that an empty CSV contains original observations.
+        output=_safe_zip_inventory(z.getvalue())
+        self.assertEqual(len(output),2)
+        self.assertEqual(output[0]["csv"]["status"],"PARSED_ORIGINAL_CSV")
+        self.assertEqual(output[0]["csv"]["n_records"],1)
+        self.assertEqual(output[1]["csv"]["status"],"CSV_SOURCE_QA_FAILURE")
+        self.assertIsNone(output[1]["csv"]["n_records"])
+
     def test_zip_traversal_rejected(self):
         z=io.BytesIO()
         with zipfile.ZipFile(z,"w") as archive:
