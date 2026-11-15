@@ -110,6 +110,7 @@ def main(argv=None):
     ap=argparse.ArgumentParser()
     ap.add_argument('--out',default='stage40_method_source_receipts')
     ap.add_argument('--debug-limited-excerpts',action='store_true')
+    ap.add_argument('--debug-primary-windows',action='store_true')
     opts=ap.parse_args(argv)
     from inspect_original_tracks import source_original_archive
     source,original=source_original_archive()
@@ -132,6 +133,19 @@ def main(argv=None):
       for k,v in raw['script_inventory'].items()},
       'source_archive':original['source_sha256'],
       'not_kinematic_calibration_or_m_s_claim':True},sort_keys=True))
+    if opts.debug_primary_windows:
+        with zipfile.ZipFile(io.BytesIO(source)) as z:
+            code_paths=[n for n in z.namelist()
+                        if Path(n).name=='analyzeTrackingData.m'
+                        and not n.startswith('__MACOSX/')]
+            if len(code_paths)!=1:
+                raise ValueError('NO_GO_PRIMARY_ORIGINAL_SCRIPT_AMBIGUOUS')
+            code_lines=z.read(code_paths[0]).decode('latin1',errors='replace').splitlines()
+            for first,last in ((1,34),(68,90),(175,225)):
+                for j in range(first,min(last,len(code_lines))+1):
+                    line=code_lines[j-1].strip()
+                    if line:
+                        print('ORIGINAL_CODE_WINDOW',str(j),line[:200])
     if opts.debug_limited_excerpts:
         for item in raw['source_code_debug_hints']:
             print('ORIGINAL_DEBUG_HINT',item['source_file'],item['line_number'],
