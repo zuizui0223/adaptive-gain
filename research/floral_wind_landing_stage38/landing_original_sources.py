@@ -98,10 +98,8 @@ def _zip_inventory(blob):
                 # preserve raw files in memory in the runner only.
                 if not real_trajectory:
                     with f.open(x) as stream:
-                        try:
-                            decoded=stream.read(1500).decode('utf-8-sig')
-                        except UnicodeDecodeError:
-                            decoded=stream.read(0).decode('utf-8',errors='replace')
+                        decoded=stream.read(1500).decode(
+                            'utf-8-sig',errors='replace')
                     lines=decoded.splitlines()
                     sample_rows=list(csv.reader(io.StringIO('\n'.join(lines[:3]))))
                     real_trajectory.append({
