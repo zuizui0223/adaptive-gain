@@ -1,0 +1,76 @@
+name: bee-stage27-paid-query-estimand-contamination
+on:
+  push:
+    branches: [analysis/bee-estimand-contamination-stage27-20261115]
+    paths:
+      - 'research/bee_estimand_stage27/**'
+      - '.github/workflows/bee-stage27-estimand-contamination.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-estimand-bias:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-free fixture and bee-bootstrap regression tests
+        working-directory: research/bee_estimand_stage27
+        run: PYTHONPATH=../bee_original_audit_stage26:. python -m unittest test_estimand_contamination -v
+      - name: Download pinned existing author trial CSV, verify original Git blob
+        working-directory: research/bee_estimand_stage27
+        run: |
+          mkdir -p source_input
+          curl --fail --location --retry 3 --silent --show-error \
+            'https://raw.githubusercontent.com/Cuixiaojian21/bee_metacognition/7f886394b4de872ecdb19ca4ea214ec321d5dce9/data/4_active_information_seeking_trials.csv' \
+            -o source_input/pinned_existing_author_trials.csv
+          actual="$(git hash-object source_input/pinned_existing_author_trials.csv)"
+          test "$actual" = '26259c9071c6d73141d56b9bedd396cab1a04491'
+          echo "STAGE27_EXISTING_AUTHOR_SOURCE_IDENTITY_VERIFIED $actual"
+      - name: Estimate source-locked pooled-flag bias using 192 bee ID clusters
+        working-directory: research/bee_estimand_stage27
+        run: |
+          PYTHONPATH=../bee_original_audit_stage26:. python -u estimand_contamination.py \
+            --input source_input/pinned_existing_author_trials.csv \
+            --bootstrap-reps 10000 \
+            --out stage27_source_locked_receipts
+      - name: Verify 192-bee estimator, time-block sensitivity and absolute inference stop
+        working-directory: research/bee_estimand_stage27
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('stage27_source_locked_receipts/stage27_estimand_contamination.json').read_text())
+          assert s['status']=='PINNED_AUTHOR_SOURCE_ESTIMAND_CONTAMINATION_AUDITED'
+          assert s['n_trials']==19200 and s['n_bee_ids']==192
+          assert s['naively_counted_information_flags']==9526
+          assert s['actual_paid_voluntary_request_landings_regular_only']==5686
+          assert s['automatic_free_cue_trials_in_naive_flag']==3840
+          z=s['trial_weighted']
+          assert abs(z['gradient_relative_attenuation']-0.2055262886781553)<1e-6
+          assert s['equal_bee_level']['contamination_difference']['n_positive']==186
+          assert s['equal_bee_level']['landing_interaction']['n_positive']==191
+          assert s['individual_bee_cluster_bootstrap']['resamples']==10000
+          assert all(s['early_late_trial_number_robustness'][p]['contamination_difference']>0 for p in ('Early','Late'))
+          limits=s['scientific_limits']
+          assert limits['original_animals_newly_collected']==0
+          assert limits['independent_colony_inference'] is False
+          assert limits['stage24_8d_sensory_recognition_measured'] is False
+          assert limits['absolute_fitness_improvement_estimated'] is False
+          print('STAGE27_LOCKED_BEES_192_POOLED_FLAG_ATTENUATION_AND_STOP_SUCCESS')
+          print(json.dumps({'trial_weighted':z,
+                 'equal_bee_contamination':s['equal_bee_level']['contamination_difference'],
+                 'bee_bootstrap_percentile95':s['individual_bee_cluster_bootstrap']['percentile95'],
+                 'early_late':{p:s['early_late_trial_number_robustness'][p]['contamination_difference'] for p in ('Early','Late')}},
+                sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage27-author-trial-derived-estimand-audit-only
+          path: research/bee_estimand_stage27/stage27_source_locked_receipts/stage27_estimand_contamination.json
+          if-no-files-found: error
+          retention-days: 90
