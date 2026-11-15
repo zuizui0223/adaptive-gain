@@ -55,6 +55,11 @@ class Stage36CrallTests(unittest.TestCase):
         self.assertEqual(rows[1]["count"],"3")
         self.assertEqual(len(rows),2)
 
+    def test_legacy_latin1_notes_do_not_change_original_numeric_fields(self):
+        rows=_rows("site,note,count\nMOCK_SITE,café,3\n".encode("latin-1"))
+        self.assertEqual(rows[0]["note"],"café")
+        self.assertEqual(rows[0]["count"],"3")
+
     def test_fake_zip_extracts_input_tables_no_real_claim(self):
         x=extract_source_tables(faux_zip())
         self.assertEqual(len(x["sessions"]),15)
