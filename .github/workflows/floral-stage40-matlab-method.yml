@@ -26,7 +26,7 @@ jobs:
         working-directory: research/floral_landing_source_stage40
         run: |
           PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
-          python -u audit_original_MATLAB.py --debug-limited-excerpts --out stage40_method_source_receipts
+          python -u audit_original_MATLAB.py --debug-limited-excerpts --debug-primary-windows --out stage40_method_source_receipts
       - name: Require source-only scientific limits
         working-directory: research/floral_landing_source_stage40
         run: |
