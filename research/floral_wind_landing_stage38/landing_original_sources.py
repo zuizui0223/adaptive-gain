@@ -17,6 +17,9 @@ It does not redistribute original dataset bytes or trajectories.
 from __future__ import annotations
 
 import argparse
+import csv
+from collections import Counter
+import re
 import hashlib
 import io
 import json
@@ -51,6 +54,14 @@ def _fetch(url,max_bytes=MAX_ZIP):
         raise ValueError('NO_GO_LARGE_ORIGINAL_ARCHIVE')
     return data
 
+def _numeric_token(value):
+    try:
+        n=float(value)
+        return math.isfinite(n)
+    except (ValueError,TypeError):
+        return False
+
+
 def _zip_inventory(blob):
     if not zipfile.is_zipfile(io.BytesIO(blob)):
         raise ValueError('NO_GO_ZENODO_NOT_A_VALID_ZIP')
@@ -61,17 +72,58 @@ def _zip_inventory(blob):
         if sum(x.file_size for x in items)>MAX_UNCOMPRESSED:
             raise ValueError('NO_GO_ZIP_BOMB_OR_LARGE_UNCOMPRESSED_SOURCE')
         entries=[]
+        real_trajectory=[]
+        lexical_wind=Counter()
+        source_B_labels=set()
         for x in items:
             if ('..' in Path(x.filename).parts or
                 x.filename.startswith('/')):
                 raise ValueError('NO_GO_UNSAFE_ZIP_ENTRY_PATH')
             suffix=Path(x.filename).suffix.lower()
+            sidecar=('/__MACOSX/' in '/'+x.filename or
+                     Path(x.filename).name.startswith('._') or
+                     Path(x.filename).name=='.DS_Store')
             entries.append({'name':x.filename,'size':x.file_size,
-                'type':suffix or '<no_extension>'})
+                'type':suffix or '<no_extension>',
+                'is_operating_system_sidecar':sidecar})
+            # These are existing ORIGINAL tracked landing trajectories,
+            # not all attempted approaches / failures.
+            if (not sidecar and suffix=='.csv' and
+                'xyzpts' in Path(x.filename).name.lower()):
+                match=re.match(r'^B([0-9]+)_.*_W([01])_',Path(x.filename).name)
+                if match:
+                    source_B_labels.add(match.group(1))
+                    lexical_wind['W'+match.group(2)]+=1
+                # Inspect ONLY headers/grain of the first source file;
+                # preserve raw files in memory in the runner only.
+                if not real_trajectory:
+                    with f.open(x) as stream:
+                        try:
+                            decoded=stream.read(1500).decode('utf-8-sig')
+                        except UnicodeDecodeError:
+                            decoded=stream.read(0).decode('utf-8',errors='replace')
+                    lines=decoded.splitlines()
+                    sample_rows=list(csv.reader(io.StringIO('\n'.join(lines[:3]))))
+                    real_trajectory.append({
+                       'example_source_path':x.filename,
+                       'source_column_count':len(sample_rows[0]) if sample_rows else None,
+                       'first_row_looks_all_numeric':(
+                           bool(sample_rows) and all(
+                               _numeric_token(c) for c in sample_rows[0])),
+                       'first_row_column_names_if_not_numeric':(
+                           sample_rows[0] if sample_rows and not all(
+                               _numeric_token(c) for c in sample_rows[0]) else None),
+                       'second_row_column_count':len(sample_rows[1]) if len(sample_rows)>1 else None,
+                       'no_original_numeric_rows_reported':True
+                    })
     return {
       'file_count':len(entries),
       'uncompressed_total_bytes':sum(x['size'] for x in entries),
       'entries':entries,
+      'kinematic_source_B_label_count':len(source_B_labels),
+      'filename_W0_W1_trajectory_counts':dict(sorted(lexical_wind.items())),
+      'filename_W_codes_not_authentic_wind_metadata':True,
+      'one_original_trajectory_header_profile':real_trajectory,
       'raw_data_rows_disclosed':0,
       'no_flight_or_person_data_redistributed':True
     }
