@@ -1,0 +1,76 @@
+name: floral-stage31-multimodal-stage-meta-and-spectral-source-gate
+on:
+  push:
+    branches: [analysis/floral-uv-original-workbook-stage31-20261115]
+    paths:
+      - 'research/floral_multimodal_stage31/**'
+      - '.github/workflows/floral-stage31-multimodal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stage-meta-contract-and-source-spectrum:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify stage-specific endpoint and modality contracts using synthetic math only
+        working-directory: research/floral_multimodal_stage31
+        run: python -m unittest test_multimodal_stage_effects -v
+      - name: Fetch 401-point FReD original-record mirror from pinned public GitHub source
+        working-directory: research/floral_multimodal_stage31
+        run: |
+          mkdir -p original_source_temp
+          curl --fail --location --retry 3 --silent --show-error \
+            'https://raw.githubusercontent.com/cran/photobiologyInOut/ae409a941e58b302ac714b4f5abc656dd9249c6b/inst/extdata/FReDflowerID_157.csv' \
+            -o original_source_temp/FReDflowerID_157.csv
+          actual="$(git hash-object original_source_temp/FReDflowerID_157.csv)"
+          test "$actual" = '0f9dace9d812cd0c0affc68b58cd7972d86b7f01'
+          echo "STAGE31_SOURCE_PINNED_PUBLIC_SPECTRUM_VERIFIED $actual"
+      - name: Derive real UV and visible reflectance summary without inventing flower guide
+        working-directory: research/floral_multimodal_stage31
+        run: |
+          python -u fred_spectral_pilot.py \
+            --input original_source_temp/FReDflowerID_157.csv \
+            --out stage31_pilot_outputs
+      - name: Audit one-record biological limit and scope of meta-estimand implementation
+        working-directory: research/floral_multimodal_stage31
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from multimodal_stage_effects import validate_source_ledger,empty_meta_evidence_gate
+          spectral=json.loads(Path('stage31_pilot_outputs/stage31_one_FReD_spectrum_QA.json').read_text())
+          assert spectral['spectral_rows']==401
+          assert spectral['wavelength_min_nm']==300 and spectral['wavelength_max_nm']==700
+          assert spectral['UV_300_399_n']==100 and spectral['visible_400_700_n']==301
+          assert abs(spectral['UV_300_399_arithmetic_mean_reflectance']-0.066442808)<1e-9
+          assert abs(spectral['visible_400_700_arithmetic_mean_reflectance']-0.21238510099667773)<1e-9
+          assert spectral['UV_guide_presence_inferred'] is False
+          assert spectral['source_specimen_record_count']==1
+          assert spectral['no_species_level_macro_effect_estimated'] is True
+          ledger=validate_source_ledger(Path('VERIFIED_SOURCE_GRANULARITY_LEDGER.csv'))
+          meta=empty_meta_evidence_gate()
+          assert ledger['total_source_rows']>=20
+          assert ledger['independent_quantitative_effects_extracted']==0
+          assert meta['status']=='NO_GO_NO_SOURCE_EXTRACTED_TREATMENT_EFFECTS'
+          assert meta['numbers_of_original_experimental_effects']==0
+          result={'status':'STAGE31_MULTIMODAL_SOURCE_AND_METHOD_CONTRACT_VERIFIED',
+                  'source_registry':ledger,'quantitative_meta':meta,
+                  'one_spectrum_pilot':spectral,
+                  'original_flower_observations_newly_collected':0,
+                  'no_raw_primary_data_redistributed':True}
+          Path('stage31_pilot_outputs/stage31_complete_receipt.json').write_text(
+              json.dumps(result,indent=2,allow_nan=False)+'\n')
+          print('STAGE31_REAL_SPECTRAL_401_ROWS_AND_NO_META_INFERENCE_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage31-multimodal-source-metadata-and-real-spectral-aggregate-only
+          path: research/floral_multimodal_stage31/stage31_pilot_outputs/*.json
+          if-no-files-found: error
+          retention-days: 90
