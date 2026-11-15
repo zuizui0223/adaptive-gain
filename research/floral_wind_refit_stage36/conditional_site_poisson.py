@@ -21,6 +21,7 @@ import hashlib
 import io
 import json
 import math
+from decimal import Decimal,InvalidOperation
 from collections import defaultdict
 from pathlib import Path
 
@@ -105,8 +106,19 @@ def read_original_session_records(blob):
             or cover is None or not 0<=cover<=1):
             raise ValueError('NO_GO_MISSING_WIND_TKE_OR_COVER')
         wind2=_finite_number(y['wind.mean'])
-        if wind2 is None or abs(wind-wind2)>0.0002:
+        if wind2 is None:
             raise ValueError('NO_GO_ORIGINAL_WIND_CROSS_SOURCE_MISMATCH')
+        try:
+            # The collection-time CSV rounds wind.mean, while the
+            # integrated file stores many decimal places. Permit only the
+            # original printed value's HALF-LAST-PLACE rounding interval.
+            displayed=Decimal(x['wind.mean'].strip())
+            precise=Decimal(y['wind.mean'].strip())
+            tolerance=Decimal('0.5') * (Decimal(10) ** displayed.as_tuple().exponent)
+            if abs(displayed-precise)>tolerance+Decimal('1e-12'):
+                raise ValueError('NO_GO_ORIGINAL_WIND_CROSS_SOURCE_MISMATCH')
+        except InvalidOperation as err:
+            raise ValueError('NO_GO_ORIGINAL_WIND_PRECISION_INVALID') from err
         if x['scent'].strip() not in EXPECTED_SCENT:
             raise ValueError('NO_GO_ORIGINAL_SCENT_UNEXPECTED')
         sessions.append({
