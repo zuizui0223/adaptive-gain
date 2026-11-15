@@ -1,0 +1,59 @@
+name: floral-stage33-cognition-wind-olfactory-vs-landing
+on:
+  push:
+    branches: [analysis/floral-receiver-cognition-guild-stage33-20261115]
+    paths:
+      - 'research/floral_receiver_stage33/**'
+      - '.github/workflows/floral-stage33-cognition-wind.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-free-exact-dual-channel-proof-and-evidence-QA:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test cognition efficiency independence and exact wind dual-channel sign reversals
+        working-directory: research/floral_receiver_stage33
+        run: |
+          python -m unittest test_receiver_cognition_route_value test_wind_dual_path -v
+      - name: Generate separate cognition and wind source-free certificates
+        working-directory: research/floral_receiver_stage33
+        run: |
+          mkdir -p stage33_validation_receipts
+          python -u receiver_cognition_route_value.py > stage33_validation_receipts/cognition_pollen_counterexamples.json
+          python -u wind_dual_path.py > stage33_validation_receipts/wind_opposed_path_counterexamples.json
+      - name: Check positive and negative wind components without claiming original effects
+        working-directory: research/floral_receiver_stage33
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          cognition=json.loads(Path('stage33_validation_receipts/cognition_pollen_counterexamples.json').read_text())
+          wind=json.loads(Path('stage33_validation_receipts/wind_opposed_path_counterexamples.json').read_text())
+          assert cognition['qualitative_evidence']['eight_species']==8
+          assert cognition['qualitative_evidence']['reported_learning_present_for_all_eight'] is True
+          assert cognition['mathematical_examples']['all_parameters_assumed_source_free'] is True
+          a=wind['example']['moderate_wind']['decomposition']
+          b=wind['example']['strong_wind']['decomposition']
+          c=wind['example']['strong_wind_with_visual_motor_compensation']['decomposition']
+          assert a['wind_minus_calm']=='9/200'
+          assert a['odour_or_other_detection_component']=='9/50'
+          assert a['mechanical_landing_component']=='-27/200'
+          assert b['wind_minus_calm']=='-3/40'
+          assert c['wind_minus_calm']=='3/16'
+          assert wind['scoping']['all_effect_sizes_from_original_raw_studies_extracted'] is False
+          assert wind['scoping']['no_claim_of_same_cohort_between_scent_and_landing_studies'] is True
+          print('STAGE33_EXACT_WIND_OPPOSING_PATHS_SCIENTIFIC_STOP_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: floral-stage33-cognition-wind-synthetic-only-proof-receipts
+          path: research/floral_receiver_stage33/stage33_validation_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
