@@ -1,0 +1,57 @@
+name: floral-stage32-uv-Dryad-original-source-shell
+on:
+  push:
+    branches: [analysis/floral-uv-dryad-source-grain-stage32-20261115]
+    paths:
+      - 'research/floral_uv_source_stage32/**'
+      - '.github/workflows/floral-stage32-dryad-original-shell.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-UV-workbook-structure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic archive tests without real workbook distribution
+        working-directory: research/floral_uv_source_stage32
+        run: python -m unittest test_dryad_original_structure_probe -v
+      - name: Read original UV-manipulation Dryad archive or fail closed
+        working-directory: research/floral_uv_source_stage32
+        run: |
+          python -u dryad_original_structure_probe.py --out stage32_original_source_receipts
+      - name: Require a transparent status and prohibit unsupported effect estimates
+        working-directory: research/floral_uv_source_stage32
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          f=Path('stage32_original_source_receipts/stage32_dryad_bm558_workbook_structure.json')
+          a=json.loads(f.read_text())
+          assert a['status'] in (
+              'ORIGINAL_DRYAD_ARCHIVE_AND_WORKBOOK_STRUCTURALLY_PRESENT',
+              'NO_GO_DRYAD_UPSTREAM_DOWNLOAD_UNAVAILABLE')
+          assert a['experimental_effects_extracted']==0
+          if a['status'].startswith('ORIGINAL_DRYAD_'):
+              assert a['doi']=='10.5061/dryad.bm558'
+              assert a['original_workbook_name']=='FEKoskiSF2.xlsx'
+              assert a['original_workbook_structure']['sheet_count']>=1
+              assert a['original_workbook_structure']['cell_values_or_headers_examined'] is False
+              assert a['original_excel_redistributed'] is False
+              print('STAGE32_REAL_SOURCE_SHELL_FOUND',a['original_workbook_structure']['sheet_names'])
+          else:
+              assert a['original_workbook_acquired'] is False
+              assert a['no_biological_claim'] is True
+              print('STAGE32_ORIGINAL_DRYAD_UNAVAILABLE_NO_GO')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage32-dryad-uv-source-only-metadata-no-original-workbook
+          path: research/floral_uv_source_stage32/stage32_original_source_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
