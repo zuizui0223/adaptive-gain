@@ -37,9 +37,18 @@ jobs:
               assert x['input_integratedSpatialWindData_original_rows']==70
               assert x['input_beedata_original_rows']==450
               assert g['n_sites']==9
+              assert g['sum_source_bee_visits_across_sessions']==409
+              assert g['source_scent_types_sessions']=={'cin':67,'meth':3}
+              assert g['distinct_recorded_dates']==29
               assert 45<=g['n_sessions_used']<=70
               w=x['wind_within_site_association_log1p']
               assert math.isfinite(w['slope_for_0p1_m_s'])
+              assert abs(w['slope_for_0p1_m_s']-0.2169204205499593)<1e-9
+              assert x['wind_between_site_association_log1p']['between_site_pearson_r']<0
+              assert x['wind_within_site_and_date_fixed_effect_sensitivity']['status']=='SITE_AND_DATE_FIXED_EFFECT_LOG1P_ASSOCIATION'
+              assert abs(x['wind_within_site_and_date_fixed_effect_sensitivity']['slope_per_0p1_m_s']-0.19952240105209967)<1e-9
+              assert x['cineole_only_within_site_sensitivity']['raw_source_session_rows_used']==67
+              assert x['cineole_only_within_site_sensitivity']['slope_for_0p1_m_s']>0
               assert x['site_cluster_bootstrap']['site_cluster_bootstrap_draws']==4000
               assert x['site_stratified_permutation']['site_stratified_permutations']==4000
               assert x['authors_original_R_GLM_MIXED_MODEL_REPLICATED'] is False
