@@ -264,6 +264,8 @@ def main():
        "source_details":[{
           "id":r["record_id_requested"],"status":r["status"],
           "archive":r.get("selected_zip_filename"),
+          "available_zip_candidates":len(r.get("zip_candidates",[])),
+          "download_failures":r.get("attempted_downloads",[]),
           "raw_csv_count":r.get("original_csv_count"),
           "files":[{
              "path":x["path"],"row_count":x.get("csv",{}).get("n_records"),
