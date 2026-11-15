@@ -1,0 +1,32 @@
+name: bee-stage23-exact-paid-query-cost-window
+on:
+  push:
+    branches: [theory/bee-exact-cost-window-stage23-20261115]
+    paths:
+      - 'research/bee_cost_window_stage23/**'
+      - '.github/workflows/bee-stage23-cost-window.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-cost-frontier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently test exact cost frontiers and normalized Bayes oracle
+        working-directory: research/bee_cost_window_stage23
+        run: python -m unittest test_exact_cost_frontier -v
+      - name: Generate exact all-cost proof certificate without animal data
+        working-directory: research/bee_cost_window_stage23
+        run: python -u exact_cost_frontier.py --out stage23_exact_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage23-source-free-cost-window-certificate
+          path: research/bee_cost_window_stage23/stage23_exact_outputs/stage23_cost_window_certificate.json
+          if-no-files-found: error
+          retention-days: 90
