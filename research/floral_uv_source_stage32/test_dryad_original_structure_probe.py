@@ -6,6 +6,8 @@ from pathlib import Path
 import tempfile
 import unittest
 import zipfile
+import urllib.error
+from unittest.mock import patch
 
 from dryad_original_structure_probe import inspect_archive,run,EXPECTED_ORIGINAL
 
@@ -65,6 +67,17 @@ class Stage32DryadSourceShellTests(unittest.TestCase):
             z.writestr(EXPECTED_ORIGINAL,b'PKnotreal')
         with self.assertRaises(ValueError):
             inspect_archive(stream.getvalue())
+
+    def test_upstream_http_error_is_transparent_no_go(self):
+        error=urllib.error.HTTPError(
+            'https://datadryad.org/api/v2/datasets/sample/download',403,
+            'Forbidden',None,None)
+        with patch('dryad_original_structure_probe.fetch_original_archive',side_effect=error):
+            out=run()
+        self.assertEqual(out['status'],'NO_GO_DRYAD_UPSTREAM_DOWNLOAD_UNAVAILABLE')
+        self.assertEqual(out['http_status_code'],403)
+        self.assertFalse(out['original_workbook_acquired'])
+        self.assertEqual(out['experimental_effects_extracted'],0)
 
     def test_no_meta_effect_from_successful_source_archive(self):
         z=run(invented_archived_xlsx())
