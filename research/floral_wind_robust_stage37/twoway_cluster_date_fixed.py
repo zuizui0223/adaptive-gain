@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import math
+import hashlib
 from pathlib import Path
 
 from conditional_site_poisson import (
@@ -214,10 +215,12 @@ def _date_loo(rows):
     }
 
 
-def analyze(rows,stage36):
+def analyze(rows,stage36,original_archive_sha256=None):
     if not isinstance(stage36,dict) or stage36.get('status')!=(
         'CRALL_REAL_SESSION_SITE_CONDITIONAL_POISSON_REFIT_WITH_LIMITS'):
         raise ValueError('NO_GO_PREVIOUS_REFIT_NOT_SOURCE_VERIFIED')
+    if original_archive_sha256 != STAGE36_SHA:
+        raise ValueError('NO_GO_ORIGINAL_ZENODO_ARCHIVE_SHA_NOT_VERIFIED')
     if len(rows)!=70 or len({r['site'] for r in rows})!=9 or (
        len({r['date'] for r in rows})!=29) or sum(r['count'] for r in rows)!=409:
         raise ValueError('NO_GO_NOT_ORIGINAL_CRALL_SESSION_GRAIN')
@@ -245,17 +248,17 @@ def main():
     dest=Path('stage37_original_robustness_receipts')
     dest.mkdir(parents=True,exist_ok=True)
     source_previous=Path('../floral_wind_refit_stage36/stage36_refit_receipts/stage36_source_locked_within_site_poisson.json')
+    blob=get_source()
+    digest=hashlib.sha256(blob).hexdigest()
     if not source_previous.exists():
         # Standalone in Stage37, recreate with same original source and
         # unchanged Stage36 frozen data pipeline, not hand-entered effects.
         from conditional_site_poisson import fitted_source_refit
-        blob=get_source()
         original=fitted_source_refit(blob)
-        rows=read_original_session_records(blob)
     else:
         original=json.loads(source_previous.read_text(encoding='utf8'))
-        rows=read_original_session_records(get_source())
-    result=analyze(rows,original)
+    rows=read_original_session_records(blob)
+    result=analyze(rows,original,original_archive_sha256=digest)
     output=dest/'stage37_site_date_robustness.json'
     output.write_text(json.dumps(result,indent=2,ensure_ascii=False,allow_nan=False)+'\n',
                       encoding='utf8')
