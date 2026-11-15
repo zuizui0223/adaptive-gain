@@ -11,3 +11,5 @@ C09,2021,quantitative_meta_analysis,Apis_mellifera_and_other_flower_visitors,per
 C10,2023,simulation_model,bee_social_agents,flower_constancy_and_social_information,no,no,no,https://doi.org/10.1111/1365-2656.13861,simulation_not_independent_pollinator_efficiency
 C11,2019,review_cognition,flower_visiting_invertebrates,foraging_plasticity_and_cognition,no,no,no,https://pmc.ncbi.nlm.nih.gov/articles/PMC6688568/,review_not_original_learning_trial
 C12,2009,book_chapter,flies_beetles_moths_butterflies,vision_and_learning_in_non_bee_visitors,no,no,no,https://doi.org/10.1017/CBO9780511542268.010,not_random_class_and_no_numeric_guide_effect
+C13,1998,experimental_butterfly_nectar_guide,Pieris_rapae_crucivora,naive_probing_response_and_learned_guide_efficiency,yes,no,no,https://doi.org/10.1303/aez.33.35,guide_improves_proboscis_targeting_and_experience_not_seed_set
+C14,2018,experimental_hoverfly_sequential_colours,Eristalis_tenax,landing_colour_bias_distinct_from_proboscis_reflex,yes,no,no,https://doi.org/10.1242/jeb.184788,innate_landing_and_pollen_probe_cues_differ_not_random
