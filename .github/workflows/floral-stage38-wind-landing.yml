@@ -1,0 +1,70 @@
+name: floral-stage38-original-wind-landing-data-audit
+on:
+  push:
+    branches: [analysis/floral-wind-landing-independent-source-stage38-20261115]
+    paths:
+      - 'research/floral_wind_landing_stage38/**'
+      - '.github/workflows/floral-stage38-wind-landing.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-source-and-grain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate landing-frequency versus success-probability denominator
+        working-directory: research/floral_wind_landing_stage38
+        run: python -m unittest test_landing_original_sources -v
+      - name: Inspect official original Chang 2016 Zenodo archive and Goyal 2024 Mendeley metadata
+        working-directory: research/floral_wind_landing_stage38
+        run: |
+          python -u landing_original_sources.py --out stage38_landing_source_receipts
+      - name: Fail closed on unsourced empirical landing success and plant fitness
+        working-directory: research/floral_wind_landing_stage38
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage38_landing_source_receipts/stage38_wind_landing_source_provenance.json').read_text())
+          a=d['paper_2024_benchmark']
+          assert a['published_tracked_successful_landings']==19421
+          assert abs(a['free_flight_high_vs_calm_rate_ratio']-(112.2/280.8))<1e-14
+          assert abs(a['post_takeoff_high_vs_calm_rate_ratio']-(16.5/56.0))<1e-14
+          assert a['cannot_infer_landing_success_probability'] is True
+          assert a['original_raw_session_variance_and_effort_not_reestimated'] is True
+          x=d['cross_source_identifiability']
+          assert x['no_same_bee_or_plant_or_site_cohort'] is True
+          assert x['do_not_multiply_source_effects_into_plant_fitness'] is True
+          assert x['no_wind_by_floral_odor_interaction_estimated'] is True
+          assert d['no_new_pollinator_data_collected'] is True
+          if d['zenodo2016']['status']=='REAL_ORIGINAL_CHANG_LANDING_ARCHIVE_VERIFIED':
+              z=d['zenodo2016']
+              assert z['record_id']==60234
+              assert z['source_md5']=='22bbc8286fecd2535d3f284679aed87b'
+              assert z['zip_source_structure']['file_count']>0
+              assert z['zip_source_structure']['raw_data_rows_disclosed']==0
+              print('STAGE38_ACTUAL_ZENODO_KINEMATICS_ARCHIVE_VERIFIED',
+                    z['zip_source_structure']['file_count'])
+          else:
+              assert d['zenodo2016']['no_original_landing_data_claim'] is True
+              print('STAGE38_ZENODO_SOURCE_NO_GO',d['zenodo2016']['error_type'])
+          if d['mendeley2024']['status']=='MENDELEY_PUBLIC_METADATA_CONFIRMED':
+              assert d['mendeley2024']['no_original_mat_trajectory_rows_extracted'] is True
+              print('STAGE38_MENDELEY_SOURCE_METADATA_CONFIRMED')
+          else:
+              assert d['mendeley2024']['no_original_mat_contents_claim'] is True
+              print('STAGE38_MENDELEY_API_NO_GO',d['mendeley2024']['error_type'])
+          print('STAGE38_WIND_LANDING_RATE_NOT_SUCCESS_PROBABILITY_ENFORCED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage38-original-landing-source-provenance-aggregates-only
+          path: research/floral_wind_landing_stage38/stage38_landing_source_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
