@@ -1,0 +1,130 @@
+name: floral-stage40-original-MATLAB-selection-and-calibration
+on:
+  push:
+    branches: [analysis/floral-chang-matlab-selection-stage40-20261115]
+    paths:
+      - 'research/floral_landing_source_stage40/**'
+      - '.github/workflows/floral-stage40-matlab-method.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-source-method-without-pseudoreplication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original kinematics signal-processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Source-free source-method validator tests
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -m unittest test_audit_original_MATLAB test_static_landmark_gate test_reconstruct_3d_approach_landing -v
+      - name: Verify authentic original 2016 Zenodo ZIP and inspect author MATLAB selection/calibration hints
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u audit_original_MATLAB.py --debug-limited-excerpts --debug-primary-windows --out stage40_method_source_receipts
+      - name: Independently verify sparse columns encode one flower reference per track
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u static_landmark_gate.py --out stage40_method_source_receipts
+      - name: Reject unsupported multi-point moving-body centroid and absent primary selection
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('stage40_method_source_receipts/stage40_static_flower_landmark_source_audit.json')
+          x=json.loads(path.read_text())
+          assert x['status']=='ORIGINAL_STATIC_FLOWER_LANDMARK_ENCODING_CONFIRMED',x
+          assert x['source_archive_file_count']==157
+          assert x['wind_file_codes']=={'W0':56,'W1':101}
+          assert x['pt7_records_per_original_trajectory_distribution']=={'1':157}
+          assert x['original_7point_table_not_seven_moving_body_markers'] is True
+          assert x['original_MATLAB_uses_pt7_as_single_flower_origin'] is True
+          assert x['pt4_7_record_totals']==dict.fromkeys(
+            ('pt4_nonmissing_frame_total','pt5_nonmissing_frame_total',
+             'pt6_nonmissing_frame_total','pt7_nonmissing_frame_total'),157)
+          assert x['original_track_frames_counted']==95153
+          assert x['published_calm_tracks_exceed_archived_W0_if_one_file_per_path'] is True
+          assert x['no_verified_original_112_track_selection'] is True
+          assert x['physical_wind_effect_not_fit_by_this_audit'] is True
+          print('STAGE40_ONE_STATIC_FLOWER_CENTER_PER_TRACK_CONFIRMED')
+          print('APPROACH_ELIGIBILITY',x['wind_group_eligibility'])
+          print('TRACK_GEOMETRY',x['pt2_approach_per_track'],x['pt2_landing_per_track'])
+          print('CONSECUTIVE_FRAMES',x['consecutive_valid_frame_pairs_for_1000fps_speed'])
+          PY
+      - name: Independently reconstruct wind-labeled exploratory m/s in source archive with correct 3-point physics
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          PYTHONPATH=../floral_wind_kinematic_stage39:../floral_wind_landing_stage38:. \
+          python -u reconstruct_3d_approach_landing.py
+      - name: Audit 157 archived source original m/s, bee-cluster design and 112-selection nonidentification
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          p=Path('stage40_kinematic_refit_receipts/stage40_original_157_archived_exploratory_kinematics.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='ORIGINAL_157_ARCHIVED_TRACKS_EXPLORATORY_KINEMATIC_REFIT'
+          assert x['original_archive_tracks']==157
+          assert x['original_filename_B_labels']==28
+          assert x['original_W0_W1_counts']=={'W0':56,'W1':101}
+          assert x['original_frames_per_second_from_author_MATLAB']==1000
+          assert x['author_MATLAB_Butterworth_order']==5
+          assert x['author_MATLAB_Butterworth_cutoff_hz']==100
+          assert x['original_tag3_and_static_flower_geometry_verified'] is True
+          assert x['stage_eligible_tracks']>100
+          assert x['published_112_selected_tracks_not_identified'] is True
+          assert x['not_author_published_GLMM_reproduction'] is True
+          assert x['no_attempted_landing_failure_denominator'] is True
+          assert x['no_flow_to_pollen_or_seed_fitness_estimated'] is True
+          assert x['not_external_source_original_raw_data_redistributed'] is True
+          assert x['no_wind_by_scent_on_off_interaction'] is True
+          for W in ('W0','W1'):
+              z=x['wind_stratified_descriptive'][W]
+              assert z['valid_stage_tracks']>0
+              for key in ('mean_approach_m_s_exploratory','mean_near_flower_m_s_exploratory',
+                          'within_track_speed_change_m_s_exploratory'):
+                  assert math.isfinite(z[key]['mean'])
+          print('STAGE40_REAL_ARCHIVED_TRACKS_KINEMATICS_CONDITIONAL_ON_SELECTED_AVAILABLE_FILES_SUCCESS')
+          print('N_ELIGIBLE',x['stage_eligible_tracks'])
+          print('RECONSTRUCTED_SPEED_BY_W',json.dumps(x['wind_stratified_descriptive'],sort_keys=True))
+          assert x['matched_original_source_design_B_S_P_before_comparing_W'] is True
+          print('ORIGINAL_B_LABEL_PAIRED_SENSITIVITY',json.dumps(x['within_original_B_label_paired_descriptive'],sort_keys=True))
+          print('WITHIN_B_S_P_MATCHED_WIND_SENSITIVITY',json.dumps(x['within_B_and_same_stiffness_position_matched_descriptive'],sort_keys=True))
+          PY
+      - name: Require source-only scientific limits
+        working-directory: research/floral_landing_source_stage40
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('stage40_method_source_receipts/stage40_original_MATLAB_calibration_pointers.json').read_text())
+          assert a['status']=='ORIGINAL_AUTHOR_MATLAB_SOURCE_POINTERS_ONLY'
+          assert a['original_record_id']==60234
+          assert a['original_public_archive_md5']=='22bbc8286fecd2535d3f284679aed87b'
+          assert 'analyzeTrackingData.m' in a['script_inventory']
+          assert not a['source_code_debug_hints']
+          assert a['no_source_MATLAB_code_or_raw_data_redistributed'] is True
+          assert a['physical_m_per_s_difference_estimated'] is False
+          assert a['author_published_112_tracks_selection_recovered'] is False
+          assert a['original_frame_index_for_each_csv_row_verified'] is False
+          print('STAGE40_ORIGINAL_SCRIPT_SOURCE_NOT_YET_KINEMATICS_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage40-original-Chang-MATLAB-script-sha-and-line-pointers-only
+          path: |
+            research/floral_landing_source_stage40/stage40_method_source_receipts/*.json
+            research/floral_landing_source_stage40/stage40_kinematic_refit_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
