@@ -107,6 +107,8 @@ def run(archive_bytes=None):
             return {'status':'NO_GO_DRYAD_UPSTREAM_DOWNLOAD_UNAVAILABLE',
                     'source_doi':DOI,
                     'failure_type':type(err).__name__,
+                    'http_status_code':getattr(err,'code',None),
+                    'api_source_endpoint':API_DOWNLOAD,
                     'original_workbook_acquired':False,
                     'experimental_effects_extracted':0,
                     'no_biological_claim':True,
