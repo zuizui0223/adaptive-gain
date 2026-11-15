@@ -1,0 +1,63 @@
+name: floral-stage39-original-3d-flight-kinematic-grain
+on:
+  push:
+    branches: [analysis/floral-wind-landing-kinematics-stage39-20261115]
+    paths:
+      - 'research/floral_wind_kinematic_stage39/**'
+      - '.github/workflows/floral-stage39-original-3d-track.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-157-3d-tracks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free marker-and-ZIP-grain regression tests
+        working-directory: research/floral_wind_kinematic_stage39
+        run: |
+          PYTHONPATH=../floral_wind_landing_stage38:. \
+          python -m unittest test_inspect_original_tracks -v
+      - name: Fetch original immutable Zenodo 2016 landing ZIP and profile all 157 trajectories
+        working-directory: research/floral_wind_kinematic_stage39
+        run: |
+          PYTHONPATH=../floral_wind_landing_stage38:. \
+          python -u inspect_original_tracks.py --out stage39_kinematic_source_receipts
+      - name: Reject unsupported 157-track speed and fake bee independence claims
+        working-directory: research/floral_wind_kinematic_stage39
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('stage39_kinematic_source_receipts/stage39_original_track_grain_profile.json').read_text())
+          assert x['status']=='ORIGINAL_157_CHANG_TRACKS_PROFILED_SOURCE_GRAIN_ONLY',x
+          assert x['original_zenodo_record']==60234
+          assert x['original_file_md5']=='22bbc8286fecd2535d3f284679aed87b'
+          assert x['source_trial_file_count']==157
+          assert x['source_filename_B_labels']==28
+          assert x['source_filename_W0_W1_file_count']=={'W0':56,'W1':101}
+          assert x['paper_selected_tracks_primary_conditions']==112
+          assert x['paper_original_independent_B_bees']==28
+          assert x['published_112_selected_not_equal_157_original_files'] is True
+          assert x['no_original_track_rows_or_matlab_code_redistributed'] is True
+          assert x['physical_speed_or_deceleration_measured_m_s'] is False
+          assert x['approach_5_7_cm_landing_1p5_3_cm_not_reconstructed'] is True
+          assert x['total_original_frame_rows']>157
+          print('STAGE39_REAL_157_TRACKS_PROFILED_BUT_NOT_PHYSICAL_SPEED_OR_FITNESS')
+          print('ORIGINAL_FILE_CODES',x['source_label_cross_counts'])
+          print('FRAME_COUNTS',x['frame_count_per_record'])
+          print('COMPLETE_MARKERS',x['marker_3d_completeness_overall'])
+          print('RAW_3D_COORDINATE_RANGE',x['coordinate_native_value_axis_range'])
+          print('AUTHOR_CODE_TOKENS',x['author_matlab_source_token_inventory'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage39-original-157-3d-track-quality-aggregate-only
+          path: research/floral_wind_kinematic_stage39/stage39_kinematic_source_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
