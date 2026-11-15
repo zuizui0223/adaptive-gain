@@ -1,0 +1,45 @@
+name: bee-stage25-original-source-confidence-gate
+on:
+  push:
+    branches: [design/bee-original-source-confidence-gate-stage25-20261115]
+    paths:
+      - 'research/bee_source_ci_stage25/**'
+      - '.github/workflows/bee-stage25-source-confidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-confidence-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit mock-only binomial intervals and source-grain fail-closed tests
+        working-directory: research/bee_source_ci_stage25
+        run: PYTHONPATH=../bee_robust_stage24:. python -m unittest test_source_confidence_gate -v
+      - name: Missing real original trials must produce NO_GO, not invented observations
+        working-directory: research/bee_source_ci_stage25
+        run: PYTHONPATH=../bee_robust_stage24:. python -u source_confidence_gate.py --out stage25_source_gate_outputs
+      - name: Assert no original animals and no biological positive inference
+        working-directory: research/bee_source_ci_stage25
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage25_source_gate_outputs/stage25_recognition_source_gate.json')
+          r=json.loads(p.read_text(encoding='utf-8'))
+          assert r['status']=='NO_GO_NO_ORIGINAL_TRIALS', r
+          assert r['biological_positive_claim'] is False
+          assert r['n_original_animals_verified']==0
+          print('STAGE25_HARD_NO_GO_WITHOUT_ORIGINAL_ANIMALS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage25-no-original-data-gate-receipt
+          path: research/bee_source_ci_stage25/stage25_source_gate_outputs/stage25_recognition_source_gate.json
+          if-no-files-found: error
+          retention-days: 90
