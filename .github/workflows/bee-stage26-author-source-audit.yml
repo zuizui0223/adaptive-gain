@@ -1,0 +1,64 @@
+name: bee-stage26-pinned-published-source-request-semantics
+on:
+  push:
+    branches: [analysis/bee-author-data-request-semantics-stage26-20261115]
+    paths:
+      - 'research/bee_original_audit_stage26/**'
+      - '.github/workflows/bee-stage26-author-source-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-author-request-semantics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail-closed source-free treatment semantics regression tests
+        working-directory: research/bee_original_audit_stage26
+        run: python -m unittest test_audit_author_request_semantics -v
+      - name: Fetch public author CSV at immutable commit and verify Git blob hash
+        working-directory: research/bee_original_audit_stage26
+        run: |
+          mkdir -p source_input
+          curl --fail --location --retry 3 --silent --show-error \
+            'https://raw.githubusercontent.com/Cuixiaojian21/bee_metacognition/7f886394b4de872ecdb19ca4ea214ec321d5dce9/data/4_active_information_seeking_trials.csv' \
+            -o source_input/author_information_seeking_trials.csv
+          actual="$(git hash-object source_input/author_information_seeking_trials.csv)"
+          test "$actual" = '26259c9071c6d73141d56b9bedd396cab1a04491'
+          echo "EXACT_PUBLIC_AUTHOR_GIT_BLOB_VERIFIED $actual"
+      - name: Audit 19200 published trials without copying author raw data into artifacts
+        working-directory: research/bee_original_audit_stage26
+        run: |
+          python -u audit_author_request_semantics.py \
+            --input source_input/author_information_seeking_trials.csv \
+            --out stage26_author_source_receipts
+      - name: Verify exact source-derived semantic mismatch and biological inference ceiling
+        working-directory: research/bee_original_audit_stage26
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('stage26_author_source_receipts/stage26_request_semantics_audit.json').read_text())
+          assert r['status']=='PUBLIC_AUTHOR_TRIAL_TABLE_SEMANTICS_REPRODUCED'
+          assert r['source_trial_rows']==19200
+          assert r['unique_bee_ids']==192
+          assert r['strict_regular_paid_animal_initiated_landings']==5686
+          assert r['free_cue_flag_without_landing_total']==1812
+          assert r['naive_cross_treatment_request_flag_total']==9526
+          assert r['all_platform_landings_total']==7714
+          assert r['stage25_eight_parameter_empirical_ci_ready'] is False
+          assert r['no_new_animals'] is True
+          assert r['no_trial_data_redistributed'] is True
+          print('PINNED_AUTHOR_19200_SOURCE_SEMANTICS_AUDIT_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage26-verified-public-author-aggregate-audit-only
+          path: research/bee_original_audit_stage26/stage26_author_source_receipts/stage26_request_semantics_audit.json
+          if-no-files-found: error
+          retention-days: 90
