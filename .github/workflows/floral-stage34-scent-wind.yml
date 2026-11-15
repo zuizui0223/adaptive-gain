@@ -1,0 +1,51 @@
+name: floral-stage34-wind-by-scent-factorial-and-nonidentification
+on:
+  push:
+    branches: [theory/floral-wind-by-scent-interaction-stage34-20261115]
+    paths:
+      - 'research/floral_wind_scent_stage34/**'
+      - '.github/workflows/floral-stage34-scent-wind.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-wind-scent-factorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test exact factorial contrasts and biological inference no-go
+        working-directory: research/floral_wind_scent_stage34
+        run: python -m unittest test_exact_wind_scent_factorial -v
+      - name: Save only source-free rational counterexample and source audit
+        working-directory: research/floral_wind_scent_stage34
+        run: |
+          mkdir -p stage34_validation_receipts
+          python exact_wind_scent_factorial.py > stage34_validation_receipts/stage34_wind_scent_rational_certificate.json
+      - name: Check qualitative interaction without claiming a field experiment
+        working-directory: research/floral_wind_scent_stage34
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('stage34_validation_receipts/stage34_wind_scent_rational_certificate.json').read_text())
+          x=doc['assumed_counterexample']
+          assert x['wind_x_scent_detection_interaction']=='1/5'
+          assert x['wind_x_scent_pollen_interaction']=='21/400'
+          assert x['wind_effect_on_pollen_transfer_if_scent_on']=='-3/200'
+          assert x['wind_on_scented_flower_absolute_benefit'] is False
+          assert x['no_original_four_arm_data_supplied'] is True
+          assert doc['source_gate']['zero_empirical_2x2_effects_extracted'] is True
+          assert doc['source_gate']['no_valid_pooled_cross_paper_interaction'] is True
+          print('STAGE34_EXACT_INTERACTION_RELATIVE_NOT_ABSOLUTE_ADVANTAGE_VERIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage34-wind-scent-four-arm-source-free-receipt
+          path: research/floral_wind_scent_stage34/stage34_validation_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
