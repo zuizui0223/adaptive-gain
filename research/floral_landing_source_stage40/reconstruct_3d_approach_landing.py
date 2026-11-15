@@ -58,7 +58,7 @@ def _parse_original(s):
 
 
 def inspect_track(raw, metadata):
-    rd=csv.DictReader(io.StringIO(raw.decode('utf8-sig'),newline=''))
+    rd=csv.DictReader(io.StringIO(raw.decode('utf-8-sig'),newline=''))
     if tuple(rd.fieldnames or ())!=MEASURED_HEADER:
         raise ValueError('NO_GO_3D_TRACK_SCHEMA_MISMATCH')
     positions=[]
