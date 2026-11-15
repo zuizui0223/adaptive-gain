@@ -16,7 +16,7 @@ M14,2025,observational_primary_data,scent_chemodiversity+floral_morphology,commu
 M15,2014,experimental,UV_bullseye,flower,detection+approach+landing,https://doi.org/10.5061/dryad.bm558,https://doi.org/10.5061/dryad.bm558,source_named_one_workbook_original_effect_not_extracted
 M16,2010,database,floral_reflectance_300_700nm,flower_part,color+guide_optics,https://github.com/cran/photobiologyInOut/blob/ae409a941e58b302ac714b4f5abc656dd9249c6b/inst/extdata/FReDflowerID_157.csv,https://doi.org/10.1371/journal.pone.0014287,one_pinned_example_spectrum_verified_not_guide
 M17,2018,computational_theory,decision_stages_various,community,search+choice+handling,not_applicable,https://www.nature.com/articles/s41598-018-32897-y,prior_art_not_independent_measurement
-M18,2018,experimental,visual_pattern,flower,nectar_rob_vs_legitimate,source_availability_not_verified,https://doi.org/10.1371/journal.pone.0055914,design_source_verified_no_effect_variance
+M18,2013,experimental,visual_pattern,flower,nectar_rob_vs_legitimate,source_availability_not_verified,https://doi.org/10.1371/journal.pone.0055914,design_source_verified_no_effect_variance
 M19,2021,meta_analysis,visitor_taxon,plant,per_visit_pollination_effect,not_examined,https://doi.org/10.1002/ajb2.1764,existing_168_studies_1564_effects
 M20,2018,experimental,floral_temperature_pattern,flower,within_flower_perception,https://doi.org/10.5061/dryad.qp244,https://doi.org/10.5061/dryad.qp244,behavior_and_infrared_raw_data
 M21,2024,observational,colour_vs_vision,flower,close_range_approach,not_examined,https://doi.org/10.1111/plb.13682,stage_and_perceptual_task_dependence
