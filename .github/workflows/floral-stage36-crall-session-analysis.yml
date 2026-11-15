@@ -1,0 +1,80 @@
+name: floral-stage36-Crall-within-vs-between-site-wind
+on:
+  push:
+    branches: [analysis/floral-crall-within-between-wind-stage36-20261115]
+    paths:
+      - 'research/floral_crall_stage36/**'
+      - '.github/workflows/floral-stage36-crall-session-analysis.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-lock-and-70-session-reanalysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify independent source-grain and site-separated estimator tests
+        working-directory: research/floral_crall_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -m unittest test_crall_session_wind_reanalysis -v
+      - name: Fetch published author Zenodo 3743898 and fit original 70-session site slopes
+        working-directory: research/floral_crall_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -u crall_session_wind_reanalysis.py
+      - name: Verify source, sample units, and scientifically delimited result
+        working-directory: research/floral_crall_stage36
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          x=json.loads(Path('stage36_original_wind_receipts/stage36_within_between_site_wind.json').read_text())
+          if x['status']=='PUBLIC_AUTHOR_70_SESSION_WIND_ASSOCIATION_REANALYZED':
+              g=x['study_grain']
+              assert x['source_record_id']==3743898
+              assert x['input_collectionMetadata_original_rows']==70
+              assert x['input_integratedSpatialWindData_original_rows']==70
+              assert x['input_beedata_original_rows']==450
+              assert g['n_sites']==9
+              assert g['sum_source_bee_visits_across_sessions']==409
+              assert g['source_scent_types_sessions']=={'cin':67,'meth':3}
+              assert g['distinct_recorded_dates']==29
+              assert 45<=g['n_sessions_used']<=70
+              w=x['wind_within_site_association_log1p']
+              assert math.isfinite(w['slope_for_0p1_m_s'])
+              assert abs(w['slope_for_0p1_m_s']-0.2169204205499593)<1e-9
+              assert x['wind_between_site_association_log1p']['between_site_pearson_r']<0
+              assert x['wind_within_site_and_date_fixed_effect_sensitivity']['status']=='SITE_AND_DATE_FIXED_EFFECT_LOG1P_ASSOCIATION'
+              assert abs(x['wind_within_site_and_date_fixed_effect_sensitivity']['slope_per_0p1_m_s']-0.19952240105209967)<1e-9
+              assert x['cineole_only_within_site_sensitivity']['raw_source_session_rows_used']==67
+              assert x['cineole_only_within_site_sensitivity']['slope_for_0p1_m_s']>0
+              assert x['site_cluster_bootstrap']['site_cluster_bootstrap_draws']==4000
+              assert x['site_stratified_permutation']['site_stratified_permutations']==4000
+              assert x['authors_original_R_GLM_MIXED_MODEL_REPLICATED'] is False
+              assert x['not_an_empirical_wind_by_scent_2x2'] is True
+              assert x['not_flower_or_pollen_transfer'] is True
+              assert x['no_original_raw_csv_or_R_script_redistributed'] is True
+              print('CRALL_ORIGINAL_SESSION_ANALYSIS_SUCCESS')
+              print(json.dumps({
+                  'study_grain':g,
+                  'within_site':w,
+                  'between_site':x['wind_between_site_association_log1p'],
+                  'turbulence':x['wind_within_site_turbulence_sensitivity'],
+                  'bootstrap95':x['site_cluster_bootstrap']['wind_slope_0p1_m_s_percentile95'],
+                  'permutation_exploratory':x['site_stratified_permutation']['two_sided_permutation_fraction'],
+                  'original_keep':x['integrated_keep_flag_distribution'],
+                  'original_R_tokens':x['original_R_model_tokens_detected']},
+                  sort_keys=True))
+          else:
+              assert x['status']=='NO_GO_AUTHOR_SOURCE_OR_ANALYSIS'
+              assert x['ecological_result_claimed'] is False
+              print('CRALL_ORIGINAL_ANALYSIS_NO_GO',x.get('error_kind'),x.get('diagnostic'))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage36-Crall-original-70-session-wind-aggregate-and-inference-gate
+          path: research/floral_crall_stage36/stage36_original_wind_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
