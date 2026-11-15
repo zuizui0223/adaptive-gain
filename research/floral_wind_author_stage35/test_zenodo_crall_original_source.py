@@ -71,6 +71,13 @@ class ZenodoSourceGrainTests(unittest.TestCase):
         self.assertEqual(output[1]["csv"]["status"],"CSV_SOURCE_QA_FAILURE")
         self.assertIsNone(output[1]["csv"]["n_records"])
 
+    def test_original_R_csv_blank_row_index_is_not_false_missing_schema(self):
+        x=_csv_profile(b',site,wind,n_bees\n1,MOCK_A,0.1,2\n2,MOCK_B,0.3,4\n')
+        self.assertEqual(x['n_records'],2)
+        self.assertEqual(x['n_columns'],4)
+        self.assertEqual(x['header'][0],'<original_unnamed_row_index>')
+        self.assertEqual(x['column_profiles'][2]['numeric_max'],.3)
+
     def test_zip_traversal_rejected(self):
         z=io.BytesIO()
         with zipfile.ZipFile(z,"w") as archive:
