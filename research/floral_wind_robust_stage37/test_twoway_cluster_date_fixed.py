@@ -4,7 +4,7 @@ import unittest
 
 from conditional_site_poisson import conditional_poisson
 from twoway_cluster_date_fixed import (
-    _design, _multicluster_robust,_date_fixed,_date_loo,analyze
+    _design, _multicluster_robust,_date_fixed,_date_loo,analyze,STAGE36_SHA
 )
 
 
@@ -87,7 +87,15 @@ class Stage37SiteDateRobustnessTests(unittest.TestCase):
                 'primary_site_conditional_poisson':{'predictors':{
                    'log_wind':{'beta':0.}}}}
         with self.assertRaisesRegex(ValueError,'NOT_ORIGINAL_CRALL_SESSION_GRAIN'):
-            analyze(rows[:-1],pseudo)
+            analyze(rows[:-1],pseudo,original_archive_sha256=STAGE36_SHA)
+
+    def test_unverified_original_archive_digest_fails_before_any_model(self):
+        rows=artificial_sessions()
+        pseudo={'status':'CRALL_REAL_SESSION_SITE_CONDITIONAL_POISSON_REFIT_WITH_LIMITS',
+                'primary_site_conditional_poisson':{'predictors':{
+                    'log_wind':{'beta':0.}}}}
+        with self.assertRaisesRegex(ValueError,'ARCHIVE_SHA_NOT_VERIFIED'):
+            analyze(rows,pseudo)
 
     def test_model_does_not_automatically_imply_wind_by_scent(self):
         self.assertTrue(all(x['scent']=='cin' for x in artificial_sessions()))
