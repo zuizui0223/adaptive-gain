@@ -61,7 +61,7 @@ class Stage36CrallTests(unittest.TestCase):
         self.assertEqual(len(x["integrated"]),1)
         self.assertEqual(len(x["bees"]),1)
         self.assertTrue(x["original_R_full_content_not_redistributed"])
-        self.assertTrue(x["original_R_analysis_excerpts"])
+        self.assertTrue(x["original_R_model_tokens_detected"][r"glmer\s*\("])
 
     def test_separate_within_positive_between_negative(self):
         rows,_=prepare_sessions(mock_rows(),require_70=False)
