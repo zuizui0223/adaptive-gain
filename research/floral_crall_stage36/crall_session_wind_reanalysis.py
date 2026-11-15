@@ -41,9 +41,12 @@ EXPECTED_SESSION_COLUMNS={"site","date","start.time","scent","count",
 
 
 def _rows(raw):
-    try:text=raw.decode("utf-8-sig")
-    except UnicodeDecodeError as err:
-        raise ValueError("NO_GO_ORIGINAL_CSV_ENCODING") from err
+    try:
+        text=raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        # Some early source archives encode non-ASCII metadata notes
+        # in Latin-1. Preserve source bytes/hash and record no edits.
+        text=raw.decode("latin-1")
     rd=csv.reader(io.StringIO(text,newline=""))
     head=next(rd)
     if head and not head[0].strip():
