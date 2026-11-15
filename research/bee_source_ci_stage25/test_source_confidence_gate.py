@@ -2,7 +2,7 @@
 import copy
 import hashlib
 import json
-import math
+from fractions import Fraction as F
 import unittest
 
 from source_confidence_gate import audit, cp_interval
@@ -97,7 +97,7 @@ class Stage25SourceGateTest(unittest.TestCase):
             self.assertEqual(colony['conditional_model']['status'],
                 'CONDITIONAL_MODEL_STRICTLY_POSITIVE_CONTINGENT_ADVANTAGE_CERTIFIED')
             self.assertGreater(
-                float(colony['conditional_model']['fixed_policy_gap_lower']),0.)
+                F(colony['conditional_model']['fixed_policy_gap_lower']),F(0))
             self.assertTrue(colony['conditional_model']['no_empirical_certification'])
 
     def test_declared_original_is_not_authenticated_by_file(self):
