@@ -1,0 +1,69 @@
+name: floral-stage37-Crall-site-date-robustness
+on:
+  push:
+    branches: [analysis/floral-crall-date-multicluster-stage37-20261115]
+    paths:
+      - 'research/floral_wind_robust_stage37/**'
+      - '.github/workflows/floral-stage37-crall-site-date.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-70-session-robustness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned independent inference library
+        run: python -m pip install --disable-pip-version-check 'statsmodels==0.14.6'
+      - name: Synthetic-only source and rank/cluster robustness unit tests
+        working-directory: research/floral_wind_robust_stage37
+        run: |
+          PYTHONPATH=../floral_wind_refit_stage36:../floral_wind_author_stage35:. \
+          python -m unittest test_twoway_cluster_date_fixed -v
+      - name: Fetch immutable original Zenodo ZIP and conduct day and two-way sensitivities
+        working-directory: research/floral_wind_robust_stage37
+        run: |
+          PYTHONPATH=../floral_wind_refit_stage36:../floral_wind_author_stage35:. \
+          python -u twoway_cluster_date_fixed.py
+      - name: Require truthful original-source and statistical-inference caveats
+        working-directory: research/floral_wind_robust_stage37
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          x=json.loads(Path('stage37_original_robustness_receipts/stage37_site_date_robustness.json').read_text())
+          assert x['status']=='ORIGINAL_CRALL_70_SESSION_DAY_AND_CLUSTER_SENSITIVITY_AUDITED'
+          assert x['archive_sha256_expected']=='4250cb51754e59b861f90ff7063dbbc223dd515a146809273fee055de81772af'
+          assert (x['n_20minute_sessions'],x['n_sites'],x['n_dates'],x['n_original_orchid_bee_visits'])==(70,9,29,409)
+          assert x['site_date_two_way_sandwich']['status'] in (
+            'TWO_WAY_SITE_DATE_CLUSTER_SENSITIVITY_AVAILABLE',
+            'NO_GO_NONPOSITIVE_TWO_WAY_CLUSTER_VARIANCE',
+            'NO_GO_TWO_WAY_CLUSTER_COVARIANCE_FAILURE')
+          assert x['site_plus_date_fixed_poisson']['status'] in (
+            'SITE_PLUS_DATE_FIXED_POISSON_SENSITIVITY_AVAILABLE',
+            'NO_GO_WIND_OR_TKE_UNIDENTIFIED_AFTER_DATE_SITE',
+            'NO_GO_DATE_FIXED_POISSON_NONCONVERGENCE',
+            'NO_GO_DATE_FIXED_WIND_SE_NONFINITE',
+            'NO_GO_DATE_FIXED_POISSON_FAILED')
+          assert x['leave_one_date_out']['dates_removed']==29
+          assert x['original_author_site_date_random_intercept_GLMM_fitted'] is False
+          assert x['no_wind_causal_effect'] is True
+          assert x['no_wind_by_scent_on_off_interaction_tested'] is True
+          assert x['no_actual_flower_landing_or_pollen_or_seeds_measured'] is True
+          assert x['no_original_author_source_data_redistributed'] is True
+          print('STAGE37_ORIGINAL_70_SESSION_SOURCE_AND_DAY_CLUSTER_SENSITIVITY_SUCCESS')
+          print('TWO_WAY',json.dumps(x['site_date_two_way_sandwich'],sort_keys=True))
+          print('DATE_FIXED',json.dumps(x['site_plus_date_fixed_poisson'],sort_keys=True))
+          print('DATE_LOO',json.dumps(x['leave_one_date_out'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: floral-stage37-original-70-session-robustness-aggregate-only
+          path: research/floral_wind_robust_stage37/stage37_original_robustness_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
