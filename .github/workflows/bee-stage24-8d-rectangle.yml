@@ -1,0 +1,32 @@
+name: bee-stage24-exact-eight-dimensional-robustness
+on:
+  push:
+    branches: [theory/bee-robust-8d-rectangle-stage24-20261115]
+    paths:
+      - 'research/bee_robust_stage24/**'
+      - '.github/workflows/bee-stage24-8d-rectangle.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-8d-robustness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test independent posterior oracle, 256 rational vertices and negative control
+        working-directory: research/bee_robust_stage24
+        run: python -m unittest test_exact_rectangle_certificate -v
+      - name: Write all-vertex proof and biological STOP artifact
+        working-directory: research/bee_robust_stage24
+        run: python -u exact_rectangle_certificate.py --out stage24_source_free_outputs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage24-source-free-eight-dimensional-robustness
+          path: research/bee_robust_stage24/stage24_source_free_outputs/stage24_8d_robust_cost_rectangle.json
+          if-no-files-found: error
+          retention-days: 90
