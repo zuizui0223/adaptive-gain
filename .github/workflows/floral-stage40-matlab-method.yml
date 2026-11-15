@@ -97,7 +97,9 @@ jobs:
           print('STAGE40_REAL_ARCHIVED_TRACKS_KINEMATICS_CONDITIONAL_ON_SELECTED_AVAILABLE_FILES_SUCCESS')
           print('N_ELIGIBLE',x['stage_eligible_tracks'])
           print('RECONSTRUCTED_SPEED_BY_W',json.dumps(x['wind_stratified_descriptive'],sort_keys=True))
+          assert x['matched_original_source_design_B_S_P_before_comparing_W'] is True
           print('ORIGINAL_B_LABEL_PAIRED_SENSITIVITY',json.dumps(x['within_original_B_label_paired_descriptive'],sort_keys=True))
+          print('WITHIN_B_S_P_MATCHED_WIND_SENSITIVITY',json.dumps(x['within_B_and_same_stiffness_position_matched_descriptive'],sort_keys=True))
           PY
       - name: Require source-only scientific limits
         working-directory: research/floral_landing_source_stage40
