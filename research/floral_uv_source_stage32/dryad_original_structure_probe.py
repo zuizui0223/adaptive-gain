@@ -131,7 +131,8 @@ def main(argv=None):
     print(json.dumps({'status':result['status'],
                       'workbook_acquired':result['status'].startswith('ORIGINAL_DRYAD_'),
                       'sheet_names':result.get('original_workbook_structure',{}).get('sheet_names'),
-                      'experimental_effects_extracted':0},sort_keys=True))
+                      'experimental_effects_extracted':0,
+                      'http_status_code':result.get('http_status_code')},sort_keys=True))
 
 
 if __name__=='__main__':
