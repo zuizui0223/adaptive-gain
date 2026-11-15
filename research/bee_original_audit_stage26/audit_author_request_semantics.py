@@ -53,6 +53,14 @@ def _count_as_int(value,name):
     return int(value)
 
 
+def _correctness_as_binary(value,name):
+    # The author CSV encodes outcome indicators as decimal 0.0/1.0,
+    # unlike actual request and platform landing flags (integer 0/1).
+    if value not in ('0','1','0.0','1.0'):
+        raise ValueError('NO_GO_NONBINARY_'+name.upper())
+    return int(float(value))
+
+
 def _new_stats():
     return {'trials':0,'info_requested':0,'actual_landing':0,
             'flagged_without_landing':0,'landed_without_flag':0,
@@ -104,11 +112,11 @@ def audit_csv_bytes(source_bytes,verify_source=True):
         if req==1:
             if row['Is_Post_Non_Request_Correct']!='':
                 raise ValueError('NO_GO_OUTCOME_BRANCH_LEAKAGE')
-            post=_count_as_int(row['Is_Post_Request_Correct'],'post_request_correct')
+            post=_correctness_as_binary(row['Is_Post_Request_Correct'],'post_request_correct')
         else:
             if row['Is_Post_Request_Correct']!='':
                 raise ValueError('NO_GO_OUTCOME_BRANCH_LEAKAGE')
-            post=_count_as_int(row['Is_Post_Non_Request_Correct'],'non_request_correct')
+            post=_correctness_as_binary(row['Is_Post_Non_Request_Correct'],'non_request_correct')
         g=groups[(typ,difficulty)]
         g['trials']+=1
         g['info_requested']+=req
