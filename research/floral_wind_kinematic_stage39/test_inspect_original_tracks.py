@@ -60,6 +60,12 @@ class OriginalKinematicSourceGrainTests(unittest.TestCase):
         self.assertEqual(x['marker1_valid_frames'],4)
         self.assertLess(x['all_coordinates_valid_fraction'],1.)
 
+    def test_original_mixed_windows_and_mac_cr_newlines_supported(self):
+        raw=fake_track(n=3).replace(b'\n',b'\r')
+        x=profile_track(raw)
+        self.assertEqual(x['frames'],3)
+        self.assertEqual(x['complete_7_marker_frames'],3)
+
     def test_numeric_matched_source_header_is_mandatory(self):
         with self.assertRaisesRegex(ValueError,'MARKER_HEADER_NOT_VALIDATED'):
             profile_track(b'x,y,z\n0,1,2\n')
