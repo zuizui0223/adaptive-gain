@@ -7,7 +7,7 @@ import zipfile
 
 from crall_session_wind_reanalysis import (
  _rows,extract_source_tables,prepare_sessions,slope_site_demeaned,
- slope_between_site_means,slope_partial_turbulence,cluster_bootstrap_sites,
+ slope_between_site_means,slope_partial_turbulence,slope_site_and_date_fixed_effects,cluster_bootstrap_sites,
  permutation_within_sites,analyze_original_archive
 )
 
@@ -82,6 +82,24 @@ class Stage36CrallTests(unittest.TestCase):
         self.assertEqual(s["status"],"WITHIN_SITE_LOG1P_SLOPE_CONTROLLING_TURBULENCE")
         self.assertGreater(s["wind_beta_per_0p1_m_s"],0)
         self.assertEqual(s["n_source_sessions"],15)
+
+    def test_two_way_site_date_FE_detects_collinear_wind(self):
+        rows,_=prepare_sessions(mock_rows(),require_70=False)
+        x=slope_site_and_date_fixed_effects(rows)
+        self.assertEqual(x['status'],'NO_GO_WIND_COLLINEAR_WITH_SITE_AND_DATE')
+        self.assertEqual(x['date_groups'],5)
+
+    def test_two_way_site_date_FE_can_identify_site_by_date_wind_variation(self):
+        arr=mock_rows()
+        # Add a within-site-by-date wind perturbation not explained
+        # by additive site and date intercepts.
+        arr[0]['wind.mean']='0.21'
+        rows,_=prepare_sessions(arr,require_70=False)
+        x=slope_site_and_date_fixed_effects(rows)
+        self.assertEqual(x['status'],'SITE_AND_DATE_FIXED_EFFECT_LOG1P_ASSOCIATION')
+        self.assertEqual(x['n_sessions'],15)
+        self.assertTrue(math.isfinite(x['slope_per_0p1_m_s']))
+        self.assertTrue(x['not_causal'])
 
     def test_repeatability_of_site_cluster_resampling(self):
         rows,_=prepare_sessions(mock_rows(),require_70=False)
