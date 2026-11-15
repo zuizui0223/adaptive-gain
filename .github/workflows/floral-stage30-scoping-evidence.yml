@@ -1,0 +1,39 @@
+name: floral-stage30-scoping-evidence-provenance
+on:
+  push:
+    branches: [design/floral-route-value-evidence-map-stage30-20261115]
+    paths:
+      - 'research/floral_route_meta_stage30/**'
+      - '.github/workflows/floral-stage30-scoping-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-protocol-QA:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure evidence map distinguishes primary effects from theory/reviews/meta
+        working-directory: research/floral_route_meta_stage30
+        run: python -m unittest test_scoping_evidence_map -v
+      - name: Assert no invented meta effect, no botanical observation, no trial redistribution
+        working-directory: research/floral_route_meta_stage30
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          with Path('SEED_EVIDENCE_MAP_20261115.csv').open(newline='') as f:
+              entries=list(csv.DictReader(f))
+          assert len(entries)>=18
+          assert all('effect_size' not in e for e in entries)
+          assert sum(e['source_type']=='primary_experiment' for e in entries)>=7
+          assert any(e['source_type']=='quantitative_meta_analysis' for e in entries)
+          note=Path('PROTOCOL_PHASED_FLORAL_INFORMATION_META_MACRO_20261115.md').read_text()
+          assert 'source-verified extraction' in note
+          assert 'not a completed PRISMA systematic review' in note
+          print('FLORAL_STAGE30_ONLY_SCOPING_PROTOCOL_AND_SEED_EVIDENCE_NO_EMPIRICAL_META')
+          PY
