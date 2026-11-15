@@ -38,6 +38,26 @@ class WindLandingSourceTests(unittest.TestCase):
         self.assertEqual(x['raw_data_rows_disclosed'],0)
         self.assertTrue(x['no_flight_or_person_data_redistributed'])
 
+    def test_source_filename_wind_codes_not_assumed_trial_success_denominator(self):
+        mem=io.BytesIO()
+        with zipfile.ZipFile(mem,'w',zipfile.ZIP_DEFLATED) as z:
+            z.writestr('kinematic data/B01_F01_T01_W0_samplexyzpts.csv',
+                       'frame,x,y,z\n1,0.0,0.2,0.1\n')
+            z.writestr('kinematic data/B01_F01_T02_W1_samplexyzpts.csv',
+                       'frame,x,y,z\n2,0.0,0.1,0.1\n')
+            z.writestr('__MACOSX/kinematic data/._B01_F01_T01_W0_samplexyzpts.csv',
+                       b'not original data')
+        d=_zip_inventory(mem.getvalue())
+        self.assertEqual(d['kinematic_source_B_label_count'],1)
+        self.assertEqual(d['filename_W0_W1_trajectory_counts'],
+                         {'W0':1,'W1':1})
+        self.assertTrue(d['filename_W_codes_not_authentic_wind_metadata'])
+        self.assertEqual(d['one_original_trajectory_header_profile'][0]
+                         ['first_row_column_names_if_not_numeric'],
+                         ['frame','x','y','z'])
+        self.assertTrue(d['one_original_trajectory_header_profile'][0]
+                        ['no_original_numeric_rows_reported'])
+
     def test_fake_bytes_never_claim_original_zenodo_sha(self):
         with self.assertRaisesRegex(ValueError,'ZIP_CHECKSUM'):
             inspect_zenodo(mock_meta(mock_zip()),mock_zip())
