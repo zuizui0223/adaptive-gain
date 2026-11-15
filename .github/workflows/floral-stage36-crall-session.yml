@@ -1,0 +1,120 @@
+name: floral-stage36-Crall-original-session-model-design
+on:
+  push:
+    branches: [analysis/floral-crall-within-site-wind-stage36-20261115]
+    paths:
+      - 'research/floral_wind_refit_stage36/**'
+      - '.github/workflows/floral-stage36-crall-session.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-session-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free fake ZIP and model-grain tests
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -m unittest test_audit_original_session_design -v
+      - name: Download canonical Crall 2020 original Zenodo archive and audit session design
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -u audit_original_session_design.py
+      - name: STOP before fitting on unspecified inclusion counts and contrasts
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage36_original_receipts/stage36_crall_original_session_design.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='ORIGINAL_AUTHOR_SESSION_DESIGN_AUDITED_NOT_STATISTICAL_REFIT',x
+          assert x['author_record_id']==3743898
+          assert x['files']['integratedSpatialWindData.csv']['n_rows']==70
+          assert x['files']['collectionMetadata.csv']['n_rows']==70
+          assert x['files']['beedata.csv']['n_rows']==450
+          assert x['session_is_primary_analysis_unit_not_bee_row']
+          assert x['visitation_effect_estimated'] is False
+          assert x['scent_on_off_randomized_in_this_experiment'] is False
+          assert x['plant_pollen_transfer_measured'] is False
+          assert x['no_raw_author_rows_or_code_uploaded'] is True
+          print('STAGE36_ORIGINAL_SESSION_DESIGN_AUDITED_WITHOUT_FAKE_INFERENCE')
+          PY
+      - name: Source-free closed-form conditional Poisson unit tests
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -m unittest test_conditional_site_poisson -v
+      - name: Independently refit original 70 sessions, site-stratified, and sensitivity checks
+        working-directory: research/floral_wind_refit_stage36
+        run: PYTHONPATH=../floral_wind_author_stage35:. python -u conditional_site_poisson.py
+      - name: Verify actual original-data count and honor GLMM-versus-fixed-site inference ceiling
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          path=Path('stage36_refit_receipts/stage36_source_locked_within_site_poisson.json')
+          result=json.loads(path.read_text())
+          assert result['status']=='CRALL_REAL_SESSION_SITE_CONDITIONAL_POISSON_REFIT_WITH_LIMITS',result
+          assert result['source_sessions']==70
+          assert result['source_sites']==9
+          assert result['source_dates']==29
+          assert result['source_total_visit_count']==409
+          assert result['scent_observation_counts']=={'cin':67,'meth':3}
+          assert result['actual_model_is_NOT_author_random_site_and_date_GLMM'] is True
+          assert result['primary_site_conditional_poisson']['modelbased_se_not_site_cluster_robust'] is True
+          assert result['primary_site_conditional_poisson']['date_random_effect_not_fitted'] is True
+          assert result['no_original_author_rows_redistributed'] is True
+          assert result['scent_free_control_sessions']==0
+          assert result['landing_traces_or_pollen_transfer_records']==0
+          assert result['plant_seed_or_fitness_records']==0
+          assert math.isfinite(result['primary_site_conditional_poisson']['predictors']['log_wind']['beta'])
+          print('STAGE36_ORIGINAL_70_SESSION_SITE_CONDITIONAL_WIND_REFIT_WITH_NO_CAUSAL_CLAIM')
+          w=result['primary_site_conditional_poisson']['predictors']['log_wind']
+          print('OBSERVED_WIND_BETA',w['beta'])
+          print('OBSERVED_WIND_IRR_DOUBLING',w['within_site_rate_ratio_per_wind_doubling'])
+          print('MODEL_BASED_WIND_IRR_CI',w['modelbased_95ci_IRR_wind_doubling'])
+          print('SITE_LOO',result['leave_one_site_out_logwind_beta'])
+          print('BETWEEN_SITE',result['between_site_site_mean_descriptive_only'])
+          print('OVERDISPERSION',result['primary_site_conditional_poisson']['pearson_deviance_overdispersion_ratio'])
+          PY
+      - name: Install independent numerical cross-check (statsmodels)
+        run: python -m pip install --disable-pip-version-check 'statsmodels==0.14.6'
+      - name: Verify two independent solvers agree and estimate site/date cluster sensitivity
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          PYTHONPATH=../floral_wind_author_stage35:. python -u independent_statsmodels_check.py
+      - name: Enforce source-locked coefficient agreement and keep cluster uncertainty visible
+        working-directory: research/floral_wind_refit_stage36
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          p=Path('stage36_refit_receipts/stage36_independent_statsmodels_poisson_check.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='INDEPENDENT_STATSMODELS_ORIGINAL_SESSION_POISSON_AGREEMENT'
+          assert x['n_original_source_sessions']==70 and x['n_sites']==9 and x['n_dates']==29
+          assert x['total_visits']==409
+          assert x['max_wind_and_tke_coefficient_absolute_diff']<1e-7
+          assert x['actual_original_GLMM_with_random_site_date_NOT_reproduced'] is True
+          assert x['site_cluster_nine_not_asymptotically_large'] is True
+          assert x['not_causal_odor_plume_mediation'] is True
+          assert x['original_raw_csv_not_redistributed'] is True
+          assert math.isfinite(x['site_cluster_sandwich_se_logwind'])
+          assert math.isfinite(x['date_cluster_sandwich_se_logwind'])
+          print('STAGE36_TWO_INDEPENDENT_POISSON_SOLVERS_AGREE_ORIGINAL_SOURCE')
+          print('IRR_MODELBASED',x['modelbased_IRR_95ci'])
+          print('IRR_SITE_CLUSTER_APPROX',x['site_cluster_IRR_95ci_t8_approx'])
+          print('IRR_DATE_CLUSTER_APPROX',x['date_cluster_IRR_95ci_t28_approx'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage36-source-verified-session-grain-and-model-identifier-only
+          path: |
+            research/floral_wind_refit_stage36/stage36_original_receipts/*.json
+            research/floral_wind_refit_stage36/stage36_refit_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
