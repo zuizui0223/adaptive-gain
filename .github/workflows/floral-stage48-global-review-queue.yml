@@ -1,0 +1,62 @@
+name: floral-stage48-4475-species-visible-pattern-photo-review-candidate-join
+on:
+  push:
+    branches: [analysis/floral-visible-guide-photo-candidate-stage48-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage48/**'
+      - '.github/workflows/floral-stage48-global-review-queue.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  global-photo-species-review-priority-with-source-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original UV PDF source reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Mock-only no-false-UV/no-image-guide-claim and species duplicate tests
+        working-directory: research/floral_visual_macro_stage48
+        run: python -m unittest -v test_crossmatch_fcp_nhm_uv_candidates
+      - name: Authenticate original FCP 4475, original NHM 59369, original UV 80 and derive review queue
+        working-directory: research/floral_visual_macro_stage48
+        run: python -u crossmatch_fcp_nhm_uv_candidates.py
+      - name: Hold review candidates apart from real UV guide observations
+        working-directory: research/floral_visual_macro_stage48
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json
+          d=Path('stage48_global_flower_pattern_review')
+          x=json.loads((d/'source_coverage_and_no_false_guide_status.json').read_text())
+          assert x['status']=='ORIGINAL_FCP_NHM_UV_GLOBAL_VISUAL_SIGNAL_REVIEW_QUEUE'
+          assert x['original_fcp_species']==4475
+          assert x['original_nhm_source_taxa']==59369
+          assert x['source_original_uv_taxon_rows']==80
+          assert x['n_original_FCP_photos_in_roster']==447500
+          assert x['n_coarse_color_classifiable_FCP_photos_in_roster']==227107
+          assert x['not_source_measured_guide_or_insect_information_use']
+          assert x['all_unobserved_pattern_states_explicitly_NOT_MEASURED']
+          assert x['only_name_matching_no_synonym_or_taxonomic_reconciliation']
+          assert x['not_spatial_Bombus_exposure_or_plant_fitness']
+          with (d/'FCP_4475_species_NHM_visible_marking_and_UV_original_review_queue.csv').open() as h:
+              records=list(csv.DictReader(h))
+          assert len(records)==4475
+          assert len({z['inat_taxon_id'] for z in records})==4475
+          assert all(z['actual_visible_guide_phenotype']=='NOT_MEASURED_FROM_FCP_PHOTO'
+                     and z['actual_UV_guide_phenotype']=='NOT_MEASURED_FROM_FCP_PHOTO'
+                     for z in records)
+          print('STAGE48_REAL_GLOBAL_VISUAL_PATTERN_SPECIES_OPPORTUNITY',
+                 json.dumps(x['review_priorities'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage48-source-verified-4475-species-visible-pattern-review-queue
+          path: research/floral_visual_macro_stage48/stage48_global_flower_pattern_review/*
+          if-no-files-found: error
+          retention-days: 90
