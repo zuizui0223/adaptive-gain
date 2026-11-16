@@ -1,0 +1,65 @@
+name: floral-stage45-original-80-species-UV-trait-registry
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/extract_original_uv_80.py'
+      - 'research/floral_visual_macro_stage45/test_extract_original_uv_80.py'
+      - '.github/workflows/floral-stage45-uv-80-species.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original-UV-species-trait-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PDF source data parser
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Synthetic extraction regression tests and five author-category guards
+        working-directory: research/floral_visual_macro_stage45
+        run: python -m unittest -v test_extract_original_uv_80
+      - name: Re-read exact original UV supplement and reconstruct 80 taxon labels
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u extract_original_uv_80.py
+      - name: Guard original source count, categories, and no false biological interpretation
+        working-directory: research/floral_visual_macro_stage45
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          base=Path('stage45_verified_uv_species')
+          q=json.loads((base/'uv_80_species_source_receipt.json').read_text())
+          assert q['status']=='ORIGINAL_TUNES_2021_80_SPECIES_UV_CATEGORY_REGISTRY'
+          assert q['source_uv_categories']=={'A':47,'R':6,'BE':7,'CM':5,'CR':15}
+          assert q['n_patterned_author_categories']==27
+          assert q['n_uniform_A_R_author_categories']==53
+          assert q['n_original_taxon_rows']==80
+          assert q['original_source_pdf_sha256']=='d11b41a36d85d1b70c8d3d47c04f3e03e7d8f5f58ebaaa331a737e56ed4c2820'
+          assert q['source_pollination_labels_NOT_direct_Bombus_observations']
+          with (base/'tunescamargoguimaraes2021_uv_80_taxa.csv').open() as h:
+              records=list(csv.DictReader(h))
+          assert len(records)==80
+          assert len({r['taxon_as_published'] for r in records})==80
+          assert all(r['uv_category'] in ('A','R','BE','CM','CR') for r in records)
+          assert all(r['source_doi']=='10.3389/fpls.2021.618028' for r in records)
+          print('STAGE45_ORIGINAL_2021_80_UV_SPECIES_REGISTRY_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-original-UV-80-species-verified-categories
+          path: research/floral_visual_macro_stage45/stage45_verified_uv_species/*.csv
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-original-UV-80-species-provenance-receipt
+          path: research/floral_visual_macro_stage45/stage45_verified_uv_species/*.json
+          if-no-files-found: error
+          retention-days: 90
