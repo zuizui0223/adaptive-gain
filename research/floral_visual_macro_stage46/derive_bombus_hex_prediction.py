@@ -32,7 +32,7 @@ def modelled_bombus_coverage(content):
     if (original["source_matrix_member_SHA256"]!=SOURCE_INNER_SHA256 or
         original["n_data_rows"]!=396703 or original["first_30_columns"]!=["siteid","species"]):
         raise ValueError("NO_GO_BEE_SPECIES_GRID_SOURCE_BYTES_CHANGED")
-    reader=csv.DictReader(io.StringIO(content.decode("utf8-sig"),newline=""))
+    reader=csv.DictReader(io.StringIO(content.decode("utf-8-sig"),newline=""))
     seen=set()
     duplicated=0
     allspecies=set()
