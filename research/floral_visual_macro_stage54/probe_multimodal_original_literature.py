@@ -82,6 +82,7 @@ def _xlsx_schema(data):
 def _pdf_schema(data):
     import fitz
     with fitz.open(stream=data,filetype="pdf") as pdf:
+        n_pages=len(pdf)
         table_pages=[]
         for i,page in enumerate(pdf):
             t=page.get_text("text")
@@ -93,7 +94,7 @@ def _pdf_schema(data):
                   "mentions_table_S1":("Table S1" in t),
                   "first_160_characters":t[:160].replace("\n"," "),
                 })
-    return {"format":"PDF","pages":len(pdf),
+    return {"format":"PDF","pages":n_pages,
             "possible_species_table_pages":table_pages[:20]}
 
 
