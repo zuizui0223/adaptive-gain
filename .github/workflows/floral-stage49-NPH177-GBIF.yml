@@ -1,0 +1,61 @@
+name: floral-stage49-original-177-UV-species-accepted-GBIF-taxa
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/map_nph2016_177_uv_gbif.py'
+      - 'research/floral_visual_macro_stage49/test_map_nph2016_177_uv_gbif.py'
+      - '.github/workflows/floral-stage49-NPH177-GBIF.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-2016-UV177-authenticated-accepted-taxonomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original 2016 source PDF reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Test no synthetic pattern-to-bee or infraspecific taxon collapse
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_map_nph2016_177_uv_gbif
+      - name: Verify original 177 UV source species IDs and fetch accepted GBIF taxonomy
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u map_nph2016_177_uv_gbif.py
+      - name: Reject lost 2016 original records or unsupported bee inference
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          path=Path('stage49_2016_UV_accepted_taxonomy')
+          r=json.loads((path/'original_177_UV_accepted_taxon_key_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_NPH2016_177_UV_TRAITS_WITH_GBIF_SPECIES_CROSSWALK'
+          assert r['original_UV_measured_taxon_rows']==177
+          assert r['original_UV_pattern_present_source_rows']==86
+          assert r['original_UV_uniform_source_rows']==91
+          assert r['S1_verified_source_binomial_rows']==168
+          assert r['high_confidence_GBIF_mapped_original_UV_source_rows']>=90
+          assert r['species_trait_conflicts_never_resolved_by_majority_or_averaging']
+          assert r['no_novel_UV_Bombus_sdm_association']
+          with (path/'nph2016_original_177_UV_trait_GBIF_accepted_taxon_key.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==177
+          assert sum(int(x['source_measured_UV_pattern_present']) for x in rows)==86
+          assert all(x['UV_pattern_distribution_model_join']=='NOT_COMPUTED' for x in rows)
+          print('STAGE49_2016_UV_ACCEPTED_TAXON_SOURCE_COVERAGE',
+                {'mapped':r['high_confidence_GBIF_mapped_original_UV_source_rows'],
+                 'unique_accepted_species':r['distinct_GBIF_accepted_species_keys'],
+                 'infraspecific_conflicts':len(r['accepted_species_key_with_conflicting_infraspecific_UV_states'])})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage49-original-Koski-Ashman2016-177-UV-patterned-taxa-GBIF-keys
+          path: research/floral_visual_macro_stage49/stage49_2016_UV_accepted_taxonomy/*
+          if-no-files-found: error
+          retention-days: 90
