@@ -1,0 +1,32 @@
+name: floral-stage49-original-42-species-paper-supplement-table
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/probe_current_biology_original_table_s1.py'
+      - 'research/floral_visual_macro_stage49/extract_current_biology_table_s1.py'
+      - '.github/workflows/floral-stage49-original-2020-paper-taxa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-three-continent-UV-species-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PDF layout reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Verify real article PDF supplement and original 42-species Table S1 source text layout
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u probe_current_biology_original_table_s1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage49-original-current-biology-42-species-paper-table-layout
+          path: research/floral_visual_macro_stage49/stage49_current_biology_source/*.json
+          if-no-files-found: error
+          retention-days: 60
