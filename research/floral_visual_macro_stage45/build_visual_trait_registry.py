@@ -100,8 +100,19 @@ def summarize_and_extract(blob,expected_rows=SOURCE_ROW_COUNT):
     with io.StringIO(blob.decode("utf-8-sig"),newline="") as handle:
         rd=csv.DictReader(handle)
         columns=rd.fieldnames or []
-        required={"taxon","wfo",*SELECTED_FIELDS}
-        missing=required-set(columns)
+        # NHM CKAN portal normalizes periods into underscores; original
+        # official author CSV preserves periods in "min. length" fields.
+        field_source_name={}
+        for key in SELECTED_FIELDS:
+            alt=key.replace("min_ length","min. length").replace(
+                "max_ length","max. length")
+            field_source_name[key]=(key if key in columns else
+                                    alt if alt in columns else None)
+        required={"taxon","wfo"}
+        missing=(required-set(columns))|{
+            key for key,raw_name in field_source_name.items()
+            if raw_name is None
+        }
         if missing:
             raise ValueError("NO_GO_SOURCE_SCHEMA_MISSING_"+",".join(sorted(missing)))
         coverage=Counter()
@@ -116,7 +127,7 @@ def summarize_and_extract(blob,expected_rows=SOURCE_ROW_COUNT):
                 raise ValueError("NO_GO_EMPTY_SOURCE_TAXON")
             wfo=_value(source_row,"wfo")
             source_taxa.add(taxon)
-            filled={k:_value(source_row,k) for k in SELECTED_FIELDS}
+            filled={k:_value(source_row,field_source_name[k]) for k in SELECTED_FIELDS}
             available={k:bool(filled[k]) for k in SELECTED_FIELDS}
             for k,yes in available.items():
                 coverage[k]+=int(yes)
