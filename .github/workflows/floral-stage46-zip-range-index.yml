@@ -1,0 +1,32 @@
+name: floral-stage46-global-bee-ZIP-range-index
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/zip_range_catalog.py'
+      - 'research/floral_visual_macro_stage46/test_zip_range_catalog.py'
+      - '.github/workflows/floral-stage46-zip-range-index.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-modelled-bee-bundle-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exact ZIP CD source-free regression tests
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_zip_range_catalog
+      - name: Source ZIP directory via HTTP 206; no 126MB or 21GB download
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u zip_range_catalog.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-global-bee-SDM-compact-ZIP-directory
+          path: research/floral_visual_macro_stage46/stage46_range_zip_index/*.json
+          if-no-files-found: error
