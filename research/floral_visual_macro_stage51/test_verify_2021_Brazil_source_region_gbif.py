@@ -7,7 +7,7 @@ from verify_2021_Brazil_source_region_gbif import (
 )
 
 def plant(key,pattern):
-    return {"gbif_species_key":key,"UV_binary":pattern}
+    return {"key":key,"UV_binary":pattern}
 
 def rec(key,lon=-48.5036,lat=-22.9125,uncertainty=1000):
     return {"key":key,"speciesKey":42,"country":"BR",
@@ -65,7 +65,7 @@ class BrazilStudySourceFeasibility(unittest.TestCase):
           "n_qualified_points_in_original_study_site_candidate_HEX":0,
           "original_study_site_candidate_HEX":[]
         }
-        rows=[dict(row,UV_pattern_source_category_binary=i%2) for i in range(71)]
+        rows=[dict(row,direct_original_UV_pattern_binary=i%2) for i in range(71)]
         x=summary(rows)
         self.assertEqual(x["n_species_with_positive_filtered_Brazil_region_GBIF_index"],0)
         self.assertTrue(x["source_species_original_sample_sites_unknown"])
