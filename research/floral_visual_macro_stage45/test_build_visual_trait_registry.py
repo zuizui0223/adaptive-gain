@@ -59,7 +59,7 @@ class BotanicalTraitRegistry(unittest.TestCase):
             summarize_and_extract(b)
 
     def test_source_schema_must_include_true_floral_columns(self):
-        x=original_like_csv([{'taxon':'Mockus one','wfo':'wfo-a'}])
+        x=b'taxon,wfo\nMockus one,wfo-a\n'
         with self.assertRaisesRegex(ValueError,'NO_GO_SOURCE_SCHEMA_MISSING'):
             summarize_and_extract(x,expected_rows=1)
 
