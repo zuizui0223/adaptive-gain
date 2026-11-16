@@ -62,8 +62,7 @@ def _fetch_datastore_pages():
             try:
                 payload=_ckan("datastore_search",{
                     "resource_id":NHM_RESOURCE,
-                    "limit":desired_page_size,"offset":offset,
-                    "sort":"_id asc"
+                    "limit":desired_page_size,"offset":offset
                 })
                 break
             except urllib.error.HTTPError as error:
