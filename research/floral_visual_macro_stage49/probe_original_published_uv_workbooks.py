@@ -131,6 +131,29 @@ def probe():
                 TimeoutError,json.JSONDecodeError) as e:
             entry["api_error"]={"kind":type(e).__name__,
                                 "detail":str(e)[:180]}
+        # Public REST file-index endpoint from Dryad's own version API.
+        versionhref=(entry.get("api",{}).get("current_version_id") or {}).get("href")
+        if isinstance(versionhref,str) and versionhref.startswith("/api/v2/versions/"):
+            u="https://datadryad.org"+versionhref+"/files"
+            try:
+                raw,status,ct=_fetch(u,200_000)
+                files_json=json.loads(raw)
+                recordlist=(
+                    (files_json.get("_embedded") or {}).get("stash:files") or
+                    files_json.get("files") or []
+                )
+                entry["api_version_files"]={
+                  "http_status":status,
+                  "index_top_keys":list(files_json)[:30],
+                  "count":files_json.get("count"),
+                  "total":files_json.get("total"),
+                  "sample_item_metadata":recordlist[:10],
+                }
+            except (ValueError,urllib.error.HTTPError,urllib.error.URLError,
+                    TimeoutError,json.JSONDecodeError,TypeError) as e:
+                entry["api_version_files_error"]={
+                   "kind":type(e).__name__,"detail":str(e)[:180]
+                }
         for url,expected in DATASET_FILE_CANDIDATES[key]:
             attempt={"file_expected":expected,"original_public_url":url}
             try:
