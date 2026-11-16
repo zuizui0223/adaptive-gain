@@ -109,6 +109,7 @@ def main():
         raise ValueError("NO_GO_UNAUTHENTICATED_AUTHOR_SUPPLEMENT_PDF")
     with fitz.open(stream=original,filetype="pdf") as pdf:
         records=parse_table_pages(pdf)
+    print('UV_PDF_R_CM_SOURCE_ROWS',json.dumps([(r['taxon_as_published'],r['uv_category']) for r in records if r['uv_category'] in ('R','CM')],ensure_ascii=False))
     result=evaluate(records)
     result["original_source_pdf_sha256"]=PINNED_SOURCE_SHA256
     output=Path("stage45_verified_uv_species")
