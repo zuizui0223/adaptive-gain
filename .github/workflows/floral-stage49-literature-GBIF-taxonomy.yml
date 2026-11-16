@@ -1,0 +1,62 @@
+name: floral-stage49-original-paper-visual-species-GBIF-taxonomy
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/match_literature_visual_taxa_gbif.py'
+      - 'research/floral_visual_macro_stage49/test_match_literature_visual_taxa_gbif.py'
+      - '.github/workflows/floral-stage49-literature-GBIF-taxonomy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-papers-to-GBIF-matching:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original 2021 UV source PDF reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Pure mock taxonomy fuzzy and unsupported-label tests
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_match_literature_visual_taxa_gbif
+      - name: Source-authenticate 2020/2021 original paper taxon identifiers and resolve GBIF name keys
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u match_literature_visual_taxa_gbif.py
+      - name: Enforce no false species absence or UV guide inference
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path('stage49_taxonomy_registry')
+          x=json.loads((p/'original_paper_species_GBIF_match_receipt.json').read_text())
+          assert x['status']=='ORIGINAL_PUBLISHED_VISUAL_TAXA_GBIF_TAXONOMIC_CROSSWALK'
+          assert x['n_original_study_taxon_records']==121
+          assert x['n_name_keys_queried']==114
+          assert x['n_exact_confident_species_records']>=60
+          assert x['spatial_UV_pattern_missing_for_2020_temporal_UVP_study']
+          assert x['no_origination_site_or_native_Bombus_inference']
+          assert x['no_formal_floral_visual_guide_Bombus_effect_estimated']
+          with (p/'original_121_source_visual_taxa_GBIF_species_keys.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==121
+          assert all(r['bee_model_cell_overlap']=='NOT_YET_COMPUTED' for r in rows)
+          assert all(
+            r['UV_spatial_guide_pattern_source_status']=='NOT_CLASSIFIED_BY_TABLE_S1'
+            for r in rows if r['original_study_doi']=='10.1016/j.cub.2020.08.077'
+          )
+          print('STAGE49_ORIGINAL_LITERATURE_TAXONOMY_ACCEPTED',
+                {'mapped_source_rows':x['n_exact_confident_species_records'],
+                 'unique_accepted':x['n_distinct_accepted_species_keys']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage49-original-literature-121-source-taxa-GBIF-taxonomy
+          path: research/floral_visual_macro_stage49/stage49_taxonomy_registry/*
+          if-no-files-found: error
+          retention-days: 90
