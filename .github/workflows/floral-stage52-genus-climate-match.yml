@@ -1,0 +1,60 @@
+name: floral-stage52-original-UV-source-genus-latitude-UVB-temperature-matching
+on:
+  push:
+    branches: [analysis/floral-temperate-uv-range-validation-stage52-20261116]
+    paths:
+      - research/floral_visual_macro_stage52/match_original_uv_sources_on_genus_lat_UVB_temp.py
+      - research/floral_visual_macro_stage52/test_match_original_uv_sources_on_genus_lat_UVB_temp.py
+      - .github/workflows/floral-stage52-genus-climate-match.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  posthoc-original-source-genus-UVB-lat-temp-match:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock matching uses no bee outcome and no false genus equivalence
+        working-directory: research/floral_visual_macro_stage52
+        run: python -m unittest -v test_match_original_uv_sources_on_genus_lat_UVB_temp
+      - name: Read source original 60 species 2016 UV bee-guild composition
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43874230221
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-2016-UV-60-bee-modelled-Bombus-share-robustness
+          path: research/floral_visual_macro_stage52/original_60_guild
+      - name: Match genuine source study species by genus latitude UVB temperature only
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python -u match_original_uv_sources_on_genus_lat_UVB_temp.py \
+            --original-60-UV-source-guild original_60_guild/original_60_UV_taxa_Bombus_share_source_model.csv
+      - name: Record posthoc and no adjusted causal phenotype inference
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('stage52_species_climate_matched_sensitivity/published_UV_genus_lat_UVB_temp_matched_pairs.json').read_text())
+          assert x['status']=='ORIGINAL_UV_2016_GENUS_LATITUDE_UVB_TEMPERATURE_MATCHED_DESCRIPTIVE'
+          assert x['n_original_published_2016_source_taxa_pilot']==60
+          assert x['source_matching_posthoc_after_initial_descriptives']
+          assert len(x['fixed_source_covariate_only_match_specs'])==2
+          assert x['no_randomized_species_trait_or_independent_native_ranges']
+          assert x['no_valid_pollinator_guide_use_or_fitness_effect']
+          print('STAGE52_ORIGINAL_UV_MATCHED_SPECIES_CONTRASTS',
+                json.dumps(x['fixed_source_covariate_only_match_specs'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage52-original-UV-species-genus-lat-UVB-temp-Bombus-share-matched
+          path: research/floral_visual_macro_stage52/stage52_species_climate_matched_sensitivity/*
+          if-no-files-found: error
+          retention-days: 90
