@@ -46,3 +46,21 @@ The original 2016 paper itself reported significant phylogenetic signal for bina
 **Next biological evidence gate:** reconstruct the actual native/measurement geography of each source-taxonomically accepted species (original herbarium locality and voucher metadata where possible), build true regional source conditional bee species-composition models, and fit prespecified phylogenetic + climate + spatial + observation-process controls with region held-out validation. The current 44 source species and raw relative fractions do **not** identify a population effect.
 
 Keep Draft/unmerged, main unchanged; do not combine with unrelated wind mechanics or falsely claim a real nectar-guide function.
+
+
+## Post hoc same-genus, published latitude/UV-B/temperature pairing — crucial attenuation
+
+**Important correction to any causal reading of the positive raw comparison:** a subsequent **post hoc exploratory** source-only sensitivity matched original 2016 UV-patterned vs UV-uniform plants without replacement *within the original Potentilla genus* using published mean-latitude, UV-B and temperature, before reading the bee-model outcome. This was NOT pre-registered; it is not phylogenetic PGLS, a model of sampling detection, a native-range analysis or a randomized exchangeability argument.
+
+| Source matching tier | Max lat gap | Max UV-B gap | Max temperature gap | Disjoint source plant pairs | Mean UV-pattern minus uniform modelled Bombus/all-bee fraction |
+|---|---:|---:|---:|---:|---:|
+| Strict | 5° | 700 J m^-2 d^-1 | 4°C | **12** | **+0.01115** |
+| Relaxed | 8° | 1,000 J m^-2 d^-1 | 6°C | **13** | **+0.01030** |
+
+Strict 12 matched pairs have **7 positive / 5 negative** pair contrasts in relative modeled Bombus richness. Leave-one-pair-out differences span **−0.01342 to +0.03703**, so the sign is **NOT stable** to removing one pair. Modelled absolute Bombus names difference attenuates from +2.149 (all 44) to **+0.678** among strict matched pairs, also sign-fragile (−0.0131 to +1.2060 under pair deletion). Among 12 strict pairs the mean all-bee modelled species richness difference is **−3.40** versus the unadjusted −51.81, likewise sign-fragile. The loosened 13 pairs produce +0.01030 fraction, with leave-one-pair-out −0.01229 to +0.03396.
+
+**Interpretation:** matching on lineage/gross climate is associated with much smaller apparent between-trait differences, and no robust within-pair sign is established. This is evidence *against prematurely claiming a general adaptation to a Bombus-dominated pollinator source*, while retaining a hypothesis worth independent native-range/field behaviour validation. It does not demonstrate statistical absence or true explanation by any one abiotic variable.
+
+Source-only Actions [run 43874975675](https://github.com/zuizui0223/adaptive-gain/actions/runs/43874975675) SUCCESS, aggregate artifact **14230421832** digest `sha256:dfebf1f9f826da164e22c2d1266624075f1bea1f1034c3d4330b6dcbf1cd162f`. Implementation `research/floral_visual_macro_stage52/match_original_uv_sources_on_genus_lat_UVB_temp.py`, synthetic-only tests, strict and relaxed fixed tolerance record. No original GBIF point identifiers redistributed, no new pollen/fitness inference.
+
+**Updated science status:** 2016 UV source plant phenotypes × historical modeled bee richness have been geographically joined and sensitivity-tested, but **not shown to have a robust climate/phylogeny-independent relationship**. The next analysis requiring real new evidence is accepted/native distribution of each plant and actual source-region insect community, not more positive modelling on these opportunistic GBIF pages.
