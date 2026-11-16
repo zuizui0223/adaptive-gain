@@ -228,7 +228,7 @@ def summarize(rows):
        "source_2016_source_UVB_available":sum(
           r["original_2016_source_mean_UVB_or_null"] is not None for r in original2016),
        "n_2016_published_mean_lat_inside_first_page_sampled_GBIF_lat_range":sum(
-          r["original_2016_mean_source_latitude_within_bounded_GBIF_index_page_range_or_unknown"] is True
+          r["original_2016_source_mean_latitude_within_bounded_GBIF_index_page_range_or_unknown"] is True
           for r in original2016),
        "n_2021_Cerrado_UV_taxa_with_model_eligible_sampled_GBIF_country_BR":sum(
           r["original_2021_Cerrado_study_Brazil_in_sampled_eligible_GBIF_country_codes_or_unknown"] is True
