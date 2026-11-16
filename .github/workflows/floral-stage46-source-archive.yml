@@ -1,0 +1,32 @@
+name: floral-stage46-source-archive-model-and-UV-discovery
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/**'
+      - '.github/workflows/floral-stage46-source-archive.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-original-bombus-model-and-UV-data-manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic source safety and no synthetic SDM tests
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_discover_pollinator_sdm_sources
+      - name: Query authentic 2026 global bee and Bombus model archives plus UV evolution data
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u discover_pollinator_sdm_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-global-bee-SDM-and-UV-source-index
+          path: research/floral_visual_macro_stage46/stage46_source_index/*.json
+          if-no-files-found: error
+          retention-days: 90
