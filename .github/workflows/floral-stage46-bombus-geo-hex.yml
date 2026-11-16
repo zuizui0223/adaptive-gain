@@ -1,0 +1,65 @@
+name: floral-stage46-original-Bombus-predicted-geographic-hex
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/georeference_bombus_prediction.py'
+      - 'research/floral_visual_macro_stage46/test_georeference_bombus_prediction.py'
+      - '.github/workflows/floral-stage46-bombus-geo-hex.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-modelled-Bombus-HEX-lonlat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline source centroid and no-false-absence regression tests
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_georeference_bombus_prediction
+      - name: Verify source 13.2MB grid and 1.3MB bee-model matrix; join true source HEX identifiers
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u georeference_bombus_prediction.py
+      - name: Guard source predicted richness and unknown versus zero semantics
+        working-directory: research/floral_visual_macro_stage46
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage46_georeferenced_Bombus_prediction')
+          r=json.loads((p/'source_hex_geographic_join_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_SOURCE_BOMBUS_PREDICTION_10242_HEX_GEOGRAPHICALLY_LINKED'
+          assert r['source_global_hex_dbf_records']==10242
+          assert r['source_hex_coverage']==10242
+          assert r['modelled_bee_PA_source_hex_coverage']==7035
+          assert r['hex_with_source_modelled_Bombus']==1981
+          assert r['hex_with_modelled_bees_but_Bombus_zero']==5054
+          assert r['unrepresented_hex_no_true_bee_absence_inference']==3207
+          assert r['max_source_modelled_Bombus_taxon_richness']==27
+          assert r['source_modelled_Bombus_taxon_names']==171
+          assert r['not_true_Bombus_occupation_or_pollination_service']
+          assert r['not_a_plant_trait_x_Bombus_suitability_analysis_yet']
+          with (p/'source_modelled_Bombus_richness_lonlat_10242_HEX.csv').open() as f:
+              cells=list(csv.DictReader(f))
+          assert len(cells)==10242
+          assert sum(x['n_source_modelled_Bombus_taxa']=='' for x in cells)==3207
+          print('STAGE46_REAL_BOMBUS_HEX_LONLAT_SOURCE_GRID_JOIN_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-global-Bombus-predicted-richness-georeferenced-10242-hexes
+          path: research/floral_visual_macro_stage46/stage46_georeferenced_Bombus_prediction/*.csv
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-global-Bombus-geography-and-source-provenance-receipt
+          path: research/floral_visual_macro_stage46/stage46_georeferenced_Bombus_prediction/*.json
+          if-no-files-found: error
+          retention-days: 90
