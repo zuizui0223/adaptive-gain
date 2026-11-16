@@ -1,0 +1,80 @@
+name: floral-stage52-real-source-2016-UV-species-latitude-two-hemisphere-Bombus-HEX
+on:
+  push:
+    branches: [analysis/floral-temperate-uv-range-validation-stage52-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage52/**'
+      - '.github/workflows/floral-stage52-original-hemisphere-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-2016-UV-60-species-mirrored-latitude-Gbif-source-Bombus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original projected HEX geometry dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pyshp==2.3.1' 'pyproj==3.7.2' 'shapely==2.1.2'
+      - name: Synthetic source latitude sign, two-hemisphere and no-zero tests
+        working-directory: research/floral_visual_macro_stage52
+        run: python -m unittest -v test_source_latitude_hemisphere_gbif_pilot
+      - name: Retrieve original 2016 source U-V, latitude, climate accepted 159 species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage52/source_2016_159
+      - name: Retrieve author-filtered original source bee HEX model 10242 cells
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43850263676
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage46-author-filtered-global-Bombus-hex-original-geography
+          path: research/floral_visual_macro_stage52/source_bee_10242
+      - name: Exact source polygons, pre-registered 60 original plants, +latitude/-latitude GBIF searches
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python -u source_latitude_hemisphere_gbif_pilot.py \
+            --source-2016 source_2016_159/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv \
+            --source-hex-model source_bee_10242/original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv
+      - name: Validate source pilot not inferred as native range or significant ecological effect
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          d=Path('stage52_2016_original_latitude_occurrence_pilot')
+          q=json.loads((d/'source_hemisphere_and_original_bee_exposure_receipt.json').read_text())
+          assert q['status']=='ORIGINAL_2016_UV_60_LATITUDE_TERCILE_TWO_HEMISPHERE_BEE_HEX_SOURCE_COVERAGE'
+          assert q['n_pilot_2016_UV_species']==60
+          assert q['source_UV_state_counts']=={'0':30,'1':30}
+          assert q['n_original_source_latitude_tercile_pairs']==6
+          assert q['published_positive_mean_latitude_not_signed_without_author_validation']
+          assert q['do_not_choose_hemisphere_by_pollinator_richness']
+          assert q['no_global_UV_pattern_by_Bombus_regression_or_significance']
+          with (d/'original_2016_60_UV_species_N_S_latitude_beeHEX_exposure.csv').open() as fp:
+              rows=list(csv.DictReader(fp))
+          assert len(rows)==60
+          assert len({r['gbif_accepted_species_key'] for r in rows})==60
+          assert all(r['no_species_native_range_or_Bombus_guide_usage_estimated']=='True' for r in rows)
+          print('STAGE52_SOURCE_LATITUDES_TWO_HEMISPHERE_BEE_COVERAGE',
+                {'hemisphere_status':q['hemispheric_validity_status_counts'],
+                 'n_with_any_qualified_GBIF_source':q['n_species_any_hemisphere_at_least_5_quality_points'],
+                 'n_api_fail':q['n_original_GBIF_api_query_unavailable'],
+                 'group':q['group_by_published_UV_pattern_and_sampled_hemisphere']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage52-original-2016-UV-60-species-N-S-latitude-Bombus-modelled-bee-HEX
+          path: research/floral_visual_macro_stage52/stage52_2016_original_latitude_occurrence_pilot/*
+          if-no-files-found: error
+          retention-days: 90
