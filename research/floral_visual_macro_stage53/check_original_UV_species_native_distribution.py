@@ -83,10 +83,11 @@ def fetch_checklist_distribution(taxon_key):
     items=[]
     seen=set()
     n_pages=0
+    next_offset=0
     end=False
     errors=[]
     while n_pages<PAGES_PER_TAXON_MAX and not end:
-        params=urllib.parse.urlencode({"limit":PAGE_SIZE,"offset":len(items)})
+        params=urllib.parse.urlencode({"limit":PAGE_SIZE,"offset":next_offset})
         url=f"{API}{taxon_key}/distributions?{params}"
         try:
             result=fetch_json(url)
@@ -110,6 +111,7 @@ def fetch_checklist_distribution(taxon_key):
             if key not in seen:
                 seen.add(key)
                 items.append(r)
+        next_offset+=len(rows)
         n_pages+=1
     return {"status":"GBIF_CHECKLIST_DISTRIBUTIONS_RETURNED",
             "items":items,"pages":n_pages,"truncated":not end,
