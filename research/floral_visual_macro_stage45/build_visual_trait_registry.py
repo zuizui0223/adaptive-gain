@@ -69,7 +69,7 @@ def _value(row,key):
     return str(value).strip()
 
 
-def summarize_and_extract(blob):
+def summarize_and_extract(blob,expected_rows=SOURCE_ROW_COUNT):
     if not isinstance(blob,bytes):
         raise ValueError("NO_GO_ORIGINAL_SOURCE_NOT_BYTES")
     with io.StringIO(blob.decode("utf-8-sig"),newline="") as handle:
@@ -139,7 +139,7 @@ def summarize_and_extract(blob):
               "pollination_text":filled["pollination"],
               "source_doi":SOURCE_DOI
             })
-        if len(rows)!=SOURCE_ROW_COUNT:
+        if len(rows)!=expected_rows:
             raise ValueError("NO_GO_NHM_SOURCE_ROW_COUNT_CHANGED")
         return rows,patterns,{
             "status":"SOURCE_VERIFIED_59369_GLOBAL_ANGIOSPERM_FLORAL_TRAIT_COVERAGE",
