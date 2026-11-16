@@ -3,6 +3,7 @@ on:
   push:
     branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
     paths:
+      - research/floral_visual_macro_stage54/probe_multimodal_original_literature.py
       - research/floral_visual_macro_stage54/inspect_nested_visual_trait_tables.py
       - research/floral_visual_macro_stage54/test_inspect_nested_visual_trait_tables.py
       - .github/workflows/floral-stage54-nested-visual-tables.yml
