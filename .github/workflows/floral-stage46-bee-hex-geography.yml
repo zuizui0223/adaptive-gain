@@ -1,0 +1,32 @@
+name: floral-stage46-original-bee-hex-geography-source
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/inspect_bee_hex_geography.py'
+      - 'research/floral_visual_macro_stage46/test_inspect_bee_hex_geography.py'
+      - '.github/workflows/floral-stage46-bee-hex-geography.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-authenticated-original-hex-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free DBF schema guards
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_inspect_bee_hex_geography
+      - name: Verify 13MB source bee hex grid ZIP and DBF identifier field
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u inspect_bee_hex_geography.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-global-bee-hex-geography-schema
+          path: research/floral_visual_macro_stage46/stage46_hex_geography/*.json
+          if-no-files-found: error
