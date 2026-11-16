@@ -76,7 +76,7 @@ def evaluate(records):
     counts=Counter(r["uv_category"] for r in records)
     n=len(records)
     if n!=80 or dict(sorted(counts.items()))!=dict(sorted(EXPECTED_COUNTS.items())):
-        raise ValueError("NO_GO_NOT_SOURCE_VERIFIED_EIGHTY_UV_CATEGORIES")
+        raise ValueError("NO_GO_NOT_SOURCE_VERIFIED_EIGHTY_UV_CATEGORIES: n="+str(n)+" counts="+str(dict(counts)))
     keys=[r["taxon_as_published"] for r in records]
     if len(set(keys))!=len(keys):
         raise ValueError("NO_GO_SOURCE_PDF_DUPLICATED_SPECIES_ROWS")
