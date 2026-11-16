@@ -1,0 +1,62 @@
+name: floral-stage45-NHM-original-global-species-registry
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/**'
+      - '.github/workflows/floral-stage45-original-global-species.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-59369-trait-registry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only nonresponse and no-false-UV-guide tests
+        working-directory: research/floral_visual_macro_stage45
+        run: python -m unittest -v test_build_visual_trait_registry
+      - name: Download and validate full original 2026 NHM 59,369-species trait resource
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u build_visual_trait_registry.py
+      - name: Fail closed if trait silence was coded as a nectar-guide absence
+        working-directory: research/floral_visual_macro_stage45
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          base=Path('stage45_species_registry')
+          s=json.loads((base/'nhm_trait_coverage.json').read_text())
+          assert s['status']=='SOURCE_VERIFIED_59369_GLOBAL_ANGIOSPERM_FLORAL_TRAIT_COVERAGE'
+          assert s['species_rows']==59369
+          assert s['unique_taxon_strings']>50000
+          assert s['important_NO_GUIDE_FIELD_AVAILABLE_IN_NHM_SOURCE']
+          assert s['no_missing_trait_as_confirmed_absence']
+          assert s['no_visual_signal_as_proven_receiver_information_use']
+          assert s['original_nhm_records_not_committed_or_uploaded_verbatim']
+          with (base/'nhm_59369_visual_trait_species_registry.csv').open() as h:
+              rows=csv.DictReader(h)
+              n=0
+              for r in rows:
+                  n+=1
+                  assert r['nectar_guide_presence']=='not_measured'
+                  assert r['uv_guide_presence']=='not_measured'
+                  assert r['visual_information_use_by_pollinator']=='not_measured'
+                  assert r['source_doi']=='10.5519/p3dm31kc'
+          assert n==59369
+          print('STAGE45_ORIGINAL_ANGIOSPERM_SPECIES_LEVEL_REGISTRY_VERIFIED')
+          print('SOURCE_TRAIT_COVERAGE',json.dumps(s['field_nonempty_counts'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-NHM-59369-plant-visual-trait-registry
+          path: |
+            research/floral_visual_macro_stage45/stage45_species_registry/*.csv
+            research/floral_visual_macro_stage45/stage45_species_registry/*.json
+          if-no-files-found: error
+          retention-days: 90
