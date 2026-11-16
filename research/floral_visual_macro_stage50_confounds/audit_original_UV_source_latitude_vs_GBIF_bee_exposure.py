@@ -50,6 +50,8 @@ def _int(r,k):
 
 
 def _json_list(r,k):
+    if r.get(k) in ("",None):
+        return []
     try:
         z=json.loads(r[k])
     except (ValueError,TypeError,KeyError) as err:
