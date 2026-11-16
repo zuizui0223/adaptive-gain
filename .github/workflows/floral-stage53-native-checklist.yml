@@ -1,0 +1,72 @@
+name: floral-stage53-original-159-UV-native-country-evidence-audit
+on:
+  push:
+    branches: [analysis/floral-native-range-checklist-stage53-20261116]
+    paths:
+      - research/floral_visual_macro_stage53/**
+      - .github/workflows/floral-stage53-native-checklist.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-2016-UV-plants-GBIF-native-checklist-country-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free explicit native status conflict and paginated API tests
+        working-directory: research/floral_visual_macro_stage53
+        run: python -m unittest -v test_check_original_UV_species_native_distribution
+      - name: Read source-verified original Koski Ashman 2016 159 species, not photo guesses
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage53/source_2016
+      - name: Audit real checklist distribution evidence (not occurrence or native model)
+        working-directory: research/floral_visual_macro_stage53
+        run: |
+          python -u check_original_UV_species_native_distribution.py \
+            --source-159 source_2016/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv
+      - name: Validate source-grain and warn against native range extrapolation
+        working-directory: research/floral_visual_macro_stage53
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage53_nativity_checklist')
+          r=json.loads((p/'native_country_source_availability_receipt.json').read_text())
+          assert r['status']=='2016_ORIGINAL_UV_PLANTS_GBIF_NATIVE_DISTRIBUTION_CHECKLIST_COVERAGE_AUDIT'
+          assert r['original_source_accepted_species']==159
+          assert r['source_UV_pattern_state_counts']=={'0':81,'1':78}
+          assert r['GBIF_checklist_country_claim_not_native_range_polygon']
+          assert r['unknown_status_is_never_true_absence_or_native']
+          assert r['no_original_plant_UV_specimen_location_recovered']
+          assert r['no_new_UV_pattern_by_Bombus_climate_phylogeny_adjusted_effect']
+          with (p/'original_159_UV_plants_GBIF_checklist_native_country_evidence.csv').open() as f:
+              values=list(csv.DictReader(f))
+          assert len(values)==159
+          assert len({x['gbif_accepted_species_key'] for x in values})==159
+          assert all(x['no_proven_current_native_species_range_polygon']=='True' for x in values)
+          print('STAGE53_SOURCE_NATIVITY_2016_UV_ACCEPTED_SPECIES_COUNTRY_COVERAGE',
+                json.dumps({k:r[k] for k in (
+                    'n_species_with_checklist_records',
+                    'n_species_with_any_explicit_nonconflicted_native_ISO_country',
+                    'n_species_with_3_or_more_native_ISO_countries',
+                    'n_species_with_native_vs_introduced_country_conflict',
+                    'n_species_pagination_truncated','source_api_status_counts'
+                )},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage53-original-2016-159-UV-species-native-GBIF-checklist-coverage
+          path: research/floral_visual_macro_stage53/stage53_nativity_checklist/*
+          if-no-files-found: error
+          retention-days: 90
