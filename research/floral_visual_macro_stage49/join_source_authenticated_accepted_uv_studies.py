@@ -109,6 +109,10 @@ def union_source_records(nph,other):
       "source_accepted_species_evidence_statuses":dict(sorted(labels.items())),
       "n_unique_species_with_consistent_directly_measured_UV_spatial_pattern":labels[
           "CONSISTENT_SOURCE_MEASURED_SPATIAL_UV_PATTERN"],
+      "n_unique_directly_UV_patterned_accepted_species":sum(
+          x["source_measured_UV_spatial_pattern_or_missing"]==1 for x in merged),
+      "n_unique_directly_UV_uniform_accepted_species":sum(
+          x["source_measured_UV_spatial_pattern_or_missing"]==0 for x in merged),
       "n_unique_species_with_temporal_UVP_only_no_direct_binary":labels[
           "NO_SOURCE_MEASURED_SPATIAL_PATTERN"],
       "n_conflicting_direct_spatial_pattern_accepted_species":labels[
