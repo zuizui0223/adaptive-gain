@@ -1,0 +1,79 @@
+name: floral-stage50-original-study-latitude-UVB-and-Gbif-sample-confounding-audit
+on:
+  push:
+    branches: [analysis/floral-gbif-plant-hex-pilot-stage50-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage50_confounds/**'
+      - '.github/workflows/floral-stage50-published-latitude-confounds.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  test-original-published-latitude-uvb-and-GBIF-sample-representativeness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free tests for source study lat, pattern and unknowns
+        working-directory: research/floral_visual_macro_stage50_confounds
+        run: python -m unittest -v test_audit_original_UV_source_latitude_vs_GBIF_bee_exposure
+      - name: Read actual Stage50 plant GBIF bee-HEX model pilot receipt
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43867539658
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage50-original-60-literature-UV-plant-GBIF-to-3370-bee-hex-feasibility
+          path: research/floral_visual_macro_stage50_confounds/source_stage50
+      - name: Read original Koski Ashman 2016 UV/climate/UVB with accepted GBIF species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43862161335
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-original-Koski-Ashman2016-177-UV-patterned-taxa-GBIF-keys
+          path: research/floral_visual_macro_stage50_confounds/source_stage49_2016
+      - name: Audit study climate and published source site coverage at the 60 actual UV species
+        working-directory: research/floral_visual_macro_stage50_confounds
+        run: |
+          python -u audit_original_UV_source_latitude_vs_GBIF_bee_exposure.py \
+            --stage50-pilot-csv source_stage50/60_source_UV_plants_GBIF_record_sampling_x_original_Bombus_hex.csv \
+            --original-2016-Gbif-csv source_stage49_2016/nph2016_original_177_UV_trait_GBIF_accepted_taxon_key.csv
+      - name: Check no source/GBIF representation conflation or unearned statistics
+        working-directory: research/floral_visual_macro_stage50_confounds
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path('stage50_published_latitude_UVB_sensitivity')
+          r=json.loads((p/'source_latitude_sensitivity_receipt.json').read_text())
+          assert r['status']=='SOURCE_VERIFIED_UV_BEE_OVERLAP_PILOT_WITH_ORIGINAL_LATITUDE_UVB_SAMPLING_AUDIT'
+          assert r['source_2016_n']==30
+          assert r['source_2021_n']==30
+          assert r['do_not_treat_source_UV_trait_as_measured_at_all_GBIF_localities']
+          assert r['first_page_not_a_population_sample_or_native_range']
+          assert r['no_species_trait_sdm_effect_adjusted_or_significant']
+          assert r['no_true_plant_fitness_or_bee_use_of_UV_guide']
+          with (p/'source_60_pilot_plant_species_orig2016_UVB_and_sample_sensitivity.csv').open() as f:
+              records=list(csv.DictReader(f))
+          assert len(records)==60
+          assert len({v['gbif_accepted_species_key'] for v in records})==60
+          assert sum(v['original_study']=='2016' for v in records)==30
+          assert sum(v['original_study']=='2021' for v in records)==30
+          print('STAGE50_ORIGINAL_STUDY_LATITUDE_AND_BRAZIL_COVERAGE',
+                {'2016_source_lat':r['source_2016_published_UV_mean_latitude_available'],
+                 '2016_source_UVB':r['source_2016_source_UVB_available'],
+                 '2021_Brazil_in_bounded_GBIF_index_page':r['n_2021_Cerrado_UV_taxa_with_model_eligible_sampled_GBIF_country_BR'],
+                 'strict_genus_lat_pairs':r['strict_2016_within_genus_and_published_latitude_pilot']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage50-UV-Bombus-pilot-original-latitude-UVB-phylogeny-geosampling-check
+          path: research/floral_visual_macro_stage50_confounds/stage50_published_latitude_UVB_sensitivity/*
+          if-no-files-found: error
+          retention-days: 90
