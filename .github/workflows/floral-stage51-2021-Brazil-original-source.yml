@@ -1,0 +1,74 @@
+name: floral-stage51-original-2021-UV-Brazil-source-region-GBIF
+on:
+  push:
+    branches: [analysis/floral-2021-Cerrado-source-region-stage51-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage51/**'
+      - '.github/workflows/floral-stage51-2021-Brazil-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-Cerrado-71-UV-plant-source-region-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-authenticated original HEX polygon tools
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pyshp==2.3.1' 'pyproj==3.7.2' 'shapely==2.1.2'
+      - name: Verify country/box/uncertainty/source-HEX no-false-absence tests
+        working-directory: research/floral_visual_macro_stage51
+        run: python -m unittest -v test_verify_2021_Brazil_source_region_gbif
+      - name: Download original source 262 accepted literature species and select 71 real 2021 UV plants
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: research/floral_visual_macro_stage51/original_literature_input
+      - name: Fetch original Brazilian region GBIF plants and exact original bee source HEX
+        working-directory: research/floral_visual_macro_stage51
+        run: |
+          python -u verify_2021_Brazil_source_region_gbif.py \
+            --accepted-literature-csv original_literature_input/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv
+      - name: Enforce no false plant species-site or bee UV interaction inference
+        working-directory: research/floral_visual_macro_stage51
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path('stage51_original_2021_Brazil_UV_species')
+          r=json.loads((p/'source_restricted_Brazil_original_2021_UV_region_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_2021_71_UV_SPECIES_BRAZIL_REGION_GBIF_AND_AUTHENTIC_SOURCE_HEX_FEASIBILITY'
+          assert r['original_direct_UV_taxa']==71
+          assert sum(r['original_pattern_class_counts'].values())==71
+          assert r['source_site_hex_modelled_Bombus_names']=={
+             'HEX8285':4,'HEX8318':3,'HEX8252':4}
+          assert r['original_site_region_study_coords_2019_2021_not_species_specific']
+          assert r['source_species_original_sample_sites_unknown']
+          assert r['not_a_valid_source_site_trait_SDM_regression']
+          assert r['not_UV_bee_causal_association_or_native_range']
+          with (p/'71_Tunes_2021_UV_original_species_Brazil_study_region_GBIF_HEX.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==71
+          assert len({x['gbif_accepted_species_key'] for x in rows})==71
+          assert all(x['GBIF_record_no_proof_source_plant_UV_phenotype_measured_here']=='True'
+                     for x in rows)
+          print('STAGE51_BRAZIL_ORIGINAL_STUDY_REGION_FEASIBILITY',
+                {'plant_species_with_real_BR_index':r['n_species_with_positive_filtered_Brazil_region_GBIF_index'],
+                 'plant_species_with_source_model_polygon':r['n_species_with_valid_original_bee_source_polygon_record'],
+                 'source_3_sites_neighboring_record_species':r['n_species_with_source_study_site_candidate_HEX_record'],
+                 'no_model_effect':r['not_a_valid_source_site_trait_SDM_regression']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage51-original-71-Tunes-UV-flora-Brazil-region-study-HEX-coverage
+          path: research/floral_visual_macro_stage51/stage51_original_2021_Brazil_UV_species/*
+          if-no-files-found: error
+          retention-days: 90
