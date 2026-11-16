@@ -1,0 +1,75 @@
+name: floral-stage44-original-within-bee-trial-extrema
+on:
+  push:
+    branches: [analysis/floral-within-bee-trial-selection-stage44-20261116]
+    paths:
+      - 'research/floral_trial_selection_stage44/**'
+      - '.github/workflows/floral-stage44-trial-choices.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original-trial-selection-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact prior source 3D kinematics dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Synthetic exactness and fail-closed schema tests
+        working-directory: research/floral_trial_selection_stage44
+        run: python -m unittest -v test_within_bee_trial_selection
+      - name: Independently check original checksum-verified 157 archived trajectory file choices
+        working-directory: research/floral_trial_selection_stage44
+        run: python -u within_bee_trial_selection.py
+      - name: Source-only audit without constraining any effect sign
+        working-directory: research/floral_trial_selection_stage44
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          r=json.loads(Path('stage44_aggregate_receipts/source_within_bee_trial_selection_extrema.json').read_text())
+          assert r['status']=='ORIGINAL_ARCHIVE_2016_WITHIN_B_TRIAL_SELECTION_INTERVALS'
+          assert r['source_original_trajectories']==157
+          assert r['source_original_B_labels']==28
+          assert r['original_W0_W1_counts']=={'W0':56,'W1':101}
+          assert r['original_MATLAB_source_sha_verified']
+          assert (r['methods'],r['subsets'],r['endpoints'])==(6,9,2)
+          assert len(r['summaries'])==108
+          assert r['original_112_publication_path_membership_unrecovered']
+          assert r['not_full_author_112_R_model_replication']
+          assert r['no_original_3d_frames_or_MATLAB_script_redistributed']
+          assert r['no_wind_olfaction_interaction_or_pollen_fitness']
+          for item in r['summaries']:
+              x=item['bounds']
+              assert x['status']=='EXACT_ARCHIVED_TRIAL_SELECTION_ENVELOPES_FIXED_OR_ONE_CELL_PER_B'
+              assert x['n_original_B_identifiers']>=1
+              assert x['n_original_matched_B_S_P_cells']>=x['n_original_B_identifiers']
+              assert x['all_matched_B_retained_no_B_deletion']
+              l=x['fixed_matched_cells_one_original_trial_per_arm_exact_lower_m_s']
+              u=x['fixed_matched_cells_one_original_trial_per_arm_exact_upper_m_s']
+              m=x['original_within_B_S_P_all_trial_mean_m_s']
+              l2=x['any_one_matched_cell_per_B_one_original_trial_per_arm_exact_lower_m_s']
+              u2=x['any_one_matched_cell_per_B_one_original_trial_per_arm_exact_upper_m_s']
+              assert all(math.isfinite(z) for z in (l,m,u,l2,u2))
+              assert l2-1e-9<=l+1e-9<=m+1e-9<=u+1e-9<=u2+1e-9
+              assert x['not_matching_original_author_112_trial_roster']
+              assert x['not_landing_success_or_pollen_or_seeds_or_fitness']
+          base=next(y for y in r['summaries']
+              if y['cutoff_hz']==100 and y['speed_method']=='three_tag_mean'
+              and y['subset']=='all' and y['endpoint']=='near_flower_speed')['bounds']
+          assert base['n_original_B_identifiers']==23
+          assert abs(base['original_within_B_S_P_all_trial_mean_m_s']-.12142936338922392)<1e-5
+          print('STAGE44_BASELINE_AND_TWO_SHARP_SELECTION_INTERVALS',json.dumps(base,sort_keys=True))
+          print('STAGE44_CORRECTLY_PRESERVES_NEGATIVE_OR_NULL_EFFECTS_IF_PRESENT')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage44-2016-original-trajectory-selection-extrema
+          path: research/floral_trial_selection_stage44/stage44_aggregate_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
