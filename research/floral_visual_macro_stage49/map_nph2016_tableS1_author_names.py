@@ -21,7 +21,7 @@ from extract_nph2016_original_uv_177 import (
 )
 from probe_nph2016_177_europepmc_supplement import _fetch,API
 
-KNOWN_SOURCE_GENE=("Argentina","Drymocallis","Duchesnea","Fragaria",
+KNOWN_SOURCE_GENE=("Argentina","Dasiphora","Drymocallis","Duchesnea","Fragaria",
                    "Horkelia","Ivesia","Potentilla","Sibbaldia")
 STUDY_DOI="10.1111/nph.13921"
 NAME_RE=re.compile(r"^("+"|".join(KNOWN_SOURCE_GENE)+r")\s+([a-z][a-z-]+)\b")
