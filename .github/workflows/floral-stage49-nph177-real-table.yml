@@ -1,0 +1,58 @@
+name: floral-stage49-original-2016-177-UV-pattern-species-table
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/extract_nph2016_original_uv_177.py'
+      - 'research/floral_visual_macro_stage49/test_extract_nph2016_original_uv_177.py'
+      - '.github/workflows/floral-stage49-nph177-real-table.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-2016-UV-177-real-species:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original open scientific PDF parsing dependency
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Test original UV source coding 0-present 1-absent (NOT inverted)
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_extract_nph2016_original_uv_177
+      - name: Retrieve exact original Europe PMC PDF S2 and extract 177 measured UV traits
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u extract_nph2016_original_uv_177.py
+      - name: Verify 177 original taxa with true UV pattern & climate columns
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          r=Path('stage49_2016_uv_pattern_177')
+          receipt=json.loads((r/'source_177_UV_binary_source_receipt.json').read_text())
+          assert receipt['status']=='AUTHENTIC_NPH2016_SOURCE_177_POTENTILLEAE_SPECIES_UV_PHENOTYPES'
+          assert receipt['n_original_2016_source_taxa']==177
+          assert receipt['n_UV_pattern_present_from_0']==86
+          assert receipt['n_uniform_UV_absorbing_from_1']==91
+          assert receipt['original_source_code_0_means_pattern_PRESENT']
+          assert receipt['no_unverified_genus_expansions_or_invented_synonyms']
+          assert receipt['no_new_UV_pattern_Bombus_geographic_regression']
+          with (r/'koski_ashman2016_177_source_codes_uvp_climate.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==177
+          assert all(int(x['source_TableS2_UV_pattern_0_present_1_absent'])==
+                     1-int(x['source_measured_UV_pattern_present']) for x in rows)
+          assert all(x['gbif_accepted_species_key']=='' for x in rows)
+          print('STAGE49_NPH2016_ORIGINAL_ALL_177_UV_PATTERN_SOURCE_REPRODUCED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage49-original-NPH2016-177-real-UV-pattern-source-species-rows
+          path: research/floral_visual_macro_stage49/stage49_2016_uv_pattern_177/*
+          if-no-files-found: error
+          retention-days: 90
