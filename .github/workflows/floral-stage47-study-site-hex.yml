@@ -1,0 +1,65 @@
+name: floral-stage47-original-UV-study-sites-by-bee-source-hex
+on:
+  push:
+    branches: [analysis/floral-uv-bombus-hex-feasibility-stage47-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage47/**'
+      - '.github/workflows/floral-stage47-study-site-hex.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-polygon-study-site-geo-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install controlled physical geo and bee source dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pyshp==2.3.1' 'pyproj==3.7.2' 'shapely==2.1.2'
+      - name: Assert study-region bounds and synthetic polygon source no-go contracts
+        working-directory: research/floral_visual_macro_stage47
+        run: python -m unittest -v test_align_uv_study_sites_to_bee_hex
+      - name: Reconstruct original 3370-source species bee model and project original study sites into verified source HEX polygons
+        working-directory: research/floral_visual_macro_stage47
+        run: python -u align_uv_study_sites_to_bee_hex.py
+      - name: Validate original geography input and prohibit invalid biological claims
+        working-directory: research/floral_visual_macro_stage47
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('stage47_source_site_feasibility/original_three_UV_study_sites_x_original_3370_bee_model.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='ORIGINAL_CERRADO_STUDY_SITE_TO_PUBLISHED_BEE_HEX_COVERAGE_AUDIT'
+          assert x['source_sites_tested']==3
+          assert x['source_study_doi']=='10.3389/fpls.2021.618028'
+          assert x['model_source_doi']=='10.5281/zenodo.20525239'
+          assert x['paper_filtered_global_Bombus_names']==133
+          assert x['paper_filtered_global_bee_names']==3370
+          assert x['source_geography']['source_hex_zip_md5']=='md5:999c8c9eb6688628588d0d794ac390e1'
+          assert x['source_geography']['original_source_hex_shape_count']==10242
+          assert x['source_geometry']['no_nearest_centroid_or_assumed_equal_area']
+          assert x['not_a_valid_between_species_UV_suitability_correlation']
+          assert x['source_article_species_site_mapping_not_available']
+          assert x['no_new_Bombus_field_presence_or_visitation_claim']
+          for s in x['site_assignments']:
+              assert s['country']=='Brazil'
+              assert s['original_source_study_sites_are_not_taxon_specific_UV_measurements']
+              assert s['n_tested_source_site_coordinates']>=1
+          print('STAGE47_SOURCE_AUTHENTIC_SITE_OVERLAP',json.dumps({
+              'site_assignments':x['site_assignments'],
+              'n_author_eligible_cells':x['n_source_study_hex_author_eligible'],
+              'different_Bombus_modelled_values':x['distinct_Bombus_source_modelled_richness_values'],
+              'different_other_bee_modelled_values':x['distinct_all_bee_source_modelled_richness_values']
+          },sort_keys=True,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage47-original-Tunes-study-sites-x-Laborieux-source-HEX-eligibility
+          path: research/floral_visual_macro_stage47/stage47_source_site_feasibility/*.json
+          if-no-files-found: error
+          retention-days: 90
