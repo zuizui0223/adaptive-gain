@@ -1,0 +1,62 @@
+name: floral-stage45-original-UV-to-global-trait-join
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/join_uv_with_global_traits.py'
+      - 'research/floral_visual_macro_stage45/test_join_uv_with_global_traits.py'
+      - '.github/workflows/floral-stage45-UV-NHM-crossjoin.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cross_source_taxon_join_without_unsupported_uv_labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: PDF categorical reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Mock-only botanical matching and no-false absence tests
+        working-directory: research/floral_visual_macro_stage45
+        run: python -m unittest -v test_join_uv_with_global_traits
+      - name: Authenticated original Tunes UV PDF vs immutable official NHM CSV
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u join_uv_with_global_traits.py
+      - name: Verify all 80 original UV rows still present, and unresolved names not imputed
+        working-directory: research/floral_visual_macro_stage45
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage45_crossdb_species')
+          q=json.loads((p/'exact_name_join_provenance.json').read_text())
+          assert q['status']=='ORIGINAL_SOURCE_80_UV_TAXA_VS_59369_NHM_EXACT_NAME_JOIN'
+          assert q['uv_source_rows']==80 and q['nhm_original_source_rows']==59369
+          assert q['uv_category_counts_TableS2']=={'A':47,'R':7,'BE':7,'CM':4,'CR':15}
+          assert q['uv_article_vs_table_discrepancy_preserved']
+          assert q['taxon_name_match_does_not_resolve_synonyms']
+          assert q['no_false_uv_absence_from_NHM_colour_coverage']
+          assert q['no_gbif_occurrences_or_Bombus_SDM_have_been_estimated']
+          with (p/'source_80_UV_taxa_x_NHM_59369_exact_name_join.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==80
+          assert all(r['gbif_taxonomic_acceptance']=='not_checked' for r in rows)
+          assert all(r['bombus_overlap_or_habitat_suitability']=='not_estimated' for r in rows)
+          print('ORIGINAL_80_UV_TO_59369_NHM_CROSS_SOURCE_JOIN_SUCCESS',q['join_status_counts'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-80-original-UV-taxonomy-and-59k-NHM-crossjoin
+          path: research/floral_visual_macro_stage45/stage45_crossdb_species/*.csv
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-80-original-UV-and-global-trait-crossjoin-receipt
+          path: research/floral_visual_macro_stage45/stage45_crossdb_species/*.json
+          if-no-files-found: error
