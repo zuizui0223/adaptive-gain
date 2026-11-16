@@ -17,6 +17,8 @@ import json
 from pathlib import Path
 import re
 import urllib.request
+import urllib.error
+import time
 
 from probe_public_sources import _ckan,_safe_url,NHM_RESOURCE,NHM_DATASET_DOI
 
@@ -40,6 +42,86 @@ PATTERN_CANDIDATE=re.compile(
 POLLINATOR_WORDS=re.compile(r"\b(bombus|bumble.?bee|bees?|apidae)\b",re.I)
 
 
+def _fetch_datastore_pages():
+    """Full authenticated CKAN resource pagination when direct CSV is 403.
+
+    The rows are original datastore resource records but re-serialized to a
+    temporary in-memory CSV. Do NOT claim a byte-identical original download.
+    """
+    read=0
+    records=[]
+    seen=set()
+    request_count=0
+    fields=None
+    total=None
+    offset=0
+    desired_page_size=800
+    while total is None or read<total:
+        payload=None
+        for attempt in range(3):
+            try:
+                payload=_ckan("datastore_search",{
+                    "resource_id":NHM_RESOURCE,
+                    "limit":desired_page_size,"offset":offset,
+                    "sort":"_id asc"
+                })
+                break
+            except urllib.error.HTTPError as error:
+                if error.code!=429 or attempt==2:
+                    raise
+                time.sleep(2*(attempt+1))
+        if payload is None:
+            raise ValueError("NO_GO_NHM_NO_DATASTORE_PAGE")
+        request_count+=1
+        current_total=payload.get("total")
+        rows=payload.get("records")
+        cols=payload.get("fields")
+        if not isinstance(current_total,int) or not isinstance(rows,list) or (
+           not isinstance(cols,list)):
+            raise ValueError("NO_GO_NHM_PAGINATED_RESPONSE_SCHEMA")
+        names=[x.get("id") for x in cols if isinstance(x,dict)]
+        if total is None:
+            total=current_total
+            fields=names
+            if total!=SOURCE_ROW_COUNT:
+                raise ValueError("NO_GO_NHM_DATASTORE_TOTAL_CHANGED")
+            if not fields or "taxon" not in fields or "wfo" not in fields:
+                raise ValueError("NO_GO_NHM_PAGINATION_FIELDS_MISSING")
+        if current_total!=total or names!=fields:
+            raise ValueError("NO_GO_NHM_DATASTORE_SNAPSHOT_DRIFT")
+        if not rows or len(rows)>desired_page_size:
+            raise ValueError("NO_GO_NHM_EMPTY_OR_TOO_LARGE_PAGE")
+        for row in rows:
+            key=str(row.get("_id",""))
+            if not key or key in seen:
+                raise ValueError("NO_GO_NHM_PAGINATED_RECORD_DUPLICATE")
+            seen.add(key)
+        records.extend(rows)
+        read+=len(rows)
+        offset=read
+        if read>total or request_count>200:
+            raise ValueError("NO_GO_NHM_PAGINATION_COUNT_OR_RATE_LIMIT")
+        time.sleep(0.10)
+    if len(records)!=SOURCE_ROW_COUNT or len(seen)!=SOURCE_ROW_COUNT:
+        raise ValueError("NO_GO_NHM_59369_ROWS_NOT_EXHAUSTIVE")
+    out=io.StringIO(newline="")
+    w=csv.DictWriter(out,fieldnames=fields,extrasaction="ignore")
+    w.writeheader()
+    w.writerows(records)
+    blob=out.getvalue().encode("utf-8")
+    return blob,{
+       "source_doi":SOURCE_DOI,
+       "nhm_resource_id":NHM_RESOURCE,
+       "source_endpoint":"NHM_CKAN_DATASTORE_PAGINATION",
+       "original_csv_bytes_not_authenticated":True,
+       "materialization_encoding":"CSV re-serialized from CKAN resource rows in memory",
+       "page_count":request_count,
+       "rows_materialized":len(records),
+       "distinct_source_datastore_ids":len(seen),
+       "materialization_sha256_not_original_file_sha256":hashlib.sha256(blob).hexdigest()
+    }
+
+
 def _get_source_bytes():
     manifest=_ckan("resource_show",{"id":NHM_RESOURCE})
     if manifest.get("id")!=NHM_RESOURCE:
@@ -54,13 +136,20 @@ def _get_source_bytes():
        "User-Agent":"adaptive-gain-stage45-NHM-original-survey/2026",
        "Accept":"text/csv,application/octet-stream"
     })
-    with urllib.request.urlopen(request,timeout=90) as stream:
-        blob=stream.read(MAX_CSV_BYTES+1)
+    try:
+        with urllib.request.urlopen(request,timeout=90) as stream:
+            blob=stream.read(MAX_CSV_BYTES+1)
+    except urllib.error.HTTPError as error:
+        if error.code!=403:
+            raise
+        return _fetch_datastore_pages()
     if len(blob)>MAX_CSV_BYTES or len(blob)!=expected:
         raise ValueError("NO_GO_NHM_ORIGINAL_RESOURCE_BYTES_NOT_MATCHED")
     return blob,{"source_url":url,"declared_original_bytes":expected,
                  "download_sha256":hashlib.sha256(blob).hexdigest(),
-                 "source_doi":SOURCE_DOI,"nhm_resource_id":NHM_RESOURCE}
+                 "source_doi":SOURCE_DOI,"nhm_resource_id":NHM_RESOURCE,
+                 "original_csv_bytes_not_authenticated":False,
+                 "source_endpoint":"ORIGINAL_CSV_BYTE_DOWNLOAD"}
 
 
 def _value(row,key):
@@ -142,7 +231,7 @@ def summarize_and_extract(blob,expected_rows=SOURCE_ROW_COUNT):
         if len(rows)!=expected_rows:
             raise ValueError("NO_GO_NHM_SOURCE_ROW_COUNT_CHANGED")
         return rows,patterns,{
-            "status":"SOURCE_VERIFIED_59369_GLOBAL_ANGIOSPERM_FLORAL_TRAIT_COVERAGE",
+            "status":"NHM_59369_CKAN_SOURCE_GRAIN_FLORAL_TRAIT_COVERAGE",
             "source_doi":SOURCE_DOI,
             "species_rows":len(rows),
             "unique_taxon_strings":len(source_taxa),
@@ -153,6 +242,7 @@ def summarize_and_extract(blob,expected_rows=SOURCE_ROW_COUNT):
             "no_visual_signal_as_proven_receiver_information_use":True,
             "no_Bombus_occurrences_treated_as_species_richness_or_suitability":True,
             "original_nhm_records_not_committed_or_uploaded_verbatim":True,
+            "original_csv_bytes_not_required_for_source_resource_identification":True,
         }
 
 
