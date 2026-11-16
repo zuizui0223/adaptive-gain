@@ -57,10 +57,13 @@ def source_index():
     for item in items:
         path=item["filename"].replace("\\","/")
         parts=[p for p in path.split("/") if p and p not in (".","..")]
-        if len(parts)>=2 and parts[0].casefold()=="reflectance":
-            if parts[1]:
-                source_names[parts[1]]+=1
-            if len(parts)>2:
+        if (len(parts)>=3 and parts[0]=="Ohashi_etal"
+            and parts[1]=="Reflectance"
+            and parts[2] not in (".DS_Store",)
+            and not parts[2].startswith("._")
+            and not path.endswith("/")):
+            source_names[parts[2]]+=1
+            if len(parts)>3 and not Path(parts[-1]).name.startswith("._"):
                 modes[Path(parts[-1]).suffix.lower()]+=1
         if len(examples)<18:
             examples.append(path[:220])
