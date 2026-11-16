@@ -29,14 +29,23 @@ DOIS={
 }
 DATASET_FILE_CANDIDATES={
   "POTENTILLEAE_177":[
+    ("https://datadryad.org/api/v2/files/543161/download",
+     "Supplementary_Data_File.xlsx"),
     ("https://datadryad.org/downloads/file_stream/543161",
      "Supplementary_Data_File.xlsx"),
   ],
   "THREE_CONTINENT_42":[
+    ("https://datadryad.org/api/v2/files/401217/download",
+     "Koski_et_al._Current_Biology_Data.xlsx"),
     ("https://datadryad.org/downloads/file_stream/401217",
      "Koski_et_al._Current_Biology_Data.xlsx"),
   ]
 }
+SOURCE_SHA256={
+ "POTENTILLEAE_177":"988e185526623394e3ae6c05cb842dd5c066d1be9ed550c167cf48fb515e8e3d",
+ "THREE_CONTINENT_42":"cfcbf56ab0a9753b20cfa31d94c89aff58691b8f38036306d453a8678ee4d71e",
+}
+SOURCE_BYTES={"POTENTILLEAE_177":31980,"THREE_CONTINENT_42":204378}
 MAX_BYTES=1_100_000
 XML_MAIN="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 XML_REL="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -161,6 +170,8 @@ def probe():
                 attempt.update({"status":"BYTES_RETRIEVED",
                                 "http_status":status,"content_type":ct,
                                 "size":len(raw)})
+                if len(raw)!=SOURCE_BYTES[key] or hashlib.sha256(raw).hexdigest()!=SOURCE_SHA256[key]:
+                    raise ValueError("NO_GO_DRYAD_ORIGINAL_FILE_CHECKSUM_MISMATCH")
                 entry["workbook"]=_header_from_excel(raw)
                 attempt["status"]="GENUINE_XLSX_WORKBOOK_VERIFIED"
             except (ValueError,urllib.error.HTTPError,urllib.error.URLError,
