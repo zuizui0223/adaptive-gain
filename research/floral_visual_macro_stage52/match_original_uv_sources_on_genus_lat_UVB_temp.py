@@ -86,8 +86,8 @@ def report(rows):
         effects={}
         for m in ENDPOINTS:
             values=[x[m+"_pattern_minus_uniform"] for x in pairs]
-            loo=[statistics.mean(values[:i]+values[i+1:]) for i in range(len(values))]
-                if len(values)>1 else []
+            loo=([statistics.mean(values[:i]+values[i+1:]) for i in range(len(values))]
+                 if len(values)>1 else [])
             effects[m]={
               "n_pairs":len(values),
               "mean_pattern_minus_uniform":statistics.mean(values) if values else None,
