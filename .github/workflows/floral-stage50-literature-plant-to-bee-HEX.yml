@@ -1,0 +1,93 @@
+name: floral-stage50-source-authentic-plant-GBIF-to-Bombus-HEX-pilot
+on:
+  push:
+    branches: [analysis/floral-gbif-plant-hex-pilot-stage50-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage50/**'
+      - '.github/workflows/floral-stage50-literature-plant-to-bee-HEX.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-original-literature-plants-and-author-filtered-bee-hex:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install strictly required original projected-hex processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pyshp==2.3.1' 'pyproj==3.7.2' 'shapely==2.1.2'
+      - name: Verify mock-only pilot design, 100k GBIF search cap and missing-vs-zero rules
+        working-directory: research/floral_visual_macro_stage50
+        run: python -m unittest -v test_pilot_original_uv_species_gbif_bee_hex
+      - name: Download source-verified 262 GBIF-accepted literature UV species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: research/floral_visual_macro_stage50/pinned_literature_species
+      - name: Preserve accepted species counts and direct UV response BEFORE plant occurrence retrieval
+        working-directory: research/floral_visual_macro_stage50
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from pilot_original_uv_species_gbif_bee_hex import (
+              read_verified_source_species, balanced_preoccurrence_sample)
+          p=Path('pinned_literature_species/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv')
+          source=read_verified_source_species(p)
+          chosen=balanced_preoccurrence_sample(source)
+          assert len(chosen)==60
+          assert len(set(x['taxon_key'] for x in chosen))==60
+          print('STAGE50_PREOCCURRENCE_ORIGINAL_SOURCE_SAMPLE_BALANCED',
+                {'source_species':len(source),'pilot_source_species':len(chosen)})
+          PY
+      - name: Original plant GBIF 2000–2026 points inside original author's global bee modeled polygons
+        working-directory: research/floral_visual_macro_stage50
+        run: |
+          python -u pilot_original_uv_species_gbif_bee_hex.py \
+            --accepted-source-csv pinned_literature_species/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv
+      - name: Freeze no spurious biological or statistical significance claim
+        working-directory: research/floral_visual_macro_stage50
+        run: |
+          python - <<'PY'
+          import csv,json,math
+          from pathlib import Path
+          p=Path('stage50_original_plant_bee_hex_pilot')
+          r=json.loads((p/'precommitted_pilot_source_exposure_receipt.json').read_text())
+          assert r['status']=='SOURCE_AUTHENTIC_60_LITERATURE_UV_SPECIES_GBIF_TO_BEE_HEX_FEASIBILITY'
+          assert r['source_original_262_species_count']==262
+          assert r['number_original_published_UV_species_pilot']==60
+          assert r['precommitted_species_balance']=={
+              '2016_UVpattern0':15,'2016_UVpattern1':15,
+              '2021_UVpattern0':15,'2021_UVpattern1':15}
+          assert r['source_original_bee_hex_count']==10242
+          assert r['source_author_eligible_bee_hex_count']==2695
+          assert r['source_original_bee_model_Bombus_names']==133
+          assert r['source_original_bee_model_total_names']==3370
+          assert r['sampled_GBIF_occurrence_search_limit']==150
+          assert r['no_source_study_taxon_measured_site_inferred_from_GBIF']
+          assert r['no_globally_valid_UV_Bombus_statistical_significance_claim']
+          assert r['no_null_bee_grid_as_true_zero']
+          with (p/'60_source_UV_plants_GBIF_record_sampling_x_original_Bombus_hex.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==60
+          assert len(set(x['gbif_accepted_species_key'] for x in rows))==60
+          assert all(x['not_a_Bombus_versus_UV_inferential_model']=='True' for x in rows)
+          assert all(x['not_a_taxon_rangewide_nativity_or_pollination_service']=='True' for x in rows)
+          print('STAGE50_ORIGINAL_SPATIAL_PILOT_ACCEPTED_NO_CAUSAL_OR_POPULATION_CLAIM',
+                {'n_species_with_eligible_cells':r['n_pilot_species_with_any_source_model_eligible_records'],
+                 'n_species_broad_coverage':r['n_pilot_species_with_at_least_3_covered_cells_and_15_records'],
+                 'n_real_occurrence_index_records':r['n_records_retrieved_total']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage50-original-60-literature-UV-plant-GBIF-to-3370-bee-hex-feasibility
+          path: research/floral_visual_macro_stage50/stage50_original_plant_bee_hex_pilot/*
+          if-no-files-found: error
+          retention-days: 90
