@@ -1,0 +1,27 @@
+name: floral-stage45-NHM-pagination-diagnostic
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/diagnose_nhm_pagination.py'
+      - '.github/workflows/floral-stage45-pagination-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose-CKAN-409:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check small/medium pages and status+error before full retrieval
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u diagnose_nhm_pagination.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage45-NHM-CKAN-409-API-diagnostic
+          path: research/floral_visual_macro_stage45/stage45_diagnostic/*.json
+          if-no-files-found: error
