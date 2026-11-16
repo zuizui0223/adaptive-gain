@@ -158,7 +158,7 @@ The distinction creates a simple 2 × 2 conceptual map.
 | low | high | the same or nearly the same species set faces a changed branch structure, cue relevance or ecological budget; accessibility can change without much compositional turnover |
 | high | high | community replacement and focal decision structure change together |
 
-The second regime is the strongest expression of the V5 quotient result: large taxonomic turnover need not create large decision novelty.
+The second regime is the strongest expression of the V5 quotient result: high taxonomic turnover need not create large decision novelty.
 
 The third regime is equally important because it shows the converse. Interaction structure can become decision-novel even without substantial species replacement. Environmental change can alter cue reliability, encounter context, resource state or the effective budget while the same species remain present. In that case, the set of behaviorally accessible links can change and **rewiring may follow**, even though species turnover is low.
 
