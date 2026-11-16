@@ -1,0 +1,57 @@
+name: floral-stage49-2016-original-S1-S2-UVCodes-to-authored-names
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/map_nph2016_tableS1_author_names.py'
+      - 'research/floral_visual_macro_stage49/test_map_nph2016_tableS1_author_names.py'
+      - '.github/workflows/floral-stage49-nph177-S1-name-authentication.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-NPH2016-TablesS1-S2-crosswalk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PDF source reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Offline S1 name-source and infraspecific unresolved tests
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_map_nph2016_tableS1_author_names
+      - name: Re-fetch original supplemental PDF and match 177 UV codes to author Genus species rows
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u map_nph2016_tableS1_author_names.py
+      - name: Verify source row and accepted-name uncertainty separation
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path('stage49_2016_UV_author_names')
+          s=json.loads((root/'original_S1_S2_author_taxonomic_join_receipt.json').read_text())
+          assert s['status']=='NPH2016_ORIGINAL_S1_TO_S2_UV_SOURCE_NAME_CROSSWALK'
+          assert s['n_original_S2_UV_measured_taxon_rows']==177
+          assert s['n_full_author_binomial_lexical_candidates']>=120
+          assert s['UV_2016_patterned_source_rows']==86
+          assert s['UV_2016_uniform_source_rows']==91
+          with (root/'Koski_Ashman2016_original_177_UV_with_S1_author_binomials.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==177
+          assert all(r['GBIF_accepted_species_key']=='NOT_QUERIED' for r in rows)
+          print('ORIGINAL_PUBLISHED_177_AUTHOR_FULL_NAME_MAPPING',
+                {'matched_source_rows':s['n_full_author_binomial_lexical_candidates'],
+                 'unique_full_binomials':s['unique_full_binomial_source_name_count'],
+                 'missing':s['n_S1_original_author_names_missing']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage49-original-NPH2016-177-UV-with-author-S1-full-binomial-source
+          path: research/floral_visual_macro_stage49/stage49_2016_UV_author_names/*
+          if-no-files-found: error
+          retention-days: 90
