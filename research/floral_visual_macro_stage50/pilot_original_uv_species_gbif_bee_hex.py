@@ -6,7 +6,9 @@ A *predeclared, source/study/phenotype-balanced 60-species PILOT* is chosen
 by deterministic GBIF accepted-key hash BEFORE observing occurrence data.
 
 Sampling from GBIF's occurrence/search is bounded: 2 separated 150-row
-pages per species, strictly NOT a complete native species distribution.
+pages in initial diagnostic design; after the GBIF live index count drift,
+we use only the first bounded page per species and retain API errors as NA.
+Strictly NOT a complete native species distribution.
 Results are coverage/measurement diagnostics; *no ecological UV×bee
 coefficient or adaptation claim*. The original source HEX shapefile and
 3,370-bee author filter from Stages46–47 are independently reproduced.
@@ -61,7 +63,7 @@ SOURCE_STUDIES={
 }
 GBIF_URL="https://api.gbif.org/v1/occurrence/search"
 MAX_RESPONSE_BYTES=2_400_000
-MAX_WORKERS=3
+MAX_WORKERS=6
 # Planned before source query: do not select using ecological outcomes.
 SELECTION_SALT="stage50-fixed-preoccurrence-20261116-UV-geography"
 
@@ -159,6 +161,7 @@ def fixed_page_offsets(count,limit=PAGE_LIMIT):
 
 
 def retrieve_plant_occurrence_pilot(taxon):
+    """One live-index bounded page. No unstable multi-page count assumption."""
     key=taxon["taxon_key"]
     q={
        "taxonKey":key,
@@ -167,16 +170,28 @@ def retrieve_plant_occurrence_pilot(taxon):
        "hasCoordinate":"true",
        "hasGeospatialIssue":"false",
        "limit":PAGE_LIMIT,
+       "offset":0,
     }
-    base=_request_json({**q,"offset":0})
+    try:
+        base=_request_json(q)
+    except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError) as e:
+        return {
+          "source_gbif_accepted_species_key":key,
+          "source_gbif_index_count_after_query_filters":None,
+          "gbif_query_limit":PAGE_LIMIT,
+          "gbif_requested_offsets":[0],
+          "source_search_100000_cap_truncated":False,
+          "n_source_records_fetched_deduplicated":0,
+          "records":[],
+          "fetch_duplicate_or_id_issues":{},
+          "source_api_query_status":"API_UNAVAILABLE_NOT_ZERO_OR_ABSENCE",
+          "source_api_error_type":type(e).__name__,
+          "not_random_sample_or_complete_native_range":True,
+          "query_period":f"{START_YEAR}-{END_YEAR}",
+          "query_filters":"hasCoordinate=true;hasGeospatialIssue=false;occurrenceStatus=PRESENT",
+        }
     count=base["count"]
-    offsets=fixed_page_offsets(count)
     records=base["results"] if count else []
-    for offset in offsets[1:]:
-        nextpayload=_request_json({**q,"offset":offset})
-        if nextpayload["count"]!=count:
-            raise ValueError("NO_GO_GBIF_OCCURRENCE_TOTAL_DRIFT_ACROSS_PAGES")
-        records+=nextpayload["results"]
     observations={}
     counts=Counter()
     for rec in records:
@@ -188,16 +203,17 @@ def retrieve_plant_occurrence_pilot(taxon):
             counts["duplicate_page_record_ids"]+=1
             continue
         observations[rid]=rec
-    # No original records in persistable output: return transient dicts
     return {
       "source_gbif_accepted_species_key":key,
       "source_gbif_index_count_after_query_filters":count,
       "gbif_query_limit":PAGE_LIMIT,
-      "gbif_requested_offsets":offsets,
+      "gbif_requested_offsets":[0] if count else [],
       "source_search_100000_cap_truncated":count>MAX_GBIF_SEARCH_WINDOW,
       "n_source_records_fetched_deduplicated":len(observations),
       "records":list(observations.values()),
       "fetch_duplicate_or_id_issues":dict(counts),
+      "source_api_query_status":"GBIF_INDEX_PAGE_OBSERVED_NOT_COMPLETE_DISTRIBUTION",
+      "source_api_error_type":"",
       "not_random_sample_or_complete_native_range":True,
       "query_period":f"{START_YEAR}-{END_YEAR}",
       "query_filters":"hasCoordinate=true;hasGeospatialIssue=false;occurrenceStatus=PRESENT",
@@ -280,6 +296,7 @@ def aggregate_plant_bee_exposure(taxon,gbif_source,names,tree,transform,bee_cell
        "original_gbif_filtered_index_count":gbif_source[
            "source_gbif_index_count_after_query_filters"],
        "source_records_retrieved_unique":n_source_records,
+       "source_API_status":gbif_source["source_api_query_status"],
        "source_search_offset_pages":gbif_source["gbif_requested_offsets"],
        "source_search_100k_limit_truncated":gbif_source["source_search_100000_cap_truncated"],
        "n_eligible_model_source_occurrence_records":n_eligible,
@@ -333,6 +350,9 @@ def summary(rows):
       "n_pilot_species_with_any_source_model_eligible_records":sum(
          r["n_eligible_model_source_occurrence_records"]>0 for r in rows),
       "n_pilot_species_with_at_least_3_covered_cells_and_15_records":len(viable),
+      "n_species_gbif_search_api_unavailable":sum(
+         r["source_API_status"]=="API_UNAVAILABLE_NOT_ZERO_OR_ABSENCE"
+         for r in rows),
       "n_species_2000_2026_GBIF_zero_result":sum(
          r["original_gbif_filtered_index_count"]==0 for r in rows),
       "n_records_retrieved_total":sum(r["source_records_retrieved_unique"] for r in rows),
@@ -341,7 +361,7 @@ def summary(rows):
       "n_species_wide_GBIF_100k_cap_exceeded":sum(
          r["source_search_100k_limit_truncated"] for r in rows),
       "descriptive_study_by_source_pattern":descriptives,
-      "source_interpretation":"GBIF bounded-page indexed observed records sampled at two offsets, not true native range or independent random species occurrence sampling.",
+      "source_interpretation":"GBIF FIRST-INDEX-PAGE ONLY, live pagination count drift made two-page sample non-repeatable; not true native range nor randomly sampled plant distribution.",
       "source_bee_model":"Laborieux et al 2026 original 3370-taxon author tree/pa_cutoff=5 model",
       "no_source_study_taxon_measured_site_inferred_from_GBIF":True,
       "no_null_bee_grid_as_true_zero":True,
@@ -386,6 +406,7 @@ def main():
     receipt["source_original_bee_model_total_names"]=3370
     receipt["source_original_262_species_count"]=len(source)
     receipt["sampled_GBIF_occurrence_search_limit"]=PAGE_LIMIT
+    receipt["sampling_policy"]="ONE_GBIF_SEARCH_INDEX_PAGE_PER_SPECIES_AFTER_MULTI_PAGE_COUNT_DRIFT"
     receipt["sampled_GBIF_occurrence_search_year_start"]=START_YEAR
     receipt["sampled_GBIF_occurrence_search_year_end"]=END_YEAR
     receipt["registered_selection_salt"]=SELECTION_SALT
