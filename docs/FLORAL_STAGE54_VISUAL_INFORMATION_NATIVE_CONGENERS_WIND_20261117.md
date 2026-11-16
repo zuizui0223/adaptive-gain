@@ -56,3 +56,19 @@ D. Functional reward colour / optical motion interactions are separately testabl
 E. Falsification: if related plants with comparable native source pools and environment differ little in receiver guild or signal effect, or if the positive association disappears under source/phylogenetic/climatic conditions, do not declare general visually mediated selection.
 
 **Current verified result:** 61 / 53 / 45 measured opposite-UV congeneric controls, original age-resolved spectral taxa expanding the distinct accepted-key source frame to 466, original review 136 candidate taxon columns, and documented direct experimental literature to connect visual-motor access and wind. No new causal pollination or robust macro UV×Bombus coefficient is claimed. Development PR remains Draft/unmerged; main untouched.
+
+
+## Final cross-modal unique species result (source-validated)
+
+The original accepted-key union of three independent source artifacts is **583 unique accepted GBIF species**. Its source-only real-data workflow [GitHub Actions 43904836644](https://github.com/zuizui0223/adaptive-gain/actions/runs/43904836644) succeeded. Aggregate artifact **14245435979**, source-derived ZIP SHA256 **fd112b7a8beb92f3fee572dae5bb176119be154d0431dbda32cd5fffadcbb100**; source row accepted-key atlas CSV and provenance receipt are inspectable in that artifact. This result supersedes the 466-species two-source working total above.
+
+Counts after exact accepted-key identification and nonindependent study overlap:
+- original UV direct/spatial and temporal-only source: 262 accepted keys (101 measured UV patterned,129 measured uniform,32 temporal UVP only);
+- original 2015 Ohashi stage-dependent reflectance archive: 207 accepted keys (219 original taxon/variety folders);
+- original 2025 positive-only colour-changing review: 124 accepted keys from **136 PDF-column source groups**, 128 provisional original binomial names, original review reports 151 species;
+- UV×Ohashi accepted overlap **3**; UV×2025 review **1**; Ohashi×2025 review **6**; triple overlap **0**; 262+207+124−3−1−6=**583**;
+- only UV source 258, only 2015 spectra 198, only 2025 review 117 unique source categories (different evidence tiers).
+
+The 124 names are **literature reported colour-changers**, not species-level receptor-model positive optical measurements or a 124-species null-comparable experiment. The older positive review's 151 total has NOT been recovered in entirety; original PDF font-column parser found 136 source taxon columns, eight unresolved names before strict GBIF mapping, and 124 confident accepted IDs. The 2015 original source ZIP index is not sufficient to assign bee/butterfly/fly perceptible-age-change negatives per species. Only ORIGINAL 2016/2021 UV-uniform is the measurable negative state for the UV spatial modality.
+
+The separate Dryad audit (successful GitHub Actions 43904498255) authenticated manifests and SHA256 source files for 2025 51 clades/2960 flowers and Taiwan 727-taxon archive, but actual full CSV bytes returned 401/403. Do not claim these additional candidate species have been imported or de-duplicated. No ecological colour×Bombus distribution effect, wind×signal behaviour, plant fitness or genuine sister-species test has been identified.
