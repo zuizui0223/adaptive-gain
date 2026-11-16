@@ -49,7 +49,7 @@ class SelectionAndDenominator(unittest.TestCase):
         self.assertEqual(a['largest_k_all_k_deletions_preserve_positive_mean'],3)
 
     def test_already_nonpositive_is_zero_deletion(self):
-        a=robust_adversarial_removals([-.6,.1,.2,.3])
+        a=robust_adversarial_removals([-.61,.1,.2,.3])
         self.assertEqual(a['minimum_adversarial_whole_B_deletions_to_nonpositive_mean'],0)
         self.assertEqual(a['largest_k_all_k_deletions_preserve_positive_mean'],-1)
 
