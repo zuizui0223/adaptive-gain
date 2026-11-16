@@ -1,0 +1,30 @@
+name: floral-stage45-original-UV-species-table-probe
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/probe_uv_supplement.py'
+      - '.github/workflows/floral-stage45-uv-supplement-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-UV-supplement-PDF-table:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PDF table reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Verify original open-access 80-species UV table pagination and cells
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u probe_uv_supplement.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-original-2021-UV-flower-80-species-table-layout
+          path: research/floral_visual_macro_stage45/stage45_uv_supplement_probe/*.json
+          if-no-files-found: error
