@@ -89,8 +89,13 @@ def parse_source_rows(page_texts):
             }
             if not (0<=uvp<=1):
                 raise ValueError("NO_GO_UV_ABSORPTION_PROPORTION_OUT_OF_RANGE")
-            if (flag==0 and uvp>=.95) or (flag==1 and uvp<.95):
-                raise ValueError("NO_GO_SOURCE_UV_0_1_PATTERN_CONTRADICTS_UVP_"+code)
+            # Report discrepancies rather than silently overriding author
+            # categorization; displayed UVP is rounded to two decimals.
+            d["UVP_rounded_threshold_vs_author_discrete_code"] = (
+                "CHECK_SOURCE_ROUNDED_THRESHOLD"
+                if (flag==0 and uvp>=.95) or (flag==1 and uvp<.95)
+                else "CONSISTENT_AT_TWO_DECIMAL_PRECISION"
+            )
             found[code]=d
     if errors:
         raise ValueError("NO_GO_SOURCE_TABLE_S2_NON_RECTANGULAR_ROWS "+json.dumps(errors[:16],ensure_ascii=False))
@@ -103,6 +108,13 @@ def summarize(rows):
     code=Counter(r["source_TableS2_UV_pattern_0_present_1_absent"] for r in rows)
     if code!={0:86,1:91}:
         raise ValueError("NO_GO_SOURCE_2016_PUBLISHED_PATTERN_COUNTS_DIFFER "+str(code))
+    mismatches=[
+        {"source_taxon_code":r["original_taxon_code"],
+         "original_reported_UVP":r["orig_2016_UV_proportion_absorbing"],
+         "author_discrete_UV_code":r["source_TableS2_UV_pattern_0_present_1_absent"]}
+        for r in rows if r["UVP_rounded_threshold_vs_author_discrete_code"]!=
+        "CONSISTENT_AT_TWO_DECIMAL_PRECISION"
+    ]
     colors=Counter(r["human_visible_flower_colour_code"] for r in rows)
     gen=Counter(r["original_taxon_code"].split("_")[0] for r in rows)
     return {
@@ -112,6 +124,9 @@ def summarize(rows):
       "n_uniform_UV_absorbing_from_1":code[1],
       "original_source_code_0_means_pattern_PRESENT":True,
       "original_source_code_1_means_uniform_ABSORBING":True,
+      "two_decimal_UVP_vs_author_category_threshold_discrepancy_count":len(mismatches),
+      "two_decimal_UVP_vs_author_category_threshold_discrepancies":mismatches,
+      "original_author_category_not_overwritten_by_rounded_UVP":True,
       "visible_flower_color_counts":dict(sorted(colors.items())),
       "original_taxon_code_prefix_counts":dict(sorted(gen.items())),
       "species_source_level_climate_UVB_and_latitude_in_same_rows":True,
