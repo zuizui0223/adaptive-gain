@@ -23,10 +23,41 @@ jobs:
       - name: Verify real article PDF supplement and original 42-species Table S1 source text layout
         working-directory: research/floral_visual_macro_stage49
         run: python -u probe_current_biology_original_table_s1.py
+      - name: Offline original article Table S1 species row parsing
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_extract_current_biology_table_s1
+      - name: Extract published UV species and continent rows from exact original PDF
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u extract_current_biology_table_s1.py
+      - name: Prevent false UV-guide or source taxon denominator conclusions
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage49_literature_species_registry')
+          s=json.loads((p/'original_TableS1_source_coverage.json').read_text())
+          assert s['status']=='SOURCE_PAPER_TABLE_S1_CONTINENT_BY_TAXON_UV_HERBARIUM_ROSTER'
+          assert s['article_reports_42_species']
+          assert s['article_reports_1238_herbarium_samples']
+          assert s['do_not_treat_UVP_slope_as_UV_guide_presence']
+          with (p/'koski_2020_current_biology_original_TableS1_taxon_continent_uvp.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==s['n_source_continent_by_taxon_rows']
+          assert all(r['uv_nectar_guide_presence']=='NOT_MEASURED_OR_NOT_REPORTED_IN_S1'
+                     for r in rows)
+          print('STAGE49_AUTHENTIC_PAPER_SPECIES_ROSTER_QA',
+                {k:s[k] for k in ('n_source_continent_by_taxon_rows',
+                                  'n_unique_literal_published_binomials',
+                                  'source_herbarium_samples_sum')})
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: stage49-original-current-biology-42-species-paper-table-layout
-          path: research/floral_visual_macro_stage49/stage49_current_biology_source/*.json
+          path: |
+            research/floral_visual_macro_stage49/stage49_current_biology_source/*.json
+            research/floral_visual_macro_stage49/stage49_literature_species_registry/*.json
+            research/floral_visual_macro_stage49/stage49_literature_species_registry/*.csv
           if-no-files-found: error
           retention-days: 60
