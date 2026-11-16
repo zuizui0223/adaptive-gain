@@ -1,0 +1,35 @@
+name: floral-stage54-original-nested-151-species-age-colour-and-51-clade-index
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/inspect_nested_visual_trait_tables.py
+      - research/floral_visual_macro_stage54/test_inspect_nested_visual_trait_tables.py
+      - .github/workflows/floral-stage54-nested-visual-tables.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-visual-species-tables-by-modality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install PDF table structure reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Mock only original-archive nesting and source-format QA
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_inspect_nested_visual_trait_tables
+      - name: Source-verify 2025 151-colour-change original tables and 2015/2025 source file indexes
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u inspect_nested_visual_trait_tables.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-151-colour-change-219-spectra-51-clade-source-file-schema
+          path: research/floral_visual_macro_stage54/stage54_source_nested_tables/*.json
+          if-no-files-found: error
+          retention-days: 90
