@@ -1,0 +1,67 @@
+name: floral-stage52-original-2016-159-accepted-UV-latitude-UVB-domain-gate
+on:
+  push:
+    branches: [analysis/floral-temperate-uv-range-validation-stage52-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage52/**'
+      - '.github/workflows/floral-stage52-original-latitude-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-2016-UV-species-original-source-latitude-UVB:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free accepted taxon and original latitude QA
+        working-directory: research/floral_visual_macro_stage52
+        run: python -m unittest -v test_audit_2016_uv_source_latitude
+      - name: Fetch independently verified 2016 original accepted-name and UV source
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43862161335
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-original-Koski-Ashman2016-177-UV-patterned-taxa-GBIF-keys
+          path: research/floral_visual_macro_stage52/original_source
+      - name: Authenticate original per-species latitude and UVB before range inference
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python -u audit_2016_uv_source_latitude.py \
+            --original-2016-csv original_source/nph2016_original_177_UV_trait_GBIF_accepted_taxon_key.csv
+      - name: Guard false source-locality and hemisphere claims
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          d=Path('stage52_source_latitude')
+          q=json.loads((d/'source_2016_latitude_UVB_hemisphere_gate.json').read_text())
+          assert q['status']=='AUTHENTIC_2016_UV_SPECIES_SOURCE_LATITUDE_UVB_FEASIBILITY_GATE'
+          assert q['source_original_taxon_rows']==177
+          assert q['accepted_source_taxon_rows']==164
+          assert q['accepted_distinct_GBIF_species']==159
+          assert q['published_latitude_source_geometry_known_to_be_actual_occurrence'] is False
+          assert q['no_Bombus_or_other_pollinator_fitness_or_richness_effect']
+          with (d/'KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==159
+          assert len(set(r['gbif_accepted_species_key'] for r in rows))==159
+          assert all(r['native_range_verified']=='False' for r in rows)
+          print('STAGE52_AUTHORIGINAL_2016_LATITUDE_COVERAGE',json.dumps({
+               'source_signed_lat':q['source_latitude_sign_counts'],
+               'study_by_pattern':q['species_source_variation']
+          },sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage52/stage52_source_latitude/*
+          if-no-files-found: error
+          retention-days: 90
