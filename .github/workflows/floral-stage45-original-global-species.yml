@@ -31,7 +31,7 @@ jobs:
           from pathlib import Path
           base=Path('stage45_species_registry')
           s=json.loads((base/'nhm_trait_coverage.json').read_text())
-          assert s['status']=='SOURCE_VERIFIED_59369_GLOBAL_ANGIOSPERM_FLORAL_TRAIT_COVERAGE'
+          assert s['status']=='NHM_59369_CKAN_SOURCE_GRAIN_FLORAL_TRAIT_COVERAGE'
           assert s['species_rows']==59369
           assert s['unique_taxon_strings']>50000
           assert s['important_NO_GUIDE_FIELD_AVAILABLE_IN_NHM_SOURCE']
