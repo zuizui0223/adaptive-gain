@@ -61,20 +61,29 @@ class GBIFCellSamplingQA(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"NO_GO_GBIF_TOTAL_COUNT"):
             fixed_page_offsets(-1)
 
-    def test_two_pages_reject_duplicate_record_ids(self):
+    def test_one_bounded_live_page_not_second_inconsistent_offset(self):
         selected={"taxon_key":88}
         def mock_request(x):
-            off=x.get("offset")
-            if off==0:return {"count":400,"results":[{"key":9},{"key":10}]}
-            if off==250:return {"count":400,"results":[{"key":10},{"key":11}]}
-            self.fail("unexpected fixed GBIF offset "+str(off))
+            self.assertEqual(x.get("offset"),0)
+            return {"count":400,"results":[{"key":9},{"key":10},{"key":10}]}
         with patch("pilot_original_uv_species_gbif_bee_hex._request_json",
                    side_effect=mock_request):
             a=retrieve_plant_occurrence_pilot(selected)
-        self.assertEqual(a["n_source_records_fetched_deduplicated"],3)
-        self.assertEqual(a["gbif_requested_offsets"],[0,250])
+        self.assertEqual(a["n_source_records_fetched_deduplicated"],2)
+        self.assertEqual(a["gbif_requested_offsets"],[0])
         self.assertEqual(a["fetch_duplicate_or_id_issues"]["duplicate_page_record_ids"],1)
+        self.assertEqual(a["source_api_query_status"],
+                         "GBIF_INDEX_PAGE_OBSERVED_NOT_COMPLETE_DISTRIBUTION")
         self.assertTrue(a["not_random_sample_or_complete_native_range"])
+
+    def test_network_denial_is_unknown_not_zero(self):
+        from urllib.error import URLError
+        with patch("pilot_original_uv_species_gbif_bee_hex._request_json",
+                   side_effect=URLError("source temporarily inaccessible")):
+            a=retrieve_plant_occurrence_pilot({"taxon_key":88})
+        self.assertIsNone(a["source_gbif_index_count_after_query_filters"])
+        self.assertEqual(a["records"],[])
+        self.assertEqual(a["source_api_query_status"],"API_UNAVAILABLE_NOT_ZERO_OR_ABSENCE")
 
     def test_same_species_true_polygon_quality_and_unknown_zero_differ(self):
         selected={"taxon_key":50,"source_primary_study":"2016",
@@ -90,7 +99,8 @@ class GBIFCellSamplingQA(unittest.TestCase):
                         point(5,-10,20000),point(6,20,1000,"INTRODUCED")],
              "source_gbif_index_count_after_query_filters":9000,
              "gbif_requested_offsets":[0,8850],
-             "source_search_100000_cap_truncated":False}
+             "source_search_100000_cap_truncated":False,
+             "source_api_query_status":"GBIF_INDEX_PAGE_OBSERVED_NOT_COMPLETE_DISTRIBUTION"}
         def match(lon,lat,names,tree,transform):
             if lon<0:return ["HEX_A"]
             if lon==10:return ["HEX_B"]
@@ -118,7 +128,8 @@ class GBIFCellSamplingQA(unittest.TestCase):
                     "n_eligible_source_model_cells_with_GBIF_plant_points":0,
                     "original_gbif_filtered_index_count":1,
                     "source_records_retrieved_unique":1,
-                    "source_search_100k_limit_truncated":False
+                    "source_search_100k_limit_truncated":False,
+                    "source_API_status":"GBIF_INDEX_PAGE_OBSERVED_NOT_COMPLETE_DISTRIBUTION"
                 } for _ in range(15))
         self.assertEqual(len(rows),PILOT_TOTAL)
         res=summary(rows)
