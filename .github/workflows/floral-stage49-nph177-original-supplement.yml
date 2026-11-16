@@ -1,0 +1,44 @@
+name: floral-stage49-original-NPH2016-177-Potentilleae-S2-source
+on:
+  push:
+    branches: [analysis/floral-literature-uv-taxonomic-atlas-stage49-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage49/probe_nph2016_177_europepmc_supplement.py'
+      - '.github/workflows/floral-stage49-nph177-original-supplement.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-177-species-source-S2-manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install supplemental PDF source reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Check original Europe PMC OA supplemental archives without guessing 177 taxa
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u probe_nph2016_177_europepmc_supplement.py
+      - name: Enforce source versus unavailability separation
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('stage49_original_nph177/europe_pmc_nph177_original_supplement_index.json').read_text())
+          assert r['article_doi']=='10.1111/nph.13921'
+          assert r['status'] in ('ORIGINAL_NPH2016_177_SPECIES_SUPPLEMENT_INDEX_ONLY',
+                                'UNAVAILABLE_NO_177_SPECIES_PER_ROW_EXTRACTION')
+          if r['status']=='ORIGINAL_NPH2016_177_SPECIES_SUPPLEMENT_INDEX_ONLY':
+              assert r['no_new_verified_177_taxon_rows_yet']
+              assert r['not_a_visual_Bombus_geographic_effect']
+          print('STAGE49_2016_TABLES2_SOURCE_STATUS',r['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage49-authentic-2016-Potentilleae-177-S2-supplement-audit
+          path: research/floral_visual_macro_stage49/stage49_original_nph177/*.json
+          if-no-files-found: error
