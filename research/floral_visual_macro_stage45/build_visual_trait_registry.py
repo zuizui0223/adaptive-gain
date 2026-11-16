@@ -32,7 +32,7 @@ SELECTED_FIELDS=(
 )
 COLOUR_FIELDS=SELECTED_FIELDS[:4]
 PATTERN_CANDIDATE=re.compile(
-    r"\b(spott?ed|striped|streaked|blotch(?:ed|es)?|"
+    r"\b(spott?ed|stripe(?:d|s)?|streaked|blotch(?:ed|es)?|"
     r"bull.?s?.?eye|nectar.?guide|eye.?spot|vein(?:ed|s)?|"
     r"bicolou?red|two.?colou?red|marked|banded)\b",
     re.I
