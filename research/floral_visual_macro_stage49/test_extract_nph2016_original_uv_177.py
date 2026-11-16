@@ -39,10 +39,14 @@ class OriginalUV2016Contracts(unittest.TestCase):
         self.assertEqual(rows[0]["source_mean_latitude_deg"],41.5)
         self.assertEqual(rows[0]["Bombus_source_model_overlap"],"NOT_COMPUTED")
 
-    def test_wrong_0_1_with_proportion_rejected(self):
+    def test_rounded_uvp_threshold_disagreement_reported_not_silently_reclassified(self):
         b=synthetic_page(17).replace("0.45\n0\nY","0.45\n1\nY")
-        with self.assertRaisesRegex(ValueError,"NO_GO_SOURCE_UV_0_1_PATTERN_CONTRADICTS"):
-            parse_source_rows({17:b})
+        rows=parse_source_rows({17:b})
+        self.assertEqual(rows[0]["source_measured_UV_pattern_present"],0)
+        self.assertEqual(
+            rows[0]["UVP_rounded_threshold_vs_author_discrete_code"],
+            "CHECK_SOURCE_ROUNDED_THRESHOLD"
+        )
 
     def test_wrong_species_source_header_not_interpreted_as_taxon(self):
         a=parse_source_rows({17:synthetic_page(17)})
