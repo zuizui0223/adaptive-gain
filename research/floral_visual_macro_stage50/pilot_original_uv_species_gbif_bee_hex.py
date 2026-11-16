@@ -154,7 +154,7 @@ def fixed_page_offsets(count,limit=PAGE_LIMIT):
         return [0] if available else []
     # select original first and distant index-window page; no false full-range
     # assertion when total>100,000 GBIF search max.
-    nextoffset=available-limit
+    nextoffset=(limit if available<=2*limit else available-limit)
     return sorted({0,nextoffset})
 
 
@@ -333,7 +333,7 @@ def summary(rows):
       "n_pilot_species_with_any_source_model_eligible_records":sum(
          r["n_eligible_model_source_occurrence_records"]>0 for r in rows),
       "n_pilot_species_with_at_least_3_covered_cells_and_15_records":len(viable),
-      "n_species_1990_2026_GBIF_zero_result":sum(
+      "n_species_2000_2026_GBIF_zero_result":sum(
          r["original_gbif_filtered_index_count"]==0 for r in rows),
       "n_records_retrieved_total":sum(r["source_records_retrieved_unique"] for r in rows),
       "n_model_eligible_plant_records_after_quality":sum(
