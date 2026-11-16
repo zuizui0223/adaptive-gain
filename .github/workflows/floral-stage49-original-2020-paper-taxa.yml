@@ -51,6 +51,42 @@ jobs:
                                   'n_unique_literal_published_binomials',
                                   'source_herbarium_samples_sum')})
           PY
+      - name: Keep original 2021 UV category, 2020 temporal UVP, and unverified 177-study distinct
+        working-directory: research/floral_visual_macro_stage49
+        run: python -m unittest -v test_assemble_literature_visual_species
+      - name: Build genuine 80 UV-category plus 2020 herbarium original-paper species evidence rows
+        working-directory: research/floral_visual_macro_stage49
+        run: python -u assemble_literature_visual_species.py
+      - name: Verify original source cohorts without invented guide-positive taxa
+        working-directory: research/floral_visual_macro_stage49
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json
+          p=Path('stage49_literature_species_registry')
+          s=json.loads((p/'source_distinct_visual_modalities_receipt.json').read_text())
+          assert s['status']=='TWO_AUTHENTIC_LITERATURE_VISUAL_SPECIES_FRAMES_WITH_DISTINCT_PHENOTYPE_MODALITIES'
+          assert s['UV_photo_2021_original_80_rows']==80
+          assert s['original_2020_continent_taxon_rows']==45
+          assert s['original_2020_unique_literal_binomial_names']==41
+          assert s['article_reported_2020_number_of_species']==42
+          assert s['original_2020_herbarium_specimens']==1238
+          assert s['original_2021_UV_patterned_taxon_rows']==26
+          assert s['original_2020_spatial_UV_pattern_labels_NOT_available']
+          assert s['no_measured_Bombus_overlap_or_pollination_fitness']
+          with (p/'combined_original_papers_visual_trait_species_registry.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==80+41
+          assert all(r['source_pollination_status'] for r in rows)
+          assert all(r['model_Bombus_geographic_link_status']=='NOT_YET_MATCHED_STUDY_SPECIES_TO_HEX' for r in rows)
+          cb=[r for r in rows if r['original_study_doi']=='10.1016/j.cub.2020.08.077']
+          assert len(cb)==41
+          assert all(r['UV_spatial_guide_pattern_source_status']=='NOT_CLASSIFIED_BY_TABLE_S1' for r in cb)
+          print('STAGE49_PUBLISHED_LITERATURE_SPECIES_REGISTRY_ACCEPTED',
+                {'study_taxon_rows':len(rows),
+                 'overlap_spelling_only':s['literal_cross_paper_binomial_string_overlap_n'],
+                 'unique_binomial_candidates':s['combined_distinct_literal_source_binomial_candidates_n']})
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
