@@ -1,0 +1,73 @@
+name: floral-stage43-original-archive-uncertainty-and-B-deletion
+on:
+  push:
+    branches: [analysis/floral-selection-deletion-stage43-20261116]
+    paths:
+      - 'research/floral_selection_stage43/**'
+      - '.github/workflows/floral-stage43-source-deletion.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original-source-selection-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing source kinematics signal-processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Source-free exact finite-data minimax and denominator contract tests
+        working-directory: research/floral_selection_stage43
+        run: python -m unittest -v test_selection_robustness
+      - name: Source-locked author ZIP and original MATLAB with all 157 archived trajectories
+        working-directory: research/floral_selection_stage43
+        run: python -u selection_robustness.py
+      - name: Guard paper-denominator mismatches and nonfitness inference
+        working-directory: research/floral_selection_stage43
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          p=Path('stage43_aggregate_receipts/paper_denominators_and_whole_bee_deletion.json')
+          r=json.loads(p.read_text())
+          assert r['status']=='ORIGINAL_SOURCE_TRIAL_DENOMINATOR_AND_WHOLE_B_DELETION_AUDIT'
+          assert r['source_157_xyz_files']==157
+          assert r['source_W0_W1_file_counts']=={'W0':56,'W1':101}
+          assert r['original_author_filename_semantics_SHA_locked']=='AUTHOR_FILENAME_INDEX_SEMANTICS_SHA_VERIFIED'
+          assert r['original_author_stats_files_named_but_not_in_source_zip']
+          assert r['original_published_112_trial_list_not_authenticated']
+          assert r['no_source_raw_xyz_or_original_author_matlab_redistributed']
+          assert r['no_plant_fitness_or_odor_factorial_or_failed_landings_measured']
+          ev=r['publication_denominator_evidence']
+          assert ev['publication_Fig1_main_prose_P_W']['conditional_minimum_unavailable_paper_paths']==4
+          assert ev['publication_Fig1_caption_first_clause_P_W']['conditional_minimum_unavailable_paper_paths']==2
+          assert ev['sample_n_if_ordinary_one_sample_or_paired_t']=={'W0':55,'W1':55}
+          assert ev['paper_fig1_first_clause_and_main_prose_differ']
+          effects=r['exact_finite_B_label_selection_sensitivities']
+          assert len(effects)==3*2*9*2
+          for q in effects:
+              b=q['selection_robustness']
+              assert b['status']=='EXACT_FINITE_OBSERVED_B_LABEL_DELETION_BOUND'
+              assert b['n_unique_matched_B_codes']>0
+              assert math.isfinite(b['original_equal_B_mean_m_s'])
+              assert b['not_authentication_of_original_112_selection']
+              assert b['not_a_colony_or_animal_population_confidence_interval']
+          target=next(q for q in effects if q['cutoff_hz']==100
+              and q['method']=='three_tag_mean' and q['subset']=='all'
+              and q['endpoint']=='near_flower_speed')['selection_robustness']
+          assert target['n_unique_matched_B_codes']==23
+          assert target['positive_B']==22
+          assert abs(target['original_equal_B_mean_m_s']-.12142936338922392)<1e-5
+          print('SOURCE_LOCKED_ADVERSARIAL_SELECTION_RESULT',json.dumps(target,sort_keys=True))
+          print('PUBLISHED_CONDITION_SOURCE_MAPPING_CANNOT_BE_RECOVERED_AS_ONE_IDENTIFIED_SET')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage43-author-original-whole-B-deletion-and-denominator-sensitivity
+          path: research/floral_selection_stage43/stage43_aggregate_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
