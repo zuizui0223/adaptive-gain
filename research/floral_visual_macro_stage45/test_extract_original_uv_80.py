@@ -58,9 +58,11 @@ class OriginalUVTableContracts(unittest.TestCase):
                 })
         obj=evaluate(rows)
         self.assertEqual(obj["n_original_taxon_rows"],80)
-        self.assertEqual(obj["n_patterned_author_categories"],27)
-        self.assertEqual(obj["n_uniform_A_R_author_categories"],53)
+        self.assertEqual(obj["n_patterned_author_categories"],26)
+        self.assertEqual(obj["n_uniform_A_R_author_categories"],54)
         self.assertTrue(obj["source_pollination_labels_NOT_direct_Bombus_observations"])
+        self.assertTrue(obj["source_TableS2_vs_article_prose_R_CM_discrepancy"])
+        self.assertTrue(obj["no_unverified_species_reassignment_to_force_paper_counts"])
         with self.assertRaisesRegex(ValueError,"NO_GO_NOT_SOURCE_VERIFIED"):
             evaluate(rows[:-1])
 
