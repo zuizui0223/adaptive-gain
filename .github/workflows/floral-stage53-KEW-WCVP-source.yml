@@ -1,0 +1,29 @@
+name: floral-stage53-official-KEW-WCVP-original-nativity-source-probe
+on:
+  push:
+    branches: [analysis/floral-native-range-checklist-stage53-20261116]
+    paths:
+      - research/floral_visual_macro_stage53/probe_kew_original_wcvp.py
+      - .github/workflows/floral-stage53-KEW-WCVP-source.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-KEW-native-vs-introduced-original-source-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch official 2026 Kew WCVP original archive and verify species and distribution source schemas
+        working-directory: research/floral_visual_macro_stage53
+        run: python -u probe_kew_original_wcvp.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage53-original-KEW-WCVP-nativity-distribution-source-schema
+          path: research/floral_visual_macro_stage53/stage53_kew_source_probe/*.json
+          if-no-files-found: error
+          retention-days: 90
