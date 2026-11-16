@@ -35,9 +35,12 @@ jobs:
           base=Path('stage45_verified_uv_species')
           q=json.loads((base/'uv_80_species_source_receipt.json').read_text())
           assert q['status']=='ORIGINAL_TUNES_2021_80_SPECIES_UV_CATEGORY_REGISTRY'
-          assert q['source_uv_categories']=={'A':47,'R':6,'BE':7,'CM':5,'CR':15}
-          assert q['n_patterned_author_categories']==27
-          assert q['n_uniform_A_R_author_categories']==53
+          assert q['source_uv_categories']=={'A':47,'R':7,'BE':7,'CM':4,'CR':15}
+          assert q['article_prose_reported_uv_categories']=={'A':47,'R':6,'BE':7,'CM':5,'CR':15}
+          assert q['source_TableS2_vs_article_prose_R_CM_discrepancy']
+          assert q['no_unverified_species_reassignment_to_force_paper_counts']
+          assert q['n_patterned_author_categories']==26
+          assert q['n_uniform_A_R_author_categories']==54
           assert q['n_original_taxon_rows']==80
           assert q['original_source_pdf_sha256']=='d11b41a36d85d1b70c8d3d47c04f3e03e7d8f5f58ebaaa331a737e56ed4c2820'
           assert q['source_pollination_labels_NOT_direct_Bombus_observations']
