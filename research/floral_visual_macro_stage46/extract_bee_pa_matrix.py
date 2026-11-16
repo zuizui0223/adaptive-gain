@@ -75,7 +75,7 @@ def source_matrix_schema(data):
             })
         if row[0].casefold().startswith("bombus "):
             label_Bombus_rows+=1
-        if rows>150000:
+        if rows>2000000:
             raise ValueError("NO_GO_TOO_MANY_MATRIX_ROWS")
     head_Bombus=[h for h in head if (
         h.casefold().startswith("bombus ") or h.casefold().startswith("bombus_")
