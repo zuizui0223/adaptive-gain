@@ -69,11 +69,34 @@ class BotanicalTraitRegistry(unittest.TestCase):
             summarize_and_extract(x,expected_rows=1)
 
     def test_original_source_bytes_gate_blocks_truncated(self):
-        with patch('build_visual_trait_registry._ckan',return_value={
-            'id':'2552d157-9519-476c-995d-906e2433cc19',
-            'size':100
-        }):
-            with self.assertRaisesRegex(ValueError,'NO_GO_RESOURCE_UNEXPECTED_SIZE'):
+        import io
+        with patch('build_visual_trait_registry.SOURCE_FILE_SIZE',100):
+            with patch('build_visual_trait_registry.urllib.request.urlopen',
+                       return_value=io.BytesIO(b'abc')):
+                with self.assertRaisesRegex(ValueError,'NO_GO_NHM_OFFICIAL_GIT_FILE_SIZE'):
+                    _get_source_bytes()
+
+    def test_immutable_official_git_blob_identity(self):
+        import io
+        from build_visual_trait_registry import _git_blob_hash
+        data=b'abc'
+        with patch('build_visual_trait_registry.SOURCE_FILE_SIZE',len(data)), \
+             patch('build_visual_trait_registry.SOURCE_GIT_BLOB_SHA1',_git_blob_hash(data)), \
+             patch('build_visual_trait_registry.urllib.request.urlopen',
+                   return_value=io.BytesIO(data)):
+            observed,prov=_get_source_bytes()
+        self.assertEqual(observed,data)
+        self.assertEqual(prov['source_endpoint'],
+                         'OFFICIAL_NHM_UPSTREAM_GITHUB_PINNED_GIT_BLOB')
+        self.assertFalse(prov['original_csv_bytes_not_authenticated'])
+
+    def test_official_git_blob_digest_mismatch_is_no_go(self):
+        import io
+        with patch('build_visual_trait_registry.SOURCE_FILE_SIZE',3), \
+             patch('build_visual_trait_registry.SOURCE_GIT_BLOB_SHA1','a'*40), \
+             patch('build_visual_trait_registry.urllib.request.urlopen',
+                   return_value=io.BytesIO(b'abc')):
+            with self.assertRaisesRegex(ValueError,'NO_GO_NHM_ORIGINAL_SOURCE_GIT_BLOB_MISMATCH'):
                 _get_source_bytes()
 
 if __name__=='__main__':
