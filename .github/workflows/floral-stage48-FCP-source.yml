@@ -1,0 +1,30 @@
+name: floral-stage48-original-FCP-photo-species-source-schema
+on:
+  push:
+    branches: [analysis/floral-visible-guide-photo-candidate-stage48-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage48/**'
+      - '.github/workflows/floral-stage48-FCP-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-4475-species-photo-frame:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only source schema and Git blob QA
+        working-directory: research/floral_visual_macro_stage48
+        run: python -m unittest -v test_probe_fcp_photo_species_frame
+      - name: Fetch original pinned FCP species ledger and derive field receipt
+        working-directory: research/floral_visual_macro_stage48
+        run: python -u probe_fcp_photo_species_frame.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage48-source-authenticated-4475-species-photo-frame-schema
+          path: research/floral_visual_macro_stage48/stage48_source_probe/*.json
+          if-no-files-found: error
