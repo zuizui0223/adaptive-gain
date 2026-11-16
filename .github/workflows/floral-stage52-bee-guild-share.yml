@@ -1,0 +1,70 @@
+name: floral-stage52-2016-original-UV-vs-Bombus-relative-bee-guild
+on:
+  push:
+    branches: [analysis/floral-temperate-uv-range-validation-stage52-20261116]
+    paths:
+      - research/floral_visual_macro_stage52/audit_source_UV_Bombus_relative_guild.py
+      - research/floral_visual_macro_stage52/test_audit_source_UV_Bombus_relative_guild.py
+      - .github/workflows/floral-stage52-bee-guild-share.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  published-UV-source-2016-modelled-bee-guild-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Invented-only source no false guild trait inferential tests
+        working-directory: research/floral_visual_macro_stage52
+        run: python -m unittest -v test_audit_source_UV_Bombus_relative_guild
+      - name: Retrieve already-authenticated original 60 UV species north/south source HEX modelled bee results
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872982408
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-original-2016-UV-60-species-N-S-latitude-Bombus-modelled-bee-HEX
+          path: research/floral_visual_macro_stage52/source_geographic_pilot
+      - name: Separate modelled Bombus source species richness from composition, lat and source genus
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python -u audit_source_UV_Bombus_relative_guild.py \
+            --source-hemisphere-pilot source_geographic_pilot/original_2016_60_UV_species_N_S_latitude_beeHEX_exposure.csv
+      - name: No invented significant coefficient or plant fitness
+        working-directory: research/floral_visual_macro_stage52
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          d=Path('stage52_guild_composition')
+          r=json.loads((d/'guild_composition_source_2016_UV_robustness.json').read_text())
+          assert r['status']=='SOURCE_2016_UV_ORIGINAL_N_LAT_GUILD_COMPOSITION_DESCRIPTIVE'
+          assert r['n_prespecified_source_species']==60
+          assert r['original_2016_article_states_source_latitudes_21_07_to_76_49_N']
+          assert r['source_GBIF_index_page_not_native_range_or_source_UV_measurement_location']
+          assert r['source_Bombus_fraction_proxy_is_ratio_of_modelled_species_name_richness']
+          assert r['no_species_exchangeable_null_or_phylogeny_climate_adjustment']
+          assert r['no_floral_signal_use_by_bee_or_reproductive_fitness_measurement']
+          with (d/'original_60_UV_taxa_Bombus_share_source_model.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==60
+          assert len({r['gbif_accepted_species_key'] for r in rows})==60
+          assert all(r['source_UV_phenotype_not_measured_at_GBIF_points']=='True' for r in rows)
+          print('STAGE52_BEE_RELATIVE_COMPOSITION_ORIGINAL_2016',
+                {'n_source_viable':r['n_viable_source_N'],
+                 'n_strict':r['n_viable_strict_source_N'],
+                 'source_strata':r['stratum_species_equal_descriptive_contrasts'],
+                 'loo':r['single_source_species_deletion_robustness']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage52-source-2016-UV-60-bee-modelled-Bombus-share-robustness
+          path: research/floral_visual_macro_stage52/stage52_guild_composition/*
+          if-no-files-found: error
+          retention-days: 90
