@@ -10,7 +10,7 @@ def plant(key,pattern):
     return {"key":key,"UV_binary":pattern}
 
 def rec(key,lon=-48.5036,lat=-22.9125,uncertainty=1000):
-    return {"key":key,"speciesKey":42,"country":"BR",
+    return {"key":key,"speciesKey":42,"country":"Brazil","countryCode":"BR",
             "decimalLongitude":lon,"decimalLatitude":lat,
             "coordinateUncertaintyInMeters":uncertainty}
 
