@@ -1,0 +1,72 @@
+name: floral-stage54-source-UV-positive-vs-measured-uniform-native-overlap-congeners
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/match_uv_measured_negative_congeners_native.py
+      - research/floral_visual_macro_stage54/test_match_uv_measured_negative_congeners_native.py
+      - .github/workflows/floral-stage54-real-UV-congener-pairs.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  exact-original-2016-UV-congener-native-area-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Synthetic positive, genuinely measured negative and unknown-native tests
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_match_uv_measured_negative_congeners_native
+      - name: Read authentic 2016 UV 159 accepted species with original latitude/UVB
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage54/source_2016_climate
+      - name: Read original official Kew 153 botanical native geography species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43883087572
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage53-official-Kew-WCVP-159-UV-native-botanical-country-evidence
+          path: research/floral_visual_macro_stage54/source_WCVP_native
+      - name: Pair measured UV contrast and measured uniform flowers in same original genus and native WGSRPD areas
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python -u match_uv_measured_negative_congeners_native.py \
+            --source-2016-159 source_2016_climate/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv \
+            --source-WCVP-159 source_WCVP_native/original_159_UV_plants_KEW_WCVP_native_TDWG_L3.csv
+      - name: Enforce original measured negatives, independence and missing evidence guards
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage54_UV_measured_negative_congener_candidates/source_verified_UV_negative_congeners_coverage.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='ORIGINAL_2016_UV_PATTERN_NEGATIVE_CONGENERIC_CANDIDATE_PAIRS_WITH_KEW_NATIVE_AREAS'
+          assert d['source_original_2016_accepted_species']==159
+          assert d['source_WCVP_species_with_any_native_L3']==153
+          assert d['source_directly_measured_UV_state_counts']=={'0':81,'1':78}
+          assert d['only_original_study_UV_positive_and_measured_UV_uniform_negative_are_compared']
+          assert d['not_actual_sister_species_or_confirmed_native_cooccurrence']
+          assert d['no_pollinator_richness_model_or_wind_interaction_estimated']
+          print('STAGE54_REAL_MEASURED_UV_NEGATIVE_RELATIVE_CANDIDATE_PAIR_COUNTS',
+                {k:v['n_nonoverlapping_opposite_UV_source_measured_congener_pairs']
+                 for k,v in d['tiers'].items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-authentic-UV-positive-vs-uniform-congener-native-area-pairs
+          path: research/floral_visual_macro_stage54/stage54_UV_measured_negative_congener_candidates/*
+          if-no-files-found: error
+          retention-days: 90
