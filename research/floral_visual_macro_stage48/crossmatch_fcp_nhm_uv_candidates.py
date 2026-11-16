@@ -53,8 +53,8 @@ def _int(value,field):
     return n
 
 
-def compose_review_registry(fcp_rows,nhm_rows,uv_rows):
-    if len(fcp_rows)!=SOURCE_FCP_EXPECTED or len(nhm_rows)!=SOURCE_NHM_EXPECTED or len(uv_rows)!=SOURCE_UV_EXPECTED:
+def compose_review_registry(fcp_rows,nhm_rows,uv_rows,expected_source_counts=(4475,59369,80)):
+    if (len(fcp_rows),len(nhm_rows),len(uv_rows))!=tuple(expected_source_counts):
         raise ValueError("NO_GO_INCORRECT_ORIGINAL_SOURCE_DENOMINATOR")
     missing=({"species","inat_taxon_id","n_source_photo","n_classified_photo"}-set(fcp_rows[0]))
     if missing:
@@ -122,7 +122,7 @@ def compose_review_registry(fcp_rows,nhm_rows,uv_rows):
           "photo_original_repository":"zuizui0223/fcp",
           "flower_guide_survey_inclusion":"CANDIDATE_ONLY_NOT_CONFIRMED",
         })
-    if len(out)!=SOURCE_FCP_EXPECTED:
+    if len(out)!=expected_source_counts[0]:
         raise ValueError("NO_GO_SPECIES_FRAME_DROPPED_ROWS")
     priorities=Counter(r["review_priority"] for r in out)
     joins=Counter(r["nhm_exact_name_join_status"] for r in out)
