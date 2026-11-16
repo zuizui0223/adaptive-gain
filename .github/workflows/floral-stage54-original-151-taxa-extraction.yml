@@ -1,0 +1,57 @@
+name: floral-stage54-original-2025-151-colour-change-review-species-extraction
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/extract_colorchange_151_review_taxa.py
+      - research/floral_visual_macro_stage54/test_extract_colorchange_151_review_taxa.py
+      - .github/workflows/floral-stage54-original-151-taxa-extraction.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-2025-review-colour-change-taxon-diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original supplemental source PDF parser
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Source-free taxon column orientation and false trait control
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_extract_colorchange_151_review_taxa
+      - name: Extract original 2025 review column-by-column taxon/colour change candidates
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u extract_colorchange_151_review_taxa.py
+      - name: Require sourced taxonomy and never infer nonchanger negatives
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage54_151_original_colour_change_taxon_candidates')
+          r=json.loads((p/'2025_original_review_taxon_extraction_receipt.json').read_text())
+          assert r['status']=='SOURCE_2025_FLORAL_COLOUR_CHANGE_REVIEW_TAXON_COLUMN_EXTRACTION'
+          assert r['original_supplement_pdf_sha256']=='0c2ba82cd6eb554942fc3ac93014f7ecc9834686f695cf628f2873a2be213039'
+          assert r['no_species_negative_controls_in_review_source']
+          assert r['review_claims_151_species_not_assumed_equal_to_extracted_taxa']
+          with (p/'2025_original_review_tableS1_colour_change_taxon_candidates.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==r['n_review_original_taxon_column_groups']
+          assert all(x['visual_signal_negative_status']=='NOT_SAMPLED_IN_POSITIVE_ONLY_REVIEW'
+                     for x in rows)
+          print('STAGE54_151_REVIEW_ORIGINAL_MEASURED_SOURCE_LIST_DIAGNOSTIC',
+                {'taxon_columns':len(rows),
+                 'binomial_candidates':r['n_review_binomial_candidates'],
+                 'source_colour_descriptions':r['n_source_group_colour_description_extracted']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-2025-colour-change-supplement-taxon-candidates
+          path: research/floral_visual_macro_stage54/stage54_151_original_colour_change_taxon_candidates/*
+          if-no-files-found: error
+          retention-days: 90
