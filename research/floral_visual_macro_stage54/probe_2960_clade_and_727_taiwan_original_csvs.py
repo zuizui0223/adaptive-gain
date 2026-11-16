@@ -77,7 +77,7 @@ def _file_source(file):
 
 
 def _summarize_rows(raw):
-    reader=csv.DictReader(io.StringIO(raw.decode("utf8-sig"),newline=""))
+    reader=csv.DictReader(io.StringIO(raw.decode("utf-8-sig"),newline=""))
     names=reader.fieldnames or []
     if not names or len(set(names))!=len(names):
         raise ValueError("NO_GO_ORIGINAL_DRYAD_CSV_FIELD_SCHEMA")
