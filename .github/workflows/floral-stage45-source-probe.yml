@@ -1,0 +1,32 @@
+name: floral-stage45-open-source-schema-probe
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-macro-stage45-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage45/**'
+      - '.github/workflows/floral-stage45-source-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-floral-trait-and-bombus-source-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only source schema and strict no-go tests
+        working-directory: research/floral_visual_macro_stage45
+        run: python -m unittest -v test_probe_public_sources
+      - name: Query real NHM CKAN 2026 traits schema and GBIF Bombus genus registry
+        working-directory: research/floral_visual_macro_stage45
+        run: python -u probe_public_sources.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage45-original-open-source-schema-receipt
+          path: research/floral_visual_macro_stage45/stage45_source_probe/*.json
+          if-no-files-found: error
+          retention-days: 90
