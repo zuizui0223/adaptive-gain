@@ -20,7 +20,10 @@ from probe_uv_supplement import URL,MAX_BYTES
 
 PINNED_SOURCE_SHA256="d11b41a36d85d1b70c8d3d47c04f3e03e7d8f5f58ebaaa331a737e56ed4c2820"
 CATEGORIES={"A","R","BE","CM","CR"}
-EXPECTED_COUNTS={"A":47,"R":6,"BE":7,"CM":5,"CR":15}
+# Values observed in original PDF Table S2, not the discrepant article prose.
+# Manuscript reports R=6 and CM=5; source table contains R=7 and CM=4.
+EXPECTED_COUNTS={"A":47,"R":7,"BE":7,"CM":4,"CR":15}
+ARTICLE_PROSE_COUNTS={"A":47,"R":6,"BE":7,"CM":5,"CR":15}
 SOURCE_DOI="10.3389/fpls.2021.618028"
 
 
@@ -84,6 +87,9 @@ def evaluate(records):
         "status":"ORIGINAL_TUNES_2021_80_SPECIES_UV_CATEGORY_REGISTRY",
         "source_doi":SOURCE_DOI,
         "source_uv_categories":dict(sorted(counts.items())),
+        "article_prose_reported_uv_categories":dict(sorted(ARTICLE_PROSE_COUNTS.items())),
+        "source_TableS2_vs_article_prose_R_CM_discrepancy":dict(counts)!=ARTICLE_PROSE_COUNTS,
+        "no_unverified_species_reassignment_to_force_paper_counts":True,
         "n_original_taxon_rows":n,
         "n_patterned_author_categories":sum(r["uv_pattern_present"] for r in records),
         "n_uniform_A_R_author_categories":sum(1-r["uv_pattern_present"] for r in records),
@@ -109,7 +115,6 @@ def main():
         raise ValueError("NO_GO_UNAUTHENTICATED_AUTHOR_SUPPLEMENT_PDF")
     with fitz.open(stream=original,filetype="pdf") as pdf:
         records=parse_table_pages(pdf)
-    print('UV_PDF_R_CM_SOURCE_ROWS',json.dumps([(r['taxon_as_published'],r['uv_category']) for r in records if r['uv_category'] in ('R','CM')],ensure_ascii=False))
     result=evaluate(records)
     result["original_source_pdf_sha256"]=PINNED_SOURCE_SHA256
     output=Path("stage45_verified_uv_species")
