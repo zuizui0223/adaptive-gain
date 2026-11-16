@@ -1,0 +1,32 @@
+name: floral-stage54-original-2960-flower-colour-clades-and-727-Taiwan-source-audit
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/probe_2960_clade_and_727_taiwan_original_csvs.py
+      - research/floral_visual_macro_stage54/test_probe_2960_clade_and_727_taiwan_original_csvs.py
+      - .github/workflows/floral-stage54-broad-colour-sources.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-Dryad-broad-plant-visible-colour-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free original data and no inferred UV/absence tests
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_probe_2960_clade_and_727_taiwan_original_csvs
+      - name: Audit actual full original flower-colour/clade and Taiwan species Dryad source
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u probe_2960_clade_and_727_taiwan_original_csvs.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-2960-clades-and-727-Taiwan-flower-colour-source-manifest
+          path: research/floral_visual_macro_stage54/stage54_broad_original_colour_sources/*.json
+          if-no-files-found: error

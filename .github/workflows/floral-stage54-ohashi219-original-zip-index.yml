@@ -1,0 +1,47 @@
+name: floral-stage54-original-Ohashi-219-age-resolved-spectra-species-zip-index
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/extract_ohashi219_original_zip_taxa.py
+      - .github/workflows/floral-stage54-ohashi219-original-zip-index.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-author-Ohashi-219-spectral-taxa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch only Zenodo original 285 MB ZIP central-directory byte ranges
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u extract_ohashi219_original_zip_taxa.py
+      - name: Prevent assuming that all 219 taxa have positive colour change
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('stage54_219_original_spectral_species/original_Zenodo_219_spectral_species_directory_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_OHASHI_2015_219_SOURCE_SPECTRAL_TAXON_ZIP_DIRECTORY'
+          assert r['n_original_spectral_species_directory_names']==219
+          assert len(set(r['species_source_directory_names']))==219
+          assert r['source_taxa_are_original_spectral_study_not_verified_colour_changers']
+          assert r['no_UV_guide_or_age_change_label_extracted_from_names_only']
+          assert r['whole_285MB_ZIP_checksum_not_independently_verified_by_partial_ranges']
+          print('STAGE54_AUTHENTIC_OHASHI_219_SPECTRAL_SOURCE_TAXON_NAMES',
+                {'species':len(r['species_source_directory_names']),
+                 'files':r['n_source_archive_members'],
+                 'read_index_bytes':r['original_index_byte_ranges_verified']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-Ohashi219-Zenodo-original-stage-specific-spectra-source-taxa
+          path: research/floral_visual_macro_stage54/stage54_219_original_spectral_species/*.json
+          if-no-files-found: error
+          retention-days: 90

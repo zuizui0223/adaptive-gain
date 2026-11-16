@@ -1,0 +1,29 @@
+name: floral-stage54-source-151-original-species-font-column-geometry
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/probe_151_original_taxon_fonts.py
+      - .github/workflows/floral-stage54-151-fonts.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-151-table-species-font-and-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact source PDF text geometry reader
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Probe original 151 PDF species font and column
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u probe_151_original_taxon_fonts.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage54-original-151-colour-change-source-species-font-geometry
+          path: research/floral_visual_macro_stage54/stage54_151_taxon_fonts/*.json
+          if-no-files-found: error

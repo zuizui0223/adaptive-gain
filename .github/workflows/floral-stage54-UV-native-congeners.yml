@@ -1,0 +1,75 @@
+name: floral-stage54-original-UV-positive-versus-measured-uniform-congener-comparators
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/match_uv_measured_negative_congeners_native.py
+      - research/floral_visual_macro_stage54/test_match_uv_measured_negative_congeners_native.py
+      - .github/workflows/floral-stage54-UV-native-congeners.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-UV-measured-positive-versus-uniform-native-overlap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test opposite real UV-phenotype semantics and missing nativity
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_match_uv_measured_negative_congeners_native
+      - name: Read source authentic 159 accepted original UV and climate species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage54/source_2016
+      - name: Read official Kew WCVP 159 native L3 original data
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43883087572
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage53-official-Kew-WCVP-159-UV-native-botanical-country-evidence
+          path: research/floral_visual_macro_stage54/source_wcvp
+      - name: Find genuine opposing measured-UV states in same genus with shared original native botanical areas
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python -u match_uv_measured_negative_congeners_native.py \
+            --source-2016-159 source_2016/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv \
+            --source-WCVP-159 source_wcvp/original_159_UV_plants_KEW_WCVP_native_TDWG_L3.csv
+      - name: Enforce genuine source UV state and no "no visual signal" claim
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path('stage54_UV_measured_negative_congener_candidates')
+          x=json.loads((p/'source_verified_UV_negative_congeners_coverage.json').read_text())
+          assert x['status']=='ORIGINAL_2016_UV_PATTERN_NEGATIVE_CONGENERIC_CANDIDATE_PAIRS_WITH_KEW_NATIVE_AREAS'
+          assert x['source_original_2016_accepted_species']==159
+          assert x['source_WCVP_species_with_any_native_L3']==153
+          assert x['source_directly_measured_UV_state_counts']=={'0':81,'1':78}
+          assert x['not_actual_sister_species_or_confirmed_native_cooccurrence']
+          assert x['only_original_study_UV_positive_and_measured_UV_uniform_negative_are_compared']
+          assert x['no_pollinator_richness_model_or_wind_interaction_estimated']
+          for name,entry in x['tiers'].items():
+              assert entry['n_nonoverlapping_opposite_UV_source_measured_congener_pairs']<=entry['n_eligible_candidate_congener_pairs']
+          with (p/'2016_UV_pattern_vs_UV_uniform_native_overlapping_congener_pairs.csv').open() as h:
+              rows=list(csv.DictReader(h))
+          assert len(rows)==sum(t['n_nonoverlapping_opposite_UV_source_measured_congener_pairs'] for t in x['tiers'].values())
+          print('STAGE54_ORIGINAL_MEASURED_UV_NEGATIVE_CONGENERS',json.dumps(x['tiers'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-UV-positive-vs-measured-uniform-congeners-KEW-native-L3
+          path: research/floral_visual_macro_stage54/stage54_UV_measured_negative_congener_candidates/*
+          if-no-files-found: error
+          retention-days: 90

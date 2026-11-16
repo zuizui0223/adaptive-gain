@@ -1,0 +1,74 @@
+name: floral-stage54-original-2025-review-colour-change-GBIF-UV262
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/match_2025_review_colorchange_taxa_gbif_uv.py
+      - research/floral_visual_macro_stage54/test_match_2025_review_colorchange_taxa_gbif_uv.py
+      - .github/workflows/floral-stage54-2025-colour-review-Gbif.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-original-2025-positive-review-taxonomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only source format and absence-comparator QA
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_match_2025_review_colorchange_taxa_gbif_uv
+      - name: Get source original 2025 136 PDF-column extraction
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43901184587
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-original-2025-colour-change-supplement-taxon-candidates
+          path: research/floral_visual_macro_stage54/review_source
+      - name: Get accepted 262 original UV study species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: research/floral_visual_macro_stage54/UV262_source
+      - name: Strict accepted GBIF-key reconciliation and source overlap
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python -u match_2025_review_colorchange_taxa_gbif_uv.py \
+            --review-source review_source/2025_original_review_tableS1_colour_change_taxon_candidates.csv \
+            --UV262-source UV262_source/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv
+      - name: Review positive-only study is never reclassified into validated age-reward signals
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage54_151_review_GBIF_UV262_crosswalk')
+          x=json.loads((p/'source_2025_review_GBIF_species_UV262_receipt.json').read_text())
+          assert x['status']=='SOURCE_2025_REVIEW_136_PARTIAL_COLOUR_CHANGE_TAXA_GBIF_AND_UV262'
+          assert x['n_recovered_original_pdf_taxon_column_groups']==136
+          assert x['n_verified_source_binomial_candidates']==128
+          assert x['n_original_review_high_confidence_GBIF_mapped_columns']>=80
+          assert x['source_2025_151_claim_not_falsely_reproduced_by_136_column_extraction']
+          assert x['positive_only_secondary_literature_source_no_measured_negative']
+          with (p/'2025_review_136_taxon_columns_GBIF_species_UV262_overlap.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==136
+          assert all(y['bee_perceptible_colour_change_status']=='NOT_MEASURED_FROM_REVIEW_TEXT'
+                     for y in rows)
+          print('STAGE54_REAL_2025_COLOR_CHANGE_REVIEW_ACCEPTED_GBIF_UV_OVERLAP',json.dumps(x,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-2025-flower-colour-change-review-GBIF-UV262-crosswalk
+          path: research/floral_visual_macro_stage54/stage54_151_review_GBIF_UV262_crosswalk/*
+          if-no-files-found: error
+          retention-days: 90

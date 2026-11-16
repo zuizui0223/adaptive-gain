@@ -1,0 +1,86 @@
+name: floral-stage54-original-multimodal-accepted-GBIF-visual-species-atlas
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/merge_original_multimodal_visual_accepted_species.py
+      - research/floral_visual_macro_stage54/test_merge_original_multimodal_visual_accepted_species.py
+      - .github/workflows/floral-stage54-source-multimodal-species-union.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-deduplicated-floral-visual-accepted-source-species:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock 3-modality accepted-key dedup and no false signal-negative tests
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_merge_original_multimodal_visual_accepted_species
+      - name: Read 262 accepted source-authenticated original UV plus 2020 temporal species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: research/floral_visual_macro_stage54/source_UV262
+      - name: Read source authenticated 219 flower-age spectra accepted-key table
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43902317642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-original-Ohashi219-spectra-taxa-accepted-Gbif-UV262-overlap
+          path: research/floral_visual_macro_stage54/source_Ohashi219
+      - name: Read reviewed 2025 colour changing original table accepted-key sources
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43902815275
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-original-2025-flower-colour-change-review-GBIF-UV262-crosswalk
+          path: research/floral_visual_macro_stage54/source_review2025
+      - name: Deduplicate original study-specific accepted botanical species identities
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python -u merge_original_multimodal_visual_accepted_species.py \
+            --UV262 source_UV262/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv \
+            --Ohashi219 source_Ohashi219/Ohashi219_original_spectral_directory_GBIF_accepted_and_UV262_link.csv \
+            --review2025 source_review2025/2025_review_136_taxon_columns_GBIF_species_UV262_overlap.csv
+      - name: Require actual study source counts, spectral unknowns and review positive-only
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json
+          p=Path('stage54_multimodal_accepted_species')
+          x=json.loads((p/'source_multimodal_accepted_species_count_receipt.json').read_text())
+          assert x['status']=='SOURCE_VERIFIED_GBIF_ACCEPTED_MULTIMODAL_FLORAL_VISUAL_INFORMATION_ATLAS'
+          assert x['original_direct_UV_2016_2021_plus_temporal_only_accepted_species']==262
+          assert x['direct_original_measured_UV_spatial_patterned_species']==101
+          assert x['direct_original_measured_UV_uniform_species']==129
+          assert x['original_Ohashi_2015_spectral_taxon_variety_directories']==219
+          assert x['original_Ohashi_2015_spectral_unique_accepted_species']==207
+          assert x['original_2025_review_source_extracted_taxon_columns_partial']==136
+          assert x['original_2025_review_unique_accepted_species_partial']==124
+          assert x['original_review_positive_only_no_nonchanging_negative_comparators']
+          with (p/'original_UV_Ohashi_age_spectra_2025_review_GBIF_accepted_species.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==x['n_total_unique_accepted_species_all_3_modalities']
+          assert all(r['no_all_modality_signal_absence_inferred']=='True' for r in rows)
+          print('STAGE54_AUTHENTIC_MULTIMODAL_ACCEPTED_SPECIES_ALL_SOURCE_COUNTS',
+                json.dumps(x,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-UV-spectral-2025-review-multimodal-accepted-floral-species
+          path: research/floral_visual_macro_stage54/stage54_multimodal_accepted_species/*
+          if-no-files-found: error
+          retention-days: 90

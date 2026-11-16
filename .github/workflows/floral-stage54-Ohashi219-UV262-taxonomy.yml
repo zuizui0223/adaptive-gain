@@ -1,0 +1,76 @@
+name: floral-stage54-original-Ohashi-219-spectral-UV262-taxonomy-crosswalk
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/match_ohashi219_taxa_to_uv262.py
+      - research/floral_visual_macro_stage54/test_match_ohashi219_taxa_to_uv262.py
+      - .github/workflows/floral-stage54-Ohashi219-UV262-taxonomy.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-Ohashi219-UV262-accepted-species-link:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline source dedup/infraspecific and no-false-age-colour labels
+        working-directory: research/floral_visual_macro_stage54
+        run: python -m unittest -v test_match_ohashi219_taxa_to_uv262
+      - name: Fetch original Zenodo 219 spectra taxon directory source receipt
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43886348528
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-Ohashi219-Zenodo-original-stage-specific-spectra-source-taxa
+          path: research/floral_visual_macro_stage54/source_Ohashi219
+      - name: Fetch authentic UV 262 GBIF accepted taxon IDs from prior studies
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: research/floral_visual_macro_stage54/source_UV262
+      - name: Resolve 219 original spectral taxon directories to strict accepted GBIF species
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python -u match_ohashi219_taxa_to_uv262.py \
+            --ohashi-original-source-index source_Ohashi219/original_Zenodo_219_spectral_species_directory_receipt.json \
+            --UV262-source-accepted source_UV262/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv
+      - name: Source original 219 and 262 no optical change label hallucination
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path('stage54_Ohashi219_UV262_taxon_bridge')
+          r=json.loads((p/'original_Ohashi219_species_taxonomy_UV262_overlap_receipt.json').read_text())
+          assert r['status']=='AUTHENTIC_OHASHI_2015_SOURCE_219_SPECTRAL_TAXA_GBIF_UV262_CROSSWALK'
+          assert r['n_original_spectral_age_sampled_taxon_directories']==219
+          assert r['n_distinct_accepted_GBIF_species_in_original_2015_spectra']>=100
+          assert r['2015_original_Zenodo_zip_only_partial_range_audited']
+          assert r['no_false_visual_information_negative_from_unread_2015_spectra']
+          assert r['no_native_species_distribution_or_bee_effect_estimated']
+          with (p/'Ohashi219_original_spectral_directory_GBIF_accepted_and_UV262_link.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==219
+          assert all(q['2015_bee_perceptible_colour_change']=='NOT_CLASSIFIED_FROM_SOURCE_DIRECTORY'
+                     for q in rows)
+          assert all(q['2015_fly_perceptible_colour_change']=='NOT_CLASSIFIED_FROM_SOURCE_DIRECTORY'
+                     for q in rows)
+          print('STAGE54_ORIGINAL_OHASHI_219_VS_UV262_ACCEPTED_SPECIES',json.dumps(r,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-original-Ohashi219-spectra-taxa-accepted-Gbif-UV262-overlap
+          path: research/floral_visual_macro_stage54/stage54_Ohashi219_UV262_taxon_bridge/*
+          if-no-files-found: error
+          retention-days: 90
