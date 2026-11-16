@@ -124,8 +124,18 @@ def evaluate_taxon(species,page,names,tree,transform):
         if not isinstance(lat,(int,float)) or not isinstance(lon,(int,float)) or not (
             LAT_RANGE[0]<=lat<=LAT_RANGE[1] and LON_RANGE[0]<=lon<=LON_RANGE[1]):
             quality["not_valid_regional_WGS84_point"]+=1;continue
-        if str(r.get("country","")).upper()!=COUNTRY:
-            quality["not_Brazil_record"]+=1;continue
+        # GBIF country is a HUMAN COUNTRY NAME; countryCode is ISO-3166.
+        # Confusing the two previously discarded all 3,052 live records.
+        code=str(r.get("countryCode") or "").strip().upper()
+        countryname=str(r.get("country") or "").strip().upper()
+        if code:
+            if code!=COUNTRY:
+                quality["countryCode_does_not_match_Brazil"]+=1;continue
+            quality["GBIF_ISO_countryCode_BR_verified"]+=1
+        elif countryname in ("BRAZIL","BRASIL","BR"):
+            quality["ISO_countryCode_missing_full_country_name_Brazil"]+=1
+        else:
+            quality["no_verifiable_source_Brazil_country_or_code"]+=1;continue
         if _is_introduction(r.get("establishmentMeans")):
             quality["reported_introduced_or_managed"]+=1;continue
         unc=r.get("coordinateUncertaintyInMeters")
