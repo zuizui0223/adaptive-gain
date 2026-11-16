@@ -1,0 +1,63 @@
+name: floral-stage46-published-bee-phylogeny-Bombus-HEX-filter
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/author_tree_filtered_bombus.py'
+      - 'research/floral_visual_macro_stage46/test_author_tree_filtered_bombus.py'
+      - '.github/workflows/floral-stage46-author-tree-bombus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authenticated-author-tree-and-hex-Bombus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline author model/matrix/hex and no-absence checks
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_author_tree_filtered_bombus
+      - name: Reproduce published intersection and cell threshold on source bee models
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u author_tree_filtered_bombus.py
+      - name: Enforce incomplete global species selection and no UV×Bombus regression
+        working-directory: research/floral_visual_macro_stage46
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage46_paper_filtered_Bombus')
+          r=json.loads((p/'paper_species_filter_source_receipt.json').read_text())
+          assert r['status']=='AUTHENTIC_ORIGINAL_BEE_PHYLOGENY_FILTERED_HEX_BOMBUS_MODEL'
+          assert r['global_hex_rows']==10242
+          s=r['source_filter_result']
+          assert s['raw_model_taxon_strings']==11594
+          assert s['n_shared_phylogeny_original_model_taxa']>0
+          assert s['source_Bombus_species_after_tree_cell_cutoff']>0
+          assert s['source_cells_after_original_pa_cutoff']>0
+          assert r['no_plant_visual_trait_x_Bombus_association_tested']
+          assert r['source_modelled_coverage_is_not_true_bee_absence_or_observed_visitation']
+          with (p/'original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==10242
+          assert sum(x['n_source_tree_and_pa_cutoff_Bombus_taxa']=='' for x in rows)==10242-s['source_cells_after_original_pa_cutoff']
+          print('STAGE46_AUTHOR_PHYLOGENY_FILTERED_BOMBUS_SOURCE_VERIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-author-filtered-global-Bombus-hex-original-geography
+          path: research/floral_visual_macro_stage46/stage46_paper_filtered_Bombus/*.csv
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-author-filtered-Bombus-species-eligibility-receipt
+          path: research/floral_visual_macro_stage46/stage46_paper_filtered_Bombus/*.json
+          if-no-files-found: error
+          retention-days: 90
