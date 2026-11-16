@@ -1,0 +1,71 @@
+name: floral-stage53-official-KEW-WCVP-original-159-UV-species-native-L3
+on:
+  push:
+    branches: [analysis/floral-native-range-checklist-stage53-20261116]
+    paths:
+      - research/floral_visual_macro_stage53/join_kew_wcvp_native_regions_to_uv_species.py
+      - research/floral_visual_macro_stage53/test_join_kew_wcvp_native_regions_to_uv_species.py
+      - .github/workflows/floral-stage53-WCVP-159-native.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audited-original-Kew-159-UV-native-botanical-distributions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic-only exact accepted vs synonym native/introduced/conflict tests
+        working-directory: research/floral_visual_macro_stage53
+        run: python -m unittest -v test_join_kew_wcvp_native_regions_to_uv_species
+      - name: Read original paper source-verified 177 UV taxon units / GBIF accepted 159 species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43862161335
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage49-original-Koski-Ashman2016-177-UV-patterned-taxa-GBIF-keys
+          path: research/floral_visual_macro_stage53/original_source
+      - name: Download official Kew WCVP pinned source and audit 159 species native TDWG Level-3
+        working-directory: research/floral_visual_macro_stage53
+        run: |
+          python -u join_kew_wcvp_native_regions_to_uv_species.py \
+            --source-original-2016-177 original_source/nph2016_original_177_UV_trait_GBIF_accepted_taxon_key.csv
+      - name: Enforce native botanical-area and GBIF taxonomy concept separation
+        working-directory: research/floral_visual_macro_stage53
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage53_wcvp_native_ranges')
+          r=json.loads((p/'original_Kew_WCVP_nativity_159_species_source_receipt.json').read_text())
+          assert r['status']=='OFFICIAL_KEW_WCVP_2016_UV_SPECIES_NATIVE_BOTANICAL_AREAS'
+          assert r['original_WCVP_zip_SHA256_verified']=='d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa'
+          assert r['n_original_2016_GBIF_accepted_UV_species']==159
+          assert r['native_area_is_TDWG_WGSRPD_L3_not_ISO_or_source_specimen_point']
+          assert r['source_species_original_UV_phenotype_measurement_location_unknown']
+          assert r['no_modelled_Bombus_UV_pattern_effect_yet']
+          with (p/'original_159_UV_plants_KEW_WCVP_native_TDWG_L3.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==159
+          assert len({x['gbif_accepted_species_key'] for x in rows})==159
+          assert all(x['original_flower_specimen_native_location_unknown']=='True' for x in rows)
+          print('STAGE53_KEW_WCVP_ORIGINAL_2016_159_NATIVE_BOTANICAL_COVERAGE',
+                {k:r[k] for k in (
+                   'n_WCVP_taxonomic_match_exact_to_single_accepted_concept',
+                   'n_species_with_at_least_one_confirmed_WCVP_native_extant_L3_area',
+                   'n_species_with_at_least_three_WCVP_native_extant_L3_areas',
+                   'n_species_with_conflicting_WCVP_native_introduced_L3_area'
+                )})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage53-official-Kew-WCVP-159-UV-native-botanical-country-evidence
+          path: research/floral_visual_macro_stage53/stage53_wcvp_native_ranges/*
+          if-no-files-found: error
+          retention-days: 90
