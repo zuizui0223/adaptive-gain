@@ -1,0 +1,69 @@
+name: floral-stage42-source-trial-selection-and-stratification
+on:
+  push:
+    branches: [analysis/floral-original-selection-stage42-20261116]
+    paths:
+      - 'research/floral_original_selection_stage42/**'
+      - '.github/workflows/floral-stage42-source-selection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-archive-design-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original 3D processing dependencies
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'scipy==1.15.3'
+      - name: Validate artificial-design invariants (no original bee rows)
+        working-directory: research/floral_original_selection_stage42
+        run: python -m unittest -v test_author_archive_condition_audit
+      - name: Audit authentic Zenodo archive, original author MATLAB, and all S/P/W original trajectories
+        working-directory: research/floral_original_selection_stage42
+        run: python -u author_archive_condition_audit.py
+      - name: Enforce the 112-vs-157 identification firewall, not an artificial positive biological sign
+        working-directory: research/floral_original_selection_stage42
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          x=json.loads(Path('stage42_aggregate_receipts/original_stiffness_position_census.json').read_text())
+          assert x['status']=='SOURCE_ARCHIVE_VS_PAPER_CONDITION_CENSUS_AND_STRATIFIED_KINEMATICS'
+          assert x['source_sha256_verified']=='9a2881e5aaf4d7bb9556c9118c45d2e2ed6a2a8b22b80d4d762a5626fdd918ec'
+          assert x['source_file_count_original_xyz_tracks']==157
+          assert x['source_filename_B_identifiers']==28
+          assert x['author_matlab_semantics']['status']=='AUTHOR_FILENAME_INDEX_SEMANTICS_SHA_VERIFIED'
+          assert x['archive_by_S_P_W']=={
+             'S0_P0_W0':25,'S0_P0_W1':29,'S0_P1_W0':13,'S0_P1_W1':27,
+             'S1_P0_W0':6,'S1_P0_W1':23,'S1_P1_W0':12,'S1_P1_W1':22}
+          p=x['publication_compatibility']
+          assert p['paper_primary_by_P_W']=={'P0_W0':31,'P1_W0':29,'P0_W1':27,'P1_W1':25}
+          assert p['original_archive_by_P_W']=={'P0_W0':31,'P1_W0':25,'P0_W1':52,'P1_W1':49}
+          assert p['minimum_missing_primary_files_if_one_to_one_and_labels_correct']==4
+          assert p['missing_primary_lower_bound_by_cell']=={
+             'P0_W0':0,'P1_W0':4,'P0_W1':0,'P1_W1':0}
+          assert p['strict_source_subset_of_published_112_possible'] is False
+          assert p['does_not_prove_original_author_error'] is True
+          assert x['no_confirmed_author_original_112_list'] is True
+          assert x['no_original_raw_trajectory_or_script_redistributed'] is True
+          assert x['no_wind_by_scent_or_pollen_or_seed_or_fitness_estimate'] is True
+          assert len(x['stratified_100hz_three_tag_matched_results'])==9
+          global_match=x['stratified_100hz_three_tag_matched_results'][0]['matched_B_effects']['near_flower_speed']
+          assert global_match['number_matched_B_codes']==23
+          assert abs(global_match['mean_W1_minus_W0_m_s']-.12142936338922392)<1e-5
+          print('ORIGINAL_CONDITION_GAPS',p['missing_primary_lower_bound_by_cell'])
+          print('AUTHOR_NONTRAJECTORY_CANDIDATES',x['potential_author_stats_or_trial_selection_file_basenames'])
+          print('S_P_SUBGROUP_RESULTS',json.dumps(x['stratified_100hz_three_tag_matched_results'],sort_keys=True))
+          print('STAGE42_FROZEN_SOURCE_ARCHIVE_PROVENANCE_GATE_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage42-original-Chang-source-PW-gaps-and-SP-matched-receipt
+          path: research/floral_original_selection_stage42/stage42_aggregate_receipts/*.json
+          if-no-files-found: error
+          retention-days: 90
