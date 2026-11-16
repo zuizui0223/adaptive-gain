@@ -1,0 +1,32 @@
+name: floral-stage46-original-bee-PA-matrix-species-schema
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/extract_bee_pa_matrix.py'
+      - 'research/floral_visual_macro_stage46/test_extract_bee_pa_matrix.py'
+      - '.github/workflows/floral-stage46-source-PA-matrix.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-authenticated-original-SDM-PA-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free compressed ZIP CRC and CSV-grain guards
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_extract_bee_pa_matrix
+      - name: Fetch 1.3MB original modelled bee matrix by byte ranges, verify source CRC
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u extract_bee_pa_matrix.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-published-bee-SDM-PA-matrix-schema
+          path: research/floral_visual_macro_stage46/stage46_PA_matrix_schema/*.json
+          if-no-files-found: error

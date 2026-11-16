@@ -1,0 +1,32 @@
+name: floral-stage46-original-bee-phylogeny-selection-audit
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/audit_bee_model_phylogeny_selection.py'
+      - 'research/floral_visual_macro_stage46/test_audit_bee_model_phylogeny_selection.py'
+      - '.github/workflows/floral-stage46-bee-phylogeny-selection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-global-bee-tree-and-analysis-eligibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Tiny Newick parser checks
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_audit_bee_model_phylogeny_selection
+      - name: Original source ZIP tree member and analysis script audit
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u audit_bee_model_phylogeny_selection.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-global-bee-phylogeny-source-selection
+          path: research/floral_visual_macro_stage46/stage46_study_taxa_audit/*.json
+          if-no-files-found: error

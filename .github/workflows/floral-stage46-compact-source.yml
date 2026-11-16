@@ -1,0 +1,31 @@
+name: floral-stage46-original-bee-grid-readme-and-UV-source
+on:
+  push:
+    branches: [analysis/floral-visual-bombus-sdm-source-stage46-20261116]
+    paths:
+      - 'research/floral_visual_macro_stage46/**'
+      - '.github/workflows/floral-stage46-compact-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-global-Bee-SDM-and-UV-file-inspection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline exact source-verification and no-SDM-inference checks
+        working-directory: research/floral_visual_macro_stage46
+        run: python -m unittest -v test_discover_pollinator_sdm_sources test_inspect_compact_source_tables
+      - name: Read original global bee grid README and Dryad Potentilleae version file manifest
+        working-directory: research/floral_visual_macro_stage46
+        run: python -u inspect_compact_source_tables.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage46-original-global-bee-grid-readme-and-UV-file-manifest
+          path: research/floral_visual_macro_stage46/stage46_compact_source/*.json
+          if-no-files-found: error
