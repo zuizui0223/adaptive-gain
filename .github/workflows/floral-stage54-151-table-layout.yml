@@ -1,0 +1,42 @@
+name: floral-stage54-original-151-flower-colour-change-table-layout
+on:
+  push:
+    branches: [analysis/floral-multimodal-literature-atlas-stage54-20261116]
+    paths:
+      - research/floral_visual_macro_stage54/inspect_151_color_change_table_layout.py
+      - .github/workflows/floral-stage54-151-table-layout.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-151-paper-supplement-table-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original source PDF table processing
+        run: python -m pip install --disable-pip-version-check 'PyMuPDF==1.26.3'
+      - name: Inspect source-authenticated 151 species table pages
+        working-directory: research/floral_visual_macro_stage54
+        run: python -u inspect_151_color_change_table_layout.py
+      - name: Check original source provenance and 17 table pages
+        working-directory: research/floral_visual_macro_stage54
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage54_151_original_table_layout/source_original_151_pages_2_to_18_table_layout.json').read_text())
+          assert d['source_supplement_PDF_SHA256']=='0c2ba82cd6eb554942fc3ac93014f7ecc9834686f695cf628f2873a2be213039'
+          assert len(d['pages'])==17
+          assert all(x['n_lines']>0 for x in d['pages'])
+          print("STAGE54_ORIGINAL_151_TABLE_PAGES_VERIFIED")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage54-151-original-2025-floral-change-source-layout
+          path: research/floral_visual_macro_stage54/stage54_151_original_table_layout/*.json
+          if-no-files-found: error
