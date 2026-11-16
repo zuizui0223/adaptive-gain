@@ -55,6 +55,13 @@ def parse_source_rows(page_texts):
             stop=starts[j+1] if j+1<len(starts) else len(lines)
             code=lines[start]
             vals=lines[start+1:stop]
+            source_wrapped_taxon=False
+            # Original PDF wraps two long Ivesia subspecies epithets onto
+            # the next text line. Join literal source text, never guess
+            # synonyms, and preserve the line-wrapping provenance flag.
+            if len(vals)==9 and re.fullmatch(r"[a-z]{1,12}",vals[0]):
+                code=code+vals.pop(0)
+                source_wrapped_taxon=True
             if len(vals)!=8:
                 errors.append({"page":index+1,"source_taxon_code":code,
                                "n_source_value_lines":len(vals),
@@ -71,6 +78,7 @@ def parse_source_rows(page_texts):
                 raise ValueError("NO_GO_UV_SOURCE_VISIBLE_COLOR_NOT_RECOGNIZED_"+code)
             d={
               "original_taxon_code":code,
+              "original_taxon_code_split_across_source_PDF_lines":source_wrapped_taxon,
               "orig_2016_UV_proportion_absorbing":uvp,
               "source_TableS2_UV_pattern_0_present_1_absent":flag,
               "source_measured_UV_pattern_present":1-flag,
@@ -131,6 +139,8 @@ def summarize(rows):
       "original_taxon_code_prefix_counts":dict(sorted(gen.items())),
       "species_source_level_climate_UVB_and_latitude_in_same_rows":True,
       "no_unverified_genus_expansions_or_invented_synonyms":True,
+      "n_original_PDF_linewrapped_taxon_codes_reassembled":sum(
+          r["original_taxon_code_split_across_source_PDF_lines"] for r in rows),
       "source_taxon_code_not_yet_verified_full_accepted_binomial":True,
       "no_inference_of_Bombus_visual_information_use":True,
       "no_new_UV_pattern_Bombus_geographic_regression":True,
