@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 
 RESOURCE="2552d157-9519-476c-995d-906e2433cc19"
-CASES=((2,0),(50,0),(100,0),(500,0),(800,0),(2,2),(50,50))
+CASES=((2,0),(50,0),(100,0),(500,0),(800,0),(2,2),(50,50),(10,800),(10,1600),(10,5000),(10,20000),(10,59000))
 def diagnostics():
     ret=[]
     for limit,offset in CASES:
