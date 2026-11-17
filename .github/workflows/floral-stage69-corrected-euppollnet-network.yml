@@ -46,6 +46,36 @@ jobs:
             --nhm-original-compact "$NHM" \
             --spectral-text-join "$SPECTRA" \
             --outdir stage69_real_original_source_network_join
+      - name: Unit guards for optical source-site and guild comparability gate
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage69 \
+            -p 'test_source_spectrometer_same_network_feasibility_gate.py' -v
+      - name: Inspect original spectrometer species co-occurrence inside independent field networks
+        run: |
+          SPEC="$(find stage69_stage68_authentic_sources -name stage67_real73_NHM_original_text_exact_literal_join.csv | head -n 1)"
+          python -u research/floral_literature_macro_stage69/source_spectrometer_same_network_feasibility_gate.py \
+            --original-network-plant-guilds stage69_real_original_source_network_join/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-73-spectra-text "$SPEC" \
+            --outdir stage69_real_original_source_network_join/optical_same_network_design
+      - name: Assert optical opportunity analysis preserves field-vs-garden distinction
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage69_real_original_source_network_join/optical_same_network_design/original_source_optical_within_network_design_gate.json')
+          s=json.loads(p.read_text())
+          assert s["original_source_spectrum_name_universe"]==73
+          assert s["source_spectrum_plant_network_year_units"]==2557
+          assert s["networks_containing_at_least_one_source_spectrometer_species"]>=1
+          assert s["source_study_NHM_and_spectra_field_same_population"] is False
+          assert s["source_field_observed_true_absences"] is False
+          assert s["causal_signal_guild_selection_ready"] is False
+          assert s["fitted_beta_or_p_value"] is None
+          print('STAGE69B_REAL_ORIGINAL_MEASURED_OPTICAL_SAME_NETWORK_FEASIBILITY',
+                {k:v for k,v in s.items() if k.startswith('networks_') or
+                 k.startswith('independent_Study') or k.startswith('distinct_spectral_taxa')})
+          PY
       - name: Check corrected denominator, observation grain and no-go claims
         run: |
           python - <<'PY'
