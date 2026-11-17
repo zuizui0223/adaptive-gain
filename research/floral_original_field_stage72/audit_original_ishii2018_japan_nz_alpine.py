@@ -148,6 +148,43 @@ def main():
             tried.append({"route":how,"status":"SOURCE_UNAVAILABLE_NOT_ABSENT",
                           "error_class":type(exc).__name__,
                           "http_code":getattr(exc,"code",None)})
+    # PMC's stable article/bin links sometimes provide supplements even when
+    # the source is absent from the PMC OA tarball package. Check real binary
+    # content, never treat an HTTP200 HTML landing page as a genuine XLSX.
+    if len(source)<2:
+        for direct_base in (
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6377100/bin/",
+            "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6377100/bin/",
+            "https://europepmc.org/articles/PMC6377100/bin/",
+        ):
+            got={}
+            for name in SUPPORT:
+                try:
+                    raw,final=get(direct_base+name,maxlen=8_000_000)
+                    if not zipfile.is_zipfile(io.BytesIO(raw)):
+                        tried.append({"route":"direct_pmc_article_bin",
+                          "source_origin":direct_base, "source_file":name,
+                          "status":"HTTP200_NOT_ACTUAL_XLSX"})
+                        continue
+                    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                        if "xl/workbook.xml" not in z.namelist():
+                            tried.append({"route":"direct_pmc_article_bin",
+                              "source_origin":direct_base, "source_file":name,
+                              "status":"ZIP_NOT_XLSX"})
+                            continue
+                    got[name]=(raw,direct_base+name)
+                    tried.append({"route":"direct_pmc_article_bin",
+                      "source_origin":direct_base, "source_file":name,
+                      "source_bytes":len(raw),"source_sha256":source_checksum(raw),
+                      "status":"ACTUAL_ORIGINAL_SOURCE_XLSX_OBTAINED"})
+                except Exception as exc:
+                    tried.append({"route":"direct_pmc_article_bin",
+                      "source_origin":direct_base,"source_file":name,
+                      "status":"ORIGINAL_SUPPLEMENT_NOT_RETRIEVED",
+                      "error_class":type(exc).__name__,
+                      "http_code":getattr(exc,"code",None)})
+            if len(got)==2:
+                source=got;route="direct_original_pmc_article_bin_XLSX";break
     receipts=[]
     for name,(raw,path) in source.items():
         receipts.append({
