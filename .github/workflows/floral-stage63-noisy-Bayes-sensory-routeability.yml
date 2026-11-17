@@ -1,0 +1,54 @@
+name: floral-stage63-noisy-Bayes-conditional-sensory-routeability
+on:
+  push:
+    branches: [theory/floral-noisy-conditional-routeability-stage63-20261117]
+    paths:
+      - 'research/floral_routeability_stage63/**'
+      - '.github/workflows/floral-stage63-noisy-Bayes-sensory-routeability.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-source-free-stochastic-voI-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent exact four-world Bayesian dynamic-programming and source-gate tests
+        run: |
+          PYTHONPATH=research/floral_routeability_stage63:. \
+            python -m unittest -v test_noisy_bayesian_conditional_routeability
+      - name: Run constructed six noise/routing regimes, best static multi-sensory baseline
+        run: python research/floral_routeability_stage63/noisy_bayesian_conditional_routeability.py
+      - name: Confirm source-free stochastic expectations and no wind coefficient calibration
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage63_noisy_Bayes_sensory_routing/exact_noisy_cue_contingent_vs_fixed_Bayes_risk_source_free.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='STAGE63_FINITE_NOISY_BAYES_CONDITIONAL_FLORAL_ROUTEABILITY_CONSTRUCTED_PREDICTIONS'
+          assert len(d['counterexample_scenarios'])==6
+          assert d['source_crall_wind_bait_and_2017_Lawson_not_used_to_fit_error_rates']
+          assert d['requires_randomized_first_cue_and_receiver_observed_next_query']
+          assert d['not_a_novel_Bayesian_decision_theorem']
+          assert d['no_causal_wind_odor_vision_or_pollen_effect_estimated']
+          for r in d['counterexample_scenarios']:
+            assert r['router_direct_target_mutual_information_zero']
+            assert r['fixed_policy_uses_best_joint_Bayes_decoder_not_a_strawman']
+            assert r['optimal_adaptive_expected_loss']<=r['optimal_fixed_expected_loss']
+          print('STAGE63_STOCHASTIC_ROUTEABILITY_THEORETICAL_PHASE_RESULTS',
+                [(r['scenario_assumed_not_measured'],r['optimal_adaptive_expected_loss_exact'],
+                   r['optimal_fixed_expected_loss_exact'],r['adaptive_loss_advantage_exact'])
+                  for r in d['counterexample_scenarios']])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage63-exact-noisy-Bayesian-adaptive-vs-strong-fixed-sensory-construct
+          path: stage63_noisy_Bayes_sensory_routing/*
+          if-no-files-found: error
+          retention-days: 90
