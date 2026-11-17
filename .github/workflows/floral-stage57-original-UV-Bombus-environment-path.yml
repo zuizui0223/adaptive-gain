@@ -1,0 +1,76 @@
+name: floral-stage57-original-UV-environment-Bombus-dual-equation-confound-audit
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - 'research/floral_visual_macro_stage57/**'
+      - '.github/workflows/floral-stage57-original-UV-Bombus-environment-path.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-159-UV-Bombus-environment-noncausal-path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact source-analysis numerical requirements
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pandas==2.2.3' 'statsmodels==0.14.5'
+      - name: Independent mock-only source-native endpoint and propensity guards
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_audit_uv_bombus_environment_paths
+      - name: Download original 2016 UV accepted species author climate from Stage52 authentic source
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage57/source_2016_uv
+      - name: Download complete 159 original UV taxa source bee-modelled HEX from Stage55 genuine source workflow
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44004224057
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage55-159-original-UV-Kew-native-congeners-Bombus-source-HEX-coverage
+          path: research/floral_visual_macro_stage57/source_bee_159
+      - name: Actual source 159 primary genus/climate/Bombus two-equation dependence models
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python -u audit_uv_bombus_environment_paths.py \
+            --original-2016-climate source_2016_uv/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv \
+            --source-159-bee-coverage source_bee_159/159_original_UV_species_first_page_Bombus_source_HEX_exposures.csv
+      - name: Enforce source climate vs guild non-identifiability gates
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage57_source_uv_bee_environment_confounds/source_original_159_environment_pollinator_two_equation_noncausal_audit.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='SOURCE_AUTHENTIC_2016_UV_159_ENVIRONMENT_BOMBUS_DUAL_EQUATION_CONFOUND_AUDIT'
+          assert d['source_coverage']['n_source_species']==159
+          assert d['source_coverage']['n_qualified_species_5points_2hex']==106
+          assert d['source_coverage']['no_p_values_or_indirect_causal_effects']
+          assert d['model_is_not_causal_SEM_or_an_indirect_effect']
+          assert d['need_sample_site_coincident_phenotype_native_pollinators_and_phylogeny']
+          print('STAGE57_ORIGINAL_UV_ENVIRONMENT_AND_GUILD_PATH_GATE',
+                {'n':d['source_coverage']['n_qualified_species_5points_2hex'],
+                 'R2EtoB':d['source_coverage']['modelled_Bombus_fraction_environment_R2'],
+                 'delta_AIC_E_to_EB':d['model_comparison_AIC_improvement_positive_is_better']
+                   ['add_pollinator_to_environment'],
+                 'delta_AIC_EG_to_EGB':d['model_comparison_AIC_improvement_positive_is_better']
+                   ['add_pollinator_to_environment_plus_grouped_genus']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-authentic-original-159-UV-environment-bee-path-confound-audit
+          path: research/floral_visual_macro_stage57/stage57_source_uv_bee_environment_confounds/*
+          if-no-files-found: error
+          retention-days: 90

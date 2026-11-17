@@ -1,0 +1,45 @@
+name: floral-stage57-2025-245-UV-bee-bird-source-DOCX-audit
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - research/floral_visual_macro_stage57/probe_oliveira_245_original_supplement.py
+      - research/floral_visual_macro_stage57/test_probe_oliveira_245_original_supplement.py
+      - .github/workflows/floral-stage57-original-UV245-supplement-source.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-2025-245-UV-bird-bee-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source Table S1 DOCX matching and no false 245 rows safety tests
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_probe_oliveira_245_original_supplement
+      - name: Source 2025 original Oliveira bee bird floral UV reflectance table DOI 10.1111/plb.70138
+        working-directory: research/floral_visual_macro_stage57
+        run: python -u probe_oliveira_245_original_supplement.py
+      - name: Check source-specific access and denominator safeguards
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage57_Oliveira245_original_source_audit/2025_Oliveira_original_UV245_bee_bird_source_supplement_receipt.json').read_text())
+          assert d['source_paper_DOI']=='10.1111/plb.70138'
+          assert d['review_245_vs_text_292_denominator_must_be_reconciled_in_primary_table']
+          assert d['no_245_direct_UV_patterns_or_Bombus_native_effect_claimed']
+          print('STAGE57_ORIGINAL_OLIVEIRA_245_SUPPLEMENT_STATUS',d['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-2025-original-245-species-UV-bee-bird-source-S1-audit
+          path: research/floral_visual_macro_stage57/stage57_Oliveira245_original_source_audit/*
+          if-no-files-found: error
+          retention-days: 90

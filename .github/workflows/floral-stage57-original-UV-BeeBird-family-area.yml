@@ -1,0 +1,63 @@
+name: floral-stage57-original-UV-reflectance-bee-bird-family-area-confound-sensitivity
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - research/floral_visual_macro_stage57/audit_oliveira245_family_area_guilds.py
+      - research/floral_visual_macro_stage57/test_audit_oliveira245_family_area_guilds.py
+      - .github/workflows/floral-stage57-original-UV-BeeBird-family-area.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-2025-UV-mean-family-area-guild-source-accepted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only distinct species/UV and no false matched family guild tests
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_audit_oliveira245_family_area_guilds
+      - name: Download real 2025 Table S1 accepted UV reflectance 245 source rows 583 crosswalk
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44008018614
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage57-authentic-2025-245-UV-reflectance-bee-bird-accepted-583-overlap
+          path: research/floral_visual_macro_stage57/source_2025_UV245
+      - name: Compute real original species-equal, family-equal and family-area-equal contrasts
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python -u audit_oliveira245_family_area_guilds.py \
+            --Oliveira2025-original-245 source_2025_UV245/Oliveira2025_original_245_species_UVreflectance_guild_GBIF_prior583.csv
+      - name: Audit published 245, strict 243 distinct source accepted taxa and no independent evolutionary claim
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage57_Oliveira245_family_area_audit')
+          r=json.loads((p/'original_UV_reflectance_bee_bird_family_area_confound_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_2025_NUMERIC_UV_BEE_BIRD_FAMILY_AREA_NONCAUSAL_COMPARISON'
+          assert r['source_authored_table_rows']==245
+          assert r['source_primary_guild_label_counts_original']=={'bee':136,'bird':109}
+          assert r['accepted_distinct_taxon_descriptive_statistics']['total_accepted_distinct_taxa']==243
+          assert r['not_a_visual_guide_or_reward_information_claim']
+          assert r['no_hue_category_recoded_as_actual_UV_pattern']
+          with (p/'original_2025_accepted_species_243_collapsed_UV_reflectance.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==243 and len({x['accepted_GBIF_species_key'] for x in rows})==243
+          print('STAGE57_OLIVEIRA_REAL_UV_MEAN_GUILD_FAMILY_AREA',r['accepted_distinct_taxon_descriptive_statistics'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-2025-UV-mean-bee-bird-guild-family-area-congruence
+          path: research/floral_visual_macro_stage57/stage57_Oliveira245_family_area_audit/*
+          if-no-files-found: error
+          retention-days: 90

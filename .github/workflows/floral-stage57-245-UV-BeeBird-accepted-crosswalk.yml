@@ -1,0 +1,68 @@
+name: floral-stage57-original-Oliveira245-UV-BeeBird-accepted-source-atlas
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - research/floral_visual_macro_stage57/extract_oliveira245_gbif_union.py
+      - research/floral_visual_macro_stage57/test_extract_oliveira245_gbif_union.py
+      - .github/workflows/floral-stage57-245-UV-BeeBird-accepted-crosswalk.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-2025-UV245-primary-spectra-bee-bird-accepted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original Table S1 245 numeric UV rows/accepted synonym test no hallucinated nectar guides
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_extract_oliveira245_gbif_union
+      - name: Read independently verified prior unique 583 accepted botanical source evidence species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43904836644
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-original-UV-spectral-2025-review-multimodal-accepted-floral-species
+          path: research/floral_visual_macro_stage57/source_prior_583
+      - name: Read DOI-verified 245 source Table S1 average UV reflection and bee/bird guild, reconcile exact GBIF accepted species
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python -u extract_oliveira245_gbif_union.py \
+            --source-prior-583-accepted source_prior_583/original_UV_Ohashi_age_spectra_2025_review_GBIF_accepted_species.csv
+      - name: Enforce primary source counts and no assumed guide, visits, or causal claim
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage57_2025_original_245_uv_BeeBird_accepted_species')
+          r=json.loads((p/'2025_245_source_reflectance_guild_to_583_accepted_union_receipt.json').read_text())
+          assert r['status']=='ORIGINAL_2025_OLIVEIRA_245_MEASURED_UV_MEAN_AND_BEE_BIRD_GUILD_ACCEPTED_SPECIES_CROSSWALK'
+          assert r['source_245_original_Wiley_PMC_docx_rows']==245
+          assert r['source_uv_numeric_not_receptor_spatial_contrast']
+          assert r['source_2025_PS_not_actual_Bombus_receptor_behaviour']
+          assert r['no_UV_spatial_pattern_or_native_guild_causal_or_SEM_claim']
+          with (p/'Oliveira2025_original_245_species_UVreflectance_guild_GBIF_prior583.csv').open() as fp:
+            rows=list(csv.DictReader(fp))
+          assert len(rows)==245
+          assert all(x['original_average_UV_reflectance_is_not_spatial_UV_pattern']=='True' for x in rows)
+          print('STAGE57_SOURCE_VERIFIED_245_ACCEPTED_GUILD_COLOUR_UNION',
+                {k:r[k] for k in (
+                 'n_original_source_binomial_candidates','n_original_source_numeric_average_UV_reflectance',
+                 'original_source_primary_pollinator_class_counts',
+                 'n_exact_confident_accepted_source_rows','n_distinct_GBIF_accepted_species_in_2025_reflectance_source',
+                 'n_source_2025_overlap_prior_accepted_583','n_combined_prior_and_2025_unique_accepted')})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-authentic-2025-245-UV-reflectance-bee-bird-accepted-583-overlap
+          path: research/floral_visual_macro_stage57/stage57_2025_original_245_uv_BeeBird_accepted_species/*
+          if-no-files-found: error
+          retention-days: 90
