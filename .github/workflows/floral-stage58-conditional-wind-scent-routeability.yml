@@ -35,7 +35,10 @@ jobs:
           assert r['source_studies_not_same_insects_or_source_flower_system']
           assert r['no_causal_visual_x_scent_x_wind_factorial_available']
           phase=r['exact_source_free_routeability_scenarios']
-          assert [x['adaptive_only_within_budget'] for x in phase.values()]==[True,True,False,False]
+          assert phase['reference_calm_assumed']['adaptive_only_within_budget'] is True
+          assert phase['facilitated_chemical_cue_but_harder_visual_assumed']['adaptive_only_within_budget'] is True
+          assert phase['visual_access_bottleneck_assumed']['adaptive_only_within_budget'] is False
+          assert phase['early_router_disrupted_assumed']['adaptive_only_within_budget'] is False
           assert phase['early_router_disrupted_assumed']['exact_fixed_minimum_bundle_cost_or_unresolvable'] is None
           assert r['independently_known_source_free_pollen_chain']['wind_minus_calm_transfer_fraction']=='-3/200'
           print('STAGE58_EXACT_BUILDED_ROUTEABILITY_ABSTRACT_PHASES',{k: (v['exact_adaptive_minimum_worst_case_cost_or_unresolvable'],v['exact_fixed_minimum_bundle_cost_or_unresolvable']) for k,v in phase.items()})
