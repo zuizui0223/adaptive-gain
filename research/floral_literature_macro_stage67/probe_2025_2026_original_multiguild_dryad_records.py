@@ -58,16 +58,22 @@ def audit(typ,doi):
     out["versions_payload_keys"]=sorted(versions)
     collections=versions.get("_embedded") or {}
     out["versions_collection_keys"]=sorted(collections)
+    # Dryad HAL public version objects expose version id ONLY in the self
+    # canonical link (/api/v2/versions/406487), NOT in the top-level id.
+    def original_id(v):
+        if isinstance(v.get("id"),int):return int(v["id"])
+        rel=((v.get("_links") or {}).get("self") or {}).get("href","")
+        m=re.search(r"/api/v2/versions/(\\d+)(?:$|\\?)",rel)
+        return int(m.group(1)) if m else None
     allvers=[]
     for key,vals in collections.items():
         if isinstance(vals,list):
-            allvers.extend(v for v in vals if isinstance(v,dict) and v.get("id"))
-    # If API versions response schema differs, do not invent a version id.
+            allvers.extend(v for v in vals if isinstance(v,dict) and original_id(v))
     if not allvers and isinstance(versions.get("data"),list):
-        allvers=[v for v in versions["data"] if isinstance(v,dict) and v.get("id")]
+        allvers=[v for v in versions["data"] if isinstance(v,dict) and original_id(v)]
     check(bool(allvers),"CANNOT_RESOLVE_REAL_PUBLIC_DRYAD_VERSION "+json.dumps(versions,ensure_ascii=False)[:1600])
-    latest=max(allvers,key=lambda v:int(v["id"]))
-    ver_id=int(latest["id"])
+    latest=max(allvers,key=original_id)
+    ver_id=original_id(latest)
     files_url=ROOT+"/versions/"+str(ver_id)+"/files"
     files_payload=safe_get(files_url)
     file_collection=[]
