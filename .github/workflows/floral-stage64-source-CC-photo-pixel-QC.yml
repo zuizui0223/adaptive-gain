@@ -1,0 +1,68 @@
+name: floral-stage64-original-iNat-licensed-actual-flower-pixel-QC
+on:
+  push:
+    branches: [analysis/floral-original-photo-marking-pilot-stage64-20261117]
+    paths:
+      - research/floral_routeability_stage64/retrieve_CC_photo_pixels_for_human_review.py
+      - research/floral_routeability_stage64/test_retrieve_CC_photo_pixels_for_human_review.py
+      - .github/workflows/floral-stage64-source-CC-photo-pixel-QC.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-CC-photo-pixels-for-botanical-review-not-UV:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install reproducible source JPEG botanical preview library
+        run: python -m pip install --disable-pip-version-check 'Pillow==11.3.0'
+      - name: Source-only fake-image license and nonclassified photo tests
+        run: |
+          PYTHONPATH=research/floral_routeability_stage64:. \
+             python -m unittest -v test_retrieve_CC_photo_pixels_for_human_review
+      - name: Download authenticated 17 original iNaturalist photo metadata records and CC licenses
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44019626997
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage64-source-original-iNat-4-VOC-FCP-taxa-licensed-photo-metadata
+          path: research/floral_routeability_stage64/frozen_source_iNat_metadata
+      - name: Retrieve bounded CC0/CC-BY ORIGINAL medium photo pixels for blinded human review only
+        run: |
+          python -u research/floral_routeability_stage64/retrieve_CC_photo_pixels_for_human_review.py \
+            --original-licensed-photo-metadata research/floral_routeability_stage64/frozen_source_iNat_metadata/new_iNat_CC_licensed_four_species_original_photo_review_queue.csv
+      - name: Confirm original source copyright attribution and no invented nectar guide
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage64_original_cc_photo_pixel_review')
+          d=json.loads((p/'original_CC_photo_pixel_review_credits_and_unmeasured_traits.json').read_text())
+          assert d['status']=='LICENSED_ORIGINAL_INAT_FOUR_TAXON_SOURCE_PIXEL_REVIEW_GATE'
+          assert d['source_original_taxon_licence_and_photo_preselection_frozen_before_pixels']
+          assert d['CC0_CC_BY_licenses_and_authors_retained']
+          assert d['not_original_FCP_exact_source_100_photo_IDs']
+          assert d['not_an_independently_measured_flower_UV_or_nectar_guide']
+          assert d['actual_visible_pattern_annotated_from_images'] is False
+          assert d['no_species_study_VOC_photo_same_individual_or_wind_pollen_data']
+          n=d['n_licensed_actual_medium_photo_pixels_read']
+          if n:assert (p/'source_CC_photos_flower_visible_pattern_CONTACT_SHEET_UNREVIEWED.png').is_file()
+          print('STAGE64_ACTUAL_ORIGINAL_LICENSED_FLOWER_PHOTO_PIXELS_FOR_REVIEW',
+              {'n_preselected':d['n_preselected_from_original_iNat_metadata'],
+               'n_original_pixels':n,
+               'n_species_with_pixels':d['n_source_species_with_pixels'],
+               'retrieval_status':[(x['source_species'],x['status']) for x in d['source_image_credits_and_exceptions']]})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage64-authentic-CC-by-CC0-flower-source-pixel-preview-with-credits
+          path: stage64_original_cc_photo_pixel_review/*
+          if-no-files-found: error
+          retention-days: 90
