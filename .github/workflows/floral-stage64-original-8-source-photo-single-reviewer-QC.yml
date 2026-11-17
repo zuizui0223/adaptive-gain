@@ -1,0 +1,70 @@
+name: floral-stage64-original-8-image-manual-visible-marking-QA
+on:
+  push:
+    branches: [analysis/floral-original-photo-marking-pilot-stage64-20261117]
+    paths:
+      - research/floral_routeability_stage64/one_reviewer_actual_8_photo_flower_marking_quality_audit.csv
+      - research/floral_routeability_stage64/audit_eight_original_CC_photo_one_reviewer_labels.py
+      - research/floral_routeability_stage64/test_audit_eight_original_CC_photo_one_reviewer_labels.py
+      - .github/workflows/floral-stage64-original-8-source-photo-single-reviewer-QC.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-real-8-CC-photo-once-reviewed-conservative-pattern:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify image source attribution, pixel SHA, unreviewable flower is NOT a trait negative
+        run: |
+          PYTHONPATH=research/floral_routeability_stage64:. \
+            python -m unittest -v test_audit_eight_original_CC_photo_one_reviewer_labels
+      - name: Download authentic original 8 CC-BY photo pixel SHA/attribution source audit
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44019859643
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage64-authentic-CC-by-CC0-flower-source-pixel-preview-with-credits
+          path: research/floral_routeability_stage64/source_original_8_cc_pixels
+      - name: Audit eight already visually reviewed actual image IDs against independent source SHA
+        run: |
+          python -u research/floral_routeability_stage64/audit_eight_original_CC_photo_one_reviewer_labels.py \
+            --original-source-image-credits research/floral_routeability_stage64/source_original_8_cc_pixels/original_CC_photo_pixel_review_credits_and_unmeasured_traits.json
+      - name: No false UV guide, no source species pattern negative, one unblinded reviewer only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage64_actual_image_visual_marking_quality_receipt/source_original_8_CC_images_one_reviewer_open_flower_marking_summary.json')
+          q=json.loads(p.read_text())
+          assert q['status']=='AUTHENTIC_EIGHT_INAT_CC_PHOTO_UNBLINDED_VISIBLE_MARKING_QA_NOT_SPECIES_TRAIT'
+          assert q['original_cc_photo_pixels_sha256_verified']==8
+          assert q['n_source_photos_with_reviewable_open_corolla']==2
+          assert q['n_source_photos_visible_colour_marking_positive']==2
+          assert q['n_source_photos_verified_within_corolla_uniform']==0
+          assert q['n_source_photos_flower_pattern_unknown_not_absent']==6
+          assert q['distinct_species_with_source_positive_photo_records']=={'Dianthus deltoides':2}
+          assert q['no_species_level_absence_or_frequency_inference']
+          assert q['unblinded_assistant_one_reviewer_no_second_independent_verifier']
+          assert q['photo_marks_not_nectar_guide_function']
+          assert q['RGB_is_not_UV_measured']
+          assert q['not_independent_plant_lineage_or_bumblebee_wind_effect']
+          print('STAGE64_ORIGINAL_IMAGE_INSPECTED_VISIBLE_MARKING_POSITIVE_TWO_NOT_NEGATIVE_SIX',
+            {k:q[k] for k in ('n_source_photos_visible_colour_marking_positive',
+            'n_source_photos_verified_within_corolla_uniform',
+            'n_source_photos_flower_pattern_unknown_not_absent',
+            'by_photo_open_flower_eligibility')})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage64-authentic-source-8-original-CC-flower-photo-eligibility-one-reviewer
+          path: stage64_actual_image_visual_marking_quality_receipt/*
+          if-no-files-found: error
+          retention-days: 90
