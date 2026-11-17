@@ -19,6 +19,7 @@ import zipfile
 STAGE67_ARTIFACT_ID = 14307499126
 STAGE67_ZIP_SHA256 = "e5625a7202d8404e33281c9a4d4ef15d5af3e46f9070a67edcb253b60b4c0728"
 STAGE67_FILENAME = "original_2024_73_petal_spectra_taxonomic_source_match_and_UV_modes.csv"
+STAGE67_CSV_SHA256 = "373816146a88f69ef23883817d04271b420ab820182e8db034df9df6f424ba21"
 STAGE67_SOURCE_DOI = "10.6084/m9.figshare.21081025.v2"
 NHM_SOURCE_GIT_BLOB = "e1cfd2d5c518c2061ec91d1a9e8b64fc7ca69389"
 
@@ -157,6 +158,7 @@ def main():
     p.add_argument("--nhm-compact", required=True, type=Path)
     p.add_argument("--nhm-source-receipt", required=True, type=Path)
     p.add_argument("--prior-artifact-zip", type=Path)
+    p.add_argument("--prior-extracted-csv", type=Path)
     p.add_argument("--outdir", required=True, type=Path)
     a = p.parse_args()
     n = read_csv(a.nhm_compact)
@@ -165,9 +167,20 @@ def main():
             receipt["original_text_description_taxon_rows"] != 59369 or
             len(n) != 59369):
         raise ValueError("STAGE68_NHM_ORIGINAL_SOURCE_IDENTITY_NOT_VERIFIED")
-    raw = (a.prior_artifact_zip.read_bytes() if a.prior_artifact_zip
-           else retrieve_prior_spectral_archive(os.environ.get("GH_TOKEN", "")))
-    original = read_prior_spectra(raw)
+    if a.prior_extracted_csv:
+        original_bytes = a.prior_extracted_csv.read_bytes()
+        if hashlib.sha256(original_bytes).hexdigest() != STAGE67_CSV_SHA256:
+            raise ValueError("STAGE67_AUTHENTIC_ORIGINAL_EXTRACTED_CSV_SHA_CHANGED")
+        original = list(csv.DictReader(io.StringIO(original_bytes.decode("utf-8"))))
+        if (len(original) != 73 or
+                sum(bool(x["gbif_accepted_species_key_or_unknown"]) for x in original) != 70 or
+                len({x["original_2024_species_name"] for x in original}) != 73 or
+                any(x["original_2024_Figshare_DOI"] != STAGE67_SOURCE_DOI for x in original)):
+            raise ValueError("STAGE67_SOURCE_DATA_73_70_OR_DOI_NOT_VERIFIED")
+    else:
+        raw = (a.prior_artifact_zip.read_bytes() if a.prior_artifact_zip
+               else retrieve_prior_spectral_archive(os.environ.get("GH_TOKEN", "")))
+        original = read_prior_spectra(raw)
     joined, summary = join_text_and_spectra(n, original)
     a.outdir.mkdir(parents=True, exist_ok=True)
     with (a.outdir / "stage67_real73_NHM_original_text_exact_literal_join.csv").open(
