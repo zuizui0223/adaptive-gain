@@ -47,6 +47,8 @@ jobs:
           assert d['status']=='ORIGINAL_FARRE_305_VOC_SPECIES_STRICT_GBIF_ACCEPTED_TO_817_VISUAL_TRAIT_MODALITY_OVERLAP'
           assert d['n_original_VOC_2020_named_species_source_rows']==305
           assert d['n_prior_visual_source_accepted_species']==817
+          assert d['n_source_original_hybrid_formulas_excluded_from_parent_species_match']==1
+          assert d['hybrid_or_infraspecific_origin_must_not_be_inferred_as_identical_genotype']
           assert d['n_accepted_VOC_species_also_in_visual_source817']<=d['n_distinct_VOC_accepted_species']
           assert d['source_wind_means_pollination_mode_not_airflow']
           assert d['no_source_ambient_wind_speed_or_VOC_plume_values']
