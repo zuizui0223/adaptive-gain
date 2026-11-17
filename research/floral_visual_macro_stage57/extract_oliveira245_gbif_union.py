@@ -44,8 +44,11 @@ def read_original_member():
        "User-Agent":"adaptive-gain-stage57-Oliveira-245-primary-OA-numeric-UV-BeeBird/2026"})
     with urllib.request.urlopen(req,timeout=70) as res:
         archive=res.read(MAX_DATA+1)
-    if len(archive)>MAX_DATA or hashlib.sha256(archive).hexdigest()!=PIN_ZIP_SHA:
-        raise ValueError("NO_GO_2025_245_ORIGINAL_EUROPE_PMC_ARCHIVE_DIGEST")
+    # EuropePMC can rebuild the outer supplementary ZIP with a different
+    # container checksum while preserving the original inner authored DOCX.
+    # Pin the exact DOCX SHA256 below, never a mutable on-the-fly ZIP wrapper.
+    if len(archive)>MAX_DATA or not zipfile.is_zipfile(io.BytesIO(archive)):
+        raise ValueError("NO_GO_2025_245_ORIGINAL_EUROPE_PMC_ZIP_SOURCE")
     with zipfile.ZipFile(io.BytesIO(archive)) as z:
         found=[x for x in z.infolist() if Path(x.filename).name==MEMBER and not x.is_dir()]
         if len(found)!=1 or found[0].file_size>180_000:
