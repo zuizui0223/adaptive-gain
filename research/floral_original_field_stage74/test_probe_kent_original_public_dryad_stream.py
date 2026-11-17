@@ -24,9 +24,9 @@ class KentIslandOriginalTests(unittest.TestCase):
     def test_no_http200_html_as_real_original_CSV(self):
         self.assertFalse(m.is_actual_utf8_csv(b"<html>access denied</html>"))
         self.assertFalse(m.is_actual_utf8_csv(b"\xff\xfe"))
-        self.assertTrue(m.is_actual_utf8_csv(b"Wavelength,Aster sp.\n300,0.3\n"))
+        self.assertTrue(m.is_actual_utf8_csv(b"Wavelength,Aster novi-belgii\n300,0.3\n"))
     def test_real_author_SHA_must_match(self):
-        good=b"Wavelength,Aster sp.\n300,0.3\n"
+        good=b"Wavelength,Aster novi-belgii\n300,0.3\n"
         h=hashlib.sha256(good).hexdigest()
         ok,rec=m.verify_original(good,{"digest":h})
         self.assertTrue(ok)
@@ -35,20 +35,20 @@ class KentIslandOriginalTests(unittest.TestCase):
         self.assertFalse(bad)
         self.assertEqual(rec["status"],"ORIGINAL_FILE_SHA256_MISMATCH")
     def test_spurious_API_sha_cannot_imply_public_data(self):
-        good=b"Wavelength,Aster sp.\n300,0.3\n"
+        good=b"Wavelength,Aster novi-belgii\n300,0.3\n"
         ok,rec=m.verify_original(good,{"digest":""})
         self.assertFalse(ok)
         self.assertEqual(rec["status"],"OFFICIAL_FILE_SHA256_NOT_DECLARED")
     def test_true_source_sample_grain_without_pseudo_zeros(self):
         original=(
-          b"Wavelength,Aster sp.,Solidago sp.,Stimulus paper\n"
+          b"Wavelength,Aster novi-belgii,Solidago canadensis,Stimulus paper\n"
           b"300,1.1,3.2,10\n"
           b"310,1.2,3.7,11\n"
         )
         obs=(
           b"Insect_ID,Year,Insect_Species,Taxonomic_Group,Plant\n"
-          b"1,2022,Bombus terrestris,bees,Aster sp.\n"
-          b"2,2023,Hoverfly sp.,flies,Solidago sp.\n"
+          b"1,2022,Bombus terrestris,bees,Aster novi-belgii\n"
+          b"2,2023,Hoverfly sp.,flies,Solidago canadensis\n"
         )
         r=m.audit_join(original,obs)
         self.assertEqual(r["strict_literal_plant_overlap"],2)
