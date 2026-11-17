@@ -1,0 +1,46 @@
+name: floral-stage56-original-FReD-sample-location-spectral-source-form-audit
+on:
+  push:
+    branches: [analysis/floral-source-locality-spectra-stage56-20261117]
+    paths:
+      - 'research/floral_visual_macro_stage56/**'
+      - '.github/workflows/floral-stage56-FReD-original-public-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-FReD-location-spectrum-availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard unverified GPS and spatial UV-pattern claims
+        working-directory: research/floral_visual_macro_stage56
+        run: python -m unittest -v test_probe_fred_original_public_search
+      - name: Inspect official public FReD search schema only
+        working-directory: research/floral_visual_macro_stage56
+        run: python -u probe_fred_original_public_search.py
+      - name: Prove receipt retains source-only semantics and no false site specimen join
+        working-directory: research/floral_visual_macro_stage56
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('stage56_FReD_original_public_search_audit/FReD_original_public_site_source_form_receipt.json')
+          d=json.loads(path.read_text())
+          assert d['status']=='SOURCE_FIRST_FRED_SITE_SCHEMA_ONLY'
+          assert d['source_claimed_GPS_or_specimen_coordinates_not_yet_audited']
+          assert d['original_Koski2016_563_UV_specimens_not_joinable_to_genetic_Table_S1_by_species_alone']
+          print('STAGE56_OFFICIAL_FRED_PUBLIC_SERVICE_SOURCE_AVAILABILITY',
+                {k:v['status'] for k,v in d['pages'].items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage56-FReD-original-search-site-schema-source-receipt
+          path: research/floral_visual_macro_stage56/stage56_FReD_original_public_search_audit/*
+          if-no-files-found: error
+          retention-days: 90
