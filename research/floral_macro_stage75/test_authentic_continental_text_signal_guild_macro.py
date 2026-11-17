@@ -16,7 +16,7 @@ def trait(**kw):
 def row(hue,sp,network="n1"):
     return {
       "Study_id":"S1","Network_id":network,"Year":"2020",
-      "species":sp,"genus":sp.split()[0],"hue":hue,
+      "species":sp.casefold(),"genus":sp.split()[0].casefold(),"hue":hue,
       "original_sampling_method":"Focal_observation",
       "source_observed_bombus_any_rank":500 if hue=="yellow" else 0,
     }
