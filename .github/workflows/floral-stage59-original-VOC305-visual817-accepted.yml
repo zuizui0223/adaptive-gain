@@ -1,0 +1,70 @@
+name: floral-stage59-original-305-VOC-source-to-817-visual-accepted-crosswalk
+on:
+  push:
+    branches: [analysis/floral-voc-visual-accepted-overlap-stage59-20261117]
+    paths:
+      - 'research/floral_routeability_stage59/**'
+      - '.github/workflows/floral-stage59-original-VOC305-visual817-accepted.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-305-scent-species-strict-accepted-visual-overlap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock-only original source Excel XML/cell-grain and no invented scent states
+        run: |
+          PYTHONPATH=research/floral_routeability_stage59:research/floral_routeability_stage58:. \
+            python -m unittest -v test_original_VOC305_visual817_accepted_overlap
+      - name: Download source-authenticated 817 original visual accepted species evidence
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44009319879
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage57-original-817-accepted-floral-multimodal-source-evidence-matrix
+          path: research/floral_routeability_stage59/source_817_visual
+      - name: Verify 305 VOC original species from pinned primary workbook then exact GBIF source acceptance against visual817
+        run: |
+          python -u research/floral_routeability_stage59/original_VOC305_visual817_accepted_overlap.py \
+             --original-visual-817 research/floral_routeability_stage59/source_817_visual/original_817_accepted_visual_evidence_modality_guild_matrix.csv
+      - name: Enforce exact measured populations not added falsely and no wind speed from wind pollination
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage59_original_VOC305_visual817_overlap')
+          s=json.loads((p/'VOC305_source_visual817_strict_accepted_overlap_receipt.json').read_text())
+          assert s['status']=='ORIGINAL_VOC305_2020_STRICT_GBIF_ACCEPTED_TO_817_VISUAL_SOURCE_CROSSWALK'
+          assert s['original_VOC_2020_source_named_species']==305
+          assert s['source_identity_qa']['n_source_named_distinct_species_records']==305
+          assert s['source_identity_qa']['n_original_source_non_species_rows']==4155
+          assert s['source_identity_qa']['no_original_wind_speed_m_per_s']
+          assert s['n_distinct_strict_GBIF_accepted_VOC_species']>150
+          assert s['not_same_original_observation_or_local_plant_individual']
+          assert s['source_no_actual_wind_airflow_field']
+          assert s['unlisted_VOC_species_are_unknown_not_verified_scentless']
+          with (p/'original_VOC305_accepted_source_and_visual817_evidence_bridge.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==305
+          assert all(r['wind_flag_is_wind_pollination_NOT_atmospheric_wind']=='True' for r in rows)
+          assert all(r['source_same_population_VOC_visual_spectra_observed']=='False' for r in rows)
+          print('STAGE59_ORIGINAL_SPECIES_OVERLAP_AGAINST_817', {k:s[k] for k in (
+            'n_distinct_strict_GBIF_accepted_VOC_species','n_source_VOC_accepted_also_in_visual817',
+            'n_source_VOC_accepted_also_direct_measured_UV_spatial_230',
+            'n_source_VOC_accepted_also_UVmean_Oliveira_243',
+            'n_distinct_accepted_source_union_817_plus_VOC')})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage59-authentic-305-VOC-to-817-visual-strict-GBIF-accepted-overlap
+          path: stage59_original_VOC305_visual817_overlap/*
+          if-no-files-found: error
+          retention-days: 90
