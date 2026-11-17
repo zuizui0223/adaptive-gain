@@ -1,0 +1,85 @@
+name: floral-stage67-authentic-original-73-flower-spectra-GBIF-vs-817-evidence-union
+on:
+  push:
+    branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage67/strict_GBIF_73_published_petal_spectra_vs_817_flower_evidence.py'
+      - 'research/floral_literature_macro_stage67/test_strict_GBIF_73_published_petal_spectra_vs_817.py'
+      - '.github/workflows/floral-stage67-73-published-spectra-GBIF-accepted-union.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-spectral-accepted-species-taxonomy-union:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline source sample grain unknown and strict GBIF accepted source controls
+        run: |
+          python -m unittest discover -s research/floral_literature_macro_stage67 \
+            -p 'test_strict_GBIF_73_published_petal_spectra_vs_817.py' -v
+      - name: Get only original 2024 73 flower-petal spectrometer source and provenance
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44037008730
+          github-token: ${{ github.token }}
+          name: stage67-source-only-original-Figshare-Shrestha2024-floral-petal-UV-visible-reflectance
+          path: stage67_primary_2024_spectra
+      - name: Get original 817 source accepted optical modality species registry
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44008957910
+          github-token: ${{ github.token }}
+          name: stage57-original-817-accepted-floral-multimodal-source-evidence-matrix
+          path: stage67_prior_817_botanical_sources
+      - name: Actual primary UV/visible spectrometer 73 species accepted-GBIF crosswalk
+        run: |
+          PYTHONPATH=. python -u \
+            research/floral_literature_macro_stage67/strict_GBIF_73_published_petal_spectra_vs_817_flower_evidence.py \
+            --original-73-spectral-columns \
+            stage67_primary_2024_spectra/source_original_per_petal_spectral_column_uv_visible_integrals.csv \
+            --original-73-spectral-receipt \
+            stage67_primary_2024_spectra/source_floral_spectra_original_Figshare_2024_receipt.json \
+            --prior-817-source-atlas \
+            stage67_prior_817_botanical_sources/original_817_accepted_visual_evidence_modality_guild_matrix.csv \
+            --outdir stage67_source_73spectra_817atlas_species_taxonomy
+      - name: Authentic source-only no-imputed-UV-guide support gate
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage67_source_73spectra_817atlas_species_taxonomy')
+          r=json.loads((p/'source_verified_73spectra_vs_817accepted_taxonomic_union.json').read_text())
+          with (p/'original_2024_73_petal_spectra_taxonomic_source_match_and_UV_modes.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          assert r['prior_817_accepted_source_modalities_union']==817
+          assert r['original_2024_spectrometer_measured_taxon_columns']==73
+          assert len(rows)==73
+          assert r['union_accepted_evidence_species_not_all_guide_positive']>=817
+          assert r['new_2024_strict_accepted_species_not_in_prior']>0
+          assert r['matched_strict_accepted_species_rows']>60
+          assert r['source_2024_spectral_average_units_percent_not_fraction']
+          assert r['source_2025_Oliveira_UV_average_units_proportion_0_to_1']
+          assert all(x['UV_spatial_guide_present_or_absent']==
+              'NOT_MEASURED_IN_THIS_PETAL_SPECTRA_SOURCE' for x in rows)
+          print('STAGE67_REAL_2024_PUBLISHED_PETAL_SPECTRA_ACCEPTED_SPECIES_UNION',
+                {'n_strict':r['unique_matched_accepted_species'],
+                 'n_previous_overlap':r['strict_cross_study_accepted_species_overlap'],
+                 'n_new_evidence_species':r['new_2024_strict_accepted_species_not_in_prior'],
+                 'accepted_source_union':r['union_accepted_evidence_species_not_all_guide_positive'],
+                 'original_measured_spatial_guide_overlap':r['2024_spectral_sample_also_measured_UV_pattern_in_prior']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage67-real-original-73-flower-petal-spectra-accepted-GBIF-join-817
+          path: stage67_source_73spectra_817atlas_species_taxonomy/*
+          retention-days: 90
+          if-no-files-found: error
