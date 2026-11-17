@@ -45,6 +45,35 @@ jobs:
             "source_statuses":{r["source_id"]:r["status"] for r in j["source_receipts"]},
             "data_effect_not_claimed":j["no_global_optical_effect_claimed"]})
           PY
+      - name: Check original 2018 Figshare source and authentic VOC XLSX parser guards
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_replay_original_kantsa2018_network_voc.py' -v
+      - name: Download publisher-identifiable original Figshare source network and VOC raw
+        run: |
+          python -u research/floral_original_field_stage72/replay_original_kantsa2018_network_voc.py \
+            --outdir stage72_original_author_primary_source_audit/original_kantsa2018_real_data
+      - name: Confirm real primary network XLSX and botanical VOC across original source sheets
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage72_original_author_primary_source_audit/original_kantsa2018_real_data/original_Kantsa2018_source_replay_network_VOC_grain.json')
+          j=json.loads(p.read_text())
+          assert j['original_network_source_file']['sha256']=='41d0c650cd9c1e02597aacf0631491615cd5214fa34a1eb18ae51a37c369b7b7'
+          assert j['original_voc_source_file']['sha256']=='72a5ae89b85ac3216071560b5db36585efbba0af9ea0bef5b99c73268de557ea'
+          assert j['original_network']['original_2018_network_sheet_names']==['p-p_network']
+          assert j['original_volatiles']['original_voc_taxon_sheet_count']>=30
+          assert j['original_network_and_VOC_are_one_geographic_study_region']
+          assert j['no_plant_reproduction_or_fitness_in_source_tables']
+          print('STAGE72B_KANTSA_ORIGINAL_XLSX_SOURCE_AUDIT_VERIFIED',{
+            'source_network_grid':j['original_network']['original_2018_numeric_grid_provisional'],
+            'source_network_first4':j['original_network']['first_eight_original_rows_with_real_cell_coordinates'][:4],
+            'source_VOC_species_sheets':j['original_volatiles']['original_voc_taxon_sheet_count'],
+            'source_positive_VOC_compounds':j['original_volatiles']['source_voc_compound_statistics']['positive_compound_species_entries']
+          })
+          PY
       - name: Save only original-source access and original workbook schema receipt
         if: always()
         uses: actions/upload-artifact@v4
