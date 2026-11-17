@@ -1,0 +1,64 @@
+name: floral-stage62-Lawson2017-original-F-colony-odor-matched-sensitivity
+on:
+  push:
+    branches: [analysis/floral-wind-backup-colony-odor-stage62-20261117]
+    paths:
+      - 'research/floral_routeability_stage62/**'
+      - '.github/workflows/floral-stage62-Lawson2017-colony-odor-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-original-Lawson2017-source-F-colony-odor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact finite conditional reassignment arithmetic on invented fixture only
+        run: |
+          PYTHONPATH=research/floral_routeability_stage62:research/floral_routeability_stage61:. \
+             python -m unittest -v test_colonyF_odor_stratified_lawson2017
+      - name: Original DOI-authenticated 72 bee source; one colony F and both reward odors
+        run: |
+          PYTHONPATH=research/floral_routeability_stage61:. \
+             python -u research/floral_routeability_stage62/colonyF_odor_stratified_lawson2017.py
+      - name: Protect source grain, 4-arm original data, no cue-order interpretation and nonrandomized sensitivity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage62_original_2017_common_colony_odour/Lawson2017_author_source_colonyF_odour_confound_sensitivity.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='AUTHENTIC_LAWSON_2017_COLONY_F_ODOR_STRATIFIED_BACKUP_SENSITIVITY'
+          assert d['source_original_bumblebee_wind_bees']==72
+          assert d['n_source_F_bees_A_B_C']==29
+          assert d['original_F_colony_group_odor_counts']=={
+             'A':{'lav':7,'mint':4}, 'B':{'lav':2,'mint':8}, 'C':{'lav':5,'mint':3}}
+          assert d['source_original_wind_no_CtoD_shared_colony']
+          assert d['no_source_validated_treatment_randomization']
+          assert d['no_real_p_value_or_replicated_colony_inference']
+          assert d['no_2017_per_bee_cue_order_decision_route_measurement']
+          assert d['not_a_full_2x2x2_wind_odour_visual_interaction']
+          edges=d['observational_comparisons']
+          assert edges['A_to_B']['n_bees_left']==11 and edges['A_to_B']['n_bees_right']==10
+          assert edges['B_to_C']['n_bees_left']==10 and edges['B_to_C']['n_bees_right']==8
+          metric='visits_to_learning_criterion'
+          assert edges['A_to_B']['original_endpoints'][metric]['source_odor_constrained_hypothetical_label_reassignment_count']==17820
+          assert edges['B_to_C']['original_endpoints'][metric]['source_odor_constrained_hypothetical_label_reassignment_count']==3465
+          print('STAGE62_ACTUAL_ORIGINAL_F_COLONY_ODOR_ADJUSTED_DESCRIPTIVES',
+             {k:{m:{
+                'raw':v['source_F_all_odor_raw_mean_right_minus_left'],
+                'odor_standardized':v['source_F_odor_pool_standardized_mean_right_minus_left'],
+                'within_scent':{s:r['right_minus_left_float'] for s,r in v['source_F_common_odour_strata_original'].items()}
+              } for m,v in x['original_endpoints'].items()} for k,x in edges.items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage62-original-2017-Lawson-F-colony-odor-matched-source-sensitivity
+          path: stage62_original_2017_common_colony_odour/*
+          if-no-files-found: error
+          retention-days: 90
