@@ -46,6 +46,18 @@ jobs:
           assert d['min_1']['source_author_hex']==1618
           assert d['min_3']['source_author_hex']==686
           assert d['posthoc_not_predeclared_and_no_floral_UV_scent_or_wind_trait']
+          region=d['posthoc_geographic_sign_and_sample_density_audit']
+          assert set(region)=={
+              'north_extratropical_lat_ge_23_5',
+              'south_extratropical_lat_le_minus23_5',
+              'tropical_abs_lat_lt_23_5'}
+          assert region['north_extratropical_lat_ge_23_5']['min_3']['species']>=2500
+          assert region['south_extratropical_lat_le_minus23_5']['min_3']['species']>=500
+          assert region['tropical_abs_lat_lt_23_5']['min_3']['species']>=100
+          assert d['posthoc_zonal_reduced_absolute_lat_collinearity_not_same_full_model']
+          for region_name,thresholds in region.items():
+              for a in ('min_1','min_3'):
+                  assert set(thresholds[a]['effects'])=={'white','yellow_orange','red_pink','blue_purple'}
           for key in ('min_1','min_3'):
               assert set(d[key]['effects'])=={'white','yellow_orange','red_pink','blue_purple'}
               assert d[key]['source_species_hex_intersection_cluster_corrected']
