@@ -1,0 +1,65 @@
+name: floral-stage73-original-Dryad-site-optical-bee-binary-admission
+
+on:
+  push:
+    branches: [analysis/floral-dryad-original-site-optical-stage73-20261117]
+    paths:
+      - "research/floral_original_field_stage73/**"
+      - ".github/workflows/floral-stage73-official-dryad-binary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-xie-albor-source-data:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Adversarial synthetic file integrity and source metadata tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage73 \
+            -p 'test_resolve_original_Dryad_versions_files.py' -v
+      - name: Attempt direct original official Dryad version file IDs and real original bytes
+        run: |
+          python -u research/floral_original_field_stage73/resolve_original_Dryad_versions_files.py \
+            --outdir stage73_original_author_Dryad_versioned_binary
+      - name: Validate reported source ID/path/cryptographic identity and no invented traits
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("stage73_original_author_Dryad_versioned_binary/original_Dryad_v2_Xie_Albor_source_manifest_and_binary_status.json")
+          x=json.loads(p.read_text())
+          assert x["source_dataset_count"]==2
+          assert set(x["source_results"])=={"xie_island_2025","albor_california_2022"}
+          assert x["no_biological_effect_or_false_pvalue_fitted"]
+          assert x["no_source_photographs_or_inferred_traits"]
+          assert x["source_401_does_not_prove_source_nonexistence"]
+          for name,d in x["source_results"].items():
+              for f in d["file_source_bytes"]:
+                  if f.get("real_source_file_admitted"):
+                      assert f["original_source_file_class"].startswith(("ORIGINAL_XLSX","ORIGINAL_ZIP","ORIGINAL_SOURCE_TEXT"))
+                      assert f["official_checksum_comparison_failed"] is False
+                      assert f["downloaded_source_sha256"]
+          print("STAGE73_ORIGINAL_PUBLIC_DRYAD_PRIMARY_SOURCE_RESOLUTION",
+                {k:{"versions":v.get("original_version_ids",[]),
+                 "official_file_count":sum(len(z["original_metadata_files"]) for z in v.get("original_version_file_lists",[])),
+                 "source_attempted":len(v["file_source_bytes"]),
+                 "source_admitted":sum(z.get("real_source_file_admitted",False) for z in v["file_source_bytes"]),
+                 "full_original_archive_status":v["alternative_official_full_dataset_package"]["status"]}
+                 for k,v in x["source_results"].items()})
+          PY
+      - name: Original source identification audit artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage73-official-Dryad-Xie-Albor-original-file-access-and-digest-receipt
+          path: stage73_original_author_Dryad_versioned_binary/
+          retention-days: 90
+          if-no-files-found: warn
