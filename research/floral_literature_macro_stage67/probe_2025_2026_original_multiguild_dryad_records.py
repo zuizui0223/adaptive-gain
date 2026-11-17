@@ -65,7 +65,7 @@ def audit(typ,doi):
     # If API versions response schema differs, do not invent a version id.
     if not allvers and isinstance(versions.get("data"),list):
         allvers=[v for v in versions["data"] if isinstance(v,dict) and v.get("id")]
-    check(bool(allvers),"CANNOT_RESOLVE_REAL_PUBLIC_DRYAD_VERSION")
+    check(bool(allvers),"CANNOT_RESOLVE_REAL_PUBLIC_DRYAD_VERSION "+json.dumps(versions,ensure_ascii=False)[:1600])
     latest=max(allvers,key=lambda v:int(v["id"]))
     ver_id=int(latest["id"])
     files_url=ROOT+"/versions/"+str(ver_id)+"/files"
