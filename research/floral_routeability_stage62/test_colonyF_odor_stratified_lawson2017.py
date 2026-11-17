@@ -64,7 +64,8 @@ class OriginalLawson2017FColonyOdorContracts(unittest.TestCase):
         rows=invented_bees()
         for r in rows:
             if r["colony_as_published"]=="F" and r["group"]=="B":
-                r["reward_scent_as_published"]="lav"
+                r["reward_scent_as_published"]=(
+                    "mint" if r["reward_scent_as_published"]=="lav" else "lav")
                 break
         with self.assertRaisesRegex(ValueError,"BY_ODOR_COVERAGE"):
             _selected(rows)
