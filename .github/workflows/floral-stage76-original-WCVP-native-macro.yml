@@ -1,0 +1,131 @@
+name: floral-stage76-source-WCVP-native-continental-guild-MACRO
+
+on:
+  push:
+    branches: [analysis/floral-wcvp-native-europe-macro-guild-stage76-20261118]
+    paths:
+      - "research/floral_macro_stage76/**"
+      - ".github/workflows/floral-stage76-original-WCVP-native-macro.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-native-plant-guild-continental-macro:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install native area polygon containment and repair
+        run: python -m pip install "shapely>=2,<3"
+      - name: Verify source-free native/introduced/unknown and independent cohort selection
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage76 \
+            -p "test_official_native_WCVP_Stage75_macro_field_guilds.py" -v
+      - name: Recover authenticated original Stage75 macro 59k TEXT x 54 field studies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44117438149 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage75-continental-NHM59k-x-EuPPollNet54study-original-TEXT-trait-guild-macro \
+            --dir stage76_original_stage75
+          test -s stage76_original_stage75/original_source_hue_positive_species_in_network_environment.csv
+          test -s stage76_original_stage75/original_source_963_species_continental_macro_trait_guild_receipt.json
+          echo "c55836c115b013ecbe41d00c20ac9348913ce4edbc23178ab3249de024314de5  stage76_original_stage75/original_source_hue_positive_species_in_network_environment.csv" | sha256sum -c
+          echo "e63f97c8cafc9d649531b247e5f0559f8c399e0cb72dfa503178806854739d93  stage76_original_stage75/original_source_963_species_continental_macro_trait_guild_receipt.json" | sha256sum -c
+      - name: Recover all 18798 authentic plant x field network source rows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage76_original_stage69
+          test -s stage76_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage76_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Fetch exact original Kew WCVP and confirm bytes match island source pin
+        run: |
+          mkdir -p stage76_original_external
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 950 \
+            https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip \
+            -o stage76_original_external/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage76_original_external/wcvp.zip" | sha256sum --check
+      - name: Fetch original source TDWG Level3 and verify its real Git blob
+        run: |
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 150 \
+            https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson \
+            -o stage76_original_external/level3.geojson
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          raw=Path("stage76_original_external/level3.geojson").read_bytes()
+          sha=hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest()
+          assert sha=="91104e5159e31f88154833a51d3b0d1c9271083f",sha
+          print("STAGE76_ORIGINAL_OLD_TDWG_L3_SOURCE_VERIFIED",sha)
+          PY
+      - name: Recompute REAL source 963 source plant text with WCVP plant native-L3 and strict bee visits
+        run: |
+          python -u research/floral_macro_stage76/official_native_WCVP_Stage75_macro_field_guilds.py \
+            --stage75-hues stage76_original_stage75/original_source_hue_positive_species_in_network_environment.csv \
+            --stage75-receipt stage76_original_stage75/original_source_963_species_continental_macro_trait_guild_receipt.json \
+            --stage69-original-networks stage76_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --wcvp-zip stage76_original_external/wcvp.zip \
+            --tdwg-geojson stage76_original_external/level3.geojson \
+            --outdir stage76_original_source_native_hue_guild
+      - name: Validate native-site observation gate and exact source 963/809/1408 counts
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage76_original_source_native_hue_guild")
+          j=json.loads((p/"official_wcvp_native_stage75_macro_source_and_guild_receipt.json").read_text())
+          assert j["source_original_EuPPollNet_623476_record_rows"]==623476
+          assert j["source_original_EuPPollNet_1864_networks"]==1864
+          assert j["source_actual_distinct_original_plant_taxa"]==1408
+          assert j["source_actual_distinct_NHM_matched_plant_taxa"]==963
+          assert j["source_actual_distinct_plant_taxa_with_NHM_flower_colour"]==809
+          assert j["source_original_valid_TDWG_polygon_provenance"]["tdwg_invalid_polygon_features_excluded"]==19
+          assert j["source_source_raw_network_coordinates"]["original_source_multiple_coordinate_networks"]==6
+          assert j["source_WCVP_exact_accepted_species_catalog"]["input_source_species_names"]==1408
+          assert j["source_origins_unlisted_unknown_not_invasive_absent"]
+          assert j["raw_tdwg_region_not_exact_species_population_native_proof"]
+          assert j["flower_visual_text_is_not_real_UV_guide_or_spectra"]
+          assert j["global_Bombus_hypervolume_artifact_reused"] is False
+          assert j["observed_site_guild_presence_not_predicted_suitability"]
+          assert j["no_new_selection_or_causal_SEM"]
+          assert len(j["original_site_native_HUE_vs_Bombus_strict_recorded_comparisons"])==4
+          for k,result in j["original_site_native_HUE_vs_Bombus_strict_recorded_comparisons"].items():
+              assert result["formal_confirmatory_p_value"] is None
+              assert not result["real_Bombus_environmental_suitability_fitted"]
+              assert result["source_original_Stage75_hue_eligible_networks"] in (345,65)
+              assert result["source_new_WCVP_native_region_networks_before_guild"]<=result["source_original_Stage75_hue_eligible_networks"]
+              assert result["WCVP_TDWG_L3_does_not_prove_plant_is_local_native_individual"]
+          with (p/"original_macro_plant_hue_WCVP_native_bio_euppollnet.csv").open() as f:
+              species=list(csv.DictReader(f))
+          print("STAGE76_MACRO_WCVP_NATIVENESS_SOURCE_FIELD_REQUALIFIED",{
+            "WCVP_exact":j["source_WCVP_exact_accepted_species_catalog"],
+            "original_native_region_coverage":j["source_EuPPollNet_all_18798_plant_site_WCVP_native_original_vs_georepaired"],
+            "source_networks":{k:{key:v.get(key) for key in (
+                 "source_new_WCVP_native_region_networks_before_guild",
+                 "informative_networks","informative_study_ids",
+                 "source_network_local_null_score_ratio",
+                 "descriptive_study_block_bootstrap_percentile_95")}
+                 for k,v in j["original_site_native_HUE_vs_Bombus_strict_recorded_comparisons"].items()},
+            "native_qualifying_plant_network_units":len(species),
+          })
+          PY
+      - name: Save audited original WCVP native macro source only — no WCVP raw binary redistributed
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage76-ORIGINAL-WCVP-native-1408-floral-TEXT-x-54study-real-visitor-macro
+          path: stage76_original_source_native_hue_guild/
+          retention-days: 90
+          if-no-files-found: warn
