@@ -167,7 +167,18 @@ def load_joined_network(rows,traits):
     if len(matched)!=SOURCE_NAME_OVERLAP:
         raise ValueError("STAGE75_ORIGINAL_NHM_963_SPECIES_OVERLAP_CHANGED")
     hue_counts=Counter(mono_species.values())
+    networks_with_two_lexical_one_hue_species={
+        k for k,v in original.items() if len(v)>=2
+    }
+    networks_with_at_least_two_distinct_hue_lexicons={
+        k for k,v in original.items()
+        if len({r["hue"] for r in v})>=2
+    }
     overall={
+      "source_networks_with_at_least_two_source_one_hue_species":len(networks_with_two_lexical_one_hue_species),
+      "source_studies_with_at_least_two_source_one_hue_species":len({k[0] for k in networks_with_two_lexical_one_hue_species}),
+      "source_networks_with_at_least_two_distinct_explicit_hue_families":len(networks_with_at_least_two_distinct_hue_lexicons),
+      "source_studies_with_at_least_two_distinct_explicit_hue_families":len({k[0] for k in networks_with_at_least_two_distinct_hue_lexicons}),
       "source_euppollnet_original_species_ranked_names":len(all_species),
       "source_original_NHM_literal_matched_species":len(matched),
       "source_original_NHM_lexical_one_hue_species":len(mono_species),
