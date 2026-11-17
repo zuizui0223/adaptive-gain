@@ -1,0 +1,89 @@
+name: floral-stage55-original-159-UV-congener-Bombus-HEX-coverage
+on:
+  push:
+    branches: [analysis/floral-congener-bombus-159-stage55-20261117]
+    paths:
+      - 'research/floral_visual_macro_stage55/**'
+      - '.github/workflows/floral-stage55-UV-congener-bee-159.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  full-original-159-plant-Gbif-bee-model-paired-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact projected-original-bee-hex processing requirements
+        run: python -m pip install --disable-pip-version-check 'numpy==2.2.6' 'pyshp==2.3.1' 'pyproj==3.7.2' 'shapely==2.1.2'
+      - name: Offline tests for source polarity, missingness, paired independence, and no false zero
+        working-directory: research/floral_visual_macro_stage55
+        run: python -m unittest -v test_source_congener_bee_coverage
+      - name: Read independently source-verified original 2016 159 UV trait species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43872051254
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage52-source-authenticated-KoskiAshman2016-159-species-latitude-UVB
+          path: research/floral_visual_macro_stage55/source_159
+      - name: Read genuine Kew WCVP native-level-3 coverage for original 159
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43883087572
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage53-official-Kew-WCVP-159-UV-native-botanical-country-evidence
+          path: research/floral_visual_macro_stage55/source_native
+      - name: Read original bee-model predictions, author tree and PA filter
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43850263676
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage46-author-filtered-global-Bombus-hex-original-geography
+          path: research/floral_visual_macro_stage55/source_bees
+      - name: Source-original 159 plants, exact bee HEX, native-overlap opposite-UV paired availability
+        working-directory: research/floral_visual_macro_stage55
+        run: |
+          python -u source_congener_bee_coverage.py \
+            --source-2016-159 source_159/KoskiAshman2016_159_accepted_UV_source_latitude_UVB.csv \
+            --source-WCVP-159 source_native/original_159_UV_plants_KEW_WCVP_native_TDWG_L3.csv \
+            --original-author-bee-hex-10242 source_bees/original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv
+      - name: Source frame and bounded no-inference gating
+        working-directory: research/floral_visual_macro_stage55
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage55_source_159_congener_bee_coverage')
+          d=json.loads((p/'source_159_UV_congener_Bombus_coverage_receipt.json').read_text())
+          assert d['n_2016_source_measured_unique_GBIF_accepted_species']==159
+          assert d['source_original_bee_HEX_total']==10242
+          assert d['source_original_eligible_bee_HEX']==2695
+          assert d['no_p_values_due_to_source_genera_and_nonrandom_data']
+          assert d['GBIF_first_index_page_not_native_range_or_random_occurrences']
+          expected={'same_genus_and_overlapping_native_WGSRPD_L3':61,
+                    'source_lat10_UVB1200_temp6':53,
+                    'source_lat5_UVB700_temp4':45}
+          for key,n in expected.items():
+            assert d['comparison_tiers'][key]['n_original_source_selected_opposite_UV_congener_pairs']==n
+          with (p/'159_original_UV_species_first_page_Bombus_source_HEX_exposures.csv').open() as fp:
+            row=list(csv.DictReader(fp))
+          assert len(row)==159 and len({x['gbif_accepted_species_key'] for x in row})==159
+          print('STAGE55_159_BOMBUS_CONGENER_COVERAGE_NO_INFERENCE',
+                {'eligible_species':d['n_original_2016_source_species_with_at_least_5_quality_records_and_2_eligible_hex'],
+                 'missing_API':d['n_GBIF_API_unavailable_species'],
+                 'tiers':d['comparison_tiers']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage55-159-original-UV-Kew-native-congeners-Bombus-source-HEX-coverage
+          path: research/floral_visual_macro_stage55/stage55_source_159_congener_bee_coverage/*
+          if-no-files-found: error
+          retention-days: 90
