@@ -1,0 +1,80 @@
+name: floral-stage65-original-8-bloom-annotated-CC-image-marking-source-QC
+on:
+  push:
+    branches: [analysis/floral-phenology-confirmed-open-flower-pilot-stage65-20261117]
+    paths:
+      - research/floral_routeability_stage65/audit_original_annotated_8_photo_marking.py
+      - research/floral_routeability_stage65/test_audit_original_annotated_8_photo_marking.py
+      - research/floral_routeability_stage65/one_reviewer_actual_8_flower_annotated_photo_marking_audit.csv
+      - .github/workflows/floral-stage65-source-8-bloom-photo-mark-QC.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuine-original-8-open-licensed-annotated-bloom-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exact photo ID source, CC license, botanically-unreviewable negative guards
+        run: |
+          PYTHONPATH=research/floral_routeability_stage65:research/floral_routeability_stage64:. \
+            python -m unittest -v test_audit_original_annotated_8_photo_marking
+      - name: Download source authenticated and integer/string-overlap-corrected flowering annotation 27 CC IDs and 8 pixel SHA/credits
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44020931936
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage65-verified-original-iNat-flowering-annotated-CC-photo-source-and-pixels
+          path: research/floral_routeability_stage65/original_source_27_and_pixels
+      - name: Verify each single-reviewer photo label against true original image SHA, species, obs and flower annotation
+        run: |
+          python -u research/floral_routeability_stage65/audit_original_annotated_8_photo_marking.py \
+            --source-CC8-image-credits research/floral_routeability_stage65/original_source_27_and_pixels/stage64_original_cc_photo_pixel_review/original_CC_photo_pixel_review_credits_and_unmeasured_traits.json \
+            --source-flowering-annotated-27 research/floral_routeability_stage65/original_source_27_and_pixels/stage65_original_iNat_flower_annotated_photo_metadata/four_source_taxa_original_iNat_annotated_flowering_CC_photo_review.csv
+      - name: Protect photo-level markings, no UV-guide functions, and reused photos not false independent biology
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage65_original_flowering_CC_photo_real_marking_QA/original_annotated_flowering_8_photo_review_eligibility_summary.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='STAGE65_SOURCE_VERIFIED_FLOWERING_ANNOTATED_EIGHT_PHOTO_SINGLE_REVIEWER_PATTERN_QA'
+          assert d['original_cc_photo_pixels_sha256_verified']==8
+          assert d['n_annotated_CC_original_photo_source_records']==27
+          assert d['n_source_photos_with_reviewable_open_corolla']==3
+          assert d['n_source_photos_visible_colour_marking_positive']==3
+          assert d['n_source_photos_verified_within_corolla_uniform']==0
+          assert d['n_source_photos_flower_pattern_unknown_not_absent']==5
+          assert d['n_stage65_images_reused_from_old_stage64_original_photo_sample']==2
+          assert d['n_source_positive_photo_IDs_already_in_stage64_manual_review']==1
+          assert d['distinct_species_with_source_positive_photo_records']=={
+             'Dianthus deltoides':1, 'Dianthus barbatus':1,'Antirrhinum majus':1}
+          assert d['flowering_annotation_is_observation_not_flower_image']
+          assert d['between_two_pilot_photographs_not_randomized_phenology_control']
+          assert d['unblinded_assistant_one_reviewer_no_second_independent_verifier']
+          assert d['RGB_is_not_UV_measured']
+          assert d['photo_marks_not_nectar_guide_function']
+          assert d['photo_not_same_original_VOC_specimen']
+          assert d['source_cue_routing_wind_VOC_mechanism_not_measured']
+          print('STAGE65_ACTUAL_BLOOM_TAGGED_SOURCE_IMAGE_MARKING_AND_REUSED_PHOTO_QA',
+              {k:d[k] for k in (
+                 'n_source_photos_visible_colour_marking_positive',
+                 'n_source_photos_verified_within_corolla_uniform',
+                 'n_source_photos_flower_pattern_unknown_not_absent',
+                 'n_stage65_images_reused_from_old_stage64_original_photo_sample',
+                 'distinct_species_with_source_positive_photo_records',
+                 'by_photo_open_flower_eligibility')})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage65-genuine-CC-source-bloom-8-photo-one-reviewer-marking-eligibility
+          path: stage65_original_flowering_CC_photo_real_marking_QA/*
+          if-no-files-found: error
+          retention-days: 90
