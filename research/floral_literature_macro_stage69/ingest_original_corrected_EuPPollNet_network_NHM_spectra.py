@@ -64,7 +64,10 @@ def fetch_original(name: str) -> bytes:
 def dict_rows(raw: bytes, compressed: bool = False):
     buffer = (gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb")
               if compressed else io.BytesIO(raw))
-    text = io.TextIOWrapper(buffer, encoding="utf-8-sig", newline="")
+    # The verified ORIGINAL v1.3.0 gzip contains non-UTF8 bytes in some source
+    # strings. Keep byte-authentication, label decoding uncertainty explicitly,
+    # and NEVER infer an accepted taxon name from replacement characters.
+    text = io.TextIOWrapper(buffer, encoding="utf-8-sig", errors="replace", newline="")
     reader = csv.DictReader(text)
     if not reader.fieldnames:
         raise ValueError("STAGE69_CSV_MISSING_HEADER")
@@ -109,6 +112,7 @@ def guild_of(row):
 
 def is_species(row):
     return (row.get("Plant_rank", "").strip().casefold() == "species" and
+            "�" not in row.get("Plant_accepted_name","") and
             row.get("Plant_unsure_id", "").strip().casefold() not in
             {"yes", "true", "1", "y"})
 
@@ -177,9 +181,14 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
     unknown_year = 0
     unmatched_study_year = 0
     observed_taxonomic_rank = Counter()
+    source_utf8_replacement_fields = Counter()
 
     for row in dict_rows(raw_gz, compressed=True):
         counts["original_corrected_record_rows"] += 1
+        affected = [k for k,v in row.items() if "�" in (v or "")]
+        if affected:
+            counts["source_original_rows_with_lossy_utf8_decode"] += 1
+            source_utf8_replacement_fields.update(affected)
         plant = row["Plant_accepted_name"].strip()
         source = row["Study_id"].strip()
         net = row["Network_id"].strip()
@@ -300,6 +309,9 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
         "plant_taxon_rank_observation_rows": dict(observed_taxonomic_rank),
         "records_with_missing_or_invalid_coordinates": malformed_geography,
         "records_without_parseable_year": unknown_year,
+        "source_original_rows_with_lossy_utf8_decode": counts["source_original_rows_with_lossy_utf8_decode"],
+        "source_original_invalid_utf8_fields": dict(source_utf8_replacement_fields),
+        "replacement_in_accepted_plant_name_disqualifies_species_match": True,
         "plant_species_confident_x_NHM_text_exact_names": len(observed_nhm),
         "plant_species_confident_x_NHM_text_any_colour": len(observed_color),
         "plant_species_confident_x_NHM_text_colour_and_structure": len(observed_color & observed_struct),
