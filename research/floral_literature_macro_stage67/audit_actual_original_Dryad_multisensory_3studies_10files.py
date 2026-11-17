@@ -8,7 +8,7 @@ Every file is an original Dryad version/fixed downloadable id and SHA256.
 Metadata archive is the external original API version-file list 44038731710.
 """
 from __future__ import annotations
-import argparse,csv,hashlib,io,json,re,urllib.request,zipfile
+import argparse,csv,hashlib,io,json,re,urllib.request,urllib.error,zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -118,26 +118,47 @@ def source_audit(meta):
         for item in files:
             filename=item["filename"].rsplit("/",1)[-1]
             check(filename in ALLOWED[name],"UNREVIEWED_EXTERNAL_FILENAME")
-            data=read_download(item)
             record={"original_filename":filename,
                 "original_version_id":source["version_id"],
-                "file_size":len(data),
-                "verified_SHA256":hashlib.sha256(data).hexdigest(),
+                "source_API_file_bytes":item["file_size_source_bytes_or_null"],
+                "source_API_reported_SHA256_NOT_DOWNLOADED":item["hash_source_or_unknown"],
                 "original_API_download_file_link":ROOT+item["source_download_URL"],
                 "original_dataset_DOI":source["query_DOI"],
                 "not_a_genetic_evolution_reproductive_fitness_observation":True}
-            suffix=Path(filename).suffix.lower()
-            if suffix==".csv":record["original_format_audit"]=csv_structure(data)
-            elif suffix==".zip":record["original_format_audit"]=zip_members(data)
-            elif suffix==".xlsx":record["original_format_audit"]=xlsx_structure(data)
-            elif suffix==".docx":record["original_format_audit"]=zip_members(data)
-            elif suffix==".md":
-                record["original_format_audit"]={"source_text_lines":len(data.splitlines()),
-                  "original_text_title":data.decode("utf-8-sig",errors="replace").splitlines()[:3]}
+            try:
+                data=read_download(item)
+            except urllib.error.HTTPError as exc:
+                if exc.code!=401:raise
+                # Public Dryad metadata files DO NOT imply anonymous access
+                # to REST raw file bytes (the public file endpoint requires
+                # a Bearer token in 2026). Explicitly report unresolved.
+                record["download_status"]="DRYAD_REST_401_OAUTH_REQUIRED_NOT_VERIFIED"
+                record["source_data_original_bytes_verified"]=False
+                record["original_format_audit"]={
+                    "status":"UNREAD_NO_SOURCE_DATA_OR_BIOLOGICAL_COUNTS",
+                    "not_a_zero_trait_or_absent_species":True}
+            else:
+                record["download_status"]="EXACT_PUBLISHED_BYTES_SHA256_VERIFIED"
+                record["source_data_original_bytes_verified"]=True
+                record["actual_bytes"]=len(data)
+                record["verified_SHA256"]=hashlib.sha256(data).hexdigest()
+                suffix=Path(filename).suffix.lower()
+                if suffix==".csv":record["original_format_audit"]=csv_structure(data)
+                elif suffix==".zip":record["original_format_audit"]=zip_members(data)
+                elif suffix==".xlsx":record["original_format_audit"]=xlsx_structure(data)
+                elif suffix==".docx":record["original_format_audit"]=zip_members(data)
+                elif suffix==".md":
+                    record["original_format_audit"]={"source_text_lines":len(data.splitlines()),
+                     "original_text_title":data.decode("utf-8-sig",errors="replace").splitlines()[:3]}
             file_results.append(record)
         out[name]={"source_version":source["version_id"],
           "original_DOI":source["query_DOI"],"source_original_files":file_results,
-          "real_files_checked":len(file_results),"real_original_SHA256_all_verified":True}
+          "original_source_file_metadata_referenced":len(file_results),
+          "actual_original_source_file_bytes_SHA256_verified":sum(
+              r["source_data_original_bytes_verified"] for r in file_results),
+          "n_source_raw_files_401_OAuth_blocked":sum(
+              r["download_status"]=="DRYAD_REST_401_OAUTH_REQUIRED_NOT_VERIFIED"
+              for r in file_results)}
         print("STAGE67_GENUINE_3_PUBLIC_PRIMARY_DRYAD_SOURCE_FILES",name,
            json.dumps({"version":source["version_id"],"n_files":len(file_results),
              "format_audits":{r["original_filename"]:{
@@ -146,7 +167,9 @@ def source_audit(meta):
                for r in file_results}},sort_keys=True))
     return {"schema":"original_2022_2025_2026_source_Dryad_download_SHA_and_format_audit",
          "n_real_independent_study_data_archives":3,
-         "total_real_published_source_files_verified":sum(z["real_files_checked"] for z in out.values()),
+         "total_original_source_file_metadata_records":sum(z["original_source_file_metadata_referenced"] for z in out.values()),
+         "total_original_source_file_bytes_SHA256_verified":sum(z["actual_original_source_file_bytes_SHA256_verified"] for z in out.values()),
+         "total_original_source_files_401_OAuth_required":sum(z["n_source_raw_files_401_OAuth_blocked"] for z in out.values()),
          "source_original_API_provenance_run":SOURCE_RUN,
          "source_data":out,
          "no_source_image_photography_or_assigned_UV_spatial_guide_binary":True,
@@ -164,5 +187,7 @@ def main():
        json.dumps(summary,ensure_ascii=False,indent=2,sort_keys=True)+"\n")
     print("STAGE67_REAL_SOURCE_3_STUDIES_10_FILES_SHA_VALIDATED",
        json.dumps({"n_sources":summary["n_real_independent_study_data_archives"],
-         "source_files_verified":summary["total_real_published_source_files_verified"]}))
+         "source_API_file_records":summary["total_original_source_file_metadata_records"],
+         "original_raw_file_bytes_verified":summary["total_original_source_file_bytes_SHA256_verified"],
+         "raw_file_401_blocked":summary["total_original_source_files_401_OAuth_required"]}))
 if __name__=="__main__":main()
