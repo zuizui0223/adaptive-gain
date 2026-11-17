@@ -1,0 +1,71 @@
+name: floral-stage71-original-flower-count-visit-effort-gate
+
+on:
+  push:
+    branches: [analysis/floral-unselected-guild-effort-stage71-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage71/**'
+      - '.github/workflows/floral-stage71-original-flower-exposure.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-flower-count-vs-visitor-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free tests of flower count source identity and unknowns
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage71 \
+            -p 'test_audit_original_flowers_sampling_exposure.py' -v
+      - name: Recover source-verified Stage69 original corrected 2557 spectral species network units
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage71_original_stage69
+          test -s stage71_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv
+      - name: Audit actual author original v1.3.0 flower abundance and visit linkage
+        run: |
+          python -u research/floral_literature_macro_stage71/audit_original_flowers_sampling_exposure.py \
+            --stage69-original-network-units stage71_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage71_original_flowers_coverage
+      - name: Scientific grain checks before field optical model
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path("stage71_original_flowers_coverage")
+          j=json.loads((root/"original_flower_count_source_audit_receipt.json").read_text())
+          with (root/"source_2557_spectral_plant_flower_count_link_audit.csv").open() as f: rows=list(csv.DictReader(f))
+          assert j["original_623476_visit_records"]==623476
+          assert j["spectral_plant_network_year_units"]==2557
+          assert len(rows)==2557
+          assert j["source_original_author_release"]=="joseblanuza/EuPPollNet@v1.3.0"
+          assert j["source_flower_csv_Git_blob_SHA1"]=="8543e446a53f3b7cffece76e1699489e7169f7fd"
+          assert j["valid_denominator_rate_for_visitor_events_per_flower"] is False
+          assert j["site_date_synchronized_flower_abundance_validated"] is False
+          assert j["trait_visitation_association_fitted"] is False
+          print("STAGE71A_REAL_FLOWER_SOURCE_EXPOSURE_COVERAGE_VERIFIED",
+                {k:v for k,v in j.items() if k.startswith("original_flower_count_")
+                 and k not in ("original_flower_count_source_columns",)})
+          print("SOURCE_VISIT_LINK_CLASSES",j["spectral_plant_network_year_coverage_classes"])
+          PY
+      - name: Upload coverage receipt and source-qualified visit–flower key audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage71-v130-ORIGINAL-flower-count-denominator-source-audit
+          path: stage71_original_flowers_coverage/
+          retention-days: 90
+          if-no-files-found: warn

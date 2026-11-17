@@ -1,0 +1,151 @@
+name: floral-stage71b-original-outcome-blind-optical-guild-native-design
+
+on:
+  push:
+    branches: [analysis/floral-unselected-guild-effort-stage71-20261117]
+    paths:
+      - "research/floral_literature_macro_stage71/build_outcome_blind_native_visitation_cohort.py"
+      - "research/floral_literature_macro_stage71/test_build_outcome_blind_native_visitation_cohort.py"
+      - "research/floral_literature_macro_stage71/compare_original_uv_vs_identified_bees_null_score.py"
+      - "research/floral_literature_macro_stage71/test_compare_original_uv_vs_identified_bees_null_score.py"
+      - ".github/workflows/floral-stage71b-unselected-native-bee.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  pre-outcome-regional-native-cohort:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned geospatial dependency family
+        run: |
+          python -m pip install "shapely>=2.0,<3"
+      - name: Prove source-cohort assignment does not use Bombus outcome
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage71 \
+            -p "test_build_outcome_blind_native_visitation_cohort.py" -v
+      - name: Recover original unselected Stage69 source plant network units and Stage68 original spectra
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage71_original_source69
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage71_original_source68
+          test -s stage71_original_source69/original_plant_network_year_observed_guilds_text_spectra.csv
+          test -s stage71_original_source68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv
+      - name: Download original official Kew WCVP, source SHA must equal island published pin
+        run: |
+          mkdir -p stage71_original_external
+          curl --fail --location --retry 2 --connect-timeout 30 --max-time 900 \
+            https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip \
+            -o stage71_original_external/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage71_original_external/wcvp.zip" | sha256sum --check
+      - name: Source original TDWG WGSRPD L3 polygon and Git blob SHA authentication
+        run: |
+          curl --fail --location --retry 2 --connect-timeout 30 --max-time 120 \
+            https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson \
+            -o stage71_original_external/level3.geojson
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          b=Path('stage71_original_external/level3.geojson').read_bytes()
+          sha=hashlib.sha1(f"blob {len(b)}\0".encode()+b).hexdigest()
+          assert sha=="91104e5159e31f88154833a51d3b0d1c9271083f",sha
+          print("STAGE71B_AUTHENTIC_ORIGINAL_HISTORICAL_TDWG_SOURCE",sha)
+          PY
+      - name: Freeze network + source-native optical species first, then open recorded bee identities
+        run: |
+          python -u research/floral_literature_macro_stage71/build_outcome_blind_native_visitation_cohort.py \
+            --stage69-network-units stage71_original_source69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --stage68-original-spectra stage71_original_source68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv \
+            --wcvp-zip stage71_original_external/wcvp.zip \
+            --tdwg-geojson stage71_original_external/level3.geojson \
+            --outdir stage71_original_unselected_native_cohort
+      - name: Validate source-blind cohort and inferential boundaries
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage71_original_unselected_native_cohort')
+          j=json.loads((p/'source_unselected_native_recorded_bee_audit.json').read_text())
+          assert j['source_spectral_original_taxon_count']==73
+          assert j['source_original_spectral_species_network_year_units']==2557
+          assert j['networks_with_at_least_two_original_spectrometer_species_before_outcomes']==685
+          assert j['source_guild_information_used_in_cohort_selection'] is False
+          assert j['stage69_156_and_stage70_73_135_outcome_selected_sets_NOT_reused']
+          assert j['source_original_networks_native_area_primary_without_guild_outcome_filter']>0
+          assert j['original_strict_bee_record_audit']['source_actual_corrected_visit_rows']==623476
+          assert j['post_freeze_guild_observability']['primary']['outcome_blind_source_networks']>0
+          assert j['source_garden_vs_field_phenotype_transfer_unverified']
+          assert j['plant_species_fixed_effect_identifies_species_constant_UV_slope'] is False
+          assert j['no_causal_bumblebee_adaptation_or_plant_fitness_result']
+          with (p/'original_study_network_native_sample_frame_NOT_GUILD_FILTERED.csv').open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==685
+          assert all(r['selection_used_Bombus_or_other_guild_outcome']=='0' for r in rows)
+          print('STAGE71B_SOURCE_ACTUAL_UNSELECTED_NETWORKS_PASS',
+                {k:v for k,v in j.items() if k.startswith('source_original_networks_native')
+                 or k.startswith('source_original_studies_native')})
+          print('STAGE71B_POST_FREEZE_STRICT_BEE_OBSERVABILITY',
+                j['post_freeze_guild_observability'])
+          PY
+      - name: Verify source-independent UV/Bombus null-score comparator and no fake p-values
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage71 \
+            -p "test_compare_original_uv_vs_identified_bees_null_score.py" -v
+      - name: Evaluate within-network source-trait versus strict recorded bee composition after frozen cohort
+        run: |
+          python -u research/floral_literature_macro_stage71/compare_original_uv_vs_identified_bees_null_score.py \
+            --original-guild-after-freeze stage71_original_unselected_native_cohort/original_strict_species_bee_observations_ONLY_AFTER_FREEZE.csv \
+            --original-native-network-frame stage71_original_unselected_native_cohort/original_study_network_native_sample_frame_NOT_GUILD_FILTERED.csv \
+            --original-source-receipt stage71_original_unselected_native_cohort/source_unselected_native_recorded_bee_audit.json \
+            --outdir stage71_original_unselected_native_cohort/exploratory_conditional_null_score
+      - name: Confirm geography-sensitivity and species/study cluster fragility receipts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          path=Path("stage71_original_unselected_native_cohort/exploratory_conditional_null_score/null_score_guild_composition_source_and_sensitivity_receipt.json")
+          d=json.loads(path.read_text())
+          assert d["primary_and_repaired_geometry_independent_pre_outcome_cohorts"]
+          assert d["previous_stage69_156_and_stage70_73_or_135_guild_outcome_conditioned_samples_rejected"]
+          assert d["scores_not_fitted_logit_regression_or_causal_selection"]
+          assert d["source_field_flower_abundance_exposure_not_harmonized"]
+          assert d["phylogeny_genus_and_source_population_trait_persistence_unidentified"]
+          assert len(d["result_cells"])==4
+          for k,c in d["result_cells"].items():
+              assert c["informative_networks"] > 0
+              assert c["informative_studies"] > 0
+              assert c["formal_confirmatory_statistical_pvalue_or_confidence_interval"] is None
+              assert c["score_is_one_step_null_linear_approximation_not_fitted_mle"]
+              assert c["source_taxon_fixed_effect_would_absorb_species_constant_spectrum"]
+              assert c["study_networks_and_species_not_independent_replicates"]
+          print("STAGE71C_EXPLORATORY_REAL_UV_ASSOCIATION_SOURCE_AND_FRAGILITY_VERIFIED",{
+           k:{m:r[m] for m in ("frozen_source_original_networks_not_selected_by_Bombus",
+              "informative_networks","informative_studies",
+              "null_score_slope_approx_UV_per_10pct_points",
+              "study_leave_one_out_flipped_sign","taxon_leave_one_out_sign_flips")}
+           for k,r in d["result_cells"].items()})
+          PY
+      - name: Original derived source cohort and bee counts with strict claim labels
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage71b-ORIGINAL-unselected-native-685-optical-networks-strict-bee
+          path: stage71_original_unselected_native_cohort/
+          retention-days: 90
+          if-no-files-found: warn
