@@ -52,9 +52,8 @@ def combine(prior,source):
         if uv not in ("0","1",""):
             raise ValueError("NO_GO_SOURCE_SPATIAL_UV_NOT_BINARY_OR_UNKNOWN")
         study=r["source_original_direct_UV_studies"]
-        if not study:
-            raise ValueError("NO_GO_PRIOR_UV262_SOURCE_ARTICLE_FIELD_MISSING")
-        prior_studies.add(key)
+        if study:
+            prior_studies.add(key)
         ohashi=from_source_bool(r["original_Ohashi_2015_age_reflectance_archive"])
         review=from_source_bool(r["original_2025_colour_change_literature_reviewed"])
         out[key]={
@@ -76,8 +75,9 @@ def combine(prior,source):
             "no_unknown_visual_modality_inferred_as_absent":True,
             "native_source_phenotyped_site_and_local_pollinator_cooccurrence":"NOT_VERIFIED",
         }
-    if len(prior_studies)!=PRIOR_N:
-        raise ValueError("NO_GO_PRIOR_SOURCE_STUDY_KEYS")
+    if len(prior_studies)!=PRIOR_UV_STUDY:
+        raise ValueError("NO_GO_PRIOR_SOURCE_UV262_STUDY_KEYS")
+    prior_all_keys=set(out)
     if (Counter(r["source_UV_pattern_directly_measured_or_unknown"] for r in out.values())
             !=Counter({"1":PRIOR_SPATIAL_PATTERNED,"0":PRIOR_SPATIAL_UNIFORM,"":353})):
         raise ValueError("NO_GO_PRIOR_DIRECT_UV_PATTERNED_UNIFORM_LABELS")
@@ -132,7 +132,7 @@ def combine(prior,source):
         primary.append(guild)
     if len(newkeys)!=NEW_N or Counter(primary)!=Counter(LITERATURE_GUILD):
         raise ValueError("NO_GO_ORIGINAL_NEW_ACCEPTED_2025_SOURCE_COUNT_GUILD")
-    overlap=len(newkeys&prior_studies)
+    overlap=len(newkeys&prior_all_keys)
     if overlap!=OVERLAP or len(out)!=UNION_N:
         raise ValueError("NO_GO_ORIGINAL_ACCEPTED_KEY_OVERLAP_817_COUNT")
     rows=sorted(out.values(),key=lambda r:int(r["gbif_accepted_species_key"]))
@@ -143,7 +143,7 @@ def combine(prior,source):
         "prior_original_UV_age_spectra_review_source_unique_accepted_species":PRIOR_N,
         "new_2025_UV_numeric_species_source_unique_accepted_species":NEW_N,
         "source_accepted_species_overlap":overlap,
-        "new_2025_source_unique_accepteds_not_in_prior":len(newkeys-prior_studies),
+        "new_2025_source_unique_accepteds_not_in_prior":len(newkeys-prior_all_keys),
         "combined_distinct_original_source_accepted_botanical_species":len(out),
         "source_original_directly_measured_UV_spatial_patterned":PRIOR_SPATIAL_PATTERNED,
         "source_original_directly_measured_UV_spatial_uniform":PRIOR_SPATIAL_UNIFORM,
