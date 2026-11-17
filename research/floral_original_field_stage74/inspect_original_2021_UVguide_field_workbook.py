@@ -23,7 +23,9 @@ from audit_original_2021_sensory_drive_Zenodo import (
     manifest_meta,record_files_metadata,pick_original_download_url,
     get,verify_original_author_digest,REFERENCE_DOI,PUBLICATION_DOI
 )
-from replay_original_kantsa2018_network_voc import read_xlsx_sparse,table_from_sheet
+from replay_original_kantsa2018_network_voc import read_xlsx_sparse
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"floral_original_field_stage73"))
+from audit_original_wisconsin_wind_visits import table_from_sheet
 
 PIN={
  "FinnKosk_PollData_Final.xlsx":{
