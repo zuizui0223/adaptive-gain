@@ -1,0 +1,101 @@
+name: floral-stage74d-original-array-pair-first-visits-UVguide-recount
+
+on:
+  push:
+    branches: [analysis/floral-field-spectra-visitor-kent-dryad-web-stage74-20261117]
+    paths:
+      - "research/floral_original_field_stage74/recount_original_UVguide_first_choice_by_array_pair.py"
+      - "research/floral_original_field_stage74/test_recount_original_UVguide_first_choice_by_array_pair.py"
+      - "research/floral_original_field_stage74/compare_original_2021_UVguide_pair_contrasts.py"
+      - "research/floral_original_field_stage74/test_compare_original_2021_UVguide_pair_contrasts.py"
+      - ".github/workflows/floral-stage74d-original-UV-array-pair-recount.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authentic-source-recount-original-arrays:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Strict mock-only source block and pairing controls
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p 'test_recount_original_UVguide_first_choice_by_array_pair.py' -v
+      - name: Recount original field experimental first visits by array and pair, not pseudoreplicated rows
+        run: |
+          python -u research/floral_original_field_stage74/recount_original_UVguide_first_choice_by_array_pair.py \
+            --outdir stage74_original_2021_uvguide_pair_recount
+      - name: Verify real source factors and zero-imputation prohibition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage74_original_2021_uvguide_pair_recount/2021_original_source_UVguide_light_background_first_choice_pair_receipt.json")
+          d=json.loads(p.read_text())
+          assert d["source_workbook_sha256"]=="d66d12f3dbfc83b3fe6e854b69f9e5f768a1c3f973c0db5368176e17264ace59"
+          assert d["original_UV_light_factor_source_grain"]["original_record_rows_flower_by_visitor"]==648
+          assert d["original_background_factor_source_grain"]["original_record_rows_flower_by_visitor"]==312
+          assert d["original_UV_light_factor_source_grain"]["source_array_is_experimental_unit_not_row"]
+          assert d["source_this_is_one_plant_species_not_macro_taxonomic_replication"]
+          assert d["source_published_377_not_filled_or_imputed"]
+          assert d["original_UV_light_factor_source_grain"]["source_noninteger_numeric_FirstVisits_cells"]==0
+          assert d["original_background_factor_source_grain"]["source_noninteger_numeric_FirstVisits_cells"]==10
+          assert d["original_background_factor_source_grain"]["source_original_fractional_FirstVisits_sum"]==11.25
+          assert d["background_FirstVisits_raw_discrete_event_counts_not_admitted_if_fractional"]
+          assert d["source_original_background_source_pair_arms"]==[]
+          assert d["no_new_adaptive_generalization_2026"]
+          print('STAGE74D_VERIFIED_AUTHOR_RECOUNT',{
+           "UV_light_source":d["original_UV_light_factor_source_grain"],
+           "background_source":d["original_background_factor_source_grain"],
+           "UV_pairwise":d["source_UVguide_paired_condition_descriptive"],
+          })
+          PY
+      - name: Validate original array pair bootstrap and 377 source event design guards
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p 'test_compare_original_2021_UVguide_pair_contrasts.py' -v
+      - name: Real original 2021 paired UV guide large-choice contrast by elevation
+        run: |
+          python -u research/floral_original_field_stage74/compare_original_2021_UVguide_pair_contrasts.py \
+            --verified-source stage74_original_2021_uvguide_pair_recount/2021_original_source_UVguide_light_background_first_choice_pair_receipt.json \
+            --outdir stage74_original_2021_uvguide_pair_recount
+      - name: Verify actual factorial source treatment counts and block-level uncertainty
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('stage74_original_2021_uvguide_pair_recount')
+          x=json.loads((root/'original_2021_377_first_visitor_pairs_UVguide_conditions.json').read_text())
+          assert x['observed_377_first_visits_recomputed_from_original_Excel']
+          assert x['original_Zenodo_source_workbook_SHA256']=='d66d12f3dbfc83b3fe6e854b69f9e5f768a1c3f973c0db5368176e17264ace59'
+          assert len(x['source_true_visits_by_elevation_UV_and_guide'])==4
+          assert sum(row['total_first_visits'] for row in x['source_true_visits_by_elevation_UV_and_guide'])==377
+          assert sum(row['independent_original_array_units'] for row in x['source_true_visits_by_elevation_UV_and_guide'])==54
+          assert len(x['source_within_original_randomized_array_pair_differences'])==27
+          assert x['preexisting_sensory_drive_mechanism_not_novelty_claim']
+          assert x['not_global_visual_signal_pollinator_macro_test']
+          print('STAGE74E_SOURCE_RECALCULATED_ACTUAL_UV_FIRST_CHOICES',{
+             'UV_by_elevation':x['source_true_visits_by_elevation_UV_and_guide'],
+             'paired_elevation':x['source_paired_elevation_guide_UV_difference_descriptive'],
+             'high_low_difference':x['high_minus_low_paired_difference_of_large_guide_preference'],
+             'high_low_95ci':x['source_descriptive_high_minus_low_pair_bootstrap_interval_95'],
+          })
+          PY
+      - name: Preserve derived original array source count receipts for independent audit
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage74d-2021-real-SHA-original-firstvisits-UVlight-x-guide-pair
+          path: |
+            stage74_original_2021_uvguide_pair_recount/2021_original_source_UVguide_light_background_first_choice_pair_receipt.json
+            stage74_original_2021_uvguide_pair_recount/original_2021_377_first_visitor_pairs_UVguide_conditions.json
+          retention-days: 90
+          if-no-files-found: warn

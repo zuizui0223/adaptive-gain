@@ -1,0 +1,65 @@
+name: floral-stage74-original-Kent-2025-field-spectra-visitor-web-Dryad-SHA
+
+on:
+  push:
+    branches: [analysis/floral-field-spectra-visitor-kent-dryad-web-stage74-20261117]
+    paths:
+      - "research/floral_original_field_stage74/**"
+      - ".github/workflows/floral-stage74-Kent-original-public-Dryad-spectra.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  Kent-field-source-authentic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Adversarial mock-only tests of source file identity and original public links
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p 'test_probe_kent_original_public_dryad_stream.py' -v
+      - name: Retrieve original Jones 2025 Kent Island public author webpage file_stream plus official SHA
+        run: |
+          python -u research/floral_original_field_stage74/probe_kent_original_public_dryad_stream.py \
+            --outdir stage74_original_Kent_source_receipt
+      - name: Validate original source status distinguishes inaccessible from absent
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage74_original_Kent_source_receipt/kent_2025_original_author_web_stream_and_SHA_join_receipt.json')
+          r=json.loads(p.read_text())
+          assert r["original_dataset_DOI"]=="10.5061/dryad.9p8cz8wtm"
+          assert r["article_DOI"]=="10.1098/rsbl.2025.0044"
+          assert r["original_Author_file_metadata"] or r["source_both_real_spectra_and_visitors_admitted"] is False
+          assert r["published_2025_original_analysis_precedes_our_comparison"]
+          assert r["new_confirmatory_UV_guild_effect_estimated"] is False
+          assert r["photo_derived_flower_traits"] is False
+          assert r["private_authentication_bypassed"] is False
+          if r["source_both_real_spectra_and_visitors_admitted"]:
+              assert len([x for x in r["file_receipts"]
+                  if x["status"]=="REAL_ORIGINAL_PUBLIC_STREAM_ADMITTED"])==2
+              assert r["source_real_join_result"]["original_visitation_rows"]>0
+              assert r["source_real_join_result"]["strict_literal_plant_overlap"]>0
+          print('STAGE74_TRUE_ORIGINAL_KENT_FIELD_SPECTRA_NETWORK_GATE',{
+            "official_author_version":r["actual_author_version_file_inventory"]["version"],
+            "html_status":r["author_public_dataset_page_status"],
+            "actual_byte_file_status":{x["filename"]:x["status"] for x in r["file_receipts"]},
+            "real_file_overlap":r["source_real_join_result"]["strict_literal_plant_overlap"] if r["source_real_join_result"] else "NOT_AVAILABLE",
+          })
+          PY
+      - name: Upload derived source-provenance and join audit only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage74-Kent2025-official-original-90-spectra-74-visited-source-public-gate
+          path: stage74_original_Kent_source_receipt/kent_2025_original_author_web_stream_and_SHA_join_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
