@@ -1,0 +1,48 @@
+name: floral-stage56-FReD-original-single-genus-observed-metadata-probe
+on:
+  push:
+    branches: [analysis/floral-source-locality-spectra-stage56-20261117]
+    paths:
+      - research/floral_visual_macro_stage56/probe_fred_single_real_genus_sample.py
+      - research/floral_visual_macro_stage56/test_probe_fred_single_real_genus_sample.py
+      - .github/workflows/floral-stage56-FReD-original-genus-sample.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sample-actual-FReD-genus-HTML-geo-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock safety checks independent of real plant outcomes
+        working-directory: research/floral_visual_macro_stage56
+        run: python -m unittest -v test_probe_fred_single_real_genus_sample
+      - name: One real source genus, bounded search and resulting GPS/spectrum metadata probe
+        working-directory: research/floral_visual_macro_stage56
+        run: python -u probe_fred_single_real_genus_sample.py
+      - name: Ensure no observational absence is fabricated from site HTML
+        working-directory: research/floral_visual_macro_stage56
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('stage56_FReD_original_public_sample_response/FReD_one_original_source_genus_search_receipt.json').read_text())
+          assert x['status'] in ('SOURCE_FRED_PUBLIC_SEARCH_UNAVAILABLE_NOT_MISSING_SPECIMENS',
+                                 'NO_MATCHED_SOURCE_GENUS_OPTION_NO_FALSE_NEGATIVE',
+                                 'ORIGINAL_FRED_PUBLIC_SOURCE_SINGLE_GENUS_SEARCH_GATE')
+          if x['status']=='ORIGINAL_FRED_PUBLIC_SOURCE_SINGLE_GENUS_SEARCH_GATE':
+            assert x['trait_spectrum_guide_and_GPS_not_assumed_from_form']
+            assert x['source_response_results']['no_spatial_UV_pattern_or_Bombus_ecological_effect_fitted']
+          print('STAGE56_FRED_ORIGINAL_ONE_GENUS_SOURCE_GATE',x['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage56-FReD-source-original-one-genus-record-metadata
+          path: research/floral_visual_macro_stage56/stage56_FReD_original_public_sample_response/*
+          if-no-files-found: error
+          retention-days: 90
