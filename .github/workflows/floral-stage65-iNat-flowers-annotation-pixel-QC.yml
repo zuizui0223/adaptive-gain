@@ -1,0 +1,101 @@
+name: floral-stage65-iNaturalist-original-flowering-annotation-photo-source
+on:
+  push:
+    branches: [analysis/floral-phenology-confirmed-open-flower-pilot-stage65-20261117]
+    paths:
+      - 'research/floral_routeability_stage65/**'
+      - '.github/workflows/floral-stage65-iNat-flowers-annotation-pixel-QC.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-flowering-annotated-licensed-photo-morphology-QC:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed original photo preview library
+        run: python -m pip install --disable-pip-version-check 'Pillow==11.3.0'
+      - name: Mock source annotation API, provenance and missing-label unit contracts
+        run: |
+          PYTHONPATH=research/floral_routeability_stage65:research/floral_routeability_stage64:. \
+            python -m unittest -v test_probe_real_iNat_annotated_flowers_original_source
+      - name: Read independently authenticated original VOC/FCP 80 source species
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44011763557
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage60-authentic-VOC305-FCP4475-visible-pattern-photo-review-80-species
+          path: research/floral_routeability_stage65/source_stage60
+      - name: Read first original unfiltered 17 CC-licensed source photo IDs, never assume it is source FCP 100-photo set
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44019626997
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage64-source-original-iNat-4-VOC-FCP-taxa-licensed-photo-metadata
+          path: research/floral_routeability_stage65/source_stage64_unfiltered17
+      - name: Retrieve original annotated-flowering iNaturalist source photo IDs with a bounded original API query
+        run: |
+          python -u research/floral_routeability_stage65/probe_real_iNat_annotated_flowers_original_source.py \
+            --original-stage60-voc-fcp80 research/floral_routeability_stage65/source_stage60/80_original_VOC_flower_photo_species_visible_guide_source_review_queue.csv \
+            --original-stage64-unfiltered-CC-metadata research/floral_routeability_stage65/source_stage64_unfiltered17/new_iNat_CC_licensed_four_species_original_photo_review_queue.csv
+      - name: Download original CC0 or CC-BY images from frozen source IDs before viewing pixels
+        run: |
+          python -u research/floral_routeability_stage64/retrieve_CC_photo_pixels_for_human_review.py \
+            --original-licensed-photo-metadata stage65_original_iNat_flower_annotated_photo_metadata/four_source_taxa_original_iNat_annotated_flowering_CC_photo_review.csv
+      - name: Source verification, annotation is not image anthesis, no false guide labels
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage65_original_iNat_flower_annotated_photo_metadata')
+          d=json.loads((p/'source_annotated_flower_photo_4taxa_vs_unfiltered17_receipt.json').read_text())
+          assert d['status']=='ORIGINAL_I_NAT_ANNOTATED_FLOWERS_VS_UNFILTERED_CC_PHOTO_METADATA_QA'
+          assert d['source_4_FCP_VOC_taxa_frozen_before_source_photo_viewing']
+          assert d['source_original_iNat_phenology_attribute_id']==12
+          assert d['source_original_iNat_phenology_flowering_value_id']==13
+          assert d['not_a_photo_level_flower_organ_state_yet']
+          assert d['no_UV_measurement_or_olfactory_evolution_fitted']
+          assert d['source_flower_phenology_annotation_is_not_an_independently_double_scored_guide']
+          expected=d['source_overlapping_and_new_photo_identifiers']['n_new_flower_annotated_CC_photo_metadata']
+          with (p/'four_source_taxa_original_iNat_annotated_flowering_CC_photo_review.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          assert expected==len(rows)
+          for r in rows:
+            assert r['source_annotation_plant_phenology_flowers_server_filtered']=='True'
+            assert r['actual_individual_photo_visible_open_flower_status']=='NOT_YET_VERIFIED_FROM_PIXELS'
+            assert r['real_visible_intrapetal_guide_state']=='UNKNOWN_UNREAD_IMAGE'
+            assert r['UV_spatial_pattern_state']=='UNKNOWN_NOT_MEASURED_BY_RGB'
+          px=Path('stage64_original_cc_photo_pixel_review')
+          x=json.loads((px/'original_CC_photo_pixel_review_credits_and_unmeasured_traits.json').read_text())
+          assert x['status']=='LICENSED_ORIGINAL_INAT_FOUR_TAXON_SOURCE_PIXEL_REVIEW_GATE'
+          assert x['CC0_CC_BY_licenses_and_authors_retained']
+          assert x['not_original_FCP_exact_source_100_photo_IDs']
+          assert x['actual_visible_pattern_annotated_from_images'] is False
+          assert x['not_an_independently_measured_flower_UV_or_nectar_guide']
+          if x['n_licensed_actual_medium_photo_pixels_read']:
+            assert (px/'source_CC_photos_flower_visible_pattern_CONTACT_SHEET_UNREVIEWED.png').is_file()
+          print('STAGE65_GENUINE_SOURCE_ANNOTATED_FLOWER_CC_METADATA_AND_PIXELS',
+                {'n_photo_source_records':expected,
+                 'n_pixels':x['n_licensed_actual_medium_photo_pixels_read'],
+                 'n_species_with_pixels':x['n_source_species_with_pixels'],
+                 'old_source_photo_overlap':d['source_overlapping_and_new_photo_identifiers'],
+                 'per_taxon':{k:{'status':v['status'],
+                      'n':v.get('actual_approved_source_image_metadata_selected'),
+                      'error':v.get('error_type')} for k,v in d['source_query_results'].items()}})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage65-verified-original-iNat-flowering-annotated-CC-photo-source-and-pixels
+          path: |
+            stage65_original_iNat_flower_annotated_photo_metadata/*
+            stage64_original_cc_photo_pixel_review/*
+          if-no-files-found: error
+          retention-days: 90
