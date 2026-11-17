@@ -27,6 +27,14 @@ jobs:
              python -m unittest -v test_exact_2017_factorial_identifiability
       - name: Exact source-free identifiability calculations (never original bee success)
         run: PYTHONPATH=. python research/floral_routeability_stage61/exact_2017_factorial_identifiability.py
+      - name: Source-free test for 72 original bee records and no unobserved cue routing
+        run: |
+          PYTHONPATH=research/floral_routeability_stage61:. \
+             python -m unittest -v test_refit_2017_wind_bees_group_outcomes
+      - name: Reanalyse original DOI-authenticated 72 wind bees, four treatment groups and colony metadata
+        run: |
+          PYTHONPATH=research/floral_routeability_stage61:. \
+             python research/floral_routeability_stage61/refit_2017_wind_bees_group_outcomes.py
       - name: Original 2017 OA supplemental workbook source retrieval and schema
         run: PYTHONPATH=. python research/floral_routeability_stage61/probe_2017_wind_visual_odor_original_data.py
       - name: Validate source supplement and published no-factorial inference ceiling
@@ -45,6 +53,20 @@ jobs:
             assert d['existing_visual_backup_wind_result_NOT_NEW_FLORAL_FINDING']
           print('STAGE61_EXISTING_WIND_VISUAL_BACKUP_ORIGINAL_SOURCE',d['status'],
                 d.get('number_detected_xlsx_members'))
+          PY
+      - name: Gate 72 genuine original wind bees, not independent colonies or pollen measurements
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage61_2017_source_72_wind_backup_reanalysis/original_Lawson_2017_72_bees_four_arm_behavior_means.json').read_text())
+          assert d['status']=='REPRODUCED_ORIGINAL_LAWSON_2017_72_BEE_WIND_EXPERIMENT_GROUP_DESCRIPTIVES'
+          assert d['source_authored_wind_bees']==72
+          assert all(x['n_bees']==18 for x in d['source_wind_treatment_groups'].values())
+          assert d['no_original_per_trial_cue_order_or_first_cue_policy']
+          assert d['no_wind_by_odor_by_visual_full_factorial_effect']
+          assert d['no_measured_animal_pollen_or_plant_fitness']
+          print('STAGE61_SOURCE72_ORIGINAL_EXPERIMENTAL_WIND_BACKUP_NOT_NEW',d['published_reanalysis_original_four_arm_observed_edge_differences'])
           PY
       - name: Confirm mathematical identifiability gate never labels real bee behavior
         run: |
@@ -65,5 +87,6 @@ jobs:
           path: |
             stage61_2017_wind_visual_odor_backup_original_source/*
             stage61_2017_factorial_nonidentification/*
+            stage61_2017_source_72_wind_backup_reanalysis/*
           if-no-files-found: error
           retention-days: 90
