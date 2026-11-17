@@ -151,6 +151,20 @@ def combine(prior,source):
         "source_original_2025_colourchange_positive_review_species":PRIOR_REVIEW,
         "source_original_Oliveira_2025_numeric_mean_UV_species":NEW_N,
         "source_original_Oliveira_2025_primary_guild_labels":dict(sorted(Counter(primary).items())),
+        "n_direct_UV_spatial_2016_2021_also_numeric_Oliveira_2025":sum(
+            r["source_UV_pattern_directly_measured_or_unknown"] in ("0","1")
+            and r["original_Oliveira2025_UV_mean_source"] for r in rows),
+        "n_Ohashi_age_spectral_taxa_also_numeric_Oliveira_2025":sum(
+            r["original_Ohashi2015_spectral_taxon_source"] and
+            r["original_Oliveira2025_UV_mean_source"] for r in rows),
+        "n_reviewed_colorchange_also_numeric_Oliveira_2025":sum(
+            r["original_2025_literature_colour_change_reported"] and
+            r["original_Oliveira2025_UV_mean_source"] for r in rows),
+        "n_temporal_only_UV_study_also_numeric_Oliveira2025":sum(
+            r["prior_source_UV2016_2021_or_2020_evidence"] and
+            not r["source_UV_pattern_directly_measured_or_unknown"] and
+            r["original_Oliveira2025_UV_mean_source"] for r in rows),
+        "cross_modality_overlap_is_not_an_optical_trait_calibration":True,
         "n_species_without_direct_UV_spatial_contrast_classification":sum(
             not r["source_UV_pattern_directly_measured_or_unknown"] for r in rows),
         "n_species_with_original_Oliveira2025_internal_two_measurement_rows":sum(
