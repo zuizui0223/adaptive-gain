@@ -48,10 +48,21 @@ def get_annotated_source(taxon_id,opener=urllib.request.urlopen):
     return json.loads(raw),hashlib.sha256(raw).hexdigest()
 
 def compare_prior(current,prior):
-    prior_ids={r.get("fresh_2026_original_iNaturalist_photo_id","") for r in prior}
-    current_ids={r.get("fresh_2026_original_iNaturalist_photo_id","") for r in current}
-    if "" in current_ids:
-        raise ValueError("NO_GO_SOURCE_FLOWER_ANNOTATED_UNKNOWN_PHOTO_ID")
+    # Official live API source ids are ints; prior Stage64 artifact CSV ids
+    # round-trip as strings. Normalize before comparing. Do NOT call a
+    # reused observation/photo an independent phenology-filtered source.
+    def ids(rows):
+        values=[]
+        for row in rows:
+            key=str(row.get("fresh_2026_original_iNaturalist_photo_id","")).strip()
+            if not key.isdigit() or int(key)<1:
+                raise ValueError("NO_GO_SOURCE_FLOWER_ANNOTATED_UNKNOWN_PHOTO_ID")
+            values.append(key)
+        if len(values)!=len(set(values)):
+            raise ValueError("NO_GO_SOURCE_PHOTO_ID_REUSED_WITHIN_SAME_QUERY")
+        return set(values)
+    prior_ids=ids(prior)
+    current_ids=ids(current)
     return {
         "n_new_flower_annotated_CC_photo_metadata":len(current_ids),
         "n_old_unfiltered_CC_source_photo_metadata":len(prior_ids),
