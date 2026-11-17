@@ -1,0 +1,49 @@
+name: floral-stage58-exact-wind-scent-visual-routeability
+on:
+  push:
+    branches: [analysis/floral-wind-scent-routeability-stage58-20261117]
+    paths:
+      - 'research/floral_routeability_stage58/**'
+      - '.github/workflows/floral-stage58-conditional-wind-scent-routeability.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mathematical-sensory-bridge-not-false-empirical-pollen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exact finite-routeability oracle over positive integer wind-context cost profiles
+        run: |
+          PYTHONPATH=.:research/floral_routeability_stage58 \
+            python -m unittest -v test_sensory_routeability_wind_scent
+      - name: Run original inherited k2 target-resolution solver and stage-specific toy pollen counterexample
+        run: PYTHONPATH=. python research/floral_routeability_stage58/sensory_routeability_wind_scent.py
+      - name: Strict ecological claim-ceiling and no cross-study pooling
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('stage58_wind_scent_visual_routeability/exact_constructed_routeability_and_original_source_separation.json')
+          r=json.loads(path.read_text())
+          assert r['status']=='SOURCE_SCOPED_WIND_SCENT_VISUAL_ROUTEABILITY_MATHEMATICAL_BRIDGE'
+          assert r['existing_mathematical_result_only']
+          assert r['source_studies_not_same_insects_or_source_flower_system']
+          assert r['no_causal_visual_x_scent_x_wind_factorial_available']
+          phase=r['exact_source_free_routeability_scenarios']
+          assert [x['adaptive_only_within_budget'] for x in phase.values()]==[True,True,False,False]
+          assert phase['early_router_disrupted_assumed']['exact_fixed_minimum_bundle_cost_or_unresolvable'] is None
+          assert r['independently_known_source_free_pollen_chain']['wind_minus_calm_transfer_fraction']=='-3/200'
+          print('STAGE58_EXACT_BUILDED_ROUTEABILITY_ABSTRACT_PHASES',{k: (v['exact_adaptive_minimum_worst_case_cost_or_unresolvable'],v['exact_fixed_minimum_bundle_cost_or_unresolvable']) for k,v in phase.items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage58-verified-exact-sensory-routeability-constructed-not-wind-pollen-effect
+          path: stage58_wind_scent_visual_routeability/*
+          if-no-files-found: error
+          retention-days: 90
