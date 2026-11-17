@@ -135,7 +135,54 @@ def describe(original):
           "C_minus_D_odour_added_with_wind_visual":c-d if c is not None and d is not None else None,
           "not_wind_by_visual_or_odor_factorial_interaction":True
         }
+    # Guard the critical experiment-grain issue: the four groups do NOT all
+    # share source colonies. F occurs in A/B/C; group D uses EE/FF only.
+    # A within-source-colony check reduces, but cannot eliminate, individual,
+    # reward-odor, wind-treatment assignment and temporal confounding.
+    abc_colonies=[
+      c for c in sorted({x["colony_as_published"] for x in original})
+      if all(any(x["colony_as_published"]==c and x["group"]==g
+                 for x in original) for g in ("A","B","C"))
+    ]
+    overlap_diagnostics={}
+    for colony in abc_colonies:
+        subset={}
+        for g in ("A","B","C"):
+            q=[x for x in original if x["group"]==g and
+               x["colony_as_published"]==colony]
+            subset[g]={
+              "n_individual_bees":len(q),
+              "source_reward_scent_counts":dict(sorted(
+                 Counter(x["reward_scent_as_published"] for x in q).items())),
+              "endpoint_means":{e:(
+                 statistics.mean(x[e] for x in q if x[e] is not None)
+                 if any(x[e] is not None for x in q) else None)
+                 for e in ENDPOINTS}
+            }
+        overlap_diagnostics[colony]={
+          "group_source_summary":subset,
+          "within_this_colony_observed_edge_differences":{
+              e:{
+                "B_minus_A_wind_odor_only":(
+                   subset["B"]["endpoint_means"][e]-subset["A"]["endpoint_means"][e]
+                   if subset["B"]["endpoint_means"][e] is not None and
+                      subset["A"]["endpoint_means"][e] is not None else None),
+                "C_minus_B_added_visual_under_wind_odor":(
+                   subset["C"]["endpoint_means"][e]-subset["B"]["endpoint_means"][e]
+                   if subset["C"]["endpoint_means"][e] is not None and
+                      subset["B"]["endpoint_means"][e] is not None else None),
+                "not_a_within_bee_paired_treatment":True,
+              } for e in ENDPOINTS},
+          "cannot_infer_original_randomization_within_source_colony":True
+        }
     return {
+      "original_colonies_shared_by_groups_A_B_C":abc_colonies,
+      "original_colony_restricted_source_sensitivity":overlap_diagnostics,
+      "original_source_group_D_has_no_common_colony_with_A_B_C":(
+         not any(set(groups[g]["source_colony_counts"]) &
+                 set(groups["D"]["source_colony_counts"])
+                 for g in ("A","B","C"))),
+      "colony_overlap_does_not_identify_first_cue_or_pollen":True,
       "status":"REPRODUCED_ORIGINAL_LAWSON_2017_72_BEE_WIND_EXPERIMENT_GROUP_DESCRIPTIVES",
       "source_paper_DOI":"10.1098/rsos.170996",
       "original_source_XLSX_SHA256":PIN,
