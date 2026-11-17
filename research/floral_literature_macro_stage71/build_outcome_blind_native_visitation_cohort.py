@@ -151,7 +151,7 @@ def read_strict_bee_events(cohort_rows):
     events=defaultdict(Counter);status=Counter()
     raw=fetch_original("Interaction_data.csv.gz")
     records=0
-    for _,r in dict_rows(raw,compressed=True):
+    for r in dict_rows(raw,compressed=True):
         records+=1
         study=r["Study_id"].strip();network=r["Network_id"].strip()
         year=year_of(r["Date"]);name=strict_name(r["Plant_accepted_name"])
