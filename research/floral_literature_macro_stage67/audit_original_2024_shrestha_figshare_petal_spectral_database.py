@@ -65,8 +65,8 @@ def clean_name(text):
     return " ".join(s.replace("_"," ").split())
 
 def parse_spectral_csv(raw,path):
-    s=raw.decode("utf-8-sig",errors="replace")
-    rows=list(csv.reader(io.StringIO(s)))
+    s=raw.decode("utf-8-sig",errors="replace").replace("\r\n","\n").replace("\r","\n")
+    rows=list(csv.reader(io.StringIO(s,newline="")))
     check(len(rows)>=101,"SOURCE_SPECTRUM_TOO_SHORT_"+path)
     hdr=rows[0]
     check(len(hdr)>=2,"NO_SPECTRAL_COLUMNS_"+path)
