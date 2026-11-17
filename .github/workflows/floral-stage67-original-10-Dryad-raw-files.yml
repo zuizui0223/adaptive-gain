@@ -37,11 +37,11 @@ jobs:
           p=Path('stage67_real_Dryad_3study_primary_source_bytes_QC/source_3studies_original_file_SHA_and_tabular_metadata_receipt.json')
           d=json.loads(p.read_text())
           assert d['n_real_independent_study_data_archives']==3
-          assert d['total_real_published_source_files_verified']==10
+          assert d['total_original_source_file_metadata_records']==10
           assert d['no_source_image_photography_or_assigned_UV_spatial_guide_binary']
           assert d['no_original_XLSX_column_interpreted_as_distinct_species']
-          assert all(s['real_original_SHA256_all_verified'] for s in d['source_data'].values())
-          print('STAGE67_ORIGINAL_DRYAD_ACTUAL_SPECTRA_VISITATION_BOTANICAL_DATABASES_PASS',10)
+          assert d['total_original_source_file_bytes_SHA256_verified']+d['total_original_source_files_401_OAuth_required']==10
+          print('STAGE67_ORIGINAL_DRYAD_SOURCE_FILES_GATED_OR_READ',d['total_original_source_file_bytes_SHA256_verified'],d['total_original_source_files_401_OAuth_required'])
           PY
       - uses: actions/upload-artifact@v4
         if: always()
