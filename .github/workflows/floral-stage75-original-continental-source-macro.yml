@@ -98,6 +98,45 @@ jobs:
                 "descriptive_study_block_bootstrap_percentile_95")} for name,v in results.items()},
           })
           PY
+      - name: Adversarial genus-holdout and source habitat/bioregion structure tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage75 \
+            -p "test_source_macro_genus_bioregion_sensitivity.py" -v
+      - name: Audit each original genus and bioregion as source-backed macro fragility controls
+        run: |
+          python -u research/floral_macro_stage75/source_macro_genus_bioregion_sensitivity.py \
+            --Stage75-hue-source stage75_real_Original_NHM_Europe_guild_macro/original_source_hue_positive_species_in_network_environment.csv \
+            --Stage75-original-network-scores stage75_real_Original_NHM_Europe_guild_macro/original_source_within_network_guild_conditional_null_scores.csv \
+            --Stage75-original-macro-receipt stage75_real_Original_NHM_Europe_guild_macro/original_source_963_species_continental_macro_trait_guild_receipt.json \
+            --outdir stage75_real_Original_NHM_Europe_guild_macro/genus_and_bioregion_fragility
+      - name: Confirm source-matched genus limitation and original environment categories
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage75_real_Original_NHM_Europe_guild_macro/genus_and_bioregion_fragility/source_original_macro_genus_bioregion_study_robustness_receipt.json")
+          r=json.loads(p.read_text())
+          assert r["real_source_59k_taxon_963_plant_54study_Europe_macro"]
+          assert r["original_source_genus_not_validated_full_phylogenetic_clade"]
+          assert r["ecological_environment_source_category_not_continuous_microclimate"]
+          assert r["original_UV_spatial_motif_not_measured_in_NHM"]
+          assert not r["confirmatory_phylogenetic_multiregion_pollination_result"]
+          assert set(r["source_macronetwork_results"])=={"yellow_vs_white","yellow_vs_purple"}
+          assert r["source_macronetwork_results"]["yellow_vs_white"]["source_hue_eligible_networks"]==345
+          assert r["source_macronetwork_results"]["yellow_vs_purple"]["source_hue_eligible_networks"]==65
+          for k,v in r["source_macronetwork_results"].items():
+              assert v["source_within_genus_approximation_not_full_plant_phylogeny"]
+              assert v["source_field_wind_VOC_climate_unmeasured_jointly"]
+              assert not v["new_significant_evolutionary_effect_estimated"]
+          print("STAGE75B_MACRO_ORIGINAL_SOURCE_GENUS_ENVIRONMENT_FRAGILITY",r["source_macronetwork_results"])
+          print("STAGE75B_BIOREGION_SCORE",[
+            {k:z[k] for k in ("contrast","source_context_recorded_value",
+                "original_informative_networks","original_distinct_study_ids",
+                "source_null_local_score_ratio_if_information")}
+            for z in r["source_context_stratification"]
+            if z["original_field_context_dimension"]=="Bioregion"])
+          PY
       - name: Publish source-only macro plant×field-network and study-block receipts
         uses: actions/upload-artifact@v4
         if: always()
