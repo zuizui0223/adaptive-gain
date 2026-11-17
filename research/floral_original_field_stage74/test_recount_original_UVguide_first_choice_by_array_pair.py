@@ -10,6 +10,11 @@ sp=importlib.util.spec_from_file_location("st74d",p)
 m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)
 
 class OriginalPairedFirstVisitTests(unittest.TestCase):
+    def test_background_fractional_first_visits_must_not_be_rounded_to_events(self):
+        self.assertIsNone(m.numeric_visitor_count("0.75"))
+        self.assertIsNone(m.numeric_visitor_count("1.5"))
+        self.assertEqual(m.numeric_visitor_count("1"),1)
+
     def test_original_visit_count_validation(self):
         self.assertEqual(m.numeric_visitor_count("2"),2)
         self.assertEqual(m.numeric_visitor_count("0"),0)
