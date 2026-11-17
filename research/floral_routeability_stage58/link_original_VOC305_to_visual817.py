@@ -54,11 +54,19 @@ def authentic_source_305(blob):
         if not species:continue
         words=species.split()
         candidate=" ".join(words[:2]) if len(words)>=2 else ""
-        exact=bool(BINOMIAL.fullmatch(candidate))
+        # An original named hybrid such as "Victoria amazonica x cruziana"
+        # is NOT a measurement of the parent "Victoria amazonica" species.
+        # Never silently truncate hybrid formulas to a true binomial.
+        hybrid=any(token.casefold() in ("x","×","hybrid") for token in words[2:])
+        infraspecific=any(token.casefold().strip(".") in (
+           "var","ssp","subsp","forma","f") for token in words[2:])
+        exact=bool(BINOMIAL.fullmatch(candidate) and not hybrid)
         rec={
           "original_VOC_source_row":source_row,
           "original_VOC_source_taxon_verbatim":species,
           "original_VOC_source_canonical_binomial_or_unknown":candidate if exact else "",
+          "source_original_named_hybrid_not_accepted_as_parent_species":hybrid,
+          "source_original_infraspecific_rank_present":infraspecific,
           "original_VOC_published_article_citation_SHA256":hashlib.sha256(
                  str(r[0] or "").encode()).hexdigest(),
           "original_VOC_source_APG_synonym_literal":str(r[2] or "")[:100],
@@ -131,6 +139,9 @@ def attach_accepted(voc,accepted_lookup,visual):
       "status":"ORIGINAL_FARRE_305_VOC_SPECIES_STRICT_GBIF_ACCEPTED_TO_817_VISUAL_TRAIT_MODALITY_OVERLAP",
       "n_original_VOC_2020_named_species_source_rows":len(voc),
       "n_gbif_exact_name_lookups":len(accepted_lookup),
+      "n_source_original_hybrid_formulas_excluded_from_parent_species_match":sum(
+         r.get("source_original_named_hybrid_not_accepted_as_parent_species",False) for r in voc),
+      "hybrid_or_infraspecific_origin_must_not_be_inferred_as_identical_genotype":True,
       "source_original_gbif_match_status_count":dict(sorted(
           Counter(r["gbif_strict_taxonomic_match_status"] for r in rows).items())),
       "n_original_VOC_source_exact_accepted_rows":sum(
