@@ -1,0 +1,84 @@
+name: floral-stage69-corrected-v130-real-visitor-network-and-text-optical-gates
+
+on:
+  push:
+    branches: [analysis/floral-euppollnet-corrected-real-visitor-stage69-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage69/**'
+      - '.github/workflows/floral-stage69-corrected-euppollnet-network.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-authenticated-corrected-real-visits:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic-only guards against wrong release and false guild negatives
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage69 \
+            -p 'test_original_corrected_EuPPollNet_network.py' -v
+      - name: Retrieve exactly Stage68 verified true NHM botanical TEXT and 73 original spectra join
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage69_stage68_authentic_sources
+          test "$(find stage69_stage68_authentic_sources -type f -name original_NHM_text_traits_compact.csv | wc -l)" -eq 2
+          test "$(find stage69_stage68_authentic_sources -type f -name stage67_real73_NHM_original_text_exact_literal_join.csv | wc -l)" -eq 1
+      - name: Exact author original corrected v1.3.0 interaction study site guild and plant joins
+        run: |
+          NHM="$(find stage69_stage68_authentic_sources -path '*/combined/original_NHM_text_traits_compact.csv' | head -n 1)"
+          SPECTRA="$(find stage69_stage68_authentic_sources -name stage67_real73_NHM_original_text_exact_literal_join.csv | head -n 1)"
+          test -s "$NHM"
+          test -s "$SPECTRA"
+          python -u research/floral_literature_macro_stage69/ingest_original_corrected_EuPPollNet_network_NHM_spectra.py \
+            --nhm-original-compact "$NHM" \
+            --spectral-text-join "$SPECTRA" \
+            --outdir stage69_real_original_source_network_join
+      - name: Check corrected denominator, observation grain and no-go claims
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('stage69_real_original_source_network_join')
+          r=json.loads((root/'corrected_EuPPollNet_v130_NHM_text_original_spectra_receipt.json').read_text())
+          assert r['original_source_repository_release']=='joseblanuza/EuPPollNet@v1.3.0'
+          assert r['actual_original_corrected_interaction_record_rows']==623476
+          assert r['source_interaction_columns']==30
+          assert r['distinct_Study_ids_in_observations']>=50
+          assert r['plant_species_confident_x_NHM_text_exact_names']>=1
+          assert r['plant_species_confident_x_73_original_spectra_names']>=0
+          assert r['source_native_range_is_not_verified']
+          assert r['no_global_signal_causal_association_estimated']
+          assert r['no_observed_guild_does_not_prove_absence']
+          assert r['recorded_visits_are_not_proven_pollination']
+          assert r['uses_photographic_phenotypes'] is False
+          with (root/'original_plant_network_year_observed_guilds_text_spectra.csv').open() as f:
+              count=sum(1 for _ in csv.DictReader(f))
+          assert count==r['n_plant_species_x_network_year_units']
+          print('STAGE69_ACTUAL_AUTHENTIC_AUTHOR_SOURCE_VALIDATED', {k:v for k,v in r.items()
+              if k.startswith('plant_species_confident_') or k in (
+                  'actual_original_corrected_interaction_record_rows',
+                  'distinct_Study_Network_Year_keys',
+                  'distinct_Study_ids_in_observations',
+                  'n_plant_species_x_network_year_units')})
+          PY
+      - name: Upload observation-grain receipts and original network guild bridge
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra
+          path: stage69_real_original_source_network_join/
+          retention-days: 90
+          if-no-files-found: warn
