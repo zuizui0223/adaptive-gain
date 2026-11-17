@@ -1,0 +1,156 @@
+name: floral-stage72-real-original-field-spectra-VOC-visits-source-audit
+
+on:
+  push:
+    branches: [analysis/floral-original-field-site-sensory-sources-stage72-20261117]
+    paths:
+      - 'research/floral_original_field_stage72/**'
+      - '.github/workflows/floral-stage72-real-original-field-multimodal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  primary-field-source-availability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Mock-only archive and metadata provenance tests
+        run: |
+          python -m unittest discover -s research/floral_original_field_stage72 \
+            -p 'test_audit_original_field_spectra_visits_sources.py' -v
+      - name: Retrieve actual original Kantsa Figshare/Nature, Xie and Albor source metadata
+        run: |
+          python -u research/floral_original_field_stage72/audit_original_field_spectra_visits_sources.py \
+            --outdir stage72_original_author_primary_source_audit
+      - name: Assert source access status cannot become biological negatives
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path("stage72_original_author_primary_source_audit/stage72_original_public_sources_access_and_workbook_schema.json").read_text())
+          assert j["number_of_candidate_independent_geographic_study_regions"]==3
+          assert j["no_photo_derived_trait_or_UV_guide_negative"]
+          assert j["no_global_optical_effect_claimed"]
+          assert j["n_actual_species_site_visitor_x_spectral_effects_extracted"]==0
+          assert all(r.get("no_inferred_plant_species_or_visits",True) for r in j["source_receipts"])
+          print("STAGE72_SOURCE_RETRIEVAL_NOT_INFERRED_TRAIT",{
+            "content_files_retrieved":j["n_original_source_content_files_retrieved"],
+            "source_statuses":{r["source_id"]:r["status"] for r in j["source_receipts"]},
+            "data_effect_not_claimed":j["no_global_optical_effect_claimed"]})
+          PY
+      - name: Check original 2018 Figshare source and authentic VOC XLSX parser guards
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_replay_original_kantsa2018_network_voc.py' -v
+      - name: Download publisher-identifiable original Figshare source network and VOC raw
+        run: |
+          python -u research/floral_original_field_stage72/replay_original_kantsa2018_network_voc.py \
+            --outdir stage72_original_author_primary_source_audit/original_kantsa2018_real_data
+      - name: Confirm real primary network XLSX and botanical VOC across original source sheets
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage72_original_author_primary_source_audit/original_kantsa2018_real_data/original_Kantsa2018_source_replay_network_VOC_grain.json')
+          j=json.loads(p.read_text())
+          assert j['original_network_source_file']['sha256']=='41d0c650cd9c1e02597aacf0631491615cd5214fa34a1eb18ae51a37c369b7b7'
+          assert j['original_voc_source_file']['sha256']=='72a5ae89b85ac3216071560b5db36585efbba0af9ea0bef5b99c73268de557ea'
+          assert j['original_network']['original_2018_network_sheet_names']==['p-p_network']
+          assert j['original_volatiles']['original_voc_taxon_sheet_count']>=30
+          assert j['original_network_and_VOC_are_one_geographic_study_region']
+          assert j['no_plant_reproduction_or_fitness_in_source_tables']
+          print('STAGE72B_KANTSA_ORIGINAL_XLSX_SOURCE_AUDIT_VERIFIED',{
+            'source_network_grid':j['original_network']['original_2018_numeric_grid_provisional'],
+            'source_network_first4':j['original_network']['first_eight_original_rows_with_real_cell_coordinates'][:4],
+            'source_VOC_species_sheets':j['original_volatiles']['original_voc_taxon_sheet_count'],
+            'source_positive_VOC_compounds':j['original_volatiles']['source_voc_compound_statistics']['positive_compound_species_entries']
+          })
+          PY
+      - name: Strict original source taxon name join guards (no spelling-based invented species)
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_reconstruct_original_kantsa2018_41x168_VOC_crosswalk.py' -v
+      - name: Independently reproduce full original Kantsa source 41x168 matrix and VOC taxon sheets
+        run: |
+          python -u research/floral_original_field_stage72/reconstruct_original_kantsa2018_41x168_VOC_crosswalk.py \
+            --outdir stage72_original_author_primary_source_audit/strict_original_Kantsa_field_network_VOC
+      - name: Verify publication count discrepancy without fabricating a visitor record
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage72_original_author_primary_source_audit/strict_original_Kantsa_field_network_VOC")
+          j=json.loads((p/"stage72c_original_raw_network_VOC_crosswalk_receipt.json").read_text())
+          n=j["original_network_matrix_replay"]
+          s=j["original_plant_scent_visits_source_overlap"]
+          assert n["original_plants"]==41
+          assert n["original_visitor_species_row_labels"]==168
+          assert n["original_source_plant_insect_matrix_cells"]==6888
+          assert n["original_source_nonzero_links"]==403
+          assert n["original_source_VISITOR_EVENTS_NUMERIC_SUM"]==7954
+          assert n["published_article_stated_events"]==7955
+          assert n["original_source_vs_manuscript_event_difference"]==-1
+          assert j["not_pooled_new_global_ecology_effect"]
+          assert j["any_null_as_biological_absence_inferred"] is False
+          with (p/"2018_original_Lesvos_true_network_VOC_species_strict_crosswalk.csv").open() as f:
+              r=list(csv.DictReader(f))
+          assert len(r)==41
+          assert sum(int(x["original_2018_visitor_event_counts"]) for x in r)==7954
+          assert sum(int(x["original_2018_nonzero_visitor_links"]) for x in r)==403
+          assert sum(int(x["source_strict_literal_name_VOC_match"]) for x in r)==s["strict_original_literal_species_overlap"]
+          print("STAGE72C_ORIGINAL_KANTSA_MATRIX_SAME_STUDY_VOC_CROSSWALK_VERIFIED",{
+           "original_plant_species":n["original_plants"],
+           "original_visitor_species":n["original_visitor_species_row_labels"],
+           "original_nonzero_links":n["original_source_nonzero_links"],
+           "original_numeric_visits":n["original_source_VISITOR_EVENTS_NUMERIC_SUM"],
+           "author_published_visits":n["published_article_stated_events"],
+           "strict_source_VOC_overlapping_species":s["strict_original_literal_species_overlap"],
+           "raw_network_name_without_VOC":s["network_only_original_plant_names"],
+           "raw_VOC_sheet_name_without_network":s["VOC_only_original_plant_names"]})
+          PY
+      - name: Test original Ishii Japan/NZ 2018 alpine file-only source accession contract
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_audit_original_ishii2018_japan_nz_alpine.py' -v
+      - name: Recover original PMC OA/Japan–NZ field optical spectra and guild data supplement files
+        run: |
+          python -u research/floral_original_field_stage72/audit_original_ishii2018_japan_nz_alpine.py \
+            --outdir stage72_original_author_primary_source_audit/original_Ishii2018_JP_NZ
+      - name: Verify all-access success not inferred from publisher reported species counts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage72_original_author_primary_source_audit/original_Ishii2018_JP_NZ/original_Ishii2018_alpine_JP_NZ_PMC_supplement_access_receipt.json')
+          j=json.loads(p.read_text())
+          assert j['original_article_PMCID']=='PMC6377100'
+          assert j['source_DOI']=='10.1093/aob/mcy188'
+          assert j['Japan_and_NewZealand_study_are_two_independent_regions_not_202_replicates']
+          assert j['no_pollinator_visit_records_in_Mount_Hutt']
+          assert j['no_uv_spatial_guide_binary_inferred']
+          assert j['no_wind_VOC_fitness_measured_in_these_source_xlsx']
+          assert j['no_macro_environmental_guild_effect_fitted']
+          print('STAGE72D_ORIGINAL_ALPINE_SOURCE_ACCESS_ONLY',{
+             'file_count':len(j['original_recovered_supplementary_files']),
+             'access_status':j['original_retrieval_route'],
+             'attempts':[{k:v for k,v in x.items() if k in ('route','status','http_code','error_class')}
+                         for x in j['original_retrieval_attempt_receipts']]})
+          PY
+      - name: Save only original-source access and original workbook schema receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage72-original-Kantsa-Xie-Albor-source-and-OA-XLSX-inventory
+          path: stage72_original_author_primary_source_audit/
+          retention-days: 90
+          if-no-files-found: warn
