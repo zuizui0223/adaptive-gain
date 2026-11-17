@@ -62,7 +62,7 @@ jobs:
           echo '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf  stage66_original_inputs/worldclim/wc2.1_10m_bio.zip' | sha256sum -c
       - name: Run actual global within-plant-species photo colour × modelled bee source-HEX macro
         run: |
-          python -u research/floral_visual_macro_stage66/original_FCP4475_beeHEX_coarse_colour_macro.py \
+          PYTHONPATH=. python -u research/floral_visual_macro_stage66/original_FCP4475_beeHEX_coarse_colour_macro.py \
             --fcp-photos stage66_original_inputs/fcp/measured/fcp_all4730_original_method_measured_photos.csv.gz \
             --source-author-bee-hex stage66_original_inputs/author_bee_hex/original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv \
             --worldclim-bio stage66_original_inputs/worldclim/wc2.1_10m_bio.zip \
