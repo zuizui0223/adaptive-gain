@@ -1,0 +1,66 @@
+name: floral-stage74c-real-original-2021-UV-guide-factor-spectra-visit
+
+on:
+  push:
+    branches: [analysis/floral-field-spectra-visitor-kent-dryad-web-stage74-20261117]
+    paths:
+      - "research/floral_original_field_stage74/inspect_original_2021_UVguide_field_workbook.py"
+      - "research/floral_original_field_stage74/test_inspect_original_2021_UVguide_field_workbook.py"
+      - ".github/workflows/floral-stage74c-real-source-UV-guide-factor.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-factor-structure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free strict author original file digest and workbook-grain guards
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p 'test_inspect_original_2021_UVguide_field_workbook.py' -v
+      - name: Re-download original file SHA-pinned experimental field visits, visual contrast and spectra
+        run: |
+          python -u research/floral_original_field_stage74/inspect_original_2021_UVguide_field_workbook.py \
+            --outdir stage74_original_2021_true_UVguide_experiment
+      - name: Validate real author experiment source before statistical test
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage74_original_2021_true_UVguide_experiment/author_2021_UVguide_original_experiment_workbook_source_structure.json")
+          j=json.loads(p.read_text())
+          assert j["source_original_article_DOI"]=="10.1111/nph.17631"
+          assert j["original_data_record_DOI"]=="10.5281/zenodo.5110165"
+          assert len(j["original_source_verified_checksums"])==3
+          assert j["source_77_member_Zenodo_spectra_zip"]["archive_member_count"]==77
+          assert len(j["source_visits_Excel_sheets"])>=1
+          assert len(j["source_color_contrast_Excel_sheets"])>=1
+          assert j["source_design_reported_first_visits_NOT_RECOMPUTED_YET"]==377
+          assert j["original_2021_Published_prior_experiment_not_new_scientific_novelty"]
+          assert j["source_single_plant_species_condition"]
+          print("STAGE74C_TRUE_SOURCE_EXPERIMENT_FACTOR_WORKSHEETS",{
+            "visits_sheets":[(z["author_sheet"],z["post_header_source_data_rows"],
+                z["candidate_source_field_labels"],
+                z["original_first7_row_data"][:3]) for z in j["source_visits_Excel_sheets"]],
+            "contrast_sheets":[(z["author_sheet"],z["post_header_source_data_rows"],
+                z["candidate_source_field_labels"],
+                z["original_first7_row_data"][:3]) for z in j["source_color_contrast_Excel_sheets"]],
+            "source_spectra_subdirs":j["source_77_member_Zenodo_spectra_zip"]["source_original_subfolder_member_counts"]
+          })
+          PY
+      - name: Save original study Excel schema and source spectral audit
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage74c-2021-SHA-authentic-UVguide-floral-optics-original-factor-sheets
+          path: stage74_original_2021_true_UVguide_experiment/author_2021_UVguide_original_experiment_workbook_source_structure.json
+          retention-days: 90
+          if-no-files-found: warn
