@@ -6,6 +6,8 @@ on:
     paths:
       - "research/floral_original_field_stage73/audit_original_wisconsin_wind_visits.py"
       - "research/floral_original_field_stage73/test_audit_original_wisconsin_wind_visits.py"
+      - "research/floral_original_field_stage73/validate_original_wisconsin_plot_date_wind_guilds.py"
+      - "research/floral_original_field_stage73/test_validate_original_wisconsin_plot_date_wind_guilds.py"
       - ".github/workflows/floral-stage73b-original-wisconsin-wind-visits.yml"
   workflow_dispatch:
 
@@ -53,6 +55,45 @@ jobs:
                 "wind_sample":x.get("original_wind_distinct_value_sample",[]),
                 "site_sample":x.get("original_site_distinct_value_sample",[])}
                 for x in d["source_Excel_sheets"]]
+          })
+          PY
+      - name: Test source three-key plot matching and author 2021/README 2022 date conflict
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage73 \
+            -p 'test_validate_original_wisconsin_plot_date_wind_guilds.py' -v
+      - name: Match original site-date-plot wind levels to real visitors and reference flower trait names
+        run: |
+          python -u research/floral_original_field_stage73/validate_original_wisconsin_plot_date_wind_guilds.py \
+            --outdir stage73b_verified_original_wisconsin
+      - name: Verify no false original year, non-recorded visitors or false UV reflectance
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage73b_verified_original_wisconsin/source_wisconsin_original_plot_visitor_wind_and_date_semantics.json")
+          j=json.loads(p.read_text())
+          assert j["author_README_says_sampling_2022"]
+          assert j["author_README_vs_original_Excel_date_conflict_UNRESOLVED"]
+          assert j["original_interpreted_year_counts"]=={"2021":12}
+          assert j["source_weather_year_alignment_allowed"] is False
+          assert j["original_source_plots"]==143
+          assert j["original_source_plant_rows"]==484
+          assert j["original_source_visitor_rows"]==356
+          assert j["original_duplicate_plot_keys"]>=0
+          assert j["original_unique_complete_site_date_plot_keys"]>=1
+          assert j["source_literature_categorical_flower_colour_is_UV_reflectance"] is False
+          assert j["original_visits_are_pollen_effectiveness_or_fitness"] is False
+          assert j["source_flower_wind_guild_model_fitted"] is False
+          print("STAGE73C_WISCONSIN_ACTUAL_ORIGINAL_VISITOR_WIND_PLOT_KEYS_VALIDATED",{
+            "unique_plots":j["original_unique_complete_site_date_plot_keys"],
+            "duplicates":j["original_duplicate_plot_keys"],
+            "within_site_date_varied_wind":j["source_site_date_groups_with_at_least_2_wind_categories"],
+            "source_site_dates":j["source_unique_site_date_groups"],
+            "plot_wind_counts":j["field_plots_by_original_Beaufort_category"],
+            "source_visitor_count_by_wind":j["source_wind_class_recorded_visitation_counts"],
+            "trait_name_match":j["visited_plant_name_matched_author_literature_trait_species"],
+            "join_gaps":j["source_visitor_join_taxon_coverage_issues"]
           })
           PY
       - name: Upload authenticated original Wisconsin study design and field data coverage receipts
