@@ -1,0 +1,73 @@
+name: floral-stage58-authentic-VOC305-visual817-accepted-species-overlap
+on:
+  push:
+    branches: [analysis/floral-wind-scent-routeability-stage58-20261117]
+    paths:
+      - research/floral_routeability_stage58/link_original_VOC305_to_visual817.py
+      - research/floral_routeability_stage58/test_link_original_VOC305_to_visual817.py
+      - .github/workflows/floral-stage58-VOC305-visual817-source-GBIF-join.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-scent-vs-visual-accepted-taxon-identifiability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original 305 source workbook minimal reader
+        run: python -m pip install --disable-pip-version-check 'openpyxl==3.1.5'
+      - name: Mock only strict accepted-key modality and negative-label tests
+        run: |
+          PYTHONPATH=research/floral_routeability_stage58:. \
+            python -m unittest -v test_link_original_VOC305_to_visual817
+      - name: Read previous validated source 817 distinct accepted floral visual evidence
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44009319879
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage57-original-817-accepted-floral-multimodal-source-evidence-matrix
+          path: research/floral_routeability_stage58/source817
+      - name: Re-read pinned authentic 305 original VOC species and strictly reconcile 817 accepted keys
+        run: |
+          PYTHONPATH=. python -u research/floral_routeability_stage58/link_original_VOC305_to_visual817.py \
+            --source-accepted-visual817 research/floral_routeability_stage58/source817/original_817_accepted_visual_evidence_modality_guild_matrix.csv
+      - name: Require measured cross-modality overlap without invented airflow, receptor-use or pollen
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage58_VOC305_visual817_source_accepted_overlap')
+          d=json.loads((p/'original_VOC305_visual817_GBIF_accepted_overlap_receipt.json').read_text())
+          assert d['status']=='ORIGINAL_FARRE_305_VOC_SPECIES_STRICT_GBIF_ACCEPTED_TO_817_VISUAL_TRAIT_MODALITY_OVERLAP'
+          assert d['n_original_VOC_2020_named_species_source_rows']==305
+          assert d['n_prior_visual_source_accepted_species']==817
+          assert d['n_source_original_hybrid_formulas_excluded_from_parent_species_match']==1
+          assert d['hybrid_or_infraspecific_origin_must_not_be_inferred_as_identical_genotype']
+          assert d['n_accepted_VOC_species_also_in_visual_source817']<=d['n_distinct_VOC_accepted_species']
+          assert d['source_wind_means_pollination_mode_not_airflow']
+          assert d['no_source_ambient_wind_speed_or_VOC_plume_values']
+          assert d['no_missing_scent_as_zero_and_no_missing_visual_as_zero']
+          assert d['no_identified_VOC_x_UV_x_Bombus_env_wind_pollen_interaction']
+          with (p/'FArre2020_305_original_VOC_source_accepted_to_817_visual_evidence.csv').open() as fp:
+            r=list(csv.DictReader(fp))
+          assert len(r)==305
+          print('STAGE58_ORIGINAL_VOC305_VISUAL817_TAXON_OVERLAP',
+                {k:d[k] for k in ('n_original_VOC_source_exact_accepted_rows',
+                  'n_distinct_VOC_accepted_species',
+                  'n_accepted_VOC_species_also_in_visual_source817',
+                  'n_combined_visual817_and_VOC_accepted_botanical_source_UNION')},
+                d['same_species_modalities_but_NOT_same_voucher_or_original_native_sample'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage58-source-original-305-VOC-to-817-visual-accepted-modality-overlap
+          path: stage58_VOC305_visual817_source_accepted_overlap/*
+          if-no-files-found: error
+          retention-days: 90

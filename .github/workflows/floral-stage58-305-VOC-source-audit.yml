@@ -1,0 +1,48 @@
+name: floral-stage58-original-305-species-VOC-scent-supplement-source
+on:
+  push:
+    branches: [analysis/floral-wind-scent-routeability-stage58-20261117]
+    paths:
+      - research/floral_routeability_stage58/probe_original_305_VOC_scent_tables.py
+      - research/floral_routeability_stage58/test_probe_original_305_VOC_scent_tables.py
+      - .github/workflows/floral-stage58-305-VOC-source-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-published-floral-VOC-305-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic original source schema and not-scentless tests
+        run: |
+          PYTHONPATH=research/floral_routeability_stage58:. \
+            python -m unittest -v test_probe_original_305_VOC_scent_tables
+      - name: Query original public 2020 305-species floral VOC compilation supplemental members
+        run: PYTHONPATH=. python research/floral_routeability_stage58/probe_original_305_VOC_scent_tables.py
+      - name: Gate not claiming 305 species-level scent traits imported or no-VOC plant states
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage58_original_305_scent_source/FArmegnol2020_305_VOC_species_original_source_manifest.json').read_text())
+          assert d['source_doi']=='10.3389/fpls.2020.01154'
+          assert d['expected_published_VOC_plant_species']==305
+          assert d['status'] in ('ORIGINAL_VOC_305_SOURCE_SUPPLEMENT_MANIFEST_ONLY',
+                               'VOC_ORIGINAL_SUPPLEMENT_UNAVAILABLE_UNKNOWN_NOT_SCENTLESS')
+          if d['status']=='ORIGINAL_VOC_305_SOURCE_SUPPLEMENT_MANIFEST_ONLY':
+            assert d['source_odour_unknown_not_absent']
+            assert d['source_climate_guild_and_species_raw_join_not_verified']
+          print('STAGE58_ORIGINAL_305_FLORAL_VOC_SOURCE_ACCESS',d['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage58-original-305-species-851-VOC-source-manifest
+          path: stage58_original_305_scent_source/*
+          if-no-files-found: error
+          retention-days: 90

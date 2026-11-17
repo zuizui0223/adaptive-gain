@@ -1,0 +1,53 @@
+name: floral-stage58-2020-VOC305-original-3-source-XLSX-schema
+on:
+  push:
+    branches: [analysis/floral-wind-scent-routeability-stage58-20261117]
+    paths:
+      - research/floral_routeability_stage58/inspect_original_VOC305_workbooks.py
+      - research/floral_routeability_stage58/test_inspect_original_VOC305_workbooks.py
+      - .github/workflows/floral-stage58-VOC305-3-original-workbooks.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-original-305-species-VOC-worksheets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install basic original OOXML spreadsheet reader
+        run: python -m pip install --disable-pip-version-check 'openpyxl==3.1.5'
+      - name: Mock-only study provenance and missingness
+        run: |
+          PYTHONPATH=research/floral_routeability_stage58:. \
+            python -m unittest -v test_inspect_original_VOC305_workbooks
+      - name: Download original OA source and examine all 3 pinned VOC spreadsheets
+        run: PYTHONPATH=. python research/floral_routeability_stage58/inspect_original_VOC305_workbooks.py
+      - name: Source workbook schemas only no false 305 VOC phenotype
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage58_original_305_voc_workbook_schemas/original_Farre_305_851_VOC_tables_source_columns.json')
+          d=json.loads(p.read_text())
+          assert d['source_paper_doi']=='10.3389/fpls.2020.01154'
+          assert d['status'] in ('SOURCE_AUTHENTIC_FARRE_2020_3_VOC_WORKBOOKS_SCHEMA',
+                               'SOURCE_VOC_ORIGINAL_WORKBOOKS_UNAVAILABLE_NOT_SCENT_NEGATIVE')
+          if d['status']=='SOURCE_AUTHENTIC_FARRE_2020_3_VOC_WORKBOOKS_SCHEMA':
+            assert d['no_305_row_species_mapping_or_817_union_claim']
+            assert d['no_absent_VOC_phenotype_inferred_from_empty_XLSX_cell']
+            assert len(d['source_authored_workbooks'])==3
+          print('STAGE58_FARRE_ORIGINAL_305_VOC_3_SOURCE_SCHEMA',d['status'],
+                {k: [(s['max_row_reported'],s['max_col_reported']) for s in v['worksheets']]
+                for k,v in d.get('source_authored_workbooks',{}).items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage58-source-verified-305-851-VOC-original-three-sheets
+          path: stage58_original_305_voc_workbook_schemas/*
+          if-no-files-found: error
+          retention-days: 90
