@@ -45,7 +45,7 @@ def verified_original_uv(path):
 def literal_binomial(s):
     v=" ".join(str(s or "").replace("_"," ").strip().split())
     chunks=v.split()
-    if len(chunks)!=2 or not (chunks[0][:1].isupper()
+    if len(chunks)!=2 or chunks[1].casefold() in ("sp.","spp.","cf.","aff.","indet.") or not (chunks[0][:1].isupper()
                               and chunks[1][:1].islower()):
         return ""
     return v.casefold()
