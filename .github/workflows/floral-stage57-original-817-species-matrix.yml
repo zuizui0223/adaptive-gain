@@ -1,0 +1,74 @@
+name: floral-stage57-original-817-accepted-multimodal-visual-source-atlas
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - research/floral_visual_macro_stage57/merge_817_original_visual_traits.py
+      - research/floral_visual_macro_stage57/test_merge_817_original_visual_traits.py
+      - .github/workflows/floral-stage57-original-817-species-matrix.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-583-plus-243-multimodal-floral-source-accepted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source acceptance cross-modality 817 and no fabricated UV absence mock-only tests
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_merge_817_original_visual_traits
+      - name: Read independently original-authenticated prior 583 accepted botanical source identities
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43904836644
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage54-original-UV-spectral-2025-review-multimodal-accepted-floral-species
+          path: research/floral_visual_macro_stage57/prior_583
+      - name: Read species-collapsed 243 accepted original numeric UV reflection and literature bee-bird labels
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44008546114
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage57-2025-UV-mean-bee-bird-guild-family-area-congruence
+          path: research/floral_visual_macro_stage57/source_243
+      - name: Build original source modality-preserving 817 unique accepted species matrix
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python -u merge_817_original_visual_traits.py \
+            --source-prior-583 prior_583/original_UV_Ohashi_age_spectra_2025_review_GBIF_accepted_species.csv \
+            --source-2025-243 source_243/original_2025_accepted_species_243_collapsed_UV_reflectance.csv
+      - name: Enforce genuine source counts and not all-positive visible guide claims
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage57_multimodal_817_accepted_visual_species')
+          stats=json.loads((p/'source_817_original_accepted_modalities_count_receipt.json').read_text())
+          assert stats['status']=='AUTHENTIC_ORIGINAL_SOURCE_MODALED_FLORAL_UV_COLOR_GUILD_EVIDENCE_817_ACCEPTED'
+          assert stats['combined_distinct_original_source_accepted_botanical_species']==817
+          assert stats['source_accepted_species_overlap']==9
+          assert stats['source_original_directly_measured_UV_spatial_patterned']==101
+          assert stats['source_original_directly_measured_UV_spatial_uniform']==129
+          assert stats['source_original_Oliveira_2025_numeric_mean_UV_species']==243
+          assert stats['not_all_817_source_measured_visual_guides_or_positive_signallers']
+          with (p/'original_817_accepted_visual_evidence_modality_guild_matrix.csv').open() as fp:
+            rows=list(csv.DictReader(fp))
+          assert len(rows)==817 and len({r['gbif_accepted_species_key'] for r in rows})==817
+          assert all(r['no_unknown_visual_modality_inferred_as_absent']=='True' for r in rows)
+          print('STAGE57_ORIGINAL_MEASURED_VISUAL_MODES_817_ACCEPTED_SOURCE',stats)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-original-817-accepted-floral-multimodal-source-evidence-matrix
+          path: research/floral_visual_macro_stage57/stage57_multimodal_817_accepted_visual_species/*
+          if-no-files-found: error
+          retention-days: 90
