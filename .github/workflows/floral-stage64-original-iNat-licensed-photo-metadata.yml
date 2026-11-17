@@ -1,0 +1,71 @@
+name: floral-stage64-original-iNat-source-4-VOC-flower-photo-metadata
+on:
+  push:
+    branches: [analysis/floral-original-photo-marking-pilot-stage64-20261117]
+    paths:
+      - 'research/floral_routeability_stage64/**'
+      - '.github/workflows/floral-stage64-original-iNat-licensed-photo-metadata.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authenticated-original-4-taxon-photo-identity-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mock license, observer and unmeasured UV/visible guide guards
+        run: |
+          PYTHONPATH=research/floral_routeability_stage64:. \
+            python -m unittest -v test_probe_original_iNat_flower_photo_source
+      - name: Retrieve frozen candidate 80 VOC x original FCP species metadata from Stage60
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44011763557
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage60-authentic-VOC305-FCP4475-visible-pattern-photo-review-80-species
+          path: research/floral_routeability_stage64/source_stage60_photo80
+      - name: Bounded original iNaturalist API metadata, 4 previously selected taxa, no image pixels
+        run: |
+          python -u research/floral_routeability_stage64/probe_original_iNat_flower_photo_source.py \
+            --frozen-source-stage60-80 research/floral_routeability_stage64/source_stage60_photo80/80_original_VOC_flower_photo_species_visible_guide_source_review_queue.csv
+      - name: Confirm original photo/observer licenses and no newly certified visible/UV guides
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage64_original_iNat_photo_metadata')
+          d=json.loads((p/'source_four_species_iNat_new_photo_API_verification_receipt.json').read_text())
+          assert d['status']=='ORIGINAL_INAT_FOUR_SPECIES_FROZEN_SOURCE_PHOTO_METADATA_PILOT'
+          assert d['matched_stage60_VOC_FCP_original_review_species']==80
+          assert d['intentionally_selected_original_FCP_taxa']==4
+          assert d['source_images_not_downloaded']
+          assert d['not_original_FCP_100_exact_photos_retrieval']
+          assert d['not_source_measured_visible_or_UV_guides']
+          assert d['no_wind_scent_visual_behavioral_effect_claim']
+          with (p/'new_iNat_CC_licensed_four_species_original_photo_review_queue.csv').open() as fp:
+            rows=list(csv.DictReader(fp))
+          for r in rows:
+            if r['photo_is_open_flower_verified']:
+              assert r['photo_is_open_flower_verified']=='UNKNOWN_UNREAD_IMAGE'
+              assert r['real_visible_intrapetal_guide_state']=='UNKNOWN_UNREAD_IMAGE'
+              assert r['UV_spatial_pattern_state']=='UNKNOWN_NOT_MEASURED_BY_RGB'
+              assert r['photo_image_pixels_downloaded']=='False'
+          print('STAGE64_ORIGINAL_INAT_NEW_SOURCE_PHOTO_METADATA',
+              {'selected_new_original_photo_records':d['real_iNaturalist_current_new_photo_records'],
+               'by_taxon':{k:{'source_status':v['status'],
+                  'n_approved':v.get('actual_approved_source_image_metadata_selected')}
+                  for k,v in d['source_sample_result'].items()}})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage64-source-original-iNat-4-VOC-FCP-taxa-licensed-photo-metadata
+          path: stage64_original_iNat_photo_metadata/*
+          if-no-files-found: error
+          retention-days: 90
