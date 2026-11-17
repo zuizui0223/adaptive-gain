@@ -145,14 +145,16 @@ def load_spectra(rows):
 
 
 def study_metadata(metadata_rows):
+    # Author Metadata.csv has 80 distinct STUDY×YEAR rows, NOT 80 studies.
+    # Seventeen study IDs repeat in different years. Preserve the year key.
     d = {}
     for r in metadata_rows:
-        k = r["Study_id"].strip()
-        if not k or k in d:
-            raise ValueError("STAGE69_METADATA_STUDY_ID_DUPLICATE")
+        k = (r["Study_id"].strip(), r["Year"].strip())
+        if not all(k) or k in d:
+            raise ValueError("STAGE69_METADATA_STUDY_YEAR_DUPLICATE_OR_EMPTY")
         d[k] = r
-    if len(d) < 50:
-        raise ValueError("STAGE69_SOURCE_STUDIES_UNEXPECTEDLY_FEW")
+    if len(d) != 80 or len({k[0] for k in d}) != 54:
+        raise ValueError("STAGE69_EXPECTED_80_STUDY_YEAR_54_DISTINCT_STUDY_IDS")
     return d
 
 
@@ -173,7 +175,7 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
     malformed_geography = 0
     uncert_plant = 0
     unknown_year = 0
-    unmatched_study = 0
+    unmatched_study_year = 0
     observed_taxonomic_rank = Counter()
 
     for row in dict_rows(raw_gz, compressed=True):
@@ -185,8 +187,8 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
         observed_taxonomic_rank[row["Plant_rank"].strip()] += 1
         if when == "UNKNOWN":
             unknown_year += 1
-        if source not in meta:
-            unmatched_study += 1
+        if (source, when) not in meta:
+            unmatched_study_year += 1
         plant_names.add(strict_name(plant))
         original_sites.add((source, net, row["Latitude"], row["Longitude"]))
         key = (source, net, when)
@@ -218,8 +220,8 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
 
     if counts["original_corrected_record_rows"] != EXPECTED_INTERACTIONS:
         raise ValueError(f"STAGE69_WRONG_OR_UNCORRECTED_INTERACTION_DENOMINATOR_{counts['original_corrected_record_rows']}")
-    if unmatched_study:
-        raise ValueError("STAGE69_STUDY_METADATA_NO_MATCH")
+    # Retain unresolved study-year joins as unknown, never borrow a nearby year.
+    # The source data are valid independently of metadata association.
     stats = Counter()
     joined = []
     spectrum_target = {k for k, s in spectra.items() if
@@ -247,12 +249,14 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
                 if g.get("Bombus", 0) > 0 and (g.get("other_bee", 0)+g.get("diptera", 0)+g.get("lepidoptera", 0)) > 0:
                     cross_guild.add(tax)
         # "0 observed" does not mean studied absent at the site.
+        yr_meta = meta.get((study, year), {})
         row = {
             "Study_id": study, "Network_id": net, "Year_from_original_date": year,
             "Original_plant_accepted_name_literal": tax,
-            "Author_study_sampling_method": meta[study].get("Sampling_method",""),
-            "Author_study_taxa_recorded": meta[study].get("Taxa_recorded",""),
-            "Author_study_DOI": meta[study].get("DOI", ""),
+            "Author_study_sampling_method": yr_meta.get("Sampling_method",""),
+            "Author_study_taxa_recorded": yr_meta.get("Taxa_recorded",""),
+            "Author_study_DOI": yr_meta.get("DOI", ""),
+            "Study_Year_metadata_join_verified": int(bool(yr_meta)),
             "NHM_text_name_match": int(desc is not None),
             "NHM_colour_text_recorded": desc["visible_text_colour_recorded"] if desc else "",
             "NHM_structure_text_recorded": desc["structural_text_trait_recorded"] if desc else "",
@@ -267,10 +271,11 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
     observed_55 = plant_species_names & spectrum_target
     observed_color = {k for k in observed_nhm if nhm[k]["visible_text_colour_recorded"] == "1"}
     observed_struct = {k for k in observed_nhm if nhm[k]["structural_text_trait_recorded"] == "1"}
-    n_studies_with_multiple_source_orders = sum(
-        bool(v.get("Number_of_main_orders_recorded", "").strip())
-        and v["Number_of_main_orders_recorded"].strip() not in {"0","1"}
-        for v in meta.values())
+    n_studies_with_multiple_source_orders = len({
+        study for (study, year), v in meta.items()
+        if v.get("Number_of_main_orders_recorded", "").strip() not in
+            {"", "0", "1", "NA"}
+    })
     summary = {
         "schema": "stage69_original_corrected_EuPPollNet_v1_3_0_network_x_NHM_text_x_real_spectra",
         "original_network_source_DOI": SOURCE_DOI,
@@ -283,7 +288,9 @@ def summarize(raw_gz: bytes, metadata_rows, nhm_rows, spectra_rows):
         "actual_original_corrected_interaction_record_rows": counts["original_corrected_record_rows"],
         "source_interaction_columns": len(header),
         "source_guild_record_count_by_independent_pollinator_taxon": dict(guilds),
-        "distinct_Study_ids_in_metadata": len(meta),
+        "distinct_Study_ids_in_metadata": len({k[0] for k in meta}),
+        "distinct_Study_Year_metadata_rows": len(meta),
+        "original_interaction_rows_without_matching_study_year_metadata": unmatched_study_year,
         "distinct_Study_ids_in_observations": len(obs_by_study),
         "distinct_Study_Network_Year_keys": len(obs_by_network),
         "distinct_Study_Network_site_coordinate_keys": len(original_sites),
