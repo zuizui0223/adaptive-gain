@@ -20,7 +20,9 @@ import urllib.error,urllib.request
 SOURCE_DOI="10.1111/plb.70138"
 SOURCE_PMID="PMC12710832"
 SOURCE_API="https://www.ebi.ac.uk/europepmc/webservices/rest/"+SOURCE_PMID+"/supplementaryFiles"
-TABLE_NAME="plb70138-sup-0003-TableS1-S8.docx"
+TABLE_NAME="PLB-28-201-s001.docx"
+# Original EuropePMC OA supplemental member corresponds to publisher-alias
+# plb70138-sup-0003-TableS1-S8.docx (90479 original uncompressed bytes).
 MAX_EPMC_ZIP=17_000_000
 MAX_DOCX=1_200_000
 MAX_XML=5_000_000
