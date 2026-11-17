@@ -12,7 +12,7 @@ Visitor records are floral visitation events/inflorescences, not known pollen
 transfer fitness. Survey missing visits must NOT be imputed as biological zero.
 """
 from __future__ import annotations
-import argparse,csv,datetime,json
+import argparse,csv,datetime,json,io,zipfile,xml.etree.ElementTree as ET
 from collections import Counter,defaultdict
 from pathlib import Path
 
@@ -29,6 +29,20 @@ def excel_date_1900(num):
         return None
     return (datetime.datetime(1899,12,30)+datetime.timedelta(days=int(n))).date().isoformat()
 
+def workbook_original_date_system(raw):
+    # Read actual source XLSX workbookPr; never assume Excel's 1900 mode
+    # from workbook date serial numbers alone.
+    with zipfile.ZipFile(io.BytesIO(raw)) as book:
+        wb=ET.fromstring(book.read("xl/workbook.xml"))
+        pr=wb.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}workbookPr")
+        raw_flag=pr.get("date1904","0") if pr is not None else "0"
+        if raw_flag in ("0","false","False"):
+            return "EXCEL_1900"
+        if raw_flag in ("1","true","True"):
+            return "EXCEL_1904"
+        raise ValueError("STAGE73C_XLSX_WORKBOOK_UNRECOGNIZED_CALENDAR_EPOCH")
+
+
 def join_key(row):
     return tuple(str(row.get(field,"")).strip() for field in ("site","date","plot"))
 
@@ -39,7 +53,9 @@ def strict_nonnegative_number(s):
     return x
 
 def summarize_field():
-    books=read_xlsx_sparse(download_original_excel())
+    original_raw=download_original_excel()
+    original_calendar=workbook_original_date_system(original_raw)
+    books=read_xlsx_sparse(original_raw)
     sheets={name:table_from_sheet(books[name])[1] for name in
             ("plots","plants","visitors","plant_spp_traits","visitor_spp_traits")}
     pts=sheets["plots"];pl=sheets["plants"];vi=sheets["visitors"];traits=sheets["plant_spp_traits"];it=sheets["visitor_spp_traits"]
@@ -115,7 +131,15 @@ def summarize_field():
     n_within_site_date_multiwind=sum(len([w for w,n in c.items() if w and n>0])>=2 for c in wind_by_site_date.values())
     wind_counts=Counter(r.get("wind","") for r in unique_plots.values())
     source_dates=sorted({r.get("date","") for r in pts if r.get("date","")})
-    interpreted=[excel_date_1900(x) for x in source_dates]
+    if original_calendar=="EXCEL_1900":
+        interpreted=[excel_date_1900(x) for x in source_dates]
+    else:
+        # Excel 1904 mode is 1904-01-01 + the serial days.
+        interpreted=[
+            (datetime.date(1904,1,1)+datetime.timedelta(days=int(float(x)))).isoformat()
+            if strict_nonnegative_number(x) is not None else None
+            for x in source_dates
+        ]
     year_count=Counter((x or "UNKNOWN")[:4] for x in interpreted)
     original_plants_plot_covered=sum(bool(plant_plot_set.get(k)) for k in unique_plots)
     original_visitors_plot_covered=sum(bool(visitor_plot_set.get(k)) for k in unique_plots)
@@ -123,7 +147,9 @@ def summarize_field():
         "schema":"stage73c_original_Wisconsin_site_date_plot_wind_visitor_field_gates",
         "original_source_Git_blob_SHA1":SOURCE_GIT_BLOB_SHA1,
         "author_README_says_sampling_2022":True,
-        "Excel_1900_date_system_assumed_for_interpretation":True,
+        "original_source_XLSX_workbook_calendar_date_system":original_calendar,
+        "original_date_year_inferred_from_author_workbook_calendar":True,
+        "Excel_1900_date_system_assumed_for_interpretation":False,
         "source_original_distinct_dates_serial":source_dates,
         "original_dates_under_Excel1900":interpreted,
         "original_interpreted_year_counts":dict(year_count),
