@@ -1,0 +1,116 @@
+name: floral-stage68-original-NHM-botanical-TEXT-traits-59k-source-check
+
+on:
+  push:
+    branches: [analysis/floral-nhm-literature-text-trait-gates-stage68-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage68/**'
+      - '.github/workflows/floral-stage68-original-NHM-text-traits.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verified-text-traits-not-photos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Unit guards on organ identity, unknown negatives, source SHA, duplicates
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage68 \
+            -p 'test_nhm_original_text_trait_coverage.py' -v
+      - name: Reproduce independently audited Ecoflora 1,989 text taxon records
+        run: |
+          python -u research/floral_literature_macro_stage68/nhm_original_text_trait_coverage.py \
+            --source ecoflora.csv --outdir stage68_source_text/ecoflora
+      - name: Ingest actual 59k-scale original NHM botanical description combined CSV
+        run: |
+          python -u research/floral_literature_macro_stage68/nhm_original_text_trait_coverage.py \
+            --source combined.csv --outdir stage68_source_text/combined
+      - name: Unit guards for no-fuzzy-match spectral text crosswalk
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage68 \
+            -p 'test_join_original_text_with_original_73_spectra.py' -v
+      - name: Recover authenticated Stage67 original 73 spectrum crosswalk with GitHub CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44037772023 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage67-real-original-73-flower-petal-spectra-accepted-GBIF-join-817 \
+            --dir stage68_stage67_original
+
+      - name: Original Stage67 spectrometer petal data x NHM botanical TEXT crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -u research/floral_literature_macro_stage68/join_original_text_with_original_73_spectra.py \
+            --nhm-compact stage68_source_text/combined/original_NHM_text_traits_compact.csv \
+            --nhm-source-receipt stage68_source_text/combined/original_NHM_text_trait_source_coverage.json \
+            --prior-extracted-csv stage68_stage67_original/original_2024_73_petal_spectra_taxonomic_source_match_and_UV_modes.csv \
+            --outdir stage68_source_text/spectral_text_join
+      - name: Exact join receipt and optical guide no-go
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('stage68_source_text/spectral_text_join/stage68_original_73_spectra_x_NHM_text_overlap_receipt.json').read_text())
+          assert j['n_original_spectral_botanical_names']==73
+          assert j['n_original_GBIF_strict_accepted_spectra']==70
+          assert j['n_NHM_botanical_text_taxon_labels']==59369
+          assert j['n_exact_literal_name_overlap']==55
+          assert j['n_GBIF_strict_accepted_spectral_names_with_NHM_literal_match']==55
+          assert j['n_matched_with_text_colour_recorded']==49
+          assert j['n_matched_with_text_structure_recorded']==25
+          assert j['n_matched_with_both_text_colour_and_structure']==25
+          assert j['n_NHM_literal_overlap_already_in_prior_817_atlas']==7
+          assert j['UV_spatial_guide_presence_or_absence_from_text']=='NOT_MEASURED'
+          assert j['native_site_Bombus_or_other_visitors']=='NOT_MEASURED'
+          print('STAGE68_REAL_SOURCE_CROSSWALK_VERIFIED',
+                {k:v for k,v in j.items() if k.startswith('n_')})
+          PY
+      - name: Verify authentic original text source and inference ceilings
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path("stage68_source_text")
+          e=json.loads((base/"ecoflora"/"original_NHM_text_trait_source_coverage.json").read_text())
+          c=json.loads((base/"combined"/"original_NHM_text_trait_source_coverage.json").read_text())
+          assert e["original_text_description_taxon_rows"] == 1989
+          assert e["visible_colour_any_of_three_organs_recorded"] == 1141
+          assert e["structure_any_of_five_text_fields_recorded"] == 304
+          assert e["visible_colour_and_structure_recorded"] == 249
+          assert c["original_text_description_taxon_rows"] >= 50000
+          assert c["visible_colour_and_structure_recorded"] >= 1
+          assert c["distinct_literal_taxon_labels"] <= c["original_text_description_taxon_rows"]
+          for r in (e,c):
+              assert r["source_dataset"] == "NaturalHistoryMuseum/plant-traits"
+              assert r["photo_input_or_derived_photo_colour"] is False
+              assert r["stage67_species_atlas_taxonomic_overlap_calculated"] is False
+              assert r["native_site_pollinator_visits_extracted"] == 0
+              assert r["unmeasured_UV_spatial_guide_negative_states"] == 0
+              assert r["missing_field_is_unknown_not_negative"] is True
+              assert r["claim_global_colour_x_bee_effect"] is False
+          print("STAGE68_SOURCE_ONLY_TEXT_TRAIT_COUNTS_AUTHENTICATED",{
+              "ecoflora_rows":e["original_text_description_taxon_rows"],
+              "combined_rows":c["original_text_description_taxon_rows"],
+              "combined_colour":c["visible_colour_any_of_three_organs_recorded"],
+              "combined_colour_and_architecture":c["visible_colour_and_structure_recorded"]})
+          PY
+      - name: Upload original source provenance and compact TEXT trait table
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV
+          path: stage68_source_text/
+          retention-days: 90
+          if-no-files-found: warn
