@@ -1,0 +1,104 @@
+name: floral-stage66-global-authentic-FCP4475-colour-x-Bombus2695-HEX-macro
+on:
+  push:
+    branches: [analysis/floral-global-photo-colour-bee-hex-macro-stage66-20261117]
+    paths:
+      - 'research/floral_visual_macro_stage66/**'
+      - '.github/workflows/floral-stage66-global-FCP-bee-HEX-macro.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-global-photo-colour-bee-hex:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproducible source-data analysis scientific libraries
+        run: |
+          python -m pip install --disable-pip-version-check \
+            'numpy==2.1.3' 'pandas==2.2.3' 'Pillow==11.3.0' \
+            'shapely==2.1.2' 'pyproj==3.7.2' 'pyshp==2.3.1'
+      - name: Source-free true-unknown-HEX and species-HEX pseudoreplication guards
+        run: |
+          python -m unittest discover -s research/floral_visual_macro_stage66 \
+            -p 'test_original_FCP4475_beeHEX_coarse_colour_macro.py' -v
+      - name: Download only actual author phylogenetic and pa_cutoff 2695 bee cells
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43850263676
+          github-token: ${{ github.token }}
+          name: stage46-author-filtered-global-Bombus-hex-original-geography
+          path: stage66_original_inputs/author_bee_hex
+      - name: Retrieve the separately archived actual original FCP photo classifications and WorldClim
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p stage66_original_inputs/fcp stage66_original_inputs/worldclim
+          gh release download fcp-all4730-original-method-actual-colour-results-20261017 \
+            --repo zuizui0223/fcp \
+            --pattern fcp_all4730_original_method_actual_measured_data_and_inference.tar.gz \
+            --dir stage66_original_inputs/fcp
+          gh release download fcp-worldclim-2.1-10m-20260925 \
+            --repo zuizui0223/fcp \
+            --pattern wc2.1_10m_bio.zip \
+            --dir stage66_original_inputs/worldclim
+          tar -xzvf stage66_original_inputs/fcp/fcp_all4730_original_method_actual_measured_data_and_inference.tar.gz \
+            -C stage66_original_inputs/fcp \
+            measured/fcp_all4730_original_method_measured_photos.csv.gz
+      - name: Independently verify the source-authentic snapshot byte hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo 'd260b18be05a2ceac87a49fddd0645734d56c6246f80321c1c577f261dd5cee4  stage66_original_inputs/author_bee_hex/original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv' | sha256sum -c
+          echo '8e7f10f0427927208485b2da6fa9c46bb681d6f3611e53b8dfdc606cfc8dabe6  stage66_original_inputs/fcp/measured/fcp_all4730_original_method_measured_photos.csv.gz' | sha256sum -c
+          echo '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf  stage66_original_inputs/worldclim/wc2.1_10m_bio.zip' | sha256sum -c
+      - name: Run actual global within-plant-species photo colour × modelled bee source-HEX macro
+        run: |
+          PYTHONPATH=. python -u research/floral_visual_macro_stage66/original_FCP4475_beeHEX_coarse_colour_macro.py \
+            --fcp-photos stage66_original_inputs/fcp/measured/fcp_all4730_original_method_measured_photos.csv.gz \
+            --source-author-bee-hex stage66_original_inputs/author_bee_hex/original_tree_and_PA_filtered_Bombus_hex_geographic_10242.csv \
+            --worldclim-bio stage66_original_inputs/worldclim/wc2.1_10m_bio.zip \
+            --outdir stage66_global_macro_original_source
+      - name: Enforce actual original data gate, source percentages and photo metadata privacy
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          base=Path('stage66_global_macro_original_source')
+          d=json.loads((base/'source_based_global_FCP_Bombus_colour_macro_receipt.json').read_text())
+          assert d['source_original_FCP']['source_photos']==447500
+          assert d['source_original_FCP']['source_species']==4475
+          assert d['source_original_FCP']['four_state_classified']==227107
+          assert d['source_original_bee']['author_eligible_hex']==2695
+          assert d['source_original_bee']['uncovered_hex_NOT_TRUE_ABSENCE']==7547
+          assert d['human_visible_coarse_photo_colour_not_UV_spatial_pattern_or_guide']
+          assert d['modelled_Bombus_range_overlaps_not_native_realized_pollination']
+          table=pd.read_csv(base/'original_species_by_eligible_model_HEX_colour_fractions.csv')
+          assert len(table)==d['species_HEX_coverage']['species_x_hex_units']
+          assert table['source_hex_id'].notna().all()
+          assert table.n_photos.ge(1).all()
+          forbidden={'photo_id','observer_id','observation_id','photo_url','image_sha256','positional_accuracy_m'}
+          assert not set(table.columns)&forbidden
+          assert set(['BIO5','BIO12','Bombus_fraction','n_Bombus','n_all_bee']).issubset(table)
+          print('STAGE66_ORIGINAL_MACRO_RECEIPT_VERIFIED',
+                {'n_matched_photos':d['species_HEX_coverage']['classified_photos_in_eligible_model'],
+                 'n_species':d['species_HEX_coverage']['eligible_species'],
+                 'n_source_hex':d['species_HEX_coverage']['eligible_hex_with_photos'],
+                 'macro':d['macro_min_1_original_classified_photo_per_cell']['status'],
+                 'min3':d['macro_min_3_original_classified_photos_per_cell']['status']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: stage66-FCP4475-real-original-flower-colour-x-global-author-Bombus-HEX-macro
+          path: stage66_global_macro_original_source/*
+          retention-days: 90

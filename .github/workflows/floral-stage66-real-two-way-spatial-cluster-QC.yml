@@ -1,0 +1,73 @@
+name: floral-stage66-authentic-FCP-bee-HEX-two-way-cluster-robustness
+on:
+  push:
+    branches: [analysis/floral-global-photo-colour-bee-hex-macro-stage66-20261117]
+    paths:
+      - 'research/floral_visual_macro_stage66/original_2way_species_and_author_HEX_robustness.py'
+      - '.github/workflows/floral-stage66-real-two-way-spatial-cluster-QC.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-photo-species-and-global-model-hex-two-way-cluster:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install frozen source-grain numerical libraries
+        run: python -m pip install --disable-pip-version-check 'numpy==2.1.3' 'pandas==2.2.3'
+      - name: Fetch genuine original FCP×author model source-joined 92010 species-HEX artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44025370724
+          github-token: ${{ github.token }}
+          name: stage66-FCP4475-real-original-flower-colour-x-global-author-Bombus-HEX-macro
+          path: stage66_real_original_source
+      - name: Independently pin original source-derived species×HEX and fit 2way correlated-error model
+        run: |
+          python -u research/floral_visual_macro_stage66/original_2way_species_and_author_HEX_robustness.py \
+            --stage66-authentic-species-hex stage66_real_original_source/original_species_by_eligible_model_HEX_colour_fractions.csv \
+            --stage66-authentic-receipt stage66_real_original_source/source_based_global_FCP_Bombus_colour_macro_receipt.json
+      - name: Check original-model coefficients are recovered and 3-photo sensitivity remains visible
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage66_global_macro_two_way_robustness/original_species_and_hex_two_way_cluster_real_macro.json').read_text())
+          assert d['source_actions_run']==44025370724
+          assert d['n_photo_source_species']==4475
+          assert d['min_1']['species']==4447
+          assert d['min_3']['species']==3560
+          assert d['min_1']['source_author_hex']==1618
+          assert d['min_3']['source_author_hex']==686
+          assert d['posthoc_not_predeclared_and_no_floral_UV_scent_or_wind_trait']
+          region=d['posthoc_geographic_sign_and_sample_density_audit']
+          assert set(region)=={
+              'north_extratropical_lat_ge_23_5',
+              'south_extratropical_lat_le_minus23_5',
+              'tropical_abs_lat_lt_23_5'}
+          assert region['north_extratropical_lat_ge_23_5']['min_3']['species']>=2500
+          assert region['south_extratropical_lat_le_minus23_5']['min_3']['species']>=500
+          assert region['tropical_abs_lat_lt_23_5']['min_3']['species']>=100
+          assert d['posthoc_zonal_reduced_absolute_lat_collinearity_not_same_full_model']
+          for region_name,thresholds in region.items():
+              for a in ('min_1','min_3'):
+                  assert set(thresholds[a]['effects'])=={'white','yellow_orange','red_pink','blue_purple'}
+          for key in ('min_1','min_3'):
+              assert set(d[key]['effects'])=={'white','yellow_orange','red_pink','blue_purple'}
+              assert d[key]['source_species_hex_intersection_cluster_corrected']
+              for value in d[key]['effects'].values():
+                  assert value['two_way_cluster_se'] is not None
+          print('STAGE66_TWO_WAY_BEE_MACRO_REAL_DATA_4447_AND_3560_SPECIES_CONFIRMED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: stage66-authentic-global-FCP-Bombus-species-and-HEX-two-way-cluster-robustness
+          path: stage66_global_macro_two_way_robustness/*
+          retention-days: 90
