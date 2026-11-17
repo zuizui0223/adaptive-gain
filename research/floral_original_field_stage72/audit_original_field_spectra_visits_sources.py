@@ -199,6 +199,20 @@ def dataset_files(data):
 
 def process_file(name, original_url, raw, outdir, max_preview=3):
     info=source_receipt(name,original_url,raw)
+    # A publisher/CDN may return HTTP 200 HTML to a nominal .xlsx URL.
+    # That response is NOT an original workbook and must not count as data.
+    expects_xlsx=(name.lower().endswith(".xlsx") or name.endswith("_xlsx"))
+    if expects_xlsx:
+        if not zipfile.is_zipfile(io.BytesIO(raw)):
+            info["status"]="SOURCE_HTTP200_NOT_GENUINE_XLSX"
+            info["original_XLSX_source_identity_verified"]=False
+            return info
+        with zipfile.ZipFile(io.BytesIO(raw)) as test_archive:
+            if "xl/workbook.xml" not in test_archive.namelist():
+                info["status"]="SOURCE_ZIP_NOT_GENUINE_XLSX"
+                info["original_XLSX_source_identity_verified"]=False
+                return info
+        info["original_XLSX_source_identity_verified"]=True
     if raw.startswith(b"PK\x03\x04") and zipfile.is_zipfile(io.BytesIO(raw)):
         try:
             with zipfile.ZipFile(io.BytesIO(raw)) as z:
@@ -272,9 +286,17 @@ def run(outdir):
       "original_source_published_design_background_not_this_source_extraction":ATTRIBUTIONS,
       "source_receipts":receipts,
       "source_inventories":search_summary,
-      "n_original_source_content_files_retrieved":sum(r.get("status")=="ORIGINAL_SOURCE_BYTES_RETRIEVED" and
-        r.get("source_id","") not in {"kantsa2018_figshare_author_article_metadata"} and
-        not r.get("source_id","").startswith("dryad_metadata_") for r in receipts),
+      "n_original_source_content_files_retrieved":len({
+            r["original_source_sha256"] for r in receipts
+            if r.get("status")=="ORIGINAL_SOURCE_BYTES_RETRIEVED"
+            and r.get("source_id","")!="kantsa2018_figshare_author_article_metadata"
+            and not r.get("source_id","").startswith("dryad_metadata_")}),
+      "n_original_source_file_fetch_occurrences_including_SHA_duplicates":sum(
+            r.get("status")=="ORIGINAL_SOURCE_BYTES_RETRIEVED"
+            and r.get("source_id","")!="kantsa2018_figshare_author_article_metadata"
+            and not r.get("source_id","").startswith("dryad_metadata_")
+            for r in receipts),
+      "http200_nonworkbook_never_counted_as_original_XLSX":True,
       "n_actual_species_site_visitor_x_spectral_effects_extracted":0,
       "original_field_site_meteorological_wind_and_VOC_jointly_matched":False,
       "published_source_sample_sizes_are_NOT_recomputed_data_points":True,
