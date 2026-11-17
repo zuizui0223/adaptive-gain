@@ -60,6 +60,16 @@ class OriginalSourceTests(unittest.TestCase):
         r=m.source_receipt("original","https://example.org",b"FOO")
         self.assertEqual(r["byte_count"],3)
         self.assertEqual(len(r["original_source_sha256"]),64)
+    def test_http200_non_excel_source_is_not_real_spreadsheet(self):
+        r=m.process_file("kantsa_2018_network_original_supplement_xlsx",
+             "https://media.springernature.com/nonbinary.xlsx",b"<html>cookie required</html>",Path("/tmp"))
+        self.assertEqual(r["status"],"SOURCE_HTTP200_NOT_GENUINE_XLSX")
+        self.assertFalse(r["original_XLSX_source_identity_verified"])
+    def test_original_real_xlsx_is_verified_in_source_receipt(self):
+        r=m.process_file("figshare_Kantsa_etal_Supp_Data1.xlsx",
+             "https://ndownloader.figshare.com/files/10377684",fake_workbook(),Path("/tmp"))
+        self.assertEqual(r["status"],"ORIGINAL_SOURCE_BYTES_RETRIEVED")
+        self.assertTrue(r["original_XLSX_source_identity_verified"])
     def test_only_real_handed_out_download_links(self):
         self.assertEqual(m.dataset_files({"files":[{"download_url":"https://a.org/f1"}]}),["https://a.org/f1"])
         self.assertEqual(m.dataset_files({"files":[{"file_id":10}]}),[])
