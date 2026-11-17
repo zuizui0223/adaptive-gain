@@ -121,6 +121,11 @@ def scan_authentic_zip(data):
             check(m.file_size<=MAX_EXPANDED_MEMBER,
                   "INDIVIDUAL_ZIP_MEMBER_OVER_LIMIT")
             low=m.filename.replace("\\","/").lower()
+            # The original Figshare ZIP contains macOS AppleDouble resource
+            # fork metadata under __MACOSX/ and ._* names, not floral spectra.
+            # Do not let short binary resource forks masquerade as CSV files.
+            if low.startswith("__macosx/") or any(x.startswith("._") for x in low.split("/")):
+                continue
             if not low.endswith(".csv") or not re.search(
                      r"(?:^|/)petals(?:/|$)",low):continue
             rows=parse_spectral_csv(z.read(m),m.filename)
