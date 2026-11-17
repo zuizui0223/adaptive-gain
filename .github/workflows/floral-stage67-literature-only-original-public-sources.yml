@@ -3,7 +3,9 @@ on:
   push:
     branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
     paths:
-      - 'research/floral_literature_macro_stage67/**'
+      - 'research/floral_literature_macro_stage67/systematic_source_europepmc_visual_and_multisensory.py'
+      - 'research/floral_literature_macro_stage67/test_systematic_source_registry_and_pagination.py'
+      - 'research/floral_literature_macro_stage67/curated_original_floral_trait_pollinator_data_sources.json'
       - '.github/workflows/floral-stage67-literature-only-original-public-sources.yml'
   workflow_dispatch:
 permissions:
