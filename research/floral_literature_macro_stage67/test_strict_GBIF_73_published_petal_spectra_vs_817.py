@@ -27,7 +27,7 @@ def fixture():
         atlas.append({"gbif_accepted_species_key":str(j+100),
                "source_UV_pattern_directly_measured_or_unknown":"1" if j<101 else "0" if j<230 else ""})
     tax={r["source_literal_species_candidate"]:{"taxonomy_status":"EXACT_CONFIDENT_SPECIES_MAPPED",
-          "gbif_accepted_usage_key":int(100+i) if i<2 else int(900+i)} for i,r in enumerate(spectra)}
+          "gbif_accepted_usage_key":int(100+i) if i<2 else int(2000+i)} for i,r in enumerate(spectra)}
     return spectra,atlas,rr,tax
 
 class OriginalGBIFPetalSourceTests(unittest.TestCase):
