@@ -1,0 +1,110 @@
+name: floral-stage76b-DoPI-original-676900-records-233-NHM-hue-external-macro
+
+on:
+  push:
+    branches: [analysis/floral-wcvp-native-europe-macro-guild-stage76-20261118]
+    paths:
+      - "research/floral_macro_stage76/original_DoPI2026_external_study_hue_guild_macro.py"
+      - "research/floral_macro_stage76/test_original_DoPI2026_external_study_hue_guild_macro.py"
+      - ".github/workflows/floral-stage76b-DOPI-original-external-source-macro.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-original-DoPI-replicate-positives:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free 8 original DoPI grade, guild, source study and missingness guard tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage76 \
+            -p "test_original_DoPI2026_external_study_hue_guild_macro.py" -v
+      - name: Restore independently fixed original FD public positive guild classifier
+        uses: actions/checkout@v4
+        with:
+          repository: zuizui0223/fd
+          ref: a68970e15c2598c68fa3a611de31c9de0c929a8b
+          path: work/fd
+          persist-credentials: false
+      - name: Restore original 59k NHM botanical source TEXT and original corrected 54-study plant roster
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage76b_source_NHM
+          test -s stage76b_source_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage76b_source_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage76b_source_networks
+          test -s stage76b_source_networks/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage76b_source_networks/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Fetch 2026 source Zenodo 676900 original DoPI positive visitor records with true SHA
+        run: |
+          mkdir -p stage76b_original_public_DOPI
+          python work/fd/scripts/audit_dopi_v2_positive_visitors.py \
+            --output stage76b_original_public_DOPI/official_source_positive_guild_audit.json \
+            --workdir stage76b_original_public_DOPI
+          test -s stage76b_original_public_DOPI/DoPI_dataset_2.0.csv
+          test "$(stat -c%s stage76b_original_public_DOPI/DoPI_dataset_2.0.csv)" = "384896230"
+          echo "b95d3084399ed2c0978af2485801108a27d14e843b9fed2611934ea582b745c8  stage76b_original_public_DOPI/DoPI_dataset_2.0.csv" | sha256sum -c
+      - name: Read exact NHM single-hue species × 676900 DoPI record source publication-level guild members
+        run: |
+          python -u research/floral_macro_stage76/original_DoPI2026_external_study_hue_guild_macro.py \
+            --original-NHM stage76b_source_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-Stage69-networks stage76b_source_networks/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-DoPI-v2 stage76b_original_public_DOPI/DoPI_dataset_2.0.csv \
+            --outdir stage76b_external_original_DOPI_macro
+      - name: Independently validate original DoPI source macro evidence ceiling and grade stratification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage76b_external_original_DOPI_macro/original_2026_DOPI_posvisits_233_NHM_hue_macro_guild_receipt.json")
+          r=json.loads(p.read_text())
+          assert r["original_DOPI_source_counts"]["original_DOPI_v2_source_rows"]==676900
+          assert r["source_original_NHM_lexically_single_hue_species"]==233
+          assert r["source_exact_EuPPollNet_recorded_plant_species_scope"]==963
+          assert r["source_DOPI_384896230_bytes_verified"]
+          assert r["external_provider_not_proven_study_disjoint"]
+          assert r["positive_only_not_true_guild_absence"]
+          assert r["observed_visitors_on_island_populations_not_recorded"]
+          assert r["global_Bombus_native_climate_model_estimated"] is False
+          assert r["causal_evolutionary_hue_trait_or_UV_motif_effect_estimated"] is False
+          assert len(r["source_original_macro_study_hue_guild_coverage"])==6
+          for panel,x in r["source_original_macro_study_hue_guild_coverage"].items():
+              assert x["positive_species_guild_membership_NOT_relative_visitation_rate"]
+              assert x["source_DOI_or_publication_key_not_verifiable_same_site_or_time"]
+              assert not x["confirmatory_significance_or_causal_plant_selection_estimated"]
+          print("STAGE76B_ORIGINAL_DOPI_REPLICATION_OR_SUPPORT_LIMIT",{
+            "source_positive_studies":r["original_distinct_publications_with_any_source_positive_lexical_hue"],
+            "source_rows_matched_to_233_hues":r["original_DOPI_source_counts"].get("source_rows_literal_NHM_lexical_hue_plant_match"),
+            "comparisons":{k:{
+              z:v[z] for z in ("source_studies_with_both_positive_hue_group_plants_before_guild_outcome",
+                "source_studies_with_Bombus_and_other_bee_both_positively_documented",
+                "source_yellow_documentation_share_Bombus_minus_other_bee_mean_if_positive",
+                "source_study_bootstrap_descriptive_95_if_at_least_10_studies",
+                "source_studies_with_informative_shared_genus",
+                "source_studies_with_source_DOPI_DOI_exactly_in_EuPPollNet_DOI")
+            } for k,v in r["source_original_macro_study_hue_guild_coverage"].items()}
+          })
+          PY
+      - name: Upload anonymous aggregated original macro DoPI evidence no raw species/study identifiers
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage76b-ORIGINAL-676900-DoPI-external-233-text-hue-study-positive-macro
+          path: stage76b_external_original_DOPI_macro/
+          if-no-files-found: warn
+          retention-days: 90
