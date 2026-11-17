@@ -1,0 +1,49 @@
+name: floral-stage61-original-Lawson2017-wind-odor-visual-backup-data
+on:
+  push:
+    branches: [analysis/floral-prior-wind-visual-odor-2017-stage61-20261117]
+    paths:
+      - 'research/floral_routeability_stage61/**'
+      - '.github/workflows/floral-stage61-Lawson-2017-source-experiment.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-identify-original-wind-color-odor-2017-cohort:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Safety tests for authentic XLSX and no invented conditional cue-order/pollen effects
+        run: |
+          PYTHONPATH=research/floral_routeability_stage61:. \
+             python -m unittest -v test_probe_2017_wind_visual_odor_original_data
+      - name: Original 2017 OA supplemental workbook source retrieval and schema
+        run: PYTHONPATH=. python research/floral_routeability_stage61/probe_2017_wind_visual_odor_original_data.py
+      - name: Validate source supplement and published no-factorial inference ceiling
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage61_2017_wind_visual_odor_backup_original_source/original_2017_Lawson_wind_scent_visual_backup_source_ledger.json').read_text())
+          assert d['published_paper_DOI']=='10.1098/rsos.170996'
+          assert d['published_original_Dryad_dataset']=='10.5061/dryad.3g591'
+          assert d['status'] in ('ORIGINAL_LAWSON_2017_BACKUP_SOURCE_SUPPLEMENT_MANIFEST',
+                                 'LAWSON_2017_ORIGINAL_SOURCE_NOT_RETRIEVED_NO_DATA_CLAIM')
+          if d['status']=='ORIGINAL_LAWSON_2017_BACKUP_SOURCE_SUPPLEMENT_MANIFEST':
+            assert d['2017_wind_four_arms_n18_each_not_complete_three_way_factorial']
+            assert d['no_conditional_first_cue_policy_or_pollen_deposition_label_inferred']
+            assert d['existing_visual_backup_wind_result_NOT_NEW_FLORAL_FINDING']
+          print('STAGE61_EXISTING_WIND_VISUAL_BACKUP_ORIGINAL_SOURCE',d['status'],
+                d.get('number_detected_xlsx_members'))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage61-2017-authentic-Bombus-wind-odor-visual-backup-source-schema
+          path: stage61_2017_wind_visual_odor_backup_original_source/*
+          if-no-files-found: error
+          retention-days: 90
