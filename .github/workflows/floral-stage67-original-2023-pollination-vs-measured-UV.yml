@@ -1,0 +1,70 @@
+name: floral-stage67-original-2023-angiosperm-pollination-x-230-published-UV-data
+on:
+  push:
+    branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage67/audit_original_2023_pollination_vs_230_UV_literature.py'
+      - 'research/floral_literature_macro_stage67/test_audit_published_UV_x_angiosperm_pollination.py'
+      - '.github/workflows/floral-stage67-original-2023-pollination-vs-measured-UV.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  published-angiosperm-pollination-vs-direct-UV-source-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Exact literature species taxonomy and unknown scent not negative checks
+        run: |
+          python -m unittest discover -s research/floral_literature_macro_stage67 \
+            -p 'test_audit_published_UV_x_angiosperm_pollination.py' -v
+      - name: Fetch already authentic author-published original UV262 accepted source
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43863056927
+          github-token: ${{ github.token }}
+          name: stage49-source-authenticated-accepted-UV-literature-species-union
+          path: stage67_original_source_UV262
+      - name: Download real 2023 pollination macro author-GitHub data, verify original Git blob
+        run: |
+          python -u research/floral_literature_macro_stage67/audit_original_2023_pollination_vs_230_UV_literature.py \
+            --original-262-author-measured-UV \
+            stage67_original_source_UV262/literature_directly_measured_UV_species_GBIF_unique_accepted_registry.csv \
+            --outdir stage67_published_original_UV_x_pollination_species
+      - name: Original source results cannot fabricate UV guides/scent/flower photography
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json
+          out=Path('stage67_published_original_UV_x_pollination_species')
+          d=json.loads((out/'published_original_1201_pollination_x_262_UV_evidence_receipt.json').read_text())
+          with (out/'literal_source_species_overlap_original_UV_pollination.csv').open() as f:
+            a=list(csv.DictReader(f))
+          assert d['original_2023_phylogenetic_named_taxa']==1201
+          assert d['original_2023_pollination_nonmissing_labels']==1160
+          assert d['prior_independently_measured_UV_spatial_original_accepted_taxa']==230
+          assert d['prior_independently_measured_UV_spatial_positive']==101
+          assert d['prior_independently_measured_UV_spatial_uniform_negative']==129
+          assert len(a)==d['n_source_exact_original_binomials_across_papers']
+          assert d['original_pollination_syndrome_is_NOT_a_real_visitation_or_biochemical_scent_measurement']
+          assert d['no_nonmatching_plant_becomes_UV_or_scent_negative']
+          assert d['no_2023_pollination_species_key_accepted_by_GBIF_without_new_validation']
+          print('STAGE67_ORIGINAL_2023_POLLINATION_X_230_DIRECT_UV_MACRO_FEASIBILITY',
+              {'source_uv_pollination_exact_species':len(a),
+              'source_uv_exact_with_known_pollination':d['n_source_direct_UV_original_binomials_with_known_original_2023_pollination'],
+              'source_macro_joint_test_no_go':d['NO_GO_joint_uv_pollinator_species_effect_if_under30'],
+              'reported_source_scent_counts':d['original_2023_scent_yes_no_unknown']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage67-original-1201-angiosperm-pollination-literature-x-230-genuine-UV-measured
+          path: stage67_published_original_UV_x_pollination_species/*
+          retention-days: 90
+          if-no-files-found: error
