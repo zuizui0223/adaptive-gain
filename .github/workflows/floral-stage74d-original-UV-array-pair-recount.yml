@@ -1,0 +1,60 @@
+name: floral-stage74d-original-array-pair-first-visits-UVguide-recount
+
+on:
+  push:
+    branches: [analysis/floral-field-spectra-visitor-kent-dryad-web-stage74-20261117]
+    paths:
+      - "research/floral_original_field_stage74/recount_original_UVguide_first_choice_by_array_pair.py"
+      - "research/floral_original_field_stage74/test_recount_original_UVguide_first_choice_by_array_pair.py"
+      - ".github/workflows/floral-stage74d-original-UV-array-pair-recount.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authentic-source-recount-original-arrays:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Strict mock-only source block and pairing controls
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p 'test_recount_original_UVguide_first_choice_by_array_pair.py' -v
+      - name: Recount original field experimental first visits by array and pair, not pseudoreplicated rows
+        run: |
+          python -u research/floral_original_field_stage74/recount_original_UVguide_first_choice_by_array_pair.py \
+            --outdir stage74_original_2021_uvguide_pair_recount
+      - name: Verify real source factors and zero-imputation prohibition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage74_original_2021_uvguide_pair_recount/2021_original_source_UVguide_light_background_first_choice_pair_receipt.json")
+          d=json.loads(p.read_text())
+          assert d["source_workbook_sha256"]=="d66d12f3dbfc83b3fe6e854b69f9e5f768a1c3f973c0db5368176e17264ace59"
+          assert d["original_UV_light_factor_source_grain"]["original_record_rows_flower_by_visitor"]==648
+          assert d["original_background_factor_source_grain"]["original_record_rows_flower_by_visitor"]==312
+          assert d["original_UV_light_factor_source_grain"]["source_array_is_experimental_unit_not_row"]
+          assert d["source_this_is_one_plant_species_not_macro_taxonomic_replication"]
+          assert d["source_published_377_not_filled_or_imputed"]
+          assert d["no_new_adaptive_generalization_2026"]
+          print('STAGE74D_VERIFIED_AUTHOR_RECOUNT',{
+           "UV_light_source":d["original_UV_light_factor_source_grain"],
+           "background_source":d["original_background_factor_source_grain"],
+           "UV_pairwise":d["source_UVguide_paired_condition_descriptive"],
+          })
+          PY
+      - name: Preserve derived original array source count receipts for independent audit
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage74d-2021-real-SHA-original-firstvisits-UVlight-x-guide-pair
+          path: stage74_original_2021_uvguide_pair_recount/2021_original_source_UVguide_light_background_first_choice_pair_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
