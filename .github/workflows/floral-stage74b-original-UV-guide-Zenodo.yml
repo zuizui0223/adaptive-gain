@@ -1,0 +1,62 @@
+name: floral-stage74b-original-2021-UV-guide-light-background-Zenodo
+
+on:
+  push:
+    branches: [analysis/floral-field-spectra-visitor-kent-dryad-web-stage74-20261117]
+    paths:
+      - "research/floral_original_field_stage74/audit_original_2021_sensory_drive_Zenodo.py"
+      - "research/floral_original_field_stage74/test_audit_original_2021_sensory_drive_Zenodo.py"
+      - ".github/workflows/floral-stage74b-original-UV-guide-Zenodo.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-Zenodo-field-multimodal-mechanism:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free original archive and checksum controls
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage74 \
+            -p "test_audit_original_2021_sensory_drive_Zenodo.py" -v
+      - name: Retrieve official original 2021 UV manipulations × bee/fly visit data Zenodo
+        run: |
+          python -u research/floral_original_field_stage74/audit_original_2021_sensory_drive_Zenodo.py \
+            --outdir stage74_original_source_Zenodo_2021
+      - name: Verify true original source retrieval cannot be substituted by paper title counts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage74_original_source_Zenodo_2021/official_KoskiFinnell2021_original_Zenodo_UV_guide_source_receipt.json')
+          j=json.loads(p.read_text())
+          assert j['source_2021_publication_DOI']=='10.1111/nph.17631'
+          assert j['source_original_data_DOI']=='10.5281/zenodo.5110165'
+          assert j['publication_prior_art_not_new_ecological_first']
+          assert j['source_visitor_fitness_or_selection_effect_independently_fitted'] is False
+          for f in j['source_original_file_receipts']:
+              if f.get('source_download_status')=='ORIGINAL_BYTES_CHECKSUM_AUTHENTIC':
+                  assert f['source_actual_bytes']==f['source_official_bytes']
+                  assert len(f['source_original_downloaded_sha256'])==64
+          print('STAGE74B_ORIGINAL_ZENODO_FIELDEXPERIMENT_SOURCE_STATUS',{
+            'official_metadata_retrieved':j['source_original_file_metadata_retrieved'],
+            'original_file_count':len(j['source_original_file_receipts']),
+            'original_true_digest_verified':j.get('n_original_Zenodo_files_checksum_verified',0),
+            'filenames_and_statuses':[(f['source_filename'],f['source_download_status']) for f in j['source_original_file_receipts'][:16]],
+          })
+          PY
+      - name: Save original source identity and content-grain receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage74b-real-original-Zenodo-UVguide-UVlight-background-bee-fly-2021
+          path: stage74_original_source_Zenodo_2021/official_KoskiFinnell2021_original_Zenodo_UV_guide_source_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
