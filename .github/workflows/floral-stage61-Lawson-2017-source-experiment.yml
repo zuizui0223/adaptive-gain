@@ -64,6 +64,10 @@ jobs:
           assert d['source_authored_wind_bees']==72
           assert all(x['n_bees']==18 for x in d['source_wind_treatment_groups'].values())
           assert d['no_original_per_trial_cue_order_or_first_cue_policy']
+          assert d['original_colonies_shared_by_groups_A_B_C']==['F']
+          assert {k:d['original_colony_restricted_source_sensitivity']['F']['group_source_summary'][k]['n_individual_bees'] for k in ('A','B','C')}=={'A':11,'B':10,'C':8}
+          assert d['original_source_group_D_has_no_common_colony_with_A_B_C']
+          assert d['colony_overlap_does_not_identify_first_cue_or_pollen']
           assert d['no_wind_by_odor_by_visual_full_factorial_effect']
           assert d['no_measured_animal_pollen_or_plant_fitness']
           print('STAGE61_SOURCE72_ORIGINAL_EXPERIMENTAL_WIND_BACKUP_NOT_NEW',d['published_reanalysis_original_four_arm_observed_edge_differences'])
