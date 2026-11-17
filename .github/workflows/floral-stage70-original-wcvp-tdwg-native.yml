@@ -1,0 +1,145 @@
+name: floral-stage70-original-WCVP-native-TDWG-site-and-EuPPollNet-gate
+
+on:
+  push:
+    branches: [analysis/floral-wcvp-tdwg-native-site-stage70-20261117]
+    paths:
+      - "research/floral_literature_macro_stage70/**"
+      - ".github/workflows/floral-stage70-original-wcvp-tdwg-native.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-locked-botanical-native-matching:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install source spatial containment dependency
+        run: python -m pip install "shapely>=2.0,<3"
+      - name: Mock-only guards for source identity, native unknowns, and geometry border
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage70 \
+            -p 'test_official_wcvp_native_tdwg_source.py' -v
+      - name: Download source-locked corrected original Stage69 network design
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage70_original_stage69
+          test -s stage70_original_stage69/optical_same_network_design/original_same_network_measured_optical_pair_opportunity.csv
+          test -s stage70_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv
+      - name: Download Stage68 authentic original 73 spectrometer crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage70_original_stage68
+          test -s stage70_original_stage68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv
+      - name: Fetch source official Kew WCVP archive — require original October source identity
+        run: |
+          mkdir -p stage70_original_external
+          curl --fail --location --retry 2 --connect-timeout 30 --max-time 900 \
+            https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip \
+            -o stage70_original_external/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage70_original_external/wcvp.zip" | sha256sum --check
+          unzip -Z1 stage70_original_external/wcvp.zip | grep -Fx wcvp_names.csv
+          unzip -Z1 stage70_original_external/wcvp.zip | grep -Fx wcvp_distribution.csv
+      - name: Fetch original TDWG botanical L3 polygon GeoJSON
+        run: |
+          curl --fail --location --retry 2 --connect-timeout 30 --max-time 120 \
+            https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson \
+            -o stage70_original_external/level3.geojson
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          b=Path("stage70_original_external/level3.geojson").read_bytes()
+          digest=hashlib.sha1(f"blob {len(b)}\0".encode()+b).hexdigest()
+          assert digest=="91104e5159e31f88154833a51d3b0d1c9271083f",digest
+          print("ORIGINAL_TDWG_LEVEL3_GIT_SHA_PIN_VERIFIED",digest)
+          PY
+      - name: Original WCVP accepted native Level3 × accurate original location polygons
+        run: |
+          python -u research/floral_literature_macro_stage70/official_wcvp_native_tdwg_original_field_network.py \
+            --gate-csv stage70_original_stage69/optical_same_network_design/original_same_network_measured_optical_pair_opportunity.csv \
+            --original-network-units-csv stage70_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-spectra-csv stage70_original_stage68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv \
+            --wcvp-zip stage70_original_external/wcvp.zip \
+            --tdwg-geojson stage70_original_external/level3.geojson \
+            --outdir stage70_verified_native_area
+      - name: Source-independent conservative topology repair diagnostics (NOT primary)
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage70 \
+            -p 'test_historic_tdwg_invalid_geometry_diagnostic.py' -v
+          python -u research/floral_literature_macro_stage70/historic_tdwg_invalid_geometry_diagnostic.py \
+            --original-156-network stage70_verified_native_area/original_156_network_native_requalification.csv \
+            --gate-csv stage70_original_stage69/optical_same_network_design/original_same_network_measured_optical_pair_opportunity.csv \
+            --original-network-units-csv stage70_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-spectra-csv stage70_original_stage68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv \
+            --wcvp-zip stage70_original_external/wcvp.zip \
+            --tdwg-geojson stage70_original_external/level3.geojson \
+            --outdir stage70_verified_native_area/TDWG_geometry_diagnostic_sensitivity
+      - name: Assert boundary geometry rescue kept separate from original 73 networks
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage70_verified_native_area/TDWG_geometry_diagnostic_sensitivity/historic_TDWG_geometry_repair_source_receipt.json')
+          s=json.loads(p.read_text())
+          assert s["conservative_original_Stage70_native_requalified"]==73
+          assert s["source_original_stage69b_exploratory_networks"]==156
+          assert s["original_geometry_valid_features"]==350
+          assert s["original_unmatched_polygon_networks"]==68
+          assert s["primary_stage70_network_73_not_promoted_to_sensitivity"]
+          assert s["source_native_L3_is_not_field_native_population_proof"]
+          assert not s["plant_fitness_and_causal_effects_estimated"]
+          print("STAGE70B_INVALID_POLYGON_SENSITIVITY_NOT_PRIMARY",{
+            k:v for k,v in s.items() if "unmatched" in k or "requalified" in k
+            or "geometry_invalid" in k})
+          PY
+      - name: Verify 156 independent source-defined candidate networks and claim ceiling
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path("stage70_verified_native_area")
+          s=json.loads((p/"native_requalification_source_receipt.json").read_text())
+          assert s["original_Stage69B_exploratory_networks"]==156
+          assert s["source_eligible_species_name_count"]==26
+          assert s["source_corrected_EuPPollNet_tag"]=="joseblanuza/EuPPollNet@v1.3.0"
+          assert s["source_WCVP_archive_sha256"]=="d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa"
+          assert s["source_TDWG_level3_geojson_git_blob_SHA1"]=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          assert s["WCVP_unlisted_area_is_unknown_not_absent"]
+          assert s["regional_native_L3_does_not_prove_source_same_population"]
+          assert not s["plant_fitness_and_causal_mediation_estimated"]
+          with (p/"original_156_network_native_requalification.csv").open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==156
+          assert sum(int(r["after_WCVP_native_L3_and_edge_sensitivity_gate"]) for r in rows)==s["native_compatible_border_safe_requalified_networks"]
+          print("STAGE70_ORIGINAL_NATIVE_REGION_REQUALIFICATION_VERIFIED",
+            {k:s[k] for k in (
+             "source_eligible_species_name_count",
+             "native_compatible_border_safe_taxa_with_any_record",
+             "native_compatible_border_safe_requalified_networks",
+             "independent_study_ids_with_requalified_networks")})
+          PY
+      - name: Artifact with derived original fields and uncertainty audit only
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage70-original-Kew-WCVP-TDWG-native-156-corrected-visitor-networks
+          path: stage70_verified_native_area/
+          retention-days: 90
+          if-no-files-found: warn
