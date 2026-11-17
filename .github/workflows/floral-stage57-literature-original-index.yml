@@ -1,0 +1,48 @@
+name: floral-stage57-systematic-source-visual-trait-literature-index
+on:
+  push:
+    branches: [analysis/floral-environment-path-literature-stage57-20261117]
+    paths:
+      - research/floral_visual_macro_stage57/discover_visual_trait_original_literature.py
+      - research/floral_visual_macro_stage57/test_discover_visual_trait_original_literature.py
+      - .github/workflows/floral-stage57-literature-original-index.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capped-original-literature-prospecting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline source provenance DOI and non-species metadata tests
+        working-directory: research/floral_visual_macro_stage57
+        run: python -m unittest -v test_discover_visual_trait_original_literature
+      - name: Run original eight bounded source queries from Europe PMC
+        working-directory: research/floral_visual_macro_stage57
+        run: python -u discover_visual_trait_original_literature.py
+      - name: Gate no accepted plant signals inferred from articles and total coverage
+        working-directory: research/floral_visual_macro_stage57
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage57_systematic_original_source_discovery/source_discovery_original_date_query_provenance.json').read_text())
+          assert d['status']=='CAPPED_SOURCE_ORIGINAL_EUROPEPMC_FLORAL_VISUAL_LITERATURE_DISCOVERY'
+          assert d['n_prespecified_source_queries']==8
+          assert d['no_individual_species_UV_phenotype_labels_from_literature_metadata']
+          print('STAGE57_EUROPEPMC_VISUAL_TRAIT_ORIGINAL_CANDIDATE_ARTICLES',
+                {'source_success_queries':d['n_source_query_success'],
+                 'distinct_bounded_articles':d['n_distinct_doi_or_pmid_candidates_in_bounded_query_frame'],
+                 'per_query':d['query_results']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage57-systematic-EuropePMC-floral-visual-trait-source-query-metadata
+          path: research/floral_visual_macro_stage57/stage57_systematic_original_source_discovery/*
+          if-no-files-found: error
+          retention-days: 90
