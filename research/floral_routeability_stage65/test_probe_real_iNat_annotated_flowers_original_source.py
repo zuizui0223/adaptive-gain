@@ -50,6 +50,19 @@ class IatOriginalFloweringAnnotationSourceTest(unittest.TestCase):
         self.assertTrue(d["flower_annotation_not_equivalent_to_photo_open_corolla"])
         self.assertTrue(d["both_pilots_same_iNaturalist_source_not_independent_provider"])
 
+    def test_inat_API_integer_photo_ids_must_match_original_CSV_string_ids(self):
+        old=[entry("Dianthus deltoides","763131994"),
+             entry("Antirrhinum majus","760688061")]
+        new=[entry("Dianthus deltoides",763131994),
+             entry("Antirrhinum majus",760688061),
+             entry("Dianthus barbatus",697709548)]
+        d=compare_prior(new,old)
+        self.assertEqual(d["n_selected_photo_IDs_in_both_queries"],2)
+        self.assertEqual(d["n_new_annotated_photo_IDs_not_in_old_filtered_source_list"],1)
+        self.assertEqual(d["n_new_flower_annotated_CC_photo_metadata"],3)
+        with self.assertRaisesRegex(ValueError,"REUSED_WITHIN_SAME_QUERY"):
+            compare_prior(new+[entry("Dianthus barbatus",697709548)],old)
+
     def test_missing_photo_identifier_is_an_error_not_a_negative_morph(self):
         with self.assertRaisesRegex(ValueError,"UNKNOWN_PHOTO_ID"):
             compare_prior([entry("Dianthus deltoides","")],
