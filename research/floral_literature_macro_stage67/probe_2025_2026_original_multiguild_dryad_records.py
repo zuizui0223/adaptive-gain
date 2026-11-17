@@ -104,7 +104,7 @@ def main():
             out=audit(name,doi)
         except Exception as e:
             out={"query_DOI":doi,"status":"UNAVAILABLE_NOT_NO_SOURCE_FILES",
-                 "error_type":type(e).__name__,"error_detail":str(e)[:250]}
+                 "error_type":type(e).__name__,"error_detail":str(e)[:2500]}
         results[name]=out
         print("STAGE67_ORIGINAL_DRYAD_PRIMARY_SOURCES",name,json.dumps({
           "doi":doi,"version":out.get("version_id"),
