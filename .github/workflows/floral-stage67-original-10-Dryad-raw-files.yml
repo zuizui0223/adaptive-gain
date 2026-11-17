@@ -1,0 +1,52 @@
+name: floral-stage67-verify-actual-10-original-Dryad-study-source-files
+on:
+  push:
+    branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage67/audit_actual_original_Dryad_multisensory_3studies_10files.py'
+      - '.github/workflows/floral-stage67-original-10-Dryad-raw-files.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-source-flower-spectra-pollination-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original 3 publication Dryad version and file metadata without photo inference
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44038731710
+          github-token: ${{ github.token }}
+          name: stage67-source-only-original-three-public-Dryad-datasets-version-file-audit
+          path: stage67_original_pinned_dryad
+      - name: Acquire actual original 3 study data sources 10 files with exact SHA256 and analyze formats
+        run: |
+          python -u research/floral_literature_macro_stage67/audit_actual_original_Dryad_multisensory_3studies_10files.py             --original-official-Dryad-source-file-index stage67_original_pinned_dryad/official_Dryad_original_versions_and_file_ids.json
+      - name: Source status cannot confuse spectral columns and botanical species
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage67_real_Dryad_3study_primary_source_bytes_QC/source_3studies_original_file_SHA_and_tabular_metadata_receipt.json')
+          d=json.loads(p.read_text())
+          assert d['n_real_independent_study_data_archives']==3
+          assert d['total_original_source_file_metadata_records']==10
+          assert d['no_source_image_photography_or_assigned_UV_spatial_guide_binary']
+          assert d['no_original_XLSX_column_interpreted_as_distinct_species']
+          assert d['total_original_source_file_bytes_SHA256_verified']+d['total_original_source_files_401_OAuth_required']==10
+          print('STAGE67_ORIGINAL_DRYAD_SOURCE_FILES_GATED_OR_READ',d['total_original_source_file_bytes_SHA256_verified'],d['total_original_source_files_401_OAuth_required'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage67-actual-original-2022-2025-2026-Dryad-10-public-source-files-SHA-format-audit
+          path: stage67_real_Dryad_3study_primary_source_bytes_QC/*
+          retention-days: 90
+          if-no-files-found: error
