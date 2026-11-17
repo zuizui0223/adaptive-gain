@@ -78,6 +78,37 @@ jobs:
             --wcvp-zip stage70_original_external/wcvp.zip \
             --tdwg-geojson stage70_original_external/level3.geojson \
             --outdir stage70_verified_native_area
+      - name: Source-independent conservative topology repair diagnostics (NOT primary)
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage70 \
+            -p 'test_historic_tdwg_invalid_geometry_diagnostic.py' -v
+          python -u research/floral_literature_macro_stage70/historic_tdwg_invalid_geometry_diagnostic.py \
+            --original-156-network stage70_verified_native_area/original_156_network_native_requalification.csv \
+            --gate-csv stage70_original_stage69/optical_same_network_design/original_same_network_measured_optical_pair_opportunity.csv \
+            --original-network-units-csv stage70_original_stage69/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-spectra-csv stage70_original_stage68/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv \
+            --wcvp-zip stage70_original_external/wcvp.zip \
+            --tdwg-geojson stage70_original_external/level3.geojson \
+            --outdir stage70_verified_native_area/TDWG_geometry_diagnostic_sensitivity
+      - name: Assert boundary geometry rescue kept separate from original 73 networks
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage70_verified_native_area/TDWG_geometry_diagnostic_sensitivity/historic_TDWG_geometry_repair_source_receipt.json')
+          s=json.loads(p.read_text())
+          assert s["conservative_original_Stage70_native_requalified"]==73
+          assert s["source_original_stage69b_exploratory_networks"]==156
+          assert s["original_geometry_valid_features"]==350
+          assert s["original_unmatched_polygon_networks"]==68
+          assert s["primary_stage70_network_73_not_promoted_to_sensitivity"]
+          assert s["source_native_L3_is_not_field_native_population_proof"]
+          assert not s["plant_fitness_and_causal_effects_estimated"]
+          print("STAGE70B_INVALID_POLYGON_SENSITIVITY_NOT_PRIMARY",{
+            k:v for k,v in s.items() if "unmatched" in k or "requalified" in k
+            or "geometry_invalid" in k})
+          PY
       - name: Verify 156 independent source-defined candidate networks and claim ceiling
         run: |
           python - <<'PY'
