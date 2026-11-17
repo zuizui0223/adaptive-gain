@@ -33,7 +33,7 @@ FCP_TARGETS=(
   ("Antirrhinum majus",48969,66,"SOURCE_PHOTO_CONTROL_UNLABELED"),
 )
 MAX_ITEMS_API=50
-MAX_BYTES=2_500_000
+MAX_BYTES=12_000_000  # bounded first-page JSON: large iNaturalist identification arrays can exceed 2.5MB
 MAX_PER_TAXON=8
 ACCEPT_PHOTO_LICENSE={"cc0","cc-by","cc-by-sa"}
 SOURCE_ONLY_DOMAINS={
@@ -196,6 +196,7 @@ def main():
                 json.JSONDecodeError) as exc:
             receipts[name]={"status":"SOURCE_API_UNAVAILABLE_UNKNOWN_NOT_NO_PHOTOS",
                             "error_type":type(exc).__name__,
+                            "error_summary":str(exc)[:160],
                             "source_query_url":original_url(tid)}
     if not allrows:
         allrows=[{k:"" for k in ("source_original_iNat_species",
