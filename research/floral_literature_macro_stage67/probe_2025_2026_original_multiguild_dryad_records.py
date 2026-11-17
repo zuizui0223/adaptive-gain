@@ -63,7 +63,7 @@ def audit(typ,doi):
     def original_id(v):
         if isinstance(v.get("id"),int):return int(v["id"])
         rel=((v.get("_links") or {}).get("self") or {}).get("href","")
-        m=re.search(r"/api/v2/versions/(\\d+)(?:$|\\?)",rel)
+        m=re.search(r"/api/v2/versions/([0-9]+)(?:$|[?])",rel)
         return int(m.group(1)) if m else None
     allvers=[]
     for key,vals in collections.items():
