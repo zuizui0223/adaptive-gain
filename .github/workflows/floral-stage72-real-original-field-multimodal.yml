@@ -74,6 +74,49 @@ jobs:
             'source_positive_VOC_compounds':j['original_volatiles']['source_voc_compound_statistics']['positive_compound_species_entries']
           })
           PY
+      - name: Strict original source taxon name join guards (no spelling-based invented species)
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_reconstruct_original_kantsa2018_41x168_VOC_crosswalk.py' -v
+      - name: Independently reproduce full original Kantsa source 41x168 matrix and VOC taxon sheets
+        run: |
+          python -u research/floral_original_field_stage72/reconstruct_original_kantsa2018_41x168_VOC_crosswalk.py \
+            --outdir stage72_original_author_primary_source_audit/strict_original_Kantsa_field_network_VOC
+      - name: Verify publication count discrepancy without fabricating a visitor record
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage72_original_author_primary_source_audit/strict_original_Kantsa_field_network_VOC")
+          j=json.loads((p/"stage72c_original_raw_network_VOC_crosswalk_receipt.json").read_text())
+          n=j["original_network_matrix_replay"]
+          s=j["original_plant_scent_visits_source_overlap"]
+          assert n["original_plants"]==41
+          assert n["original_visitor_species_row_labels"]==168
+          assert n["original_source_plant_insect_matrix_cells"]==6888
+          assert n["original_source_nonzero_links"]==403
+          assert n["original_source_VISITOR_EVENTS_NUMERIC_SUM"]==7954
+          assert n["published_article_stated_events"]==7955
+          assert n["original_source_vs_manuscript_event_difference"]==-1
+          assert j["not_pooled_new_global_ecology_effect"]
+          assert j["any_null_as_biological_absence_inferred"] is False
+          with (p/"2018_original_Lesvos_true_network_VOC_species_strict_crosswalk.csv").open() as f:
+              r=list(csv.DictReader(f))
+          assert len(r)==41
+          assert sum(int(x["original_2018_visitor_event_counts"]) for x in r)==7954
+          assert sum(int(x["original_2018_nonzero_visitor_links"]) for x in r)==403
+          assert sum(int(x["source_strict_literal_name_VOC_match"]) for x in r)==s["strict_original_literal_species_overlap"]
+          print("STAGE72C_ORIGINAL_KANTSA_MATRIX_SAME_STUDY_VOC_CROSSWALK_VERIFIED",{
+           "original_plant_species":n["original_plants"],
+           "original_visitor_species":n["original_visitor_species_row_labels"],
+           "original_nonzero_links":n["original_source_nonzero_links"],
+           "original_numeric_visits":n["original_source_VISITOR_EVENTS_NUMERIC_SUM"],
+           "author_published_visits":n["published_article_stated_events"],
+           "strict_source_VOC_overlapping_species":s["strict_original_literal_species_overlap"],
+           "raw_network_name_without_VOC":s["network_only_original_plant_names"],
+           "raw_VOC_sheet_name_without_network":s["VOC_only_original_plant_names"]})
+          PY
       - name: Save only original-source access and original workbook schema receipt
         if: always()
         uses: actions/upload-artifact@v4
