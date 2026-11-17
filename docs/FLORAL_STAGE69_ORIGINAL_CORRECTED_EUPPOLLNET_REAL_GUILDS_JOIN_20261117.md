@@ -20,6 +20,20 @@ Important nonindependence: original `Metadata.csv` has **80 study×year records 
 
 Source run: [44056410895](https://github.com/zuizui0223/adaptive-gain/actions/runs/44056410895), artifact **14317000061**, SHA256 `928cbdfd695b92e58b72451fbac267d19b6295eda366a7c9ad78970a05db9075`.
 
+## Stage69B independently verified same-network optical feasibility
+
+A second successful original-source Action [44057077625](https://github.com/zuizui0223/adaptive-gain/actions/runs/44057077625) runs four additional mock-only guards and inspects the 2,557 original measured-petal plant×network units *before* fitting any effect, using original 73 spectrometer traits with native site and optical measurement-source mismatches preserved as unknown.
+
+- Original 36 measured-petal species occur in **1,221** of the corrected source study×network×year units.
+- **685** networks have at least **two distinct original spectrometer-measured species**, across **45** original study IDs.
+- **667** networks have at least two of the original spectrometer species also independently named in NHM botanical TEXT.
+- With prespecified minimum 3 source visitor records for each of at least two NHM+spectrometer species, **different genera**, recorded Bombus and a second visitor category, and at least **1 percentage-point contrast in original UV 300–399nm mean petal reflectance**, **156** networks in **27** original study IDs meet the exploratory observational comparison gate. These involve **26** measured-spectra botanical species.
+- These 156 are repeated nested observational samples and not independent phenotype origins or evolutionary contrasts. Only original source spectrometer **mean percentage reflectance** differs among species. This does not measure spatial nectar-guide geometry, receiver-color contrast, wild-population phenotype or adaptive value.
+
+Thus the per-network design has enough source *recorded visitation* replication to support a transparent exploratory descriptive comparison and study holdout, **but still does not pass the independent original optical source site × field visitor site and native-range verification needed for credible biological selection claims**. No effect beta, p-value, path/mediation SEM, legitimate pollen deposition, seed fitness or site-matched wind effect is estimated.
+
+Reproducible code: `research/floral_literature_macro_stage69/source_spectrometer_same_network_feasibility_gate.py`; results in the Stage69 updated Action artifact subfolder `optical_same_network_design/`.
+
 ## Inferential grain and hard caveats
 
 1. A record reports a taxon observed on a flower under the source protocol, not necessarily plant pollen fitness or an effective pollinator.
