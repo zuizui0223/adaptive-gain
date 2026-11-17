@@ -66,6 +66,8 @@ class OriginalVOC305StrictCrosswalkContracts(unittest.TestCase):
         self.assertEqual(receipt["n_first_header_named_chemical_or_summary_columns"],800)
         self.assertEqual(receipt["n_original_source_wind_pollination_yes"],1)
         self.assertTrue(receipt["no_original_wind_speed_m_per_s"])
+        self.assertTrue(receipt["no_positive_VOC_cells_not_an_odor_absence_inference"])
+        self.assertEqual(receipt["n_original_species_without_an_explicit_positive_VOC_cell"],0)
 
     def test_infra_or_generic_labels_not_false_species_binomial(self):
         self.assertEqual(source_binomial("Potentilla sp."),"")
