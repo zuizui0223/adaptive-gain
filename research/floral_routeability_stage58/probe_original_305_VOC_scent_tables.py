@@ -40,7 +40,7 @@ def unpack_original_source(blob):
             record["sha256"]=hashlib.sha256(content).hexdigest()
             lower=name.lower()
             if lower.endswith((".csv",".tsv",".txt")):
-                data=content.decode("utf8-sig",errors="replace").splitlines()
+                data=content.decode("utf-8-sig",errors="replace").splitlines()
                 record.update({"status":"TEXT_SOURCE_HEADER_AUDIT_ONLY",
                     "source_line_count":len(data),
                     "first_2_lines_source_schema":[q[:180] for q in data[:2]]})
