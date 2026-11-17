@@ -117,6 +117,35 @@ jobs:
            "raw_network_name_without_VOC":s["network_only_original_plant_names"],
            "raw_VOC_sheet_name_without_network":s["VOC_only_original_plant_names"]})
           PY
+      - name: Test original Ishii Japan/NZ 2018 alpine file-only source accession contract
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage72 \
+            -p 'test_audit_original_ishii2018_japan_nz_alpine.py' -v
+      - name: Recover original PMC OA/Japan–NZ field optical spectra and guild data supplement files
+        run: |
+          python -u research/floral_original_field_stage72/audit_original_ishii2018_japan_nz_alpine.py \
+            --outdir stage72_original_author_primary_source_audit/original_Ishii2018_JP_NZ
+      - name: Verify all-access success not inferred from publisher reported species counts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage72_original_author_primary_source_audit/original_Ishii2018_JP_NZ/original_Ishii2018_alpine_JP_NZ_PMC_supplement_access_receipt.json')
+          j=json.loads(p.read_text())
+          assert j['original_article_PMCID']=='PMC6377100'
+          assert j['source_DOI']=='10.1093/aob/mcy188'
+          assert j['Japan_and_NewZealand_study_are_two_independent_regions_not_202_replicates']
+          assert j['no_pollinator_visit_records_in_Mount_Hutt']
+          assert j['no_uv_spatial_guide_binary_inferred']
+          assert j['no_wind_VOC_fitness_measured_in_these_source_xlsx']
+          assert j['no_macro_environmental_guild_effect_fitted']
+          print('STAGE72D_ORIGINAL_ALPINE_SOURCE_ACCESS_ONLY',{
+             'file_count':len(j['original_recovered_supplementary_files']),
+             'access_status':j['original_retrieval_route'],
+             'attempts':[{k:v for k,v in x.items() if k in ('route','status','http_code','error_class')}
+                         for x in j['original_retrieval_attempt_receipts']]})
+          PY
       - name: Save only original-source access and original workbook schema receipt
         if: always()
         uses: actions/upload-artifact@v4
