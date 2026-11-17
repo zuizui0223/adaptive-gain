@@ -66,12 +66,21 @@ def summarize_factor_sheet(books,sheet):
     array=defaultdict(lambda:defaultdict(Counter))
     pairs=defaultdict(lambda:defaultdict(lambda:defaultdict(Counter)))
     invalid=[]
+    fractional=[]
     for i,row in enumerate(rows,2):
         for key in categorical:
             categorical[key][row[key]]+=1
         n=numeric_visitor_count(row.get("FirstVisits"))
         if n is None:
-            invalid.append({"source_row":i,"value":row.get("FirstVisits")})
+            original_value=str(row.get("FirstVisits","")).strip()
+            try:
+                v=float(original_value)
+                if math.isfinite(v) and v>=0 and v!=int(v):
+                    fractional.append({"source_row":i,"value":v})
+                    continue
+            except ValueError:
+                pass
+            invalid.append({"source_row":i,"value":original_value})
             continue
         observed["original_rows_with_known_first_visit_event_counts"]+=1
         observed["original_first_visits_all_rows"]+=n
@@ -122,6 +131,14 @@ def summarize_factor_sheet(books,sheet):
       "source_raw_first_visit_counts_sum":observed["original_first_visits_all_rows"],
       "source_original_recorded_first_visit_zero_rows":observed["original_zero_recorded_first_visit_plant_guild_rows"],
       "source_missing_invalid_first_visit_rows":invalid[:12],
+      "source_noninteger_numeric_FirstVisits_cells":len(fractional),
+      "source_original_fractional_FirstVisits_first20":fractional[:20],
+      "source_original_fractional_FirstVisits_sum":sum(x["value"] for x in fractional),
+      "source_first_visits_all_integer_counts_reproducible":not fractional and not invalid,
+      "source_integer_visits_total_excludes_fractional_observations":
+          bool(fractional),
+      "source_original_FirstVisits_original_numeric_sum_including_fractional":
+          observed["original_first_visits_all_rows"]+sum(x["value"] for x in fractional),
       "original_distinct_randomized_array_ids":len(array),
       "original_distinct_source_elevation_population_date_pair_keys":len(pairs),
       "source_original_unique_array_treatment_levels":sorted(original_armtypes),
@@ -208,7 +225,15 @@ def run():
     main_array,main_pairs,a=summarize_factor_sheet(books,"UVLightArrays")
     background,background_pairs,b=summarize_factor_sheet(books,"BackgroundArrays")
     main_arm=normalized_guide_arms(main_pairs)
-    back_arm=normalized_guide_arms(background_pairs)
+    # BackgroundArrays contains fractional original FirstVisits cells:
+    # do not reinterpret these as discrete visit counts or infer fake
+    # missing zeros. Background counts are source descriptive until
+    # their original author weighting semantics are audited.
+    if b["source_noninteger_numeric_FirstVisits_cells"]:
+        background=[]
+        back_arm=[]
+    else:
+        back_arm=normalized_guide_arms(background_pairs)
     return {
       "schema":"stage74d_2021_author_original_first_choice_UVguide_background_paired_source",
       "original_study_DOI":"10.1111/nph.17631",
@@ -222,6 +247,10 @@ def run():
       "source_original_background_source_pair_arms":back_arm,
       "source_UVguide_paired_condition_descriptive":paired_treatment_summary(main_arm),
       "source_first_visits_published_reference":377,
+      "source_ambient_vs_reduced_real_first_visits_count_admitted":
+          a["source_first_visits_all_integer_counts_reproducible"],
+      "background_FirstVisits_raw_discrete_event_counts_not_admitted_if_fractional":
+          bool(b["source_noninteger_numeric_FirstVisits_cells"]),
       "source_published_377_not_filled_or_imputed":True,
       "source_this_is_one_plant_species_not_macro_taxonomic_replication":True,
       "genuine_field_irradiance_and_background_manipulation_existing_2021":True,
