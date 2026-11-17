@@ -58,7 +58,7 @@ def combine(prior,source):
         review=from_source_bool(r["original_2025_colour_change_literature_reviewed"])
         out[key]={
             "gbif_accepted_species_key":key,
-            "prior_source_UV2016_2021_or_2020_evidence":True,
+            "prior_source_UV2016_2021_or_2020_evidence":bool(study),
             "source_UV_pattern_directly_measured_or_unknown":uv,
             "measured_UV_pattern_1_or_uniform_0_is_NOT_all_visual_signal_binary":True,
             "original_Ohashi2015_spectral_taxon_source":ohashi,
@@ -147,6 +147,8 @@ def combine(prior,source):
         "combined_distinct_original_source_accepted_botanical_species":len(out),
         "source_original_directly_measured_UV_spatial_patterned":PRIOR_SPATIAL_PATTERNED,
         "source_original_directly_measured_UV_spatial_uniform":PRIOR_SPATIAL_UNIFORM,
+        "source_original_uvsource_any_262_species":sum(
+            r["prior_source_UV2016_2021_or_2020_evidence"] for r in rows),
         "source_original_Ohashi2015_age_spectra_botanical_species":PRIOR_OHASHI,
         "source_original_2025_colourchange_positive_review_species":PRIOR_REVIEW,
         "source_original_Oliveira_2025_numeric_mean_UV_species":NEW_N,
