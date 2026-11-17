@@ -37,6 +37,10 @@ class OriginalModalityUnion817Contracts(unittest.TestCase):
         self.assertEqual(report["source_original_directly_measured_UV_spatial_patterned"],101)
         self.assertEqual(report["source_original_directly_measured_UV_spatial_uniform"],129)
         self.assertEqual(report["n_species_without_direct_UV_spatial_contrast_classification"],587)
+        self.assertEqual(report["source_original_uvsource_any_262_species"],262)
+        self.assertEqual(report["n_temporal_only_UV_study_also_numeric_Oliveira2025"],0)
+        non_uv=next(x for x in rows if x["gbif_accepted_species_key"]=="500300")
+        self.assertFalse(non_uv["prior_source_UV2016_2021_or_2020_evidence"])
         self.assertEqual(report["source_original_Oliveira_2025_primary_guild_labels"],
                          {"bee":134,"bird":109})
         self.assertTrue(report["no_unknown_visual_state_encoded_as_false_zero"])
