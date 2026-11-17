@@ -34,6 +34,39 @@ jobs:
         run: |
           python -u research/floral_literature_macro_stage68/nhm_original_text_trait_coverage.py \
             --source combined.csv --outdir stage68_source_text/combined
+      - name: Unit guards for no-fuzzy-match spectral text crosswalk
+        run: |
+          python -m unittest discover \
+            -s research/floral_literature_macro_stage68 \
+            -p 'test_join_original_text_with_original_73_spectra.py' -v
+      - name: Original Stage67 spectrometer petal data x NHM botanical TEXT crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -u research/floral_literature_macro_stage68/join_original_text_with_original_73_spectra.py \
+            --nhm-compact stage68_source_text/combined/original_NHM_text_traits_compact.csv \
+            --nhm-source-receipt stage68_source_text/combined/original_NHM_text_trait_source_coverage.json \
+            --outdir stage68_source_text/spectral_text_join
+      - name: Exact join receipt and optical guide no-go
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('stage68_source_text/spectral_text_join/stage68_original_73_spectra_x_NHM_text_overlap_receipt.json').read_text())
+          assert j['n_original_spectral_botanical_names']==73
+          assert j['n_original_GBIF_strict_accepted_spectra']==70
+          assert j['n_NHM_botanical_text_taxon_labels']==59369
+          assert j['n_exact_literal_name_overlap']==55
+          assert j['n_GBIF_strict_accepted_spectral_names_with_NHM_literal_match']==55
+          assert j['n_matched_with_text_colour_recorded']==49
+          assert j['n_matched_with_text_structure_recorded']==25
+          assert j['n_matched_with_both_text_colour_and_structure']==25
+          assert j['n_NHM_literal_overlap_already_in_prior_817_atlas']==7
+          assert j['UV_spatial_guide_presence_or_absence_from_text']=='NOT_MEASURED'
+          assert j['native_site_Bombus_or_other_visitors']=='NOT_MEASURED'
+          print('STAGE68_REAL_SOURCE_CROSSWALK_VERIFIED',
+                {k:v for k,v in j.items() if k.startswith('n_')})
+          PY
       - name: Verify authentic original text source and inference ceilings
         run: |
           python - <<'PY'
