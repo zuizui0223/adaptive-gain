@@ -79,7 +79,7 @@ The next scientifically informative step is **to acquire actual field-site, co-t
 - `research/floral_literature_macro_stage71/audit_original_flowers_sampling_exposure.py`
 - `research/floral_literature_macro_stage71/build_outcome_blind_native_visitation_cohort.py`
 - `research/floral_literature_macro_stage71/compare_original_uv_vs_identified_bees_null_score.py`
-- Sixteen? **15 source-free tests total**: 5 flower-count, 3 outcome-blind cohort, 7 null-score guards, verified in the two Actions above. All source-native bytes SHA locked in the source scripts.
+- **15 source-free tests total**: 5 flower-count, 3 outcome-blind cohort, 7 null-score guards, verified in the two Actions above. All source-native bytes SHA locked in the source scripts.
 - [Stage71A author flower census workflow](../.github/workflows/floral-stage71-original-flower-exposure.yml) and [Stage71B/C outcome-blind source native guild workflow](../.github/workflows/floral-stage71b-unselected-native-bee.yml).
 - Full Stage71B/C result artifact **14324287258**, digest `sha256:02323cb8e39cc6f601d0cae9a23b634991a69b1965c41685bea2a3d449dcc6e1`.
 
