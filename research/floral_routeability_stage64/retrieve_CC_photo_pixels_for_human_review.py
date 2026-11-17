@@ -50,6 +50,10 @@ def select(rows):
         if not key or key in seen:
             raise ValueError("NO_GO_ORIGINAL_INAT_PHOTO_ID_MISSING_OR_DUPLICATED")
         seen.add(key)
+        if row.get("original_photo_licence_code") not in ALLOWED_LICENCES:
+            # CC-BY-SA is valid open data; do not mix its share-alike
+            # adaptation conditions into this CC0/CC-BY preview.
+            continue
         uri_medium(row)
         if row.get("photo_is_open_flower_verified")!="UNKNOWN_UNREAD_IMAGE":
             raise ValueError("NO_GO_IMAGE_TRAIT_CLAIM_BEFORE_PHOTO_INSPECTION")
