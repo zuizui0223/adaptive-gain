@@ -92,7 +92,17 @@ def fit_binomial(y,X):
     values=fit.params.replace([np.inf,-np.inf],np.nan)
     if not np.isfinite(values).all() or not np.isfinite(fit.aic):
         raise ValueError("NO_GO_UNSTABLE_OR_SEPARATED_GLM")
-    return {"AIC":float(fit.aic),"deviance":float(fit.deviance),
+    # Under mixed small genera, complete/semi separation can yield finite
+    # numerical AIC while intercept/dummy standard errors explode (~13000).
+    # Such AIC must NOT be interpreted as a reliable genus-adjusted test.
+    if float(fit.bse.abs().max())>50 or float(fit.params.abs().max())>15:
+        return {"status":"QUASI_SEPARATION_DO_NOT_COMPARE_AIC",
+                "AIC":None,
+                "largest_coefficient_standard_error":float(fit.bse.abs().max()),
+                "n_coefficients":int(len(fit.params)),
+                "no_genus_adjusted_effect_or_AIC_claim":True}
+    return {"status":"ESTIMABLE_EXPLORATORY_ASSOCIATION_NOT_CAUSAL",
+            "AIC":float(fit.aic),"deviance":float(fit.deviance),
             "coefficients":{k:float(v) for k,v in fit.params.items()},
             "coefficient_standard_errors":{k:float(v) for k,v in fit.bse.items()},
             "no_significance_or_causal_indirect_effect_claimed":True}
@@ -135,6 +145,10 @@ def report(eligible):
           (str(k),int(v)) for k,v in Counter(outcome).items())),
       "qualified_original_study_genera":{str(k):int(v) for k,v in genus.value_counts().items()},
       "n_genus_original_source":genus.nunique(),
+      "original_genus_by_UV_state":{
+        str(k):{"n":int(len(s)),"patterned":int(sum(s==1)),"uniform":int(sum(s==0))}
+        for k,s in eligible.groupby("original_author_genus")["measured_UV_spatial_pattern"]},
+      "genus_fixed_effect_complete_separation_is_a_numerical_hard_stop":True,
       "fraction_source_taxa_qualified":n/N_SOURCE,
       "author_UVB_vs_author_mean_latitude_correlation":float(pairwise),
       "modelled_Bombus_fraction_environment_R2":float(linear.rsquared),
@@ -154,9 +168,12 @@ def report(eligible):
             "model_comparison_AIC_improvement_positive_is_better":{
               "add_pollinator_to_environment":
                 reg["environment_only"]["AIC"]-reg["environment_plus_pollinator"]["AIC"],
-              "add_pollinator_to_environment_plus_grouped_genus":
+              "add_pollinator_to_environment_plus_grouped_genus":(
                 reg["environment_plus_grouped_genus"]["AIC"]
-                -reg["environment_plus_grouped_genus_plus_pollinator"]["AIC"],
+                -reg["environment_plus_grouped_genus_plus_pollinator"]["AIC"]
+                if reg["environment_plus_grouped_genus"]["AIC"] is not None
+                and reg["environment_plus_grouped_genus_plus_pollinator"]["AIC"] is not None
+                else None),
             },
             "model_is_not_causal_SEM_or_an_indirect_effect":True,
             "need_sample_site_coincident_phenotype_native_pollinators_and_phylogeny":True}
