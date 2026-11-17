@@ -21,6 +21,12 @@ jobs:
         run: |
           PYTHONPATH=research/floral_routeability_stage61:. \
              python -m unittest -v test_probe_2017_wind_visual_odor_original_data
+      - name: Exact four-arm factorial counterexample and missing early sensory-route policy tests
+        run: |
+          PYTHONPATH=research/floral_routeability_stage61:. \
+             python -m unittest -v test_exact_2017_factorial_identifiability
+      - name: Exact source-free identifiability calculations (never original bee success)
+        run: PYTHONPATH=. python research/floral_routeability_stage61/exact_2017_factorial_identifiability.py
       - name: Original 2017 OA supplemental workbook source retrieval and schema
         run: PYTHONPATH=. python research/floral_routeability_stage61/probe_2017_wind_visual_odor_original_data.py
       - name: Validate source supplement and published no-factorial inference ceiling
@@ -40,10 +46,24 @@ jobs:
           print('STAGE61_EXISTING_WIND_VISUAL_BACKUP_ORIGINAL_SOURCE',d['status'],
                 d.get('number_detected_xlsx_members'))
           PY
+      - name: Confirm mathematical identifiability gate never labels real bee behavior
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('stage61_2017_factorial_nonidentification/2017_existing_wind_backup_design_missing_conditional_routing_example.json').read_text())
+          assert d['status']=='EXACT_SHARP_MISSING_2017_FACTORIAL_ARM_IDENTIFIABILITY_GATE'
+          assert d['hypothetical_sharp_wind_by_visual_at_odor_one_bounds']==['-1/10','9/10']
+          assert d['hypothetical_sharp_wind_by_odor_by_visual_bounds']==['-7/4','9/4']
+          assert d['no_pollen_or_original_bee_rate_used_in_example']
+          assert d['order_contingent_route_policy_unobserved']
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: stage61-2017-authentic-Bombus-wind-odor-visual-backup-source-schema
-          path: stage61_2017_wind_visual_odor_backup_original_source/*
+          path: |
+            stage61_2017_wind_visual_odor_backup_original_source/*
+            stage61_2017_factorial_nonidentification/*
           if-no-files-found: error
           retention-days: 90
