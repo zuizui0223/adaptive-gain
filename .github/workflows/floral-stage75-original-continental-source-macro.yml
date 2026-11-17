@@ -1,0 +1,147 @@
+name: floral-stage75-CONTINENTAL-59k-NHM-TEXT-x-54study-real-guilds
+
+on:
+  push:
+    branches: [analysis/floral-continental-network-signal-macro-stage75-20261118]
+    paths:
+      - "research/floral_macro_stage75/**"
+      - ".github/workflows/floral-stage75-original-continental-source-macro.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  macroscale-real-plant-visible-traits-vs-source-recorded-bees:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free tests of flower-text missingness, strict guild identity and pre-outcome field cohorts
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage75 \
+            -p "test_authentic_continental_text_signal_guild_macro.py" -v
+      - name: Retrieve original source-provenanced 59,369-source-taxon NHM text
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage75_sources_NHM
+          test -s stage75_sources_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage75_sources_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Retrieve original corrected 623476 visits source identity × 18798 species/network units
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage75_sources_network
+          test -s stage75_sources_network/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage75_sources_network/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Execute ORIGINAL macro source full 59k plant TEXT and 54 source real field studies
+        run: |
+          python -u research/floral_macro_stage75/authentic_continental_text_signal_guild_macro.py \
+            --original-NHM stage75_sources_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-networks stage75_sources_network/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage75_real_Original_NHM_Europe_guild_macro
+      - name: Verify source macro counts, pre-outcome selection and claim ceilings
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage75_real_Original_NHM_Europe_guild_macro")
+          d=json.loads((p/"original_source_963_species_continental_macro_trait_guild_receipt.json").read_text())
+          x=d["source_NHM_x_original_recorded_visits"]
+          assert d["source_original_NHM_all_taxon_label_counts"]["original_all_plant_taxon_labels"]==59369
+          assert x["source_original_NHM_literal_matched_species"]==963
+          assert x["source_original_NHM_lexical_one_hue_species"]==233
+          assert x["source_networks_with_at_least_two_source_one_hue_species"]==625
+          assert x["source_networks_with_at_least_two_distinct_explicit_hue_families"]==424
+          assert x["source_studies_with_at_least_two_distinct_explicit_hue_families"]==43
+          assert d["original_reported_spot_positive_all_NHM_taxon_labels"]>=900
+          assert d["original_spot_text_positive_plant_species_with_visits"]==31
+          ctx=d["original_EuPPollNet_source_field_context_and_guild_qc"]
+          assert ctx["source_original_corrected_visitation_record_rows"]==623476
+          assert ctx["original_field_network_keys"]==1864
+          assert d["all_field_networks_eligible_hue_group_selection_unconditioned_on_Bombus"]
+          assert d["no_photographs_no_source_inferred_UV_nectarguide_absence"]
+          assert d["no_confirmatory_phylogenetic_or_global_effect_estimated"]
+          results=d["effect_test_output"]
+          assert results["yellow_vs_white"]["source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes"]==345
+          assert results["yellow_vs_purple"]["source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes"]==65
+          assert all(v["confirmatory_p_value"] is None and
+              v["true_nonobserved_guilds_are_unknown_not_zeros"] and
+              v["source_wind_and_local_VOC_not_measured_in_EuPPollNet"]
+              for v in results.values())
+          with (p/"original_source_hue_positive_species_in_network_environment.csv").open() as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)>1000
+          print("STAGE75_ORIGINAL_CONTINENTAL_MACRO_SOURCE_REAL_COUNTS",{
+            "NHM_source_taxa":d["source_original_NHM_all_taxon_label_counts"]["original_all_plant_taxon_labels"],
+            "matched_plant_species":x["source_original_NHM_literal_matched_species"],
+            "source_single_reported_hue_taxa":x["source_original_NHM_lexical_one_hue_species"],
+            "networks_with_2_distinct_source_hues":x["source_networks_with_at_least_two_distinct_explicit_hue_families"],
+            "strict_source_bee_effects":{name:{
+              k:v.get(k) for k in ("source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes",
+                "informative_networks","informative_study_ids",
+                "source_network_local_null_score_ratio",
+                "source_leave_one_study_out_sign_flip_count",
+                "source_original_genus_matched_networks_before_guild_outcomes",
+                "descriptive_study_block_bootstrap_percentile_95")} for name,v in results.items()},
+          })
+          PY
+      - name: Adversarial genus-holdout and source habitat/bioregion structure tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage75 \
+            -p "test_source_macro_genus_bioregion_sensitivity.py" -v
+      - name: Audit each original genus and bioregion as source-backed macro fragility controls
+        run: |
+          python -u research/floral_macro_stage75/source_macro_genus_bioregion_sensitivity.py \
+            --Stage75-hue-source stage75_real_Original_NHM_Europe_guild_macro/original_source_hue_positive_species_in_network_environment.csv \
+            --Stage75-original-network-scores stage75_real_Original_NHM_Europe_guild_macro/original_source_within_network_guild_conditional_null_scores.csv \
+            --Stage75-original-macro-receipt stage75_real_Original_NHM_Europe_guild_macro/original_source_963_species_continental_macro_trait_guild_receipt.json \
+            --outdir stage75_real_Original_NHM_Europe_guild_macro/genus_and_bioregion_fragility
+      - name: Confirm source-matched genus limitation and original environment categories
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage75_real_Original_NHM_Europe_guild_macro/genus_and_bioregion_fragility/source_original_macro_genus_bioregion_study_robustness_receipt.json")
+          r=json.loads(p.read_text())
+          assert r["real_source_59k_taxon_963_plant_54study_Europe_macro"]
+          assert r["original_source_genus_not_validated_full_phylogenetic_clade"]
+          assert r["ecological_environment_source_category_not_continuous_microclimate"]
+          assert r["original_UV_spatial_motif_not_measured_in_NHM"]
+          assert not r["confirmatory_phylogenetic_multiregion_pollination_result"]
+          assert set(r["source_macronetwork_results"])=={"yellow_vs_white","yellow_vs_purple"}
+          assert r["source_macronetwork_results"]["yellow_vs_white"]["source_hue_eligible_networks"]==345
+          assert r["source_macronetwork_results"]["yellow_vs_purple"]["source_hue_eligible_networks"]==65
+          for k,v in r["source_macronetwork_results"].items():
+              assert v["source_within_genus_approximation_not_full_plant_phylogeny"]
+              assert v["source_field_wind_VOC_climate_unmeasured_jointly"]
+              assert not v["new_significant_evolutionary_effect_estimated"]
+          print("STAGE75B_MACRO_ORIGINAL_SOURCE_GENUS_ENVIRONMENT_FRAGILITY",r["source_macronetwork_results"])
+          print("STAGE75B_BIOREGION_SCORE",[
+            {k:z[k] for k in ("contrast","source_context_recorded_value",
+                "original_informative_networks","original_distinct_study_ids",
+                "source_null_local_score_ratio_if_information")}
+            for z in r["source_context_stratification"]
+            if z["original_field_context_dimension"]=="Bioregion"])
+          PY
+      - name: Publish source-only macro plant×field-network and study-block receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage75-continental-NHM59k-x-EuPPollNet54study-original-TEXT-trait-guild-macro
+          path: stage75_real_Original_NHM_Europe_guild_macro/
+          retention-days: 90
+          if-no-files-found: warn
