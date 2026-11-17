@@ -1,0 +1,56 @@
+name: floral-stage67-real-original-2024-Figshare-flower-spectra-no-photographs
+on:
+  push:
+    branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage67/audit_original_2024_shrestha_figshare_petal_spectral_database.py'
+      - 'research/floral_literature_macro_stage67/test_audit_2024_original_figshare_spectral_database.py'
+      - '.github/workflows/floral-stage67-source-Figshare-original-2024-petal-spectra.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-2024-spectrometer-reflectance-not-RGB-images:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free 2024 original spectra version/checksum/no-false-guide tests
+        run: |
+          python -m unittest discover -s research/floral_literature_macro_stage67 \
+            -p 'test_audit_2024_original_figshare_spectral_database.py' -v
+      - name: Read genuine publisher-linked Figshare original source spectra CSV archive
+        run: |
+          python -u research/floral_literature_macro_stage67/audit_original_2024_shrestha_figshare_petal_spectral_database.py \
+            --outdir stage67_original_Figshare_73_species_petal_reflectance_source
+      - name: Verify true-spectrum-only source and denominators, not UV nectar-guide assertions
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage67_original_Figshare_73_species_petal_reflectance_source')
+          r=json.loads((p/'source_floral_spectra_original_Figshare_2024_receipt.json').read_text())
+          with (p/'source_original_per_petal_spectral_column_uv_visible_integrals.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          d=r['actual_source_petal_columns']
+          assert r['source_data_DOI']=='10.6084/m9.figshare.21081025.v2'
+          assert d['original_published_claim_species']==73
+          assert d['paper_7_colour_groups_sum_11_10_10_17_10_11_14']==83
+          assert len(rows)==d['n_original_petal_spectral_columns_NOT_SPECIES']
+          assert d['n_source_columns_with_complete_UV_and_visible']>=10
+          assert all(s['UV_spatial_guide_status']=='NOT_OBSERVABLE_FROM_ONE_PETAL_MEAN_SPECTRUM' for s in rows)
+          print('STAGE67_PUBLISHED_ORIGINAL_FIGSHARE_SPECTRA_STUDY',
+             {'original_spectral_columns':len(rows),
+              'source_distinct_name_labels':d['n_distinct_original_column_labels_not_accepted_species'],
+              'source_explicit_wavelength_complete':d['n_source_columns_with_complete_UV_and_visible']})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage67-source-only-original-Figshare-Shrestha2024-floral-petal-UV-visible-reflectance
+          path: stage67_original_Figshare_73_species_petal_reflectance_source/*
+          retention-days: 90
+          if-no-files-found: error
