@@ -39,6 +39,15 @@ jobs:
           python -m unittest discover \
             -s research/floral_literature_macro_stage68 \
             -p 'test_join_original_text_with_original_73_spectra.py' -v
+      - name: Recover authenticated Stage67 original 73 spectrum crosswalk with GitHub CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44037772023 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage67-real-original-73-flower-petal-spectra-accepted-GBIF-join-817 \
+            --dir stage68_stage67_original
+
       - name: Original Stage67 spectrometer petal data x NHM botanical TEXT crosswalk
         env:
           GH_TOKEN: ${{ github.token }}
@@ -46,6 +55,7 @@ jobs:
           python -u research/floral_literature_macro_stage68/join_original_text_with_original_73_spectra.py \
             --nhm-compact stage68_source_text/combined/original_NHM_text_traits_compact.csv \
             --nhm-source-receipt stage68_source_text/combined/original_NHM_text_trait_source_coverage.json \
+            --prior-extracted-csv stage68_stage67_original/original_2024_73_petal_spectra_taxonomic_source_match_and_UV_modes.csv \
             --outdir stage68_source_text/spectral_text_join
       - name: Exact join receipt and optical guide no-go
         run: |
