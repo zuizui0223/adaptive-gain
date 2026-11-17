@@ -1,0 +1,65 @@
+name: floral-stage73b-original-Wisconsin-field-WIND-flowers-real-visits
+
+on:
+  push:
+    branches: [analysis/floral-dryad-original-site-optical-stage73-20261117]
+    paths:
+      - "research/floral_original_field_stage73/audit_original_wisconsin_wind_visits.py"
+      - "research/floral_original_field_stage73/test_audit_original_wisconsin_wind_visits.py"
+      - ".github/workflows/floral-stage73b-original-wisconsin-wind-visits.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-wisconsin-field-2022:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Original source mock guards
+        run: |
+          python -m unittest discover \
+            -s research/floral_original_field_stage73 \
+            -p 'test_audit_original_wisconsin_wind_visits.py' -v
+      - name: Download author original 2022 Wisconsin wind and field visitor workbook with immutable Git blob verification
+        run: |
+          python -u research/floral_original_field_stage73/audit_original_wisconsin_wind_visits.py \
+            --outdir stage73b_verified_original_wisconsin
+      - name: Verify genuine author source field wind vs ordinal flower colour separation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage73b_verified_original_wisconsin/original_wisconsin_2022_author_WIND_VISIT_FLORAL_WORKBOOK_coverage.json")
+          d=json.loads(p.read_text())
+          assert d["source_authentic_bytes"]==69522
+          assert d["original_Git_blob_SHA1"]=="d456ddae4b5a737fc3351a5df612bd6a4b2c6244"
+          assert d["source_sheet_count"]>=5
+          assert d["wind_is_beaufort_ordinal_field_observation"]
+          assert d["petal_wvl_is_ordinal_literature_color_NOT_spectrometric_nm"]
+          assert d["visitor_zeros_are_not_inferred_from_absent_rows"]
+          assert d["source_plot_date_site_keys_not_yet_validated"]
+          assert d["original_source_wind_and_visits_association_fitted"] is False
+          print("STAGE73B_REAL_AUTHOR_WISCONSIN_FIELD_SOURCE_REPLAY",{
+             "source_original_sheets":[{
+                "sheet":x["author_source_sheet"],
+                "data_rows":x["source_data_rows_nonempty_after_header"],
+                "headings":x["source_original_header_names_first50"][:18],
+                "wind_sample":x.get("original_wind_distinct_value_sample",[]),
+                "site_sample":x.get("original_site_distinct_value_sample",[])}
+                for x in d["source_Excel_sheets"]]
+          })
+          PY
+      - name: Upload authenticated original Wisconsin study design and field data coverage receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage73b-original-Wisconsin-2022-four-sites-wind-visitor-floral-source
+          path: stage73b_verified_original_wisconsin/
+          retention-days: 90
+          if-no-files-found: warn
