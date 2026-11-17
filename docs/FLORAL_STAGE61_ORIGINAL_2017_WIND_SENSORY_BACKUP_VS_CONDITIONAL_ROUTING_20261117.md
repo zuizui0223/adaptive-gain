@@ -31,7 +31,7 @@ To make missing-arm no-go executable, set **assumed** four rates A=3/5, B=2/5, C
 - `W×O×V` additive 3-way can range **−7/4 to +9/4** (sign not identified).
 - This is simple linear/experimental-design arithmetic, **not** a biological causal result and not a novel theorem; the assumed values are not measured in the original 2017 experiment. When real published endpoints are unbounded count outcomes, these toy probability intervals must NOT be transferred to source rates or count effects.
 
-Source-opened original workbook supports a separate **four-arm descriptive reanalysis only**. `refit_2017_wind_bees_group_outcomes.py` now authenticates the inner DOCX? **No**: source **XLSX** identity, reads the 72 wind-sheet individuals, validates all four group sizes, original colony IDs, authored counts, source missingness, and produces existing-treatment per-group means and medians **without independent-colony causal tests or invented cue-order effects**. Only summary receipts are committed; original raw rows remain in ephemeral workflow memory.
+Source-opened original workbook supports a separate **four-arm descriptive reanalysis only**. `refit_2017_wind_bees_group_outcomes.py` now authenticates the original source **XLSX** identity, reads the 72 wind-sheet individuals, validates all four group sizes, original colony IDs, authored counts, source missingness, and produces existing-treatment per-group means and medians **without independent-colony causal tests or invented cue-order effects**. Only summary receipts are committed; original raw rows remain in ephemeral workflow memory.
 
 ## What the inherited adaptive-gain theory does and does not add
 
@@ -49,4 +49,29 @@ A proposed statistical model `choice_or_delay ~ early-cue × late-cue × wind/li
 
 ## Next evidence gate / stop rule
 
-Only after source-authenticated 72-bee aggregate refit (new original-data workflow) and independent QA can source means be reported; do not use existing 2017 behavioural effects as a new ecological discovery or claim a sign-identified full factorial wind×scent×vision effect. Stage61 remains Draft, `main` unchanged.
+### Completed real-data reanalysis (2026-11-17, Stage61 source Action SUCCESS)
+
+Full original DOE [run 44012536196](https://github.com/zuizui0223/adaptive-gain/actions/runs/44012536196) reconstructed exact source-pinned 72 bee rows with 18 distinct individuals per treatment. The observed original-source **group means** are:
+
+| Source group | Visits to learning criterion | Correct landing choices | Rewarding flower landings | Original colony records |
+|---|---:|---:|---:|---|
+| A calm odor only | 19.3333 | 32.3889 | 27.0000 | A:7, F:11 |
+| B wind odor only | 31.7222 | 27.2778 | 22.9444 | D:8, F:10 |
+| C wind odor + visual | 18.7778 | 34.6667 | 31.3889 | A:10, F:8 |
+| D wind visual only | 18.2778 | 31.8889 | 29.4444 | EE:12, FF:6 |
+
+C minus B (added visual under windy scented conditions) is **−12.9444 visits to learning criterion, +7.3889 correct choices and +8.4444 rewarding landings**, descriptive published-experiment reanalysis, NOT new biological discovery or colony-independent randomization. A–D contrast across different original colonies is particularly confounded.
+
+**Shared-colony sensitivity, original source Actions [44012944003](https://github.com/zuizui0223/adaptive-gain/actions/runs/44012944003) SUCCESS:** Only source colony **F** appears in all A/B/C. Its numbers are A **11**, B **10**, C **8** individual bees. F-only means:
+- A: learning 21.8182, correct 30.2727, rewarding 24.9091;
+- B: learning 27.7000, correct 28.4000, rewarding 24.0000;
+- C: learning 20.1250, correct 34.1250, rewarding 30.8750.
+- F-only C minus B: **−7.5750 learning visits, +5.7250 correct, +6.8750 rewarding**. Direction matches whole-group descriptive contrast but is attenuated.
+- F-only original reward-odor assignment remains **imbalanced**: B lav 2/mint 8, C lav 5/mint 3. The shared colony removes one major source mismatch, but does NOT randomize individual odors, reward routes, motivational states or trial sequence. Group D has no source colony in common with A/B/C at all (EE/FF vs A/D/F). The F-only calculation must not be presented as fully adjusted causal effect or independent-colony replication.
+
+The analysis and 7 mock-only contracts are in `research/floral_routeability_stage61/refit_2017_wind_bees_group_outcomes.py`, with original workbook SHA256 pinned; original Action 44012944003 artifact ID **14296768514**, ZIP digest `06d0a0806669a583e8f1043a3bbed33fe40d80bab6e9b21cb20c6d7e0ba0d86e`. Original raw individually associated records are not redistributed.
+
+**Conclusive source limit:** No first-route cue observations, time-stamped subsequent modality queries, wind × scent × visual complete 2×2×2 arm set, plant pollen receipt or fitness. Neither the 72 bee original data nor the toy exact design can identify conditional cue-order advantages. Do not promote an old visual-backup effect as new.
+
+
+**Stop rule:** Original 72-bee existing experiment refit finished and verified, but does not identify a new floral conditional routing or pollen effect. Stage61 remains Draft, `main` unchanged.
