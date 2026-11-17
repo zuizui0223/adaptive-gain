@@ -1,0 +1,80 @@
+name: floral-stage60-authentic-305-VOC-4475-original-photo-visible-review
+on:
+  push:
+    branches: [analysis/floral-voc-visible-photo-review-stage60-20261117]
+    paths:
+      - 'research/floral_routeability_stage60/**'
+      - '.github/workflows/floral-stage60-VOC305-FCP4475-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-305-VOC-to-4475-flower-photo-morphology-opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source-free mock tests, no unsupported UV or visible guide claim
+        run: |
+          PYTHONPATH=research/floral_routeability_stage60:. \
+            python -m unittest -v test_source_VOC_FCP_visible_photo_review
+      - name: Download independent source-owned FCP 4475 flower photo review registry
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 43854189546
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage48-source-verified-4475-species-visible-pattern-review-queue
+          path: research/floral_routeability_stage60/source_FCP4475
+      - name: Download independently audited original VOC 305 accepted species from Stage59
+        uses: actions/download-artifact@v4
+        with:
+          repository: zuizui0223/adaptive-gain
+          run-id: 44011328406
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: stage59-authentic-305-VOC-to-817-visual-strict-GBIF-accepted-overlap
+          path: research/floral_routeability_stage60/source_VOC305
+      - name: Exact original binomial matching before any image trait interpretation
+        run: |
+          python -u research/floral_routeability_stage60/source_VOC_FCP_visible_photo_review.py \
+            --original-fcp4475-queue research/floral_routeability_stage60/source_FCP4475/FCP_4475_species_NHM_visible_marking_and_UV_original_review_queue.csv \
+            --original-voc305-accepted research/floral_routeability_stage60/source_VOC305/original_VOC305_accepted_source_and_visual817_evidence_bridge.csv
+      - name: Require source image review feasibility and no unseen guide trait
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage60_source_VOC305_FCP4475_visible_review')
+          d=json.loads((p/'source_VOC_FCP_photo_review_80_receipt.json').read_text())
+          assert d['status']=='ORIGINAL_305_VOC_4475_FCP_VISUAL_PATTERN_REVIEW_OPPORTUNITY'
+          assert d['n_original_2020_VOC_species_source']==305
+          assert d['n_original_FCP_image_opportunity_species']==4475
+          assert d['n_exact_verbatim_binomial_VOC_FCP_join_candidates']==80
+          assert d['n_species_classifiable_photo_ge_40']==55
+          assert d['n_original_attempted_photos_for_matched_species']==8000
+          assert d['n_coarse_classifiable_photos_for_matched_species']==3822
+          assert d['n_unverified_NHM_marking_text_candidates']==3
+          assert d['n_NHM_text_candidates_with_40_photos']==2
+          assert d['source_wind_is_pollination_not_wind_m_s']
+          assert d['all_visible_UV_pattern_status_unknown_not_negative']
+          with (p/'80_original_VOC_flower_photo_species_visible_guide_source_review_queue.csv').open() as fp:
+            rows=list(csv.DictReader(fp))
+          assert len(rows)==80
+          assert len({r['original_FCP_inat_taxon_id'] for r in rows})==80
+          assert all(r['visible_intrapetal_guide_status']=='NOT_YET_MEASURED_ON_AUTHENTIC_SOURCE_PHOTO'
+                     and r['UV_pattern_status_from_FCP_photo']=='NOT_MEASURED_UV_WITH_RGB_PHOTO'
+                     and r['n_original_source_photo_bytes_rehosted']=='0'
+                     for r in rows)
+          print('STAGE60_ORIGINAL_VISIBLE_PHOTO_REVIEW_80_VOC_CANDIDATES',d)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage60-authentic-VOC305-FCP4475-visible-pattern-photo-review-80-species
+          path: stage60_source_VOC305_FCP4475_visible_review/*
+          if-no-files-found: error
+          retention-days: 90
