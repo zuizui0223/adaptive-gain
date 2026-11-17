@@ -38,7 +38,7 @@ def authenticated_source(csv_path,receipt_path):
           "DUPLICATE_SPECIES_HEX")
     return t,d
 
-def two_way_species_hex(cell,min_photos):
+def two_way_species_hex(cell,min_photos,drop_abs_lat_for_single_zone=False):
     t=cell.loc[(cell.n_photos>=min_photos)&cell.BIO5.notna()&cell.BIO12.notna()].copy()
     t=t.loc[t.groupby("inat_taxon_id").source_hex_id.transform("size")>=2].reset_index(drop=True)
     if len(t)<300 or t.inat_taxon_id.nunique()<50:
@@ -50,9 +50,13 @@ def two_way_species_hex(cell,min_photos):
         t.log_bees.to_numpy(float),la/30,np.abs(la)/30,
         np.sin(np.deg2rad(lo)),np.cos(np.deg2rad(lo)),
         t.BIO5.to_numpy(float)/20,np.log1p(t.BIO12.to_numpy(float))/5])
+    # In a single hemisphere lat and |lat| are identical up to sign;
+    # keep signed latitude, drop collinear |lat| in zone-only fits.
+    if drop_abs_lat_for_single_zone:
+        X=X[:,[0,1,2,4,5,6,7]]
     for j in range(X.shape[1]):
         X[:,j]-=pd.Series(X[:,j]).groupby(groups).transform("mean").to_numpy(float)
-    check(np.linalg.matrix_rank(X*np.sqrt(w)[:,None])==8,"DESIGN_NOT_FULL_RANK")
+    check(np.linalg.matrix_rank(X*np.sqrt(w)[:,None])==X.shape[1],"DESIGN_NOT_FULL_RANK")
     bread=np.linalg.inv(X.T@(w[:,None]*X))
     bvar=t.groupby("inat_taxon_id").Bombus_fraction.transform("std").fillna(0).gt(1e-9)
     result={"status":"POSTHOC_CLUSTER_ROBUST_SOURCE_SPECIES_AND_AUTHOR_HEX",
@@ -67,9 +71,9 @@ def two_way_species_hex(cell,min_photos):
         y-=pd.Series(y).groupby(groups).transform("mean").to_numpy(float)
         beta=bread@(X.T@(w*y))
         scores=(w*(y-X@beta))[:,None]*X
-        s=pd.DataFrame(scores,columns=[f"x{j}" for j in range(8)])
+        s=pd.DataFrame(scores,columns=[f"x{j}" for j in range(X.shape[1])])
         s["species"]=groups.to_numpy();s["source_hex_id"]=t.source_hex_id.to_numpy()
-        cols=[f"x{j}" for j in range(8)]
+        cols=[f"x{j}" for j in range(X.shape[1])]
         by_species=s.groupby("species",sort=False)[cols].sum().to_numpy()
         by_hex=s.groupby("source_hex_id",sort=False)[cols].sum().to_numpy()
         meat=by_species.T@by_species+by_hex.T@by_hex-scores.T@scores
@@ -98,6 +102,20 @@ def main():
             "min_1":two_way_species_hex(data,1),
             "min_3":two_way_species_hex(data,3),
             "posthoc_not_predeclared_and_no_floral_UV_scent_or_wind_trait":True}
+    # Post-outcome geographic sensitivity (not independent confirmation):
+    # fixed physical tropical boundary 23.5 degrees latitude, held within
+    # region, retaining source model missingness and species/HEX clustering.
+    # Do NOT reuse global |lat| predictor in a one-hemisphere regression.
+    regions={
+       "north_extratropical_lat_ge_23_5":data.loc[data.lat>=23.5],
+       "south_extratropical_lat_le_minus23_5":data.loc[data.lat<=-23.5],
+       "tropical_abs_lat_lt_23_5":data.loc[data.lat.abs()<23.5],
+    }
+    output["posthoc_geographic_sign_and_sample_density_audit"]={
+       zone:{"min_1":two_way_species_hex(part,1,True),
+             "min_3":two_way_species_hex(part,3,True)}
+       for zone,part in regions.items()}
+    output["posthoc_zonal_reduced_absolute_lat_collinearity_not_same_full_model"]=True
     # Assert that the new 2-way cluster audit EXACTLY regenerates the earlier
     # genuine photographic OLS effects; do not accidentally change the data.
     for n,k in ((1,"min_1_original_classified_photo_per_cell"),
