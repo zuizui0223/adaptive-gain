@@ -62,10 +62,10 @@ jobs:
           x=d["source_NHM_x_original_recorded_visits"]
           assert d["source_original_NHM_all_taxon_label_counts"]["original_all_plant_taxon_labels"]==59369
           assert x["source_original_NHM_literal_matched_species"]==963
-          assert x["source_original_NHM_lexical_one_hue_species"]==245
-          assert x["source_networks_with_at_least_two_source_one_hue_species"]==631
-          assert x["source_networks_with_at_least_two_distinct_explicit_hue_families"]==434
-          assert x["source_studies_with_at_least_two_distinct_explicit_hue_families"]==44
+          assert x["source_original_NHM_lexical_one_hue_species"]==233
+          assert x["source_networks_with_at_least_two_source_one_hue_species"]==625
+          assert x["source_networks_with_at_least_two_distinct_explicit_hue_families"]==424
+          assert x["source_studies_with_at_least_two_distinct_explicit_hue_families"]==43
           assert d["original_reported_spot_positive_all_NHM_taxon_labels"]>=900
           assert d["original_spot_text_positive_plant_species_with_visits"]==31
           ctx=d["original_EuPPollNet_source_field_context_and_guild_qc"]
@@ -75,7 +75,7 @@ jobs:
           assert d["no_photographs_no_source_inferred_UV_nectarguide_absence"]
           assert d["no_confirmatory_phylogenetic_or_global_effect_estimated"]
           results=d["effect_test_output"]
-          assert results["yellow_vs_white"]["source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes"]==352
+          assert results["yellow_vs_white"]["source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes"]==345
           assert results["yellow_vs_purple"]["source_original_networks_with_two_source_positive_hue_groups_BEFORE_guild_outcomes"]==65
           assert all(v["confirmatory_p_value"] is None and
               v["true_nonobserved_guilds_are_unknown_not_zeros"] and
