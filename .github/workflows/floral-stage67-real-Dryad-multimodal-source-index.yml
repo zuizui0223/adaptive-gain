@@ -1,0 +1,43 @@
+name: floral-stage67-new-original-2022-2025-2026-Dryad-multisource-macro-index
+on:
+  push:
+    branches: [analysis/floral-literature-database-macro-systematic-stage67-20261117]
+    paths:
+      - 'research/floral_literature_macro_stage67/probe_2025_2026_original_multiguild_dryad_records.py'
+      - '.github/workflows/floral-stage67-real-Dryad-multimodal-source-index.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-publisher-Dryad-version-and-files:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retrieve published original 2022 2025 2026 Dryad metadata, versions and files
+        run: |
+          python -u research/floral_literature_macro_stage67/probe_2025_2026_original_multiguild_dryad_records.py --outdir stage67_authentic_public_Dryad_multisource_ingestion_index
+      - name: Verify original source unresolved never interpreted as zero
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage67_authentic_public_Dryad_multisource_ingestion_index/official_Dryad_original_versions_and_file_ids.json')
+          r=json.loads(p.read_text())
+          assert len(r['datasets'])==3
+          assert r['no_FCP_or_iNaturalist_photographic_traits']
+          assert r['no_GBIF_pseudo_visitation_or_imputed_UV_spatial_guide']
+          print('STAGE67_DRYAD_PUBLISHED_ORIGINAL_SOURCE_VERSIONS',
+                {k:{'version':v.get('version_id'),'files':v.get('number_original_files'),
+                    'error':v.get('error_detail')} for k,v in r['datasets'].items()})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage67-source-only-original-three-public-Dryad-datasets-version-file-audit
+          path: stage67_authentic_public_Dryad_multisource_ingestion_index/*
+          if-no-files-found: error
+          retention-days: 90
