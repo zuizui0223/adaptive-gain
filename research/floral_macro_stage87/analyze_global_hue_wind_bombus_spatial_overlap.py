@@ -133,7 +133,7 @@ def source_blocks(frame,latitude_bin,longitude_bin):
 
 def all_outcomes(frame):
     y=frame[[z[0] for z in OUTCOMES]].copy()
-    if (y.isna().any() or (~np.isfinite(y.to_numpy(dtype=float))).any() or
+    if (y.isna().to_numpy().any() or (~np.isfinite(y.to_numpy(dtype=float))).any() or
          (y.to_numpy(dtype=float)<0).any() or (y.to_numpy(dtype=float)>1).any()):
         raise ValueError("STAGE87E_SOURCE_HUE_FRACTION_UNRECORDED_IN_ELIGIBLE_REGIONS")
     return y
@@ -193,7 +193,6 @@ def analyze_frame(frame,scope,include_bee,spatial_reps=1000):
     Y=all_outcomes(frame)
     names=list(X.columns)
     target=["wind"]+(["log_bombus_richness","wind_x_bombus"] if include_bee else [])
-    fit=sm.OLS(Y.iloc[:,0].to_numpy(float),X).fit(cov_type="HC3")
     # Same fixed source design, separately fitted source fractions.
     fits=[sm.OLS(Y.iloc[:,j].to_numpy(float),X).fit(cov_type="HC3")
           for j in range(Y.shape[1])]
