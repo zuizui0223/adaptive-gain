@@ -52,7 +52,7 @@ jobs:
           assert s["primary_gust_day_threshold_m_s"]==15
           assert s["sensitivity_gust_day_thresholds_m_s"]==[10,20]
           assert len(s["source_real_strong_gust_overview"])==5
-          assert len({r["Study_id"] for r in s["source_first5_studies_outcome_blind"]})==5
+          assert len({r["Study_id"] for r in s["source_field_sites"]})==5
           assert s["model_forced_ERA5_consistent_historical"]=="era5"
           assert s["source_original_ERA5_API_JSON_bytes"]>1000
           assert s["not_survey_hour_and_not_direct_flower_scent_plume"]
@@ -63,7 +63,7 @@ jobs:
               assert r["source_daily_max_gust_days_ge_10_ms"]>=r["source_daily_max_gust_days_ge_15_ms"]
               assert r["source_daily_max_gust_days_ge_15_ms"]>=r["source_daily_max_gust_days_ge_20_ms"]
           print("STAGE78A_GENUINE_EXTREME_WIND_ERA5_SOURCE_SUCCESS",{
-              "source_studies":len(s["source_first5_studies_outcome_blind"]),
+              "source_studies":len(s["source_field_sites"]),
               "model":s["model_forced_ERA5_consistent_historical"],
               "site_gust_extremes":[{k:v for k,v in r.items() if
                 k in ("Study_id","source_ERA5_month_max_daily_gust_ms",
