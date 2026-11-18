@@ -1,0 +1,88 @@
+name: floral-stage79F-positive-FCC-vs-far-width-near-pattern-macro-power
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/assess_fcc_petal_width_marking_network_power.py"
+      - "research/floral_macro_stage79/test_assess_fcc_petal_width_marking_network_power.py"
+      - ".github/workflows/floral-stage79F-original-signal-pair-coverage.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-signal-stage-power-before-bee-gust:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Positive-only signal and original artifact lock tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage79 \
+            -p 'test_assess_fcc_petal_width_marking_network_power.py' -v
+      - name: Restore original 59k botanical measured petal size and marking macro source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44222475354 --repo zuizui0223/adaptive-gain \
+            --name stage79B-original-NHM59k-EuPP1408-petal-width-vs-near-pattern-macro-coverage \
+            --dir stage79f_far_near_original
+          test -s stage79f_far_near_original/original_EuPP_plant_petal_width_marking_trait_availability.csv
+          test -s stage79f_far_near_original/original_macro_source_far_petal_width_near_marking_coverage.json
+      - name: Restore original 2025 Rezende author-positive PDF 9 names crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44224143509 --repo zuizui0223/adaptive-gain \
+            --name stage79e-real-2025-151-positive-colorchange-source-54study-field-overlap \
+            --dir stage79f_fcc_original
+          test -s stage79f_fcc_original/source_original_151_change_positive_rezende_EuPP_match.json
+      - name: Restore original corrected visit plant species-year field roster
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage79f_plant_roster_original
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage79f_plant_roster_original/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Actually compare original far and near positive source signals at same real field networks
+        run: |
+          python -u research/floral_macro_stage79/assess_fcc_petal_width_marking_network_power.py \
+            --far-near-original-receipt stage79f_far_near_original/original_macro_source_far_petal_width_near_marking_coverage.json \
+            --far-near-original-plant-networks stage79f_far_near_original/original_EuPP_plant_petal_width_marking_trait_availability.csv \
+            --fcc-original-positive-receipt stage79f_fcc_original/source_original_151_change_positive_rezende_EuPP_match.json \
+            --original-EuPP-source stage79f_plant_roster_original/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage79f_original_signal_stage_power
+      - name: Verify no nonreported floral change invented as a true absence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79f_original_signal_stage_power/stage79f_true_original_FCC_size_marking_crosssource_coverage.json")
+          d=json.loads(p.read_text())
+          assert d["source_original_EuPP_accepted_plant_species"]==1408
+          assert d["source_original_source_petal_width_species"]==118
+          assert d["source_original_reported_pattern_positive_species"]==31
+          assert d["original_FCC_source_exact_visited_taxa"]==9
+          assert d["no_original_source_validated_FCC_absent_vs_present_comparison"]
+          assert d["no_original_source_verified_UV_guide_negative_vs_positive"]
+          assert d["true_visual_signal_by_strong_gust_ordered_beta_estimated"] is False
+          assert len(d["source_original_signal_opportunity_networks"])>=3
+          print("STAGE79F_ACTUAL_SIGNAL_STAGE_MACRO_COVERAGE",{
+            "source_plant_name_intersections":d["source_original_FCC_vs_petal_width_overlapping_names"],
+            "far_near_by_original_network":d["source_original_signal_opportunity_networks"],
+            "far_near_by_original_study":d["source_original_signal_opportunity_studies"],
+            "FCC_repeated_taxa":d["source_FCC_positive_species_study_and_network_reuse"],
+          })
+          PY
+      - name: Archive independently inspectable signal-by-network feasibility
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79F-real-9FCC-118width-31pattern-source-macro-network-study-power
+          path: stage79f_original_signal_stage_power/
+          retention-days: 90
+          if-no-files-found: warn
