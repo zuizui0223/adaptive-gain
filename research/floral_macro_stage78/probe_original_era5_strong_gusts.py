@@ -8,7 +8,7 @@ Source UTC daily reanalysis is not observed bee visit-hour wind or true
 turbulent floral VOC plume. Exceedance thresholds fixed before outcome access.
 """
 from __future__ import annotations
-import argparse,csv,datetime,hashlib,json,math,urllib.parse,urllib.request
+import argparse,csv,datetime,hashlib,json,math,urllib.parse,urllib.request,urllib.error
 from pathlib import Path
 
 STAGE77_SHA="948ac0ecbcfc9b8a2e810753748a5436d998cd586574ea185c6da5db08cbce53"
@@ -52,7 +52,7 @@ def query_sites(rows,start="2018-06-01",end="2018-06-30"):
        "start_date":start,"end_date":end,
        "daily":"wind_gusts_10m_max,wind_speed_10m_max,temperature_2m_mean,precipitation_sum",
        "models":"era5","timezone":"GMT","wind_speed_unit":"ms",
-       "elevation":"nan","cell_selection":"nearest",
+       "elevation":",".join("nan" for _ in rows),"cell_selection":"nearest",
     }
     return API+"?"+urllib.parse.urlencode(params)
 
@@ -62,9 +62,16 @@ def original_api(url):
     request=urllib.request.Request(url,headers={
        "Accept":"application/json",
        "User-Agent":"academic-floral-strong-gust-research-source-2026-11-18"})
-    with urllib.request.urlopen(request,timeout=110) as response:
-        raw=response.read(2500000)
-        mime=response.headers.get("Content-Type","")
+    try:
+        with urllib.request.urlopen(request,timeout=110) as response:
+            raw=response.read(2500000)
+            mime=response.headers.get("Content-Type","")
+    except urllib.error.HTTPError as exc:
+        # The official API's JSON reason identifies unsupported model/variable
+        # or multi-location argument semantics; never hide behind HTTP400.
+        detail=exc.read(2000).decode("utf-8",errors="replace")
+        raise ValueError("STAGE78_ERA5_SOURCE_HTTP_"+str(exc.code)+
+            "_REASON_"+detail[:500]) from exc
     if not raw or len(raw)>=2500000 or "json" not in mime:
         raise ValueError("STAGE78_SOURCE_API_NOT_REAL_JSON")
     result=json.loads(raw)
