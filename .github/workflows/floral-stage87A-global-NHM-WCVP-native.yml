@@ -1,0 +1,82 @@
+name: Stage87A global NHM floral traits x WCVP native TDWG3
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/global_native_floral_signal_tdwg3.py"
+      - "research/floral_macro_stage87/test_global_native_floral_signal_tdwg3.py"
+      - ".github/workflows/floral-stage87A-global-NHM-WCVP-native.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-authenticated-global-plant-signal-native-geography:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free native-flora and text uncertainty unit tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage87 \
+            -p "test_global_native_floral_signal_tdwg3.py" -v
+      - name: Restore genuine complete NHM 59,369 taxon botanical text source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage87_source_NHM
+          test -s stage87_source_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage87_source_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Download actual official 2026 Kew WCVP accepted native-range bulk source
+        run: |
+          mkdir -p stage87_source_Kew
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 900 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            --output stage87_source_Kew/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage87_source_Kew/wcvp.zip" | sha256sum -c
+      - name: Actually analyze all 59k original source traits × GLOBAL native TDWG3 species ranges
+        run: |
+          python -u research/floral_macro_stage87/global_native_floral_signal_tdwg3.py \
+            --original-NHM stage87_source_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP-zip stage87_source_Kew/wcvp.zip \
+            --outdir stage87_global_NHM_WCVP_native_derived
+      - name: Assert global not 49-taxon/Europe source and no false UV or wind inference
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage87_global_NHM_WCVP_native_derived")
+          r=json.loads((p/"stage87_real_global_NHM_WCVP_native_TDWG3_receipt.json").read_text())
+          assert r["sources"]["nhm"]["original_NHM_source_taxon_labels"]==59369
+          assert r["sources"]["nhm"]["NHM_documented_colour_text"]==31773
+          assert r["sources"]["wcvp"]["strict_NHM_names_exact_WCVP_accepted"]>10000
+          assert r["sources"]["wcvp"]["global_TDWG3_regions_with_source_native_trait_taxa"]>200
+          assert r["source_region_composition"]["regions_with_at_least_25_documented_single_hues"]>80
+          assert r["study_not_restricted_to_prior_49_spectrometer_taxa"]
+          assert r["no_true_flower_age_UV_guide_odour_learning_landing_or_fitness_assessed"]
+          assert r["no_global_true_Bombus_occurrence_or_suitability_already_included"]
+          with (p/"stage87_native_TDWG3_original_NHM_visual_source_community.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)>200
+          assert all(0<=float(x["source_documented_colour_coverage_fraction"])<=1 for x in rows)
+          print("STAGE87A_VERIFIED_GLOBAL_REAL_59369_TEXT_WCVP_NATIVE_REGION",{
+             "unique_native_source_species":r["sources"]["wcvp"]["globally_unique_accepted_NHM_source_native_species"],
+             "native_TDWG3_regions":len(rows),
+             "regions_with_50_source_hues":r["source_region_composition"]["regions_with_at_least_50_documented_single_hues"]})
+          PY
+      - name: Upload compact derived source regional matrix only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage87A-original-global-NHM59369-WCVP-native-TDWG3-traits
+          path: stage87_global_NHM_WCVP_native_derived/
+          retention-days: 90
+          if-no-files-found: warn
