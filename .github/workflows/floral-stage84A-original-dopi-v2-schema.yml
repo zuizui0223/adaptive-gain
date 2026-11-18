@@ -1,0 +1,39 @@
+name: Stage84A original Zenodo DoPI version2 file identity and schema
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage84/probe_original_dopi_v2_archive.py"
+      - ".github/workflows/floral-stage84A-original-dopi-v2-schema.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  authentic-dopi-v2-release-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read official DoPI v2 Zenodo record and bounded raw file header
+        run: python research/floral_macro_stage84/probe_original_dopi_v2_archive.py --out stage84a_dopi_v2_public_source_metadata.json
+      - name: Confirm exact author deposit and no assumed overlapping species or visits
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("stage84a_dopi_v2_public_source_metadata.json"))
+          assert x["original_release_id"] == 22876365
+          assert x["original_2026_version_2_source_found"]
+          assert x["original_manifest"]["source_release_files"]
+          assert x["no_author_spectrometer_219_taxa_join_yet_estimated"]
+          print("SOURCE_META_ONLY_NOT_A_SPECIES_EFFECT")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage84a-original-dopi-v2-file-manifest-schema-verified
+          path: stage84a_dopi_v2_public_source_metadata.json
+          if-no-files-found: error
