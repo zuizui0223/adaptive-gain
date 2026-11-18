@@ -1,0 +1,81 @@
+name: floral-stage79H-source-petal-width-ERA5-strong-gust-Bombus-macro
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/petal_width_vs_era5_strong_gust_real_Bombus_network_gate.py"
+      - "research/floral_macro_stage79/test_petal_width_vs_era5_strong_gust_real_Bombus_network_gate.py"
+      - ".github/workflows/floral-stage79H-petalwidth-stronggust-Bombus-gate.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-size-gust-bee-power:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Original source conditional null information and preregistered no-go tests
+        run: |
+          python -m pip install "pandas>=2.1,<3" "numpy>=1.26,<3" "statsmodels>=0.14,<1"
+          python -m unittest discover -s research/floral_macro_stage79 \
+            -p "test_petal_width_vs_era5_strong_gust_real_Bombus_network_gate.py" -v
+      - name: Recover full original 59k botanical petal width x 1408 observed flora crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44222475354 --repo zuizui0223/adaptive-gain \
+            --name stage79B-original-NHM59k-EuPP1408-petal-width-vs-near-pattern-macro-coverage \
+            --dir stage79h_original_width
+          test -s stage79h_original_width/original_EuPP_plant_petal_width_marking_trait_availability.csv
+      - name: Recover real ERA5 strong gust threshold 15m-s in preselected 152 original field networks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44215375699 --repo zuizui0223/adaptive-gain \
+            --name stage78b-real-European-ERA5-strong-GUST-15ms-x-visual-Bombus-macro \
+            --dir stage79h_original_gust
+          test -s stage79h_original_gust/source_ERA5_true_strong_gust_study_balanced_424_frame.csv
+      - name: Actually reconstruct corrected original visitor true species-ranked bees and source width conditional null score
+        run: |
+          python -u research/floral_macro_stage79/petal_width_vs_era5_strong_gust_real_Bombus_network_gate.py \
+            --source-original-plant-width stage79h_original_width/original_EuPP_plant_petal_width_marking_trait_availability.csv \
+            --source-original-ERA5-strong-gust stage79h_original_gust/source_ERA5_true_strong_gust_study_balanced_424_frame.csv \
+            --outdir stage79h_true_flower_size_gust_conditional_bee
+      - name: Scientific model-go gate must remain honest for low network or study power
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79h_true_flower_size_gust_conditional_bee/source_original_size_vs_gust15_Bombus_macro_eligibility.json")
+          d=json.loads(p.read_text())
+          x=d["source_original_preguild_size_network_gates"]
+          assert x["original_ERA5_outcome_blind_field_networks"]==152
+          assert x["source_size_selected_without_Bombus_response"]
+          assert d["recorded_Bombus_not_true_pollinator_absence_or_real_gust_behavior"]
+          assert d["source_near_FCC_and_pattern_negative_controls_NOT_MEASURED"]
+          assert d["no_general_causal_Bombus_strong_wind_visual_order_claim"]
+          v=d["source_size_gust_estimand_eligibility"]
+          if v["status"]=="SOURCE_OBSERVATIONAL_NETWORK_NULL_SCORE_GUST_TENDENCY":
+              assert v["original_source_size_gust_informative_networks"]>=25
+              assert v["within_study_gust15_variation_groups"]>=5
+              assert v["original_source_size_gust_informative_studies"]>=10
+          else:
+              assert v["status"].startswith("NO_GO") or v["status"]=="NO_GUILD_INFORMATIVE_SIZE_NETWORKS"
+          print("STAGE79H_GUST_VISUAL_SIZE_BOMBUS_REAL_MACRO_GO_NO_GO",{
+            "source_original_pre_bee":x,
+            "strict_bee_informative":d["source_original_accepted_bee_width_network_reason_counts"],
+            "source_test":v})
+          PY
+      - name: Preserve source-only scientific eligibility and actual null-score network rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79H-ERA5-gust15-true-Bombus-NHM118-petalwidth-guild-networks
+          path: stage79h_true_flower_size_gust_conditional_bee/
+          retention-days: 90
+          if-no-files-found: warn
