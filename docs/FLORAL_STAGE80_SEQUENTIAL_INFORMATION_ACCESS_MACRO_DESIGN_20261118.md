@@ -51,7 +51,7 @@ The audit yields:
 - wind + measured true guide + actual landing: **0/10**;
 - all eight dimensions and fitness: **0/10**.
 
-These are coverage gaps among a targeted list, NOT a published-universe meta-analysis, not evidence of null biological effects and not a fitted SEM. One naming conflict needs review: original EuPP publisher correction reports 52 source studies, but repository analysis counts 54 distinct Study_id values; do not treat the latter as 54 independent publications before resolving that map.
+These are coverage gaps among a targeted list, NOT a published-universe meta-analysis, not evidence of null biological effects and not a fitted SEM. **Resolved study-ID accounting:** original EuPPPollNet explicitly states 52 independent studies and 54 Study IDs because one study was divided into three habitat-specific IDs 23, 24 and 25 (original DOI 10.1111/geb.70000, section 2.3). The corrected study-year database retains those ID labels. Stage79's 15 informative Study_id labels must be checked for these duplicate-publication IDs and publication-level clustering before calling them 15 independent studies.
 
 ## Preregistered direction for a real macro test
 
