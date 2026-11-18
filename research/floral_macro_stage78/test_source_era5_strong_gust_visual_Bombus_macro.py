@@ -68,7 +68,7 @@ class SourceStrongWindMacroTests(unittest.TestCase):
             m.aggregate_exposure([x],{("S1","N","2018"):{}})
 
     def test_input_fixed_effect_wind_will_not_imply_scent_measured(self):
-        self.assertIn("MAX_GUST",m.__doc__.upper() if m.__doc__ else "")
+        self.assertIn("NO islands",m.__doc__ or "")
 
 if __name__=="__main__":
     unittest.main()
