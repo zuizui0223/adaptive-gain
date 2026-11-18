@@ -1,0 +1,97 @@
+name: Floral Stage82 original species-permutation and wind support gates
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage82/**"
+      - "docs/FLORAL_STAGE82_SOURCE_INDEPENDENCE_AND_GUST_SUPPORT_20261118.md"
+      - ".github/workflows/floral-stage82-real-taxon-wind-independent-gates.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-species-trait-and-wind-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Pin numeric computation versions
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6"
+      - name: Source-free invariant tests
+        run: python -m unittest discover -s research/floral_macro_stage82 -p "test_*.py" -v
+      - name: Restore original authenticated EUPP corrected visits 18798 rows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage82_source_EuPP
+      - name: Restore authentic Ohashi 28-species original 53-part spectrometer summaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44255120835 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage81b-28-true-age-part-spectral-macro-derived \
+            --dir stage82_source_Ohashi
+      - name: Recompute source 194 networks and 9999 taxon-label permutations
+        run: |
+          python -u research/floral_macro_stage82/source_trait_independence_test.py \
+            --original-stage69-flora stage82_source_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-stage81b-ages stage82_source_Ohashi/stage81b_28_species_source_early_late_part_spectral_metrics.csv \
+            --outdir stage82_results
+      - name: Restore stage79I original survey-year ERA5 gust15 exposures
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44242382680 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage79I-392size-original-ERA5-15ms-true-Bombus-sizefirst-macro \
+            --dir stage82_source_ERA5
+      - name: Restore stage81C original 194 true visitor local null scores
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44257043688 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage81c-measured-age-spectra-eupp-guild-source-macro \
+            --dir stage82_source_visit
+      - name: Recompute true 36-network study gust+age uncertainty
+        run: |
+          python -u research/floral_macro_stage82/source_age_wind_join_gate.py \
+            --original-sizefirst-gust-exposures stage82_source_ERA5/source_original_sizefirst_ERA5_gust15_exposures.csv \
+            --original-stage81c-guild-scores stage82_source_visit/stage81c_194_true_source_network_null_scores.csv \
+            --out stage82_results/stage82_real_36_network_era5_age_guild_support.json
+      - name: Verify scientific support does not justify environmental mechanism
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('stage82_results/stage82_true_original_taxon_exchangeability_vs_publication_source.json').read_text())
+          b=json.loads(Path('stage82_results/stage82_real_36_network_era5_age_guild_support.json').read_text())
+          assert a['source_species_present_in_actual_194_scored_networks']==23
+          assert a['source_taxon_exchangeability_diagnostic']['independent_permutations']==9999
+          assert a['source_taxon_exchangeability_diagnostic']['trait_exchangeability_ignores_phylogeny_and_is_only_falsification_diagnostic']
+          assert b['source_support']['matched_age_spectra_and_strict_bees_gust_networks']==36
+          assert b['source_support']['true_source_publications']==16
+          assert b['effective_information_count_too_low_for_generalization']
+          assert b['not_an_identified_wind_age_visual_cue_or_selection_effect']
+          print('STAGE82_NO_GO_SOURCE_LIMITS_VERIFIED')
+          PY
+      - name: Upload only derived numerics; no original raw spectra or visitor file copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage82-source-real-taxon-permutation-wind-support-audit
+          path: stage82_results/
+          retention-days: 90
+          if-no-files-found: warn
