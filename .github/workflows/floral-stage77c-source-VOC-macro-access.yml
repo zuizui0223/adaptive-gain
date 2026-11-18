@@ -1,0 +1,92 @@
+name: floral-stage77c-original-305VOC-source-access-macro-feasibility
+
+on:
+  push:
+    branches: [analysis/floral-bombus-visual-wind-climate-path-stage77-20261118]
+    paths:
+      - "research/floral_macro_stage77/audit_original_multispecies_floral_VOC_sources.py"
+      - "research/floral_macro_stage77/test_audit_original_multispecies_floral_VOC_sources.py"
+      - ".github/workflows/floral-stage77c-source-VOC-macro-access.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-multispecies-VOC-evidence-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test strict original VOC archive access and non-assignment of unknown scent
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage77 \
+            -p 'test_audit_original_multispecies_floral_VOC_sources.py' -v
+      - name: Restore original NHM 59369 species descriptive flora
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage77c_original_NHM
+          test -s stage77c_original_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage77c_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original corrected recorded floral plant names
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage77c_original_networks
+          test -s stage77c_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage77c_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Fetch publisher-linked original 2020 305-species floral VOC supplementary inventory
+        run: |
+          python -u research/floral_macro_stage77/audit_original_multispecies_floral_VOC_sources.py \
+            --source-NHM stage77c_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --source-EuPP stage77c_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage77c_original_VOC_source_access
+      - name: Enforce real original chemical spreadsheet required before mediation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage77c_original_VOC_source_access/original_2020_305species_VOC_public_archive_access_receipt.json")
+          j=json.loads(p.read_text())
+          assert j["source_original_review_article_DOI"]=="10.3389/fpls.2020.01154"
+          assert j["source_original_review_PMCID"]=="PMC7412988"
+          assert j["source_original_EuPP_accepted_plant_names"]==1408
+          assert j["source_original_exact_botanical_description_names"]==963
+          assert j["source_original_visual_single_explicit_hue_names"]==233
+          assert j["source_author_reported_VOC_corpus_NOT_reanalysed"]["plants"]==305
+          assert j["source_study_review_analyzed_climate_and_pollinator_effects_ALREADY_PRIOR_ART"]
+          assert j["source_missing_VOC_is_unknown_not_zero_scent"]
+          assert j["wind_driven_scent_plume_mediation_identified"] is False
+          assert j["real_same_site_scent_versus_Bombus_visits_join_verified"] is False
+          print("STAGE77C_REAL_PUBLIC_VOC_305_SPECIES_COMPILATION_SOURCE_AVAILABLE",{
+            "source_data_artifacts": [{
+                "source":x.get("source"),
+                "status":x.get("status"),
+                "bytes":x.get("actual_source_bytes"),
+                "format":x.get("source_archive_format"),
+                "xlsx_csv_counts":x.get("n_actual_original_spreadsheets",0),
+                "publisher_supplement_links":len(x.get("original_article_disclosed_supplement_links",[])),
+                "OA_package":x.get("original_official_OA_package_urls",[]),
+                } for x in j["source_actual_original_primary_VOC_archive_access_receipts"]]
+          })
+          PY
+      - name: Upload original 2020 chemical source provenance and no causal VOC mediation receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage77c-original-floral-VOC-305-species-public-source-no-false-odor-SEM
+          path: stage77c_original_VOC_source_access/
+          retention-days: 90
+          if-no-files-found: warn
