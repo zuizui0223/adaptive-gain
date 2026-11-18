@@ -26,8 +26,12 @@ jobs:
           python -m unittest discover \
             -s research/floral_macro_stage79 \
             -p 'test_inspect_original_rezende_151_table_pdf.py' -v
-      - name: Verify original PDF text reader and first-page renderer
+      - name: Install original source PDF embedded-text reader and page renderer if missing
         run: |
+          if ! command -v pdftotext >/dev/null || ! command -v pdfinfo >/dev/null || ! command -v pdftoppm >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq poppler-utils
+          fi
           command -v pdftotext
           command -v pdfinfo
           command -v pdftoppm
