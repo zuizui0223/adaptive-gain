@@ -1,0 +1,75 @@
+name: Stage84B source-authenticated full DoPI v2 x Ohashi219 spectrometer taxon independent guild audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage84/audit_real_dopi_v2_ohashi_eupp_power.py"
+      - "research/floral_macro_stage84/test_audit_real_dopi_v2_ohashi_eupp_power.py"
+      - ".github/workflows/floral-stage84B-original-dopi-v2-219-species-guild.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  full-original-source-DOPI-2026-spectrometer-flora-power:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test source admission strict species, DOI, guild and location rules
+        run: python -m unittest discover -s research/floral_macro_stage84 -p "test_*.py" -v
+      - name: Restore SHA-verifiable corrected original EuPP 18,798 source plant×network-year records
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage84_original_EuPP
+      - name: Restore Stage81D 28 source honeybee receptor taxa verified ZIP from GitHub Artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --retry 2 --silent --show-error \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14409142056/zip" \
+            --output stage84_original_28_apis_receptor_derived.zip
+          echo "9139935f10fbd94a8fb888d807af872c9e5289422249d138fb8a61ac799a0b2a  stage84_original_28_apis_receptor_derived.zip" | sha256sum -c
+      - name: Actually download full DoPI v2 384896230 CSV plus original Ohashi 285933377 author ZIP and verify checksums
+        run: |
+          python -u research/floral_macro_stage84/audit_real_dopi_v2_ohashi_eupp_power.py \
+            --eupp-source-accepted-plant-network stage84_original_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --stage81d-receptor-zip stage84_original_28_apis_receptor_derived.zip \
+            --outdir stage84_real_source_audit
+      - name: Enforce original 219/180/28 source numerator semantics and no invented field effects
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage84_real_source_audit/stage84_original_DOPI_v2_Ohashi219_28_vs_EuPP_publication_coverage.json")
+          a=json.loads(p.read_text())
+          assert a["source_record_rows_checked"]>500000
+          assert a["source_original_DOPI_full_download_verified"]["source_bytes"]==384896230
+          assert a["source_original_DOPI_full_download_verified"]["source_md5"]=="d1c76fc0fd4df6a6828550c5866e4af1"
+          assert a["source_original_Ohashi_taxon_roster"]["original_219_taxon_folders"]==219
+          assert a["source_original_Ohashi_taxon_roster"]["original_exact_simple_binomial_taxa"]==180
+          assert a["source_original_Ohashi_taxon_roster"]["genuine_28_specifically_bee_receptor_modeled_source_taxa"]==28
+          assert a["full_original_bulk_source_not_redistributed"]
+          assert a["not_a_fitted_flower_signal_Bombus_effect"]
+          assert a["source_28_current_apis_receptor_taxa"]["source_missing_visitors_are_NOT_true_absences"]
+          print("STAGE84_FULL_AUTHENTIC_DOPI_V2_OHASHI_PAPER_OVERLAP_VERIFIED")
+          PY
+      - name: Upload ONLY derived coverage, study DOI and guild summary, NOT original raw copyrighted source archives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage84b-original-DOPI-v2-219-Ohashi-28-Apis-EuPP-publication-power
+          path: stage84_real_source_audit/
+          retention-days: 90
+          if-no-files-found: warn
