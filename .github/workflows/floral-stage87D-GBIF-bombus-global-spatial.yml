@@ -1,0 +1,75 @@
+name: Stage87D real GBIF 3958417 archived Bombus occurrence spatial TDWG3
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/global_gbif_bombus_tdwg3_observed_richness.py"
+      - "research/floral_macro_stage87/test_global_gbif_bombus_tdwg3_observed_richness.py"
+      - ".github/workflows/floral-stage87D-GBIF-bombus-global-spatial.yml"
+permissions:
+  contents: read
+jobs:
+  real-bumblebee-source-occurrence-geo-without-absence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free taxon/coordinate and non-detection guard tests
+        run: |
+          python -m pip install "numpy==2.3.5" "shapely==2.1.2"
+          python -m unittest discover -s research/floral_macro_stage87 -p "test_global_gbif_bombus_tdwg3_observed_richness.py" -v
+      - name: Original official TDWG3 regional polygons with Git blob hash
+        run: |
+          mkdir -p stage87D_source
+          curl --fail --location --retry 3 --connect-timeout 25 \
+             https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson \
+             -o stage87D_source/level3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage87D_source/level3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Actually download all archived original 3958417 GBIF Bombus records
+        run: |
+          curl --fail --location --retry 3 --retry-delay 10 \
+            --connect-timeout 60 --max-time 3000 \
+            https://api.gbif.org/v1/occurrence/download/request/0003256-260226173443078.zip \
+            -o stage87D_source/GBIF_0003256-260226173443078.zip
+          test "$(stat -c%s stage87D_source/GBIF_0003256-260226173443078.zip)" -gt 5000000
+          unzip -Z1 stage87D_source/GBIF_0003256-260226173443078.zip | head -18
+      - name: Assign genuine GBIF species-ranked recorded Bombus occurrences to TDWG L3 points
+        run: |
+          python -u research/floral_macro_stage87/global_gbif_bombus_tdwg3_observed_richness.py \
+            --original-gbif-zip stage87D_source/GBIF_0003256-260226173443078.zip \
+            --original-tdwg-geojson stage87D_source/level3.geojson \
+            --outdir stage87D_derived_Bombus_native_geo
+      - name: Verify archive record denominator and no false biological absences
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage87D_derived_Bombus_native_geo")
+          r=json.loads((p/"stage87D_original_GBIF_Bombus_source_spatial_receipt.json").read_text())
+          assert r["original_source_archive"]["observed_original_full_source_count"]==3958417
+          assert r["source_TDWG3_regions_with_recorded_bumblebees"]>=100
+          assert r["source_missing_plant_region_bumblebee_records_NOT_true_absence"]
+          assert r["GBIF_source_local_effort_bias_not_removed"]
+          assert r["source_native_bumblebee_distribution_NOT_identified"]
+          with (p/"stage87D_original_GBIF_Bombus_TDWG3_recorded_richness.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)>=100
+          print("STAGE87D_SOURCE_3958417_OBSERVED_BOMBUS_REGION_DIVERSITY",{
+              "regions":len(rows),
+              "unique_Bombus_taxa_max_in_one_region":max(int(row["GBIF_Bombus_strict_binomial_recorded_species"]) for row in rows)})
+          PY
+      - name: Upload aggregated region richess evidence only, no raw GBIF source archive
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage87D-real-GBIF3958417-Bombus-TDWG3-recorded-richness
+          path: stage87D_derived_Bombus_native_geo/
+          retention-days: 90
+          if-no-files-found: warn

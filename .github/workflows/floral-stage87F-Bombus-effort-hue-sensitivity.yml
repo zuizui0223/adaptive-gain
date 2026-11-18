@@ -1,0 +1,80 @@
+name: Stage87F global floral colour x Bombus original GBIF effort sensitivity
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/sensitivity_global_hue_Bombus_effort_wind.py"
+      - "research/floral_macro_stage87/test_sensitivity_global_hue_Bombus_effort_wind.py"
+      - ".github/workflows/floral-stage87F-Bombus-effort-hue-sensitivity.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  global-source-bombus-spatial-quality-sensitivity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned source analysis libraries
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6" "scipy==1.16.3"
+      - name: Source-free nested effort and non-detection exclusion checks
+        run: python -m unittest discover -s research/floral_macro_stage87 -p "test_sensitivity_global_hue_Bombus_effort_wind.py" -v
+      - name: Recover original WorldClim/native flora 367-region source ZIP by exact SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            --output stage87F_original_native_WorldClim.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage87F_original_native_WorldClim.zip" | sha256sum -c
+      - name: Recover GBIF original 3958417 Bombus record region ZIP by exact SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14419407872/zip" \
+            --output stage87F_original_Bombus_GBIF.zip
+          echo "2fe7510fe8c08189d63151fe255a00baafb96c7acc87d3d0fedc970966ca1a43  stage87F_original_Bombus_GBIF.zip" | sha256sum -c
+      - name: Refit full 11 source lexical hues under 5 independent original-source recording-quality restrictions
+        run: |
+          python research/floral_macro_stage87/sensitivity_global_hue_Bombus_effort_wind.py \
+            --stage87C-global-native-climate-zip stage87F_original_native_WorldClim.zip \
+            --stage87D-original-GBIF-Bombus-zip stage87F_original_Bombus_GBIF.zip \
+            --outdir stage87F_original_source_sensitivity
+      - name: Verify full species/hue/sampling source denominators, not positive significance
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          from pathlib import Path
+          p=Path("stage87F_original_source_sensitivity")
+          z=json.loads((p/"stage87F_original_5_Bombus_effort_sensitivity_source_receipt.json").read_text())
+          assert z["source_geographic_cohort_counts"]=={
+            "base_primary_5_1degree_cells":139,
+            "GBIF_reporting_10_1degree_cells":109,
+            "GBIF_reporting_20_1degree_cells":76,
+            "NHM_source_at_least_100_exclusive_hue_taxa":135,
+            "coordinate_uncertainty_le10km_recorded_richness":139}
+          assert z["source_positive_only_recorded_richness_not_native_or_absent"]
+          assert z["source_plant_phenotypic_pollination_mode_missing_in_botanical_text"]
+          x=pd.read_csv(p/"stage87F_GBIF_Bombus_source_effort_and_flora_hue_source_sensitivity.csv")
+          assert len(x)==330
+          assert x["BH_q_fixed_11_hue_families"].between(0,1).all()
+          assert x["standardized_region_partial_slope_fraction_points"].notna().all()
+          print("STAGE87F_GBIF_HUE_SPATIAL_EFFORT_ORIGINAL_SENSITIVITY_VERIFIED")
+          PY
+      - name: Upload only derived source regional quality checks and model directions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage87F-real-global-Bombus-source-effort-floral-hue-spatial-sensitivity
+          path: stage87F_original_source_sensitivity/
+          retention-days: 90
+          if-no-files-found: warn

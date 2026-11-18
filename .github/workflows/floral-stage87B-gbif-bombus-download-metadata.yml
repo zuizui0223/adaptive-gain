@@ -1,0 +1,38 @@
+name: Stage87B original GBIF 3.96m Bombus spatial download identity
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/probe_gbif_bombus_spatial_archive.py"
+      - ".github/workflows/floral-stage87B-gbif-bombus-download-metadata.yml"
+permissions:
+  contents: read
+jobs:
+  original-archived-bumblebee-world-data:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Retrieve full metadata of frozen original GBIF 2026 Bombus snapshot
+        run: |
+          python research/floral_macro_stage87/probe_gbif_bombus_spatial_archive.py \
+           --out stage87_source_Bombus_2026_archive_metadata.json
+      - name: Verify large public download status and no false absence claim
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("stage87_source_Bombus_2026_archive_metadata.json"))
+          assert r["download_status"]=="SUCCEEDED"
+          assert r["declared_download_link"].startswith("https://")
+          assert r["archive_record_count"]==3958417
+          assert r["original_database_no_species_absence_inferred"]
+          print("ORIGINAL_BOMBUS_GBIF_ARCHIVE_HAS_3958417_OCCURRENCES",r)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage87B-real-GBIF-bombus-2025-snapshot-download-source
+          path: stage87_source_Bombus_2026_archive_metadata.json
+          if-no-files-found: error
