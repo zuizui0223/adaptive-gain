@@ -10,9 +10,10 @@ animal-versus-wind pollen vector mode. Source raw 55,775 native taxa,
 WCVP official family names, original WorldClim and GBIF archived species.
 """
 from __future__ import annotations
-import argparse,hashlib,io,json,zipfile
+import argparse,hashlib,io,json,zipfile,sys
 from pathlib import Path
 import numpy as np,pandas as pd
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"floral_macro_stage87"))
 from analyze_global_hue_wind_bombus_spatial_overlap import (
     source_join,source_design,source_blocks,COLORS,PRIMARY,CELLS,
 )
