@@ -293,6 +293,16 @@ def audit(nhm,network,climate,climate_receipt):
        "no_external_island_botanical_data_in_model":True,
     }
 
+def native_numeric_json(value):
+    # Source scientific output uses NumPy/Pandas scalar integers. Do not
+    # stringify these and lose machine-readable quantitative receipts.
+    if isinstance(value,np.integer):return int(value)
+    if isinstance(value,np.floating):return float(value)
+    if isinstance(value,np.bool_):return bool(value)
+    if isinstance(value,np.ndarray):return value.tolist()
+    raise TypeError(f"unsupported scientific result JSON value: {type(value).__name__}")
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--source-NHM",required=True,type=Path)
@@ -309,7 +319,7 @@ def main():
             load(a.source_worldclim_sites),json.loads(a.source_worldclim_receipt.read_text()))
     a.outdir.mkdir(exist_ok=True,parents=True)
     (a.outdir/"original_worldclim_flower_visual_Bombus_piecewise_path_screen.json").write_text(
-        json.dumps(d,indent=2,sort_keys=True,ensure_ascii=False)+"\n",encoding="utf-8")
+        json.dumps(d,indent=2,sort_keys=True,ensure_ascii=False,default=native_numeric_json)+"\n",encoding="utf-8")
     main=d["source_environment_path_macro_models"]["cross_hue"]
     print("STAGE77B_REAL_CLIMATE_ADJUSTED_VISUAL_BOMBUS_OBSERVATIONAL_PATH_SCREEN",
           json.dumps({
@@ -324,7 +334,7 @@ def main():
               "leave_study_out":main["study_leave_out_visual_to_Bombus_and_wind_interaction"],
               "source_UNMEASURED_scent":d["source_scent_VOC_availability_in_same_54_Europe_studies"],
               "scent_mediation_identifiable":d["odor_wind_visual_three_modal_causal_mediation_identifiable"]
-          },sort_keys=True))
+          },sort_keys=True,default=native_numeric_json))
     print("NOT_CAUSAL_PATH_SEM_NO_SITE_WIND_NO_VOC_AND_NO_VISUAL_UV_SPECTRA")
 if __name__=="__main__":
     main()
