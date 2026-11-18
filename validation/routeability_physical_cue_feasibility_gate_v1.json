@@ -1,0 +1,114 @@
+{
+  "schema": "adaptive-gain-routeability-physical-cue-feasibility-gate-v1",
+  "date": "2026-09-29",
+  "status": "biological_cue_architecture_constraints_frozen_materials_pending",
+  "purpose": "Translate the exact three-cue routeability task into a biologically learnable bumblebee-style visual apparatus without changing the formal cue architecture or introducing an access-arm timing confound.",
+  "species_scope": {
+    "preferred_system": "free-flying worker bumblebees with colony identity retained",
+    "exact_species": "operational/human input pending local availability and ethics",
+    "reason": "the feasibility literature for contextual visual learning, multicue discrimination and artificial-flower foraging is strongest in Bombus"
+  },
+  "physical_roles": {
+    "q_route": {
+      "role": "context / routing cue",
+      "implementation": "large visual surround or frame that is presented before terminal access and remains visible throughout terminal-cue presentation and the final choice",
+      "binary_outcomes": "two visually discriminable context symbols",
+      "forbidden": [
+        "a context cue that disappears before the terminal cue",
+        "an unavoidable spatial-location cue that cannot be masked in the fixed-access arm",
+        "changing global illumination in a way that changes the appearance of terminal cues"
+      ]
+    },
+    "q_left": {
+      "role": "left terminal query window",
+      "implementation": "spatially fixed terminal window whose binary outcome is a member of the same terminal-symbol family used for q_right"
+    },
+    "q_right": {
+      "role": "right terminal query window",
+      "implementation": "spatially fixed terminal window whose binary outcome is a member of the same terminal-symbol family used for q_left"
+    }
+  },
+  "access_timing": {
+    "contingent_B2": [
+      "show q_route",
+      "keep q_route visible",
+      "reveal exactly one terminal window selected by the frozen context rule",
+      "keep revealed terminal cue visible through the response"
+    ],
+    "fixed_B2": [
+      "do not show q_route",
+      "reveal one terminal cue",
+      "keep the first terminal cue visible",
+      "reveal the second terminal cue in a state-independent counterbalanced order",
+      "keep both terminal cues visible through the response"
+    ],
+    "B3": "all three cues are available in both access arms with matched persistence and total presentation opportunity",
+    "B1": "one cue is available according to the frozen budget-ladder definition",
+    "principle": "access arms differ in contingent information architecture, not in simultaneous-versus-sequential exposure or cue persistence"
+  },
+  "physical_matching": {
+    "same_cue_vectors_between_architectures": true,
+    "same_context_symbols_between_architectures": true,
+    "same_terminal_symbols_between_architectures": true,
+    "same_spatial_layout_between_architectures": true,
+    "same_timing_between_architectures_within_access_budget": true,
+    "only_allowed_architecture_difference": "target/reward mapping for the already frozen cue vectors",
+    "cue_symbol_counterbalance": "use the four orthogonal bit-flip profiles already frozen in the experiment schedule so no physical symbol is permanently tied to semantic bit 0/1 or target class"
+  },
+  "architecture_neutral_material_pretest": {
+    "cohort": "separate pretest/pilot animals or pre-randomization apparatus cohort; never use confirmatory treatment performance to select cue materials",
+    "task": "test each binary cue identity as a simple two-choice differential discrimination outside the routeability architecture",
+    "admission_criterion_each_cue": "at least 80% correct in the last 20 scored choices",
+    "salience_balance_rule": "after all three cue identities meet the 80% criterion, the absolute difference between best and worst final-20 accuracy must be <= 0.10; otherwise redesign the physical materials before confirmatory allocation",
+    "failure_policy": "replace or resize symbols and repeat the architecture-neutral material pretest; do not exclude randomized confirmatory individuals because one architecture is harder",
+    "interpretation": "the 80% rule is an apparatus/cue qualification criterion, not the confirmatory routeability endpoint or power target"
+  },
+  "overshadowing_control": {
+    "problem": "bumblebees can preferentially learn the most salient or easiest element in multicomponent visual stimuli",
+    "controls": [
+      "qualify each cue identity separately before compound training",
+      "avoid one trivially discriminable color contrast paired with much harder shape/pattern contrasts",
+      "counterbalance symbol identities across individuals",
+      "record cue-role-specific acquisition diagnostics during the procedural pilot",
+      "do not change cue salience after confirmatory data are opened"
+    ]
+  },
+  "odor_and_side_controls": {
+    "odor": "physical cue surfaces must not carry cue-specific scent; clean/reuse materials under one frozen protocol",
+    "side": "terminal-window side is a query identity, not a reward predictor; reward mapping and first-fixed-cue order are counterbalanced independently of side",
+    "scent_marking": "clean contacted artificial-flower surfaces between bouts or use replaceable neutral covers"
+  },
+  "literature_rationale": [
+    {
+      "citation": "Dale et al. 2005, J Exp Biol",
+      "doi": "10.1242/jeb.01370",
+      "role": "bumblebee contextual learning is substantially stronger when contextual cues are concurrent/persistent than when a priming cue is only briefly presented before the target"
+    },
+    {
+      "citation": "Learning modifies attention during bumblebee visual search, Behav Ecol Sociobiol 2024",
+      "doi": "10.1007/s00265-024-03432-z",
+      "role": "example of an 80%-correct-in-last-20-choices visual discrimination criterion"
+    },
+    {
+      "citation": "Bumble bee visual learning: simple solutions for complex stimuli, Animal Behaviour 2025",
+      "doi": "10.1016/j.anbehav.2024.123070",
+      "role": "multicomponent visual learning can show salience-driven generalization and overshadowing"
+    },
+    {
+      "citation": "Spaethe et al. 2026, Science Advances",
+      "doi": "10.1126/sciadv.adw9320",
+      "role": "Bombus terrestris changes multicue learning strategy with cue discriminability; supports explicit salience control rather than assuming all visual cues are equally learned"
+    }
+  ],
+  "human_material_inputs_still_required": [
+    "exact bumblebee species and colony source",
+    "exact printed/Perspex/LED stimulus materials",
+    "spectral reflectance or display calibration where colour is used",
+    "arena dimensions and viewing distance",
+    "sucrose concentration/volume and unrewarded-fluid protocol",
+    "cleaning materials compatible with the local apparatus",
+    "ethics/regulatory approval"
+  ],
+  "promotion_rule": "Do not freeze exact physical colors/patterns into the confirmatory schedule until the architecture-neutral material pretest passes. Once passed, hash the material specification and do not alter cue identities after confirmatory allocation.",
+  "claim_ceiling": "This gate establishes biological plausibility and confound control for the physical cue architecture. It does not establish that a particular local material set is learnable until the architecture-neutral pretest is run, and it does not supply pilot nuisance parameters, final N, ethics approval, or an empirical routeability result."
+}

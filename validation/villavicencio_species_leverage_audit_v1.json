@@ -1,0 +1,65 @@
+{
+  "schema": "adaptive-gain-villavicencio-species-leverage-audit-v1",
+  "date": "2026-09-28",
+  "status": "post_hoc_species_leverage_diagnostic",
+  "scope": "strict_core_2008_2011",
+  "analysis_role": "post-result leave-one-species-out robustness audit of the phenology state-stratification pattern",
+  "base": {
+    "positive_overlap_gain_vs_stable_absent_auc": 0.5057955085408757,
+    "positive_overlap_retained_vs_loss_auc": 0.6568481527478882,
+    "gain_vs_loss_auc": 0.49068357998590556,
+    "plant_count": 37,
+    "pollinator_count": 77,
+    "rows": 5154
+  },
+  "leave_one_plant_out": {
+    "species_count": 37,
+    "positive_overlap_gain_vs_stable_absent_auc": {
+      "n_omissions": 37,
+      "min": 0.4988624360120257,
+      "median": 0.5057955085408757,
+      "max": 0.5157865502221831,
+      "fraction_above_half": 0.9459459459459459
+    },
+    "positive_overlap_retained_vs_loss_auc": {
+      "n_omissions": 37,
+      "min": 0.6431283528018392,
+      "median": 0.6568481527478882,
+      "max": 0.6656037936391136,
+      "fraction_above_half": 1.0
+    },
+    "gain_vs_loss_auc": {
+      "n_omissions": 37,
+      "min": 0.48249833627499195,
+      "median": 0.4909027639689798,
+      "max": 0.5059766932041075,
+      "fraction_above_half": 0.02702702702702703
+    }
+  },
+  "leave_one_pollinator_out": {
+    "species_count": 77,
+    "positive_overlap_gain_vs_stable_absent_auc": {
+      "n_omissions": 77,
+      "min": 0.4984375399565273,
+      "median": 0.5059278193349053,
+      "max": 0.5108796272748544,
+      "fraction_above_half": 0.974025974025974
+    },
+    "positive_overlap_retained_vs_loss_auc": {
+      "n_omissions": 77,
+      "min": 0.6500792936436501,
+      "median": 0.6564461797580768,
+      "max": 0.6702848900108186,
+      "fraction_above_half": 1.0
+    },
+    "gain_vs_loss_auc": {
+      "n_omissions": 77,
+      "min": 0.48614995006420314,
+      "median": 0.49064453608848346,
+      "max": 0.4987307497038416,
+      "fraction_above_half": 0.0
+    }
+  },
+  "ecological_read": "The two-stage phenology pattern is not attributable to any single plant or pollinator species: conditional on positive overlap, overlap magnitude remains near chance for distinguishing gains from stable absences, remains moderately informative for retention versus loss, and remains near chance for distinguishing gain from loss among changed dyads after every single-species omission.",
+  "claim_ceiling": "Post-hoc leverage robustness only; this does not make the state-stratification pattern causal, independent across dyad-years, or prospectively validated."
+}

@@ -85,7 +85,7 @@ def test_decision_structural_turnover_rewiring_bridge():
         "species turnover",
         "interaction rewiring",
         "Four ecological regimes",
-        "high taxonomic turnover need not create large decision novelty",
+        "large taxonomic turnover need not create large decision novelty",
         "Rewiring requires not only available partners",
         "decision-equivalence boundary",
     ):

@@ -1,0 +1,74 @@
+{
+  "schema": "adaptive-gain-villavicencio-census-rate-result-v1",
+  "date": "2026-09-29",
+  "status": "effort_standardized_opportunity_increment_mixed",
+  "analysis_status": "post-effort-audit ecological association using a binomial 5-min-census incidence response; not ecological rewiring",
+  "source": {
+    "design_gate": "validation/villavicencio_census_rate_gate_v1.json",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36523539551,
+    "run_number": 426,
+    "conclusion": "success",
+    "head_sha": "8880be06e96f17c742b9b08f4fede92aec5f8ab9",
+    "artifact_id": 11013569648,
+    "artifact_digest": "sha256:0f73ad34bbd56d8391b38f24afef745771685c534227a0e1e8ceac195a53b5d0"
+  },
+  "primary_scope": {
+    "name": "strict_dated_core_2008_2010",
+    "transition_count": 6,
+    "candidate_dyad_rows": 3117,
+    "dyad_census_trials": 24684,
+    "positive_censuses": 617,
+    "observed_positive_census_fraction": 0.024995948792740235
+  },
+  "candidate_surface": {
+    "plant": "focal plant has identifiable 5-min censuses in both adjacent subseasons",
+    "pollinator": "focal pollinator is independently detected on at least one other plant in both adjacent subseasons",
+    "focal_response_excluded_from_candidate_surface": true,
+    "focal_response_excluded_from_opportunity": true
+  },
+  "models": {
+    "history_only": {
+      "per_census_log_loss": 0.11120704542320847,
+      "trial_weighted_brier": 0.00574319831493978
+    },
+    "history_plus_current_siteweek_opportunity": {
+      "per_census_log_loss": 0.10993661033222574,
+      "trial_weighted_brier": 0.005672760131630742
+    }
+  },
+  "opportunity_increment": {
+    "per_census_log_loss_improvement": 0.0012704350909827355,
+    "trial_weighted_brier_improvement": 0.00007043818330903801,
+    "positive_log_loss_folds": "4/6",
+    "classification": "not_reproducible_under_frozen_rule",
+    "fold_log_loss_improvement": {
+      "2008_early->2008_mid": 0.0022131122314249796,
+      "2008_mid->2008_late": 0.004412007060807299,
+      "2009_early->2009_mid": -0.00014355181933121963,
+      "2009_mid->2009_late": -0.003702524333643903,
+      "2010_early->2010_mid": 0.004126489943598641,
+      "2010_mid->2010_late": 0.002768534322779903
+    }
+  },
+  "ecological_read": {
+    "supported": "After putting focal-plant census count into the response denominator, current focal-response-excluded site-week opportunity has a small positive pooled association with interaction incidence.",
+    "not_supported": "The opportunity increment is not reproducibly positive across all six held-out subseason transitions under the frozen rule, so it cannot be promoted as a general within-season ecological filter result.",
+    "consequence": "The effort-standardized response weakens the apparent universality of the binary-turnover opportunity signal."
+  },
+  "not_established": [
+    "latent true link occupancy",
+    "ecological rewiring",
+    "causal effect of opportunity",
+    "sampling-process-independent mechanism",
+    "independent dyad-census replicates",
+    "strict prospective forecasting",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Effort-standardized observed interaction-incidence association only. The pooled opportunity increment is small and fold-mixed; do not use this result as evidence for general ecological rewiring or routeability."
+}

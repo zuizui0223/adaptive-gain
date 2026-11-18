@@ -1,0 +1,46 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-schedule-gate-v1",
+  "date": "2026-09-27",
+  "status": "randomization_and_counterbalance_mechanics_frozen_sample_size_pending",
+  "design": {
+    "architecture": "between_subject",
+    "access_mode": "between_subject",
+    "budget": "between_subject",
+    "factorial_cells": 12,
+    "factors": {
+      "architecture": ["routeable", "bypass_control"],
+      "access_mode": ["contingent", "fixed"],
+      "budget": [1, 2, 3]
+    }
+  },
+  "within_individual_balance": {
+    "state_rule": "each four-trial block contains w0,w1,w2,w3 exactly once",
+    "terminal_position_rule": "two trials per block with each q_left/q_right physical side assignment",
+    "fixed_order_rule": "two trials per block for each state-independent terminal order",
+    "b1_fixed_rule": "q_left and q_right are each used on half of B=1 fixed trials, independently of state",
+    "b2_contingent_rule": "q_route=0 -> q_right; q_route=1 -> q_left",
+    "b3_rule": "both access arms receive all three cues with identical access surface"
+  },
+  "between_individual_counterbalance": {
+    "binary_symbol_profiles": [
+      [0, 0, 0],
+      [0, 1, 1],
+      [1, 0, 1],
+      [1, 1, 0]
+    ],
+    "property": "each cue flip is balanced and every pair of cue-flip bits realizes all four combinations within each treatment cell",
+    "required_individuals_per_cell_multiple": 4
+  },
+  "sample_size": {
+    "status": "not_frozen",
+    "builder_minimum_for_counterbalance_testing": 4,
+    "forbidden_interpretation": "4 individuals per cell or 48 total individuals is not the powered biological sample size",
+    "freeze_rule": "definitive sample size must come from nuisance-parameter simulation using procedural/full-information pilot information without using the focal confirmatory architecture-by-access effect"
+  },
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_experiment_schedule.py",
+    "exporter": "examples/build_routeability_experiment_schedule.py",
+    "regression_test": "tests/test_routeability_experiment_schedule.py"
+  },
+  "claim_boundary": "This gate freezes allocation, randomization and counterbalancing mechanics only. It does not freeze sample size, husbandry, apparatus dimensions, training criterion, or ethical protocol."
+}

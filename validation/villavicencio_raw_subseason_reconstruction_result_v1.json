@@ -1,0 +1,126 @@
+{
+  "schema": "adaptive-gain-villavicencio-raw-subseason-reconstruction-result-v1",
+  "date": "2026-09-29",
+  "status": "raw_18_subseason_response_reconstructed",
+  "analysis_status": "response reconstruction from externally documented temporal boundaries; no ecological predictor effects used to define the periods",
+  "source": {
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "design_gate": "validation/villavicencio_raw_subseason_reconstruction_gate_v1.json",
+    "period_rule": "before November 1 / November 1-30 / after November 30 within each declared study year",
+    "published_rdata_bytes_used": false
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36445393210,
+    "run_number": 370,
+    "conclusion": "success",
+    "head_sha": "115cd33aeb9123b53bc030e7dde795e5cdd72b0b",
+    "artifact_id": 10980721875,
+    "artifact_digest": "sha256:9593753aa216d97c5ef521eef3251bbb2651f84990408466b96cca84c72807a6"
+  },
+  "reconstruction": {
+    "period_count": 18,
+    "all_periods_nonempty": true,
+    "trait_subset": {
+      "plants": 45,
+      "pollinators": 135
+    },
+    "dated_positive_rows": 7105,
+    "dated_positive_visits": 27029,
+    "undated_positive_rows": 26,
+    "undated_positive_visits": 45,
+    "undated_years": [
+      2011
+    ],
+    "annual_link_support": {
+      "2006": {
+        "full": 150,
+        "dated": 150,
+        "only_undated": 0
+      },
+      "2007": {
+        "full": 206,
+        "dated": 206,
+        "only_undated": 0
+      },
+      "2008": {
+        "full": 342,
+        "dated": 342,
+        "only_undated": 0
+      },
+      "2009": {
+        "full": 300,
+        "dated": 300,
+        "only_undated": 0
+      },
+      "2010": {
+        "full": 215,
+        "dated": 215,
+        "only_undated": 0
+      },
+      "2011": {
+        "full": 440,
+        "dated": 433,
+        "only_undated": 7
+      }
+    }
+  },
+  "primary_within_year_stage1": {
+    "transition_count": 12,
+    "eligible_shared_dyad_rows": 4581,
+    "changed_count": 853,
+    "unchanged_count": 3728,
+    "changed_fraction": 0.18620388561449466,
+    "gain_count": 422,
+    "loss_count": 431,
+    "stable_present_count": 369,
+    "stable_absent_count": 3359,
+    "transitions_with_any_change": 12,
+    "transitions_with_both_changed_and_unchanged": 12,
+    "presence_basis": "observed_positive_links; detection-sensitive"
+  },
+  "dated_complete_2006_2010_sensitivity": {
+    "transition_count": 10,
+    "eligible_shared_dyad_rows": 2733,
+    "changed_count": 524,
+    "gain_count": 272,
+    "loss_count": 252,
+    "stable_present_count": 226,
+    "rationale": "2006-2010 annual link support is fully represented by dated raw records; 2011 contains seven annual links represented only by undated positive rows."
+  },
+  "endpoint_model_boundary": {
+    "note": "Response estimability is green for all 12 transitions, but endpoint-specific gain/loss models need both endpoint classes in each held-out transition.",
+    "degenerate_transition": "2006_mid->2006_late",
+    "degenerate_endpoint": "loss",
+    "counts": {
+      "gain": 1,
+      "loss": 0
+    },
+    "consequence": "Do not require a separate loss-model held-out fold for 2006_mid->2006_late. Endpoint-specific modeling should use a nondegenerate prespecified scope such as 2007 onward or the sampling-consistent core."
+  },
+  "ecological_read": "The preferred within-season response grain can be reconstructed from public raw dated records without the unavailable RData bytes. It provides twelve documented within-year transitions for response feasibility and detection audits, but the binary changes are observed-link turnover rather than identified ecological rewiring because repeated-census effort diagnostics show material detection sensitivity.",
+  "not_established": [
+    "byte-for-byte equality with the unavailable published RData object",
+    "true species presence or absence",
+    "sampling-effort-corrected rewiring",
+    "ecological filtering",
+    "decision-equivalence classes",
+    "environmental routeability",
+    "ecological rewiring identity for the 853 observed binary changes",
+    "latent true link state under imperfect detection"
+  ],
+  "claim_ceiling": "This establishes a reproducible public-raw-record reconstruction of the documented 18-period response surface, with an explicit 2011 date-missingness boundary. Sampling-effort semantics are resolved, but binary detection is materially effort-sensitive under repeated-census diagnostics, so the 853 binary changes cannot be identified as ecological rewiring events. Exact RData identity, true presence, sampling-effort-corrected rewiring, decision equivalence, and routeability remain unestablished.",
+  "sampling_effort_followup": {
+    "status": "EFFORT_SEMANTICS_RESOLVED_BINARY_DETECTION_MATERIAL",
+    "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "consequence": "The 853 changes are reproducible observed-link state changes, not 853 identified ecological rewiring events."
+  },
+  "detection_audit": {
+    "result": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "binary_link_detection": "MATERIAL_DETECTION_SENSITIVITY_TRUE_ABSENCE_UNRESOLVED",
+    "observed_changed_dyads": 853,
+    "identified_ecological_rewiring_events": null,
+    "response_label": "observed-link turnover"
+  }
+}

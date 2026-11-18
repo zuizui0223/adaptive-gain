@@ -1,0 +1,105 @@
+{
+  "schema": "adaptive-gain-villavicencio-opportunity-effort-control-result-v1",
+  "date": "2026-09-29",
+  "status": "gain_opportunity_beyond_focal_plant_effort_reproducible_loss_mixed",
+  "analysis_status": "post-result effort-adjustment sensitivity on a detection-sensitive annual binary-link response; not detection-corrected or confirmatory",
+  "source": {
+    "design_gate": "validation/villavicencio_opportunity_effort_control_gate_v1.json",
+    "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36537628401,
+    "run_number": 436,
+    "conclusion": "success",
+    "head_sha": "8e540f1291f016d739af5044acba91c59f5d13af",
+    "artifact_id": 11018803000,
+    "artifact_digest": "sha256:4972874727fb07227d4cc7cdee998014cb79bf95e784f93469fba28c826bb6bb"
+  },
+  "strict_core_2008_2011": {
+    "gain": {
+      "effort_only": {
+        "log_loss": 0.3034489254253654,
+        "roc_auc": 0.6441647567270667,
+        "relative_log_loss_reduction_vs_null": 0.0562877294724593
+      },
+      "opportunity_only": {
+        "log_loss": 0.27803882205640146,
+        "roc_auc": 0.7399697379613532,
+        "relative_log_loss_reduction_vs_null": 0.13531198803936734
+      },
+      "opportunity_plus_effort": {
+        "log_loss": 0.27356599902107676,
+        "roc_auc": 0.7551552645936769,
+        "relative_log_loss_reduction_vs_null": 0.14922226297745522
+      },
+      "opportunity_increment_beyond_effort": {
+        "delta_log_loss": 0.029882926404288634,
+        "positive_folds": "3/3",
+        "classification": "reproducible_incremental_information"
+      },
+      "effort_increment_beyond_opportunity": {
+        "delta_log_loss": 0.004472823035324702,
+        "positive_folds": "3/3"
+      }
+    },
+    "loss": {
+      "effort_only": {
+        "log_loss": 0.6661960634073881,
+        "roc_auc": 0.657020892679626,
+        "relative_log_loss_reduction_vs_null": 0.0478406421270884
+      },
+      "opportunity_only": {
+        "log_loss": 0.6558133704155923,
+        "roc_auc": 0.6646979708788959,
+        "relative_log_loss_reduction_vs_null": 0.06268008480031009
+      },
+      "opportunity_plus_effort": {
+        "log_loss": 0.6632721772153225,
+        "roc_auc": 0.6664313699282415,
+        "relative_log_loss_reduction_vs_null": 0.05201960047291131
+      },
+      "opportunity_increment_beyond_effort": {
+        "delta_log_loss": 0.002923886192065628,
+        "positive_folds": "2/3",
+        "classification": "positive_but_fold_unstable"
+      },
+      "effort_increment_beyond_opportunity": {
+        "delta_log_loss": -0.007458806799730211,
+        "positive_folds": "2/3"
+      }
+    }
+  },
+  "sensitivity": {
+    "near_core_2007_2011": {
+      "gain_opportunity_increment_beyond_effort": 0.02519980750581835,
+      "gain_positive_folds": "4/4",
+      "loss_opportunity_increment_beyond_effort": 0.006696197039443241,
+      "loss_positive_folds": "3/4"
+    },
+    "all_annual_2006_2011": {
+      "gain_opportunity_increment_beyond_effort": 0.022301095996620723,
+      "gain_positive_folds": "4/5",
+      "loss_opportunity_increment_beyond_effort": 0.006632640817934354,
+      "loss_positive_folds": "4/5",
+      "sampling_boundary": "the broad scope includes the 2006 expanded site pool"
+    }
+  },
+  "ecological_read": {
+    "supported": "The clean annual gain association is not exhausted by focal-plant census counts: current focal-response-excluded opportunity adds held-out information beyond previous/current focal-plant effort in every strict-core and near-core gain fold.",
+    "loss": "The corresponding annual loss increment is small and fold-unstable.",
+    "important_boundary": "This remains a binary observed-link analysis. It does not correct pollinator-side detection or identify true absence.",
+    "integration_with_census_rate_result": "At the finer within-season scale, an effort-standardized 5-min census-incidence response yields only a small pooled opportunity increment that is positive in 4/6 folds. Therefore the annual gain robustness does not justify a universal effort-independent rewiring mechanism."
+  },
+  "not_established": [
+    "detection-corrected true rewiring",
+    "sampling-process-independent gain mechanism",
+    "causal effect of current opportunity",
+    "pollinator-side detection correction",
+    "strict prospective forecasting",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "The annual binary gain association survives direct adjustment for focal-plant census counts, but the response remains detection-sensitive and the effort-standardized subseason incidence result is fold-mixed. Use this as evidence that focal-plant census effort alone does not exhaust the annual gain association, not as evidence for true ecological rewiring or routeability."
+}

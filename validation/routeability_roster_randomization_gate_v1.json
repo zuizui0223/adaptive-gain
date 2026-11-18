@@ -1,0 +1,67 @@
+{
+  "schema": "adaptive-gain-routeability-roster-randomization-gate-v1",
+  "date": "2026-09-27",
+  "status": "algorithm_frozen_actual_eligible_roster_pending",
+  "timing": {
+    "eligibility_freeze": "after architecture-neutral familiarization/engagement screening and before architecture-specific training or treatment outcomes",
+    "treatment_assignment": "after eligible roster and colony IDs are frozen",
+    "randomization_seed": "freeze before assignments are generated"
+  },
+  "eligible_roster": {
+    "required_columns": [
+      "individual_id",
+      "colony_id"
+    ],
+    "forbidden_inputs": [
+      "architecture or access assignment",
+      "budget or treatment cell",
+      "architecture-specific training accuracy",
+      "test accuracy or behavioral outcome",
+      "reward response",
+      "H1/H2 or other focal-effect information"
+    ],
+    "hash_rule": "the exact eligible roster CSV is SHA-256 hashed in the randomization receipt",
+    "replacement_rule": "eligible but unassigned individuals remain explicitly unassigned; do not add them later based on treatment performance or outcomes"
+  },
+  "blocking": {
+    "treatment_cell_count": 12,
+    "rule": "complete 12-cell treatment blocks are formed within a single colony; each complete block assigns exactly one individual to every architecture x access x budget cell",
+    "reason": "prevents colony identity from becoming confounded with treatment-cell imbalance",
+    "individuals_per_cell": "equals the total number of complete colony blocks across colonies",
+    "counterbalance_rule": "individuals per cell must be a multiple of four so each treatment cell receives the four cue-symbol profiles equally often"
+  },
+  "allocation": {
+    "algorithm": "allocate complete blocks across colonies as evenly as possible subject to each colony's floor(n_eligible/12) block capacity; break equal-capacity choices by the frozen RNG seed",
+    "within_block": "shuffle the 12 eligible individuals and 12 treatment cells with the frozen seed",
+    "counterbalance_profile": "one frozen cue-symbol profile per complete block, cycling cb0,cb1,cb2,cb3 across global blocks",
+    "excess_individuals": "returned in a separate unassigned CSV"
+  },
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_roster_randomization.py",
+    "exporter": "examples/randomize_routeability_roster.py",
+    "regression_test": "tests/test_routeability_roster_randomization.py",
+    "outputs": [
+      "treatment assignment CSV",
+      "explicit unassigned eligible-individual CSV",
+      "JSON randomization receipt with roster SHA-256, eligibility rule, seed, colony block capacity and balance audits"
+    ]
+  },
+  "finalization": {
+    "current_status": "actual eligible roster not yet available",
+    "required_before_confirmatory_collection": [
+      "architecture-neutral eligibility rule frozen",
+      "eligible roster and colony IDs frozen",
+      "definitive individuals-per-cell frozen by final power operating-characteristic surface",
+      "randomization seed frozen",
+      "assignment and unassigned artifacts generated and checksum-frozen before architecture-specific training"
+    ]
+  },
+  "forbidden": [
+    "selecting replacement individuals after seeing architecture-specific training or test performance",
+    "randomizing individuals before the architecture-neutral eligibility rule is applied",
+    "allowing a colony to contribute only selected treatment cells when complete-block capacity exists",
+    "changing treatment assignments to improve apparent colony balance after outcomes are observed",
+    "treating unassigned eligible individuals as an outcome-dependent reserve"
+  ],
+  "claim_ceiling": "The algorithm removes avoidable treatment-colony imbalance by design. It does not make colony a negligible biological source of variation; colony remains a hierarchical factor in the frozen analysis."
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "adaptive-gain-villavicencio-covariate-time-support-audit-v1",
+  "date": "2026-09-28",
+  "status": "aggregate_time_support_confirmed",
+  "source": {
+    "dataset_doi": "10.5061/dryad.8cz8w9gm1",
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "public_methods": "Dryad dataset methods",
+    "workbook": "plant_pollinator_data.xlsx"
+  },
+  "time_support": {
+    "phenological_overlap": {
+      "workbook_shape": "45 plants x 135 pollinators plus row/column labels",
+      "year_indexed": false,
+      "source_definition": "number of weeks across the entire six-year sampling period in which each plant-pollinator pair co-occurred"
+    },
+    "flower_abundance": {
+      "workbook_fields": [
+        "plant_ids",
+        "flower_abtot"
+      ],
+      "year_indexed": false,
+      "source_definition": "flower counts summed across years to obtain one overall abundance per plant species over the entire six-year sampling period"
+    },
+    "morphology": {
+      "year_indexed": false,
+      "role": "species-level plant and pollinator traits"
+    }
+  },
+  "consequence_for_cross_validation": {
+    "held_out_object": "annual link outcome rows for one transition",
+    "not_held_out": "the temporal support used to construct study-wide phenological overlap and overall flower abundance",
+    "allowed_label": "leave-one-transition-out held-out response discrimination",
+    "forbidden_labels": [
+      "strict prospective forecasting",
+      "future-link prediction from past-only covariates",
+      "temporal extrapolation with all predictors estimated only from training years"
+    ]
+  },
+  "interpretation": "The annual CV still asks whether study-wide independently tabulated ecological filters discriminate link gains and losses in a held-out annual transition. It does not establish that those filters would forecast a future transition when estimated using only information available beforehand.",
+  "impact_on_existing_result": {
+    "phenology_block_result": "retained as a held-out response predictive-filter result",
+    "gain_loss_asymmetry": "retained as a retrospective held-out discrimination asymmetry",
+    "routeability": "not established",
+    "causal_primacy": "not established"
+  },
+  "claim_ceiling": "Use the annual Villavicencio analysis as a retrospective external-response bridge and feasibility result. Do not describe it as a prospective forecast until year-specific or genuinely past-only covariates are reconstructed."
+}

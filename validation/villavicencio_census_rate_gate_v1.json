@@ -1,0 +1,62 @@
+{
+  "schema": "adaptive-gain-villavicencio-census-rate-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_effort_audit_rate_response_design_frozen",
+  "analysis_status": "designed after sampling-effort sensitivity of binary link states was established; detection-standardized ecological association only, not confirmatory rewiring",
+  "purpose": "Replace binary gain/loss as the ecological response with focal-dyad interaction incidence per identifiable 5-min focal-plant census, so unequal focal-plant observation intensity enters as the binomial denominator rather than defining link presence.",
+  "sources": {
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "plant_codes": "plant_names.csv",
+    "pollinator_codes": "insect_names.csv",
+    "period_rule": "the same externally documented early/mid/late boundaries used in the raw 18-period reconstruction",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json"
+  },
+  "census_semantics": {
+    "unit": "one identifiable 5-min focal-plant observation census",
+    "identity": ["site", "year", "date", "codigo.p", "obs.time"],
+    "response_success": "the focal pollinator is recorded with no.fl.visit > 0 in that focal-plant census",
+    "response_trials": "number of identifiable 5-min censuses for the focal plant in the current subseason"
+  },
+  "candidate_dyad_surface": {
+    "plant_requirement": "focal plant has at least one identifiable census in both adjacent subseasons",
+    "pollinator_requirement": "focal pollinator is detected on at least one other plant in both adjacent subseasons",
+    "focal_response_exclusion": "the focal plant-pollinator interaction is never used to establish pollinator presence or the opportunity predictor",
+    "reason": "avoid defining the analysis surface from the same focal binary link state being modeled"
+  },
+  "predictors": {
+    "history": "Jeffreys-smoothed previous-period focal interaction detection rate, transformed to logit scale: (successes + 0.5)/(trials + 1)",
+    "current_siteweek_opportunity": "fraction of current focal-plant site x ISO-week cells in which the focal pollinator is detected on at least one other plant",
+    "full_model": ["history", "current_siteweek_opportunity"],
+    "baseline_model": ["history"]
+  },
+  "model": {
+    "family": "aggregated binomial logistic regression using current positive-census count out of current focal-plant census count",
+    "primary_scope": "strict_dated_core_2008_2010",
+    "primary_transitions": [
+      "2008_early->2008_mid",
+      "2008_mid->2008_late",
+      "2009_early->2009_mid",
+      "2009_mid->2009_late",
+      "2010_early->2010_mid",
+      "2010_mid->2010_late"
+    ],
+    "cross_validation": "leave-one-subseason-transition-out",
+    "primary_metric": "held-out per-census binomial log loss",
+    "comparison": "baseline history-only versus history-plus-current-opportunity",
+    "promotion_rule": "current opportunity may be described as reproducible incremental information only if pooled held-out log loss improves and the full-minus-baseline improvement has the same positive direction in every primary held-out transition",
+    "secondary": ["weighted Brier score", "pooled current-response census count"]
+  },
+  "interpretation": {
+    "allowed": "current focal-response-excluded spatiotemporal opportunity carries held-out information about per-census interaction incidence beyond recent interaction history under an effort-standardized response",
+    "forbidden": [
+      "true latent link occupancy",
+      "ecological rewiring",
+      "causal effect of opportunity",
+      "sampling-process-independent mechanism",
+      "strict prospective forecasting",
+      "decision equivalence",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "This analysis standardizes the response for unequal focal-plant census effort by modeling interaction detections out of observed 5-min censuses. It can support an ecological opportunity association in observed interaction incidence, but it does not identify latent links, true rewiring, causality, or routeability."
+}

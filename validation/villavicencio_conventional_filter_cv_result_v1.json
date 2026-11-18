@@ -1,0 +1,148 @@
+{
+  "schema": "adaptive-gain-villavicencio-conventional-filter-cv-result-v1",
+  "date": "2026-09-27",
+  "status": "green_conventional_filter_predictive_baseline",
+  "scope": "annual detection-sensitive fallback; sampling-effort-stratified response holdout",
+  "source": {
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "gate": "validation/villavicencio_conventional_filter_gate_v1.json",
+    "sampling_effort_audit": "validation/villavicencio_sampling_effort_audit_v1.json",
+    "covariate_time_support_audit": "validation/villavicencio_covariate_time_support_audit_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36286958936,
+    "run_number": 42,
+    "conclusion": "success",
+    "head_sha": "42dafed46a67ce87ea7e71f13a0d8a40f9dee6ae",
+    "artifact_id": 10921105110,
+    "artifact_digest": "sha256:18e1754da7962f1bd23c38a0c9508160e796324e5cbe803b72e861461cd407b3",
+    "all_pipeline_steps": "success"
+  },
+  "analysis_surface": {
+    "shared_dyad_rows": 7620,
+    "complete_case_rows": 7186,
+    "complete_case_fraction": 0.9430446194225722,
+    "frozen_predictor_count": 10,
+    "decision_equivalence_inferred": false,
+    "predictor_tuning_after_outcome": false
+  },
+  "primary_scope": {
+    "name": "strict_core_2008_2011",
+    "transitions": [
+      "2008->2009",
+      "2009->2010",
+      "2010->2011"
+    ],
+    "role": "sampling-consistent primary annual fallback",
+    "gain": {
+      "n": 4480,
+      "events": 430,
+      "event_fraction": 0.09598214285714286,
+      "model_log_loss": 0.2546726063412769,
+      "null_log_loss": 0.3288877196742357,
+      "heldout_log_loss_improvement": 0.07421511333295877,
+      "relative_log_loss_reduction": 0.22565486302276372,
+      "model_brier": 0.07683300508081778,
+      "null_brier": 0.08888192713825988,
+      "heldout_brier_improvement": 0.012048922057442096,
+      "roc_auc": 0.8652316968130922,
+      "folds": 3,
+      "all_folds_converged": true,
+      "endpoint_gate": "PASS"
+    },
+    "loss": {
+      "n": 674,
+      "events": 330,
+      "event_fraction": 0.4896142433234421,
+      "model_log_loss": 0.6600786511109732,
+      "null_log_loss": 0.6994793188399504,
+      "heldout_log_loss_improvement": 0.03940066772897721,
+      "relative_log_loss_reduction": 0.05632856707517978,
+      "model_brier": 0.2338373096255081,
+      "null_brier": 0.25316216212934833,
+      "heldout_brier_improvement": 0.019324852503840223,
+      "roc_auc": 0.6504668780831572,
+      "folds": 3,
+      "all_folds_converged": true,
+      "endpoint_gate": "PASS"
+    },
+    "promotion_gate": "PASS"
+  },
+  "sensitivities": {
+    "near_core_2007_2011": {
+      "gain": {
+        "n": 5756,
+        "events": 550,
+        "relative_log_loss_reduction": 0.2531446209669688,
+        "roc_auc": 0.8862731812943109,
+        "endpoint_gate": "PASS"
+      },
+      "loss": {
+        "n": 854,
+        "events": 417,
+        "relative_log_loss_reduction": 0.0659399786463759,
+        "roc_auc": 0.6716878213676198,
+        "endpoint_gate": "PASS"
+      }
+    },
+    "all_annual_2006_2011": {
+      "gain": {
+        "n": 6229,
+        "events": 628,
+        "relative_log_loss_reduction": 0.2580245332988479,
+        "roc_auc": 0.8881802271432422,
+        "endpoint_gate": "PASS"
+      },
+      "loss": {
+        "n": 957,
+        "events": 467,
+        "relative_log_loss_reduction": 0.06819505369007979,
+        "roc_auc": 0.6732028143163047,
+        "endpoint_gate": "PASS"
+      }
+    }
+  },
+  "ecological_interpretation": {
+    "status": "QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE_AUDIT",
+    "gain": "The numerical full-model gain skill is reproducible but cannot be interpreted as an outcome-independent ecological-filter result because non-zero published phenological overlap is nested entirely within dyads that are observed as links at least once over 2006-2011.",
+    "loss": "The loss endpoint remains descriptive only. Removing phenology leaves modest primary discrimination (AUC 0.5995; relative log-loss reduction 0.0131) and one of three primary folds has negative proper-score skill.",
+    "routeability": "No routeability or decision-equivalence inference is supported.",
+    "detection_update": "A later raw-census audit reconstructs 5-min observation effort and shows binary link gain/loss is materially detection-sensitive. Therefore even apart from phenology support leakage, this annual response cannot identify true ecological rewiring."
+  },
+  "next_gate": "Observational rewiring promotion is closed for this Villavicencio binary baseline. Use validation/villavicencio_rewiring_claim_resolution_v1.json as the authoritative interpretation; any further routeability evidence must come from a detection-defensible independent network with an external decision layer or the controlled experiment.",
+  "claim_ceiling": "Historical held-out numerical performance only. The gain result is quarantined by phenology support leakage, and the binary annual response is materially detection-sensitive under the raw-census audit. It is not evidence for sampling-effort-independent ecological rewiring, prospective forecasting, causal filtering, or routeability.",
+  "time_support": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "held_out": "annual link outcomes",
+    "not_held_out": "full temporal support used to construct phenological overlap and flower abundance",
+    "interpretation": "held-out annual-link discrimination, not strict prospective forecasting"
+  },
+  "historical_ecological_interpretation": {
+    "primary": "independently measured phenology, abundance and raw morphology carry reproducible information about both link formation and link loss across held-out annual transitions",
+    "asymmetry": "the conventional-filter baseline discriminates held-out annual link gains substantially better than losses in the sampling-consistent primary scope",
+    "residual_opportunity": "predictive improvement is incomplete for both endpoints, leaving a well-defined residual target for any later independent decision-structure layer",
+    "not_established": [
+      "causal effects of individual traits",
+      "true species turnover",
+      "decision-equivalence classes",
+      "environmental routeability",
+      "incremental value of decision structure beyond conventional filters",
+      "strict prospective forecasting from past-only covariates"
+    ]
+  },
+  "supersession": {
+    "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
+    "date": "2026-09-28",
+    "numerical_result_retained": true,
+    "gain_filter_interpretation_valid": false,
+    "required_next_step": "STOP_OBSERVATIONAL_REWIRING_PROMOTION",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "effort_standardized_result": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "final_claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+  }
+}

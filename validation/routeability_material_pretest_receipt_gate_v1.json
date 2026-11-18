@@ -1,0 +1,47 @@
+{
+  "schema": "adaptive-gain-routeability-material-pretest-receipt-gate-v1",
+  "date": "2026-09-29",
+  "status": "qualification_algorithm_frozen_material_data_pending",
+  "parent_gate": "validation/routeability_physical_cue_feasibility_gate_v1.json",
+  "purpose": "Make the architecture-neutral physical-cue material qualification rule executable and hash-addressed before confirmatory allocation.",
+  "inputs": {
+    "trial_log_csv_required_columns": [
+      "material_set_id",
+      "individual_id",
+      "cue_identity",
+      "sequence_index",
+      "correct",
+      "architecture_neutral",
+      "confirmatory_roster_member"
+    ],
+    "material_spec_json_required": [
+      "material_set_id",
+      "cue_roles"
+    ],
+    "cue_roles_exact": [
+      "q_route",
+      "q_left",
+      "q_right"
+    ]
+  },
+  "qualification_rule": {
+    "each_cue_minimum_scored_choices": 20,
+    "each_cue_final20_accuracy_at_least": 0.8,
+    "best_minus_worst_final20_accuracy_at_most": 0.1,
+    "all_rows_architecture_neutral": true,
+    "confirmatory_roster_members_forbidden": true,
+    "no_posthoc_cue_dropping": true
+  },
+  "hash_chain": {
+    "trial_log_sha256_required": true,
+    "material_spec_sha256_required": true,
+    "promotion": "Only a PASS receipt may be linked into the final confirmatory stimulus/schedule chain; changing the material specification requires a new pretest and receipt."
+  },
+  "failure_policy": "A failed material set is redesigned and re-tested architecture-neutrally. Do not exclude randomized confirmatory animals or alter cue identities after confirmatory allocation to rescue performance.",
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_material_pretest.py",
+    "exporter": "examples/build_routeability_material_pretest_receipt.py",
+    "regression_test": "tests/test_routeability_material_pretest.py"
+  },
+  "claim_ceiling": "Passing qualifies simple cue learnability and gross salience balance only. It does not establish routeability, treatment effects, final N, ethics approval, or confirmatory biological performance."
+}

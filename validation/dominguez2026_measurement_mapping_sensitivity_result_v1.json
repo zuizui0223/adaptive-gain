@@ -1,0 +1,86 @@
+{
+  "schema": "adaptive-gain-dominguez2026-measurement-mapping-sensitivity-result-v1",
+  "date": "2026-09-29",
+  "status": "measurement_mapping_sensitive_no_clean_gain_rescue",
+  "analysis_status": "post-result diagnostic after the pre-frozen focal-excluded external gain mismatch; cannot redefine the primary replication",
+  "parent_result": "validation/dominguez2026_external_axis_replication_result_v1.json",
+  "validation": {
+    "workflow": "External axis replication screen",
+    "workflow_run": 36509682465,
+    "run_number": 14,
+    "conclusion": "success",
+    "head_sha": "f6bf8ca4f3f1e82c093ed59f151033d2b02484a5",
+    "artifact_id": 11008802015,
+    "artifact_digest": "sha256:8b65aa48f49e538444aacef40f4334988d11930e50366b18e1a156b9f5e5691f"
+  },
+  "pairs": {
+    "plant_abundance_vs_published_pollinator_abundance": {
+      "gain": {
+        "full_auc": 0.642700836341898,
+        "plant_increment": 0.005082283372443153,
+        "pollinator_increment": 0.010707835640649699,
+        "pollinator_minus_plant": 0.005625552268206546,
+        "sites_matching_villavicencio_gain_direction": "7/12"
+      },
+      "loss": {
+        "full_auc": 0.7076668291386033,
+        "plant_increment": 0.006017453378455495,
+        "pollinator_increment": 0.052534699571708754,
+        "plant_minus_pollinator": -0.04651724619325326,
+        "sites_matching_villavicencio_loss_direction": "2/12"
+      }
+    },
+    "plant_phenology_vs_published_pollinator_abundance": {
+      "gain": {
+        "full_auc": 0.6904593580035634,
+        "plant_increment": 0.01821197745646741,
+        "pollinator_increment": 0.012736015197594652,
+        "pollinator_minus_plant": -0.0054759622588727574,
+        "sites_matching_villavicencio_gain_direction": "4/12"
+      },
+      "loss": {
+        "full_auc": 0.7272317736027414,
+        "plant_increment": 0.02048405200750436,
+        "pollinator_increment": 0.058420845717085945,
+        "plant_minus_pollinator": -0.037936793709581584,
+        "sites_matching_villavicencio_loss_direction": "1/12"
+      }
+    },
+    "plant_phenology_vs_published_pollinator_phenology": {
+      "gain": {
+        "full_auc": 0.7056191538118904,
+        "plant_increment": 0.01892255796875819,
+        "pollinator_increment": 0.019432166909943538,
+        "pollinator_minus_plant": 0.0005096089411853466,
+        "sites_matching_villavicencio_gain_direction": "5/12"
+      },
+      "loss": {
+        "full_auc": 0.7133182677537516,
+        "plant_increment": 0.019718310876920886,
+        "pollinator_increment": 0.04585335580970551,
+        "plant_minus_pollinator": -0.026135044932784623,
+        "sites_matching_villavicencio_loss_direction": "3/12"
+      }
+    }
+  },
+  "diagnostic_read": {
+    "gain": "Alternative pollinator measurements do not produce a stable rescue of the Villavicencio gain-side pollinator dominance. The direction ranges from plant-dominant to nearly tied to weakly pollinator-dominant depending on measurement pair.",
+    "loss": "Published pollinator abundance/phenology can dominate loss prediction, opposite to the focal-excluded primary external loss result. Because these published pollinator metrics may share observational support with the focal interaction response, this does not overturn the cleaner primary result but demonstrates strong measurement sensitivity.",
+    "cross_system_implication": "The existence of predictive structure on recorded annual links is more portable than exact plant-versus-pollinator axis dominance. Because the response is not detection-defensible for latent state, this sensitivity cannot adjudicate universal ecological assembly/disassembly mechanisms."
+  },
+  "not_established": [
+    "a universal pollinator-side gain mechanism",
+    "a universal plant-side loss mechanism independent of measurement definition",
+    "cross-system latent ecological gain/loss replication",
+    "that published pollinator abundance or phenology is focal-response-independent",
+    "causal assembly-disassembly asymmetry",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Post-result measurement sensitivity on recorded annual-link prediction only. The pre-frozen external gain mismatch remains the primary observed-link result, and the response-validity gate prevents any measurement mapping from being promoted to latent ecological mechanism or routeability evidence.",
+  "response_validity": {
+    "gate": "validation/dominguez2026_response_validity_v1.json",
+    "classification": "observed_link_turnover_only",
+    "role": "measurement-mapping sensitivity on recorded annual-link prediction, not latent ecological state"
+  }
+}

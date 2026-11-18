@@ -1,0 +1,66 @@
+{
+  "schema": "adaptive-gain-villavicencio-latent-opportunity-decomposition-gate-v1",
+  "date": "2026-09-29",
+  "status": "conditional_post_detection_identifiability_design_frozen",
+  "analysis_status": "designed before inspecting opportunity effects in the latent-state model; runs only if the two-season detection gate identifies at least five of six transitions",
+  "parent_gate": "validation/villavicencio_two_season_detection_gate_v1.json",
+  "purpose": "Separate a current focal-response-excluded opportunity association with latent interaction transitions from an association with current-period per-census detection probability.",
+  "scope": "same six strict_dated_core_2008_2010 transitions and same focal-response-excluded candidate surface as the census-rate and two-season detection analyses",
+  "covariate": {
+    "name": "current_siteweek_opportunity_fraction",
+    "definition": "fraction of focal-plant current site x ISO-week cells in which the focal pollinator is independently detected on at least one other plant",
+    "preprocessing": "z-score within transition before fitting"
+  },
+  "models_per_transition": {
+    "base": {
+      "parameters": ["psi", "gamma", "epsilon", "p_previous", "p_current"],
+      "role": "no opportunity effect"
+    },
+    "detection_only": {
+      "state": "gamma and epsilon constant",
+      "detection": "logit(p_current_i) = alpha_p_current + beta_detection * opportunity",
+      "role": "tests whether opportunity acts only as a current detectability/activity covariate"
+    },
+    "state_only": {
+      "state": [
+        "logit(gamma_i) = alpha_gamma + beta_gain * opportunity",
+        "logit(epsilon_i) = alpha_epsilon + beta_loss * opportunity"
+      ],
+      "detection": "p_previous and p_current constant",
+      "role": "tests latent colonization/persistence association without detection modulation"
+    },
+    "state_plus_detection": {
+      "state": [
+        "logit(gamma_i) = alpha_gamma + beta_gain * opportunity",
+        "logit(epsilon_i) = alpha_epsilon + beta_loss * opportunity"
+      ],
+      "detection": "logit(p_current_i) = alpha_p_current + beta_detection * opportunity",
+      "role": "allows both mechanisms"
+    }
+  },
+  "optimizer": {
+    "method": "R optim L-BFGS-B",
+    "logit_bounds": [-8, 8],
+    "deterministic_multi_starts": true,
+    "require_convergence_and_finite_coefficients": true
+  },
+  "model_comparison": {
+    "criterion": "AIC within transition",
+    "material_advantage": "AIC at least 2 lower than comparator",
+    "state_evidence_rule": "state component is called transition-level supported only when state_plus_detection has AIC at least 2 lower than detection_only and beta_gain > 0 and beta_loss < 0",
+    "detection_evidence_rule": "detection component is called transition-level supported when detection_only has AIC at least 2 lower than base and beta_detection > 0",
+    "cross_transition_promotion": "a general latent state-opportunity result requires transition-level state support in at least five of six transitions; otherwise report mixed/no general state effect",
+    "no_posthoc_threshold_change": true
+  },
+  "interpretation": {
+    "allowed": "diagnose whether current opportunity is more consistent with latent transition structure, detectability, both, or neither under the simple occupancy model",
+    "forbidden": [
+      "causal opportunity effect",
+      "treating AIC model preference as experimental identification",
+      "routeability inference",
+      "changing the state/detection parameterization after seeing coefficients",
+      "overriding a failed five-of-six state rule with pooled significance"
+    ]
+  },
+  "claim_ceiling": "Even if a latent state component is supported, this remains an observational detection-model sensitivity analysis. If detection-only explains the signal or the state rule is not met in five of six transitions, do not promote current opportunity as a general driver of ecological rewiring."
+}

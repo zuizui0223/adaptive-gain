@@ -1,0 +1,82 @@
+{
+  "schema": "adaptive-gain-villavicencio-detection-effort-identity-result-v1",
+  "date": "2026-09-30",
+  "status": "observed_gain_loss_direction_strongly_aligned_with_detection_map",
+  "analysis_status": "deterministic observation-process diagnostic using previously fitted transition-specific detection probabilities; not an independent ecological prediction model",
+  "source": {
+    "identity_gate": "validation/detection_effort_gain_loss_identity_v1.json",
+    "census_rate_table": "Villavicencio latent-detection workflow census_rate_table.csv",
+    "detection_model": "validation/villavicencio_two_season_detection_result_v1.json",
+    "recomputed_from_validated_artifact": {
+      "workflow": "Villavicencio latent detection audit",
+      "workflow_run": 36588463423,
+      "run_number": 116,
+      "artifact_id": 11044862992,
+      "artifact_digest": "sha256:61077e9af5e8a41775dd35dfc14a659d331854e1273773afe112283fb9da3cd9",
+      "role": "independent pre-workflow cross-check retained for provenance; superseded as primary validation by validation.workflow_run"
+    }
+  },
+  "exact_identity": {
+    "persistent_latent_link": true,
+    "gain": "P(G)=(1-q_previous)q_current",
+    "loss": "P(L)=q_previous(1-q_current)",
+    "difference": "P(G)-P(L)=q_current-q_previous",
+    "independent_census_special_case": "q=1-(1-p)^n",
+    "general_binary_conservation": "P(0->1)-P(1->0)=P(Y_current=1)-P(Y_previous=1); no independence assumption",
+    "persistent_link_specialization": "P(observed gain)-P(observed loss)=q_current-q_previous; no period-independence assumption is needed for this difference",
+    "product_formula_assumption": "the listed product formulas P(G)=(1-q_previous)q_current and P(L)=q_previous(1-q_current), and the corresponding odds-ratio identity, require period-level conditional independence"
+  },
+  "all_six_transitions": {
+    "changed_rows": 449,
+    "observed_gain": 196,
+    "observed_loss": 253,
+    "auc_detection_q_difference_gain_over_loss": 0.8517383237880132,
+    "auc_raw_census_difference_gain_over_loss": 0.8386303137855933,
+    "mean_q_difference_observed_gain": 0.126137482001549,
+    "mean_q_difference_observed_loss": -0.2997544767736691,
+    "fraction_gain_with_q_current_gt_previous": 0.6530612244897959,
+    "fraction_loss_with_q_current_lt_previous": 0.857707509881423
+  },
+  "identified_five_transition_subset": {
+    "changed_rows": 357,
+    "observed_gain": 151,
+    "observed_loss": 206,
+    "auc_detection_q_difference_gain_over_loss": 0.8370571593904713,
+    "auc_raw_census_difference_gain_over_loss": 0.828489680447502,
+    "mean_q_difference_observed_gain": 0.09200030926737736,
+    "mean_q_difference_observed_loss": -0.2846718169791671,
+    "fraction_gain_with_q_current_gt_previous": 0.5761589403973509,
+    "fraction_loss_with_q_current_lt_previous": 0.883495145631068
+  },
+  "per_transition_auc_detection_q_difference": {
+    "2008_early->2008_mid": 0.7320261437908496,
+    "2008_mid->2008_late": 0.9093434343434343,
+    "2009_early->2009_mid": 0.8933806146572104,
+    "2009_mid->2009_late": 0.8206168831168831,
+    "2010_early->2010_mid": 0.8983333333333333,
+    "2010_mid->2010_late": 0.8255172413793104
+  },
+  "interpretation": {
+    "supported": "The direction of observed binary changes is strongly aligned with the exact observation-process asymmetry expected when period-level detection probability changes, even under a persistent-latent-link counterfactual.",
+    "mechanistic_read": "The independence-free binary conservation identity shows that a change in marginal observed-presence probability necessarily creates a gain-minus-loss imbalance. For a persistent latent link this imbalance is q_current-q_previous. The fitted Villavicencio diagnostic then shows that observed gain/loss direction is strongly aligned with this detectability axis.",
+    "important_boundary": "The q values use detection probabilities fitted from the same repeated-census dataset, so the AUC is a mechanistic diagnostic of the observation map, not independent predictive validation and not an estimate of the fraction of false rewiring."
+  },
+  "not_established": [
+    "that individual observed gains or losses are false",
+    "biological fraction of observed turnover",
+    "that the simple fitted detection model is the true observation process",
+    "true latent ecological gain or loss",
+    "routeability"
+  ],
+  "claim_ceiling": "The exact identity plus the high diagnostic AUC explains why binary gain/loss direction can track effort and detectability so strongly. It strengthens the rewiring-identification boundary but does not convert detection modeling into a corrected ecological rewiring response.",
+  "validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36621806381,
+    "run_number": 120,
+    "conclusion": "success",
+    "head_sha": "e07e2b79bd8a8a4a269ba9d9e67eadf8cc8e7363",
+    "artifact_id": 11058975675,
+    "artifact_digest": "sha256:36affa6daf26599713c8aa6fb5da7f86bf1b9777c954026330e280ad7437b99e",
+    "reproduction": "dedicated identity audit step reproduced the frozen AUCs and per-transition values from the same census-rate and two-season-detection surfaces"
+  }
+}

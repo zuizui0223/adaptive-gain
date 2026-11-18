@@ -1,0 +1,67 @@
+{
+  "schema": "adaptive-gain-routeability-final-schedule-gate-v1",
+  "date": "2026-09-27",
+  "status": "compiler_frozen_actual_roster_and_final_n_pending",
+  "chain": [
+    "architecture-neutral eligible roster",
+    "roster SHA-256",
+    "complete within-colony treatment randomization",
+    "assignment CSV SHA-256 recorded in randomization receipt",
+    "assignment-locked final trial schedule compilation",
+    "final schedule SHA-256",
+    "preregistration final_schedule reference/hash"
+  ],
+  "assignment_integrity": {
+    "required_fields": [
+      "individual_id",
+      "colony_id",
+      "complete_block_id",
+      "architecture",
+      "access_mode",
+      "budget",
+      "treatment_cell",
+      "counterbalance_profile"
+    ],
+    "rule": "compiler must reproduce every frozen treatment/colony/profile assignment exactly; treatment-cell or profile mismatch is fatal",
+    "input_hash": "assignment CSV SHA-256 must equal randomization receipt assignments_sha256 before compilation"
+  },
+  "trial_randomization": {
+    "global_seed": "domain-separated deterministically from the frozen roster randomization seed",
+    "derivation": "sha256('routeability-final-trial-schedule-v1|<randomization_seed>')",
+    "per_individual_seed": "sha256(global trial seed + individual/colony/treatment/profile identity)",
+    "row_order_invariance": "sorting/input CSV row order cannot change an individual's trial schedule",
+    "within_individual": [
+      "each four-trial block contains each state exactly once",
+      "terminal side assignment balanced",
+      "state-independent fixed cue order balanced"
+    ]
+  },
+  "outputs": {
+    "compiler": "examples/compile_routeability_final_schedule.py",
+    "module": "adaptive_gain/routeability_final_schedule.py",
+    "regression_test": "tests/test_routeability_final_schedule.py",
+    "artifacts": [
+      "final trial schedule CSV with actual individual and colony IDs",
+      "schedule receipt JSON with assignment hash, randomization-receipt hash, derived seed, schedule hash and balance audit"
+    ]
+  },
+  "finalization": {
+    "current_status": "actual eligible roster and definitive individuals-per-cell not yet available",
+    "required_before_preregistration": [
+      "final N frozen from GLMM operating-characteristic gate",
+      "architecture-neutral eligible roster frozen",
+      "roster randomization receipt generated",
+      "assignment CSV hash verified",
+      "final schedule compiled from the matching assignment receipt",
+      "final schedule SHA-256 inserted into preregistration finalization payload"
+    ]
+  },
+  "forbidden": [
+    "hand-editing final trial schedule after roster randomization",
+    "reassigning counterbalance profiles during schedule compilation",
+    "using an assignment CSV whose hash differs from the randomization receipt",
+    "regenerating schedules with a different seed after outcomes or training performance are observed",
+    "treating the generic anonymous schedule builder as the final assigned-individual schedule"
+  ],
+  "claim_ceiling": "This gate makes the final trial schedule a deterministic descendant of the frozen eligible roster and randomized assignment. It does not supply the roster, final N, pilot, ethics or preregistration itself."
+}

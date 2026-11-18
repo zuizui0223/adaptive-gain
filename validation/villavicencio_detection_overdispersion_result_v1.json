@@ -1,0 +1,85 @@
+{
+  "schema": "adaptive-gain-villavicencio-detection-overdispersion-result-v1",
+  "date": "2026-09-29",
+  "status": "latent_transition_inference_model_sensitive",
+  "analysis_status": "post-identifiability observation-model robustness stress test; not a latent ecological effect analysis",
+  "source": {
+    "design_gate": "validation/villavicencio_detection_overdispersion_gate_v1.json",
+    "simple_detection_result": "validation/villavicencio_two_season_detection_result_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36541521307,
+    "run_number": 21,
+    "conclusion": "success",
+    "head_sha": "13a493fc75c742ecc364fa23e5e59c16d91a641a",
+    "artifact_id": 11020653096,
+    "artifact_digest": "sha256:19d34b8f1c33101b1e53bc3bbae06e7001a6efb6de38a5c2324c054bdb47aea6"
+  },
+  "frozen_sensitivity_rule": {
+    "beta_binomial_preferred_transition_count": 6,
+    "required_beta_binomial_preferred_count": 5,
+    "state_transition_boundary_count": 6,
+    "required_state_transition_boundary_count": 3,
+    "model_sensitivity_rule_met": true
+  },
+  "transition_results": {
+    "2008_early->2008_mid": {
+      "delta_aic_beta_minus_binomial": -24.753580694525,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.162060814150396
+    },
+    "2008_mid->2008_late": {
+      "delta_aic_beta_minus_binomial": -44.9184940104392,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.000335350130466478
+    },
+    "2009_early->2009_mid": {
+      "delta_aic_beta_minus_binomial": -100.482616692698,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.000335350130466478
+    },
+    "2009_mid->2009_late": {
+      "delta_aic_beta_minus_binomial": -103.216231366224,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.085211704766781
+    },
+    "2010_early->2010_mid": {
+      "delta_aic_beta_minus_binomial": -13.7577042995524,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.000335350130466478
+    },
+    "2010_mid->2010_late": {
+      "delta_aic_beta_minus_binomial": -50.8519855091657,
+      "beta_binomial_preferred": true,
+      "state_transition_boundary": true,
+      "gamma": 0.000335350130466478,
+      "epsilon": 0.000335350130466478
+    }
+  },
+  "ecological_read": {
+    "supported": "Allowing extra-binomial heterogeneity in repeated focal-interaction detections materially changes the observation model in every primary transition.",
+    "model_comparison": "The beta-binomial detection model has AIC at least 13.8 lower than the simple binomial model in every transition, and much larger improvements in four transitions.",
+    "state_instability": "At least one latent transition parameter is driven to the frozen logit boundary in all six transitions under the richer detection model.",
+    "consequence": "The simple-binomial latent gain/loss estimates are not robust enough to restore a detection-corrected ecological rewiring response."
+  },
+  "not_established": [
+    "the beta-binomial model is the true observation process",
+    "true latent gain or loss rates",
+    "the biological fraction of the 853 raw observed-link changes",
+    "causal opportunity effects",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Observation-model sensitivity is decisive under the frozen stress rule: beta-binomial detection is preferred in 6/6 transitions and latent transition estimates hit a state boundary in 6/6. Detection-corrected rewiring therefore remains model-dependent and must not be promoted as an identified ecological response."
+}

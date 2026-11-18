@@ -1,0 +1,125 @@
+{
+  "schema": "adaptive-gain-villavicencio-latent-opportunity-decomposition-result-v1",
+  "date": "2026-09-29",
+  "status": "latent_opportunity_state_effect_not_general_detection_component_common",
+  "analysis_status": "conditional post-detection-identifiability decomposition; model structure and five-of-six rule were frozen before opportunity coefficients were inspected",
+  "source": {
+    "design_gate": "validation/villavicencio_latent_opportunity_decomposition_gate_v1.json",
+    "detection_result": "validation/villavicencio_two_season_detection_result_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio latent detection audit",
+    "workflow_run": 36540686413,
+    "run_number": 5,
+    "conclusion": "success",
+    "head_sha": "2da133eaae456f2fda0b0d132e04a5367fdadfe8",
+    "artifact_id": 11020721111,
+    "artifact_digest": "sha256:6e84f05d6b04e3a9bd533ccd3b23dfe2efd68013609d7a3dbb1a6bb13ea1197c"
+  },
+  "frozen_rule_result": {
+    "state_supported_transition_count": 1,
+    "detection_supported_transition_count": 4,
+    "required_state_supported_transition_count": 5,
+    "general_state_promotion_rule_met": false
+  },
+  "transition_results": {
+    "2008_early->2008_mid": {
+      "state_component_supported": true,
+      "detection_component_supported": true,
+      "detection_only_delta_aic_vs_base": -5.558239222089924,
+      "state_plus_detection_delta_aic_vs_detection_only": -6.255076821019884,
+      "state_plus_detection_betas": {
+        "gain": 0.628659876748974,
+        "loss": -1.88805037584916,
+        "detection": -0.069346154133155
+      }
+    },
+    "2008_mid->2008_late": {
+      "state_component_supported": false,
+      "detection_component_supported": true,
+      "detection_only_delta_aic_vs_base": -14.11251611632997,
+      "state_plus_detection_delta_aic_vs_detection_only": 3.2352685601499616,
+      "state_plus_detection_betas": {
+        "gain": 0.398696018591031,
+        "loss": 0.124313174568025,
+        "detection": 0.505331175754026
+      }
+    },
+    "2009_early->2009_mid": {
+      "state_component_supported": false,
+      "detection_component_supported": false,
+      "detection_only_delta_aic_vs_base": 1.9028254855600153,
+      "state_plus_detection_delta_aic_vs_detection_only": 3.1944191862501157,
+      "state_plus_detection_betas": {
+        "gain": 0.359606012578367,
+        "loss": 0.0394928383552593,
+        "detection": -0.0770385230822091
+      }
+    },
+    "2009_mid->2009_late": {
+      "state_component_supported": false,
+      "detection_component_supported": false,
+      "detection_only_delta_aic_vs_base": 1.3926933404140982,
+      "state_plus_detection_delta_aic_vs_detection_only": 3.1666762351969737,
+      "state_plus_detection_betas": {
+        "gain": 0.304156342387242,
+        "loss": -1.73809445743804,
+        "detection": -0.487102597983263
+      }
+    },
+    "2010_early->2010_mid": {
+      "state_component_supported": false,
+      "detection_component_supported": true,
+      "detection_only_delta_aic_vs_base": -22.869788436208978,
+      "state_plus_detection_delta_aic_vs_detection_only": 3.5111839899029746,
+      "state_plus_detection_betas": {
+        "gain": -0.259077847516611,
+        "loss": -6.87328245486388,
+        "detection": 0.856148478000183
+      }
+    },
+    "2010_mid->2010_late": {
+      "state_component_supported": false,
+      "detection_component_supported": true,
+      "detection_only_delta_aic_vs_base": -5.317998182439965,
+      "state_plus_detection_delta_aic_vs_detection_only": 2.3440841562020296,
+      "state_plus_detection_betas": {
+        "gain": 0.405250303319196,
+        "loss": -0.514592050057405,
+        "detection": 0.285622255208865
+      }
+    }
+  },
+  "ecological_read": {
+    "supported": "Current focal-response-excluded opportunity is more consistently associated with current-period detectability/activity than with latent link-state transitions under the simple detection model. Detection-only receives frozen support in four of six transitions; the latent state component meets the frozen support rule in only one of six.",
+    "not_supported": "The predeclared five-of-six rule for a general opportunity effect on latent colonization/persistence fails decisively.",
+    "consequence": "The strong binary-turnover opportunity association must not be interpreted as a general ecological rewiring mechanism. A substantial part of the signal is compatible with detecting active pollinators more readily when current opportunity is high.",
+    "optimizer_sensitivity": "The primary frozen result remains state 1/6 versus detection 4/6. A post-result stricter optimizer-stability sensitivity yields state 0/6 versus detection 2/6, strengthening rather than weakening the no-general-state conclusion without retroactively redefining the primary test."
+  },
+  "not_established": [
+    "opportunity causally changes detection",
+    "opportunity causally changes latent link state",
+    "the simple occupancy model is the true ecological process",
+    "a universal current-opportunity rewiring mechanism",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "The pre-frozen opportunity decomposition does not support a general latent-state rewiring effect: state-side support is 1/6 versus a frozen 5/6 requirement, while detection-side support occurs in 4/6 transitions. A post-result stricter optimizer sensitivity yields 0/6 versus 2/6 and cannot be used to rewrite the primary rule.",
+  "post_result_optimizer_reliability_sensitivity": {
+    "validation": {
+      "workflow": "Villavicencio latent detection audit",
+      "workflow_run": 36541521307,
+      "run_number": 21,
+      "conclusion": "success",
+      "head_sha": "13a493fc75c742ecc364fa23e5e59c16d91a641a",
+      "artifact_id": 11020653096,
+      "artifact_digest": "sha256:19d34b8f1c33101b1e53bc3bbae06e7001a6efb6de38a5c2324c054bdb47aea6"
+    },
+    "status": "stricter_optimizer_stability_makes_support_weaker",
+    "criterion": "best fit converged, all deterministic starts converged, and multi-start NLL range <= 1e-6",
+    "strict_state_supported_transition_count": 0,
+    "strict_detection_supported_transition_count": 2,
+    "role": "post-result robustness only; does not redefine the pre-frozen primary state/detection effect rule",
+    "interpretation": "Requiring stronger optimizer agreement does not rescue a latent-state opportunity effect; it removes the lone primary state-supported transition and reduces detection-side support from 4/6 to 2/6."
+  }
+}

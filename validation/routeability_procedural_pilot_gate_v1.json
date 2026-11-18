@@ -1,0 +1,84 @@
+{
+  "schema": "adaptive-gain-routeability-procedural-pilot-gate-v1",
+  "date": "2026-09-27",
+  "status": "prospective_nuisance_pilot_frozen_no_focal_effect_estimation",
+  "manuscript": "manuscript/ROUTEABILITY_PROCEDURAL_PILOT_V1.md",
+  "pilot_A": {
+    "role": "architecture-neutral apparatus calibration",
+    "focal_stimuli": false,
+    "outputs": [
+      "terminal-response latency distribution",
+      "timeout/non-response fraction",
+      "side/window bias diagnostics",
+      "apparatus error rate"
+    ],
+    "response_window_rule": "smallest prespecified candidate window containing at least 95% of terminal decisions among engaged calibration trials, subject to a predeclared upper bound",
+    "failure": "if no candidate reaches 95%, redesign/re-run pilot rather than tune on confirmatory treatments",
+    "material_precondition": "run only after the exact cue material set has passed the separate physical-cue feasibility gate; Pilot A does not rescue a failed cue-discrimination pretest"
+  },
+  "pilot_B": {
+    "role": "pooled B=3 full-information nuisance calibration",
+    "access_restriction": "none; all three cues visible",
+    "architecture_labels_in_nuisance_output": "pooled/masked where practical",
+    "allowed": [
+      "pooled correctness within frozen response window",
+      "pooled timeout probability",
+      "individual repeated-trial variation",
+      "colony variation",
+      "learning/fatigue summaries",
+      "apparatus-error rate"
+    ],
+    "forbidden": [
+      "architecture-specific accuracy",
+      "routeable-minus-bypass contrast",
+      "architecture x access contrast",
+      "B=2 data",
+      "H1 or H2 estimates"
+    ]
+  },
+  "sample_size_policy": {
+    "pilot_goal": "nuisance estimation and operational feasibility, not focal hypothesis power",
+    "theoretical_ceiling_as_effect_size": false,
+    "pilot_focal_effect_as_power_target": false,
+    "next_product": "operating-characteristic surface over individuals-per-cell, trials-per-individual, nuisance parameters, and a grid of scientifically relevant effects",
+    "final_N_status": "not frozen"
+  },
+  "promotion_gate": [
+    "stable response window from Pilot A",
+    "measurable pooled B=3 performance without catastrophic non-response",
+    "nuisance receipt produced without opening H1/H2",
+    "schedule feasible under available colony/individual supply",
+    "sample-size operating-characteristic analysis frozen before confirmatory allocation"
+  ],
+  "claim_ceiling": "The pilot can establish operational measurability and nuisance calibration only; it is not an empirical routeability test.",
+  "machine_surface": {
+    "module": "adaptive_gain/routeability_procedural_pilot.py",
+    "exporter": "examples/build_routeability_procedural_pilot_receipt.py",
+    "regression_tests": [
+      "tests/test_routeability_procedural_pilot.py",
+      "tests/test_routeability_procedural_pilot_exporter.py"
+    ],
+    "outputs": [
+      "frozen response-window selection from prespecified candidate grid",
+      "pooled B3 success and timeout fractions",
+      "balanced repeated-trial ICC moment when estimable",
+      "randomized-individual dropout fraction when randomized IDs are supplied"
+    ]
+  },
+  "power_bridge": {
+    "downstream_module": "adaptive_gain/routeability_experiment_power.py",
+    "required_fields": [
+      "trial_icc_moment",
+      "randomized_individual_dropout_fraction",
+      "pooled_success_fraction",
+      "pooled_timeout_fraction"
+    ],
+    "focal_contrast_opened_must_be_false": true
+  },
+  "prerequisite_material_gate": {
+    "path": "validation/routeability_physical_cue_feasibility_gate_v1.json",
+    "rule": "exact local cue materials must pass the architecture-neutral cue qualification before Pilot A timing/timeout calibration is treated as valid for the confirmatory apparatus",
+    "confirmatory_subject_selection": false,
+    "note": "material qualification uses separate/pre-randomization apparatus animals and cannot use B=2 architecture x access outcomes"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "adaptive-gain-routeability-nuisance-robustness-grid-gate-v1",
+  "date": "2026-09-29",
+  "status": "policy_frozen_before_real_pilot",
+  "purpose": "Freeze the nuisance-only GLMM bridge and robustness-grid expansion before real procedural-pilot data are available, so final power scenarios cannot be selected after viewing pilot nuisance values.",
+  "pilot_nuisance_glmm": {
+    "input": "pooled full-information B=3 Pilot B trial log only",
+    "forbidden_columns": [
+      "architecture",
+      "access_mode",
+      "budget",
+      "H1",
+      "H2"
+    ],
+    "model": "correct_within_window ~ 1 + (1|individual_id) + (1|colony_id) when multiple colonies are present; omit the colony random effect only when exactly one colony is present",
+    "timeout_semantics": "timeouts remain primary failures because correct_within_window is false for timeouts",
+    "outputs": [
+      "pooled intercept",
+      "individual random-intercept SD on logit scale",
+      "colony random-intercept SD on logit scale",
+      "singular-fit flag",
+      "convergence receipt"
+    ],
+    "role": "nuisance calibration only; no focal treatment contrast may enter the fit"
+  },
+  "robustness_policy": {
+    "sesoi": {
+      "source": "validation/routeability_sesoi_gate_v1.json",
+      "h1": 0.1,
+      "h2": 0.1,
+      "provenance": "practical_decision_threshold",
+      "fixed_across_every_scenario_and_candidate_N": true
+    },
+    "baseline_profiles": {
+      "hard_center": {
+        "bypass_fixed_by_budget": {
+          "1": 0.5,
+          "2": 0.55,
+          "3": 0.65
+        },
+        "bypass_access_effect_by_budget": {
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": 0,
+          "3": 0
+        }
+      },
+      "pilot_anchored": {
+        "bypass_fixed_by_budget": {
+          "1": "pilot_pooled_B3_success - 0.20",
+          "2": "pilot_pooled_B3_success - 0.10",
+          "3": "pilot_pooled_B3_success"
+        },
+        "bypass_access_effect_by_budget": {
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": -0.02,
+          "3": 0
+        }
+      },
+      "high_performance": {
+        "bypass_fixed_by_budget": {
+          "1": 0.65,
+          "2": 0.7,
+          "3": 0.8
+        },
+        "bypass_access_effect_by_budget": {
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0
+        },
+        "routeable_fixed_effect_by_budget": {
+          "1": 0,
+          "2": -0.02,
+          "3": 0
+        }
+      }
+    },
+    "nuisance_profiles": {
+      "nominal": {
+        "individual_sd_multiplier": 1,
+        "individual_sd_floor": 0,
+        "colony_sd_multiplier": 1,
+        "colony_sd_floor": 0,
+        "dropout_add": 0,
+        "timeout_add": 0
+      },
+      "variance_stress": {
+        "individual_sd_multiplier": 1.5,
+        "individual_sd_floor": 0.25,
+        "colony_sd_multiplier": 1.5,
+        "colony_sd_floor": 0.15,
+        "dropout_add": 0,
+        "timeout_add": 0
+      },
+      "attrition_stress": {
+        "individual_sd_multiplier": 1,
+        "individual_sd_floor": 0,
+        "colony_sd_multiplier": 1,
+        "colony_sd_floor": 0,
+        "dropout_add": 0.05,
+        "timeout_add": 0.05
+      },
+      "combined_stress": {
+        "individual_sd_multiplier": 1.5,
+        "individual_sd_floor": 0.25,
+        "colony_sd_multiplier": 1.5,
+        "colony_sd_floor": 0.15,
+        "dropout_add": 0.05,
+        "timeout_add": 0.05
+      }
+    },
+    "crossing": "all 3 baseline profiles x all 4 nuisance profiles = 12 robustness_id values at every candidate N",
+    "pilot_anchored_failure_rule": "do not clip invalid probabilities. If the pilot-anchored profile makes any 12-cell target probability invalid or above 1-timeout, fail closed and revise the preregistered planning design before confirmatory allocation rather than silently truncating values.",
+    "attrition_failure_rule": "do not cap dropout or timeout stress values. If adding 0.05 produces an invalid probability, fail closed and redesign rather than silently clipping.",
+    "random_effect_floor_role": "the variance-stress floors protect against a small or singular nuisance pilot fit being treated as proof of zero heterogeneity."
+  },
+  "colony_allocation_policy": {
+    "input": "planned colony_count frozen before final power simulation",
+    "allocation": "for each candidate individuals-per-cell N, distribute complete 12-cell blocks as evenly as possible across colonies; deterministic remainder goes to the lowest indexed colonies",
+    "same_policy_across_candidate_N": true,
+    "actual_roster_constraint": "final confirmatory randomization may proceed only if the actual colony supply can realize the selected-N block allocation; otherwise rerun the already frozen power policy with the revised pre-allocation colony count before treatment assignment"
+  },
+  "candidate_N_policy": {
+    "values": "every counterbalance multiple from the smallest value that can allocate at least one complete 12-cell block to each planned contributing colony through the separately frozen operational maximum individuals_per_cell",
+    "same_robustness_id_set_at_every_N": true,
+    "same_trials_per_individual_at_every_N": true,
+    "same_simulations_per_scenario_at_every_N": true,
+    "no_gaps": true,
+    "operational_max_role": "husbandry/supply feasibility input frozen after Pilot B nuisance calibration but before final power simulation; it cannot be chosen from the power result",
+    "input_contract": "planning input supplies operational_max_individuals_per_cell and colony_count only; examples/build_routeability_robustness_grid.py derives the complete colony-feasible N sequence automatically and rejects hand-listed candidate arrays",
+    "operational_max_freeze": "freeze from husbandry/colony-supply feasibility before final power simulation and before viewing any final operating-characteristic result",
+    "minimum_formula": "counterbalance_multiple * ceil(colony_count / counterbalance_multiple); with counterbalance_multiple=4"
+  },
+  "claim_ceiling": "This gate freezes how real nuisance pilot values will be converted into final robustness scenarios. It does not provide nuisance estimates, power, or a biological sample size before the real pilot."
+}

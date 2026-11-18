@@ -1,0 +1,64 @@
+{
+  "schema": "adaptive-gain-villavicencio-two-season-detection-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_effort_audit_latent_link_identifiability_design_frozen",
+  "analysis_status": "designed after binary turnover was shown to be materially effort-sensitive; latent-state diagnostic only",
+  "purpose": "Test whether repeated 5-min focal-plant censuses contain enough information to distinguish true focal interaction state from non-detection across adjacent subseasons before any detection-corrected rewiring claim is attempted.",
+  "source_table": "artifact/raw_subseason/census_rate_table.csv",
+  "primary_scope": "strict_dated_core_2008_2010",
+  "transitions": [
+    "2008_early->2008_mid",
+    "2008_mid->2008_late",
+    "2009_early->2009_mid",
+    "2009_mid->2009_late",
+    "2010_early->2010_mid",
+    "2010_mid->2010_late"
+  ],
+  "candidate_surface": "same focal-response-excluded candidate dyads used by the census-rate analysis: focal plant censused in both periods and focal pollinator independently detected on another plant in both periods",
+  "model": {
+    "type": "two-season dynamic occupancy/detection likelihood fitted separately to each transition",
+    "latent_states": {
+      "z_previous": "true focal interaction state in previous subseason",
+      "z_current": "true focal interaction state in current subseason"
+    },
+    "parameters": {
+      "psi": "P(z_previous=1)",
+      "gamma": "P(z_current=1 | z_previous=0)",
+      "epsilon": "P(z_current=0 | z_previous=1)",
+      "p_previous": "per-5-min-census detection probability conditional on z_previous=1",
+      "p_current": "per-5-min-census detection probability conditional on z_current=1"
+    },
+    "observation_model": "current/previous positive focal-pollinator census counts out of identifiable focal-plant census counts",
+    "likelihood": "sum over the four latent state pairs; z=0 permits only zero detections",
+    "optimizer": "R optim L-BFGS-B on logit parameters with deterministic multi-starts",
+    "parameter_bounds_logit": [-8, 8]
+  },
+  "identifiability_gate": {
+    "optimizer_converged": true,
+    "multi_start_nll_range_max": 0.000001,
+    "hessian_positive_definite": true,
+    "finite_logit_standard_errors": true,
+    "detection_probability_interior": "0.01 < p_previous,p_current < 0.99",
+    "transition_label": "IDENTIFIED only if all criteria pass; otherwise WEAK_OR_NONIDENTIFIED"
+  },
+  "posterior_diagnostics": [
+    "expected latent gain count",
+    "expected latent loss count",
+    "expected stable-present count",
+    "expected stable-absent count",
+    "mean posterior true-gain probability among observed binary gains",
+    "mean posterior true-loss probability among observed binary losses"
+  ],
+  "promotion_rule": "Do not fit or interpret an opportunity effect on latent gain/loss unless at least five of six primary transitions pass the frozen IDENTIFIED gate. If fewer than five pass, the correct result is that latent rewiring is not identified well enough from these repeated-census data.",
+  "interpretation": {
+    "allowed": "assess whether true link state and transition probabilities are statistically identifiable under a simple repeated-detection model",
+    "forbidden": [
+      "claiming the simple occupancy model is the true ecological process",
+      "calling posterior expected transitions observed facts",
+      "routeability inference",
+      "causal opportunity effect",
+      "silently dropping weakly identified transitions"
+    ]
+  },
+  "claim_ceiling": "This is an identifiability diagnostic. Passing would permit a detection-model sensitivity analysis; failure means the raw data do not support a defensible detection-corrected rewiring response under this simple model."
+}

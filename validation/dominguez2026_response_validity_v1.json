@@ -1,0 +1,55 @@
+{
+  "schema": "adaptive-gain-dominguez2026-response-validity-v1",
+  "date": "2026-10-01",
+  "status": "observed_link_turnover_only_not_detection_defensible_state",
+  "purpose": "Apply the reusable network response-validity gate to the independent Dominguez-Garcia et al. 2026 annual plant-pollinator response before interpreting the external axis result as ecological-state replication.",
+  "source": {
+    "article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293",
+    "doi": "10.1111/ele.70293",
+    "zenodo_record": 17362189,
+    "public_archive": "Sup_CODE_Resubmission.zip v3"
+  },
+  "published_sampling": {
+    "years": "2015-2022",
+    "sites": 12,
+    "rounds": "twice monthly for at least seven rounds per year through the flowering season",
+    "transect": "100 m for 30 min per site per round",
+    "uneven_effort": "number of rounds differs among years",
+    "published_effort_sensitivities": [
+      "repeat analyses after removing annual singleton species",
+      "annual iNEXT sample coverage; most site-year combinations exceed 0.7"
+    ]
+  },
+  "public_processed_surface_used_by_this_project": {
+    "annual_links": "Ilist_byyear.csv",
+    "pollinator_species_year": "Abn_Pheno.csv",
+    "plant_species_year": "Abn_Pheno_P.csv",
+    "round_level_interaction_records_available": false,
+    "site_year_round_counts_in_primary_link_table": false,
+    "repeated_dyad_detection_histories_available": false
+  },
+  "gate_evidence": {
+    "response_reconstructable": true,
+    "response_nondegenerate": true,
+    "effort_semantics_resolved": true,
+    "binary_detection_audited": true,
+    "binary_detection_material": false,
+    "binary_state_detection_defensible": false,
+    "true_absence_independently_supported": false,
+    "effort_standardized_response_available": false,
+    "repeated_detection_model_available": false,
+    "repeated_detection_identifiable": false,
+    "state_effect_reproducible": false,
+    "observation_model_robust": false,
+    "independent_decision_layer": false
+  },
+  "gate_result": {
+    "response_validity": "observed_link_turnover_only",
+    "routeability_bridge_eligible": false
+  },
+  "reason": "The published sampling diagnostics are meaningful robustness checks, but the public processed response used for the external axis analysis is an annual binary recorded-link surface. It does not provide dyad-level repeated-detection histories or independent true-absence information sufficient to identify latent link gain/loss.",
+  "consequence_for_external_axis_result": "The pre-frozen gain/loss axis comparison remains a valid out-of-site predictive pattern for recorded annual links. It is not a detection-defensible cross-system replication of latent ecological assembly/disassembly mechanisms.",
+  "not_a_claim_about_source_paper": "This response-validity classification does not invalidate the source paper's own structural-persistence analyses or its published effort sensitivities. It limits this project's reuse of the annual binary link surface for mechanistic gain/loss replication.",
+  "claim_ceiling": "Describe the independent result as cross-site replication or non-replication of observed-link predictive information only. Do not use it as evidence that plant-side or pollinator-side opportunity universally controls latent ecological gain/loss, and do not use it as routeability evidence.",
+  "binary_detection_material_interpretation": "The source paper reports high/consistent network-level coverage and singleton sensitivity, so material bias is not asserted here; however absence of evidence for material bias is not treated as validation of dyad-level latent absence."
+}

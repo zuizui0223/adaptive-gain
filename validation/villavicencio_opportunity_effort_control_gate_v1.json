@@ -1,0 +1,58 @@
+{
+  "schema": "adaptive-gain-villavicencio-opportunity-effort-control-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_effort_adjustment_sensitivity_frozen",
+  "analysis_status": "designed after the clean annual opportunity result and subseason effort audit were inspected; sensitivity only, not confirmatory",
+  "purpose": "Test whether the clean annual focal-response-excluded current-opportunity association adds held-out information beyond focal-plant 5-min census effort.",
+  "sources": {
+    "clean_opportunity_table": "artifact/annual_focal_excluded_opportunity_dyads.csv",
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json"
+  },
+  "effort_definition": {
+    "unit": "5-min focal-plant census",
+    "raw_identity": ["site", "year", "date", "codigo.p", "obs.time"],
+    "predictors": [
+      "previous-year focal-plant census count",
+      "current-year focal-plant census count"
+    ],
+    "raw_counts_used": true,
+    "note": "2010 raw count remains 463 rather than being coerced to the published 460."
+  },
+  "opportunity_predictors": [
+    "current-year plant_flowering_weeks",
+    "current-year pollinator_otherplant_active_weeks"
+  ],
+  "models": {
+    "effort_only": [
+      "previous_plant_censuses",
+      "current_plant_censuses"
+    ],
+    "opportunity_only": [
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "opportunity_plus_effort": [
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks",
+      "previous_plant_censuses",
+      "current_plant_censuses"
+    ]
+  },
+  "preprocessing": "log1p all four predictors, then z-score from training-fold moments",
+  "cross_validation": "same leave-one-annual-transition-out strict-core, near-core and all-annual scopes as the repaired opportunity baseline",
+  "primary_metric": "held-out log loss",
+  "increment": "effort-only log loss minus opportunity-plus-effort log loss",
+  "interpretation": {
+    "allowed": "whether clean current ecological opportunity adds predictive information beyond focal-plant census effort",
+    "forbidden": [
+      "detection-corrected true rewiring",
+      "causal phenology/opportunity effect",
+      "claiming census effort is exogenous to flowering availability",
+      "strict forecasting",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "Post-result effort-adjustment sensitivity only. A positive opportunity increment can show that the clean opportunity association is not exhausted by focal-plant census counts, but it cannot identify true rewiring or remove all sampling-process dependence."
+}

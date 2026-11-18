@@ -1,0 +1,40 @@
+{
+  "schema": "adaptive-gain-villavicencio-link-frequency-threshold-audit-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_detection_threshold_sensitivity_frozen",
+  "analysis_status": "designed after the repaired current-state opportunity result was observed; robustness only, not confirmatory",
+  "source_table": "artifact/annual_focal_excluded_opportunity_dyads.csv",
+  "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+  "question": "Does the focal-response-excluded current-opportunity signal persist when an annual link must have at least 2 or at least 3 observed visits rather than any positive visit?",
+  "fixed_surface": "Use the already frozen shared-species dyad rows from the annual Stage-1 table. Only the binary link-state threshold is changed; species presence and dyad eligibility are not re-estimated.",
+  "thresholds": [2, 3],
+  "risk_sets": {
+    "gain": "previous_weight < threshold; outcome = current_weight >= threshold",
+    "loss": "previous_weight >= threshold; outcome = current_weight < threshold"
+  },
+  "model": {
+    "predictors": [
+      "focal_excluded_overlap_weeks",
+      "plant_flowering_weeks",
+      "pollinator_otherplant_active_weeks"
+    ],
+    "family": "binomial logistic",
+    "transform": "log1p then training-fold z-score",
+    "scope": "strict_core_2008_2011",
+    "cross_validation": "leave one annual transition out",
+    "null_model": "training-fold event prevalence",
+    "metrics": ["log_loss", "brier_score", "roc_auc"]
+  },
+  "interpretation": {
+    "allowed": "robustness of the current-state opportunity association to excluding singleton and very-low-frequency links",
+    "forbidden": [
+      "perfect-detection correction",
+      "true interaction absence",
+      "causal effect of opportunity",
+      "pre-registered threshold confirmation",
+      "decision equivalence",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "Post-result frequency-threshold robustness only. Persistence at >=2 and >=3 observed visits shows that the repaired opportunity signal is not confined to singleton links, but it is not a detection model, causal analysis, true-absence analysis, decision-equivalence test, or routeability test."
+}

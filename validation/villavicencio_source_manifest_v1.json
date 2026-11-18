@@ -1,0 +1,150 @@
+{
+  "schema": "adaptive-gain-villavicencio-source-manifest-v1",
+  "date": "2026-09-26",
+  "status": "trait_bytes_verified_response_rdata_metadata_only_raw_response_reconstructed",
+  "sources": [
+    {
+      "role": "high-temporal-resolution interaction response",
+      "doi": "10.5061/dryad.j6q573n9j",
+      "title": "Plant-pollinator networks for three subseasons and six years from Villavicencio Nature Reserve",
+      "declared_files": [
+        "miele-JAE.R",
+        "miele-JAE.RData"
+      ],
+      "declared_total_size_kb": 63.68,
+      "declared_objects": [
+        "bipartite.networks",
+        "directed.networks",
+        "plant.id",
+        "pollinator.id"
+      ],
+      "declared_network_count": 18,
+      "declared_temporal_grain": "three subseasons per year for six years",
+      "raw_sha256": null,
+      "dryad_version_id": 57785,
+      "dryad_version_number": 3,
+      "target_file": {
+        "path": "miele-JAE.RData",
+        "file_id": 268444,
+        "size_bytes": 62453,
+        "digest_type": "sha-256",
+        "published_digest": "2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b"
+      },
+      "code_file": {
+        "path": "miele-JAE.R",
+        "file_id": 268443,
+        "size_bytes": 1232,
+        "digest_type": "sha-256",
+        "published_digest": "4bd03522eba91d631014c05d71dae501efe513b6b9a4e94e8dfe68feb7de38f3"
+      },
+      "materialization": {
+        "status": "published_rdata_bytes_unavailable_for_byte_validation",
+        "official_file_present": true,
+        "file_id": 268444,
+        "declared_size_bytes": 62453,
+        "published_sha256": "2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b",
+        "anonymous_file_stream_attempt": "HTTP_403_FORBIDDEN",
+        "public_github_mirror_search": "NO_EXACT_RDATA_MIRROR_FOUND",
+        "consequence": "exact byte-for-byte RData identity remains unverified"
+      },
+      "raw_record_reconstruction": {
+        "status": "PASS_INDEPENDENT_PUBLIC_RAW_ROUTE",
+        "source": "Figshare article 11794503 / visits_2006-2011_data.csv",
+        "period_rule": "externally documented Dryad subseason date boundaries",
+        "result": "validation/villavicencio_raw_subseason_reconstruction_result_v1.json",
+        "period_count": 18,
+        "primary_within_year_transition_count": 12,
+        "shared_dyad_rows": 4581,
+        "observed_binary_change_count": 853,
+        "exact_rdata_identity_established": false
+      }
+    },
+    {
+      "role": "traits phenology abundance and annual interaction covariates",
+      "doi": "10.5061/dryad.8cz8w9gm1",
+      "title": "Trait matching and phenological overlap increase the spatio-temporal stability and functionality of plant-pollinator interactions",
+      "declared_files": [
+        "plant_pollinator_data.xlsx"
+      ],
+      "declared_total_size_kb": 230.65,
+      "declared_trait_subset": {
+        "plants": 45,
+        "flower_visitors": 135
+      },
+      "declared_original_interaction_surface": {
+        "plants": 59,
+        "flower_visitors": 196,
+        "visits": 28015,
+        "interacting_pairs": 1050
+      },
+      "raw_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+      "dryad_version_id": 87009,
+      "dryad_version_number": 5,
+      "target_file": {
+        "path": "plant_pollinator_data.xlsx",
+        "file_id": 449108,
+        "size_bytes": 230652,
+        "digest_type": "sha-256",
+        "published_digest": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459"
+      },
+      "public_mirror_candidate": {
+        "repository": "Ecological-Complexity-Lab/emln_package",
+        "commit": "07797e23510cec0a68257ba405d763b60b8e6968",
+        "path": "data/emln_db_datasets/65_Temporal_Chacoff_2020/plant_pollinator_data.xlsx",
+        "github_blob_sha": "99eef735b001751b4407f8fae67d271c2c63a1f3",
+        "size_bytes": 230652,
+        "status": "pinned_pending_dryad_sha256_verification",
+        "admission_rule": "admit only if materialized SHA-256 equals the published Dryad digest"
+      },
+      "materialization": {
+        "status": "verified",
+        "route": "CONICET institutional mirror resolved from item metadata",
+        "resolved_url": "https://datosdeinvestigacion.conicet.gov.ar/bitstream/handle/11336/249358/plant_pollinator_data.xlsx?sequence=2&isAllowed=y",
+        "dryad_digest_match": true,
+        "verified_workflow_run": 36286304896
+      }
+    }
+  ],
+  "freeze_rule": "Do not record a raw RData checksum until the exact downloaded bytes have been materialized. Keep RData byte identity separate from the independently reproducible raw-record response reconstruction.",
+  "join_rule": "Freeze plant and pollinator crosswalks before inspecting the focal rewiring contrasts.",
+  "analysis_rule": "The exact RData object remains an optional source-identity cross-check. Stage-1 response feasibility may use the checksum-validated public raw Figshare visits plus externally documented subseason boundaries. Neither route supplies independent decision-equivalence classes, and observed binary link states remain detection-sensitive.",
+  "acquisition_policy": {
+    "anonymous_metadata": "required for Dryad file IDs, declared sizes and published digests",
+    "rdata_bytes": "materialize only through an authenticated Dryad route or an exact mirror whose SHA-256 matches the published digest",
+    "raw_record_response_route": "allowed independently of RData byte materialization when public raw visit files are checksum-validated and the documented subseason boundaries are frozen",
+    "dryad_token_secret": "optional repository secret DRYAD_TOKEN",
+    "no_credential_fallback": "retain metadata-only RData status; do not treat missing RData bytes as failure of the raw-record reconstruction",
+    "rdata_identity_gate": "exact RData identity remains UNVERIFIED until SHA-256 2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b is matched",
+    "ecological_response_gate": "raw-record reconstruction may establish observed-link response feasibility only; detection-standardized ecological rewiring remains a separate identification problem"
+  },
+  "implementation": {
+    "manifest_resolver": "examples/fetch_dryad_source_manifest.py",
+    "smoke_workflow": ".github/workflows/villavicencio-source-smoke.yml",
+    "workflow_behavior": "metadata-first; token-aware; uploads inventory even when bytes are unavailable"
+  },
+  "latest_source_smoke": {
+    "workflow_run": 36286958936,
+    "run_number": 42,
+    "conclusion": "success",
+    "head_sha": "42dafed46a67ce87ea7e71f13a0d8a40f9dee6ae",
+    "artifact_id": 10921105110,
+    "artifact_digest": "sha256:18e1754da7962f1bd23c38a0c9508160e796324e5cbe803b72e861461cd407b3",
+    "response_bytes": "metadata_only_no_bearer_token",
+    "trait_bytes": "materialized_and_matches_published_dryad_sha256",
+    "annual_fallback": "response_estimability_pass",
+    "conventional_filter_table": "complete_case_7186_of_7620",
+    "conventional_filter_cv": "green_primary_and_sensitivities",
+    "response_model_fitted": true,
+    "decision_structure_model_fitted": false,
+    "transition_mapping_verified": false
+  },
+  "next_materialization_gate": "Optional source cross-check: materialize exact miele-JAE.RData bytes and verify SHA-256 2503de5acc2a9c6debed880d5289a51a16c0b2e556d35deeaf3cd200a8c0751b. This is no longer required for the independent raw-record response reconstruction and cannot by itself resolve ecological detection bias.",
+  "latest_source_resolution": {
+    "response_rdata": "metadata_only_official_file_present_anonymous_download_forbidden",
+    "raw_response_reconstruction": "PASS_18_PERIODS_12_WITHIN_YEAR_TRANSITIONS",
+    "trait_workbook": "verified_materialized_sha256_match",
+    "sampling_effort_semantics": "RESOLVED_RAW_5MIN_CENSUS_IDENTITY",
+    "natural_rewiring_status": "NOT_IDENTIFIED_DETECTION_AND_OBSERVATION_MODEL_SENSITIVE",
+    "claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+  }
+}

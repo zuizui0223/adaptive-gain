@@ -1,0 +1,123 @@
+{
+  "schema": "adaptive-gain-villavicencio-current-opportunity-axis-audit-result-v1",
+  "date": "2026-09-28",
+  "status": "retrospective_axis_decomposition_green_primary_near_core",
+  "analysis_status": "post-result hypothesis-generating held-out predictive-information decomposition; not confirmatory",
+  "source": {
+    "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json",
+    "design_gate": "validation/villavicencio_current_opportunity_axis_audit_gate_v1.json",
+    "raw_table": "artifact/annual_focal_excluded_opportunity_dyads.csv"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36391039300,
+    "run_number": 358,
+    "conclusion": "success",
+    "head_sha": "0dfbca84a3aad235009b6683e261b8a72ffdf611",
+    "artifact_id": 10956247442,
+    "artifact_digest": "sha256:3ae9e3edcf186a45d60dd3a7ad9460141ccc6099c8312f76bea87d290e6b7be7"
+  },
+  "definitions": {
+    "plant_availability_increment": "pollinator-only held-out log-loss minus the two-axis marginal-full held-out log-loss",
+    "pollinator_activity_increment": "plant-only held-out log-loss minus the two-axis marginal-full held-out log-loss",
+    "gain_axis_contrast": "pollinator activity increment minus plant availability increment",
+    "loss_axis_contrast": "plant availability increment minus pollinator activity increment"
+  },
+  "strict_core_2008_2011": {
+    "gain": {
+      "n": 4750,
+      "events": 443,
+      "marginal_full_auc": 0.7399697379613532,
+      "plant_availability_increment": {
+        "delta_log_loss": 0.011689013354188926,
+        "positive_folds": "3/3",
+        "classification": "reproducible_incremental_information"
+      },
+      "pollinator_activity_increment": {
+        "delta_log_loss": 0.02619973856822727,
+        "positive_folds": "3/3",
+        "classification": "reproducible_incremental_information"
+      },
+      "axis_contrast": {
+        "pollinator_minus_plant": 0.014510725214038345,
+        "positive_folds": "3/3",
+        "fold_differences": {
+          "2008->2009": 0.009239126825775157,
+          "2009->2010": 0.010992573454038979,
+          "2010->2011": 0.025350459679030657
+        }
+      }
+    },
+    "loss": {
+      "n": 692,
+      "events": 343,
+      "marginal_full_auc": 0.6646979708788959,
+      "plant_availability_increment": {
+        "delta_log_loss": 0.036712876852928344,
+        "positive_folds": "3/3",
+        "classification": "reproducible_incremental_information"
+      },
+      "pollinator_activity_increment": {
+        "delta_log_loss": 0.005061883642308973,
+        "positive_folds": "3/3",
+        "classification": "reproducible_incremental_information"
+      },
+      "axis_contrast": {
+        "plant_minus_pollinator": 0.03165099321061937,
+        "positive_folds": "3/3",
+        "fold_differences": {
+          "2008->2009": 0.021262765672914963,
+          "2009->2010": 0.04060649524704418,
+          "2010->2011": 0.03684122472763374
+        }
+      }
+    }
+  },
+  "near_core_2007_2011": {
+    "gain": {
+      "plant_availability_increment": 0.010270439024560374,
+      "pollinator_activity_increment": 0.021705643526505114,
+      "pollinator_minus_plant": 0.01143520450194474,
+      "axis_direction_positive_folds": "4/4"
+    },
+    "loss": {
+      "plant_availability_increment": 0.03607785713976808,
+      "pollinator_activity_increment": 0.005706343611098563,
+      "plant_minus_pollinator": 0.030371513528669514,
+      "axis_direction_positive_folds": "4/4"
+    }
+  },
+  "all_annual_2006_2011": {
+    "gain": {
+      "plant_availability_increment": 0.008950869132800299,
+      "pollinator_activity_increment": 0.01945300386009502,
+      "pollinator_minus_plant": 0.01050213472729472,
+      "axis_direction_positive_folds": "5/5",
+      "individual_axis_increment_note": "both individual increments are positive_but_fold_unstable because 2006->2007 is negative for both"
+    },
+    "loss": {
+      "plant_availability_increment": 0.02802575346102898,
+      "pollinator_activity_increment": 0.006720068902343335,
+      "plant_minus_pollinator": 0.021305684558685645,
+      "axis_direction_positive_folds": "4/5",
+      "exception": "2006->2007",
+      "exception_context": "2006 used an expanded site pool relative to the strict-core years and is already designated a broad sampling-effort sensitivity"
+    }
+  },
+  "ecological_read": {
+    "supported": "Within the repaired current-state opportunity baseline, the predictive information is not symmetrically distributed between the two marginal axes. Link gains carry more held-out information from pollinator activity on other plants, whereas link losses carry more held-out information from focal-plant flowering availability in the primary and near-core scopes.",
+    "hypothesis": "A candidate follow-up hypothesis is that entry into an interaction is more limited by whether a pollinator is currently active in the local floral environment, whereas persistence of an established interaction is more sensitive to continued plant-side availability.",
+    "scope": "This is an endpoint-specific predictive-information asymmetry, not a demonstrated biological mechanism."
+  },
+  "not_established": [
+    "pollinator activity causally drives link formation",
+    "plant flowering availability causally drives link loss",
+    "assembly and disassembly are proven to have different mechanisms",
+    "the axis asymmetry is independent of observational sampling effort",
+    "the 2006->2007 exception is caused by the expanded site pool rather than merely coincident with it",
+    "generalization beyond Villavicencio",
+    "decision-equivalence classes",
+    "environmental routeability"
+  ],
+  "claim_ceiling": "Post-result, hypothesis-generating decomposition of held-out predictive information only. The primary and near-core directional asymmetry is reproducible, but it must not be promoted to a causal assembly/disassembly mechanism or routeability result without independent replication or intervention."
+}

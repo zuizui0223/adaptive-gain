@@ -1,0 +1,131 @@
+{
+  "schema": "adaptive-gain-routeability-experiment-analysis-gate-v1",
+  "date": "2026-09-27",
+  "status": "prospective_confirmatory_estimands_frozen_before_data",
+  "scope": "direct artificial-flower routeability experiment",
+  "analysis_population": {
+    "independent_unit": "individual forager",
+    "repeated_unit": "trial",
+    "higher_level_group": "colony where applicable",
+    "inclusion": "all valid test trials from randomized individuals who complete architecture-neutral familiarization and initiate testing after the fixed architecture-specific training dose",
+    "forbidden": [
+      "counting trials as independent biological replicates",
+      "excluding randomized individuals because architecture-specific training accuracy is low",
+      "excluding individuals because test accuracy is low",
+      "dropping slow or incorrect trials to improve the primary endpoint",
+      "conditioning the primary correctness endpoint on producing a terminal response"
+    ]
+  },
+  "primary_endpoint": "binary success: correct accept/reject decision within the frozen response window; incorrect decisions and timeouts are both scored 0",
+  "model": {
+    "family": "binomial logistic mixed model",
+    "fixed_effects": "architecture * access_mode * categorical_budget",
+    "random_effects": [
+      "individual random intercept",
+      "colony random intercept where multiple colonies are used"
+    ],
+    "primary_model_covariates": "none beyond randomized factorial terms",
+    "trial_order": "secondary prespecified sensitivity / learning-slope analysis, not a model-selection knob for H1",
+    "budget_coding": "categorical B1/B2/B3; do not impose a linear budget trend"
+  },
+  "estimands": {
+    "interaction_by_budget": "Delta_B = [P(correct|routeable,contingent,B)-P(correct|routeable,fixed,B)] - [P(correct|bypass,contingent,B)-P(correct|bypass,fixed,B)]",
+    "H1": {
+      "name": "routeability_sensitive_B2_interaction",
+      "estimand": "Delta_B2",
+      "directional_prediction": "> 0",
+      "confirmatory_role": "primary"
+    },
+    "H2": {
+      "name": "budget_window_localization",
+      "estimand": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3)",
+      "directional_prediction": "> 0",
+      "confirmatory_role": "hierarchically gated secondary confirmatory contrast"
+    }
+  },
+  "multiplicity": {
+    "rule": "hierarchical gatekeeping",
+    "order": [
+      "H1",
+      "H2"
+    ],
+    "alpha": 0.05,
+    "test_sidedness": "two-sided inferential test with preregistered directional interpretation",
+    "H2_confirmatory_only_if": "H1 rejects at the frozen alpha; otherwise H2 is descriptive/sensitivity only"
+  },
+  "reporting": {
+    "required": [
+      "cell-level individuals and valid trial counts",
+      "marginal predicted correctness for all 12 cells with uncertainty",
+      "Delta_B1, Delta_B2, Delta_B3 on probability scale",
+      "H1 and H2 model-scale contrasts with uncertainty",
+      "colony and individual variance estimates",
+      "exclusion flow and reasons",
+      "timeout / abandonment counts and fractions by all 12 randomized cells"
+    ],
+    "forbidden": [
+      "replacing accuracy with latency after seeing H1",
+      "claiming the theoretical 0.25 ceiling as the expected behavioral effect",
+      "promoting a B1 or B3 interaction as support for routeability if B2 localization fails",
+      "dropping timeout trials from the primary denominator",
+      "pooling autonomous-routing trials into the guided confirmatory H1/H2 dataset",
+      "switching the primary confirmatory phase from guided to autonomous after viewing pilot or test outcomes"
+    ]
+  },
+  "secondary_endpoints": [
+    "decision latency after final allowed cue",
+    "context-conditioned terminal-window choice in autonomous-routing phase",
+    "abandonment probability",
+    "learning slope across test trials"
+  ],
+  "sample_size_boundary": "sample size remains unfrozen until nuisance-parameter calibration; do not power from the exact 0.25 information ceiling or the focal confirmatory interaction observed in a pilot",
+  "claim_ceiling": "A positive H1 plus localized H2 supports a behavioral consequence of contingent information architecture in the controlled task. It does not establish natural-network rewiring, niche breadth, or ecosystem-level effects.",
+  "training_selection_firewall": {
+    "preferred": "architecture-neutral familiarization before assignment; fixed-dose architecture-specific training after assignment; no treatment-specific accuracy gate for primary test entry",
+    "training_outcomes": [
+      "training accuracy by block",
+      "time or trials to descriptive criterion",
+      "training completion",
+      "non-response or disengagement"
+    ],
+    "unavoidable_criterion_rule": "if a hard architecture-specific criterion is operationally unavoidable, criterion attainment is a treatment-dependent outcome and the test-phase criterion-reacher analysis is labelled per-protocol rather than the sole randomized primary analysis"
+  },
+  "timeout_policy": {
+    "primary_denominator": "all initiated test trials",
+    "timeout_score": 0,
+    "response_window": "freeze from architecture-neutral pilot timing before opening confirmatory treatment contrasts",
+    "forbidden": "dropping timeout/abandonment trials or making response a prerequisite for inclusion in the primary accuracy analysis",
+    "secondary": [
+      "conditional accuracy among responded trials",
+      "timeout/abandonment probability",
+      "decision latency among valid timed responses"
+    ]
+  },
+  "protocol_validation": {
+    "module": "adaptive_gain/routeability_trial_validation.py",
+    "regression_test": "tests/test_routeability_trial_validation.py",
+    "planned_observed_join": "exact (individual_id, trial_index) key match required",
+    "protocol_invalid": [
+      "revealed cue sequence mismatch",
+      "cue duration outside frozen tolerance",
+      "required context not persistent during terminal presentation",
+      "apparatus error",
+      "invalid response coding"
+    ],
+    "biological_zeroes": [
+      "incorrect terminal decision within response window",
+      "no terminal decision before timeout",
+      "terminal decision after response window"
+    ],
+    "primary_scoring_rule": "protocol-valid timeout or incorrect decision = 0; protocol-invalid apparatus/presentation trial = not scored biologically and must be reported separately",
+    "forbidden": "do not relabel biological timeout as apparatus failure or drop it from the primary denominator"
+  },
+  "confirmatory_phase": {
+    "primary": "Phase 1 guided contingent presentation",
+    "contingent_arm": "apparatus reveals q_route first and then the frozen context-selected terminal cue; the animal does not choose which terminal channel to inspect in the confirmatory H1/H2 experiment",
+    "fixed_arm": "apparatus reveals the frozen state-independent terminal cue bundle/prefix for the assigned budget",
+    "reason": "isolates the causal information-architecture contrast from policy-learning, motor-selection and terminal-window-choice failures",
+    "autonomous_phase": "separate mechanistic follow-up; its routing-choice outcomes must not be pooled into the primary H1/H2 analysis and require separate preregistration for confirmatory use",
+    "diagnostic": "guided success plus autonomous failure localizes a policy-learning/action-selection bottleneck rather than erasing the guided information-architecture result"
+  }
+}

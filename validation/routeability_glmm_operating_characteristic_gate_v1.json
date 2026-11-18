@@ -1,0 +1,106 @@
+{
+  "schema": "adaptive-gain-routeability-glmm-operating-characteristic-gate-v1",
+  "date": "2026-09-27",
+  "status": "simulator_and_robustness_policy_code_ready_real_pilot_inputs_pending",
+  "purpose": "simulate the frozen confirmatory binomial mixed model over a prespecified planning surface after nuisance parameters and external SESOI are frozen",
+  "inputs": {
+    "sesoi": {
+      "required": [
+        "H1 probability-scale Delta_B2",
+        "H2 probability-scale localization contrast",
+        "allowed external provenance"
+      ],
+      "forbidden": [
+        "theoretical 0.25 information ceiling as behavioral effect size",
+        "opened focal pilot H1/H2 estimate",
+        "post-hoc confirmatory effect"
+      ],
+      "frozen_source": "validation/routeability_sesoi_gate_v1.json",
+      "status": "FROZEN_H1_0.10_H2_0.10",
+      "h1_probability_scale": 0.1,
+      "h2_probability_scale": 0.1,
+      "provenance": "practical_decision_threshold",
+      "freeze_id": "practical_decision_threshold_frozen_2026-09-29"
+    },
+    "baseline_surface": {
+      "required": [
+        "bypass-control fixed primary-success probability at B1/B2/B3",
+        "ordinary contingent-minus-fixed access effect at B1/B2/B3",
+        "ordinary routeable-minus-bypass fixed-access effect at B1/B2/B3"
+      ],
+      "rule": "Use the frozen three-profile robustness policy (hard-center, pilot-anchored, high-performance); do not hand-pick a favorable baseline after the pilot.",
+      "frozen_policy_source": "validation/routeability_nuisance_robustness_grid_gate_v1.json"
+    },
+    "nuisance": {
+      "required": [
+        "individual random-intercept SD on logit scale",
+        "colony random-intercept SD on logit scale when multiple colonies are used",
+        "randomized-individual dropout fraction",
+        "timeout fraction",
+        "trials per individual",
+        "actual/planned complete treatment-block count contributed by each colony; the vector must sum to individuals per cell"
+      ],
+      "preferred_source": "pooled B3 nuisance-only GLMM receipt from examples/fit_routeability_pilot_nuisance_glmm.R plus frozen stress expansion in validation/routeability_nuisance_robustness_grid_gate_v1.json",
+      "bridge": {
+        "fit_script": "examples/fit_routeability_pilot_nuisance_glmm.R",
+        "receipt_script": "examples/summarize_routeability_pilot_nuisance_glmm.py",
+        "robustness_builder": "examples/build_routeability_robustness_grid.py",
+        "policy": "validation/routeability_nuisance_robustness_grid_gate_v1.json",
+        "focal_contrast_allowed": false
+      }
+    },
+    "robustness_grid": {
+      "status": "FROZEN_POLICY_PILOT_VALUES_PENDING",
+      "source": "validation/routeability_nuisance_robustness_grid_gate_v1.json",
+      "builder": "adaptive_gain/routeability_robustness_grid.py",
+      "baseline_profile_count": 3,
+      "nuisance_profile_count": 4,
+      "robustness_scenarios_per_candidate_n": 12,
+      "same_robustness_id_set_at_every_candidate_n": true
+    }
+  },
+  "simulation": {
+    "scenario_builder": "adaptive_gain/routeability_operating_characteristics.py",
+    "scenario_exporter": "examples/build_routeability_glmm_simulation_scenarios.py",
+    "glmm_simulator": "examples/simulate_routeability_glmm_operating_characteristics.R",
+    "model": "success ~ architecture * access_mode * categorical_budget + (1|individual) + (1|colony) when colony_count>1",
+    "timeout_process": "timeout is generated first and scores primary success 0; cell primary-success probabilities are realized at zero random effects by conditional correctness p/(1-timeout)",
+    "dropout_process": "randomized individuals drop before trial generation; simulations losing an entire treatment cell are fit failures",
+    "fit_failure_policy": "fit failures count as H1/H2 failures in the operating-characteristic denominator and are reported separately",
+    "singular_fit_policy": "singularity is reported; a numerically completed singular fit is not silently discarded from the replicate ledger",
+    "contrast_estimation": "population-average H1/H2 over the fitted combined random-intercept distribution using deterministic Gaussian quadrature; delta-method fixed-effect uncertainty conditional on fitted variance components",
+    "multiplicity": "H1 directional interpretation after two-sided alpha; H2 hierarchical pass requires H1 pass and H2 directional two-sided rejection",
+    "cell_probability_semantics": "scenario cell probabilities are target population-average primary-success probabilities, not zero-random-effect probabilities",
+    "random_effect_calibration": "for each cell, the simulator solves the latent conditional-correctness logit so that integrating over the prespecified combined individual+colony normal random-intercept distribution and multiplying by 1-timeout reproduces the target population-average primary-success probability",
+    "variance_component_uncertainty": "reported operating characteristics do not add a second delta-method term for uncertainty in fitted random-effect variances; this limitation is fixed and must be retained in interpretation",
+    "colony_allocation": "each treatment cell receives exactly the same prespecified colony_block_counts vector, matching complete within-colony 12-cell randomization blocks"
+  },
+  "outputs": [
+    "replicate-level fit success, convergence, singularity, H1/H2 estimates, SEs, p-values and hierarchical pass flags",
+    "scenario-level fit-success fraction",
+    "H1 directional rejection fraction",
+    "H2 raw directional rejection fraction",
+    "H2 hierarchical pass fraction",
+    "mean H1/H2 estimates among successful fits",
+    "retained-individual, trial and timeout diagnostics",
+    "population-average contrast estimates use fitted random-intercept integration rather than zero-random-effect cell predictions",
+    "robustness_id identifying the nuisance/baseline scenario replicated across every candidate N"
+  ],
+  "final_N_promotion_rule": {
+    "required": [
+      "procedural pilot nuisance receipt frozen without focal contrast opening",
+      "pooled B3 nuisance-only GLMM receipt frozen without architecture/access/B2 labels",
+      "H1/H2 SESOI values 0.10/0.10 and provenance match validation/routeability_sesoi_gate_v1.json",
+      "robustness scenarios generated mechanically from validation/routeability_nuisance_robustness_grid_gate_v1.json",
+      "planned colony_count and operational maximum individuals-per-cell frozen before final power simulation",
+      "candidate N set contains every multiple of four from the smallest colony-feasible value (4*ceil(planned colony_count/4)) through the frozen operational maximum, so no feasible smaller N is skipped",
+      "selected individuals-per-cell meets the predeclared H1/H2 operating-characteristic criterion across the required robustness surface",
+      "every candidate individuals-per-cell value is evaluated on the exact same frozen robustness_id set",
+      "all rows in the final power surface use the same frozen H1/H2 SESOI values and SESOI provenance"
+    ],
+    "final_N_status": "not frozen",
+    "forbidden": "do not select N from the most favorable scenario, hand-edit robustness profiles, clip invalid pilot-anchored probabilities, skip smaller colony-feasible multiples of four, or rerun the grid after viewing confirmatory outcomes; do not vary the robustness scenario set or SESOI across candidate N values"
+  },
+  "software_fixture_boundary": "CI may use arbitrary synthetic nuisance/effect values solely to verify code execution. Fixture outputs are never scientific planning results and must not enter the readiness ledger as power evidence.",
+  "claim_ceiling": "The simulator, nuisance-only GLMM bridge and 12-scenario robustness policy are code-frozen. Real pilot nuisance values, pre-allocation colony count/operational N cap and the resulting operating-characteristic surface are still required before any biological N is justified."
+}

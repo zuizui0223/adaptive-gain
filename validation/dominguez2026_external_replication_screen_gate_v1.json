@@ -1,0 +1,97 @@
+{
+  "schema": "adaptive-gain-external-axis-replication-screen-gate-v1",
+  "date": "2026-09-29",
+  "status": "effect_blind_external_axis_replication_design_frozen",
+  "purpose": "Screen the independent Dominguez-Garcia et al. 2026 eight-year, 12-site plant-pollinator dataset for a non-circular replication of the Villavicencio gain/loss opportunity-axis asymmetry.",
+  "source": {
+    "article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293",
+    "zenodo_record": 17362189,
+    "zenodo_doi": "10.5281/zenodo.17362189",
+    "version": "v3",
+    "archive": "Sup_CODE_Resubmission.zip",
+    "published_md5": "7243776b1fd8f2b9340321be5e7a4185"
+  },
+  "screen_only": true,
+  "admission_requirements": [
+    "site x year or finer interaction data sufficient to reconstruct link gain and loss among shared species",
+    "plant-side opportunity information measured independently of the focal link outcome, such as flower abundance or activity",
+    "pollinator-side opportunity information measured independently of the focal link outcome, such as abundance or activity",
+    "species and site/year identifiers sufficient to keep repeated observations and independent sites distinct",
+    "exposure definitions must not be derived from the same focal gain/loss response"
+  ],
+  "reject_or_downgrade_if": [
+    "only aggregate turnover statistics are public",
+    "plant/pollinator opportunity fields are interaction-derived in a way that reuses the focal response",
+    "link-level temporal states cannot be reconstructed",
+    "site/year identity is lost"
+  ],
+  "candidate_replication": "Test only the pre-frozen directional predictive-information asymmetry on the recorded annual-link surface under leave-one-site-out validation. Interpret any matching direction as observed-link predictive consistency, not detection-defensible latent-state replication. Do not test routeability.",
+  "claim_ceiling": "Recorded-link predictive-direction test only. The dataset-specific response-validity gate classifies the public processed annual link surface as observed_link_turnover_only, so neither a matching nor mismatching axis direction establishes a latent ecological assembly/disassembly mechanism, decision equivalence, or routeability.",
+  "source_audit": {
+    "plant_abundance_provenance": "Annual plant resource abundance was measured from flower counts in ten 1 m2 subplots and normalized by annual sampling effort. Plant phenology was measured as the number of days the species was present in the field.",
+    "pollinator_abundance_boundary": "Published pollinator abundance counts recorded individuals and may share observation support with the interaction network, so raw Abundance is not the primary pollinator-side exposure for the focal-dyad replication.",
+    "primary_pollinator_axis": "current-year number of distinct other plant partners recorded for the focal pollinator after excluding the focal plant; the focal dyad can never contribute to this predictor",
+    "source_article": "Dominguez-Garcia et al. 2026 Ecology Letters e70293"
+  },
+  "replication_design": {
+    "unit": "shared-species plant-pollinator dyad within adjacent site-year transition",
+    "sites": "12 independent sites",
+    "years": "2015-2022",
+    "response": {
+      "gain": "dyad absent at t and present at t+1 among plant and pollinator species present in both years",
+      "loss": "dyad present at t and absent at t+1 among plant and pollinator species present in both years"
+    },
+    "species_presence": {
+      "plant": "site-year row present in Abn_Pheno_P.csv",
+      "pollinator": "site-year row present in Abn_Pheno.csv",
+      "purpose": "define shared-species risk sets independently of focal dyad link state"
+    },
+    "predictors": {
+      "plant_availability": "current-year PhenologyP (plant activity/flowering duration) for the focal plant",
+      "pollinator_activity": "current-year distinct other-plant partner count for the focal pollinator, excluding the focal plant"
+    },
+    "models": {
+      "full": [
+        "plant_availability",
+        "pollinator_activity"
+      ],
+      "plant_only": [
+        "plant_availability"
+      ],
+      "pollinator_only": [
+        "pollinator_activity"
+      ]
+    },
+    "preprocessing": "log1p, then training-fold z-score",
+    "cross_validation": "leave-one-site-out; each of the 12 sites is held out in turn",
+    "primary_metric": "held-out log-loss",
+    "secondary_metric": "ROC AUC",
+    "axis_increments": {
+      "plant_availability_increment": "pollinator-only log-loss minus full-model log-loss",
+      "pollinator_activity_increment": "plant-only log-loss minus full-model log-loss"
+    },
+    "frozen_directional_replication": {
+      "gain": "pollinator_activity_increment > plant_availability_increment",
+      "loss": "plant_availability_increment > pollinator_activity_increment"
+    },
+    "classification": "report pooled contrast and the number of held-out sites with the frozen directional contrast; do not tune definitions after seeing the result",
+    "plant_abundance_sensitivity": {
+      "replacement": "replace PhenologyP with current-year AbundanceP while keeping focal-excluded pollinator activity unchanged",
+      "role": "prespecified sensitivity only; directional replication status is defined by the PhenologyP primary analysis"
+    },
+    "replication_rule": {
+      "primary": "direction_matches_both_endpoints if the pooled out-of-site gain contrast (pollinator minus plant increment) is > 0 and the pooled out-of-site loss contrast (plant minus pollinator increment) is > 0",
+      "site_robustness": "report the number of 12 held-out sites with the frozen direction for each endpoint; no post-hoc site-count threshold is used to redefine the primary result",
+      "no_p_value": "leave-one-site-out folds share training data, so fold sign counts are treated as robustness rather than independent hypothesis tests"
+    }
+  },
+  "admission_decision": "ADMIT_WITH_FOCAL_EXCLUDED_POLLINATOR_AXIS: plant phenology/flower abundance are tabulated at species x site x year independently of focal dyad identity; published pollinator abundance is not used as the primary pollinator-side exposure because its observation support may overlap with the focal response.",
+  "response_validity_gate": {
+    "generic": "validation/network_response_validity_gate_v1.json",
+    "dataset_specific": "validation/dominguez2026_response_validity_v1.json",
+    "classification": "observed_link_turnover_only",
+    "detection_defensible_state_replication": false,
+    "routeability_bridge_eligible": false,
+    "consequence": "The frozen axis-direction analysis may test predictive structure of recorded annual links, but it cannot be promoted to latent ecological gain/loss replication without new detection-defensible state information."
+  }
+}

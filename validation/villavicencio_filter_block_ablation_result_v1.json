@@ -1,0 +1,129 @@
+{
+  "schema": "adaptive-gain-villavicencio-filter-block-ablation-result-v1",
+  "date": "2026-09-27",
+  "status": "green_phenology_reproducible_both_endpoints",
+  "scope": "annual detection-sensitive fallback",
+  "source": {
+    "workbook_sha256": "182366f6742f874144a76b44cb0b0e766c315352201e84acadeb9e49036ce459",
+    "gate": "validation/villavicencio_filter_block_ablation_gate_v1.json",
+    "baseline_result": "validation/villavicencio_conventional_filter_cv_result_v1.json",
+    "covariate_time_support_audit": "validation/villavicencio_covariate_time_support_audit_v1.json"
+  },
+  "validation": {
+    "workflow": "Villavicencio source smoke",
+    "workflow_run": 36306969046,
+    "run_number": 54,
+    "conclusion": "success",
+    "head_sha": "5550ff177a994bf275d6ec0e262b5e418b3c587d",
+    "artifact_id": 10927109831,
+    "artifact_digest": "sha256:ee1af78351833b75916a90e482f274f4ca922d16917bab1d53061146f78256d5"
+  },
+  "frozen_rule": {
+    "reproducible_incremental_information": "drop-block pooled held-out log-loss is worse than full model and delta log-loss is positive in every primary held-out transition",
+    "primary_scope": "strict_core_2008_2011"
+  },
+  "primary": {
+    "gain": {
+      "n": 4480,
+      "full_model_log_loss": 0.25467260634127686,
+      "blocks": {
+        "phenology": {
+          "classification": "reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": 0.07671189331237421,
+          "positive_folds": "3/3"
+        },
+        "abundance": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.0027007949176909296,
+          "positive_folds": "2/3"
+        },
+        "plant_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.003739021741072046,
+          "positive_folds": "1/3"
+        },
+        "pollinator_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.0021120399049682215,
+          "positive_folds": "2/3"
+        }
+      }
+    },
+    "loss": {
+      "n": 674,
+      "full_model_log_loss": 0.6600786511109732,
+      "blocks": {
+        "phenology": {
+          "classification": "reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": 0.030255186941361423,
+          "positive_folds": "3/3"
+        },
+        "abundance": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.0008048037345169679,
+          "positive_folds": "2/3"
+        },
+        "plant_morphology": {
+          "classification": "positive_but_fold_unstable",
+          "delta_log_loss_drop_minus_full": 0.009795563104293192,
+          "positive_folds": "2/3"
+        },
+        "pollinator_morphology": {
+          "classification": "no_reproducible_incremental_information",
+          "delta_log_loss_drop_minus_full": -0.009491946419249886,
+          "positive_folds": "1/3"
+        }
+      }
+    }
+  },
+  "sensitivity_consistency": {
+    "near_core_2007_2011": {
+      "phenology_gain": "reproducible_incremental_information_4_of_4",
+      "phenology_loss": "reproducible_incremental_information_4_of_4"
+    },
+    "all_annual_2006_2011": {
+      "phenology_gain": "reproducible_incremental_information_5_of_5",
+      "phenology_loss": "reproducible_incremental_information_5_of_5"
+    }
+  },
+  "ecological_interpretation": {
+    "status": "QUARANTINED_BY_PHENOLOGY_SUPPORT_LEAKAGE_AUDIT",
+    "numerical_ablation": "Removing the published phenology block still causes the recorded held-out performance drop, but this cannot be promoted as independent ecological information for gain because the phenology support surface is conditioned on ever-realized links.",
+    "clean_gain_baseline": "The already-fitted drop-phenology model has primary gain AUC 0.5142 and relative log-loss reduction -0.00759 versus null.",
+    "clean_loss_baseline": "The drop-phenology model has primary loss AUC 0.5995 and relative log-loss reduction 0.0131 versus null.",
+    "consequence": "Do not describe phenology as a validated predictive filter for candidate link gains until an independently reconstructed opportunity surface is tested."
+  },
+  "not_established": [
+    "causal primacy of phenology",
+    "absence of morphological effects under other model structures",
+    "true species turnover",
+    "decision-equivalence classes",
+    "environmental routeability",
+    "strict prospective forecasting from past-only covariates"
+  ],
+  "next_gate": "No further ecological promotion from this historical ablation. Follow validation/villavicencio_rewiring_claim_resolution_v1.json: the published-overlap interpretation is quarantined, binary turnover is detection-sensitive, and natural rewiring remains unidentified. Any routeability mechanism test requires an independent decision layer or the controlled experiment.",
+  "claim_ceiling": "The ablation arithmetic is retained as a historical numerical result. It is not a causal decomposition. The phenology interpretation is invalid for candidate gain because of support leakage, and the binary response is not an identified ecological rewiring surface after the raw-census detection audits. It cannot validate ecological filtering, causality, rewiring, or routeability.",
+  "time_support": {
+    "phenological_overlap": "study-wide six-year aggregate",
+    "flower_abundance": "study-wide six-year aggregate",
+    "consequence": "block ablation tests held-out response discrimination, not past-only forecasting"
+  },
+  "historical_ecological_interpretation": {
+    "supported": "phenological overlap is the only prespecified conventional-filter block that carries reproducible incremental held-out information for both annual link gains and losses under the frozen primary rule, and the same classification persists in both broader sampling sensitivities",
+    "gain_loss_asymmetry": "the absolute held-out log-loss penalty from removing phenology is larger for gains than losses in the primary scope",
+    "morphology": "raw plant and pollinator morphology blocks do not meet the frozen all-primary-fold reproducibility rule for either endpoint; plant morphology is fold-unstable for losses",
+    "abundance": "flower abundance has positive pooled information but is fold-unstable for both endpoints"
+  },
+  "supersession": {
+    "audit": "validation/villavicencio_phenology_support_leakage_v1.json",
+    "date": "2026-09-28",
+    "phenology_gain_interpretation_valid": false,
+    "phenology_loss_interpretation": "descriptive association only; source surface is study-wide and interaction-conditioned",
+    "effort_audit": "validation/villavicencio_subseason_effort_audit_result_v1.json",
+    "census_rate_result": "validation/villavicencio_census_rate_result_v1.json",
+    "latent_detection_result": "validation/villavicencio_two_season_detection_result_v1.json",
+    "latent_opportunity_result": "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+    "observation_model_stress": "validation/villavicencio_detection_overdispersion_result_v1.json",
+    "final_claim_resolution": "validation/villavicencio_rewiring_claim_resolution_v1.json"
+  }
+}

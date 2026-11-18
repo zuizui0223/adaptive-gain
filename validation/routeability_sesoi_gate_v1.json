@@ -1,0 +1,53 @@
+{
+  "schema": "adaptive-gain-routeability-sesoi-v1",
+  "date": "2026-09-29",
+  "status": "frozen_before_confirmatory_data",
+  "purpose": "Freeze the minimum probability-scale routeability-specific effects worth detecting before procedural pilot nuisance values or confirmatory treatment contrasts are opened.",
+  "estimands": {
+    "H1": {
+      "name": "routeability_sensitive_B2_interaction",
+      "estimand": "Delta_B2",
+      "sesoi_probability_points": 0.1,
+      "direction": "> 0"
+    },
+    "H2": {
+      "name": "budget_window_localization",
+      "estimand": "Delta_B2 - 0.5*(Delta_B1 + Delta_B3)",
+      "sesoi_probability_points": 0.1,
+      "direction": "> 0"
+    }
+  },
+  "provenance": {
+    "type": "practical_decision_threshold",
+    "primary_rationale": "A 0.10 probability-scale interaction corresponds to one additional correct decision per ten test trials attributable to the routeability-specific architecture-by-access contrast. Smaller effects are treated as biologically too small to justify the full 12-cell controlled experiment as a mechanism claim.",
+    "same_threshold_for_H1_H2": "Using the same 0.10 threshold prevents a weaker post-hoc standard for budget localization than for the primary B2 interaction.",
+    "literature_context_only": [
+      {
+        "citation": "Laverty 1994, Animal Behaviour 47:531-545, doi:10.1006/anbe.1994.1077",
+        "role": "bumblebee flower-learning work used 80% correct visits as an acquisition criterion"
+      },
+      {
+        "citation": "Blarer et al. 2002, Ethology 108:341-351, doi:10.1046/j.1439-0310.2002.00778.x",
+        "role": "trained bumblebees reached greater than 85% accuracy in an artificial-flower size discrimination task"
+      },
+      {
+        "citation": "Church et al. 2001, Great Lakes Entomologist 34:85-95, doi:10.22543/0090-0222.2052",
+        "role": "color discrimination in artificial flowers reached very high accuracy; used only to establish that 10 percentage points is behaviorally interpretable, not to estimate the focal effect"
+      }
+    ]
+  },
+  "firewalls": {
+    "theoretical_information_ceiling": "The exact 0.25 routeability information ceiling is not an effect-size estimate and is forbidden as the power target.",
+    "pilot": "No observed routeable-versus-bypass, contingent-versus-fixed, H1 or H2 effect from the procedural pilot may alter the frozen 0.10 SESOI.",
+    "confirmatory": "SESOI cannot be changed after treatment contrasts are opened.",
+    "literature": "External discrimination accuracies are contextual and are not converted into a meta-analytic expected H1/H2 effect."
+  },
+  "power_interface": {
+    "h1_sesoi": 0.1,
+    "h2_sesoi": 0.1,
+    "sesoi_provenance": "practical_decision_threshold",
+    "use": "These exact values and provenance must be identical in every robustness scenario and candidate N in the final GLMM operating-characteristic surface.",
+    "freeze_id": "practical_decision_threshold_frozen_2026-09-29"
+  },
+  "claim_ceiling": "The 0.10 values are smallest-worthwhile-effect thresholds for design and interpretation, not predictions of the true behavioral effect. A smaller estimated effect may be scientifically nonzero but is below the predeclared mechanism-relevance threshold."
+}

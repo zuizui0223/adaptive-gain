@@ -1,0 +1,50 @@
+{
+  "schema": "adaptive-gain-network-response-validity-gate-v1",
+  "date": "2026-10-01",
+  "status": "fail_closed_response_gate_frozen",
+  "purpose": "Prevent held-out predictive skill on repeated interaction networks from being promoted to ecological rewiring or routeability when observation effort and imperfect detection do not identify latent interaction state.",
+  "order": [
+    "response reconstruction and nondegeneracy",
+    "observation-effort semantics",
+    "binary detection sensitivity / independent true-absence information",
+    "explicit binary-detection audit status",
+    "explicit validation that binary detection is defensible for latent-state inference",
+    "effort-standardized response availability",
+    "repeated-detection identifiability",
+    "reproducible state-side ecological information",
+    "robustness to observation-model choice",
+    "independent decision-structure exposure"
+  ],
+  "response_classes": {
+    "not_estimable": "response itself cannot be reconstructed or is degenerate",
+    "feasibility_only": "response exists but effort semantics are unresolved",
+    "observed_link_turnover_only": "binary state is materially detection-sensitive, imperfect detection is unaudited, or detection has been audited but binary state has not been validated as defensible for latent-state inference",
+    "detection_defensible_state": "the declared ecological state response passes the response-side detection gate"
+  },
+  "routeability_bridge_rule": "A natural-network routeability bridge is eligible only when response_validity is detection_defensible_state and the decision-structure exposure is independently measured rather than inferred from the focal network response. A detection audit alone is insufficient: binary state must be explicitly defensible for latent-state inference or replaced by an effort/repeated-detection state model that passes the frozen gate.",
+  "villavicencio_fixture": {
+    "response_reconstructable": true,
+    "response_nondegenerate": true,
+    "effort_semantics_resolved": true,
+    "binary_detection_material": true,
+    "true_absence_independently_supported": false,
+    "effort_standardized_response_available": true,
+    "repeated_detection_model_available": true,
+    "repeated_detection_identifiable": true,
+    "state_effect_reproducible": false,
+    "observation_model_robust": false,
+    "independent_decision_layer": false,
+    "expected_response_validity": "observed_link_turnover_only",
+    "expected_routeability_bridge_eligible": false,
+    "evidence": [
+      "validation/villavicencio_subseason_effort_audit_result_v1.json",
+      "validation/villavicencio_census_rate_result_v1.json",
+      "validation/villavicencio_two_season_detection_result_v1.json",
+      "validation/villavicencio_latent_opportunity_decomposition_result_v1.json",
+      "validation/villavicencio_detection_overdispersion_result_v1.json"
+    ],
+    "binary_detection_audited": true,
+    "binary_state_detection_defensible": false
+  },
+  "claim_ceiling": "This is a response-validity classifier, not an ecological effect estimator. Passing the gate does not establish causality. Unaudited binary detection fails closed, and failing the response gate prevents promotion of raw binary interaction turnover to latent ecological rewiring."
+}

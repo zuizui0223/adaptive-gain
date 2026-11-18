@@ -1,0 +1,41 @@
+{
+  "schema": "adaptive-gain-villavicencio-siteweek-opportunity-audit-gate-v1",
+  "date": "2026-09-29",
+  "status": "post_result_spatiotemporal_robustness_frozen",
+  "analysis_status": "designed after the clean week-level opportunity result was observed; robustness only, not confirmatory",
+  "question": "Does the focal-response-excluded opportunity signal persist when plant flowering and pollinator activity must occur in the same site and ISO week rather than merely the same week anywhere in the study area?",
+  "source": {
+    "raw_visits": "Figshare article 11794503 / visits_2006-2011_data.csv",
+    "stage1_response": "artifact/annual_stage1_dyads.csv",
+    "parent_result": "validation/villavicencio_focal_excluded_opportunity_result_v1.json"
+  },
+  "surface": {
+    "plant_availability": "number of site-week cells in the target year where the focal plant has no.fl.obs > 0",
+    "pollinator_activity": "number of site-week cells in the target year where the focal pollinator has a positive visit to any plant other than the focal plant",
+    "pairwise_overlap": "number of site-week cells shared by those two focal-response-excluded sets",
+    "focal_response_exclusion": true
+  },
+  "model": {
+    "predictors": [
+      "siteweek_focal_excluded_overlap_cells",
+      "plant_flowering_siteweeks",
+      "pollinator_otherplant_active_siteweeks"
+    ],
+    "family": "separate binomial logistic models for gain and loss",
+    "transform": "log1p then training-fold z-score",
+    "cross_validation": "same leave-one-transition-out strict-core, near-core and all-annual scopes as the repaired week-level baseline",
+    "metrics": ["log_loss", "brier_score", "roc_auc"]
+  },
+  "success_read": "positive held-out proper-score skill in each primary transition for both endpoints would show that the repaired current-state opportunity signal is not created solely by pooling spatially separated records within the same week",
+  "interpretation": {
+    "allowed": "spatiotemporally stricter focal-response-excluded opportunity retains held-out association with annual link dynamics",
+    "forbidden": [
+      "causal effect of local co-occurrence",
+      "sampling-effort-independent mechanism",
+      "strict prospective forecasting",
+      "decision equivalence",
+      "routeability"
+    ]
+  },
+  "claim_ceiling": "Post-result spatiotemporal robustness only. Persistence under same-site same-week matching strengthens the current-state opportunity interpretation but does not establish causality, effort independence, strict forecasting, decision equivalence, or routeability."
+}

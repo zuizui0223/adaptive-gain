@@ -1,0 +1,55 @@
+{
+  "schema": "adaptive-gain-villavicencio-phenology-support-leakage-audit-v1",
+  "date": "2026-09-28",
+  "status": "gain_filter_quarantined_support_leakage",
+  "workbook_dyad_surface": {
+    "dyad_count": 6075,
+    "ever_linked_count": 881,
+    "never_linked_count": 5194,
+    "phenology_positive_count": 827,
+    "contingency": {
+      "never_linked_phenology_zero": 5194,
+      "never_linked_phenology_positive": 0,
+      "ever_linked_phenology_zero": 54,
+      "ever_linked_phenology_positive": 827
+    },
+    "probability_ever_linked_given_phenology_positive": 1.0,
+    "probability_phenology_positive_given_ever_linked": 0.9387060158910329,
+    "nonzero_phenology_subset_of_ever_linked_support": true
+  },
+  "primary_drop_phenology": {
+    "scope": "strict_core_2008_2011",
+    "gain": {
+      "n": 4480,
+      "events": 430,
+      "roc_auc": 0.5141688199827734,
+      "relative_log_loss_reduction_vs_null": -0.007591587736655096,
+      "brier_improvement_vs_null": -0.0006457729536280404,
+      "fold_relative_log_loss_reduction_vs_null": {
+        "2008->2009": -0.049964901852029106,
+        "2009->2010": 0.03507288905406126,
+        "2010->2011": 0.005189150101023255
+      }
+    },
+    "loss": {
+      "n": 674,
+      "events": 330,
+      "roc_auc": 0.5994978858350951,
+      "relative_log_loss_reduction_vs_null": 0.013074697909272124,
+      "brier_improvement_vs_null": 0.006056177837452659,
+      "fold_relative_log_loss_reduction_vs_null": {
+        "2008->2009": 0.019417024229035802,
+        "2009->2010": 0.05166127109822678,
+        "2010->2011": -0.03818327201693662
+      }
+    }
+  },
+  "interpretation": {
+    "support_audit": "Every dyad with non-zero published phenological overlap occurs as a positive interaction in at least one annual network; none of the 5,194 never-observed dyads has positive published overlap.",
+    "primary_gain": "Removing phenological_overlap reduces primary gain AUC from 0.8652 to 0.5142 and makes proper-score performance slightly worse than the null. The earlier strong gain predictive-filter interpretation is quarantined.",
+    "primary_loss": "Removing phenological_overlap leaves modest loss discrimination (AUC 0.5995; relative held-out log-loss reduction 0.0131), but the annual analysis remains retrospective and not causal."
+  },
+  "not_a_claim_about_source_paper": "This does not invalidate Peralta et al. (2020), which analyzed stability/functionality among observed interactions. It invalidates this project's reuse of the published overlap matrix as an outcome-independent predictor over the full candidate-dyad gain risk set.",
+  "required_next_step": "Reconstruct an opportunity/phenology surface independently from raw dated visitor and flower-observation records with focal-response exclusion, then rerun the gain/loss audit.",
+  "claim_ceiling": "Do not use the annual full-model gain skill or the zero-versus-positive phenology state pattern as evidence for ecological filtering, prospective forecasting, causal primacy, or routeability."
+}
