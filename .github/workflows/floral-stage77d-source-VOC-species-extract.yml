@@ -1,0 +1,94 @@
+name: floral-stage77d-authentic-2020-VOC-305-plant-source-XLSX
+
+on:
+  push:
+    branches: [analysis/floral-bombus-visual-wind-climate-path-stage77-20261118]
+    paths:
+      - "research/floral_macro_stage77/reconstruct_original_multispecies_VOC_XLSX_species_overlap.py"
+      - "research/floral_macro_stage77/test_reconstruct_original_multispecies_VOC_XLSX_species_overlap.py"
+      - ".github/workflows/floral-stage77d-source-VOC-species-extract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-source-scent-trait-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify only authentic source Excel taxonomy semantics and no fake scent zero
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage77 \
+            -p 'test_reconstruct_original_multispecies_VOC_XLSX_species_overlap.py' -v
+      - name: Retrieve source-locked original 59k NHM botanical TEXT
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage77d_original_NHM
+          test -s stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Retrieve source-locked EuPPollNet 1408 visited botanical species
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage77d_original_guilds
+          test -s stage77d_original_guilds/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage77d_original_guilds/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Verify downloaded 8428937-byte original 2020 multi-scent primary supplementary and actual original 3 Excel data sheets
+        run: |
+          python -u research/floral_macro_stage77/reconstruct_original_multispecies_VOC_XLSX_species_overlap.py \
+            --source-NHM stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --source-EuPP stage77d_original_guilds/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage77d_original_scent_VOC_XLSX
+      - name: Confirm source file actual 3 XLSX, no faux direct guild mediation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage77d_original_scent_VOC_XLSX/2020_original_3_VOC_XLSX_direct_species_crosswalk.json")
+          r=json.loads(p.read_text())
+          assert r["source_original_review_DOI"]=="10.3389/fpls.2020.01154"
+          assert r["original_verified_EuropePMC_supplement_sha256"]=="44b9f0b8ee0a41be3958a18552e84afb518ecca57e34b573e4a7d800ae1dfb88"
+          assert len(r["original_source_three_XLSX_workbooks"])==3
+          assert all(len(x["source_original_xlsx_sha256"])==64 for x in r["original_source_three_XLSX_workbooks"])
+          assert r["source_2020_scent_dataset_cannot_prove_VOC_at_EuPP_field_site_time"]
+          assert r["source_2020_scent_compilation_prior_studies_not_independent_flower_evolution"]
+          assert r["VOC_scent_wind_Bombus_causal_mediation_fitted"] is False
+          assert r["source_2020_original_305_66_851_sample_counts_not_assumed_from_files"]
+          print("STAGE77D_305VOC_ORIGINAL_SHEETS_TRUE_SPECIES_SOURCE_AUDIT",{
+            "original_XLSX": [{
+             "filename":book["original_source_workbook"],
+             "sheets":[{k:v[k] for k in (
+               "source_sheet","source_nonempty_rows",
+               "semantic_exact_plant_species_header_evidence",
+               "original_first6_record_rows")}
+               for v in book["source_original_sheets"]]} for book in r["original_source_three_XLSX_workbooks"]],
+            "source_verified_semantic_binomial_species_count":
+             r["original_source_all_candidate_species_names_from_verified_XLSX_headers"],
+            "real_direct_233_hue_species_overlap":
+             r["original_exact_233_VISUAL_HUE_species_source_VOC_overlap_if_header_verified"],
+            "real_direct_963_NHM_species_overlap":
+             r["original_exact_NHM_EuPP_name_overlap_if_source_header_verified"],
+          })
+          PY
+      - name: Source-only original species and worksheet provenance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage77d-real-305-plant-VOC-XLSX-source-visual-text-cohort-overlap
+          path: stage77d_original_scent_VOC_XLSX/
+          retention-days: 90
+          if-no-files-found: warn
