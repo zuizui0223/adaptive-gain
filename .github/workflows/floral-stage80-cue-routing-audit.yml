@@ -1,0 +1,36 @@
+name: Floral Stage80 synthetic cue routing and source co-measurement audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage80/**"
+      - "docs/FLORAL_STAGE80_SEQUENTIAL_INFORMATION_ACCESS_MACRO_DESIGN_20261118.md"
+      - ".github/workflows/floral-stage80-cue-routing-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  run-source-free-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR branch
+        uses: actions/checkout@v4
+      - name: Use Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run nine deterministic regression checks
+        run: python -m unittest discover -s research/floral_macro_stage80 -p "test_*.py" -v
+      - name: Demonstrate the synthetic cue-order switch
+        run: python research/floral_macro_stage80/sequential_floral_cues.py
+      - name: Generate real original-source co-measurement audit
+        run: python research/floral_macro_stage80/audit_stage_identifiability.py --out stage80_original_source_coverage.json
+      - name: Upload reproducible source-coverage receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage80-source-identifiability-receipt
+          path: stage80_original_source_coverage.json
+          if-no-files-found: error
