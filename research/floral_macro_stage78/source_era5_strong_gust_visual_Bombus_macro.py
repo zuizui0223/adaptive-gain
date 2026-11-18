@@ -24,6 +24,7 @@ not measured receptor-specific visual signal or guide geometry.
 """
 from __future__ import annotations
 import argparse,csv,datetime,hashlib,json,math,sys,time,urllib.parse
+import requests
 from collections import Counter,defaultdict
 from pathlib import Path
 
@@ -36,9 +37,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from source_observational_visual_wind_climate_Bombus_piecewise import (
     build_original_positive_visual_networks,CLIM
 )
-from probe_original_era5_strong_gusts import (
-    API,original_api,STAGE77_SHA
-)
+from probe_original_era5_strong_gusts import API,STAGE77_SHA
 
 PIN={
  "nhm":"b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a",
@@ -183,31 +182,88 @@ def source_days(frame,begin,end):
         values[var]=x
     return values
 
-def retrieve_strong_gusts(pages):
+def original_persisted_or_live_batch(job,i,checkpoint,session):
+    url=job["original_API_URL"]
+    fingerprint=hashlib.sha256(url.encode("utf-8")).hexdigest()
+    path=checkpoint/(str(i+1).zfill(4)+"_"+fingerprint[:16]+".json")
+    if path.exists():
+        x=json.loads(path.read_text(encoding="utf-8"))
+        if x["original_source_query_url"]!=url:
+            raise ValueError("STAGE78B_SOURCE_CHECKPOINT_WRONG_ERA5_QUERY")
+        content=json.dumps(x["payload"],sort_keys=True).encode()
+        if hashlib.sha256(content).hexdigest()!=x["checkpoint_content_SHA256"]:
+            raise ValueError("STAGE78B_SOURCE_ERA5_CHECKPOINT_SHA_NOT_VERIFIED")
+        return x["payload"],x["source_raw_response_SHA256"],x["source_original_response_bytes"],True
+    result=None
+    for attempt in range(3):
+        try:
+            response=session.get(url,timeout=(20,90))
+            if response.status_code==429:
+                raise ValueError("STAGE78B_ERA5_SOURCE_RATE_LIMIT_STOP_NOT_RETRY")
+            if response.status_code in (500,502,503,504):
+                if attempt<2:
+                    time.sleep(2*(attempt+1))
+                    continue
+                raise ValueError("STAGE78B_ERA5_SOURCE_BACKEND_UNAVAILABLE_"+str(response.status_code))
+            if response.status_code!=200:
+                raise ValueError("STAGE78B_ERA5_SOURCE_HTTP_"+str(response.status_code)+"_REASON_"+response.text[:300])
+            raw=response.content
+            if not raw or len(raw)>2500000 or "json" not in response.headers.get("Content-Type",""):
+                raise ValueError("STAGE78B_ERA5_SOURCE_NOT_REAL_JSON")
+            result=json.loads(raw)
+            if isinstance(result,dict) and result.get("error"):
+                raise ValueError("STAGE78B_ERA5_SOURCE_ERROR_"+str(result.get("reason"))[:200])
+            break
+        except (requests.exceptions.Timeout,requests.exceptions.ConnectionError) as exc:
+            if attempt>=2:
+                raise RuntimeError("STAGE78B_TLS_CONNECTION_TIMEOUT_AFTER_3_BOUNDED_ATTEMPTS") from exc
+            time.sleep(3*(attempt+1))
+    proof={
+      "original_source_query_url":url,
+      "source_raw_response_SHA256":hashlib.sha256(raw).hexdigest(),
+      "source_original_response_bytes":len(raw),
+      "payload":result,
+      "checkpoint_content_SHA256":hashlib.sha256(json.dumps(result,sort_keys=True).encode()).hexdigest(),
+      "original_source_provider":"Open-Meteo historical ECMWF ERA5, CC BY 4.0",
+      "original_reanalysis_not_flower_site_wind_observation":True
+    }
+    temp=path.with_suffix(".partial")
+    temp.write_text(json.dumps(proof,sort_keys=True)+"\n",encoding="utf-8")
+    temp.replace(path)
+    return result,proof["source_raw_response_SHA256"],len(raw),False
+
+def retrieve_strong_gusts(pages,checkpoint_dir):
+    checkpoint_dir.mkdir(parents=True,exist_ok=True)
     daily=defaultdict(lambda:defaultdict(lambda:defaultdict(list)))
     evidence=[]
-    for i,job in enumerate(pages):
-        result,sha,count=original_api(job["original_API_URL"])
-        if isinstance(result,dict):result=[result]
-        if not isinstance(result,list) or len(result)!=len(job["coordinates"]):
-            raise ValueError("STAGE78B_ERA5_MULTI_SOURCE_RESPONSE_LENGTH_CHANGED")
-        for coord,source in zip(job["coordinates"],result):
-            if abs(float(source.get("latitude",999))-coord[0])>.35 or abs(float(source.get("longitude",999))-coord[1])>.35:
-                raise ValueError("STAGE78B_SOURCE_REANALYSIS_GRID_TOO_FAR")
-            values=source_days(source,job["begin"],job["end"])
-            for network in job["keys_by_coord"][coord]:
-                if job["month"] in daily[network]:
-                    raise ValueError("STAGE78B_DUPLICATED_SOURCE_STUDY_MONTH_WEATHER_JOIN")
-                daily[network][job["month"]]=values
-        evidence.append({
-          "original_ERA5_model":"era5",
-          "original_ERA5_GMT_month":str(job["year"])+"-"+str(job["month"]).zfill(2),
-          "n_original_sites_in_batch":len(job["coordinates"]),
-          "source_original_response_SHA256":sha,"source_raw_JSON_bytes":count,
-          "original_source_openmeteo_URL":job["original_API_URL"],
-          "source_same_field_visit_hour_gust_observed":False})
-        # Protect provider rate quotas; no concurrent calls or implicit retry
-        if i+1<len(pages):time.sleep(.18)
+    with requests.Session() as session:
+        session.headers.update({"User-Agent":"academic-botanical-strong-gust-field-macro-2026-11-18","Accept":"application/json"})
+        for i,job in enumerate(pages):
+            result,sha,count,cached=original_persisted_or_live_batch(
+                job,i,checkpoint_dir,session)
+            if isinstance(result,dict):result=[result]
+            if not isinstance(result,list) or len(result)!=len(job["coordinates"]):
+                raise ValueError("STAGE78B_ERA5_MULTI_SOURCE_RESPONSE_LENGTH_CHANGED")
+            for coord,source in zip(job["coordinates"],result):
+                if abs(float(source.get("latitude",999))-coord[0])>.35 or abs(float(source.get("longitude",999))-coord[1])>.35:
+                    raise ValueError("STAGE78B_SOURCE_REANALYSIS_GRID_TOO_FAR")
+                values=source_days(source,job["begin"],job["end"])
+                for network in job["keys_by_coord"][coord]:
+                    if job["month"] in daily[network]:
+                        raise ValueError("STAGE78B_DUPLICATED_SOURCE_STUDY_MONTH_WEATHER_JOIN")
+                    daily[network][job["month"]]=values
+            evidence.append({
+              "original_ERA5_model":"era5",
+              "original_ERA5_GMT_month":str(job["year"])+"-"+str(job["month"]).zfill(2),
+              "n_original_sites_in_batch":len(job["coordinates"]),
+              "source_original_response_SHA256":sha,"source_raw_JSON_bytes":count,
+              "original_source_openmeteo_URL":job["original_API_URL"],
+              "source_replayed_authenticated_checkpoint":cached,
+              "source_same_field_visit_hour_gust_observed":False})
+            print("STAGE78B_SOURCE_STRONG_GUST_BATCH",i+1,"of",len(pages),
+                  "source_year_month",job["year"],job["month"],
+                  "n_points",len(job["coordinates"]),"checkpoint",cached,flush=True)
+            if i+1<len(pages) and not cached:time.sleep(.25)
     return daily,evidence
 
 def aggregate_exposure(frozen,weather):
@@ -352,10 +408,12 @@ def save_csv(path,rows):
         w=csv.DictWriter(f,fieldnames=list(rows[0]))
         w.writeheader();w.writerows(rows)
 
-def run(nhm,plant,site):
+def run(nhm,plant,site,checkpoint_dir):
     frozen,frame=pre_bombus_strong_gust_sample(nhm,plant,site)
     req=build_requests(frozen)
-    original_weather,source_receipts=retrieve_strong_gusts(req)
+    print("STAGE78B_FROZEN_NO_BOMBUS_SELECTION",json.dumps(frame,sort_keys=True),
+          "ERA5_monthly_source_batches",len(req),flush=True)
+    original_weather,source_receipts=retrieve_strong_gusts(req,checkpoint_dir)
     exposure=aggregate_exposure(frozen,original_weather)
     diagnostic,fits=fit_source_study_frame(exposure,site)
     return exposure,{
@@ -390,10 +448,11 @@ def main():
     for name,path in (("nhm",a.source_NHM),("plant_network",a.source_plant_network),
        ("sites",a.source_original_field_climate)):
         verified_csv(path,PIN[name])
+    a.outdir.mkdir(exist_ok=True,parents=True)
     x,report=run(verified_csv(a.source_NHM,PIN["nhm"]),
         verified_csv(a.source_plant_network,PIN["plant_network"]),
-        verified_csv(a.source_original_field_climate,PIN["sites"]))
-    a.outdir.mkdir(exist_ok=True,parents=True)
+        verified_csv(a.source_original_field_climate,PIN["sites"]),
+        a.outdir/"ERA5_source_daily_gust_checkpoint_batches")
     save_csv(a.outdir/"source_ERA5_true_strong_gust_study_balanced_424_frame.csv",x)
     (a.outdir/"source_ERA5_actual_gust_bombus_visual_macro_and_audit.json").write_text(
         json.dumps(report,sort_keys=True,indent=2,ensure_ascii=False,default=scientific_json)+"\n",encoding="utf-8")
