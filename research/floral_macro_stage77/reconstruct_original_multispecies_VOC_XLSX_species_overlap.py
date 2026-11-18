@@ -34,6 +34,17 @@ CELL=re.compile(r"^([A-Z]+)(\d+)$")
 SOURCE_ARTICLE="10.3389/fpls.2020.01154"
 SHEET_CANDIDATES=("species","taxon","plant species","plant name","floral species")
 BINOMIAL=re.compile(r"^[A-Z][a-zA-Z-]+ [a-z][a-zA-Z-]+$")
+NON_SPECIES_EPITHETS={"unidentified","unknown","unresolved","undetermined",
+    "species","sp","spp","hybrid","indet","indeterminate","cf","aff"}
+
+
+def source_binomial(value):
+    text=str(value or "").strip()
+    if not BINOMIAL.fullmatch(text):
+        return False
+    genus,epithet=text.split()
+    return (genus.casefold() not in {"species","genus","unknown","unidentified"}
+            and epithet.casefold() not in NON_SPECIES_EPITHETS)
 SHEET_ROW_PREVIEW=6
 
 def sha(b):
@@ -128,7 +139,7 @@ def original_workbook(raw,name):
                 for rownum,cells in rows:
                     if rownum<=headrow:continue
                     value=cells.get(col,"").strip()
-                    if BINOMIAL.fullmatch(value):
+                    if source_binomial(value):
                         entries.add(value.casefold())
                 candidate_names|=entries
             records.append({
