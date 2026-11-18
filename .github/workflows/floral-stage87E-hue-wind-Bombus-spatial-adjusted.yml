@@ -1,0 +1,95 @@
+name: Stage87E original GLOBAL floristic hue x wind x observed Bombus spatial controls
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/analyze_global_hue_wind_bombus_spatial_overlap.py"
+      - "research/floral_macro_stage87/test_analyze_global_hue_wind_bombus_spatial_overlap.py"
+      - "docs/FLORAL_STAGE87E_GLOBAL_SPATIAL_WIND_BOMBUS_GATES_20261118.md"
+      - ".github/workflows/floral-stage87E-hue-wind-Bombus-spatial-adjusted.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  authentic-global-original-source-spatial-resampling:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned numerical and regression libraries
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6" "scipy==1.16.3"
+      - name: Source-free geography/trait-family/NA admission tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage87 \
+            -p "test_analyze_global_hue_wind_bombus_spatial_overlap.py" -v
+      - name: Restore original source-derived global WCVP native floral trait x WorldClim region ZIP
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            --output stage87E_source_native_flora_WorldClim.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage87E_source_native_flora_WorldClim.zip" | sha256sum -c
+      - name: Restore all original 3958417 archived Bombus source-derived region observations
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14419407872/zip" \
+            --output stage87E_source_GBIF_Bombus_TDWG3.zip
+          echo "2fe7510fe8c08189d63151fe255a00baafb96c7acc87d3d0fedc970966ca1a43  stage87E_source_GBIF_Bombus_TDWG3.zip" | sha256sum -c
+      - name: Recalculate full 11-hue global / GBIF positive-region spatial models and geographical block bootstraps
+        run: |
+          python -u research/floral_macro_stage87/analyze_global_hue_wind_bombus_spatial_overlap.py \
+            --stage87C-global-native-climate-zip stage87E_source_native_flora_WorldClim.zip \
+            --stage87D-original-GBIF-Bombus-zip stage87E_source_GBIF_Bombus_TDWG3.zip \
+            --outdir stage87E_verified_original_spatial \
+            --spatial-bootstrap-reps 1000
+      - name: Check SOURCE count, category, two-scale spatial uncertainty and limits
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          from pathlib import Path
+          p=Path("stage87E_verified_original_spatial")
+          a=json.loads((p/"stage87E_global_spatial_hue_wind_Bombus_full_original_analysis.json").read_text())
+          c=a["cohort"]
+          assert c["original_flora_regions"]==367
+          assert c["original_worldclim_complete_regions"]==350
+          assert c["original_Bombus_positive_regions"]==165
+          assert c["global_source_hue_geographic_regression_regions"]==274
+          assert c["recorded_Bombus_positive_eligible_geographic_regions"]==139
+          assert c["GBIF_missing_region_records_not_true_absence"]
+          assert a["global_analysis"]["geographic_block_20x45_unique"]>=20
+          assert a["GBIF_observed_analysis"]["geographic_block_20x45_unique"]>=15
+          assert len(a["source_hue_colour_descriptive_spatial_results"])==44
+          assert a["interpretation_gates"]["analysis_is_exploratory_spatial_correspondence_NOT_evolution_or_fitness_causal_claim"]
+          assert a["interpretation_gates"]["hue_fractions_are_compositional_not_independent_outcomes"]
+          r=pd.read_csv(p/"stage87E_original_global_regions_colour_wind_Bombus_model_summary.csv")
+          assert set(r["term"])=={"wind","log_bombus_richness","wind_x_bombus"}
+          assert len(r)==(22+3*22)
+          assert r["BH_q_11"].between(0,1).all()
+          assert r["coef"].notna().all()
+          matrix=pd.read_csv(p/"stage87E_original_full_TDWG_region_matched_data_with_NA_absence.csv")
+          assert len(matrix)==367
+          assert matrix["GBIF_observed_Bombus_source_coverage"].sum()==165
+          assert matrix["GBIF_Bombus_3occ_2grid_recorded_species_primary"].isna().sum()==202
+          print("STAGE87E_REAL_GLOBAL_HUE_BOMBUS_WIND_SPATIAL_SOURCE_VERIFIED",c)
+          PY
+      - name: Publish compact derived source-adjusted regional results, not raw third-party sources
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage87E-original-global-native-floral-wind-GBIF-positive-spatial-correspondence
+          path: stage87E_verified_original_spatial/
+          retention-days: 90
+          if-no-files-found: warn
