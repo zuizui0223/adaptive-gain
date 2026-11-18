@@ -1,0 +1,55 @@
+name: Stage81F real 36 ERA5 gust matched source floral age x EuPP guild macro
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage81/real_age_spectra_era5_gust_overlap_sensitivity.py"
+      - "research/floral_macro_stage81/test_real_age_spectra_era5_gust_overlap_sensitivity.py"
+      - ".github/workflows/floral-stage81F-36-original-ERA5-age-guild-overlap.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independent-source-EuPP-flower-age-ERA5-match:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install numeric analysis dependencies
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6"
+      - name: Source-free provenance and study identity tests
+        run: python -m unittest discover -s research/floral_macro_stage81 -p "test_real_age_spectra_era5_gust_overlap_sensitivity.py" -v
+      - name: Independently retrieve Stage79I original ERA5 and Stage81C genuine EuPP source outcomes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44242382680 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage79i-392-width-sizefirst-ERA5-real-stronggust-Bombus-macro \
+            --dir stage81f_era5_original
+          gh run download 44256106078 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage81c-measured-age-spectra-eupp-guild-source-macro \
+            --dir stage81f_age_original
+          test -s stage81f_era5_original/source_original_sizefirst_ERA5_gust15_exposures.csv
+          test -s stage81f_age_original/stage81c_194_true_source_network_null_scores.csv
+      - name: Reproduce SHA-locked real original 36-networks from 16 source publications
+        run: |
+          python -u research/floral_macro_stage81/real_age_spectra_era5_gust_overlap_sensitivity.py \
+            --stage79i-era5-source stage81f_era5_original/source_original_sizefirst_ERA5_gust15_exposures.csv \
+            --stage81c-age-guild-source stage81f_age_original/stage81c_194_true_source_network_null_scores.csv \
+            --outdir stage81f_real_original_age_gust_source
+      - name: Upload new 36-network true original source overlap audit and study-cluster readout
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage81f-original-36-ERA5-gust15-age-spectrum-guild-macro
+          path: stage81f_real_original_age_gust_source/
+          retention-days: 90
+          if-no-files-found: warn
