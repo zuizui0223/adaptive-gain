@@ -50,10 +50,24 @@ if (nrow(vis)!=nrow(meta) || nrow(hex)!=nrow(meta) ||
     !all(c("x","y","r.vec")%in%names(hex))) {
   stop("STAGE85_R_APIS_BEE_RECEPTOR_OUTPUT_SAMPLE_ID_MISMATCH")
 }
-if (any(as.matrix(vis[,c("s","m","l")])<=0) ||
-    any(as.matrix(vis[,c("s","m","l")])>=1)) {
-  stop("STAGE85_ADAPTED_RECEPTORS_OUTSIDE_0_1")
+# A physically black/absorbing original spectrum may yield EXACTLY zero
+# excitation; 0 and 1 are valid mathematical endpoints, not corruption.
+# Reject nonfinite values or true out-of-range values without clipping.
+receptor_matrix <- as.matrix(vis[,c("s","m","l")])
+if (any(!is.finite(receptor_matrix)) ||
+    any(receptor_matrix<0) || any(receptor_matrix>1)) {
+  bad <- which(!is.finite(receptor_matrix) |
+               receptor_matrix<0 | receptor_matrix>1,arr.ind=TRUE)
+  print(data.frame(source_sample=meta$sample_id[bad[,1]],
+                   source_species=meta$source_species[bad[,1]],
+                   photoreceptor=colnames(receptor_matrix)[bad[,2]],
+                   excitation=receptor_matrix[bad]))
+  stop("STAGE85_NONFINITE_OR_TRULY_OUT_OF_RANGE_RECEPTOR_VALUES")
 }
+cat("STAGE85_AUTHENTIC_ORIGINAL_RECEPTOR_RANGE",
+  min(receptor_matrix),max(receptor_matrix),
+  "exact_endpoint_excitations",sum(receptor_matrix==0|receptor_matrix==1),"\n")
+
 x <- data.frame(meta,green_receptor_E=as.numeric(vis$l),
                 hex_x=as.numeric(hex$x),hex_y=as.numeric(hex$y),
                 hex_background_r=as.numeric(hex$r.vec),
