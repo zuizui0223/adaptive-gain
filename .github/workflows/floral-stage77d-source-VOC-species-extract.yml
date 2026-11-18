@@ -61,7 +61,12 @@ jobs:
           p=Path("stage77d_original_scent_VOC_XLSX/2020_original_3_VOC_XLSX_direct_species_crosswalk.json")
           r=json.loads(p.read_text())
           assert r["source_original_review_DOI"]=="10.3389/fpls.2020.01154"
-          assert r["original_verified_EuropePMC_supplement_sha256"]=="44b9f0b8ee0a41be3958a18552e84afb518ecca57e34b573e4a7d800ae1dfb88"
+          assert r["original_historical_EuropePMC_dynamic_ZIP_SHA256"]=="44b9f0b8ee0a41be3958a18552e84afb518ecca57e34b573e4a7d800ae1dfb88"
+          assert r["original_current_EuropePMC_ZIP_audit"]["actual_original_member_count"]==24
+          assert r["original_current_EuropePMC_ZIP_audit"]["original_3_source_XLSX_content_sizes_verified"]
+          assert len(r["original_author_source_XLSX_per_member_double_fetch_sha256"])==3
+          assert all(x["original_content_identical_over_two_fresh_authoritative_fetches"]
+                     for x in r["original_author_source_XLSX_per_member_double_fetch_sha256"].values())
           assert len(r["original_source_three_XLSX_workbooks"])==3
           assert all(len(x["source_original_xlsx_sha256"])==64 for x in r["original_source_three_XLSX_workbooks"])
           assert r["source_2020_scent_dataset_cannot_prove_VOC_at_EuPP_field_site_time"]
