@@ -30,6 +30,6 @@ class Stage79FPositiveOnlyTests(unittest.TestCase):
         self.assertNotIn("source_non_FCC_negative_class",original.__code__.co_varnames)
     def test_archived_provider_receipts_are_artifacts_not_raw_csv(self):
         self.assertEqual(len(m.PINS["roster"]),64)
-        self.assertTrue("artifact digests" in m.__doc__ if m.__doc__ else False)
+        self.assertEqual(m.PINS["farnear"],"39e89f3d20410e1d54d1b366e62fd3362878bab12815835282731e224f65a1f7")
 
 if __name__=="__main__":unittest.main()
