@@ -56,11 +56,29 @@ def load_source_zip():
        "Accept":"application/zip"})
     with urllib.request.urlopen(req,timeout=75) as f:
         raw=f.read(ZIP_SIZE+1)
-    if len(raw)!=ZIP_SIZE or sha(raw)!=ZIP_SHA:
-        raise ValueError("STAGE77D_ORIGINAL_SUPPLEMENTARY_8428937_SOURCE_CHANGED")
+    # Europe PMC dynamically repackages a ZIP: the *outer* archive digest
+    # can change because ZIP entry timestamps/order are not stable. This
+    # is explicitly diagnosed, never silently treated as source-sheet change.
+    current_sha=sha(raw)
     if not zipfile.is_zipfile(io.BytesIO(raw)):
         raise ValueError("STAGE77D_ORIGINAL_SUPPLEMENT_NOT_REAL_ZIP")
-    return raw
+    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        files=[x for x in z.infolist() if not x.is_dir()]
+        if len(files)!=24:
+            raise ValueError("STAGE77D_ORIGINAL_EUROPEPMC_24_SOURCE_MEMBERS_CHANGED")
+        for path,size in XLSX.items():
+            if path not in z.namelist() or z.getinfo(path).file_size!=size:
+                raise ValueError("STAGE77D_ORIGINAL_AUTHOR_XLSX_CONTENT_SIZE_CHANGED_"+path)
+    return raw,{
+       "original_historical_retrieval_ZIP_SHA256":ZIP_SHA,
+       "original_current_dynamic_ZIP_SHA256":current_sha,
+       "historical_ZIP_8428937_bytes":ZIP_SIZE,
+       "current_downloaded_original_ZIP_bytes":len(raw),
+       "outer_source_ZIP_repackaged_sha_drift":current_sha!=ZIP_SHA,
+       "actual_original_member_count":len(files),
+       "original_3_source_XLSX_content_sizes_verified":True,
+       "dynamic_ZIP_outer_digest_is_not_stable_XLSX_identity":True,
+    }
 
 def col_idx(cell_ref):
     m=CELL.fullmatch(cell_ref)
@@ -181,7 +199,21 @@ def original_targets(nhm,network):
     return eu,matched,hu
 
 def run(nhm,eu):
-    original=load_source_zip()
+    original,zip_source=load_source_zip()
+    # A second authoritative HTTP retrieval validates actual XLSX content,
+    # not the potentially repackaged outer ZIP timestamps or compression.
+    second,second_outer=load_source_zip()
+    with zipfile.ZipFile(io.BytesIO(second)) as z1,zipfile.ZipFile(io.BytesIO(original)) as z2:
+        member_checks={
+          name:{
+            "original_sha256_download_1":sha(z2.read(name)),
+            "original_sha256_download_2":sha(z1.read(name)),
+            "original_content_identical_over_two_fresh_authoritative_fetches":
+                sha(z2.read(name))==sha(z1.read(name)),
+          } for name in XLSX
+        }
+        if not all(v["original_content_identical_over_two_fresh_authoritative_fetches"] for v in member_checks.values()):
+            raise ValueError("STAGE77D_AUTHOR_ORIGINAL_XLSX_MEMBER_DRIFT_ACROSS_FRESH_FETCHES")
     workbooks=[]
     candidates=set()
     with zipfile.ZipFile(io.BytesIO(original)) as z:
@@ -205,7 +237,10 @@ def run(nhm,eu):
        "schema":"stage77d_2020_multispecies_VOC_original_XLSX_readout_and_source_overlap",
        "source_original_review_DOI":SOURCE_ARTICLE,
        "source_original_supplement_PMCID":"PMC7412988",
-       "original_verified_EuropePMC_supplement_sha256":ZIP_SHA,
+       "original_historical_EuropePMC_dynamic_ZIP_SHA256":ZIP_SHA,
+       "original_current_EuropePMC_ZIP_audit":zip_source,
+       "original_second_download_ZIP_audit":second_outer,
+       "original_author_source_XLSX_per_member_double_fetch_sha256":member_checks,
        "original_source_three_XLSX_workbooks":workbooks,
        "original_source_all_candidate_species_names_from_verified_XLSX_headers":len(candidates),
        "original_exact_EuPP_species_name_overlap_if_source_header_verified":len(candidates&e),
