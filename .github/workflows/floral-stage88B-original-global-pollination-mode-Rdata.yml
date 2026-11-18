@@ -1,0 +1,62 @@
+name: Stage88B original global 179263 animal-vs-wind pollination mode Rdata field audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/audit_original_global_pollination_Rdata.R"
+      - ".github/workflows/floral-stage88B-original-global-pollination-mode-Rdata.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  read-verified-original-dryad-rdata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Install JSON audit package
+        run: |
+          Rscript -e 'repo<-Sys.getenv("RSPM"); if(!nzchar(repo))repo<-"https://cloud.r-project.org"; install.packages("jsonlite",repos=repo)'
+          Rscript -e 'stopifnot(requireNamespace("jsonlite"))'
+      - name: Download true Dryad original published Wang et al 2025 Rdata
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            --connect-timeout 30 --max-time 500 \
+            "https://datadryad.org/api/v2/files/4049686/download" \
+            --output stage88_2025_Wang_original_global_179263_pollination.Rdata
+          test "$(stat -c%s stage88_2025_Wang_original_global_179263_pollination.Rdata)" -eq 2719385
+          echo "dfb34e3ce42bb07bdae6e2dea71de3653155670bc3032bc11e5f2d58303759e6  stage88_2025_Wang_original_global_179263_pollination.Rdata" | sha256sum -c
+      - name: Read original Rdata classes, category codes, species identifiers and coding provenance
+        run: |
+          Rscript research/floral_macro_stage88/audit_original_global_pollination_Rdata.R \
+            stage88_2025_Wang_original_global_179263_pollination.Rdata \
+            stage88B_source_pollination_modes
+      - name: Confirm no mixed or missing pollination labels silently classified
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("stage88B_source_pollination_modes/stage88B_original_Wang2025_Rdata_field_schema.json"))
+          assert d["original_source_data_frame_rows"]>170000
+          assert d["source_missing_pollination_is_unknown_not_wind"]
+          assert d["source_category_labels_need_verbatim_verified_before_any_model"]
+          assert d["original_pollination_code_column"]
+          assert d["original_species_column"]
+          print("STAGE88B_TRUE_ORIGINAL_GLOBAL_MODE_CODE_LEVELS",d["source_true_pollination_code_frequencies"])
+          PY
+      - name: Do not redistribute author original species-mode rows or Rdata
+        if: always()
+        run: |
+          rm -f stage88B_source_pollination_modes/TEMP_stage88_global_original_species_pollination_labels.csv
+          rm -f stage88_2025_Wang_original_global_179263_pollination.Rdata
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage88B-original-Wang2025-global-179263-pollination-mode-Rdata-schema
+          path: stage88B_source_pollination_modes/stage88B_original_Wang2025_Rdata_field_schema.json
+          retention-days: 90
+          if-no-files-found: warn
