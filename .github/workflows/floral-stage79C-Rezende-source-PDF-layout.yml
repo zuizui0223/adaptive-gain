@@ -1,0 +1,65 @@
+name: floral-stage79C-authentic-2025-Rezende-colour-change-S1-PDF
+
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/inspect_original_rezende_151_table_pdf.py"
+      - "research/floral_macro_stage79/test_inspect_original_rezende_151_table_pdf.py"
+      - ".github/workflows/floral-stage79C-Rezende-source-PDF-layout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-original-151-positive-taxon-table:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original author PDF/ZIP identity and no false age-changing negatives
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage79 \
+            -p 'test_inspect_original_rezende_151_table_pdf.py' -v
+      - name: Verify original PDF text reader and first-page renderer
+        run: |
+          command -v pdftotext
+          command -v pdfinfo
+          command -v pdftoppm
+      - name: Check original MDPI 2025 Table S1 151-positive author source PDF contents
+        run: |
+          python -u research/floral_macro_stage79/inspect_original_rezende_151_table_pdf.py \
+            --outdir stage79C_real_rezende_151_pdf_source
+      - name: Prove this is source PDF table not an imputed 151 absent guild states
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('stage79C_real_rezende_151_pdf_source/rezende2025_original_pdf_table_schema_receipt.json')
+          d=json.loads(p.read_text())
+          assert d['source_pdf_bytes']==254746
+          assert d['publication_DOI']=='10.3390/plants14142185'
+          assert d['published_pos_151_species_NOT_CONFLATED_WITH_SCREENED_NEGATIVES']
+          assert not d['actual_original_151_species_parsed_and_taxon_verified']
+          assert d['pdf_full_source_rows_NOT_automatically_extracted_as_species']
+          assert d['source_text_characters']>500
+          print('STAGE79C_ORIGINAL_REZENDE_151_SOURCE_TABLE_LAYOUT',{
+            'PDF_sha':d['original_pdf_sha256'],
+            'page_count':d['source_pages_formfeed'],
+            'source_first75lines':d['source_first75_lines'],
+            'naive_species_line_count_UNVERIFIED':d['source_naive_binomial_line_count'],
+          })
+          PY
+      - name: Archive derived original PDF structural and text preview receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79c-rezende-2025-151-positive-flower-change-original-PDF-table
+          path: stage79C_real_rezende_151_pdf_source/rezende2025_original_pdf_table_schema_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
