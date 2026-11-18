@@ -1,0 +1,78 @@
+name: floral-stage79J-original-gust10-15-20-p95-size-cluster-robustness
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/source_sizefirst_gust_threshold_study_sensitivity.py"
+      - "research/floral_macro_stage79/test_source_sizefirst_gust_threshold_study_sensitivity.py"
+      - ".github/workflows/floral-stage79J-original-gust-source-robustness.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  predeclared-strong-gust-study-influence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install study cluster descriptive source model dependencies
+        run: |
+          python -m pip install "numpy>=1.26,<3" "pandas>=2.1,<3" "statsmodels>=0.14,<1"
+      - name: Guard pre-outcome environmental scaling and insufficient gust group diversity
+        run: |
+          python -m unittest discover -s research/floral_macro_stage79 \
+            -p "test_source_sizefirst_gust_threshold_study_sensitivity.py" -v
+      - name: Restore strictly original 151 source ERA5 sites and 37 source true bees-with-size null score networks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44242382680 --repo zuizui0223/adaptive-gain \
+            --name stage79I-392size-original-ERA5-15ms-true-Bombus-sizefirst-macro \
+            --dir stage79j_source_original_sizefirst
+          test -s stage79j_source_original_sizefirst/source_original_sizefirst_ERA5_gust15_exposures.csv
+          test -s stage79j_source_original_sizefirst/source_original_sizefirst_Bombus_width_nullscores.csv
+          test -s stage79j_source_original_sizefirst/source_original_sizefirst_ERA5_gust_vs_Bombus_width_preguild_receipt.json
+      - name: Compute true source 10m/s 15m/s 20m/s gust and p95 in original source 37 within-networks
+        run: |
+          python -u research/floral_macro_stage79/source_sizefirst_gust_threshold_study_sensitivity.py \
+            --original-size-first-gust-exposures stage79j_source_original_sizefirst/source_original_sizefirst_ERA5_gust15_exposures.csv \
+            --original-source-network-width-null-scores stage79j_source_original_sizefirst/source_original_sizefirst_Bombus_width_nullscores.csv \
+            --outdir stage79j_original_ERA5_study_robustness
+      - name: Verify source uncertainty and no causal selection/cue order inference
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79j_original_ERA5_study_robustness/stage79j_original_petalwidth_gust_threshold_study_robustness.json")
+          j=json.loads(p.read_text())
+          f=j["source_original_preguild_frame"]
+          assert f["source_original_PRE_Bee_ERA5_networks"]==151
+          assert f["source_original_STRICT_bee_informative_Width_networks"]==37
+          assert f["source_original_independent_study_groups"]==15
+          assert j["source_no_validated_colourchange_negative_or_UV_spatial_guide"]
+          assert j["source_NO_same_site_VOC_scent_or_true_pollination_fitness"]
+          assert j["source_no_adaptive_cue_order_inferred"]
+          assert set(j["original_gust_threshold_sensitivity"])==set(j["original_source_predefined_ERA5_thresholds"])
+          print("STAGE79J_REAL_SOURCE_FIXED_STRONG_GUST_THRESHOLD_SENSITIVITY",{
+            "source_study_information_concentration":j["source_source_null_information_concentration"],
+            "source_fixed_10_15_20_and_gust95_sensitivity":{
+              k:{"status":v["status"],
+                 "source_gust_slope":v.get("source_ERA5_climate_and_study_adjusted_gust_coefficient"),
+                 "cluster_interval":v.get("source_study_cluster_95_sampling_interval_NOT_causal"),
+                 "study_leave_out_sign_flips":v.get("source_leave_one_study_out_sign_flips"),
+                 "within_study_wind_variation":v["within_source_study_wind_variation_groups"]}
+              for k,v in j["original_gust_threshold_sensitivity"].items()}
+          })
+          PY
+      - name: Upload source-only original gust fixed thresholds study influence receipt
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage79J-original-37size-networks-15studies-gust-threshold-study-robustness
+          path: stage79j_original_ERA5_study_robustness/
+          retention-days: 90
+          if-no-files-found: warn
