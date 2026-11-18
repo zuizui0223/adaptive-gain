@@ -19,7 +19,7 @@ from rasterio.io import MemoryFile
 
 TDWG_GIT_BLOB_SHA1="91104e5159e31f88154833a51d3b0d1c9271083f"
 GEOM_CODES="LEVEL3_COD"
-WCVP_REGION_SOURCE_SHA256="a7121978c053eba3fdbb8aed771576fa97fc8310600e0296635ca9b47cb8cd38"
+WCVP_REGION_SOURCE_SHA256="f8a84a979db18a7137a125df656cb719a5f864a8111f3babc8eaa9b470b0a2bb"
 SAMPLED_PER_SOURCE_REGION=48
 CLIMATE_VARIABLES={
  "wind":"worldclim_baseline_wind_m_s",
@@ -40,6 +40,8 @@ def original_blob_sha(raw):
     return hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()
 
 def source_regions(source_csv):
+    if sha(source_csv)!=WCVP_REGION_SOURCE_SHA256:
+        raise ValueError("STAGE87C_AUTHENTIC_STAGE87A_GLOBAL_NATIVE_REGIONS_CSV_DIGEST_CHANGED")
     with Path(source_csv).open(newline="",encoding="utf-8") as f:
         rows=list(csv.DictReader(f))
     if len(rows)!=367 or len({x["TDWG_L3"] for x in rows})!=367:
