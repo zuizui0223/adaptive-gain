@@ -58,6 +58,10 @@ def run():
         vid=vd.get("id") or vd.get("versionId") or vd.get("version")
     if not vid:
         vid=d.get("versionId") or d.get("currentVersion",{}).get("id")
+    if not vid and versionurl:
+        import re
+        m=re.search(r"/versions/(\d+)(?:[/?#]|$)",versionurl)
+        if m:vid=int(m.group(1))
     if not vid:
         print("STAGE88_DRYAD_API_METADATA_SHAPE",json.dumps({
             "root_keys":sorted(d),
