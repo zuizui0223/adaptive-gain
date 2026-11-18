@@ -107,7 +107,14 @@ def run(flora,ages):
           'independent_source_publications':int(one.source_publication.nunique()),
           'local_null_score_ratio':effect,
           'paper_cluster_bootstrap':publication_bootstrap(one,seed=20261118),}
-    source_species=matched.merge(scores[list(KEY)],on=list(KEY),validate='many_to_one')[NAME].nunique()
+    # Stage81C's original score key stores Year as a text label, while the
+    # source-observed plant table decodes the exact same calendar year as int.
+    # Canonicalize both keys before joining, never by a fuzzy location match.
+    matched_keys=matched.copy()
+    matched_keys['Year_from_original_date']=matched_keys['Year_from_original_date'].astype(str)
+    scored_keys=scores[list(KEY)].copy()
+    scored_keys['Year_from_original_date']=scored_keys['Year_from_original_date'].astype(str)
+    source_species=matched_keys.merge(scored_keys,on=list(KEY),validate='many_to_one')[NAME].nunique()
     out={'schema':'stage82_source_age_RMS_guild_dual_independence_audit',
          'source_species_ever_measured':28,
          'source_species_present_in_actual_194_scored_networks':int(source_species),
