@@ -14,7 +14,7 @@ positive taxon, not evidence the field flowers visibly changed at visit time.
 from __future__ import annotations
 import argparse,csv,hashlib,io,json,re,subprocess,tempfile,urllib.request,zipfile
 from pathlib import Path
-from collections import Counter
+from collections import Counter,defaultdict
 
 URL="https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12299958/supplementaryFiles"
 NESTED="plants-14-02185-s001.zip"
