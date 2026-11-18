@@ -61,6 +61,28 @@ These are coverage gaps among a targeted list, NOT a published-universe meta-ana
 4. **Condition on adequate independent source studies.** Show study-ID and clade leave-one-out, within-study atmospheric contrast, true matched negative controls and site-time compatibility before a cross-stage model. Keep 20m/s gust as Stage79 NO-GO (only four varying source studies), not "no effect".
 5. **Claim ceiling.** The novel empirical demonstration would be a reproducible cross-guild/clade/context boundary for **cue-order switches** that survives phylogeny, visitor availability, environmental confounding and sampling bias. No source now identifies a complete wind -> scent -> information cost -> landing -> pollination-fitness mediation.
 
+
+## Stage80L: NEW original numerical reanalysis after correcting published-study independence
+
+Re-downloaded the actual pre-existing Stage79I original Actions artifact #14399842321 and verified ZIP SHA256 d81b24bef6c01e849121cbbbf1dc085953767fc52d909f40757fc912be403b7d. The original corrected EuPPPollNet paper DOI 10.1111/geb.70000, section 2.3, explicitly clarifies that study labels 23, 24, 25 are one published source study split by three habitats. In the exact 37 bee-informative width-gust networks, 23_Holzschuh and 25_Holzschuh are present; thus 15 source Study IDs represent **14 published studies**, not 15 publications. Other IDs with the same surname (4_Marini, 5_Marini, 6_Marini) were NOT automatically merged.
+
+Independently recomputed study-fixed-effect first-order source null-score WLS using the original 151 ERA5 rows to standardize climate and matching the original 37 true source scores. Results, per ten percentage points of days with ERA5 10m daily maximum gust >=15m/s:
+
+| Source comparison | Network weight rule | Clustering | Original/source-recomputed coefficient | Cluster 95% interval |
+| --- | --- | --- | ---: | --- |
+| Stage79I exact reproduction | local null information | 15 original Study IDs | +1.4384233 | [-1.1804235, +4.0572701] |
+| Stage79K equal study exact reproduction | each Study ID one unit | 15 original Study IDs | +0.7339773 | [-1.5098657, +2.9778203] |
+| **Stage80L corrected publication clustering** | local null information | **14 source publications** | **+1.4384233** | **[-1.1989441, +4.0757907]** |
+| **Stage80L corrected publication equal weights** | each source publication one unit | **14 source publications** | **+0.9326501** | **[-1.2364367, +3.1017369]** |
+
+After publication-level grouping, the largest original publication still contributes **81.07% of the null information**, and the information-effective publication count is only **1.5092**. All descriptive intervals include zero. Neither favorable positive point estimates nor any re-clustering identify an actual sensory preference or reordering effect. Field effort and lineage remain uncontrolled.
+
+Runnable scientific check:
+    python research/floral_macro_stage80/reanalyse_publication_clusters.py --stage79i-source-zip <pinned-artifact-zip> --out new-sensitivity.json
+
+The script stops rather than silently proceeding on altered source ZIP digest, changed network/study cohort, duplicate joins, invalid scores or failed reproduction of the two published Stage79 coefficients. The numerical result is pinned in validation/stage80_publication_cluster_sensitivity_20261118.json.
+
+
 Run locally:
     python research/floral_macro_stage80/sequential_floral_cues.py
     python research/floral_macro_stage80/audit_stage_identifiability.py
