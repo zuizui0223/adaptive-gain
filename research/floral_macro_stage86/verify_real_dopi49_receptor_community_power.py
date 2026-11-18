@@ -143,7 +143,28 @@ def quantify_sites(sites,traits,new,old):
                 "candidate_blocks_containing_a_new21_taxon":sum(bool(sps&new) for k,sps in hits)}
         counts=collections.Counter(key[0] for key,g,names in opt)
         weights=[c/sum(counts.values()) for c in counts.values()] if counts else []
+        # Targeted follow-on study recruitment from the true source result:
+        # report original DOI(s) and botanical names, not invented site
+        # visits, per-flower opportunity or independent phenotypic origins.
+        new_taxa_observed=sorted(set().union(*(names&new for key,g,names in cross_new))) if cross_new else []
+        candidate_new_doi_details=[]
+        for doi in sorted(npubs):
+            group=[(key,g,names) for key,g,names in cross_new if key[0]==doi]
+            taxa=sorted(set().union(*(names&new for key,g,names in group)))
+            candidate_new_doi_details.append({
+                "original_normalized_DOI":doi,
+                "source_candidate_blocks_containing_new_taxa":len(group),
+                "original_source_new21_species_names":taxa,
+                "original_source_visited_species_in_those_blocks":
+                    sorted(set().union(*(names for key,g,names in group))),
+                "original_year_month_habitat_strata":[
+                    {"year":k[2],"month":k[3],"habitat":k[6]}
+                    for k,g,names in group[:12]],
+                "source_publication_DOI_not_proof_independent_field_study":True,
+            })
         out[label]={
+           "source_new21_taxa_in_strict_guild_comparable_metadata_blocks":new_taxa_observed,
+           "source_new21_DOI_specific_recruitment_targets":candidate_new_doi_details,
            "original_source_metadata_blocks_with_any_optical_species":len(x),
            "source_prebee_metadata_blocks_with_2_or_more_measured_plants":len(presize),
            "source_metadata_blocks_with_2_distinct_bee_visited_plants_two_genera_and_both_guilds":len(opt),
