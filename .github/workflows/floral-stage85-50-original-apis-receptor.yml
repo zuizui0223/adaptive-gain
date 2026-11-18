@@ -99,8 +99,8 @@ jobs:
           assert r['source_28_old_continuous_physics_max_absolute_diff']<1e-7
           assert r['source_previous_28_species_in_full_50']==28
           assert r['original_source_spectrometer_species']==50
-          assert r['source_original_complete_age_parts']>=53
-          assert r['source_author_exact_taxon_48_of_219_group_status_unverified'] if 'source_author_exact_taxon_48_of_219_group_status_unverified' in r else True
+          assert r['original_source_complete_flower_age_parts']>=53
+          assert r['original_source_spectrometer_species']==50
           with (p/'stage85_50_original_apis_far_near_species.csv').open() as f:
             rows=list(csv.DictReader(f))
           assert len(rows)==r['original_source_complete_age_species']
