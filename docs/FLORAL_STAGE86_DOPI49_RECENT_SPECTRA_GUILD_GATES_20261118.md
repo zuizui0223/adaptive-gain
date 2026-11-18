@@ -27,3 +27,31 @@ Source DoPI rows are positive interaction reports only: no unrecorded visitor is
 ## Preregistered stop / advance rule
 
 The scientific goal is a cross-study replicated information-stage effect that remains after species identity, plant clade, observer/source study, actual sampled floral opportunity, temperature/UV irradiance, gust and pollinator guild availability are accounted for. If strict metadata/survey candidates are sparse or concentrated in one publication/species, report a positive **coverage expansion** but **NO-GO** for cue-order or ecological preference mechanism. Study-level gust in ERA5 cannot establish airborne floral VOC plume intermittency, and neither DoPI nor original Japan spectra measure learned recognition, actual flower landing or successful pollen transfer at the same time. Do not fit a fictional wind -> scent -> learning -> landing -> plant fitness SEM.
+
+
+## Executed actual-original-source results and publication clustering
+
+GitHub Actions [#44283700979](https://github.com/zuizui0223/adaptive-gain/actions/runs/44283700979) **SUCCESS**. Original DoPI source download 384,896,230 bytes and original MD5 d1c76fc0fd4df6a6828550c5866e4af1 re-verified. Genuine Stage85 49 species receptor artifact SHA256 fd49543ccbc27631e37ccff25d7fc7ab17def7f2b8f9365658d272d24d25097d also re-verified. Derived-only numerical ZIP GitHub artifact **14418760539**, ZIP SHA256 **fcaf29fde7c51faecef3f5bbbcb1040b680d9c0fc4292bfbe9b8b27926d37b34**.
+
+The original public DoPI 676,900-row table contains **42,738** positive literature interaction rows from 49 genuine source age-comparable Apis receptor species: **39,814** from previously modeled 28 species, **2,924** from 21 newly paired species. *Houttuynia cordata* is the only source 50-species match missing a complete early/late optical contrast (one source row). Across the 49, **192 normalized source DOIs** are represented: 183 among old 28 and 35 among new21, with 26 DOIs shared and **9 DOIs not found among prior 28**. Only **35/49** source plants have both species-ranked Bombus and other bee positive reports somewhere in DoPI; only **10/21** newly added plants have both.
+
+### Frozen source comparability gates
+
+The cohort was selected using only authentic taxon names, original author DOI × exact coordinate × source year × source month × country × habitat, original source method, and source survey-scope labels. Outcome-defined guild filters are reported separately and do not silently control the original plant cohort.
+
+| Source evidence gate | Before guild ≥2 species | ≥2 separately bee-visited plant species, ≥2 genera, both identified bee guilds | Same filter using old 28 species | Genuinely new blocks after adding 21 species | Blocks containing at least one new 21 taxon | Normalized DOI sources, all valid blocks | New-species DOI sources |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original DOI/site/month/habitat only | 955 | **115** | 115 | **0** | 9 | 30 | 2 |
+| Author source method DO | 916 | **107** | 106 | **1** | 9 | 29 | 2 |
+| DO + plant and pollinator scope both All | 200 | **43** | 42 | **1** | 7 | **12** | **1** |
+| DO + both All + pollination category 1/2 | 24 | **4** | 4 | **0** | 0 | **1** | **0** |
+
+Caution: the "new blocks" are increases in site-key count, not new independent botanical populations or confirmations that the new source species were sampled under common effort. The tight DO+both-All block subset has one source DOI contributing 25.58% of all 43 blocks; source DOI weight concentration gives **6.58 effective DOI units**, not 12 equal studies. In the strongest source pollen evidence category, all four strict blocks arise from **one DOI**, with **no new 21-taxonomy contribution**.
+
+Optical cue contrast power also shrinks with source quality. Under DO+both-All, all 43 blocks have some distinction among the *continuous* measured species-level far-green, near-chromatic or hexagon age-change variables; only **12 blocks in seven DOIs** contain differing values of the descriptive green-maintained/near-chroma-reduced binary source flag, five of which include a newly recruited 21-taxon plant. Under pollination-grade 1/2, four blocks share one DOI and **none** contains a binary-sign-flag contrast. Neither description identifies visual sensory behavior or preference.
+
+### Biological interpretation / progress limit
+
+Stage85's expansion of available optical species **28 → 49** increased the taxonomic/visual measurement substrate, but it has **not enlarged the stringent same-study candidate observational comparisons meaningfully**: 42 → 43 DO+all-survey blocks and no additional grade-1/2 original pollen-support blocks. This is a real source-level empirical **coverage bottleneck**, not an absence of any wind-dependent or learning-dependent floral behavior in nature. The source contains no observed at-visit age-specific flower colour or source-coincident bee visual learning, true plume transport, actual wind, flower oscillation, landing or plant fitness.
+
+Preregistration consequence: stop exploratory regression tuning on the same repeated DoPI taxa. Prioritize genuine new independently sampled **site/hour/flower** optical and visit data plus experimental tracking of individual sensory cue order. A study-level positivity ledger is a source recruitment target, not a new coefficient for causation.
