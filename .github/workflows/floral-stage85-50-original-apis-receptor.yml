@@ -1,0 +1,119 @@
+name: Stage85 verified 50 authentic Ohashi taxa x Apis D65 far/near perception
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage85/**"
+      - "docs/FLORAL_STAGE85_DOPI50_APIS_RECEIVERS_20261118.md"
+      - ".github/workflows/floral-stage85-50-original-apis-receptor.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  genuine-source-50-taxon-receptor-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install known source-compatible Python readers
+        run: python -m pip install "numpy==2.3.5" "xlrd==2.0.2"
+      - name: Source-free scientific provenance/unit guards
+        run: |
+          python -m unittest discover -s research/floral_macro_stage85 \
+            -p "test_*.py" -v
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Install underlying system libraries needed by pavo
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            libcurl4-openssl-dev libudunits2-dev libssl-dev libxml2-dev \
+            libgdal-dev libgeos-dev libproj-dev libmagick++-dev
+      - name: Install and verify real pavo honeybee receptor model
+        run: |
+          Rscript -e 'repo<-Sys.getenv("RSPM"); if(!nzchar(repo))repo<-"https://cloud.r-project.org"; install.packages(c("pavo","jsonlite"),repos=repo,Ncpus=2)'
+          Rscript -e 'stopifnot(requireNamespace("pavo",quietly=TRUE),requireNamespace("jsonlite",quietly=TRUE)); cat("SOURCE_PAVO_VERSION",as.character(packageVersion("pavo")),"\n")'
+      - name: Verify same original Apis fixture as Stage81D
+        run: |
+          Rscript -e 'data(flowers,package="pavo"); m<-pavo::vismodel(flowers,visual="apis",illum="D65",qcatch="Ei",bkg="green",vonkries=TRUE,relative=FALSE,achromatic="l"); h<-pavo::colspace(m,space="hexagon"); stopifnot(nrow(m)==nrow(h),all(c("s","m","l")%in%names(m)),all(c("x","y","r.vec")%in%names(h)))'
+      - name: Download original Stage84 DoPI 50-name source-verified manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14411919452/zip" \
+            --output stage85_source_original_50_taxa.zip
+          echo "50c3f5a7468dff211fe0ca75d49bc50a1004930898742fe3f85a8ec0f22467a1  stage85_source_original_50_taxa.zip" | sha256sum -c
+      - name: Download prior Stage81D actual 28-species source-derived receptor result
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p stage85_source_original_28_receptor
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14409142056/zip" \
+            --output stage85_source_original_28_receptor/stage81d_original_authentic_receptor_28.zip
+          echo "9139935f10fbd94a8fb888d807af872c9e5289422249d138fb8a61ac799a0b2a  stage85_source_original_28_receptor/stage81d_original_authentic_receptor_28.zip" | sha256sum -c
+          unzip -q stage85_source_original_28_receptor/stage81d_original_authentic_receptor_28.zip -d stage85_source_original_28_receptor/extracted
+          test -s stage85_source_original_28_receptor/extracted/stage81d_derived_bee_receptor_metrics/stage81d_original_28_apis_far_near_species.csv
+          test -s stage85_source_original_28_receptor/extracted/stage81d_derived_bee_receptor_metrics/stage81d_original_28_apis_far_green_near_hex_age_parts.csv
+      - name: Verify true author 286MB ZIP and calculate 50 source taxa original spectra
+        run: |
+          python -u research/floral_macro_stage85/export_original_50_stage_spectra.py \
+            --source-stage84-artifact-zip stage85_source_original_50_taxa.zip \
+            --outdir stage85_temporary_original_spectra
+      - name: Fit 50 taxa Apis D65 green/hexagon early-late source contrasts and cross-check old 28
+        run: |
+          Rscript research/floral_macro_stage85/quantify_original_50_pavo_far_near.R \
+            stage85_temporary_original_spectra/temp_original_50_stage_spectra_wide.csv \
+            stage85_temporary_original_spectra/temp_original_50_source_sample_manifest.csv \
+            stage85_source_original_28_receptor/extracted/stage81d_derived_bee_receptor_metrics/stage81d_original_28_apis_far_near_species.csv \
+            stage85_source_original_28_receptor/extracted/stage81d_derived_bee_receptor_metrics/stage81d_original_28_apis_far_green_near_hex_age_parts.csv \
+            stage85_true_original_derived_50_receiver
+      - name: Prohibit redistribution of all 50 original per-sample spectra
+        if: always()
+        run: |
+          rm -f stage85_temporary_original_spectra/temp_original_50_stage_spectra_wide.csv
+          rm -f stage85_temporary_original_spectra/temp_original_50_source_sample_manifest.csv
+      - name: Validate science gates and previous 28 numerical reproduction
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path('stage85_true_original_derived_50_receiver')
+          r=json.loads((p/'stage85_50_apis_true_original_source_receipt.json').read_text())
+          s=json.loads(Path('stage85_temporary_original_spectra/stage85_source_50_spectrometer_manifest_receipt.json').read_text())
+          assert s['original_50_source_species_with_spectra']==50
+          assert s['source_original_prior_28_true_spectral_replicates']==1360
+          assert s['source_original_new_22_true_spectral_replicates']>0
+          assert r['source_28_old_continuous_physics_max_absolute_diff']<1e-7
+          assert r['source_previous_28_species_in_full_50']==28
+          assert r['original_source_spectrometer_species']==50
+          assert r['original_source_complete_flower_age_parts']>=53
+          assert r['original_source_spectrometer_species']==50
+          with (p/'stage85_50_original_apis_far_near_species.csv').open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==r['original_source_complete_age_species']
+          assert len({x['source_species'] for x in rows})==len(rows)
+          print('STAGE85_SOURCE_50_AGE_RECEPTOR_ORIGINAL_NUMERICAL_ADMISSION_OK',r)
+          PY
+      - name: Publish ONLY source-derived species/part metrics and accession receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage85-original-Ohashi-DoPI-50-Apis-far-green-near-chroma
+          path: |
+            stage85_true_original_derived_50_receiver/
+            stage85_temporary_original_spectra/stage85_source_50_spectrometer_manifest_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
