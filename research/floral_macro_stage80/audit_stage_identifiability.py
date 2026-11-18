@@ -53,7 +53,7 @@ def audit(rows:list[dict])->dict:
         'Raw-unverified data cannot be relabelled as downloaded, re-extracted, or inaccessible forever.',
         'Within-source co-measurement is necessary but not sufficient for true site-time or causal identification.',
         'Missing modality means no source evidence; it never means trait or insect phenotype is absent.',
-        'Original EuPPollNet publisher correction states 52 studies; original code distinct study_ID=54: reconcile before independence claims.',
+        'Original EuPPollNet publication explicitly resolves 52 studies versus 54 Study IDs: a single study was split into ID 23, 24 and 25 for three habitats. Publication-level clustering, not label count, is required for independence.',
     ]
     output['schema']='stage80_original_source_stage_cooccurrence_NOT_effect_size_meta_analysis'
     output['original_source_rows']=len(rows)
