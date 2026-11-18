@@ -27,10 +27,16 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-      - name: Install published R bee vision model pavo and JSON serializer
+      - name: Install missing R system libraries (previous source CI failed libcurl and libudunits2)
         run: |
-          Rscript -e 'install.packages(c("pavo","jsonlite"),repos="https://cloud.r-project.org",Ncpus=2)'
-          Rscript -e 'stopifnot(requireNamespace("pavo"),requireNamespace("jsonlite"))'
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            libcurl4-openssl-dev libudunits2-dev libssl-dev libxml2-dev \
+            libgdal-dev libgeos-dev libproj-dev libmagick++-dev
+      - name: Install published R bee vision model pavo with native Posit package repository
+        run: |
+          Rscript -e 'repo <- Sys.getenv("RSPM"); if (!nzchar(repo)) repo <- "https://cloud.r-project.org"; install.packages(c("pavo","jsonlite"), repos=repo, Ncpus=2)'
+          Rscript -e 'stopifnot(requireNamespace("pavo",quietly=TRUE),requireNamespace("jsonlite",quietly=TRUE)); cat("PAVO_R_RECEPTOR_LIBRARY_OK",as.character(utils::packageVersion("pavo")),"\n")'
       - name: Run source-free export audit tests
         run: |
           python -m unittest discover -s research/floral_macro_stage81 \
