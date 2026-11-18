@@ -31,7 +31,7 @@ jobs:
         run: |
           gh run download 44242382680 \
             --repo zuizui0223/adaptive-gain \
-            --name stage79i-392-width-sizefirst-ERA5-real-stronggust-Bombus-macro \
+            --name stage79I-392size-original-ERA5-15ms-true-Bombus-sizefirst-macro \
             --dir stage81f_era5_original
           gh run download 44256106078 \
             --repo zuizui0223/adaptive-gain \
