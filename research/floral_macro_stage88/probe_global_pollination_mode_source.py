@@ -59,6 +59,13 @@ def run():
     if not vid:
         vid=d.get("versionId") or d.get("currentVersion",{}).get("id")
     if not vid:
+        print("STAGE88_DRYAD_API_METADATA_SHAPE",json.dumps({
+            "root_keys":sorted(d),
+            "embedded_links":d.get("_links",{}),
+            "version_url_resolved":versionurl,
+            "version_object_sample":versions[:1],
+            "known_version_ID_candidates":{k:d.get(k) for k in ("versionId","version","currentVersion","versionNumber")}},
+             ensure_ascii=False,default=str),flush=True)
         raise ValueError("STAGE88_DRYAD_ORIGINAL_VERSION_ID_UNAVAILABLE")
     file_data,_,_=http(f"{BASE}/versions/{int(vid)}/files")
     files=json.loads(file_data)
