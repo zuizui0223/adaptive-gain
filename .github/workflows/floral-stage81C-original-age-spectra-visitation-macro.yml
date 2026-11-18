@@ -1,0 +1,55 @@
+name: Floral Stage81C measured raw age spectra x actual 54-ID EuPP visitor macro
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage81/source_ohashi_age_shift_vs_real_EuPP_guild.py"
+      - "research/floral_macro_stage81/test_source_ohashi_age_shift_vs_real_EuPP_guild.py"
+      - ".github/workflows/floral-stage81C-original-age-spectra-visitation-macro.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  numerical-macro-from-real-original-source-artifacts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned quantitative libraries
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3"
+      - name: Run original-grain null-score and publication clustering guards
+        run: |
+          python -m unittest discover -s research/floral_macro_stage81 \
+             -p "test_source_ohashi_age_shift_vs_real_EuPP_guild.py" -v
+      - name: Download real source Stage69 and source Stage81B artifacts independently
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage81c_source_original_EuPP
+          gh run download 44255120835 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage81b-28-true-age-part-spectral-macro-derived \
+            --dir stage81c_source_original_Ohashi
+      - name: Independently calculate source-coincident species x original visitor null scores
+        run: |
+          python -u research/floral_macro_stage81/source_ohashi_age_shift_vs_real_EuPP_guild.py \
+            --original-stage69-flora stage81c_source_original_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-stage81b-ages stage81c_source_original_Ohashi/stage81b_28_species_source_early_late_part_spectral_metrics.csv \
+            --outdir stage81c_original_source_macro_readout
+      - name: Publish only derived macro source and interval information
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage81c-measured-age-spectra-eupp-guild-source-macro
+          path: stage81c_original_source_macro_readout/
+          retention-days: 90
+          if-no-files-found: warn
