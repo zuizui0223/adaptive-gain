@@ -1,0 +1,121 @@
+name: floral-stage77b-visual-Bombus-wind-climate-piecewise-MACRO
+
+on:
+  push:
+    branches: [analysis/floral-bombus-visual-wind-climate-path-stage77-20261118]
+    paths:
+      - "research/floral_macro_stage77/source_observational_visual_wind_climate_Bombus_piecewise.py"
+      - "research/floral_macro_stage77/test_source_observational_visual_wind_climate_Bombus_piecewise.py"
+      - ".github/workflows/floral-stage77b-visual-wind-piecewise-macro.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  macro-original-visual-guild-environment-path-screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install study-block regression and originally measured source data readers
+        run: |
+          python -m pip install "pandas>=2.1,<3" "statsmodels>=0.14,<1" "numpy>=1.26,<3"
+      - name: Mock-only source path, scientific cohort, rank and no-imputed-VOC safeguards
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage77 \
+            -p "test_source_observational_visual_wind_climate_Bombus_piecewise.py" -v
+      - name: Restore original 59k botanical source TEXT (no photo colours)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage77b_original_NHM
+          test -s stage77b_original_NHM/combined/original_NHM_text_traits_compact.csv
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage77b_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original corrected study plant x network species rows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage77b_original_networks
+          test -s stage77b_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage77b_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Restore original 5-attribute WorldClim WIND x all 1864 original network sites
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44205235512 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage77-ORIGINAL-WORLDCLIM-WIND-54study-1864-field-sites-vs-Bombus \
+            --dir stage77b_original_climate
+          test -s stage77b_original_climate/original_1864_network_sites_worldclim_wind_climate_normals.csv
+          echo "948ac0ecbcfc9b8a2e810753748a5436d998cd586574ea185c6da5db08cbce53  stage77b_original_climate/original_1864_network_sites_worldclim_wind_climate_normals.csv" | sha256sum -c
+          echo "c01268ed200ad20da7f16888c041fcd71a47cad8f21dde58cc27309d08e45af5  stage77b_original_climate/original_source_WorldClim_wind_climate_1864_site_matching_receipt.json" | sha256sum -c
+      - name: Fit observational study-block conditional path screen with climate normal wind modulation
+        run: |
+          python -u research/floral_macro_stage77/source_observational_visual_wind_climate_Bombus_piecewise.py \
+            --source-NHM stage77b_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --source-original-networks stage77b_original_networks/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --source-worldclim-sites stage77b_original_climate/original_1864_network_sites_worldclim_wind_climate_normals.csv \
+            --source-worldclim-receipt stage77b_original_climate/original_source_WorldClim_wind_climate_1864_site_matching_receipt.json \
+            --outdir stage77b_original_observational_path
+      - name: Verify no false causal wind×scent mediation or arbitrary 2021 experiment insertion
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage77b_original_observational_path/original_worldclim_flower_visual_Bombus_piecewise_path_screen.json")
+          d=json.loads(p.read_text())
+          assert d["source_Europe_study_networks"]==1864
+          assert d["source_original_study_IDs"]==54
+          assert d["source_positive_lexical_hue_plant_network_audit"]["original_network_keys_with_two_DISTINCT_reported_hue_states"]==424
+          assert d["source_scent_VOC_availability_in_same_54_Europe_studies"]==0
+          assert d["odor_wind_visual_three_modal_causal_mediation_identifiable"] is False
+          assert d["source_mediator_plume_latent_with_no_indicators_is_unidentified"]
+          assert d["no_external_island_botanical_data_in_model"]
+          assert not d["new_global_Bombus_SDM_or_phylogenetic_effect_estimated"]
+          a=d["source_environment_path_macro_models"]["cross_hue"]
+          assert a["source_base_frame_unconditioned_on_recorded_Bombus"]==424
+          assert a["source_networks_5_climatology_monthly"]==422
+          assert a["source_networks_with_any_strict_recorded_bee_after_preselection"]==421
+          assert a["source_studies_with_strict_bees"]>=30
+          assert a["VOC_to_Bombus_path"].startswith("NOT_IDENTIFIED")
+          assert a["wind_to_VOC_to_Bombus_indirect_path"].startswith("NOT_IDENTIFIED")
+          assert a["confirmed_phylogenetic_adaptation_or_causal_SEM_fitted"] is False
+          for mod in ("model_V_climate_to_positive_reported_color_composition",
+                      "model_B_climate_wind_visual_to_realized_Bombus_recorded_share",
+                      "model_B_srad_vapr_instead_of_highly_collinear_T"):
+              item=a[mod]
+              assert item["source_independent_study_ID_groups"]>=30
+              assert item["cluster_robust_interval_NOT_causal_SEM_interval"]
+              assert item["source_design_matrix_rank"]==item["source_design_matrix_columns"]
+          print("STAGE77B_REAL_VISUAL_WIND_BOMBUS_CLIMATE_PATH_ALGEBRA_ONLY",{
+            "n_orig_field_networks":d["source_Europe_study_networks"],
+            "visual_frame":a["source_base_frame_unconditioned_on_recorded_Bombus"],
+            "matched_monthly_climate":a["source_networks_5_climatology_monthly"],
+            "bee_recorded":a["source_networks_with_any_strict_recorded_bee_after_preselection"],
+            "wind_within_study":a["source_study_variation_in_wind_normal"],
+            "B_path_main":a["model_B_climate_wind_visual_to_realized_Bombus_recorded_share"]["observed_coefficient_and_cluster_sampling_intervals"],
+            "V_path":a["model_V_climate_to_positive_reported_color_composition"]["observed_coefficient_and_cluster_sampling_intervals"],
+            "B_study_loo":a["study_leave_out_visual_to_Bombus_and_wind_interaction"]["source_study_leave_one_out_terms"],
+            "scent_VOC_path":a["VOC_to_Bombus_path"],
+            })
+          PY
+      - name: Publish source-only study and climate association receipts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage77b-ORIGINAL-WorldClim-visual-Bombus-climate-piecewise-observational
+          path: stage77b_original_observational_path/
+          retention-days: 90
+          if-no-files-found: warn
