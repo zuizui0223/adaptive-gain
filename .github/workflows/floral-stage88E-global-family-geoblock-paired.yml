@@ -1,0 +1,97 @@
+name: Stage88E real-global 12-family hue/wind/Bombus paired geographic block audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/source_paired_global_family_spatial_ablation.py"
+      - "research/floral_macro_stage88/test_source_paired_global_family_spatial_ablation.py"
+      - "docs/FLORAL_STAGE88E_SPATIAL_PAIRED_FAMILY_COMPOSITION_20261118.md"
+      - ".github/workflows/floral-stage88E-global-family-geoblock-paired.yml"
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  same-original-regions-taxon-family-ablation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fixed source regression and geo-block dependencies
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6" "scipy==1.16.3"
+      - name: No false original source and paired geographic blocks invariant checks
+        run: python -m unittest discover -s research/floral_macro_stage88 -p "test_source_paired_global_family_spatial_ablation.py" -v
+      - name: Recover original 55,775 species×367 native TDWG WCVP family exclusion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14426246428/zip" \
+            --output stage88E_original_WCVP_family_3scopes.zip
+          echo "4451986d53f653cb96966d0595765d2c7806fb81057177be65ccfb3d2519e7d2  stage88E_original_WCVP_family_3scopes.zip" | sha256sum -c
+      - name: Recover 367 original floral TDWG3 WorldClim monthly normals
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            --output stage88E_original_climate_regions.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage88E_original_climate_regions.zip" | sha256sum -c
+      - name: Recover original 3,958,417 GBIF Bombus record-derived regional richness
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14419407872/zip" \
+            --output stage88E_original_GBIF_Bombus_regions.zip
+          echo "2fe7510fe8c08189d63151fe255a00baafb96c7acc87d3d0fedc970966ca1a43  stage88E_original_GBIF_Bombus_regions.zip" | sha256sum -c
+      - name: Recompute common 268 global/138 observed Bombus region fixed-covariate paired 2-scale spatial intervals
+        run: |
+          python -u research/floral_macro_stage88/source_paired_global_family_spatial_ablation.py \
+            --stage88D-family-zip stage88E_original_WCVP_family_3scopes.zip \
+            --stage87C-climate-zip stage88E_original_climate_regions.zip \
+            --stage87D-GBIF-zip stage88E_original_GBIF_Bombus_regions.zip \
+            --geoblock-reps 999 \
+            --outdir stage88E_real_original_spatial_family_derived
+      - name: Confirm original source count and genuine paired geographic differences
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          p=Path("stage88E_real_original_spatial_family_derived")
+          r=json.loads((p/"stage88E_original_paired_global_flora_family_spatial_receipt.json").read_text())
+          assert [z["n_source_common_original_regions"] for z in r["source_global_and_bee_scope"]]==[268,138]
+          assert r["source_NO_reinterpretation_as_individual_animal_or_wind_pollination"]
+          data=list(csv.DictReader((p/"stage88E_268global_138bee_source_family_spatial_comparison.csv").open()))
+          assert len(data)==264
+          def one(scope,hue,term,condition):
+            x=[z for z in data if z["scope"]==scope and z["hue"]==hue and
+               z["aggregation"]=="genus_balanced" and z["term"]==term and z["family_exclusion"]==condition]
+            assert len(x)==1
+            return x[0]
+          gram="exclude_three_graminoid_families"
+          brown=one("global","brown","wind",gram)
+          assert abs(float(brown["beta_fixed_covariates"])-(-.000901))<.00003
+          assert abs(float(brown["delta_to_all_native_species"])-(-.004898))<.00003
+          delta=json.loads(brown["geoblock20x45_paired_delta_95"])
+          assert delta[1]<0
+          yellow=one("bee_record_positive_only","yellow","log_bombus_richness",gram)
+          assert abs(float(yellow["beta_fixed_covariates"])-.022669)<.00005
+          assert json.loads(yellow["geoblock20x45_beta_95"])[0]>0
+          print("STAGE88E_GLOBAL_SOURCE_268_138_PAIRED_FAMILY_ABLATION_VERIFIED")
+          PY
+      - name: Publish only derived 264-comparison source summary, not third-party originals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage88E-original-global-WCVP-family-268-138-spatial-paired-ablation
+          path: stage88E_real_original_spatial_family_derived/
+          retention-days: 90
+          if-no-files-found: warn
