@@ -5,7 +5,7 @@ Stage79D verified 28 exact accepted name overlaps. Owner original README:
   Reflectance/<Species>/<Species>-e10o.xls
   e/m/l are early/middle/late; digits denote sample number,
   suffix is measured petal area. Column 1 nm; column 6 %T/R.
-The public ZIP also contains AppleDouble ._*.xls metadata, NOT spectra.
+The public ZIP also contains unevenly distributed AppleDouble ._*.xls metadata, NOT spectra.
 Do not count or read them as separate samples.
 
 This DOES NOT implement the author's D65/Apis receptor model, background
@@ -124,9 +124,12 @@ def author_part_age_archive(z,roster):
 
 def real_source_age_audit(z,roster):
     total,valid,meta,exact,bydir=author_part_age_archive(z,roster)
-    # The published 20,490 ZIP suffix entries include paired AppleDouble files.
-    if total!=20490 or valid!=10245 or meta!=10245:
-        raise ValueError("STAGE81B_MACOS_APPLEDOUBLE_UNVERIFIED_SOURCE_ORIGINAL_COUNTS")
+    # Original ._ AppleDouble metadata are UNEVEN: two 28-taxon folders contain none.
+    if total!=20490 or not 0<meta<total or valid+meta!=total:
+        raise ValueError("STAGE81B_ORIGINAL_ZIP_SOURCE_OR_APPLEDOUBLE_COUNTS_INVALID")
+    actual_28=sum(len(bydir[exact[r]]) for r in roster)
+    if actual_28!=1660:
+        raise ValueError("STAGE81B_28_SOURCE_SPECIES_TRUE_WORKBOOK_COUNT_CHANGED")
     out=[];problems=[];audit=Counter()
     for literal in sorted(roster):
         author_folder=exact[literal]
