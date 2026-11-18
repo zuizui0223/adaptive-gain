@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import unittest
+import csv,tempfile
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
@@ -38,6 +39,24 @@ def fixture_xlsx(header="Species",taxon="Gentiana lutea"):
     return b.getvalue()
 
 class OriginalFloralVOCSpeciesGuards(unittest.TestCase):
+    def test_original_73_measured_spectra_and_duplicate_or_missing_source_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            f=Path(d)/"spectrum_original.csv"
+            with f.open("w",newline="",encoding="utf-8") as h:
+                w=csv.DictWriter(h,fieldnames=[
+                    "spectral_original_species_name",
+                    "original_2024_true_petal_UV_300_399_percent"])
+                w.writeheader()
+                for i in range(73):
+                    w.writerow({"spectral_original_species_name":f"Genus{i} alba",
+                                "original_2024_true_petal_UV_300_399_percent":2.5})
+            names,checksum=m.direct_source_spectrometer_73(f)
+            self.assertEqual(len(names),73)
+            self.assertEqual(len(checksum),64)
+            f.write_text("species_name\nGenus1 alba\n",encoding="utf-8")
+            with self.assertRaisesRegex(ValueError,"ORIGINAL_73_SPECTROMETER_ROWS_CHANGED"):
+                m.direct_source_spectrometer_73(f)
+
     def test_original_published_not_automatically_305(self):
         self.assertEqual(m.SOURCE_ARTICLE,"10.3389/fpls.2020.01154")
         self.assertEqual(m.ZIP_SIZE,8428937)
