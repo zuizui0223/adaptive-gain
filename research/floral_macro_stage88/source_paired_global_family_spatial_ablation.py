@@ -16,6 +16,7 @@ import numpy as np,pandas as pd
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"floral_macro_stage87"))
 from analyze_global_hue_wind_bombus_spatial_overlap import (
     source_join,source_design,source_blocks,COLORS,PRIMARY,CELLS,
+    WCVP_CLIMATE_ZIP_SHA,BOMBUS_ZIP_SHA,
 )
 SOURCE_FAMILY_SHA="4451986d53f653cb96966d0595765d2c7806fb81057177be65ccfb3d2519e7d2"
 SOURCE_MEMBER="stage88D_global_TDWG3_native_flora_hue_three_family_exclusion_designs.csv"
@@ -137,8 +138,9 @@ def analyze(family_zip,native_zip,bee_zip,out,boot=999):
             writer.writerow({k:json.dumps(v) if isinstance(v,list) else v for k,v in row.items()})
     receipt={"schema":"stage88E_original_NHM_Kew_WCVP_family_leaveout_real_paired_geographical_bootstrap",
        "source_file_SHA256":{"family_source":SOURCE_FAMILY_SHA,
-         "Stage87C_climate_source":orig["original_flora_regions"],
-         "Stage87D_bombus_source":orig["original_Bombus_positive_regions"]},
+         "Stage87C_climate_source":WCVP_CLIMATE_ZIP_SHA,
+         "Stage87D_bombus_source":BOMBUS_ZIP_SHA},
+       "original_source_region_gates":orig,
        "source_global_and_bee_scope":meta,
        "source_original_family_conditions":list(DESIGNS),
        "source_source_species_wind_pollination_mode_NOT_verified":True,
