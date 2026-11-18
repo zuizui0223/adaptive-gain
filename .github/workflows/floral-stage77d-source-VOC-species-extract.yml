@@ -36,6 +36,7 @@ jobs:
             --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
             --dir stage77d_original_NHM
           test -s stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv
+          test -s stage77d_original_NHM/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv
           echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
       - name: Retrieve source-locked EuPPollNet 1408 visited botanical species
         env:
@@ -52,6 +53,7 @@ jobs:
           python -u research/floral_macro_stage77/reconstruct_original_multispecies_VOC_XLSX_species_overlap.py \
             --source-NHM stage77d_original_NHM/combined/original_NHM_text_traits_compact.csv \
             --source-EuPP stage77d_original_guilds/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --original-73-spectra stage77d_original_NHM/spectral_text_join/stage67_real73_NHM_original_text_exact_literal_join.csv \
             --outdir stage77d_original_scent_VOC_XLSX
       - name: Confirm source file actual 3 XLSX, no faux direct guild mediation
         run: |
@@ -69,6 +71,9 @@ jobs:
                      for x in r["original_author_source_XLSX_per_member_double_fetch_sha256"].values())
           assert len(r["original_source_three_XLSX_workbooks"])==3
           assert all(len(x["source_original_xlsx_sha256"])==64 for x in r["original_source_three_XLSX_workbooks"])
+          assert r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["source_original_direct_2024_spectrometer_species"]==73
+          assert r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["source_direct_spectrometer_species_with_original_EuPP_visits"]==36
+          assert r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["no_false_three_modality_site_cotemporal_coincidence"]
           assert r["source_2020_scent_dataset_cannot_prove_VOC_at_EuPP_field_site_time"]
           assert r["source_2020_scent_compilation_prior_studies_not_independent_flower_evolution"]
           assert r["VOC_scent_wind_Bombus_causal_mediation_fitted"] is False
@@ -87,6 +92,12 @@ jobs:
              r["original_exact_233_VISUAL_HUE_species_source_VOC_overlap_if_header_verified"],
             "real_direct_963_NHM_species_overlap":
              r["original_exact_NHM_EuPP_name_overlap_if_source_header_verified"],
+            "real_source_73_spectra_overlap_VOC":
+             r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["source_original_VOC_overlap_with_73_direct_spectrometer_species"],
+            "true_spectrometer_x_VOC_x_original_visits_overlap":
+             r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["source_original_VOC_overlap_with_direct_spectrometer_AND_EuPP"],
+            "true_spectrometer_x_VOC_x_original_visits_names":
+             r["original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource"]["source_original_strict_spectrometer_VOC_EuPP_taxon_names"],
           })
           PY
       - name: Source-only original species and worksheet provenance report
