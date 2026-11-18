@@ -1,0 +1,89 @@
+name: floral-stage79I-size-FIRST-392-network-ERA5-gust15-Bombus-MACRO
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/source_sizefirst_392_network_ERA5_gust_Bombus.py"
+      - "research/floral_macro_stage79/test_source_sizefirst_392_network_ERA5_gust_Bombus.py"
+      - ".github/workflows/floral-stage79I-sizefirst-stronggust-Bombus-macro.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prospectively-sampled-original-strong-wind-within-network-size:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 54
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original macro and persistent ERA5 source read software
+        run: |
+          python -m pip install "numpy>=1.26,<3" "pandas>=2.1,<3" "statsmodels>=0.14,<1" "requests>=2.31,<3"
+      - name: Source-free tests for prospective 392-size-network selection and January date caveat
+        run: |
+          python -m unittest discover -s research/floral_macro_stage79 \
+            -p 'test_source_sizefirst_392_network_ERA5_gust_Bombus.py' -v
+      - name: Retrieve real botanical 118 petal widths at corrected original study networks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44222475354 --repo zuizui0223/adaptive-gain \
+            --name stage79B-original-NHM59k-EuPP1408-petal-width-vs-near-pattern-macro-coverage \
+            --dir original_79I_petal_width
+          test -s original_79I_petal_width/original_EuPP_plant_petal_width_marking_trait_availability.csv
+      - name: Restore all 1864 original corrected true field network study coordinates/years/months
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44205235512 --repo zuizui0223/adaptive-gain \
+            --name stage77-ORIGINAL-WORLDCLIM-WIND-54study-1864-field-sites-vs-Bombus \
+            --dir original_79I_field_sites
+          echo "948ac0ecbcfc9b8a2e810753748a5436d998cd586574ea185c6da5db08cbce53  original_79I_field_sites/original_1864_network_sites_worldclim_wind_climate_normals.csv" | sha256sum -c
+      - name: Fetch actual ERA5 survey-year-month daily GUST from size-first 392 networks / 40 source studies
+        run: |
+          python -u research/floral_macro_stage79/source_sizefirst_392_network_ERA5_gust_Bombus.py \
+            --source-original-plant-width original_79I_petal_width/original_EuPP_plant_petal_width_marking_trait_availability.csv \
+            --source-original-1864-climate-sites original_79I_field_sites/original_1864_network_sites_worldclim_wind_climate_normals.csv \
+            --outdir source_79I_sizefirst_ERA5_extreme
+      - name: Distinguish actual source study+within-site gust signal from unidentifiable magnitude
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('source_79I_sizefirst_ERA5_extreme/source_original_sizefirst_ERA5_gust_vs_Bombus_width_preguild_receipt.json')
+          x=json.loads(p.read_text())
+          design=x['source_original_PRE_ERA5_392_width_network_selection']
+          test=x['source_study_cluster_strong_gust_width_inference_gate']
+          assert design['original_all_networks_with_two_distinct_botanical_petal_widths']==392
+          assert design['frozen_source_studies']>=30
+          assert design['source_visiting_bee_outcome_not_used_in_selection']
+          assert x['source_no_independently_measured_same_field_UV_or_scent']
+          assert x['no_plant_evolutionary_selection_or_causal_Cue_order_claim']
+          assert x['source_original_ERA5_request_batches']<=280
+          assert test['status'] in (
+             'NO_GO_INSUFFICIENT_WITHIN_STUDY_STRONG_GUST_OR_SOURCE_WIDTH_BEE_OVERLAP',
+             'NO_GO_SINGULAR_STUDY_FE_SOURCE_GUST_DESIGN',
+             'NO_GUILD_INFORMATIVE_SIZE_NETWORKS',
+             'SOURCE_OBSERVATIONAL_NETWORK_NULL_SCORE_GUST_TENDENCY',
+          )
+          print('STAGE79I_FULL_SIZE_FIRST_SOURCE_GUST_BOMBUS_MACRO_RESULT',{
+            'original_size_vs_original_gust_preselected':design,
+            'guild_info_gates':x['source_actual_Bombus_conditioning_status'],
+            'source_evidence':test,
+            'weather_request_batches':x['source_original_ERA5_request_batches'],
+          })
+          PY
+      - name: Preserve full source SHA audited ERA5 study balanced records and original no-go source assessments
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage79I-392size-original-ERA5-15ms-true-Bombus-sizefirst-macro
+          path: |
+            source_79I_sizefirst_ERA5_extreme/source_original_sizefirst_ERA5_gust_vs_Bombus_width_preguild_receipt.json
+            source_79I_sizefirst_ERA5_extreme/source_original_sizefirst_ERA5_gust15_exposures.csv
+            source_79I_sizefirst_ERA5_extreme/source_original_sizefirst_Bombus_width_nullscores.csv
+          retention-days: 90
+          if-no-files-found: warn
