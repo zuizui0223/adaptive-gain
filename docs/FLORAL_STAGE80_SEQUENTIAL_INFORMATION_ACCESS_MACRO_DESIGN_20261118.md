@@ -83,6 +83,16 @@ Runnable scientific check:
 The script stops rather than silently proceeding on altered source ZIP digest, changed network/study cohort, duplicate joins, invalid scores or failed reproduction of the two published Stage79 coefficients. The numerical result is pinned in validation/stage80_publication_cluster_sensitivity_20261118.json.
 
 
+
+## Prior-art counterexamples that require a nonlinear macro wind moderator
+
+The theoretical possibility of wind-driven cue reordering must NOT assume wind unconditionally makes scent weaker. The *floral signal encounter* modeling study "The prevalence of olfactory- versus visual-signal encounter by searching bumblebees" (2018, PMC6167322) already varied bloom abundance, visual acuity and odor-plume encounter: it reports model odor accessibility in 90% of simulated successful signal encounters, vision in 49%. These are simulated availability frequencies, not observed action order.
+
+Lawson, Whitney & Rands (2017), DOI 10.1098/rsos.170996, found experimentally in Bombus terrestris that high wind and olfactory noise slowed learning for scent-only artificial flowers, while adding visual cues mitigated the effect. This is prior direct evidence for multimodal backup; claiming a newly discovered generic wind-by-vision mechanism would duplicate prior art.
+
+In the opposite direction, the 2020 tropical orchid-bee field paper "Wind drives temporal variation in pollinator visitation in a fragmented tropical forest" (PMCID PMC7211451) reported that increasing wind speed/turbulence was associated with *increased visitation to scent stations*, potentially through transport of attractant odor. Station visitation is not floral reproductive fitness; the system was fragrance-attracted orchid bees, not a generic Bombus response. Together these studies motivate a **nonmonotonic, context- and guild-dependent wind moderator**: airflow can improve long-range odor encounter while gust variability can disrupt learning/tracking and flower motion can increase near-field landing cost. Never directly convert a mean wind or ERA5 gust into a plume intermittency or flower oscillation frequency without independent transport/biomechanical measurements.
+
+
 Run locally:
     python research/floral_macro_stage80/sequential_floral_cues.py
     python research/floral_macro_stage80/audit_stage_identifiability.py
