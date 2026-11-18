@@ -1,0 +1,82 @@
+name: floral-stage79B-real-distant-petal-width-near-markings-eupp-macro
+
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/quantify_real_nhm_petal_size_marking_eupp_macro_coverage.py"
+      - "research/floral_macro_stage79/test_quantify_real_nhm_petal_size_marking_eupp_macro_coverage.py"
+      - ".github/workflows/floral-stage79B-original-far-near-coverage.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  true-source-distance-stage-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: No false biological negatives, source dimensional and original network-cohort tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage79 \
+            -p 'test_quantify_real_nhm_petal_size_marking_eupp_macro_coverage.py' -v
+      - name: Retrieve original corrected EuPPollNet plant network source SHA verified
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage79B_eupp_source
+          test -s stage79B_eupp_source/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage79B_eupp_source/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Fetch original full 59k NHM prose raw and quantify source true petal width, orientation and positive marking
+        run: |
+          python -u research/floral_macro_stage79/quantify_real_nhm_petal_size_marking_eupp_macro_coverage.py \
+            --source-Stage69-network-plant stage79B_eupp_source/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage79B_genuine_far_petal_width_near_motif_macro
+      - name: Validate original source taxon, study and network proof and no invented colour-change negatives
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path('stage79B_genuine_far_petal_width_near_motif_macro')
+          d=json.loads((p/'original_macro_source_far_petal_width_near_marking_coverage.json').read_text())
+          assert 800<=d['original_field_network_year_keys_in_accepted_plant_roster']<=1864
+          assert 30<=d['original_source_studies_with_strict_accepted_plant_roster']<=54
+          assert d['original_source_all_corrected_visitor_network_keys']==1864
+          assert d['original_plant_species_recorded_in_field_visits']==1408
+          assert d['original_plant_names_lexically_in_NHM']==963
+          assert d['original_source_nhm_raw_corpus']['source_actual_taxa']==59369
+          assert d['original_source_nhm_raw_corpus']['original_blob_git_SHA1']=='e1cfd2d5c518c2061ec91d1a9e8b64fc7ca69389'
+          assert d['source_far_visual_size_proxy_is_petal_width_only_NOT_true_DISPLAY']
+          assert d['source_positive_mark_text_not_true_UV_nectar_guide']
+          assert d['source_unknown_marking_is_NEVER_zero']
+          assert d['no_WIND_interaction_or_causal_paths_fitted']
+          with (p/'original_1864_field_network_visual_size_near_motif_outcome_blind_cohorts.csv').open() as f:
+              field=list(csv.DictReader(f))
+          assert len(field)==d['original_field_network_year_keys_in_accepted_plant_roster']
+          assert all(r['site_assigned_Bombus_visits_used_in_cohort_selection']=='0' for r in field)
+          print('STAGE79B_AUTHENTIC_MACRO_Distant_PETALWIDTH_Near_POSITIVE_MARKING',{
+            'source_name_matched':d['original_plant_names_lexically_in_NHM'],
+            'source_original_petal_max_width_species':d['original_source_species_with_petal_MAX_width_cm'],
+            'source_positive_marked_species':d['original_source_species_with_positive_pattern_text'],
+            'source_orientation_species':d['original_source_species_with_flower_orientation_text'],
+            'source_macro_network_comparison_opportunities':d['network_design_coverage_selected_BEFORE_any_visiting_bee_outcome'],
+          })
+          PY
+      - name: Save source-linked macro coverage receipts and original field-network crosswalk
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79B-original-NHM59k-EuPP1408-petal-width-vs-near-pattern-macro-coverage
+          path: stage79B_genuine_far_petal_width_near_motif_macro/
+          retention-days: 90
+          if-no-files-found: warn

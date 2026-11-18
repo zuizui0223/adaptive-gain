@@ -1,0 +1,71 @@
+name: floral-stage79K-original-equal-STUDY-gust15-size-Bombus-fragility
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/source_equal_study_weight_original_strong_gust_size.py"
+      - "research/floral_macro_stage79/test_source_equal_study_weight_original_strong_gust_size.py"
+      - ".github/workflows/floral-stage79K-equal-original-study-gust.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-study-equal-weight-not-data-mining:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install model and verify original 1-study=1-weight guards
+        run: |
+          python -m pip install "numpy>=1.26,<3" "pandas>=2.1,<3" "statsmodels>=0.14,<1"
+          python -m unittest discover -s research/floral_macro_stage79 \
+            -p "test_source_equal_study_weight_original_strong_gust_size.py" -v
+      - name: Retrieve ORIGINAL source 151 independent weather networks and 37 study-network null scores
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44242382680 --repo zuizui0223/adaptive-gain \
+            --name stage79I-392size-original-ERA5-15ms-true-Bombus-sizefirst-macro \
+            --dir stage79k_true_source_gust
+          test -s stage79k_true_source_gust/source_original_sizefirst_ERA5_gust15_exposures.csv
+          test -s stage79k_true_source_gust/source_original_sizefirst_Bombus_width_nullscores.csv
+      - name: Refit source study-balanced vs study-normalized original network nullscore gust15
+        run: |
+          python -u research/floral_macro_stage79/source_equal_study_weight_original_strong_gust_size.py \
+            --original-ERA5-gust-exposure stage79k_true_source_gust/source_original_sizefirst_ERA5_gust15_exposures.csv \
+            --original-size-null-scores stage79k_true_source_gust/source_original_sizefirst_Bombus_width_nullscores.csv \
+            --outdir stage79k_actual_equal_study_source_robustness
+      - name: Compare actual source 81% one-study dominance and whether a different estimand survives
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79k_actual_equal_study_source_robustness/stage79k_original_equal_study_weight_strong_gust_size_source.json")
+          d=json.loads(p.read_text())
+          assert d["source_original_pre_bee_ERA5_networks"]==151
+          assert d["source_original_size_guild_informative_networks"]==37
+          assert d["source_original_studies"]==15
+          assert d["source_equal_publication_weight_displays_within_study_GUST_variation"]>=5
+          assert d["source_true_visual_cue_order_effect_IDENTIFIED"] is False
+          assert d["source_VOC_wind_plume_path_IDENTIFIED"] is False
+          assert d["source_whole_flower_visual_display_MEASURED"] is False
+          assert d["study_equal_weight_is_not_new_confirmatory_hypothesis"]
+          print("STAGE79K_REAL_ORIGINAL_SOURCE_81PERCENT_STUDY_WEIGHT_DIAGNOSIS",{
+            "original_event_information_weight":d["source_information_WEIGHTED_original_score_tendency"],
+            "equal_independent_study_weight":d["source_equal_STUDY_weighted_score_tendency"],
+            "n_within_study_raw_slope":d["source_within_study_raw_slopes_n"],
+            "positive_slopes":d["source_within_study_raw_slopes_positive"],
+            "negative_slopes":d["source_within_study_raw_slopes_negative"]})
+          PY
+      - name: Archive source-only equal study weighting diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage79K-original-size-gust15-Bombus-equal-study-evidence-fragility
+          path: stage79k_actual_equal_study_source_robustness/
+          retention-days: 90
+          if-no-files-found: warn

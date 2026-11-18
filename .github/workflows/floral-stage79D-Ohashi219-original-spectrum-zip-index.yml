@@ -1,0 +1,76 @@
+name: floral-stage79D-Ohashi219-author-zip-index-EuPP-spectral-overlap
+
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/ohashi_2015_zip_central_directory_species_coverage.py"
+      - "research/floral_macro_stage79/test_ohashi_2015_zip_central_directory_species_coverage.py"
+      - ".github/workflows/floral-stage79D-Ohashi219-original-spectrum-zip-index.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  author-archived-219-screened-species-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test original public ZIP central directory and infraspecific unresolved policy
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage79 \
+            -p "test_ohashi_2015_zip_central_directory_species_coverage.py" -v
+      - name: Restore original 54-study correction-aware 1408 visited plant species
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage79d_source_original_EuPP
+          test -s stage79d_source_original_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage79d_source_original_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Authenticate full original Ohashi 286MB publicly shared source ZIP and 219 taxon folder roster
+        run: |
+          python -u research/floral_macro_stage79/ohashi_2015_zip_central_directory_species_coverage.py \
+            --original-Stage69-roster stage79d_source_original_EuPP/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage79d_original_Ohashi_reflectance_folder_names
+      - name: Verify original source coverage and no guessed color-change negatives
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79d_original_Ohashi_reflectance_folder_names/original_ohashi_2015_zipped_219_spectrum_folder_species_EuPP_overlap.json")
+          d=json.loads(p.read_text())
+          assert d["original_downloaded_bytes"]==285933377
+          assert d["original_author_MD5_recomputed"]=="d98ddd3b93fb79fdbaaa5eec5818c187"
+          assert d["original_source_full_bytes_and_MD5_verified"]
+          assert d["original_source_219_distinct_spectral_taxon_folders"]==219
+          assert d["original_author_published_219_screened_species_not_verified_visible_change_219"]
+          assert d["original_author_published_48_bee_visible_changes_not_linked_to_source_folders"]
+          assert d["source_flower_stage_colour_change_not_inferred_from_folder_membership"]
+          assert d["source_no_Bombus_or_gust_effect_model_fitted"]
+          print("STAGE79D_REAL_AUTHOR_2015_OHASHI_SPECIES_EUPP_MATCH",{
+            "original_screened_flower_species":d["original_source_219_distinct_spectral_taxon_folders"],
+            "two_token_original_binomial":d["original_two_token_binomial_spectral_source_taxa"],
+            "original_source_spectrometer_EuPP_overlap":d["exact_measured_2015_spectrometer_species_with_2025_EuPP_visits"],
+            "original_eupp_matched_source_names":d["exact_measured_species_with_2025_EuPP_visit_names"],
+            "full_author_source_SHA256":d["original_full_source_SHA256"],
+            "source_stages_not_fabricated":True,
+          })
+          PY
+      - name: Archive original directory-only measurement provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79d-2015-Ohashi219-spectrometer-original-ZIP-directory-coverage
+          path: stage79d_original_Ohashi_reflectance_folder_names/
+          retention-days: 90
+          if-no-files-found: warn

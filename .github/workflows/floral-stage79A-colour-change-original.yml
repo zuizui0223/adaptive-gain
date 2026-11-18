@@ -1,0 +1,56 @@
+name: floral-stage79A-real-colour-change-sources-rezende-ohashi
+
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/probe_original_colorchange_rezende_ohashi.py"
+      - "research/floral_macro_stage79/test_probe_original_colorchange_rezende_ohashi.py"
+      - ".github/workflows/floral-stage79A-colour-change-original.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-source-151-positives-and-219-screened:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Safeguard screen positives and source original file identity
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage79 \
+            -p "test_probe_original_colorchange_rezende_ohashi.py" -v
+      - name: Fetch actual 2025 Rezende PMC original source supplement and Ohashi Zenodo author README
+        run: |
+          python -u research/floral_macro_stage79/probe_original_colorchange_rezende_ohashi.py \
+            --outdir stage79a_source_original_flower_change
+      - name: Confirm source access vs author claim
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage79a_source_original_flower_change/stage79_original_rezende_ohashi_source_inventory.json")
+          d=json.loads(p.read_text())
+          assert d["Ohashi_219_are_screened_not_all_true_colour_changers"]
+          assert d["reviewed_positive_species_not_measured_negative_color_change"]
+          assert d["not_photo_derived_visual_traits"]
+          assert d["no_new_flower_Bombus_strong_gust_effect_fitted"]
+          print("STAGE79A_SOURCE_INVENTORY_RESULT",{
+            "rezende":d["original_sources"]["rezende_2025"],
+            "ohashi":d["original_sources"]["ohashi_2015"],
+          })
+          PY
+      - name: Archive original public evidence receipt without third-party copyrighted source binaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79a-original-151-positive-219-screened-color-change-archive-inventory
+          path: stage79a_source_original_flower_change/
+          retention-days: 90
+          if-no-files-found: warn

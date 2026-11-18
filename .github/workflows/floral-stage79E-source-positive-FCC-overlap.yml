@@ -1,0 +1,98 @@
+name: floral-stage79E-real-Rezende-151-positive-FCC-x-EuPP-study-guilds
+
+on:
+  push:
+    branches: [analysis/floral-stage79-far-near-signals-original-overlap-20261118]
+    paths:
+      - "research/floral_macro_stage79/extract_original_rezende_positive_fcc_vs_EuPP.py"
+      - ".github/workflows/floral-stage79E-source-positive-FCC-overlap.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-positive-color-change-field-plant-overlap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check original positive-only table semantic binomial and wrapped author names
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0,'research/floral_macro_stage79')
+          from extract_original_rezende_positive_fcc_vs_EuPP import semantic_source_candidates
+          source=[
+            'Supplementary Table S1. Angiosperms that display color change along floral development.',
+            '                        Taxon              Color change',
+            '            Pittosporaceae',
+            '                        Marianthus ringens              Yellow-orange to red',
+            '                        (J.Drumm. ex Harv.)',
+            '                        Epidendrum                    White to yellow',
+            '                        stamfordianum Bateman        Brazil',
+            '                        Vanda sp.                   Lavender to white',
+            'References',
+          ]
+          r,s=semantic_source_candidates(source)
+          assert 'marianthus ringens' in r,r
+          assert 'epidendrum stamfordianum' in r,r
+          assert 'vanda sp' not in r,r
+          assert s['published_151_positive_species_catalogue_NOT_measured_negative_states']
+          print('STAGE79E_PDF_SEMANTIC_SPECIES_WRAPPED_AUTHOR_SOURCE_MOCK_PASS',list(r))
+          PY
+      - name: Verify original PDF text reader available
+        run: |
+          if ! command -v pdftotext >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -qq -y poppler-utils
+          fi
+      - name: Retrieve original corrected 1408 accepted plant names in 54 real EuPP studies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44057077625 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage69-v130-corrected-REAL-EuPPollNet-guild-network-NHM-text-spectra \
+            --dir stage79E_eupp_original
+          test -s stage79E_eupp_original/original_plant_network_year_observed_guilds_text_spectra.csv
+          echo "475863c2b193dd9c1eaad848dae05a9f518b57446cad2661979ca582c7d88617  stage79E_eupp_original/original_plant_network_year_observed_guilds_text_spectra.csv" | sha256sum -c
+      - name: Parse actual original verified Rezende 151-positive species PDF and source EuPP overlap
+        run: |
+          python -u research/floral_macro_stage79/extract_original_rezende_positive_fcc_vs_EuPP.py \
+            --source-original-visitor-plant-roster stage79E_eupp_original/original_plant_network_year_observed_guilds_text_spectra.csv \
+            --outdir stage79E_original_rezende_fcc_positive_networks
+      - name: Verify positive-only inference policy
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('stage79E_original_rezende_fcc_positive_networks/source_original_151_change_positive_rezende_EuPP_match.json').read_text())
+          assert r['source_original_PDF_SHA256']=='0c2ba82cd6eb554942fc3ac93014f7ecc9834686f695cf628f2873a2be213039'
+          assert r['this_is_positive_source_literature_not_sampled_true_Negative']
+          assert r['no_invented_same_site_original_FCC_or_wind_gust_behavior']
+          assert r['real_guild_visual_interaction_effect_not_fitted']
+          n=r['source_original_species_table_parsing']['exact_two_token_source_candidate_species_names']
+          x=r['source_exact_name_join_to_original_visit_roster']
+          assert 0<=x['source_original_positive_FCC_exact_plant_species_in_1408_visit_roster']<=n
+          print('STAGE79E_REAL_FCC_POSITIVE_SOURCE_151_TABLE_EUPP_MACRO_OVERLAP',{
+            'reported_positive_list':r['source_original_published_positive_FCC_species'],
+            'parsed_source_unique_binomial_candidates':n,
+            'source_has_unresolved_taxa':r['source_original_species_table_parsing']['completeness_against_151_published_NOT_guaranteed'],
+            'strict_1408_EuPP_plant_overlap':x,
+            'source_first60_candidates':r['source_original_species_table_parsing']['source_first60_positive_species_candidates'],
+            'source_last40_candidates':r['source_original_species_table_parsing']['source_last40_positive_species_candidates'],
+          })
+          PY
+      - name: Archive only source biological support receipts and no inferred negatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage79e-real-2025-151-positive-colorchange-source-54study-field-overlap
+          path: stage79E_original_rezende_fcc_positive_networks/
+          retention-days: 90
+          if-no-files-found: warn
