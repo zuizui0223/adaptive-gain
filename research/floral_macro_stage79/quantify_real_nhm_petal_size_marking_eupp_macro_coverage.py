@@ -73,6 +73,7 @@ def ingest_nhm(raw):
         raise ValueError("STAGE79B_ORIGINAL_NHM_SOURCE_SIZE_COLUMNS_NOT_PRESENT_"+str(sorted(needed-set(reader.fieldnames or []))))
     data={}
     fields=Counter()
+    original_nonempty_example=defaultdict(list)
     nrows=0
     for row in reader:
         nrows+=1
@@ -95,6 +96,11 @@ def ingest_nhm(raw):
            "source_marking_text_is_NOT_measured_UV_or_spatial_nectar_guide":True,
         }
         for f in NUMERIC_FIELDS:
+            value=str(row.get(f) or "").strip()
+            fields["original_source_nonempty_raw_"+f]+=bool(value)
+            if value and len(original_nonempty_example[f])<16:
+                original_nonempty_example[f].append({"taxon":row["taxon"],
+                                                  "raw_original_cell_text":value[:140]})
             fields["source_numeric_usable_"+f]+=x[f] is not None
         for f in TEXT_MORPH_FIELDS:
             fields["source_positive_text_recorded_"+f]+=bool(shape[f])
@@ -104,7 +110,9 @@ def ingest_nhm(raw):
     return data,{"source_actual_taxa":nrows,
                  "original_blob_git_SHA1":gitsha(raw),
                  "original_source_SHA256":hashlib.sha256(raw).hexdigest(),
-                 "source_full_corpus_coverage":dict(fields)}
+                 "source_full_corpus_coverage":dict(fields),
+                 "source_original_numeric_descriptor_raw_cell_examples":
+                     dict(original_nonempty_example)}
 
 def visit_roster(path):
     b=path.read_bytes()
