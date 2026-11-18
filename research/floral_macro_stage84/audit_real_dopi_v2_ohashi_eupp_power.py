@@ -141,7 +141,15 @@ def source_site_key(row,doi):
     return (doi,country,year,str(int(float(month))),lat,lon,habitat)
 
 def scan_dopi(path,all180,measured28,eupp_dois_set,eupp_species_set):
-    seen_records=set()
+    # DoPI original 'record' field is NOT assumed a globally unique row ID.
+    # Audit collisions explicitly and do not discard/duplicate-generate visits.
+    seen_records={}
+    duplicated_record_keys=set()
+    repeated_record_rows=0
+    repeated_record_identical_rows=0
+    repeated_record_conflicting_rows=0
+    source_record_id_missing=0
+    source_duplicate_examples=[]
     n=0;matched_180=0;matched_28=0
     plant_all=set();plant_180=set();plant_28=set()
     pub_all=set();pub_180=set();pub_28=set()
@@ -164,10 +172,29 @@ def scan_dopi(path,all180,measured28,eupp_dois_set,eupp_species_set):
             n+=1
             if n>1_200_000:raise ValueError("STAGE84_UNEXPECTED_ORIGINAL_DOPI_RECORD_COUNT")
             rid=str(row.get("record") or "").strip()
-            if rid:
-                if rid in seen_records:
-                    raise ValueError("STAGE84_DUPLICATED_SOURCE_RECORD_PRIMARY_KEY")
-                seen_records.add(rid)
+            if rid.casefold() in ("","na","n/a","none","null","unknown"):
+                source_record_id_missing+=1
+            else:
+                # Use compact canonical 128-bit content digest for memory-safe
+                # duplicate identity vs distinct interactions with reused ID.
+                signature=hashlib.blake2b(("\\x1f".join(str(row.get(k) or "") for k in (
+                    "publication","doi","plant_species","pollinator_species",
+                    "interactions","year","month","latitude","longitude","methodology",
+                    "pollination","country"))).encode("utf-8"),digest_size=16).digest()
+                prior=seen_records.get(rid)
+                if prior is None:seen_records[rid]=signature
+                else:
+                    repeated_record_rows+=1
+                    duplicated_record_keys.add(rid)
+                    if prior==signature:repeated_record_identical_rows+=1
+                    else:repeated_record_conflicting_rows+=1
+                    if len(source_duplicate_examples)<8:
+                        source_duplicate_examples.append({
+                           "source_reused_record_id":rid[:45],
+                           "same_selected_original_row_fields":prior==signature,
+                           "plant_species":str(row.get("plant_species") or "")[:70],
+                           "pollinator_species":str(row.get("pollinator_species") or "")[:70],
+                           "source_methodology":str(row.get("methodology") or "")[:70]})
             name=normalized_name(row.get("plant_species"))
             if name:plant_all.add(name)
             doi=normalized_doi(row.get("doi"))
@@ -212,7 +239,15 @@ def scan_dopi(path,all180,measured28,eupp_dois_set,eupp_species_set):
     extra_180=plant_180-measured28
     return {
         "source_record_rows_checked":n,
-        "source_record_ids_uniquely_verified":len(seen_records),
+        "source_unique_nonblank_record_labels":len(seen_records),
+        "source_record_label_missing_or_placeholder_rows":source_record_id_missing,
+        "source_reused_record_labels":len(duplicated_record_keys),
+        "source_repeated_record_label_rows":repeated_record_rows,
+        "source_repeated_record_label_identical_selected_content_rows":repeated_record_identical_rows,
+        "source_repeated_record_label_different_selected_content_rows":repeated_record_conflicting_rows,
+        "source_reused_record_label_examples":source_duplicate_examples,
+        "source_do_not_treat_record_label_as_unique_independent_pollination_event":True,
+        "source_unchanged_source_rows_not_auto_deduplicated":True,
         "source_exact_original_header_columns":field_schema,
         "source_valid_binomial_plant_species_in_all_DOPI":len(plant_all),
         "source_total_unique_DOIs_with_records":len(pub_all),
@@ -271,6 +306,15 @@ def main():
         ohashi=root/"Ohashi_etal.zip"
         source_ohashi=download_source(OHASHI_URL,ohashi,OHASHI_BYTES,OHASHI_MD5,OHASHI_SHA)
         exact180,measured28,roster=ohashi_universe(ohashi,a.stage81d_receptor_zip)
+        # Small source roster survives as a derived-only provenance receipt even
+        # if subsequent DoPI taxonomy checks find source integrity problems.
+        (a.outdir/"stage84_original_219_source_name_180_strict_binomial_manifest.json").write_text(
+            json.dumps({"original_2015_source_ohashi_archive_sha256":OHASHI_SHA,
+                        "source_taxon_structure":roster,
+                        "strict_180_original_author_taxa":sorted(exact180),
+                        "current_28_actual_apis_receptor_modelled":sorted(measured28),
+                        "not_all_219_source_taxa_have_reconstructed_receptor_values":True},
+                       indent=2,sort_keys=True,ensure_ascii=False)+"\n",encoding="utf-8")
         eupp_dois_set,eupp_species_set,eupp=eupp_dois(a.eupp_source_accepted_plant_network)
         result=scan_dopi(dopi,exact180,measured28,eupp_dois_set,eupp_species_set)
     result.update({"schema":"stage84_full_original_2026_DOPI_v2_Ohashi219_28_source_species_independence_audit",
