@@ -1,0 +1,42 @@
+name: Stage88B2 independent original Dryad RData species-mode Python schema
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/probe_original_Rdata_modes_pyreadr.py"
+      - ".github/workflows/floral-stage88B2-fast-Rdata-mode-schema.yml"
+permissions:
+  contents: read
+jobs:
+  actual-Dryad-pollination-levels-without-invented-codebook:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install RData native compatible Python parser
+        run: python -m pip install "pyreadr==0.5.4" "pandas==2.2.3"
+      - name: Verify ORIGINAL 2.72MB SHA and decode actual 179k pollination mode levels
+        run: |
+          python research/floral_macro_stage88/probe_original_Rdata_modes_pyreadr.py \
+            --out stage88B2_Dryad_real_source_pollination_mode_schema.json
+      - name: Check actual source before accepting its encoded animal/wind statuses
+        run: |
+          python - <<'PY'
+          import json
+          o=json.load(open("stage88B2_Dryad_real_source_pollination_mode_schema.json"))
+          assert o["author_original_bytes"]==2719385
+          assert o["author_original_file_SHA256"]=="dfb34e3ce42bb07bdae6e2dea71de3653155670bc3032bc11e5f2d58303759e6"
+          assert o["source_original_dataframe_rows"]>=170000
+          assert o["source_original_pollination_code_values"]
+          print("STAGE88_ORIGINAL_ANIMAL_WIND_AUTHOR_CODES",o["source_original_pollination_code_values"])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage88B2-original-179263-pollination-mode-Python-source-audit
+          path: stage88B2_Dryad_real_source_pollination_mode_schema.json
+          if-no-files-found: warn
