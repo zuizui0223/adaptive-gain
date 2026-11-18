@@ -1,0 +1,81 @@
+name: Stage81D original 28 Ohashi Apis D65 green-adapted far/near receptor channels
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage81/export_ohashi_to_pavo_d65.py"
+      - "research/floral_macro_stage81/quantify_pavo_ohashi_bee_far_near.R"
+      - "research/floral_macro_stage81/test_export_ohashi_to_pavo_d65.py"
+      - ".github/workflows/floral-stage81D-real-apis-far-near-visual-modality.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independent-real-original-bee-receptor-spectral-analysis:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original XLS and numeric source readers
+        run: python -m pip install "numpy==2.3.5" "xlrd==2.0.2"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Install missing R system libraries (previous source CI failed libcurl and libudunits2)
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            libcurl4-openssl-dev libudunits2-dev libssl-dev libxml2-dev \
+            libgdal-dev libgeos-dev libproj-dev libmagick++-dev
+      - name: Install published R bee vision model pavo with native Posit package repository
+        run: |
+          Rscript -e 'repo <- Sys.getenv("RSPM"); if (!nzchar(repo)) repo <- "https://cloud.r-project.org"; install.packages(c("pavo","jsonlite"), repos=repo, Ncpus=2)'
+          Rscript -e 'stopifnot(requireNamespace("pavo",quietly=TRUE),requireNamespace("jsonlite",quietly=TRUE)); cat("PAVO_R_RECEPTOR_LIBRARY_OK",as.character(utils::packageVersion("pavo")),"\n")'
+      - name: Run source-free export audit tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage81 \
+            -p "test_export_ohashi_to_pavo_d65.py" -v
+      - name: Confirm the published Chittka Apis hexagon model can calculate a real library fixture
+        run: |
+          Rscript -e 'data(flowers,package="pavo"); v<-pavo::vismodel(flowers,visual="apis",illum="D65",qcatch="Ei",bkg="green",vonkries=TRUE,relative=FALSE,achromatic="l"); h<-pavo::colspace(v,space="hexagon"); stopifnot(nrow(v)==nrow(h),all(c("s","m","l")%in%names(v)),all(c("x","y","r.vec")%in%names(h)))'
+      - name: Download original Stage79D 28 accepted species from SHA-locked field crosswalk
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44241602748 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage79d-2015-Ohashi219-spectrometer-original-ZIP-directory-coverage \
+            --dir stage81d_original_crosswalk
+          test -s stage81d_original_crosswalk/original_ohashi_2015_zipped_219_spectrum_folder_species_EuPP_overlap.json
+      - name: Verify author 286 MB MD5/SHA and reconstruct 1360 original XLS measurements transiently
+        run: |
+          python -u research/floral_macro_stage81/export_ohashi_to_pavo_d65.py \
+            --stage79d-overlap stage81d_original_crosswalk/original_ohashi_2015_zipped_219_spectrum_folder_species_EuPP_overlap.json \
+            --outdir stage81d_temp_original_source_data
+      - name: Derive Apis D65 far green and near chromatic original taxon-stage contrasts
+        run: |
+          Rscript research/floral_macro_stage81/quantify_pavo_ohashi_bee_far_near.R \
+            stage81d_temp_original_source_data/temp_original_28_spectra_wide.csv \
+            stage81d_temp_original_source_data/temp_original_28_spectra_manifest.csv \
+            stage81d_derived_bee_receptor_metrics
+      - name: Do not redistribute the original 1360 replicate source spectra
+        if: always()
+        run: |
+          rm -f stage81d_temp_original_source_data/temp_original_28_spectra_wide.csv
+          rm -f stage81d_temp_original_source_data/temp_original_28_spectra_manifest.csv
+      - name: Upload derived age-stage insect receptor contrasts and source receipt ONLY
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage81d-original-28-apis-d65-green-far-near-receptor-derived
+          path: |
+            stage81d_derived_bee_receptor_metrics/
+            stage81d_temp_original_source_data/stage81d_manifest_provenance_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
