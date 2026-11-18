@@ -1,0 +1,83 @@
+name: floral-stage78A-real-ERA5-strong-GUST-not-mean-wind
+
+on:
+  push:
+    branches: [analysis/floral-bombus-strong-gust-extremes-stage78-20261118]
+    paths:
+      - "research/floral_macro_stage78/probe_original_era5_strong_gusts.py"
+      - "research/floral_macro_stage78/test_probe_original_era5_strong_gusts.py"
+      - ".github/workflows/floral-stage78A-ERA5-strong-gust-pilot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  true-strong-gust-original-field-source-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free original ERA5 strong gust thresholds/units/missingness tests
+        run: |
+          python -m unittest discover \
+            -s research/floral_macro_stage78 \
+            -p "test_probe_original_era5_strong_gusts.py" -v
+      - name: Recover actual original 54-study corrected source field site network coordinates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44205235512 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage77-ORIGINAL-WORLDCLIM-WIND-54study-1864-field-sites-vs-Bombus \
+            --dir stage78a_original_source_site
+          test -s stage78a_original_source_site/original_1864_network_sites_worldclim_wind_climate_normals.csv
+          echo "948ac0ecbcfc9b8a2e810753748a5436d998cd586574ea185c6da5db08cbce53  stage78a_original_source_site/original_1864_network_sites_worldclim_wind_climate_normals.csv" | sha256sum -c
+      - name: Retrieve genuine observed-date-year ERA5 historical daily max GUST for 5 independently selected source studies
+        run: |
+          python -u research/floral_macro_stage78/probe_original_era5_strong_gusts.py \
+            --source-original-stage77-sites stage78a_original_source_site/original_1864_network_sites_worldclim_wind_climate_normals.csv \
+            --outdir stage78a_source_actual_era5_strong_gust
+      - name: Validate original ERA5 reanalysis source and no visit-hour mislabeling
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage78a_source_actual_era5_strong_gust/source_ERA5_2018_June_gust_extreme_five_studies.json")
+          s=json.loads(p.read_text())
+          assert s["primary_gust_day_threshold_m_s"]==15
+          assert s["sensitivity_gust_day_thresholds_m_s"]==[10,20]
+          assert len(s["source_real_strong_gust_overview"])==5
+          assert len({r["Study_id"] for r in s["source_field_sites"]})==5
+          assert s["model_forced_ERA5_consistent_historical"]=="era5"
+          assert s["source_original_ERA5_API_JSON_bytes"]>1000
+          assert s["not_survey_hour_and_not_direct_flower_scent_plume"]
+          assert s["no_path_effect_estimated_at_pilot"]
+          for r in s["source_real_strong_gust_overview"]:
+              assert r["source_actual_daily_gust_values"]==30
+              assert r["source_ERA5_month_max_daily_gust_ms"]>=0
+              assert r["source_daily_max_gust_days_ge_10_ms"]>=r["source_daily_max_gust_days_ge_15_ms"]
+              assert r["source_daily_max_gust_days_ge_15_ms"]>=r["source_daily_max_gust_days_ge_20_ms"]
+          print("STAGE78A_GENUINE_EXTREME_WIND_ERA5_SOURCE_SUCCESS",{
+              "source_studies":len(s["source_field_sites"]),
+              "model":s["model_forced_ERA5_consistent_historical"],
+              "site_gust_extremes":[{k:v for k,v in r.items() if
+                k in ("Study_id","source_ERA5_month_max_daily_gust_ms",
+                      "source_ERA5_month_p95_daily_max_gust_ms",
+                      "source_daily_max_gust_days_ge_10_ms",
+                      "source_daily_max_gust_days_ge_15_ms",
+                      "source_daily_max_gust_days_ge_20_ms")}
+                for r in s["source_real_strong_gust_overview"]]})
+          PY
+      - name: Preserve exact source ERA5 daily gust API digest and derived 5-study pilot
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage78a-real-ERA5-strong-gust-pilot-5-original-floral-field-studies
+          path: stage78a_source_actual_era5_strong_gust/
+          retention-days: 90
+          if-no-files-found: warn
