@@ -1,0 +1,68 @@
+name: Floral Stage80 cue routing and original source-cluster sensitivity
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage80/**"
+      - "docs/FLORAL_STAGE80_SEQUENTIAL_INFORMATION_ACCESS_MACRO_DESIGN_20261118.md"
+      - "validation/stage80_publication_cluster_sensitivity_20261118.json"
+      - ".github/workflows/floral-stage80-cue-routing-audit.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-free-model-and-ledger-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR branch
+        uses: actions/checkout@v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run twelve deterministic regression checks
+        run: python -m unittest discover -s research/floral_macro_stage80 -p "test_*.py" -v
+      - name: Demonstrate synthetic cue-order transitions
+        run: python research/floral_macro_stage80/sequential_floral_cues.py
+      - name: Generate original-source co-measurement audit
+        run: python research/floral_macro_stage80/audit_stage_identifiability.py --out stage80_original_source_coverage.json
+      - name: Upload source-coverage receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage80-source-identifiability-receipt
+          path: stage80_original_source_coverage.json
+          if-no-files-found: error
+
+  independently-recompute-real-stage79-paper-cluster:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact PR branch
+        uses: actions/checkout@v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned numeric computation dependencies
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6"
+      - name: Download author-matched original Stage79I GitHub Actions ZIP
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14399842321/zip" \
+            --output original-stage79i-source.zip
+      - name: Verify original artifact SHA and reproduce real 37-network/14-publication contrasts
+        run: python research/floral_macro_stage80/reanalyse_publication_clusters.py --stage79i-source-zip original-stage79i-source.zip --out original-stage80-publication-sensitivity.json
+      - name: Upload independently rerun numerical receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage80-source-verified-publication-correction
+          path: original-stage80-publication-sensitivity.json
+          if-no-files-found: error

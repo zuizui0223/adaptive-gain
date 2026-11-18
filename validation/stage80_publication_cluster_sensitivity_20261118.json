@@ -1,0 +1,59 @@
+{
+  "corrected_14_publication_clustered_information_weighted": {
+    "cluster_count": 14,
+    "slope_per_10_percentage_point_ERA5_gust15": 1.4384233037722203,
+    "source_original_study_cluster_unit": "publication_id",
+    "study_cluster_95_interval_NOT_causal": [
+      -1.1989441306551505,
+      4.075790738199591
+    ]
+  },
+  "corrected_14_publication_equal_weighted": {
+    "cluster_count": 14,
+    "slope_per_10_percentage_point_ERA5_gust15": 0.9326501056510361,
+    "source_original_study_cluster_unit": "publication_id",
+    "study_cluster_95_interval_NOT_causal": [
+      -1.2364366534775648,
+      3.101736864779637
+    ]
+  },
+  "no_association_significance_or_causal_identification_claimed": true,
+  "no_measured_sensory_stage_scent_plume_landing_or_bee_fitness": true,
+  "original_15_studyID_equal_weighted": {
+    "cluster_count": 15,
+    "slope_per_10_percentage_point_ERA5_gust15": 0.7339773145211246,
+    "source_original_study_cluster_unit": "Study_id",
+    "study_cluster_95_interval_NOT_causal": [
+      -1.5098656538933364,
+      2.9778202829355855
+    ]
+  },
+  "original_15_studyID_information_weighted": {
+    "cluster_count": 15,
+    "slope_per_10_percentage_point_ERA5_gust15": 1.4384233037722203,
+    "source_original_study_cluster_unit": "Study_id",
+    "study_cluster_95_interval_NOT_causal": [
+      -1.1804234878162398,
+      4.05727009536068
+    ]
+  },
+  "schema": "stage80l_true_original_37_network_publication_cluster_sensitivity",
+  "source_original_clustering_count": {
+    "network_years_informative": 37,
+    "source_publications": 14,
+    "split_study_ids_in_original_37_networks": [
+      "23_Holzschuh",
+      "25_Holzschuh"
+    ],
+    "study_id_labels": 15
+  },
+  "source_original_github_artifact_zip_sha256_verified": "d81b24bef6c01e849121cbbbf1dc085953767fc52d909f40757fc912be403b7d",
+  "source_original_stage79i_github_actions_artifact_id": 14399842321,
+  "source_publication_information_concentration": {
+    "effective_publication_number_by_information_weights": 1.5092153669202664,
+    "largest_publication_fraction": 0.8107239340016974
+  },
+  "source_publisher_52_independent_studies_vs_54_study_ids_reason": "one source study split into original IDs 23,24,25 for habitat comparisons",
+  "source_publisher_DOI": "10.1111/geb.70000",
+  "unequal_visit_effort_and_species_phylogeny_not_controlled": true
+}
