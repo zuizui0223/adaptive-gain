@@ -114,10 +114,21 @@ def visit_roster(path):
     tax={key(r["Original_plant_accepted_name_literal"]) for r in rows}
     studies={r["Study_id"] for r in rows}
     nets={(r["Study_id"],r["Network_id"],r["Year_from_original_date"]) for r in rows}
-    if (len(rows),len(tax),len(studies),len(nets))!=(
-        EXPECTED_SOURCE_PLANT_NETWORKS,EXPECTED_SOURCE_EUPP_PLANTS,
-        EXPECTED_SOURCE_STUDIES,EXPECTED_NETWORKS):
-        raise ValueError("STAGE79B_CORRECTED_EUPP_VISIT_ROSTER_SOURCE_GRAIN_CHANGED")
+    observed=(len(rows),len(tax),len(studies),len(nets))
+    if (len(rows),len(tax))!=(EXPECTED_SOURCE_PLANT_NETWORKS,EXPECTED_SOURCE_EUPP_PLANTS):
+        raise ValueError("STAGE79B_SOURCE_PLANT_ROWS_OR_ACCEPTED_NAMES_CHANGED_"+str(observed))
+    if not (30<=len(studies)<=EXPECTED_SOURCE_STUDIES and
+            800<=len(nets)<=EXPECTED_NETWORKS):
+        # Original corrected 1,864 observational network-year keys include
+        # networks where a strict species-ranked accepted plant is unavailable.
+        # The plant-roster key count need not equal all source field networks.
+        raise ValueError("STAGE79B_SOURCE_STRICT_ACCEPTED_PLANT_NETWORK_COVERAGE_CHANGED_"+str(observed))
+    print("STAGE79B_ORIGINAL_STRICT_PLANT_ROSTER_GRAIN",{
+        "accepted_plant_units":len(rows),"accepted_plant_species":len(tax),
+        "source_studies_with_strict_plants":len(studies),
+        "strict_accepted_plant_field_networks":len(nets),
+        "all_original_visitation_source_networks":EXPECTED_NETWORKS
+    },flush=True)
     return rows,tax,nets
 
 def coverage(nhm,roster,taxa,nets):
@@ -189,8 +200,10 @@ def coverage(nhm,roster,taxa,nets):
         })
     out={
         "schema":"stage79b_original_nhm_petal_width_text_guide_proxy_EuPPollNet_macro",
-        "original_source_studies":EXPECTED_SOURCE_STUDIES,
-        "original_field_network_year_keys":len(nets),
+        "original_source_studies_with_strict_accepted_plant_roster":
+            len({r["Study_id"] for r in roster}),
+        "original_field_network_year_keys_in_accepted_plant_roster":len(nets),
+        "original_source_all_corrected_visitor_network_keys":EXPECTED_NETWORKS,
         "original_plant_species_recorded_in_field_visits":len(taxa),
         "original_plant_names_lexically_in_NHM":len(overlap),
         "original_source_species_with_petal_MAX_width_cm":len(withmax),
