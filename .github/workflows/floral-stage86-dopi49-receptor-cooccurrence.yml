@@ -1,0 +1,72 @@
+name: Stage86 source-verified 49 age-comparable spectra taxa x original DoPI guild/study overlap
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage86/**"
+      - "docs/FLORAL_STAGE86_DOPI49_RECENT_SPECTRA_GUILD_GATES_20261118.md"
+      - ".github/workflows/floral-stage86-dopi49-receptor-cooccurrence.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-dopi49-source-verified-community-power:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free invariants for no false source absence and method semantics
+        run: |
+          python -m unittest discover -s research/floral_macro_stage86 \
+             -p "test_*.py" -v
+      - name: Recover Stage85 original-author derived 49 Apis visual taxa with verified ZIP
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14414838373/zip" \
+            --output stage86_original_stage85_true_49_apis.zip
+          echo "fd49543ccbc27631e37ccff25d7fc7ab17def7f2b8f9365658d272d24d25097d  stage86_original_stage85_true_49_apis.zip" | sha256sum -c
+      - name: Recover whole official original DoPI v2 and calculate source DOI × site × month optical-comparison power
+        run: |
+          python -u research/floral_macro_stage86/verify_real_dopi49_receptor_community_power.py \
+            --stage85-derived-artifact-zip stage86_original_stage85_true_49_apis.zip \
+            --outdir stage86_true_source_metadata_power
+      - name: Block original-source denominator drift and false causal cue claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage86_true_source_metadata_power/stage86_DoPI49_true_original_source_spatiotemporal_network_power.json")
+          x=json.loads(p.read_text())
+          assert x["original_DoPI_v2_full_source_676900_rows"] == 676900
+          assert x["original_measured_spectra_species_with_valid_early_late"] == 49
+          assert x["source_28_old_receptor_species"] == 28
+          assert x["source_21_new_receptor_species"] == 21
+          assert x["source_49_receptor_plant_species_in_DoPI"] == 49
+          assert x["source_rows_in_all_49_real_original_taxa"]>30000
+          assert x["original_DoPI_v2_publisher_bytes_and_MD5_verified"]["source_bytes"] == 384896230
+          assert x["original_DoPI_v2_publisher_bytes_and_MD5_verified"]["source_md5"] == "d1c76fc0fd4df6a6828550c5866e4af1"
+          assert x["source_not_same_plant_population_as_2015_Japan_spectra"]
+          assert x["source_no_behavioural_information_order_wind_plume_learning_or_landing"]
+          for label,scope in x["source_candidate_metadata_design_gates"].items():
+            assert scope["source_same_DOI_location_year_month_is_not_same_observation_effort"]
+            assert scope["source_positive_only_bee_records_not_absence_or_flower_use_preference"]
+          print("STAGE86_SOURCE_DOI_SITE_GUILD_METADATA_POWER_ADMITTED_NOT_CAUSAL")
+          PY
+      - name: Upload compact derived-only original evidence receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage86-original-DoPI49-receptor-taxonomy-design-power
+          path: stage86_true_source_metadata_power/
+          retention-days: 90
+          if-no-files-found: warn
