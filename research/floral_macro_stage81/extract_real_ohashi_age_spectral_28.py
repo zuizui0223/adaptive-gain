@@ -124,11 +124,12 @@ def author_part_age_archive(z,roster):
 
 def real_source_age_audit(z,roster):
     total,valid,meta,exact,bydir=author_part_age_archive(z,roster)
-    # Original ._ AppleDouble metadata are UNEVEN: two 28-taxon folders contain none.
-    if total!=20490 or not 0<meta<total or valid+meta!=total:
-        raise ValueError("STAGE81B_ORIGINAL_ZIP_SOURCE_OR_APPLEDOUBLE_COUNTS_INVALID")
+    # FULL archive scan, not a top-12 filename-pattern preview: exactly half are
+    # AppleDouble metadata (sometimes hidden in __MACOSX, not a ._ basename).
+    if total!=20490 or valid!=10245 or meta!=10245:
+        raise ValueError("STAGE81B_FULL_SOURCE_TRUE_XLS_APPLEDOUBLE_COUNTS_CHANGED")
     actual_28=sum(len(bydir[exact[r]]) for r in roster)
-    if actual_28!=1660:
+    if actual_28!=1360:
         raise ValueError("STAGE81B_28_SOURCE_SPECIES_TRUE_WORKBOOK_COUNT_CHANGED")
     out=[];problems=[];audit=Counter()
     for literal in sorted(roster):
