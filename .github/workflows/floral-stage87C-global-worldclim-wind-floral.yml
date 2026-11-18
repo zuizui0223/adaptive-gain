@@ -1,0 +1,86 @@
+name: Stage87C real-global WCVP native floral signal x WorldClim wind climate
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage87/aggregate_global_tdwg3_worldclim_wind.py"
+      - "research/floral_macro_stage87/test_aggregate_global_tdwg3_worldclim_wind.py"
+      - ".github/workflows/floral-stage87C-global-worldclim-wind-floral.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  global-native-visual-colour-wind-climate-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install GIS and source raster readers
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Verify source-free spatial and climate test cases
+        run: python -m unittest discover -s research/floral_macro_stage87 -p "test_aggregate_global_tdwg3_worldclim_wind.py" -v
+      - name: Restore source-verified 367 global native floral TDWG3 regions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44286028499 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage87A-original-global-NHM59369-WCVP-native-TDWG3-traits \
+            --dir stage87C_real_native_regions
+          echo "f8a84a979db18a7137a125df656cb719a5f864a8111f3babc8eaa9b470b0a2bb  stage87C_real_native_regions/stage87_native_TDWG3_original_NHM_visual_source_community.csv" | sha256sum -c
+      - name: Restore original TDWG3 polygons using exact original Git blob
+        run: |
+          mkdir -p stage87C_original_external
+          curl --fail --location --retry 3 --connect-timeout 25 \
+             https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson \
+             -o stage87C_original_external/level3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage87C_original_external/level3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Download real WorldClim2.1 10-arcminute wind temperature rain solar vapor monthly normal GeoTIFFs
+        run: |
+          set -euo pipefail
+          mkdir -p stage87C_original_external
+          for v in wind tavg prec srad vapr; do
+            curl --fail --location --retry 3 --connect-timeout 30 --max-time 900 \
+              "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_$v.zip" \
+              -o "stage87C_original_external/wc2.1_10m_$v.zip"
+            unzip -tq "stage87C_original_external/wc2.1_10m_$v.zip" | tail -1
+          done
+      - name: Real native area spatial sampling and monthly WorldClim overlay
+        run: |
+          python -u research/floral_macro_stage87/aggregate_global_tdwg3_worldclim_wind.py \
+            --original-native-flora stage87C_real_native_regions/stage87_native_TDWG3_original_NHM_visual_source_community.csv \
+            --original-tdwg-geojson stage87C_original_external/level3.geojson \
+            --worldclim-directory stage87C_original_external \
+            --outdir stage87C_native_worldclim_geography
+      - name: Verify global 367 source area & actual continuous wind climate coverage
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage87C_native_worldclim_geography")
+          r=json.loads((p/"stage87C_real_worldclim_TDWG3_flower_spatial_receipt.json").read_text())
+          assert r["source_original_global_native_region_input"]==367
+          assert r["source_GIS_invalid_features_repaired_for_explicit_sensitivity"]==19
+          assert r["source_original_climate_region_source_join"]["region_complete_5variable_climate"]>=250
+          assert r["source_no_measured_true_at_flower_voc_or_landing_wind"]
+          with (p/"stage87_original_global_TDWG3_NHM_WCVP_WorldClim_regions.csv").open() as h:
+            rows=list(csv.DictReader(h))
+          assert len(rows)>=300
+          assert sum(z["source_all_5climate_variables_at_12_or_more_points"]=="1" for z in rows)>=250
+          print("STAGE87C_GENUINE_GLOBAL_NATIVE_FLORAL_WIND_CLIMATE_TDWG3",r["source_original_climate_region_source_join"])
+          PY
+      - name: Publish only derived regional matrix and original source hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage87C-original-global-native-flower-climate-wind-TDWG3
+          path: stage87C_native_worldclim_geography/
+          retention-days: 90
+          if-no-files-found: warn
