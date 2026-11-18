@@ -198,7 +198,22 @@ def original_targets(nhm,network):
         raise ValueError("STAGE77D_NOT_963_233_SOURCE_NHM_VS_EUPP_ACCEPTED")
     return eu,matched,hu
 
-def run(nhm,eu):
+def direct_source_spectrometer_73(original_source):
+    # Exact 2024 source-original measured 300-399nm reflectance species
+    # crosswalk, archived independently in the authenticated Stage68 run.
+    with Path(original_source).open(encoding="utf-8",newline="") as f:
+        source=list(csv.DictReader(f))
+    if len(source)!=73:
+        raise ValueError("STAGE77D_ORIGINAL_73_SPECTROMETER_ROWS_CHANGED")
+    names=[r["spectral_original_species_name"].casefold().strip() for r in source]
+    if len(set(names))!=73 or any(not x for x in names):
+        raise ValueError("STAGE77D_ORIGINAL_73_SPECTRA_DUPLICATE_OR_EMPTY")
+    if not all("original_2024_true_petal_UV_300_399_percent" in x for x in source):
+        raise ValueError("STAGE77D_SPECTRA_SOURCE_NO_DIRECT_UV")
+    return set(names),sha(Path(original_source).read_bytes())
+
+
+def run(nhm,eu,source_spectrometer=None):
     original,zip_source=load_source_zip()
     # A second authoritative HTTP retrieval validates actual XLSX content,
     # not the potentially repackaged outer ZIP timestamps or compression.
@@ -233,6 +248,26 @@ def run(nhm,eu):
                 "explicit_binomial_species_found_in_verified_header_columns":len(taxa),
             })
     e,n,h=original_targets(nhm,eu)
+    if source_spectrometer is None:
+        spectra_diagnostic={
+          "source_original_direct_2024_spectrometer_73_taxa_retrieved":False,
+          "source_direct_2024_spectra_and_VOC_overlap_not_yet_evaluated":True,
+        }
+    else:
+        sp,specsha=direct_source_spectrometer_73(source_spectrometer)
+        if len(sp&e)!=36:
+            raise ValueError("STAGE77D_ORIGINAL_36_REAL_SPECTRA_EUPP_VISITOR_TAXA_CHANGED")
+        spectra_diagnostic={
+          "source_original_direct_2024_spectrometer_73_taxa_retrieved":True,
+          "source_original_direct_2024_spectrometer_file_SHA256":specsha,
+          "source_original_direct_2024_spectrometer_species":len(sp),
+          "source_direct_spectrometer_species_with_original_EuPP_visits":len(sp&e),
+          "source_original_VOC_overlap_with_73_direct_spectrometer_species":len(candidates&sp),
+          "source_original_VOC_overlap_with_direct_spectrometer_AND_EuPP":len(candidates&sp&e),
+          "source_original_strict_spectrometer_VOC_EuPP_taxon_names":sorted(candidates&sp&e),
+          "garden_spectrometer_VOC_compilation_and_field_visits_are_NOT_same_population":True,
+          "no_false_three_modality_site_cotemporal_coincidence":True,
+        }
     return {
        "schema":"stage77d_2020_multispecies_VOC_original_XLSX_readout_and_source_overlap",
        "source_original_review_DOI":SOURCE_ARTICLE,
@@ -246,6 +281,7 @@ def run(nhm,eu):
        "original_exact_EuPP_species_name_overlap_if_source_header_verified":len(candidates&e),
        "original_exact_NHM_EuPP_name_overlap_if_source_header_verified":len(candidates&n),
        "original_exact_233_VISUAL_HUE_species_source_VOC_overlap_if_header_verified":len(candidates&h),
+       "original_measured_SPECTRAL_VISUAL_x_VOC_x_EuPP_crosssource":spectra_diagnostic,
        "source_species_first_two_tokens_without_authorship_are_NOT_autojoined":True,
        "source_2020_scent_dataset_cannot_prove_VOC_at_EuPP_field_site_time":True,
        "source_2020_scent_compilation_prior_studies_not_independent_flower_evolution":True,
@@ -258,9 +294,10 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("--source-NHM",type=Path,required=True)
     p.add_argument("--source-EuPP",type=Path,required=True)
+    p.add_argument("--original-73-spectra",type=Path,required=False)
     p.add_argument("--outdir",type=Path,required=True)
     a=p.parse_args()
-    result=run(a.source_NHM,a.source_EuPP)
+    result=run(a.source_NHM,a.source_EuPP,a.original_73_spectra)
     a.outdir.mkdir(exist_ok=True,parents=True)
     (a.outdir/"2020_original_3_VOC_XLSX_direct_species_crosswalk.json").write_text(
         json.dumps(result,sort_keys=True,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
