@@ -60,8 +60,12 @@ def parsed_size(v):
     v=str(v or "").strip()
     if not v or v.casefold() in {"na","nan","none","null"}:
         return None
-    try:x=float(v)
-    except ValueError:return None
+    # Verified original combined.csv source stores values as "4.0 cm"
+    # (even when the header itself says [cm]). Do NOT change units or
+    # interpret unrecognized "mm", range or prose as a missing zero.
+    m=re.fullmatch(r"([0-9]+(?:\.[0-9]+)?)(?:\s*cm)?",v,flags=re.I)
+    if m is None:return None
+    x=float(m.group(1))
     if not math.isfinite(x) or x<=0 or x>MAX_PETAL_WIDTH_CM:
         return None
     return x
