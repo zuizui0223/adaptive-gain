@@ -53,6 +53,18 @@ class Stage93SourceProseTests(unittest.TestCase):
             self.assertEqual(len(met),2)
             self.assertEqual(met[0]["fields"]["scientificname"],1)
             self.assertEqual(met[1]["fields"]["description"],1)
+    def test_taxon_id_only_core_is_unevaluated_not_negative(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"FNA_taxonID_only.zip"
+            with zipfile.ZipFile(p,"w") as z:
+                z.writestr("meta.xml",META.replace("scientificName","taxonID"))
+                z.writestr("taxon.txt","id\\ttaxonID\\ttaxonRank\\n1\\twfo-0123456789\\tspecies\\n".replace("\\t","\\t").replace("\\n","\\n"))
+                z.writestr("description.txt","id\\tdescription\\n1\\tFlowers fragrant.\\n".replace("\\t","\\t").replace("\\n","\\n"))
+            data,qc=source_raw_flora(p,{"campanula punctata"})
+            self.assertEqual(data,{})
+            self.assertFalse(qc["source_taxonomy_join_admissible"])
+            self.assertTrue(qc["not_evaluated_not_zero_scent_species"])
+
     def test_unauthentic_small_archive_does_not_get_used_as_real_flora(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/"dummy.zip"
