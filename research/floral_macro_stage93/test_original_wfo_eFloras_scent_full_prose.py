@@ -58,8 +58,8 @@ class Stage93SourceProseTests(unittest.TestCase):
             p=Path(td)/"FNA_taxonID_only.zip"
             with zipfile.ZipFile(p,"w") as z:
                 z.writestr("meta.xml",META.replace("scientificName","taxonID"))
-                z.writestr("taxon.txt","id\\ttaxonID\\ttaxonRank\\n1\\twfo-0123456789\\tspecies\\n".replace("\\t","\\t").replace("\\n","\\n"))
-                z.writestr("description.txt","id\\tdescription\\n1\\tFlowers fragrant.\\n".replace("\\t","\\t").replace("\\n","\\n"))
+                z.writestr("taxon.txt","id\ttaxonID\ttaxonRank\n1\twfo-0123456789\tspecies\n")
+                z.writestr("description.txt","id\tdescription\n1\tFlowers fragrant.\n")
             data,qc=source_raw_flora(p,{"campanula punctata"})
             self.assertEqual(data,{})
             self.assertFalse(qc["source_taxonomy_join_admissible"])
