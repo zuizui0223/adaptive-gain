@@ -1,0 +1,87 @@
+name: Stage94B source-locked mainland three-cue measurement support and heldout feasibility
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage94/real_source_mainland_three_cue_support.py"
+      - "research/floral_macro_stage94/test_real_source_mainland_three_cue_support.py"
+      - ".github/workflows/floral-stage94B-source-mainland-cue-support.yml"
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  genuine-original-derived-northern-southern-mainland-cue-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate source-authentic no-false-zero and regional split constraints
+        run: python -m unittest discover -s research/floral_macro_stage94 -p "test_real_source_mainland_three_cue_support.py" -v
+      - name: Restore verified NHM/WCVP/GIFT lexical marking source-only Stage91B original-derived 367 regions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526435551/zip" -o stage94B_stage91_source.zip
+          echo "f1197a050d110d1e3626ab01f3c5d49626ac32fd0588d41ce3a162b44d921cdf  stage94B_stage91_source.zip" | sha256sum -c
+      - name: Restore verified original AusTraits7 source-labeled diameter 367-region Stage92
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526917824/zip" -o stage94B_stage92_source.zip
+          echo "01d76457aa8423b7964b5fccdfea597f5c158a805c138fd8597e7efd1733a05f  stage94B_stage92_source.zip" | sha256sum -c
+      - name: Restore verified original TDWG3 + NaturalEarth strict island-free Stage94
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" -o stage94B_stage94_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage94B_stage94_geo.zip" | sha256sum -c
+      - name: Exact source region join and common 88/37 mainland split measurement feasibility readout
+        run: |
+          python -u research/floral_macro_stage94/real_source_mainland_three_cue_support.py \
+            --stage91-source-zip stage94B_stage91_source.zip \
+            --stage92-source-zip stage94B_stage92_source.zip \
+            --stage94-geography-zip stage94B_stage94_geo.zip \
+            --outdir stage94B_derived
+      - name: Assert exact original source frame and no unsupported scent or wind model
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("stage94B_derived")
+          d=json.loads((root/"stage94B_source_only_mainland_three_cue_measurement_gate.json").read_text())
+          c=d["cohorts"]
+          assert c["mainland"]["regional_units"]==125
+          assert c["mainland_exploration"]["regional_units"]==88
+          assert c["mainland_holdout"]["regional_units"]==37
+          assert c["island_excluded"]["regional_units"]==120
+          assert c["mixed_excluded"]["regional_units"]==122
+          assert c["mainland"]["n_true_AusTraits_LABELLED_flower_diameter_species_regions_at_least_10"]==30
+          assert c["mainland"]["n_positive_marking_TEXT_SOURCE_CANDIDATES_regions_at_least_10"]==83
+          assert c["mainland_holdout"]["n_true_AusTraits_LABELLED_flower_diameter_species_regions_at_least_10"]==4
+          assert d["source_GIFT_wind_diameter_zero_regions_with_five_or_more"]
+          assert d["no_wind_or_cue_effect_coefficients"]
+          assert d["fragrance_usable_estimand_premature"]
+          print("STAGE94B_TRUE_MAINLAND_CUE_SUPPORT",{
+            "mainland_regions":c["mainland"]["regional_units"],
+            "holdout_regions_with_10_original_diameter_species":c["mainland_holdout"]["n_true_AusTraits_LABELLED_flower_diameter_species_regions_at_least_10"],
+            "mainland_regions_10_marking_text_positive":c["mainland"]["n_positive_marking_TEXT_SOURCE_CANDIDATES_regions_at_least_10"]})
+          PY
+      - name: Archive only derived continental source measurements and scientific missingness gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage94B-original-global-source-three-cue-mainland-88-37-support
+          path: stage94B_derived/
+          retention-days: 90
+          if-no-files-found: warn
