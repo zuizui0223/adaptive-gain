@@ -1,0 +1,82 @@
+name: Stage98B source-verified no-contact train-only mainland holdout repair
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage98/original_source_contact_free_holdout_remedy.py"
+      - "research/floral_macro_stage98/test_original_source_contact_free_holdout_remedy.py"
+      - ".github/workflows/floral-stage98B-source-contact-free-mainland-holdout.yml"
+      - "docs/FLORAL_STAGE98_MAINLAND_SHARED_HOLDOUT_GEOGRAPHY_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-verified-contact-only-training-exclusion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify source-only train-removal semantics before original data
+        run: python -m unittest discover -s research/floral_macro_stage98 -p "test_original_source_contact_free_holdout_remedy.py" -v
+      - name: Restore exact original Stage94 125-mainland 88-37 fixed partition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage98B_stage94_original_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage98B_stage94_original_geo.zip" | sha256sum -c
+      - name: Restore source original Stage98A all 3256 crossfold boundary contact audits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14538076350/zip" \
+            -o stage98B_stage98A_original_contacts.zip
+          echo "aca6a2cd7a97de0c23fa259e391d3725cdbd92d7344b3a43353468f51add5f2c  stage98B_stage98A_original_contacts.zip" | sha256sum -c
+      - name: Exact source-only remove contact original training regional polygons and retain all 37 original holdouts
+        run: |
+          python -u research/floral_macro_stage98/original_source_contact_free_holdout_remedy.py \
+            --stage94-original-geo-zip stage98B_stage94_original_geo.zip \
+            --stage98A-original-boundary-zip stage98B_stage98A_original_contacts.zip \
+            --outdir stage98B_derived
+      - name: Check 125 source regions preserved through 72train 37holdout 16 excluded with no contact
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage98B_derived")
+          r=json.loads((p/"stage98B_source_contact_free_exploration_holdout_receipt.json").read_text())
+          x=r["source_cohorts"]
+          assert x["original_mainland_region_count"]==125
+          assert x["original_exploration_region_count"]==88
+          assert x["original_holdout_region_count"]==37
+          assert x["original_train_holdout_source_contact_pairs"]==22
+          assert x["source_heldout_regions_touched"]==10
+          assert x["source_exploration_regions_removed_contact"]==16
+          assert x["source_exploration_regions_retained"]==72
+          assert x["source_holdout_regions_retained_UNCHANGED"]==37
+          assert x["no_train_polygon_contact_with_any_heldout_region_after_exclusion"]
+          assert not x["100km_geodesic_buffer_verified"]
+          assert not x["independent_plant_lineages_between_folds_verified"]
+          assert r["only_source_geography_consulted"]
+          assert r["no_climate_flower_trait_or_GBIF_outcome_opened"]
+          assert r["source_split_membership_never_reassigned"]
+          print("STAGE98B_REAL_SOURCE_MAINLAND_CONTACT_FREE",x)
+          PY
+      - name: Upload derived zero-direct-contact exploratory cohort, holdout unchanged, excluded source IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage98B-original-mainland-contact-free-72train-37holdout-source
+          path: stage98B_derived/
+          retention-days: 90
+          if-no-files-found: warn
