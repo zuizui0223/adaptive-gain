@@ -180,6 +180,8 @@ def WFO_backbone_202606_crosswalk(archive_path,wanted_ids,approved):
         raise ValueError("WFO_202606_AUTHOR_ZENODO_BACKBONE_MD5_MISMATCH")
     matches={};ambiguous=set();counts=Counter()
     with zipfile.ZipFile(archive_path) as z:
+        print("STAGE93_WFO_202606_AUTHOR_BACKBONE_ORIGINAL_ZIP_MEMBERS",
+              json.dumps(z.namelist()[:60]),flush=True)
         meta=parse_meta(z)
         core=next(x for x in meta if x["type"]=="core")
         print("STAGE93_WFO_202606_BACKBONE_AUTHENTIC_META",json.dumps({
