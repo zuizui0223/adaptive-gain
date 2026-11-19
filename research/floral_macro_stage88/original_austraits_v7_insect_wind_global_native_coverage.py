@@ -57,9 +57,14 @@ def original_long_source_table(z):
             h=set(header)
             if {"taxon_name","trait_name","value","dataset_id"}<=h:
                 found.append(f)
-    if len(found)!=1:
-        raise ValueError("STAGE88F_AUSTRAITS_EXACT_LONG_TRAIT_TABLE_AMBIGUOUS "+str([(x.filename,x.file_size) for x in found]))
-    return found[0]
+    # The official v7 archive contains both its primary traits.csv and
+    # excluded_data.csv with the same long-format schema. Only traits.csv
+    # is the analysis dataset; excluded_data must never be admitted.
+    canonical=[f for f in found if Path(f.filename).name.casefold()=="traits.csv"]
+    if len(canonical)!=1:
+        raise ValueError("STAGE88F_AUSTRAITS_PRIMARY_TRAITS_CSV_NOT_UNIQUE "+
+                         str([(x.filename,x.file_size) for x in found]))
+    return canonical[0]
 
 def pollination_source(z):
     source=original_long_source_table(z)
