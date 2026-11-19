@@ -41,6 +41,31 @@ class Stage93SourceProseTests(unittest.TestCase):
     def test_only_species_rank_not_infraspecies(self):
         self.assertEqual(canon_source_binomial("Campanula punctata Lam.","species"),"campanula punctata")
         self.assertIsNone(canon_source_binomial("Campanula punctata var. alba","variety"))
+    def test_stable_WFO_taxon_name_id_accepts_version_and_URI(self):
+        from original_wfo_eFloras_scent_full_prose import stable_wfo_name_id
+        self.assertEqual(stable_wfo_name_id("wfo-0000615907-2026-06"),"wfo-0000615907")
+        self.assertEqual(stable_wfo_name_id("https://www.worldfloraonline.org/taxon/wfo-0000615907"),"wfo-0000615907")
+        self.assertIsNone(stable_wfo_name_id("123456"))
+    def test_original_taxonID_source_scan_requires_no_guessed_scientific_name(self):
+        from original_wfo_eFloras_scent_full_prose import source_legacy_wfo_ids
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"fake-source.zip"
+            with zipfile.ZipFile(p,"w") as z:
+                z.writestr("meta.xml",META.replace("scientificName","taxonID"))
+                z.writestr("taxon.txt","id\ttaxonID\ttaxonRank\n"+
+                    "".join(f"{i}\twfo-{i:010d}\tspecies\n" for i in range(1,105)))
+                z.writestr("description.txt","id\tdescription\n")
+            names,counts=source_legacy_wfo_ids(p)
+            self.assertEqual(len(names),104)
+            self.assertEqual(counts["source_core_rows"],104)
+    def test_modified_backbone_is_rejected_by_author_md5(self):
+        from original_wfo_eFloras_scent_full_prose import WFO_backbone_202606_crosswalk
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"fake-backbone.zip"
+            with zipfile.ZipFile(p,"w") as z:z.writestr("README","fake")
+            with self.assertRaisesRegex(ValueError,"MD5_MISMATCH"):
+                WFO_backbone_202606_crosswalk(p,{"wfo-0000000001"},{"campanula punctata"})
+
     def test_xml_original_dwca_schema(self):
         with tempfile.TemporaryDirectory() as td:
             path=Path(td)/"source.zip"
