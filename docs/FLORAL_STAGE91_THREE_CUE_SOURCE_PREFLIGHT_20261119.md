@@ -39,3 +39,24 @@ Source restoration and byte checks are inherited from SHA-pinned Stage87 NHM, St
 The spatial association cannot establish how bees change sensory cue order, whether wind improves/impairs odour plume use, learning cost, within-flower landing success, flower fitness, evolutionary adaptation or phylogenetic recurrence. Fragrance wind direction remains an explicitly two-sided hypothesis. Early results are exploratory; multiple-testing and independent holdout thresholds must be fixed before true outcome inspection.
 
 Existing Stage77 #156 is a distinct conditional European visited-flora analysis and has no existing globally usable mainland floristic holdout. Stage91 creates a new shared split **only after** verifying geography and before ecological trait modelling.
+
+
+## Stage91A first successful original-source run: 2026-11-19
+
+**Genuinely executed and externally SHA checked**: [GitHub Actions #44514165386](https://github.com/zuizui0223/adaptive-gain/actions/runs/44514165386); derived-only artifact ID **14524294663**, exact artifact ZIP SHA256 **d64b015a55d4661653ede0e18e7f8250531e9d9af74a5fbe0e46ebce5d64e429**. All 17 source-free tests passed, and original NHM, GIFT, Kew ZIP byte checks and joined 367-region count gates succeeded. The first run #44513633574 failed at an overstrict compact-schema expectation of optional petal width; the optional column has been removed from the *mandatory* schema and is now flagged as missing rather than fabricating measurements. The successful original NHM compact header contains only original botanical trait fields such as flower colour, petal colour and corolla colour, but **no typed petal width, fragrance or true flower diameter column**.
+
+Original source-native unique species **55,775** (over 367 TDWG3 regions, including islands):
+
+| Real source trait-documentation state | Exact unique species |
+| --- | ---: |
+| Flower-colour fields mention spotting, stripes, maculation etc. (positive lexical candidates, not true nectar guides) | **906** |
+| Flower-colour documented but no marking keyword (UNKNOWN, not validated plain) | **29,065** |
+| Source flower-colour fields blank (UNKNOWN) | **25,804** |
+| Explicitly documented plain/unmarked by this bounded lexical parser | **0** |
+| Authenticated full open flower diameter | **0** |
+| Authenticated original floral fragrance | **0** |
+| Authenticated typed petal maximum width (column not present) | **0** |
+
+The 906 positive lexical candidate species are not a prevalence estimate; **no valid negative flower-marking reference set exists** in the compact data. They recur across **322/367** original TDWG3 regions, producing **7,815 species×native-region positive appearances**, not 7,815 independent plants or evolutionary origins. **209** regions have ≥10 positive lexical candidate appearances, but these regions include islands and are not independent floral evolutionary experiments. The dominant reported marking families vary by region (Orchidaceae, Lamiaceae, Saxifragaceae often the regional top family). Taxonomic and documented-description confounding remains unresolved. No wind exposure was used to make any of these counts.
+
+The next audit added separately to this PR counts source-positive marking names by independently GIFT-qualified **animal / wind / unknown** modes; **do not infer those counts before its new original-source run succeeds**. Even if positive cases are widespread within biotic plants, a valid negative comparison and directly measured signal are still absent. Therefore: **NO-GO for the user-proposed actual species proportion patterned/unpatterned as an identified primary biological response from compact NHM data**. The source-mention rate is at most an exploratory documentation outcome until an independent negative-ascertainment protocol is established.
