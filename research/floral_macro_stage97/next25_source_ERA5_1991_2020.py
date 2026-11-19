@@ -10,9 +10,11 @@ NOT source CDS raw hourly ERA5 10fg and NOT area-weighted regional wind.
 NO floral signal/cognition/landing/fitness or ecological regression fit.
 """
 from __future__ import annotations
-import argparse,datetime,hashlib,io,json,time,zipfile
+import argparse,datetime,hashlib,io,json,time,zipfile,sys
 from pathlib import Path
 from collections import Counter
+BASE=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(BASE/"floral_macro_stage95"))
 from original_ERA5_1991_2020_regional_25point_source_probe import (
     source_mainland_regions, SITES_PER_REQUEST,INTER_GROUP_PACE_SEC,
     SOURCE_429_PAUSE_SEC
