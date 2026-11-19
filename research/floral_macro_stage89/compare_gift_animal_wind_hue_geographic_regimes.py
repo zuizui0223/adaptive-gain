@@ -86,7 +86,7 @@ def matched_native_mode_frames(gift_zip,climate_zip,bombus_zip):
     return {"global":global_,"GBIF_positive_only":bee},gift_meta,support
 
 def model_design(df,bee):
-    columns=list(BASE_CONTROLS)+(["log_bombus_richness","log_gbif_cells","wind_x_bombus"] if bee else [])
+    columns=list(BASE_CONTROLS)+(["log_bombus_richness","log_gbif_cells"] if bee else [])
     X=pd.DataFrame(index=df.index)
     for col in columns:
         a=np.asarray(df[col],float)
@@ -163,7 +163,6 @@ def analyze_case(df,scope,geoboot=999):
                 "mode_trait_not_same_local_population_as_source_bee_observation":True})
     # Multiplicity across predeclared hue families, separately by data scope,
     # aggregation, mode and predictor. Does not correct previous exploration.
-    for (_,_,term),group in __import__("itertools").groupby([],lambda x:x):pass
     from collections import defaultdict
     buckets=defaultdict(list)
     for i,r in enumerate(rows):
