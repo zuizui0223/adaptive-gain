@@ -95,8 +95,12 @@ def original_natural_earth_land(path):
                 g=shape(rec["geometry"])
                 if not g.is_valid:raise ValueError("NATURAL_EARTH_INVALID_ORIGINAL_LAND_GEOMETRY")
                 if not g.is_empty:polys.append(g)
-    if len(polys)<100:
-        raise ValueError("NATURAL_EARTH_LAND_POLYGON_COUNT_IMPLAUSIBLE")
+    if not polys:
+        raise ValueError("NATURAL_EARTH_LAND_SOURCE_EMPTY")
+    # The source shapefile has a small number of multipolygon FEATURES;
+    # actual distinct islands are GEOMETRY components, validated below.
+    print("STAGE94_NATURAL_EARTH_ORIGINAL_MULTIPOLYGON_FEATURES",
+          len(polys),flush=True)
     dissolved=unary_union(polys)
     components=(list(dissolved.geoms) if dissolved.geom_type=="MultiPolygon" else [dissolved])
     if len(components)<50:raise ValueError("NATURAL_EARTH_ISLANDS_MISSING_IN_LAND_DISSOLVE")
