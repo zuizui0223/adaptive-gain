@@ -68,7 +68,7 @@ jobs:
           p=Path("stage88E_real_original_spatial_family_derived")
           r=json.loads((p/"stage88E_original_paired_global_flora_family_spatial_receipt.json").read_text())
           assert [z["n_source_common_original_regions"] for z in r["source_global_and_bee_scope"]]==[268,138]
-          assert r["source_NO_reinterpretation_as_individual_animal_or_wind_pollination"]
+          assert r["source_source_species_wind_pollination_mode_NOT_verified"]
           data=list(csv.DictReader((p/"stage88E_268global_138bee_source_family_spatial_comparison.csv").open()))
           assert len(data)==264
           def one(scope,hue,term,condition):
