@@ -1,0 +1,92 @@
+name: Stage94 authentic TDWG3 × Natural Earth strict mainland-only source topology
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage94/**"
+      - "docs/FLORAL_STAGE94_MAINLAND_367_TDWG_SOURCE_AUDIT_20261119.md"
+      - ".github/workflows/floral-stage94-tdwg-naturalearth-mainland-only.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-mainland-only-geographic-frame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned GIS source readers
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3" "fiona==1.10.1" "pyproj==3.7.2"
+      - name: Unit guards of source SHA, island exclusion and geodesic area
+        run: python -m unittest discover -s research/floral_macro_stage94 -p "test_*.py" -v
+      - name: Restore genuinely original Stage91 55,775-species 367-region source audit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526435551/zip" \
+            -o stage94_source_stage91_367.zip
+          echo "f1197a050d110d1e3626ab01f3c5d49626ac32fd0588d41ce3a162b44d921cdf  stage94_source_stage91_367.zip" | sha256sum -c
+      - name: Retrieve exact TDWG WGSRPD original physical Level 3 polygon file
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage94_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage94_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Retrieve independent physical mainland and island polygons from Natural Earth 10m land v5.1.1
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 4 \
+            --connect-timeout 40 --max-time 900 \
+            "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip" \
+            -o stage94_original_NaturalEarth_land10m.zip
+          echo "e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc  stage94_original_NaturalEarth_land10m.zip" | sha256sum -c
+          unzip -tq stage94_original_NaturalEarth_land10m.zip
+      - name: Compute source-audited original 367-region mainland / island / mixed and common block split
+        run: |
+          python -u research/floral_macro_stage94/original_tdwg_naturalearth_strict_mainland.py \
+            --source-original-stage91-region-artifact stage94_source_stage91_367.zip \
+            --source-original-TDWG-geospatial-geojson stage94_original_TDWG3.geojson \
+            --source-original-NaturalEarth-land-ZIP stage94_original_NaturalEarth_land10m.zip \
+            --outdir stage94_source_derived
+      - name: Assert every source region audited and all excluded island/mixed TDWG3 outside analysis split
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage94_source_derived")
+          r=json.loads((p/"stage94_original_mainland_island_mixed_geometry_receipt.json").read_text())
+          region=list(csv.DictReader((p/"stage94_original_367_mainland_island_mixed_registry.csv").open()))
+          split=list(csv.DictReader((p/"stage94_original_mainland_shared_geoblock_split.csv").open()))
+          assert r["source_TDWG_regions"]==367
+          assert len(region)==367 and len({x["TDWG_L3"] for x in region})==367
+          assert len(split)>0
+          assert all(x["land_scope"]=="mainland" for x in split)
+          assert all(x["TDWG_L3"] in {z["TDWG_L3"] for z in region if z["land_scope"]=="mainland"} for x in split)
+          assert r["source_geographic_polygon_based_not_plant_cue_or_wind_based"]
+          assert r["no_cue_direction_or_wind_regression_performed"]
+          assert not r["spatial_buffer_between_heldout_train_regions_verified"]
+          assert r["same_frozen_block_holdout_for_three_separate_cues"]["same_split_required_for_all_three_separate_responses"]
+          assert r["strict_regional_land_scope_counts"]["mainland"]>20
+          assert r["strict_regional_land_scope_counts"]["island"]>20
+          print("STAGE94_NATIVE_MAINLAND_ONLY_GEOGRAPHIC_FRAME",r["strict_regional_land_scope_counts"],r["same_frozen_block_holdout_for_three_separate_cues"]["block_split_counts"])
+          PY
+      - name: Upload derived geometry registry and shared split (no raw source redistribution)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage94-genuine-TDWG3-NaturalEarth-mainland-only-367-regions
+          path: stage94_source_derived/
+          retention-days: 90
+          if-no-files-found: warn
