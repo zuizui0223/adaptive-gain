@@ -64,6 +64,7 @@ def source_region_counts(native, traits, modes, families):
         c["n_native"]+=1
         c["pollen_mode_"+mode]+=1
         c["mark_"+state]+=1
+        c["mark_"+state+"_mode_"+mode]+=1
         if width is not None:c["n_source_petals_width_numeric"]+=1
         if state=="positive_lexical":
             pos_families[families.get(sp,"UNKNOWN")]+=1
@@ -74,6 +75,9 @@ def source_region_counts(native, traits, modes, families):
         "pollen_wind":c["pollen_mode_wind"],
         "pollen_unknown":c["pollen_mode_unknown"],
         "n_mark_positive_source_only":c["mark_positive_lexical"],
+        "n_mark_positive_animal_source_only":c["mark_positive_lexical_mode_animal"],
+        "n_mark_positive_wind_source_only":c["mark_positive_lexical_mode_wind"],
+        "n_mark_positive_unknown_source_only":c["mark_positive_lexical_mode_unknown"],
         "n_mark_explicit_plain_source_only":c["mark_explicit_plain_lexical"],
         "n_mark_ambiguous":c["mark_ambiguous"],
         "n_mark_unmentioned_not_negative":c["mark_unmentioned"],
@@ -110,6 +114,10 @@ def run(nhm_path,wcvp_path,gift_path,output):
        "GIFT_animal_mode":sum(modes.get(s)=="animal" for s in unique),
        "GIFT_wind_mode":sum(modes.get(s)=="wind" for s in unique),
        "unique_species_flower_mark_lexical_states":dict(states),
+       "unique_species_positive_marking_by_GIFT_mode":dict(Counter(modes.get(sp,"unknown") for sp in unique if data[sp][0]=="positive_lexical")),
+       "positive_marking_source_distinct_genera_by_GIFT_mode":{
+           m:len({sp.split()[0] for sp in unique if modes.get(sp,"unknown")==m and data[sp][0]=="positive_lexical"})
+           for m in ("animal","wind","unknown")},
        "unique_species_numeric_PETAL_width_NOT_flower_diameter":widths,
        "flower_diameter_validated_species":0,"fragrance_validated_species":0,
        "candidate_structured_scent_fields_NOT_validated":scent_headers,
