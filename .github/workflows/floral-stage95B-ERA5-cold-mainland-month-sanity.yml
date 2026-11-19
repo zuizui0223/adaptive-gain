@@ -1,0 +1,76 @@
+name: Stage95B genuine ERA5 1991-2020 cold-month continental source-validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage95/original_ERA5_1991_2020_cold_mainland_month_sanity.py"
+      - "research/floral_macro_stage95/test_original_ERA5_1991_2020_cold_mainland_month_sanity.py"
+      - ".github/workflows/floral-stage95B-ERA5-cold-mainland-month-sanity.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-cold-mainland-month-filter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original source TDWG geography validation dependencies
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Source-free cold-season and fake-geography guards
+        run: python -m unittest discover -s research/floral_macro_stage95 -p "test_original_ERA5_1991_2020_cold_mainland_month_sanity.py" -v
+      - name: Restore source-frozen real mainland split
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage95B_original_mainland_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage95B_original_mainland_geo.zip" | sha256sum -c
+      - name: Retrieve exact original TDWG WGSRPD source geography
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage95B_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage95B_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Independently fetch 1991-2020 ERA5-model gust/T2m at three source-only high latitude mainland exploration blocks
+        run: |
+          python -u research/floral_macro_stage95/original_ERA5_1991_2020_cold_mainland_month_sanity.py \
+            --original-Stage94-geography-ZIP stage95B_original_mainland_geo.zip \
+            --original-TDWG3-geojson stage95B_original_TDWG3.geojson \
+            --outdir stage95B_derived
+      - name: Verify actual high-lat real months filtered, no wind-cue coefficient
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("stage95B_derived/stage95B_real_ERA5_1991_2020_source_cold_month_sanity.json")
+          d=json.loads(p.read_text())
+          assert len(d["source_sites"])==3
+          assert len({r["spatial_block_id"] for r in d["source_sites"]})==3
+          assert d["source_selection_latitude_only_before_climate_or_floral_cues"]
+          assert d["not_ERA5_CDS_original_hourly_10fg"]
+          assert d["not_an_ecological_effect_or_causal_choice_model"]
+          assert all(r["source_ERA5_observed_30yr_days"]==10958 for r in d["source_sites"])
+          assert all(0<len(r["source_eligible_climatological_months_T2m_strict_above_5C"])<12 for r in d["source_sites"])
+          assert all(0<r["source_eligible_days"]<10958 for r in d["source_sites"])
+          print("STAGE95B_TRUE_30YR_ERA5_COLD_SEASON_VALIDATED",{
+            r["TDWG_L3"]:r["source_eligible_climatological_months_T2m_strict_above_5C"] for r in d["source_sites"]})
+          PY
+      - name: Archive only source-derived seasonal fractions and source SHA provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage95B-original-30yr-ERA5-model-cold-season-3-mainland-regions
+          path: stage95B_derived/
+          if-no-files-found: warn
+          retention-days: 90
