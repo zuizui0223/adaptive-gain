@@ -361,6 +361,7 @@ def run(nhm,wcvp,gift,flora_sources,out,wfo_backbone=None):
     if len(unique)!=55775 or len(native)!=367:
         raise ValueError("STAGE93_WCVP_NATIVE_SOURCE_COHORT_CHANGED")
     allinfo={};states=defaultdict(set);details=defaultdict(list)
+    source_ids=defaultdict(set)
     wfo_names={};crosswalk_meta={"source_absent":True}
     if wfo_backbone is not None:
         requested=set();original_id_counts={}
@@ -381,6 +382,7 @@ def run(nhm,wcvp,gift,flora_sources,out,wfo_backbone=None):
         for sp,entry in data.items():
             states[sp].add(entry["scent"])
             details[sp].append(entry["description_chars_median"])
+            source_ids[sp].add(label)
     flora={}
     for sp,st in states.items():
         if "conflicting_prose" in st or ({"positive_candidate","explicit_negative_candidate"}<=st):
@@ -413,12 +415,28 @@ def run(nhm,wcvp,gift,flora_sources,out,wfo_backbone=None):
       "source_archive_sha_frozen_before_future_climate_cue_fit":True,
       "WFO_backbone_202606_exact_ID_join":crosswalk_meta,
       "source_flora_files":allinfo,"unique_native_source_description_species":len(flora),
+      "species_identity_ledger_only_no_raw_copyrighted_prose":True,
       "scent_lexical_species_states":dict(summary),
       "positive_candidate_species_GIFT_mode":dict(Counter(modes.get(s,"unknown") for s,v in flora.items() if v["state"]=="positive_candidate")),
       "cannot_treat_unmentioned_as_scent_absent":True,
       "does_not_measure_actual_VOC_emission_or_pollinator_airflow":True,
       "not_a_fitted_wind_signal":True,"mainland_only":False}
     out.mkdir(parents=True,exist_ok=True)
+    # Exact accepted species identity ledger for independent measured VOC
+    # proxy crosscheck. No raw botanical prose is redistributed.
+    cols=("accepted_species","source_flora_lexical_fragrance_state",
+      "original_flora_provider","botanical_description_length_characters_median",
+      "independent_GIFT_source_pollination_mode")
+    with (out/"stage93_original_WFO_species_fragrance_lexical_states_NOT_VOC.csv").open(
+        "w",newline="",encoding="utf-8") as f:
+        wr=csv.DictWriter(f,fieldnames=cols);wr.writeheader()
+        for sp in sorted(flora):
+            v=flora[sp]
+            wr.writerow({"accepted_species":sp,
+                "source_flora_lexical_fragrance_state":v["state"],
+                "original_flora_provider":"|".join(sorted(source_ids[sp])),
+                "botanical_description_length_characters_median":v["median_characters"],
+                "independent_GIFT_source_pollination_mode":modes.get(sp,"unknown")})
     with (out/"stage93_original_WFO_flora_scent_source_367_region_counts_INCLUDES_ISLANDS.csv").open("w",newline="") as f:
         wr=csv.DictWriter(f,fieldnames=list(rows[0]));wr.writeheader();wr.writerows(rows)
     (out/"stage93_WFO_original_flora_source_scent_coverage.json").write_text(json.dumps(output,indent=2,sort_keys=True)+"\n")
