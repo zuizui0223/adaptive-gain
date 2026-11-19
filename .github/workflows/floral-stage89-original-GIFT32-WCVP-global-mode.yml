@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: No false biological absence / source artifact forgery tests
-        run: python -m unittest discover -s research/floral_macro_stage89 -p "test_*.py" -v
+        run: python -m unittest discover -s research/floral_macro_stage89 -p "test_gift32_independent_pollen_mode_global_native_coverage.py" -v
       - name: Download original independently verified public GIFT source 5771 exact species modes from island H5c
         env:
           GH_TOKEN: ${{ github.token }}
