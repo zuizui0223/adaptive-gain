@@ -1,0 +1,45 @@
+name: Stage88B3 public Wiley 2025 global pollination mode Dataset S2 source audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/probe_official_publisher_pollination_supplement.py"
+      - ".github/workflows/floral-stage88B3-original-Wiley-pollination-mode-supplement.yml"
+
+permissions:
+  contents: read
+jobs:
+  original-author-publisher-supporting-file:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Decode published supplementary Rdata without source imputation
+        run: python -m pip install "pyreadr==0.5.4" "pandas==2.2.3"
+      - name: Inspect independent official published New Phytologist Dataset S2 download
+        run: |
+          python research/floral_macro_stage88/probe_official_publisher_pollination_supplement.py \
+            --out stage88B3_official_2025_global_animal_wind_supplement.json
+      - name: Retain scientifically honest source retrieval status
+        run: |
+          python - <<'PY'
+          import json
+          o=json.load(open("stage88B3_official_2025_global_animal_wind_supplement.json"))
+          assert o["original_publisher_DOI"]=="10.1111/nph.70196"
+          if o["original_source_became_accessible"]:
+            assert o["original_source_rows"]>170000
+            assert o["original_source_mode_codes"]
+          else:
+            assert o["no_inferred_taxon_mode_or_manufactured_179263_records"]
+          print("STAGE88B3_PUBLIC_PUBLISHER_AUTHOR_SOURCE_ACCESS",o["original_source_became_accessible"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage88B3-official-NewPhytologist-179263-animal-wind-S2-access
+          path: stage88B3_official_2025_global_animal_wind_supplement.json
+          retention-days: 90
+          if-no-files-found: error

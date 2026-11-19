@@ -1,0 +1,74 @@
+name: Stage88F independently verified AusTraits v7 insect-vs-wind global native flora coverage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/original_austraits_v7_insect_wind_global_native_coverage.py"
+      - "research/floral_macro_stage88/test_original_austraits_v7_insect_wind_global_native_coverage.py"
+      - ".github/workflows/floral-stage88F-original-Austraits-global-pollen-mode.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  actual-original-1798215-Austraits-source-mode-WCVP:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Guard no fake 1.8m trait records
+        run: python -m unittest discover -s research/floral_macro_stage88 -p "test_original_austraits_v7_insect_wind_global_native_coverage.py" -v
+      - name: Restore source SHA-locked original NHM plant text
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage88F_NHM_original
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage88F_NHM_original/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original official Kew WCVP native species and family bulk
+        run: |
+          mkdir -p stage88F_WCVP_original
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage88F_WCVP_original/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage88F_WCVP_original/wcvp.zip" | sha256sum -c
+      - name: Re-download and SHA/MD5 check original AusTraits v7, scan 1798215 trait records
+        run: |
+          python -u research/floral_macro_stage88/original_austraits_v7_insect_wind_global_native_coverage.py \
+            --source-NHM stage88F_NHM_original/combined/original_NHM_text_traits_compact.csv \
+            --source-WCVP-zip stage88F_WCVP_original/wcvp.zip \
+            --outdir stage88F_source_original_Austraits7_native_TDWG3
+      - name: Verify author source and honest global coverage before ecological regression
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage88F_source_original_Austraits7_native_TDWG3")
+          x=json.loads((p/"stage88F_original_AusTraits7_insect_wind_global_native_coverage_receipt.json").read_text())
+          assert x["original_AusTraits_release"]["original_SHA256"]=="2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f"
+          assert x["source_pollination_syndrome"]["original_long_source_rows"]==1798215
+          assert x["source_pollination_syndrome"]["original_syndrome_source_rows"]==13440
+          assert x["source_pollination_syndrome"]["source_exact_species_insect_only"]>1000
+          assert x["source_pollination_syndrome"]["source_exact_species_wind_only"]>100
+          assert x["source_mode_by_native_floras"]["source_original_WCVP_native_plant_species"]==55775
+          assert x["source_mode_by_native_floras"]["source_original_367_native_region_modes"]==367
+          assert x["original_AusTraits_not_Wang_2025_global_179263_source"]
+          assert x["source_flowering_species_with_unrecorded_syndromes_unknown_not_wind"]
+          print("STAGE88F_GENUINE_GLOBAL_MODE_SOURCE_COVERAGE",
+                x["source_mode_by_native_floras"]["source_spatial_mode_composition_coverage"])
+          PY
+      - name: Publish source-derived 367 native region pollination-mode coverage only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage88F-original-Austraits7-insect-wind-WCVP55775-TDWG3-coverage
+          path: stage88F_source_original_Austraits7_native_TDWG3/
+          retention-days: 90
+          if-no-files-found: warn

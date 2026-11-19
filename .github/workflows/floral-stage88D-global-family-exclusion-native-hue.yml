@@ -1,0 +1,74 @@
+name: Stage88D global original WCVP taxonomic-family leaveouts in native floral hue geography
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage88/source_taxonomic_family_exclusion_native_flora.py"
+      - "research/floral_macro_stage88/test_source_taxonomic_family_exclusion_native_flora.py"
+      - ".github/workflows/floral-stage88D-global-family-exclusion-native-hue.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-native-55775-species-family-spatial-exclusion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Guard taxonomy lineage exclusion as sensitivity, not plant pollination-mode truth
+        run: python -m unittest discover -s research/floral_macro_stage88 -p "test_source_taxonomic_family_exclusion_native_flora.py" -v
+      - name: Restore source-verified 59,369 original NHM botanical text traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage88D_NHM_source
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage88D_NHM_source/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Retrieve official original Kew WCVP accepted taxon family and native distribution
+        run: |
+          mkdir -p stage88D_WCVP_source
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage88D_WCVP_source/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage88D_WCVP_source/wcvp.zip" | sha256sum -c
+      - name: Reconstruct all actual 55,775 WCVP source native plants by exact family and 367 global TDWG regions
+        run: |
+          python -u research/floral_macro_stage88/source_taxonomic_family_exclusion_native_flora.py \
+            --original-NHM stage88D_NHM_source/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage88D_WCVP_source/wcvp.zip \
+            --outdir stage88D_global_family_source_derived
+      - name: Validate original global denominators and no false species-level pollination modes
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage88D_global_family_source_derived")
+          x=json.loads((p/"stage88D_original_global_family_exclusion_source_receipt.json").read_text())
+          assert x["source_global_original_55775_species"]==55775
+          assert x["source_original_Kew_WCVP_family"]["WCVP_family_exact_unambiguous_source_species"]>50000
+          assert x["source_not_species_animal_wind_pollination_classification"]
+          assert len(x["source_frozen_family_exclusion_sensitivity"])==3
+          with (p/"stage88D_global_TDWG3_native_flora_hue_three_family_exclusion_designs.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==3*367
+          assert len({r["TDWG_L3"] for r in rows})==367
+          assert set(r["source_exclusion_sensitivity"] for r in rows)==set(x["source_frozen_family_exclusion_sensitivity"])
+          print("STAGE88D_VERIFIED_REAL_55775_Kew_SOURCE_FAMILY_REMOVAL",
+              x["source_frozen_family_exclusion_sensitivity"])
+          PY
+      - name: Publish only derived global regional community composition, no original bulk taxonomy
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage88D-global-NHM-WCVP-native-family-exclusion-floral-hues
+          path: stage88D_global_family_source_derived/
+          retention-days: 90
+          if-no-files-found: warn
