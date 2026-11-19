@@ -16,6 +16,12 @@ from original_ERA5_1991_2020_gust_five_mainland_pilot import (
     source_polygons,api_url,query_original,parse_decade,climatology)
 SITES_PER_REQUEST=5
 FIRST_SOURCE_REGIONS=25
+# Stage95C first source pilot got provider HTTP429 on request 4, with explicit
+# "Minutely API request limit exceeded. Please try again in one minute."
+# Each group makes exactly three decade requests; do not request another group
+# until the published per-minute quota can reset.
+INTER_GROUP_PACE_SEC=70
+SOURCE_429_PAUSE_SEC=70
 
 def source_mainland_regions(artifact,geo):
     if sha256(artifact)!=STAGE94_ARTIFACT_SHA:
@@ -51,13 +57,30 @@ def run(artifact,tdwg,outdir,max_sites=FIRST_SOURCE_REGIONS):
     # The selection is by original TDWG code only, never climate, trait, or
     # pollinator outcome. The remaining original mainland frame is preserved.
     chosen=allsites[:max_sites]
-    receipts=[];regional=[];run_start=time.monotonic()
+    receipts=[];regional=[];quota_pause_events=[]
     for j in range(0,len(chosen),SITES_PER_REQUEST):
+        if j:
+            print("STAGE95C_SOURCE_QUOTA_PACE_SECS",INTER_GROUP_PACE_SEC,
+                  "before_next_five_source_sites",flush=True)
+            time.sleep(INTER_GROUP_PACE_SEC)
         sites=chosen[j:j+SITES_PER_REQUEST]
         series={s["TDWG_L3"]:[] for s in sites}
         for a,b in YEARS:
             url=api_url(sites,f"{a}-01-01",f"{b}-12-31")
-            result,digest,n=query_original(url)
+            try:
+                result,digest,n=query_original(url)
+            except ValueError as exc:
+                # Bounded, visible, provider-grounded 429 recovery ONLY.
+                # A second 429 is a hard failure and stops all source claims.
+                if "STAGE95_OPENMETEO_ERA5_API_HTTP_429_" not in str(exc):
+                    raise
+                print("STAGE95C_PROVIDER_HTTP_429_QUOTA",str(exc)[:240],
+                      "waiting_seconds",SOURCE_429_PAUSE_SEC,flush=True)
+                quota_pause_events.append({"batch":j//SITES_PER_REQUEST,
+                                           "decade":[a,b],
+                                           "pause_seconds":SOURCE_429_PAUSE_SEC})
+                time.sleep(SOURCE_429_PAUSE_SEC)
+                result,digest,n=query_original(url)
             if not isinstance(result,list) or len(result)!=len(sites):
                 raise ValueError("STAGE95C_ORIGINAL_ERA5_MULTI_SITE_RESULT_WRONG_LENGTH")
             receipts.append({"batch_id":j//SITES_PER_REQUEST,
@@ -81,7 +104,6 @@ def run(artifact,tdwg,outdir,max_sites=FIRST_SOURCE_REGIONS):
         print("STAGE95C_TRUE_ORIGINAL_ERA5_REGION_BATCH",
               json.dumps({"batch":j//SITES_PER_REQUEST,"sites":[r["TDWG_L3"] for r in sites],
                   "completed":len(regional),"total_expected":max_sites},sort_keys=True),flush=True)
-        time.sleep(.3)
     counts=Counter(r["shared_split"] for r in regional)
     wind=[r["source_primary_fraction_days_daily_gust_strict_above_15_ms"]
           for r in regional if r["source_primary_fraction_days_daily_gust_strict_above_15_ms"] is not None]
@@ -96,6 +118,8 @@ def run(artifact,tdwg,outdir,max_sites=FIRST_SOURCE_REGIONS):
        "source_selected_folds":dict(counts),
        "source_regions_not_yet_downloaded":125-max_sites,
        "original_api_requests_count":len(receipts),
+       "source_provider_explicit_minutely_quota_429_recoveries":quota_pause_events,
+       "source_pace_seconds_between_groups":INTER_GROUP_PACE_SEC,
        "real_ERA5_model_requested_30yr_days_per_site":10958,
        "regional_gust_source_site_fraction_min":min(wind) if wind else None,
        "regional_gust_source_site_fraction_max":max(wind) if wind else None,
