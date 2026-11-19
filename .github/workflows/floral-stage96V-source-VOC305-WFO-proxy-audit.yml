@@ -1,0 +1,77 @@
+name: Stage96V authentic WFO floral-scent text × original VOC305 species-level validity audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage96/original_WFO_scent_VOC305_exact_source_overlap.py"
+      - "research/floral_macro_stage96/test_original_WFO_scent_VOC305_exact_source_overlap.py"
+      - ".github/workflows/floral-stage96V-source-VOC305-WFO-proxy-audit.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-source-VOC305-WFO-fragrance-validation-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free tests for strict species identity and never false scent absence
+        run: python -m unittest discover -s research/floral_macro_stage96 -p "test_original_WFO_scent_VOC305_exact_source_overlap.py" -v
+      - name: Restore original authenticated WFO source species fragrance descriptions with no botanical prose
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14534460860/zip" \
+            -o stage96V_actual_original_WFO_species_fragrance.zip
+          echo "eb32786c6464a6edecd7ff0d12e61762cdb107f3082124066aadcc03292dd88e  stage96V_actual_original_WFO_species_fragrance.zip" | sha256sum -c
+      - name: Restore original authentic Farré-Armengol 2020 VOC305 source & strict GBIF-accepted names
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14296278415/zip" \
+            -o stage96V_original_true_VOC305_source.zip
+          echo "9522821741ad3054345235f6a3711a709144cc86cc13c0cc6e06cd278b2f6552  stage96V_original_true_VOC305_source.zip" | sha256sum -c
+      - name: Join original source 305 VOC species to 27,899 WFO botanical prose species by exact accepted species
+        run: |
+          python -u research/floral_macro_stage96/original_WFO_scent_VOC305_exact_source_overlap.py \
+            --wfo-species-zip stage96V_actual_original_WFO_species_fragrance.zip \
+            --voc305-species-zip stage96V_original_true_VOC305_source.zip \
+            --outdir stage96V_derived
+      - name: Verify source true 67 matches and no valid VOC scentless benchmark
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("stage96V_derived/stage96V_original_flora_scent_VOC305_proxy_feasibility.json").read_text())
+          assert d["original_WFO_native_species"]==27899
+          assert d["original_author_VOC_species"]==305
+          assert d["original_source_taxa_exact_matched"]==67
+          assert d["source_WFO_lexical_state_counts"]["positive_candidate"]==11
+          assert d["source_WFO_lexical_state_counts"]["unmentioned_or_uncertain"]==56
+          assert d["source_WFO_lexical_state_counts"].get("explicit_negative_candidate",0)==0
+          assert d["original_distinct_VOC_source_article_text_keys"]==22
+          assert d["within_original_source_article_positive_vs_unmentioned_both_groups"]==4
+          assert not d["fragrance_absence_proxy_validation_identifiable"]
+          assert d["cannot_compare_orig_emission_units_from_this_presence_workbook"]
+          print("STAGE96V_TRUE_ORIGINAL_FLORENTIC_VOC_SOURCE_OVERLAP_NO_GO",{
+             "species":67,"text_fragrant":11,
+             "text_explicit_scentless":0,"undocumented":56})
+          PY
+      - name: Archive source-only original exact matched names and no-go receipt (NO original VOC XLSX)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage96V-original-WFO-VOC305-source-proxy-validity-gate
+          path: stage96V_derived/
+          retention-days: 90
+          if-no-files-found: warn
