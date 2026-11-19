@@ -1,0 +1,88 @@
+name: Stage89 global true GIFT3.2 direct biotic-vs-wind × WCVP native plants source coverage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage89/**"
+      - ".github/workflows/floral-stage89-original-GIFT32-WCVP-global-mode.yml"
+      - "docs/FLORAL_STAGE89_GLOBAL_GIFT32_POLLINATION_MODE_SOURCE_COVERAGE_20261119.md"
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-original-global-GIFT32-WCVP-mode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: No false biological absence / source artifact forgery tests
+        run: python -m unittest discover -s research/floral_macro_stage89 -p "test_*.py" -v
+      - name: Download original independently verified public GIFT source 5771 exact species modes from island H5c
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p stage89_original_GIFT
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage89_original_GIFT/verified_original_H5c_5771.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage89_original_GIFT/verified_original_H5c_5771.zip" | sha256sum -c
+      - name: Recover author original 59,369 botanical source prose traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage89_source_original_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage89_source_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Recover 2026 source official Kew WCVP 55,775 native NHM species regional ranges
+        run: |
+          mkdir -p stage89_original_Kew
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage89_original_Kew/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage89_original_Kew/wcvp.zip" | sha256sum -c
+      - name: Reconstruct real global 367 region × animal/wind/unknown flora from independent GIFT accepted original species
+        run: |
+          python -u research/floral_macro_stage89/gift32_independent_pollen_mode_global_native_coverage.py \
+            --source-GIFT32-island-original-artifact stage89_original_GIFT/verified_original_H5c_5771.zip \
+            --source-original-NHM stage89_source_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --source-original-Kew-WCVP stage89_original_Kew/wcvp.zip \
+            --outdir stage89_original_GIFT_NHM_WCVP_mode_derived
+      - name: Validate original independent 4538 biotic + 1233 wind source and global opportunity before fitting
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage89_original_GIFT_NHM_WCVP_mode_derived")
+          x=json.loads((p/"stage89_original_GIFT32_NHM_WCVP_global_plant_mode_spatial_support.json").read_text())
+          assert x["source_original_GIFT32"]["original_species_modes_declared"]["source_mode_animal"]==4537
+          assert x["source_original_GIFT32"]["original_species_modes_declared"]["source_mode_wind"]==1233
+          assert x["source_original_GIFT32"]["original_species_modes_declared"]["bad_name"]==1
+          z=x["source_global_GIFT_pollination_mode_native_join"]
+          assert z["source_original_WCVP_native_plant_species"]==55775
+          assert z["source_original_367_native_region_modes"]==367
+          assert z["source_original_Wang2025_source_mode_strict_matched_species_gift_external"]>500
+          assert x["source_unrecorded_pollinator_absence_and_pollination_mode_are_unknown"]
+          with (p/"stage89_original_GIFT32_native_animal_wind_unknown_367_TDWG3_hues.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==1101
+          assert set(r["pollination_mode"] for r in rows)=={"animal","wind","unknown"}
+          print("STAGE89_REAL_5771_GIFT32_SOURCE_NATIVE_WCVP_HUE_MODE_367_REGIONS",
+               z["source_spatial_mode_composition_coverage"])
+          PY
+      - name: Publish only source-derived regional trait coverage matrix and original provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage89-original-GIFT32-5771-mode-NHM-WCVP-global-TDWG3
+          path: stage89_original_GIFT_NHM_WCVP_mode_derived/
+          retention-days: 90
+          if-no-files-found: warn
