@@ -1,0 +1,121 @@
+name: Stage93 WFO original Flora of China and North America scent description preflight
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage93/**"
+      - ".github/workflows/floral-stage93-WFO-eFloras-original-scent.yml"
+      - "docs/FLORAL_STAGE93_WFO_SOURCE_FLORAL_SCENT_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-world-flora-source-scent-prose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Original source text, XML format and lexical state source-free tests
+        run: python -m unittest discover -s research/floral_macro_stage93 -p "test_*.py" -v
+      - name: Restore native plant exact source NHM master
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV --dir stage93_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage93_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore independently qualified original GIFT3.2 pollination mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage93_GIFT32.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage93_GIFT32.zip" | sha256sum -c
+      - name: Restore exact official 2026 WCVP native taxonomic archive
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" -o stage93_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage93_WCVP.zip" | sha256sum -c
+      - name: Download original full descriptive botanical treatment sources from WFO
+        run: |
+          mkdir -p stage93_WFO
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/Flora_Of_China/Flora_Of_China.zip" \
+            -o stage93_WFO/Flora_Of_China_original.zip
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/FNA/FNA.zip" \
+            -o stage93_WFO/FNA_original.zip
+          sha256sum stage93_WFO/*zip | tee stage93_WFO/original_sha256_manifest.txt
+          unzip -tq stage93_WFO/Flora_Of_China_original.zip
+          unzip -tq stage93_WFO/FNA_original.zip
+      - name: Retrieve exact WFO Plant List 2026-06 independently versioned Taxon ID to scientific name backbone
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1" \
+            -o stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip
+          echo "0e4486945cd9f7af548ca87eb9a870ed  stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip" | md5sum -c
+          unzip -tq stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip
+          sha256sum stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip | tee stage93_WFO/WFO_2026-06_backbone_SHA256.txt
+      - name: Read ORIGINAL WFO DwC-A taxon and description rows with versioned accepted-species ID crosswalk
+        run: |
+          python -u research/floral_macro_stage93/original_wfo_eFloras_scent_full_prose.py \
+            --original-NHM stage93_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage93_WCVP.zip \
+            --original-GIFT stage93_GIFT32.zip \
+            --original-WFO-202606-backbone-ZIP stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip \
+            --original-Flora-of-China-ZIP stage93_WFO/Flora_Of_China_original.zip \
+            --original-Flora-of-North-America-ZIP stage93_WFO/FNA_original.zip \
+            --outdir stage93_derived
+      - name: Verify original flora source support, no false negatives and no mainland wind fit
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage93_derived")
+          d=json.loads((p/"stage93_WFO_original_flora_source_scent_coverage.json").read_text())
+          rows=list(csv.DictReader((p/"stage93_original_WFO_flora_scent_source_367_region_counts_INCLUDES_ISLANDS.csv").open()))
+          assert d["native_species"]==55775
+          assert d["global_TDWG3_regions_INCLUDING_islands"]==367
+          assert d["unique_native_source_description_species"]==27899
+          assert d["scent_lexical_species_states"]=={"positive_candidate":420,
+               "explicit_negative_candidate":105,"unmentioned_or_uncertain":27374}
+          assert sum(d["scent_lexical_species_states"].values())==d["unique_native_source_description_species"]
+          species=list(csv.DictReader((p/"stage93_original_WFO_species_fragrance_lexical_states_NOT_VOC.csv").open()))
+          assert len(species)==27899
+          assert len({r["accepted_species"] for r in species})==27899
+          assert all(r["original_flora_provider"] for r in species)
+          assert all(r["independent_GIFT_source_pollination_mode"] in ("animal","wind","unknown") for r in species)
+          assert d["species_identity_ledger_only_no_raw_copyrighted_prose"]
+          assert d["cannot_treat_unmentioned_as_scent_absent"]
+          assert not d["mainland_only"]
+          assert d["not_a_fitted_wind_signal"]
+          assert len(rows)==367
+          assert all(x["ecological_wind_scent_effect_admissible"]=="NO" for x in rows)
+          print("SOURCE_ONLY_REAL_WFO_SCENT",{
+            "source_description_species":d["unique_native_source_description_species"],
+            "scent_states":d["scent_lexical_species_states"],
+            "WFO_fingerprints":{k:v["archive_sha256_first_source_fingerprint"]
+                               for k,v in d["source_flora_files"].items()}})
+          PY
+      - name: Publish only derived source evidence counts, source schema and frozen first SHA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage93-WFO-original-Flora-China-FNA-full-text-fragrance-source-only
+          path: |
+            stage93_derived/
+            stage93_WFO/original_sha256_manifest.txt
+            stage93_WFO/WFO_2026-06_backbone_SHA256.txt
+          retention-days: 90
+          if-no-files-found: warn
