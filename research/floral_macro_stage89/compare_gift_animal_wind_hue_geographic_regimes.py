@@ -148,18 +148,28 @@ def analyze_case(df,scope,geoboot=999):
     termset=("wind","log_bombus_richness","wind_x_bombus") if bee else ("wind",)
     rows=[]
     for j,(agg,hue,mode) in enumerate(names):
+        # A missing hue report throughout a source-defined mode is NOT
+        # biological proof of a true zero-colour effect; don't manufacture
+        # regression inferential output from a constant source series.
+        documented_positive_regions=int(np.sum(Y[:,j]>0))
+        has_source_variation=bool(np.std(Y[:,j])>1e-12)
+        fit=sm.OLS(Y[:,j],X).fit(cov_type="HC3") if has_source_variation else None
         for term in termset:
             ix=list(X.columns).index(term)
-            # HC3 is only exploratory region-level variance; paired
-            # geographical resampling is the primary uncertainty.
-            fit=sm.OLS(Y[:,j],X).fit(cov_type="HC3")
+            p=float(fit.pvalues.iloc[ix]) if fit is not None else None
+            if p is not None and not np.isfinite(p):p=None
+            inferred=bool(has_source_variation and p is not None)
             rows.append({"scope":scope,"mode":mode,"averaging":agg,"hue":hue,
                 "predictor":term,"n_source_regions":len(df),
+                "source_positive_hue_documentation_regions":documented_positive_regions,
+                "source_status":"DESCRIPTIVE_ESTIMABLE" if inferred else (
+                     "NOT_IDENTIFIABLE_NO_HUE_VARIATION" if not has_source_variation
+                     else "NOT_IDENTIFIABLE_HC3_NUMERICAL"),
                 "mean_source_hue_fraction":float(np.mean(Y[:,j])),
-                "original_partial_slope_frac_points_per_1sd":float(original_beta[ix,j]),
-                "exploratory_HC3_p":float(fit.pvalues.iloc[ix]),
-                "geoblock_20x45_95":[float(v) for v in np.quantile(bootstrap1[:,ix,j],[.025,.975])],
-                "geoblock_30x60_95":[float(v) for v in np.quantile(bootstrap2[:,ix,j],[.025,.975])],
+                "original_partial_slope_frac_points_per_1sd":float(original_beta[ix,j]) if inferred else None,
+                "exploratory_HC3_p":p if inferred else None,
+                "geoblock_20x45_95":[float(v) for v in np.quantile(bootstrap1[:,ix,j],[.025,.975])] if inferred else None,
+                "geoblock_30x60_95":[float(v) for v in np.quantile(bootstrap2[:,ix,j],[.025,.975])] if inferred else None,
                 "mode_trait_not_same_local_population_as_source_bee_observation":True})
     # Multiplicity across predeclared hue families, separately by data scope,
     # aggregation, mode and predictor. Does not correct previous exploration.
@@ -168,14 +178,26 @@ def analyze_case(df,scope,geoboot=999):
     for i,r in enumerate(rows):
         buckets[(r["averaging"],r["mode"],r["predictor"])].append(i)
     for keys,ii in buckets.items():
-        p=[rows[i]["exploratory_HC3_p"] for i in ii]
+        # FDR over eleven PREDECLARED source hue slots. The number
+        # of valid tests may be <11, but an omitted hue cannot create
+        # an artificially smaller family of tested hypotheses.
+        tests=[i for i in ii if rows[i]["exploratory_HC3_p"] is not None]
+        if not tests:continue
+        p=[rows[i]["exploratory_HC3_p"] for i in tests]
         adj=multipletests(p,method="fdr_bh")[1]
-        for i,v in zip(ii,adj):rows[i]["exploratory_BH_11_hues"]=float(v)
+        # multiply for the unobserved original hue hypotheses too
+        # (conservative vs an 11-cell predeclared family).
+        adj=np.minimum(1.,adj*11/max(1,len(tests)))
+        for i,v in zip(tests,adj):rows[i]["exploratory_BH_11_hues"]=float(v)
     summary={"scope":scope,"n_original_regions":len(df),
        "n_source_geoblocks_20x45":b1,"n_source_geoblocks_30x60":b2,
        "n_bootstrap20_success":len(bootstrap1),"n_bootstrap30_success":len(bootstrap2),
        "source_original_11_source_hues":len(COLORS_ALL),
        "source_outcomes_2_aggregations_3_modes":len(names),
+       "source_mode_hue_outcomes_not_estimable_due_no_original_positive_hue":{
+           "hues_and_mode":[{"aggregation":agg,"hue":hue,"mode":mode}
+               for j,(agg,hue,mode) in enumerate(names) if np.std(Y[:,j])<=1e-12],
+           "n_mode_hue_series":int(sum(np.std(Y[:,j])<=1e-12 for j in range(Y.shape[1])))},
        "note":"'animal_minus_wind' response is the within-region difference, not a phylogenetically replicated transition"}
     return rows,summary
 
@@ -217,7 +239,7 @@ def run(gift_zip,climate_zip,bombus_zip,outdir,bootstrap=999):
             {"mode":x["mode"],"hue":x["hue"],"term":x["predictor"],
             "beta":x["original_partial_slope_frac_points_per_1sd"],
             "block20":x["geoblock_20x45_95"],
-            "BH_q":x["exploratory_BH_11_hues"]} for x in out],sort_keys=True),flush=True)
+            "BH_q":x.get("exploratory_BH_11_hues")} for x in out],sort_keys=True),flush=True)
     return report
 
 def main():
