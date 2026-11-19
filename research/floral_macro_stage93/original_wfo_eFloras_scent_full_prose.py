@@ -118,25 +118,45 @@ def canon_source_binomial(name,rank):
     if len(words)>2 and words[2].casefold() in {"var.","var","subsp","subsp.","ssp","ssp.","f.","forma"}:return None
     return strict_name(words[0]+" "+words[1])
 
+def _nonfloral_modification_before_cue(txt, start):
+    """A reverse 'fragrant flowers' hit can describe fragrance of LEAVES.
+
+    Check the grammatical segment immediately preceding the fragrance token.
+    Comma, semicolon, or sentence boundaries reset that segment. This is a
+    conservative text-screen only: no assertion of true odor absence.
+    """
+    prefix=txt[:start]
+    cut=max(prefix.rfind(","),prefix.rfind("."),prefix.rfind(";"),prefix.rfind(":"))
+    fragment=prefix[cut+1:].strip()
+    return bool(NONFLORAL_INTERVENING.search(fragment[-65:]))
+
 def scent_class(text):
     txt=cleaned(text)
     if not txt:return "empty_description"
     positive=[];negative=[]
-    for m in list(P1.finditer(txt))+list(P2.finditer(txt)):
+    # Forward matches: floral organ -> scent; intervening nonfloral organs
+    # invalidate the apparent organ attribution.
+    for m in P1.finditer(txt):
         frag=m.group(0)
-        if re.search(NEGATIVE,frag,re.I):continue
-        if UNCERTAIN.search(frag):continue
-        # Reject cross-organ proximity, e.g. "Leaves fragrant, flowers white"
-        # and "Flowers white, leaves fragrant". This sacrifices recall rather
-        # than confounding nonfloral odor with floral chemistry.
+        if re.search(NEGATIVE,frag,re.I) or UNCERTAIN.search(frag):continue
         if NONFLORAL_INTERVENING.search(frag):continue
         positive.append((m.start(),m.end()))
-    for m in list(N1.finditer(txt))+list(N2.finditer(txt)):
+    # Reverse matches: scent -> floral organ; may be preceded by a LEAF
+    # subject outside the regex match ("Leaves fragrant, flowers white").
+    for m in P2.finditer(txt):
         frag=m.group(0)
-        if UNCERTAIN.search(frag):continue
-        # A scentless leaf/bark next to a described flower is NOT a
-        # directly observed absence of floral odor.
+        if re.search(NEGATIVE,frag,re.I) or UNCERTAIN.search(frag):continue
         if NONFLORAL_INTERVENING.search(frag):continue
+        if _nonfloral_modification_before_cue(txt,m.start()):continue
+        positive.append((m.start(),m.end()))
+    for m in N1.finditer(txt):
+        frag=m.group(0)
+        if UNCERTAIN.search(frag) or NONFLORAL_INTERVENING.search(frag):continue
+        negative.append((m.start(),m.end()))
+    for m in N2.finditer(txt):
+        frag=m.group(0)
+        if UNCERTAIN.search(frag) or NONFLORAL_INTERVENING.search(frag):continue
+        if _nonfloral_modification_before_cue(txt,m.start()):continue
         negative.append((m.start(),m.end()))
     return "positive_candidate" if positive and not negative else (
         "explicit_negative_candidate" if negative and not positive else
