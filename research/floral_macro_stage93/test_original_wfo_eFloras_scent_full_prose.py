@@ -58,6 +58,25 @@ class Stage93SourceProseTests(unittest.TestCase):
             names,counts=source_legacy_wfo_ids(p)
             self.assertEqual(len(names),104)
             self.assertEqual(counts["source_core_rows"],104)
+    def test_real_WFO_backbone_plain_tsv_classification_csv_contract(self):
+        import hashlib
+        from unittest.mock import patch
+        import original_wfo_eFloras_scent_full_prose as mod
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"dummy_backbone.zip"
+            header="taxonID\tscientificName\ttaxonRank\ttaxonomicStatus\n"
+            target="wfo-0000615907\tCampanula punctata\tspecies\taccepted\n"
+            filler="wfo-9999999999\tOtherium unknownium\tspecies\taccepted\n"
+            with zipfile.ZipFile(p,"w",compression=zipfile.ZIP_DEFLATED) as z:
+                z.writestr("classification.csv",header+target+filler*100000)
+            md5=hashlib.md5(p.read_bytes()).hexdigest()
+            with patch.object(mod,"WFO_BACKBONE_202606_MD5",md5):
+                names,meta=mod.WFO_backbone_202606_crosswalk(
+                    p,{"wfo-0000615907"},{"campanula punctata"})
+            self.assertEqual(names,{"wfo-0000615907":"campanula punctata"})
+            self.assertEqual(meta["source_counts"]["original_backbone_core_rows"],100001)
+            self.assertTrue(meta["no_synonym_or_fuzzy_matching_performed"])
+
     def test_modified_backbone_is_rejected_by_author_md5(self):
         from original_wfo_eFloras_scent_full_prose import WFO_backbone_202606_crosswalk
         with tempfile.TemporaryDirectory() as td:
