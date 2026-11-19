@@ -180,36 +180,50 @@ def WFO_backbone_202606_crosswalk(archive_path,wanted_ids,approved):
         raise ValueError("WFO_202606_AUTHOR_ZENODO_BACKBONE_MD5_MISMATCH")
     matches={};ambiguous=set();counts=Counter()
     with zipfile.ZipFile(archive_path) as z:
-        print("STAGE93_WFO_202606_AUTHOR_BACKBONE_ORIGINAL_ZIP_MEMBERS",
-              json.dumps(z.namelist()[:60]),flush=True)
-        meta=parse_meta(z)
-        core=next(x for x in meta if x["type"]=="core")
-        print("STAGE93_WFO_202606_BACKBONE_AUTHENTIC_META",json.dumps({
-            "row_type":core["row_type"],"file":core["file"],"fields":sorted(core["fields"]),
-            "original_core_id_index":core["id"],"archive_sha256":sha256(archive_path)
-        },sort_keys=True),flush=True)
-        fields=core["fields"]
-        if "scientificname" not in fields:
-            raise ValueError("WFO_202606_BACKBONE_DOES_NOT_HAVE_SCIENTIFICNAME_FIELD")
-        if "taxonid" not in fields and core["id"] is None:
-            raise ValueError("WFO_202606_BACKBONE_DOES_NOT_HAVE_TAXONID_FIELD")
-        for row in iter_rows(z,core):
-            counts["original_backbone_core_rows"]+=1
-            key=field(row,fields,"taxonid")
-            if not key and core["id"] is not None and core["id"]<len(row):
-                key=row[core["id"]]
-            wfo=stable_wfo_name_id(key)
-            if not wfo or wfo not in wanted_ids:continue
-            counts["original_backbone_target_ID_rows"]+=1
-            sp=canon_source_binomial(field(row,fields,"scientificname"),field(row,fields,"taxonrank"))
-            if not sp or sp not in approved:continue
-            status=field(row,fields,"taxonomicstatus").casefold().strip()
-            if status and status not in {"accepted","valid"}:
-                counts["backbone_nonaccepted_usage_excluded"]+=1
-                continue
-            if wfo in matches and matches[wfo]!=sp:
-                ambiguous.add(wfo)
-            else:matches[wfo]=sp
+        # The official _DwC_backbone_R.zip is NOT a meta.xml DwC-A; it
+        # stores one tab-delimited table named classification.csv (despite
+        # the .csv suffix). Confirmed against upstream EcoSISTEM.jl and
+        # WorldFloraFast reader source, then separately original MD5 verified.
+        candidates=[n for n in z.namelist()
+                    if n=="classification.csv" or n.endswith("/classification.csv")]
+        if len(candidates)!=1:
+            raise ValueError("WFO_202606_OFFICIAL_ZIP_NO_UNIQUE_CLASSIFICATION_CSV_"+
+                             repr(z.namelist()[:12]))
+        member=candidates[0]
+        with io.TextIOWrapper(z.open(member),encoding="utf-8-sig",
+                              errors="surrogateescape",newline="") as f:
+            header=f.readline()
+            sep="\t" if "\t" in header else ","
+            f.seek(0)
+            reader=csv.DictReader(f,delimiter=sep)
+            columns=set(reader.fieldnames or [])
+            print("STAGE93_WFO_202606_BACKBONE_AUTHENTIC_CLASSIFICATION",
+                  json.dumps({"member":member,"delimiter":"TAB" if sep=="\t" else "COMMA",
+                   "columns":sorted(columns),"archive_sha256":sha256(archive_path)},
+                             sort_keys=True),flush=True)
+            if not {"taxonID","scientificName","taxonRank","taxonomicStatus"}<=columns:
+                raise ValueError("WFO_202606_BACKBONE_SOURCE_REQUIRED_COLUMNS_MISSING")
+            for row in reader:
+                counts["original_backbone_core_rows"]+=1
+                used=[row.get(k) or "" for k in
+                      ("taxonID","scientificName","taxonRank","taxonomicStatus")]
+                if any(0xDC80<=ord(c)<=0xDCFF for cell in used for c in cell):
+                    counts["original_backbone_invalid_encoded_rows_skipped"]+=1
+                    continue
+                wfo=stable_wfo_name_id(row.get("taxonID"))
+                if not wfo or wfo not in wanted_ids:continue
+                counts["original_backbone_target_ID_rows"]+=1
+                sp=canon_source_binomial(row.get("scientificName"),
+                                         row.get("taxonRank"))
+                if not sp or sp not in approved:continue
+                status=(row.get("taxonomicStatus") or "").casefold().strip()
+                if status and status not in {"accepted","valid"}:
+                    counts["backbone_nonaccepted_usage_excluded"]+=1
+                    continue
+                if wfo in matches and matches[wfo]!=sp:
+                    ambiguous.add(wfo)
+                else:
+                    matches[wfo]=sp
     for key in ambiguous:matches.pop(key,None)
     if counts["original_backbone_core_rows"]<100000:
         raise ValueError("WFO_202606_BACKBONE_SOURCE_NOT_FULL_ARCHIVE")
