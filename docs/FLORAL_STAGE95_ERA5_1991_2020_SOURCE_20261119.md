@@ -29,3 +29,25 @@ The stage does not recover original source floral scent, verified nectar guides,
 - .github/workflows/floral-stage95A-ERA5-1991-2020-mainland-pilot.yml
 
 If remote ERA5-model source cannot deliver consistent complete dates or units across decades, fail rather than filling missing days or switching silently to mean wind.
+
+
+## Original 30-year source execution actually SUCCESS
+
+Source GitHub Actions [#44525653919](https://github.com/zuizui0223/adaptive-gain/actions/runs/44525653919), derived ZIP artifact ID **14532170043**, ZIP SHA256 **ead1dd4a717bdc7de31455f5d02e953c2ce8406547dcc03e158391b4bc1b9b06**. All ten source-free tests and original Stage94 source geographic ZIP SHA passed. The original three source API response JSON SHA256 checks were:
+- 1991–2000: c5a907fe4c3a5c4ec79aace410423b97b99487fb794cecf3d6952510c5978233
+- 2001–2010: a0b87bfb02dce76ad36b1448f2b81c788cc611f19a38d0ed3b5c0b079d39b5e1
+- 2011–2020: 1919218c1b3b5c0c6c554f5d553a0b04a9a12eee147e64731e1d0eab78de0bc1
+
+All five original geographical source-selected exploration block sites have complete original derived daily ERA5-model arrays for **10,958** UTC days, including 1991–2020 leap days. The original 30-year mean monthly 2m temperatures exceeded 5C for **all 12 months at these five pilot sites**, so this pilot validates full-period source retrieval and strong-gust exceedance logic, not the real ecological operation of omitting cold flowering months.
+
+| TDWG3 source site code | Strict fraction of 30-year daily max 10m gust days >15 m/s |
+| --- | ---: |
+| CLC | 0.022449352071545903 |
+| NSW | 0.08076291294031758 |
+| AGW | 0.01706515787552473 |
+| GHA | 0.0 |
+| BEN | 0.0 |
+
+The two zero site values are actual **reanalysis-model grid-cell 30-year candidate threshold exceedance zeros**, not an absence of wind or storms throughout the flora's TDWG region. Source model: Open-Meteo historical archive explicit models=era5. **No original CDS hourly ERA5 10fg cross-check, no TDWG land-area spatial average, and no wind-visual/odor ecological coefficient** has yet been obtained. The fixed >15 threshold differs from older Stage78 >=15. This is a physical measurement source feasibility result only.
+
+The immediate next source-validation target is a **cold high-latitude/high-altitude mainland test** to demonstrate >5C month restriction on real daily data. Regional mainland landmask integration remains a separate exposure prerequisite.
