@@ -31,4 +31,24 @@ A nonzero source reuse fraction is a warning about apparent biogeographic valida
 - `research/floral_macro_stage99/test_original_three_cue_species_holdout_source_leakage.py`
 - `.github/workflows/floral-stage99-original-mainland-three-cue-species-holdout.yml`
 
-Actual counts pending original SHA-verified source CI. Keep Draft and main unchanged.
+
+
+## Exact source-authenticated execution (2026-11-19)
+
+GitHub Actions [#44544470811](https://github.com/zuizui0223/adaptive-gain/actions/runs/44544470811) **SUCCESS**: six tests, and original SHA checks for NHM/WCVP/GIFT/AusTraits/WFO and Stage98B source partitions all passed. Derived archive artifact **14539521754**, SHA256 **bd6bfaabbc9fba30b7ba39e0e1cf62db1b8bddd8457fd43d8b8b3ce3e683d8c0**.
+
+| Source cohort | Distinct holdout species | Exact species already in 72-region training | Holdout-only species | Reuse fraction |
+| --- | ---: | ---: | ---: | ---: |
+| All original native species | 27,882 | 9,093 | 18,789 | 32.6% |
+| Floral marking positive lexical mention | 555 | 164 | 391 | 29.5% |
+| Original AusTraits labelled flower diameter | 54 | 35 | 19 | **64.8%** |
+| WFO fragrance positive lexical mention | 297 | 70 | 227 | 23.6% |
+| WFO explicitly negative lexical mention | 65 | 18 | 47 | 27.7% |
+| Independently GIFT animal-labelled pollen vector | 1,039 | 776 | 263 | 74.7% |
+| Independently GIFT wind-labelled pollen vector | 331 | 310 | 21 | **93.7%** |
+
+These rows are not disjoint trait sets. They are exact source species-level names; a plant can belong to more than one row. The 104 globally measured original flower-diameter species include only 19 holdout-only species in the fixed 37-region test. Thus good cross-region prediction on this original species trait compilation could largely reflect repeated plant species and their unchanged curated source traits, rather than out-of-species generalization.
+
+**Consequent admissibility:** geographically blocked prediction and transfer to truly unknown plant species are separate claims. This same-species source-label reuse is an observed design limitation, not an estimated selective pressure or an ecological null. Genus novelty and future phylogeny/lineage-heldout contrasts remain descriptive without independent transitions. Do not promote Stage99 to a wind effect, scent plume mechanism, visible nectar-guide prevalence or sensory order inference.
+
+Keep Draft and main unchanged.
