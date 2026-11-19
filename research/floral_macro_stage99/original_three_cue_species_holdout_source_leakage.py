@@ -17,7 +17,7 @@ BASE=Path(__file__).resolve().parents[1]
 for name in ("floral_macro_stage87","floral_macro_stage88",
              "floral_macro_stage89","floral_macro_stage91","floral_macro_stage92"):
     sys.path.insert(0,str(BASE/name))
-from global_native_floral_signal_tdwg3 import load_nhm,wcvp_regions
+from global_native_floral_signal_tdwg3 import load_nhm,wcvp_regions,NHM_SHA,WCVP_SHA
 from real_three_cue_preflight import source_rows
 from austraits7_flower_diameter_source_audit import parse_original_austraits_zip
 from gift32_independent_pollen_mode_global_native_coverage import original_gift_species
@@ -161,8 +161,10 @@ def run(stage98B_zip,nhm_file,wcvp_file,gift_zip,austraits_zip,wfo_zip,outdir):
       "schema":"stage99_original_source_72train_37holdout_species_identity_recurrence",
       "source_original_GitHub_stage98B_SHA256":STAGE98B_SHA,
       "source_original_WFO_species_artifact_SHA256":WFO_SPP_SHA,
-      "source_original_NHM_SHA256":nhm_qc.get("source_sha256",None),
-      "source_original_WCVP_SHA256":wcvp_qc.get("source_sha256",None),
+      "source_original_NHM_SHA256":NHM_SHA,
+      "source_original_WCVP_SHA256":WCVP_SHA,
+      "source_original_GIFT_SHA256":giftmeta.get("archive_sha256"),
+      "source_original_AusTraits7_SHA256":ausmeta.get("authentic_zipped_source_sha256"),
       "original_native_plant_universe":len(universe),
       "source_original_contact_free_train_regions":len(train_codes),
       "source_original_holdout_regions":len(hold_codes),
