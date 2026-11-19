@@ -142,7 +142,89 @@ def sha256(path):
         for b in iter(lambda:f.read(1<<20),b""):h.update(b)
     return h.hexdigest()
 
-def source_raw_flora(path,approved):
+WFO_BACKBONE_202606_MD5="0e4486945cd9f7af548ca87eb9a870ed"
+WFO_BACKBONE_URL="https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1"
+WFO_ID=re.compile(r"wfo-[0-9]{10}",re.I)
+
+def stable_wfo_name_id(value):
+    match=WFO_ID.search(str(value or "").casefold())
+    return match.group(0) if match else None
+
+def source_legacy_wfo_ids(path):
+    """Original taxonID core IDs, without guessing that the name is known."""
+    ids=set();count=Counter()
+    with zipfile.ZipFile(path) as z:
+        meta=parse_meta(z)
+        core=next(x for x in meta if x["type"]=="core")
+        for row in iter_rows(z,core):
+            count["source_core_rows"]+=1
+            key=field(row,core["fields"],"taxonid")
+            if not key and core["id"] is not None and core["id"]<len(row):
+                key=row[core["id"]]
+            x=stable_wfo_name_id(key)
+            if x:ids.add(x)
+            else:count["source_non_WFO_id_rows"]+=1
+    if count["source_core_rows"]<100:
+        raise ValueError("ORIGINAL_WFO_ELFORAS_CORE_ID_SCAN_TOO_SMALL")
+    return ids,dict(count)
+
+def WFO_backbone_202606_crosswalk(archive_path,wanted_ids,approved):
+    """Original Zenodo WFO 2026-06 data, exact WFO stable ID -> accepted species.
+
+    No synonym or infraspecific-to-species promotion; unknown IDs stay unknown.
+    """
+    h=hashlib.md5()
+    with Path(archive_path).open("rb") as f:
+        for block in iter(lambda:f.read(1<<20),b""):h.update(block)
+    if h.hexdigest()!=WFO_BACKBONE_202606_MD5:
+        raise ValueError("WFO_202606_AUTHOR_ZENODO_BACKBONE_MD5_MISMATCH")
+    matches={};ambiguous=set();counts=Counter()
+    with zipfile.ZipFile(archive_path) as z:
+        meta=parse_meta(z)
+        core=next(x for x in meta if x["type"]=="core")
+        print("STAGE93_WFO_202606_BACKBONE_AUTHENTIC_META",json.dumps({
+            "row_type":core["row_type"],"file":core["file"],"fields":sorted(core["fields"]),
+            "original_core_id_index":core["id"],"archive_sha256":sha256(archive_path)
+        },sort_keys=True),flush=True)
+        fields=core["fields"]
+        if "scientificname" not in fields:
+            raise ValueError("WFO_202606_BACKBONE_DOES_NOT_HAVE_SCIENTIFICNAME_FIELD")
+        if "taxonid" not in fields and core["id"] is None:
+            raise ValueError("WFO_202606_BACKBONE_DOES_NOT_HAVE_TAXONID_FIELD")
+        for row in iter_rows(z,core):
+            counts["original_backbone_core_rows"]+=1
+            key=field(row,fields,"taxonid")
+            if not key and core["id"] is not None and core["id"]<len(row):
+                key=row[core["id"]]
+            wfo=stable_wfo_name_id(key)
+            if not wfo or wfo not in wanted_ids:continue
+            counts["original_backbone_target_ID_rows"]+=1
+            sp=canon_source_binomial(field(row,fields,"scientificname"),field(row,fields,"taxonrank"))
+            if not sp or sp not in approved:continue
+            status=field(row,fields,"taxonomicstatus").casefold().strip()
+            if status and status not in {"accepted","valid"}:
+                counts["backbone_nonaccepted_usage_excluded"]+=1
+                continue
+            if wfo in matches and matches[wfo]!=sp:
+                ambiguous.add(wfo)
+            else:matches[wfo]=sp
+    for key in ambiguous:matches.pop(key,None)
+    if counts["original_backbone_core_rows"]<100000:
+        raise ValueError("WFO_202606_BACKBONE_SOURCE_NOT_FULL_ARCHIVE")
+    return matches,{
+      "original_WFO_taxonomic_release":"2026-06",
+      "original_WFO_backbone_DOI":"10.5281/zenodo.20782718",
+      "original_backbone_Zenodo_md5":WFO_BACKBONE_202606_MD5,
+      "original_backbone_ZIP_sha256":sha256(archive_path),
+      "source_counts":dict(counts),
+      "WFO_source_taxonIDs_requested":len(wanted_ids),
+      "backbone_accepted_native_exact_matches":len(matches),
+      "ambiguous_202606_name_usage_IDs_excluded":len(ambiguous),
+      "no_synonym_or_fuzzy_matching_performed":True,
+      "source_versioned_names_may_differ_from_regional_original_flora_year":True,
+    }
+
+def source_raw_flora(path,approved,crosswalk=None):
     # First original retrieval establishes SHA. The next (heldout) use
     # MUST pin the emitted digest before any wind model and compare it.
     count=Counter();datasets=defaultdict(set);desclens=defaultdict(list)
@@ -154,10 +236,10 @@ def source_raw_flora(path,approved):
             {"type":m["type"],"row_type":m["row_type"],"file":m["file"],
              "id":m["id"],"coreid":m["coreid"],"field_names":sorted(m["fields"])}
             for m in meta],sort_keys=True),flush=True)
-        if "scientificname" not in taxcol or core["id"] is None:
-            # FNA 2026 verified DwC-A classification.txt supplies only taxonID.
-            # It has original descriptions but NO direct scientificName mapping
-            # in its own core; do not invent a taxon-name crosswalk.
+        if ("scientificname" not in taxcol and not crosswalk) or core["id"] is None:
+            # Source core often contains only a stable WFO taxonID; without
+            # the independently versioned WFO backbone the floral text is
+            # genuinely UNJOINABLE (not evidence of a scent-negative species).
             return {},{
               "archive_sha256_first_source_fingerprint":sha256(path),
               "original_rows":{"original_core_rows":0},
@@ -172,8 +254,15 @@ def source_raw_flora(path,approved):
         taxa={}
         for row in iter_rows(archive,core):
             count["original_core_rows"]+=1
-            sp=canon_source_binomial(field(row,taxcol,"scientificname"),
-                field(row,taxcol,"taxonrank"))
+            rawname=field(row,taxcol,"scientificname")
+            if rawname:
+                sp=canon_source_binomial(rawname,field(row,taxcol,"taxonrank"))
+            else:
+                key=field(row,taxcol,"taxonid")
+                if not key and core["id"]<len(row):key=row[core["id"]]
+                wfo=stable_wfo_name_id(key)
+                sp=crosswalk.get(wfo) if wfo and crosswalk else None
+                count["source_ID_no_validated_name_crosswalk"]+=(sp is None)
             if not sp or sp not in approved:continue
             status=field(row,taxcol,"taxonomicstatus").casefold().strip()
             if status and status not in {"accepted","valid"}:
@@ -223,18 +312,29 @@ def source_raw_flora(path,approved):
                                 |{"field_names":sorted(d["fields"])} for d in meta],
         "source_text_not_a_structured_negative_database":True}
 
-def run(nhm,wcvp,gift,flora_sources,out):
+def run(nhm,wcvp,gift,flora_sources,out,wfo_backbone=None):
     traits,_=load_nhm(nhm);native,_=wcvp_regions(wcvp,traits)
     modes,_=original_gift_species(gift)
     unique=set().union(*native.values())
     if len(unique)!=55775 or len(native)!=367:
         raise ValueError("STAGE93_WCVP_NATIVE_SOURCE_COHORT_CHANGED")
     allinfo={};states=defaultdict(set);details=defaultdict(list)
+    wfo_names={};crosswalk_meta={"source_absent":True}
+    if wfo_backbone is not None:
+        requested=set();original_id_counts={}
+        for label,path in flora_sources:
+            ids,sourcecounts=source_legacy_wfo_ids(path)
+            requested.update(ids);original_id_counts[label]=sourcecounts
+        wfo_names,crosswalk_meta=WFO_backbone_202606_crosswalk(
+            wfo_backbone,requested,unique)
+        crosswalk_meta["original_elfloras_taxonID_scans"]=original_id_counts
+        if not wfo_names:
+            raise ValueError("STAGE93_NO_ACCEPTED_NATIVE_WFO_ID_TO_SPECIES_CROSSWALK")
     for label,path in flora_sources:
         if label not in ORIGINAL:raise ValueError("WFO_UNREGISTERED_ORIGINAL_SOURCE")
         if sha256(path)!=SOURCE_SHA256[label]:
             raise ValueError("WFO_ORIGINAL_FIRST_RETRIEVED_SOURCE_ZIP_SHA_CHANGED_"+label)
-        data,manifest=source_raw_flora(path,unique)
+        data,manifest=source_raw_flora(path,unique,wfo_names)
         allinfo[label]={"url":ORIGINAL[label],**manifest}
         for sp,entry in data.items():
             states[sp].add(entry["scent"])
@@ -269,6 +369,7 @@ def run(nhm,wcvp,gift,flora_sources,out):
       "native_species":len(unique),"global_TDWG3_regions_INCLUDING_islands":len(native),
       "source_fingerprint_first_retrieval_not_frozen_for_future_wind_model":False,
       "source_archive_sha_frozen_before_future_climate_cue_fit":True,
+      "WFO_backbone_202606_exact_ID_join":crosswalk_meta,
       "source_flora_files":allinfo,"unique_native_source_description_species":len(flora),
       "scent_lexical_species_states":dict(summary),
       "positive_candidate_species_GIFT_mode":dict(Counter(modes.get(s,"unknown") for s,v in flora.items() if v["state"]=="positive_candidate")),
@@ -289,10 +390,12 @@ if __name__=="__main__":
     p.add_argument("--original-NHM",type=Path,required=True)
     p.add_argument("--original-WCVP",type=Path,required=True)
     p.add_argument("--original-GIFT",type=Path,required=True)
+    p.add_argument("--original-WFO-202606-backbone-ZIP",type=Path)
     p.add_argument("--original-Flora-of-China-ZIP",type=Path,required=True)
     p.add_argument("--original-Flora-of-North-America-ZIP",type=Path,required=True)
     p.add_argument("--outdir",type=Path,required=True)
     a=p.parse_args()
     run(a.original_NHM,a.original_WCVP,a.original_GIFT,
       [("Flora_of_China",a.original_Flora_of_China_ZIP),
-       ("Flora_of_North_America",a.original_Flora_of_North_America_ZIP)],a.outdir)
+       ("Flora_of_North_America",a.original_Flora_of_North_America_ZIP)],a.outdir,
+       wfo_backbone=a.original_WFO_202606_backbone_ZIP)
