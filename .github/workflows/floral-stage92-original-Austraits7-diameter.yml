@@ -49,8 +49,7 @@ jobs:
           curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 900 \
             "https://zenodo.org/records/15718081/files/austraits-7.0.0.zip?download=1" \
             -o stage92_original_AusTraits7.zip
-          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4d547c68f95e2f3f" >/dev/null
-          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4d547c68f95e2f3f  stage92_original_AusTraits7.zip" | sha256sum -c
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f  stage92_original_AusTraits7.zip" | sha256sum -c
       - name: Count exact open flower diameter source labels, native species, regions, and effective lineages
         run: |
           python -u research/floral_macro_stage92/austraits7_flower_diameter_source_audit.py \
