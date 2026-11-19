@@ -1,0 +1,92 @@
+name: Stage89B global 155 matched biotic/wind floras x wind/Bombus positive source
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage89/compare_gift_animal_wind_hue_geographic_regimes.py"
+      - "research/floral_macro_stage89/test_compare_gift_animal_wind_hue_geographic_regimes.py"
+      - ".github/workflows/floral-stage89B-GIFT32-animal-wind-hue-climate-Bombus.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-global-animal-vs-wind-hue:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned source regression libs
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6" "scipy==1.16.3"
+      - name: Verify no source fabrication and paired mode/geoblock and cost tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage89 \
+            -p "test_compare_gift_animal_wind_hue_geographic_regimes.py" -v
+      - name: Restore original 5770 strict GIFT species modes matched to 55,775 Kew native plants
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14485554038/zip" \
+            --output stage89B_true_original_GIFT_native_modes.zip
+          echo "26ffa12c78a583743735d89575b6b8d4c4066a01da5b2a7e54aea531915bb7a8  stage89B_true_original_GIFT_native_modes.zip" | sha256sum -c
+      - name: Restore real original WorldClim 1970-2000 native regional five climate variables
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            --output stage89B_true_original_WCVP_WorldClim.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage89B_true_original_WCVP_WorldClim.zip" | sha256sum -c
+      - name: Restore real source all 3958417 archived GBIF Bombus recorded species
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14419407872/zip" \
+            --output stage89B_true_original_GBIF_Bombus.zip
+          echo "2fe7510fe8c08189d63151fe255a00baafb96c7acc87d3d0fedc970966ca1a43  stage89B_true_original_GBIF_Bombus.zip" | sha256sum -c
+      - name: Actually fit common-region two-mode hue spatial 155 global and 113 GBIF observed positive areas
+        run: |
+          python -u research/floral_macro_stage89/compare_gift_animal_wind_hue_geographic_regimes.py \
+            --source-GIFT32-global-modes-zip stage89B_true_original_GIFT_native_modes.zip \
+            --source-Stage87C-climate-zip stage89B_true_original_WCVP_WorldClim.zip \
+            --source-Stage87D-GBIF-zip stage89B_true_original_GBIF_Bombus.zip \
+            --bootstrap-reps 999 \
+            --outdir stage89B_verified_real_global_mode_spatial
+      - name: Enforce real source denominators and avoid causal cue-order claims
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage89B_verified_real_global_mode_spatial")
+          x=json.loads((p/"stage89B_GIFT_animal_wind_native_floral_global_spatial_receipt.json").read_text())
+          assert [s["n_original_regions"] for s in x["actual_source_common_pollination_mode_regional_design"]]==[155,113]
+          assert x["source_GIFT_original_pollination_mode_n"]["animal_exact_matched_native_taxa"]==2560
+          assert x["source_GIFT_original_pollination_mode_n"]["wind_exact_matched_native_taxa"]==612
+          assert x["source_compiled_pollination_mode_not_local_field_plant_pollination"]
+          assert x["source_no_odor_learning_landing_pollen_fitness_measured"]
+          with (p/"stage89B_original_155_global_113bee_GIFT_mode_hue_wind_Bombus_geoblocks.csv").open() as f:
+            rows=list(csv.DictReader(f))
+          assert len(rows)==264
+          assert all(z["original_partial_slope_frac_points_per_1sd"] not in ("","nan") for z in rows)
+          assert all(0<=float(z["exploratory_BH_11_hues"])<=1 for z in rows)
+          assert all(s["n_bootstrap20_success"]>=750 and s["n_bootstrap30_success"]>=750 for s in x["actual_source_common_pollination_mode_regional_design"])
+          print("STAGE89B_TRUE_SOURCE_GLOBAL_MODE_DISTINCT_WIND_ANIMAL_HUE_SPATIAL_VERIFIED")
+          PY
+      - name: Upload original source-derived 264 contrasts and true observation coverages only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage89B-GIFT32-source-155global-113Bombus-paired-mode-hue-spatial
+          path: stage89B_verified_real_global_mode_spatial/
+          retention-days: 90
+          if-no-files-found: warn
