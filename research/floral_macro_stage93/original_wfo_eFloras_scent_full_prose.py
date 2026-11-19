@@ -24,6 +24,11 @@ ORIGINAL={
  "Flora_of_China":"https://files.worldfloraonline.org/files/eFloras/Flora_Of_China/Flora_Of_China.zip",
  "Flora_of_North_America":"https://files.worldfloraonline.org/files/eFloras/FNA/FNA.zip",
 }
+# First genuine source ZIP download verified in Actions 44518683985:
+SOURCE_SHA256={
+ "Flora_of_China":"4c0b89280efdcfd0ef8dc753cca5d63566ddf8c34542b0bb4a78cdce799b63a9",
+ "Flora_of_North_America":"0757eb55f2e844383d34650ea3aa577d15c2210f3893561b6694559dd9aa02e1",
+}
 COLLAPSE=re.compile(r"\s+")
 FLOWER=r"(?:flowers?|blooms?|corollas?|petals?|tepals?|inflorescences?)"
 POSITIVE=r"(?:fragrant|sweet(?:ly)?[ -]scented|scented|sweet[ -]smelling|perfumed)"
@@ -150,7 +155,20 @@ def source_raw_flora(path,approved):
              "id":m["id"],"coreid":m["coreid"],"field_names":sorted(m["fields"])}
             for m in meta],sort_keys=True),flush=True)
         if "scientificname" not in taxcol or core["id"] is None:
-            raise ValueError("WFO_ORIGINAL_CORE_TAXON_NAME_OR_ID_NOT_DISCOVERABLE")
+            # FNA 2026 verified DwC-A classification.txt supplies only taxonID.
+            # It has original descriptions but NO direct scientificName mapping
+            # in its own core; do not invent a taxon-name crosswalk.
+            return {},{
+              "archive_sha256_first_source_fingerprint":sha256(path),
+              "original_rows":{"original_core_rows":0},
+              "source_taxonomy_join_admissible":False,
+              "source_taxonomy_join_blocker":"NO_SCIENTIFICNAME_CORE_ONLY_TAXONID",
+              "matched_species_with_full_descriptions":None,
+              "original_meta_schema":[{k:v for k,v in d.items() if k!="fields"}
+                       |{"field_names":sorted(d["fields"])} for d in meta],
+              "source_text_not_a_structured_negative_database":True,
+              "not_evaluated_not_zero_scent_species":True,
+            }
         taxa={}
         for row in iter_rows(archive,core):
             count["original_core_rows"]+=1
@@ -214,6 +232,8 @@ def run(nhm,wcvp,gift,flora_sources,out):
     allinfo={};states=defaultdict(set);details=defaultdict(list)
     for label,path in flora_sources:
         if label not in ORIGINAL:raise ValueError("WFO_UNREGISTERED_ORIGINAL_SOURCE")
+        if sha256(path)!=SOURCE_SHA256[label]:
+            raise ValueError("WFO_ORIGINAL_FIRST_RETRIEVED_SOURCE_ZIP_SHA_CHANGED_"+label)
         data,manifest=source_raw_flora(path,unique)
         allinfo[label]={"url":ORIGINAL[label],**manifest}
         for sp,entry in data.items():
@@ -247,7 +267,8 @@ def run(nhm,wcvp,gift,flora_sources,out):
     output={
       "schema":"stage93_original_WFO_eFloras_full_prose_scent_SOURCE_CANDIDATES_only",
       "native_species":len(unique),"global_TDWG3_regions_INCLUDING_islands":len(native),
-      "source_fingerprint_first_retrieval_not_frozen_for_future_wind_model":True,
+      "source_fingerprint_first_retrieval_not_frozen_for_future_wind_model":False,
+      "source_archive_sha_frozen_before_future_climate_cue_fit":True,
       "source_flora_files":allinfo,"unique_native_source_description_species":len(flora),
       "scent_lexical_species_states":dict(summary),
       "positive_candidate_species_GIFT_mode":dict(Counter(modes.get(s,"unknown") for s,v in flora.items() if v["state"]=="positive_candidate")),
