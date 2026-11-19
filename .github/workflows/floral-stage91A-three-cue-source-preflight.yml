@@ -1,0 +1,91 @@
+name: Stage91A genuine three-floral-cue source support (NOT a wind effect)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage91/**"
+      - "docs/FLORAL_STAGE91_THREE_CUE_SOURCE_PREFLIGHT_20261119.md"
+      - ".github/workflows/floral-stage91A-three-cue-source-preflight.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  authentic-original-nhm-wcvp-gift-data-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free tests of no-false-zero and geographic scope rules
+        run: python -m unittest discover -s research/floral_macro_stage91 -p "test_*.py" -v
+      - name: Restore exact original 59,369-row NHM botanical compact source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage91_original_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage91_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original independently qualified GIFT v3.2 pollen modes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage91_original_GIFT32.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage91_original_GIFT32.zip" | sha256sum -c
+      - name: Restore official Kew WCVP source and pin byte SHA
+        run: |
+          curl --fail --location --silent --show-error \
+            --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage91_original_Kew.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage91_original_Kew.zip" | sha256sum -c
+      - name: Calculate genuine lexical markings / petal width source availability
+        run: |
+          python -u research/floral_macro_stage91/real_three_cue_preflight.py \
+            --nhm stage91_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --wcvp stage91_original_Kew.zip \
+            --gift stage91_original_GIFT32.zip \
+            --outdir stage91_derived
+      - name: Enforce original cohorts, honest missingness, and NO mainland wind effect
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv,json
+          root=Path("stage91_derived")
+          d=json.loads((root/"stage91_source_support.json").read_text())
+          r=list(csv.DictReader((root/"stage91_global_TDWG3_3cue_availability_INCLUDES_ISLANDS.csv").open()))
+          assert d["native_unique_species"]==55775
+          assert d["all_TDWG3_regions_INCLUDES_ISLANDS"]==367
+          assert d["GIFT_mode_assigned_native_species"]==3172
+          assert d["GIFT_animal_mode"]==2560
+          assert d["GIFT_wind_mode"]==612
+          assert d["flower_diameter_validated_species"]==0
+          assert d["fragrance_validated_species"]==0
+          assert not d["mainland_geo_source_AUDITED"]
+          assert not d["ERA5_1991_2020_primary_gust_source_recovered"]
+          assert d["no_real_wind_cue_coefficients"]
+          assert len(r)==367
+          assert all(x["trait_wind_regression_admissible"]=="NO" for x in r)
+          print("STAGE91_TRUE_SOURCES_ONLY",{
+             "unique_positive_pattern_word_species":d["unique_species_flower_mark_lexical_states"].get("positive_lexical",0),
+             "typed_petal_width_not_diameter":d["unique_species_numeric_PETAL_width_NOT_flower_diameter"],
+             "validated_fragrance":d["fragrance_validated_species"]})
+          PY
+      - name: Archive ONLY derived source counts and non-inference receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage91A-true-NHM-WCVP-GIFT-floral-cue-support-no-wind-fit
+          path: stage91_derived/
+          retention-days: 90
+          if-no-files-found: warn
