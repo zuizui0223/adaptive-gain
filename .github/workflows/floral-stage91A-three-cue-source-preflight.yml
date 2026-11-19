@@ -76,8 +76,11 @@ jobs:
           assert d["no_real_wind_cue_coefficients"]
           assert len(r)==367
           assert all(x["trait_wind_regression_admissible"]=="NO" for x in r)
+          assert sum(d["unique_species_positive_marking_by_GIFT_mode"].values()) == d["unique_species_flower_mark_lexical_states"].get("positive_lexical",0)
+          assert all(sum(int(x[k]) for k in ("n_mark_positive_animal_source_only","n_mark_positive_wind_source_only","n_mark_positive_unknown_source_only"))==int(x["n_mark_positive_source_only"]) for x in r)
           print("STAGE91_TRUE_SOURCES_ONLY",{
              "unique_positive_pattern_word_species":d["unique_species_flower_mark_lexical_states"].get("positive_lexical",0),
+             "pattern_positive_by_GIFT_mode":d["unique_species_positive_marking_by_GIFT_mode"],
              "typed_petal_width_not_diameter":d["unique_species_numeric_PETAL_width_NOT_flower_diameter"],
              "validated_fragrance":d["fragrance_validated_species"]})
           PY
