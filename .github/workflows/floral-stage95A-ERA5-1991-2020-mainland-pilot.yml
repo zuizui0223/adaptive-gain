@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "research/floral_macro_stage95/**"
+      - "research/floral_macro_stage95/original_ERA5_1991_2020_gust_five_mainland_pilot.py"
+      - "research/floral_macro_stage95/test_original_ERA5_1991_2020_gust_five_mainland_pilot.py"
       - ".github/workflows/floral-stage95A-ERA5-1991-2020-mainland-pilot.yml"
       - "docs/FLORAL_STAGE95_ERA5_1991_2020_SOURCE_20261119.md"
 
