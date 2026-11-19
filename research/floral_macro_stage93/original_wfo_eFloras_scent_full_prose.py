@@ -38,7 +38,7 @@ P2=re.compile(r"\b"+POSITIVE+r"\b[^.;:]{0,50}?\b"+FLOWER+r"\b",re.I)
 N1=re.compile(r"\b"+FLOWER+r"\b[^.;:]{0,75}?\b"+NEGATIVE+r"\b",re.I)
 N2=re.compile(r"\b"+NEGATIVE+r"\b[^.;:]{0,50}?\b"+FLOWER+r"\b",re.I)
 UNCERTAIN=re.compile(r"\b(?:probably|possibly|perhaps|reportedly|apparently|may|might)\b",re.I)
-POLLEN=re.compile(r"\b(?:pollen|anther|stamen|seed|fruit|leaf|leaves|foliage|stem)\b",re.I)
+NONFLORAL_INTERVENING=re.compile(r"\b(?:leaves?|leaflets?|foliage|stems?|barks?|roots?|fruits?|seeds?|pollen|anthers?|stamens?|twigs?|branches?|rhizomes?|capsules?|vegetative|wood|shoots?)\b",re.I)
 SPECIES_TEXT=re.compile(r"^[A-Z][a-zA-Z-]+ [a-z][a-zA-Z-]+(?:$|\s)")
 
 class HTMLText(HTMLParser):
@@ -126,11 +126,17 @@ def scent_class(text):
         frag=m.group(0)
         if re.search(NEGATIVE,frag,re.I):continue
         if UNCERTAIN.search(frag):continue
-        if POLLEN.search(frag) and "nectar" in frag.casefold():continue
+        # Reject cross-organ proximity, e.g. "Leaves fragrant, flowers white"
+        # and "Flowers white, leaves fragrant". This sacrifices recall rather
+        # than confounding nonfloral odor with floral chemistry.
+        if NONFLORAL_INTERVENING.search(frag):continue
         positive.append((m.start(),m.end()))
     for m in list(N1.finditer(txt))+list(N2.finditer(txt)):
         frag=m.group(0)
         if UNCERTAIN.search(frag):continue
+        # A scentless leaf/bark next to a described flower is NOT a
+        # directly observed absence of floral odor.
+        if NONFLORAL_INTERVENING.search(frag):continue
         negative.append((m.start(),m.end()))
     return "positive_candidate" if positive and not negative else (
         "explicit_negative_candidate" if negative and not positive else
