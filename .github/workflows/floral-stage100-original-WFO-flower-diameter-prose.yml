@@ -1,0 +1,121 @@
+name: Stage100 authentic WFO original botanical whole-flower diameter prose candidate audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage100/**"
+      - "docs/FLORAL_STAGE100_WFO_ORIGINAL_FLOWER_DIAMETER_20261119.md"
+      - ".github/workflows/floral-stage100-original-WFO-flower-diameter-prose.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-verified-efloras-whole-flower-diameter-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test conservative floral diameter grammar and never-infer-missing rules
+        run: python -m unittest discover -s research/floral_macro_stage100 -p "test_*.py" -v
+      - name: Restore genuine original 59,369 NHM source taxon evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage100_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage100_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original 2026 Kew WCVP accepted/native 367 source regions
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage100_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage100_WCVP.zip" | sha256sum -c
+      - name: Restore independent real public GIFT3.2 pollen-mode source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage100_GIFT32.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage100_GIFT32.zip" | sha256sum -c
+      - name: Retrieve source-original WFO full species botanical descriptions from China and North America
+        run: |
+          mkdir -p stage100_WFO
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/Flora_Of_China/Flora_Of_China.zip" \
+            -o stage100_WFO/Flora_of_China_original.zip
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/FNA/FNA.zip" \
+            -o stage100_WFO/FNA_original.zip
+          echo "4c0b89280efdcfd0ef8dc753cca5d63566ddf8c34542b0bb4a78cdce799b63a9  stage100_WFO/Flora_of_China_original.zip" | sha256sum -c
+          echo "0757eb55f2e844383d34650ea3aa577d15c2210f3893561b6694559dd9aa02e1  stage100_WFO/FNA_original.zip" | sha256sum -c
+          unzip -tq stage100_WFO/Flora_of_China_original.zip
+          unzip -tq stage100_WFO/FNA_original.zip
+      - name: Authenticate WFO 2026-06 accepted species ID-to-name classification snapshot
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1" \
+            -o stage100_WFO/WFO_2026-06_original_backbone.zip
+          echo "0e4486945cd9f7af548ca87eb9a870ed  stage100_WFO/WFO_2026-06_original_backbone.zip" | md5sum -c
+          unzip -tq stage100_WFO/WFO_2026-06_original_backbone.zip
+          sha256sum stage100_WFO/WFO_2026-06_original_backbone.zip
+      - name: Actually inspect exact source flower-diameter sentences without confusing leaf, inflorescence, corolla or fruit
+        run: |
+          python -u research/floral_macro_stage100/original_WFO_flora_flower_diameter_prose_candidates.py \
+            --original-NHM stage100_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage100_WCVP.zip \
+            --original-GIFT stage100_GIFT32.zip \
+            --original-China stage100_WFO/Flora_of_China_original.zip \
+            --original-FNA stage100_WFO/FNA_original.zip \
+            --original-WFO-backbone stage100_WFO/WFO_2026-06_original_backbone.zip \
+            --outdir stage100_derived
+      - name: Report real original source size coverage without falsely measured optical detection
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path("stage100_derived")
+          d=json.loads((p/"stage100_original_eflora_flower_diameter_prose_candidate_receipt.json").read_text())
+          r=list(csv.DictReader((p/"stage100_wfo_original_size_phrase_367_regions_INCLUDES_ISLANDS.csv").open()))
+          assert d["source_original_NHM_WCVP_native_species"]==55775
+          assert d["source_original_TDWG3_regions_INCLUDING_islands"]==367
+          assert d["unique_source_native_species_with_original_botanical_prose"]==27899
+          assert d["n_original_source_unreviewed_flower_diameter_phrase_species"]==237
+          assert d["n_original_source_only_corolla_width_not_whole_flower_species"]==58
+          ledger=list(csv.DictReader((p/"stage100_WFO_original_accepted_species_whole_flower_diameter_SOURCE_CANDIDATE.csv").open()))
+          assert len(ledger)==295 and d["source_species_ledger_exact_rows"]==295
+          assert len({row["accepted_species_exact_WCVP"] for row in ledger})==295
+          assert all(row["floral_size_description_manual_validation"]=="PENDING" for row in ledger)
+          assert sum(row["source_202606_WFO_prose_state"]=="candidate_flower_diameter_from_prose" for row in ledger)==237
+          assert sum(row["source_202606_WFO_prose_state"]=="candidate_corolla_width_only_NOT_whole_flower" for row in ledger)==58
+          assert len(r)==367
+          assert d["flower_diameter_prose_candidates_are_NOT_manually_phenotype_validated"]
+          assert d["no_range_imputation_or_petals_or_inflorescences"]
+          assert d["source_undocumented_is_unknown_NOT_zero_size"]
+          assert d["no_ecological_wind_flower_cue_coefficient_estimated"]
+          assert all(row["mainland_spatial_scope"]=="NOT_AUDITED_INCLUDES_ISLANDS" for row in r)
+          print("STAGE100_REAL_SOURCE_DIAMETER_ONLY",{
+            "whole_flower_diameter_phrase_candidate_species":d["n_original_source_unreviewed_flower_diameter_phrase_species"],
+            "only_corolla_width_species":d["n_original_source_only_corolla_width_not_whole_flower_species"],
+            "source_mode_support":d["source_GIFT_mode_with_whole_flower_diameter_phrase"]})
+          PY
+      - name: Publish derived-only original source measurement candidates and full source digest receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage100-original-WFO-eFloras-flower-diameter-phrase-source-coverage
+          path: stage100_derived/
+          retention-days: 90
+          if-no-files-found: warn
