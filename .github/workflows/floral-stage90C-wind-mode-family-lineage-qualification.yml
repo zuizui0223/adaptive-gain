@@ -1,0 +1,94 @@
+name: Stage90C true GIFT wind-flora original-source family leaveout eligibility
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage90/original_wind_mode_floral_family_lineage_leaveout.py"
+      - "research/floral_macro_stage90/test_original_wind_mode_floral_family_lineage_leaveout.py"
+      - ".github/workflows/floral-stage90C-wind-mode-family-lineage-qualification.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-global-57-hue-wind-mode-family-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Guard preregistered 3 graminoid plus 9 extra leaveout lineages
+        run: python -m unittest discover -s research/floral_macro_stage90 -p "test_original_wind_mode_floral_family_lineage_leaveout.py" -v
+      - name: Authenticate independently qualified source GIFT3.2 5,770 species pollination mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage90C_original_GIFT32_modes.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage90C_original_GIFT32_modes.zip" | sha256sum -c
+      - name: Reuse independent original botanical description release with checked SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage90C_original_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage90C_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Re-fetch Kew original official 2026 native species×geography/family source
+        run: |
+          mkdir -p stage90C_original_Kew
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage90C_original_Kew/wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage90C_original_Kew/wcvp.zip" | sha256sum -c
+      - name: Authenticate original 367 TDWG region WorldClim/GIS metadata and original source eligibility
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            -o stage90C_original_WorldClim_regions.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage90C_original_WorldClim_regions.zip" | sha256sum -c
+      - name: Original source 55,775 WCVP plants, 57 wind one-hue taxa, 155 common regions under six source family leaveouts
+        run: |
+          python -u research/floral_macro_stage90/original_wind_mode_floral_family_lineage_leaveout.py \
+            --GIFT-original-artifact stage90C_original_GIFT32_modes.zip \
+            --NHM-original stage90C_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --WCVP-original stage90C_original_Kew/wcvp.zip \
+            --WorldClim-source-artifact stage90C_original_WorldClim_regions.zip \
+            --outdir stage90C_original_wind_mode_family_genus_support
+      - name: Assert original true target and common-region labels, not positive effect directions
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path("stage90C_original_wind_mode_family_genus_support")
+          d=json.loads((root/"stage90_original_GIFT_wind_flora_family_support_receipt.json").read_text())
+          assert d["original_source_55775_plant_native_WCVP_species"]==55775
+          assert d["source_exact_same_Stage89_original_global_common_regions"]==155
+          assert d["source_unique_wind_one_hue_taxa"]==57
+          assert d["source_unique_animal_one_hue_taxa"]==598
+          assert len(d["source_original_lineage_source_coverage_per_family_exclusion"])==6
+          assert d["source_mode_classification_not_local_observation_of_pollen_vector"]
+          assert d["source_family_exclusion_not_actual_trait_mode_intervention"]
+          m=list(csv.DictReader((root/"stage90_original_wind_flora_family_155_common_region_source_support.csv").open()))
+          assert len(m)==367*6
+          assert sum(int(row["source_original_GIFT_wind_one_hue_taxa"])>=10 for row in m if row["source_condition"]=="all_source_wind_mode")>=155
+          print("STAGE90C_TRUE_SOURCE_FAMILY_GRAMINOID_LEAVEOUT_GIFT_MODE_SUPPORT_VERIFIED")
+          PY
+      - name: Upload only original source-derived unique families and 367-region pollination support, no original data
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage90C-original-GIFT-wind-57-colour-taxa-family-independent-support
+          path: stage90C_original_wind_mode_family_genus_support/
+          retention-days: 90
+          if-no-files-found: warn

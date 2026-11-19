@@ -1,0 +1,110 @@
+name: Stage90B REAL global GIFT modes inverse native-range recurrence spatial falsification
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage90/source_reweighted_GIFT_hue_wind_Bombus_spatial_pairs.py"
+      - "research/floral_macro_stage90/test_source_reweighted_GIFT_hue_wind_Bombus_spatial_pairs.py"
+      - ".github/workflows/floral-stage90B-inverse-range-geoblock-sensitivity.yml"
+      - "docs/FLORAL_STAGE90_NATIVE_RANGE_PHYLOGENETIC_SUPPORT_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-global-inverse-range-155-113-regions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact source numerical and regression dependencies
+        run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "statsmodels==0.14.6" "scipy==1.16.3"
+      - name: Source-free no-imputed-trait and paired geographic sampling tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage90 \
+            -p "test_source_reweighted_GIFT_hue_wind_Bombus_spatial_pairs.py" -v
+      - name: Authenticate original Stage90A repeated WCVP native species source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14493253828/zip" \
+            -o stage90B_source_actual_native_species_range_ancestry.zip
+          echo "523c0369483af34f702157021066174ed503c77c322fb1fa3ca88dcc2dbbe2fa  stage90B_source_actual_native_species_range_ancestry.zip" | sha256sum -c
+      - name: Authenticate independently original GIFT stage89 367×3 modes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14485554038/zip" \
+            -o stage90B_source_original_GIFT_155_113.zip
+          echo "26ffa12c78a583743735d89575b6b8d4c4066a01da5b2a7e54aea531915bb7a8  stage90B_source_original_GIFT_155_113.zip" | sha256sum -c
+      - name: Restore actual WorldClim original flora/wind 367 region original source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14420920043/zip" \
+            -o stage90B_source_original_WorldClim1970_2000.zip
+          echo "4c0ab25596078be4b2aa35a254e42695fd260e1720864e173970aac8aa7db83a  stage90B_source_original_WorldClim1970_2000.zip" | sha256sum -c
+      - name: Restore actual archived 3,958,417 GBIF Bombus source spatial positive records
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14419407872/zip" \
+            -o stage90B_source_original_Bombus1950_2025.zip
+          echo "2fe7510fe8c08189d63151fe255a00baafb96c7acc87d3d0fedc970966ca1a43  stage90B_source_original_Bombus1950_2025.zip" | sha256sum -c
+      - name: Actually fit same 155 global/113 GBIF-positive source regions under original vs inverse native-range species weights
+        run: |
+          python -u research/floral_macro_stage90/source_reweighted_GIFT_hue_wind_Bombus_spatial_pairs.py \
+            --stage90A-source-range-zip stage90B_source_actual_native_species_range_ancestry.zip \
+            --stage89-source-mode-zip stage90B_source_original_GIFT_155_113.zip \
+            --stage87C-source-climate-zip stage90B_source_original_WorldClim1970_2000.zip \
+            --stage87D-source-Bombus-zip stage90B_source_original_Bombus1950_2025.zip \
+            --geographic-bootstrap-reps 999 \
+            --outdir stage90B_real_global_original_phylogenetic_caution
+      - name: Strict source-level identities and paired geographic 2-scale uncertainty check
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage90B_real_global_original_phylogenetic_caution")
+          r=json.loads((p/"stage90_source_range_reweighted_global_spatial_receipt.json").read_text())
+          assert r["source_native_plant_range_breadth_support"]["source_genera_with_both_animal_and_wind_modes"]==13
+          assert r["source_native_plant_range_breadth_support"]["source_genera_with_both_modes_and_explicit_hue_in_both"]==2
+          assert r["source_native_plant_range_breadth_support"]["source_mode_arm_range_and_hue_support"]["wind"]["original_source_lexical_one_hue_species"]==57
+          assert [z["original_regions"] for z in r["original_scope_counts_and_geoblock_quality"]]==[155,113]
+          assert all(z["successful_paired_geo_bootstrap_20x45"]==999 and
+                     z["successful_paired_geo_bootstrap_30x60"]==999
+                     for z in r["original_scope_counts_and_geoblock_quality"])
+          assert r["source_one_species_in_many_TDWG_regions_not_independent_evolution"]
+          assert r["inverse_range_reweighting_NOT_phylogenetic_GLS_or_independent_transitions"]
+          assert r["source_GBIF_absence_not_imputed_nor_target_group_effort_measured"]
+          tab=list(csv.DictReader((p/"stage90_original_global_range_breadth_weighted_hue_spatial_paired.csv").open()))
+          assert len(tab)==264
+          assert sum(x["source_status"]=="DESCRIPTIVE_ESTIMABLE" for x in tab)>=200
+          assert sum(x["source_status"]!="DESCRIPTIVE_ESTIMABLE" for x in tab)>=30
+          print("STAGE90B_ORIGINAL_SPECIES_RANGE_REWEIGHT_COEFFICIENTS_AND_GEOGRAPHY_CHECK_VERIFIED")
+          PY
+      - name: Upload only source-derived 264 paired original-vs-reweighted coefficient contrasts, no original bulk data
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage90B-original-155-113-global-plant-breadth-GIFT-mode-spatial
+          path: stage90B_real_global_original_phylogenetic_caution/
+          retention-days: 90
+          if-no-files-found: warn
