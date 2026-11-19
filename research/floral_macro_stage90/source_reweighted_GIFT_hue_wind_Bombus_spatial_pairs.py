@@ -112,8 +112,13 @@ def analyze_case(frame,scope,weighted,georeps=999):
     terms=["wind"]+(["log_bombus_richness","wind_x_bombus"] if include_bee else [])
     results=[];nonidentified=[]
     for j,(agg,hue,mode) in enumerate(names):
-        positive0=int((Y0[:,j]>0).sum())
-        positive1=int((Y1[:,j]>0).sum())
+        # For source animal-minus-wind DIFFERENCE a negative value is
+        # informative, not a lack of documented flower hue. Separate the
+        # denominators to avoid counting only positive differences.
+        source_hue0=int((Y0[:,j]>0).sum()) if mode!="animal_minus_wind" else None
+        source_hue1=int((Y1[:,j]>0).sum()) if mode!="animal_minus_wind" else None
+        source_diff0=int((np.abs(Y0[:,j])>1e-12).sum()) if mode=="animal_minus_wind" else None
+        source_diff1=int((np.abs(Y1[:,j])>1e-12).sum()) if mode=="animal_minus_wind" else None
         estimable=(np.std(Y0[:,j])>1e-12 and np.std(Y1[:,j])>1e-12)
         if not estimable:nonidentified.append({"aggregation":agg,"hue":hue,"mode":mode,
             "positive_unweighted":positive0,"positive_inverse_range":positive1})
@@ -129,8 +134,10 @@ def analyze_case(frame,scope,weighted,georeps=999):
                 "region_scope":scope,"aggregation":agg,"hue":hue,
                 "mode":mode,"source_wind_or_Bombus_term":term,
                 "original_source_region_count":len(frame),
-                "original_source_hue_positive_regions":positive0,
-                "range_weighted_source_hue_positive_regions":positive1,
+                "original_source_hue_positive_regions":source_hue0,
+                "range_weighted_source_hue_positive_regions":source_hue1,
+                "original_source_mode_difference_nonzero_regions":source_diff0,
+                "inverse_range_source_mode_difference_nonzero_regions":source_diff1,
                 "source_status":"DESCRIPTIVE_ESTIMABLE" if estimable else "SOURCE_UNINFORMATIVE_NO_HUE_VARIATION",
                 "unweighted_source_beta":val0,
                 "inverse_native_range_breadth_source_beta":val1,
