@@ -37,4 +37,21 @@ Code:
 - research/floral_macro_stage101/verify_original_WFO_AusTraits_diameter_union_mainland.py
 - research/floral_macro_stage101/test_verify_original_WFO_AusTraits_diameter_union_mainland.py
 
-Source numbers beyond the pre-known A=104/B=237/C=58 remain UNKNOWN until the original SHA-locked Stage100 species ledger and Stage101 source run succeed.
+
+## Real-source Stage101 validated results (2026-11-19)
+
+Original [Actions #44547835621](https://github.com/zuizui0223/adaptive-gain/actions/runs/44547835621) **SUCCESS** (6 independent source-free guards plus original source and derived artifact SHA). Derived-only artifact ID **14541990862** SHA256 **caca7afc84736cfd3eda0c93fd0e69b8e6434383950ec7b6ef1ff37e5e116656**.
+
+**Exact source species identity, not inferred by region:** original AusTraits v7 measured-source flower_diameter **104 species**, WFO 2026 China/FNA botanical prose whole-flower diameter **237 *unreviewed* candidate species**; exact accepted species overlap **4** and deduplicated A-or-B evidence **337 species** (only **104** remain original measured-grade). WFO corolla-width-only 58 species were excluded from the diameter union. Four source-overlap numeric ratios had median WFO prose mm/AusTraits mm **1.1053**, and 3/4 were within 0.5 to 2; this is insufficient to establish measurement comparability or accuracy.
+
+| Original source coverage, strictly mainland | 72 exploration | 37 unchanged holdout |
+| --- | ---: | ---: |
+| Regions with >=10 original AusTraits measured-grade species | **23** | **4** |
+| Regions with >=10 source-original WFO prose diameter candidate species | **36** | **16** |
+| Regions with >=10 A-or-B evidence, exact-species deduplicated | **47** | **20** |
+| Regions with >=5 A-or-B evidence, exact-species deduplicated | **66** | **33** |
+
+The fixed holdout contains **195** A-or-B source-available species, of which **104** are absent from the geographically contact-free 72-region exploration source set. Unlike the reported native plant global flora where multiple regions repeat identical taxa, this statistic explicitly avoids double-counting accepted species names *within each cohort*. It does not independently verify WFO morphological extraction quality or phylogenetic evolutionary transitions.
+
+**Claim limit:** This is improved *candidate information availability* and a separate measurement-validity bottleneck, not a wind-related biological effect. The newly added 233 WFO-only species are unreviewed prose cues. Original WFO geographic source coverage remains heavily China/North America biased, pollen vector often unknown, and no regional area-weighted verified original CDS 1991–2020 hourly gust exposure is present. Next scientific gate is source-text extraction quality review stratified by source and morphology, not ecological model fitting.
+
