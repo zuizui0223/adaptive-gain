@@ -91,7 +91,7 @@ def frozen_mainland_codes(path):
         raise ValueError("STAGE101_NONMAINLAND_HOLDOUT")
     return train,holdout
 
-def size_source_groups(native,aus,wfo,train_codes,holdout_codes):
+def size_source_groups(native,aus,wfo,corolla,train_codes,holdout_codes):
     """Partition by geography and grade, never re-label prose as measured."""
     measured=set(aus);prose=set(wfo)
     both=measured&prose
@@ -124,7 +124,7 @@ def size_source_groups(native,aus,wfo,train_codes,holdout_codes):
            "predeclared_original_geographic_source_fold":"exploration" if code in train_codes else "holdout",
            "original_WCVP_native_species_total":len(species),
            **{"n_"+k:v for k,v in vals.items()},
-           "n_unreviewed_WFO_corolla_width_only_NOT_whole_flower":len(species&set())})
+           "n_unreviewed_WFO_corolla_width_only_NOT_whole_flower":len(species&set(corolla))})
     return summaries,byregion,grades
 
 def run(wfo_archive,wfo_sha,aus_zip,nhm,wcvp,geo,outdir):
@@ -138,9 +138,9 @@ def run(wfo_archive,wfo_sha,aus_zip,nhm,wcvp,geo,outdir):
         raise ValueError("STAGE101_ORIGINAL_AUSTRAITS104_SOURCE_UNIVERSE_DRIFTED")
     wfo,corolla,providers,wfo_modes=source_ledger(wfo_archive,wfo_sha,universe)
     train,holdout=frozen_mainland_codes(geo)
-    if not train|holdout<=set(native):
+    if not ((train|holdout)<=set(native)):
         raise ValueError("STAGE101_GEOGRAPHIC_KEYS_NOT_IN_ORIGINAL_WCVP")
-    groups,regions,cohorts=size_source_groups(native,aus,wfo,train,holdout)
+    groups,regions,cohorts=size_source_groups(native,aus,wfo,corolla,train,holdout)
     anysize=cohorts["source_union_ANY_size_record_not_all_direct_measured"]
     # Exact measured-vs-prose numeric agreement must not be assumed.
     both=sorted(set(aus)&set(wfo))
