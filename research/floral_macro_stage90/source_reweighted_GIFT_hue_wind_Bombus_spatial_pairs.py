@@ -121,7 +121,10 @@ def analyze_case(frame,scope,weighted,georeps=999):
         source_diff1=int((np.abs(Y1[:,j])>1e-12).sum()) if mode=="animal_minus_wind" else None
         estimable=(np.std(Y0[:,j])>1e-12 and np.std(Y1[:,j])>1e-12)
         if not estimable:nonidentified.append({"aggregation":agg,"hue":hue,"mode":mode,
-            "positive_unweighted":positive0,"positive_inverse_range":positive1})
+            "source_hue_positive_unweighted":source_hue0,
+            "source_hue_positive_inverse_range":source_hue1,
+            "original_mode_difference_nonzero":source_diff0,
+            "inverse_range_mode_difference_nonzero":source_diff1})
         for term in terms:
             k=list(X.columns).index(term)
             if estimable:
