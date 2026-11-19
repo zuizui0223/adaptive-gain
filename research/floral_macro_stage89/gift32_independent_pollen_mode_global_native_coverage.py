@@ -64,9 +64,12 @@ def original_gift_species(source_zip):
         if name in out:raise ValueError("STAGE89_SOURCE_GIFT_QUALIFIED_DUPLICATE_SPECIES")
         out[name]=mode
         counts["source_mode_"+mode]+=1
+    # Independent H5c fixture has a source taxon literal "Taraxacum sect."
+    # tagged biotic. It is a SECTION, not a binomial species. Exclude it
+    # rather than fabricating a species; 5,770 strict plant species remain.
     if (counts["source_original_gift_qualified_rows"]!=5771 or
-        counts["source_mode_animal"]!=4538 or counts["source_mode_wind"]!=1233 or
-        len(out)!=5771 or bad_name or unknown):
+        counts["source_mode_animal"]!=4537 or counts["source_mode_wind"]!=1233 or
+        len(out)!=5770 or bad_name!=1 or unknown):
         raise ValueError("STAGE89_GIFT32_TRUE_4538_1233_SOURCE_MODE_SCOPE_DRIFT")
     if metadata.get("n_prepared_species")!=8635:
         raise ValueError("STAGE89_GIFT32_REAL_SOURCE_NUMBER_OF_TAXA_CHANGED")
