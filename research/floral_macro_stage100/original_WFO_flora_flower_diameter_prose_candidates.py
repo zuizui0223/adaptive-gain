@@ -162,11 +162,13 @@ def run(nhm,wcvp,gift,china,fna,backbone,output):
         ids.update(these);source_idcounts[label]=counts
     mapping,meta=WFO_backbone_202606_crosswalk(backbone,ids,universe)
     if len(mapping)<1000:raise ValueError("STAGE100_NO_VERIFIED_WFO_NATIVE_NAME_MAP")
-    all_seen=set();raw=defaultdict(list);orig={}
+    all_seen=set();raw=defaultdict(list);orig={};species_source_labels=defaultdict(set)
     for label,path in flora:
         seen,cues,counters=scan_source(path,label,universe,mapping)
         all_seen.update(seen)
-        for sp,v in cues.items():raw[sp].extend(v)
+        for sp,v in cues.items():
+            raw[sp].extend(v)
+            species_source_labels[sp].add(label)
         orig[label]={"source_SHA256":FROZEN_SRC_BY_LABEL[label],
                      "source_total_described_native_species":len(seen),
                      "source_candidate_species":len(cues),
@@ -180,6 +182,20 @@ def run(nhm,wcvp,gift,china,fna,backbone,output):
     if not all(sp in universe for sp in results):
         raise ValueError("STAGE100_SOURCE_SPECIES_NOT_IN_NATIVE_ACCEPTED_WCVP")
     if len(all_seen)<1000:raise ValueError("STAGE100_SOURCE_NONTRIVIAL_DESCRIPTIONS_MISSING")
+    appearances=Counter(sp for plants in native.values() for sp in plants)
+    original_species_ledger=[
+        {"accepted_species_exact_WCVP":sp,
+         "source_202606_WFO_prose_state":results[sp][0],
+         "source_unreviewed_prose_whole_flower_diameter_mm":(
+            results[sp][1] if results[sp][0]=="candidate_flower_diameter_from_prose" else ""),
+         "source_corolla_width_only_NOT_whole_flower_mm":(
+            results[sp][1] if results[sp][0]=="candidate_corolla_width_only_NOT_whole_flower" else ""),
+         "source_original_flora_providers":"|".join(sorted(species_source_labels[sp])),
+         "independent_GIFT_pollen_vector_mode":modes.get(sp,"unknown"),
+         "original_WCVP_native_TDWG_region_repetitions":appearances[sp],
+         "floral_size_description_manual_validation":"PENDING",
+         "source_exact_full_flower_visual_display_not_verified":"YES"}
+        for sp in sorted(results)]
     sizes=[]
     for code,plants in sorted(native.items()):
         subset=set(plants)&set(flower)
@@ -206,6 +222,8 @@ def run(nhm,wcvp,gift,china,fna,backbone,output):
         "species_source_phrase_state_counts":dict(types),
         "n_original_source_unreviewed_flower_diameter_phrase_species":len(flower),
         "n_original_source_only_corolla_width_not_whole_flower_species":len(corolla),
+        "source_species_ledger_exact_rows":len(original_species_ledger),
+        "source_species_ledger_no_raw_botanical_description_redistribution":True,
         "source_GIFT_mode_with_whole_flower_diameter_phrase":dict(Counter(modes.get(s,"unknown") for s in flower)),
         "flower_diameter_prose_candidates_are_NOT_manually_phenotype_validated":True,
         "no_range_imputation_or_petals_or_inflorescences":True,
@@ -213,6 +231,9 @@ def run(nhm,wcvp,gift,china,fna,backbone,output):
         "no_ecological_wind_flower_cue_coefficient_estimated":True,
         "not_a_125_region_mainland_area_wind_exposure":True}
     output.mkdir(parents=True,exist_ok=True)
+    with (output/"stage100_WFO_original_accepted_species_whole_flower_diameter_SOURCE_CANDIDATE.csv").open("w",newline="",encoding="utf-8") as f:
+        wr=csv.DictWriter(f,fieldnames=list(original_species_ledger[0]))
+        wr.writeheader();wr.writerows(original_species_ledger)
     with (output/"stage100_wfo_original_size_phrase_367_regions_INCLUDES_ISLANDS.csv").open("w",newline="") as f:
         wr=csv.DictWriter(f,fieldnames=list(sizes[0]));wr.writeheader();wr.writerows(sizes)
     (output/"stage100_original_eflora_flower_diameter_prose_candidate_receipt.json").write_text(
