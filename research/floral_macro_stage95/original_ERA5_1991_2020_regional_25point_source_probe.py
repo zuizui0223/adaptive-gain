@@ -42,9 +42,12 @@ def source_mainland_regions(artifact,geo):
     return sites
 
 def run(artifact,tdwg,outdir,max_sites=FIRST_SOURCE_REGIONS):
-    allsites=source_mainland_regions(artifact,tdwg)
-    if not 1<=max_sites<=len(allsites) or max_sites%SITES_PER_REQUEST:
+    # Validate arguments BEFORE accessing any archived source files.
+    if not 1<=max_sites<=125 or max_sites%SITES_PER_REQUEST:
         raise ValueError("STAGE95C_MAX_SITES_MUST_BE_POSITIVE_MULTIPLE_OF_FIVE")
+    allsites=source_mainland_regions(artifact,tdwg)
+    if max_sites>len(allsites):
+        raise ValueError("STAGE95C_MAX_SITES_EXCEEDS_ORIGINAL_MAINLAND_REGIONS")
     # The selection is by original TDWG code only, never climate, trait, or
     # pollinator outcome. The remaining original mainland frame is preserved.
     chosen=allsites[:max_sites]
