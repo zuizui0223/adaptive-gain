@@ -94,7 +94,9 @@ def novelty_report(train_native,holdout_native,traits):
       "holdout_exact_species_reuse_fraction":len(both)/len(hold) if hold else None,
       "holdout_new_species_fraction":len(novel)/len(hold) if hold else None,
       "distinct_holdout_genera_total":len({s.split()[0] for s in hold}),
-      "distinct_holdout_new_only_genera":len({s.split()[0] for s in novel}),
+      "distinct_holdout_genera_containing_new_species":len({s.split()[0] for s in novel}),
+      "distinct_holdout_genera_absent_in_training":len(
+          {s.split()[0] for s in hold}-{s.split()[0] for s in train}),
       "original_species_identity_holdout_NOT_phylogenetic_independence":True,
     }
 
