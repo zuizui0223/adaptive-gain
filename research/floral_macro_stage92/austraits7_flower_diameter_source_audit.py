@@ -52,7 +52,7 @@ def choose_source_table(z):
     for name in z.namelist():
         if not name.casefold().endswith(".csv") or name.endswith("/"):continue
         try:
-            with io.TextIOWrapper(z.open(name),encoding="utf-8-sig",newline="") as f:
+            with io.TextIOWrapper(z.open(name),encoding="utf-8-sig",errors="surrogateescape",newline="") as f:
                 rd=csv.reader(f); fields=next(rd,[])
         except (UnicodeDecodeError,ValueError,StopIteration):
             continue
@@ -79,12 +79,20 @@ def parse_original_austraits_zip(path,approved):
     count=Counter();raw_units=Counter();dataset=Counter()
     with zipfile.ZipFile(path) as z:
         _,member,cols=choose_source_table(z)
-        with io.TextIOWrapper(z.open(member),encoding="utf-8-sig",newline="") as f:
+        with io.TextIOWrapper(z.open(member),encoding="utf-8-sig",errors="surrogateescape",newline="") as f:
             rd=csv.DictReader(f)
             for row in rd:
                 count["source_long_format_rows"]+=1
                 if (row.get(cols["trait"]) or "").strip()!="flower_diameter":continue
                 count["author_flower_diameter_rows"]+=1
+                # A few original source cells contain arbitrary non-UTF8 bytes.
+                # Preserve the raw archive, but never recode/repair a scientific
+                # taxon, trait value, unit or dataset silently.
+                used=[row.get(cols[k]) or "" for k in ("taxon","trait","value","unit","dataset")
+                      if cols.get(k)]
+                if any(0xDC80<=ord(ch)<=0xDCFF for cell in used for ch in cell):
+                    count["author_flower_diameter_invalid_utf8_used_field_skipped"]+=1
+                    continue
                 ds=(row.get(cols["dataset"]) or "UNKNOWN") if cols["dataset"] else "UNKNOWN"
                 raw_units[(row.get(cols["unit"]) or "UNSPECIFIED") if cols["unit"] else "UNSPECIFIED"]+=1
                 sp=strict_name(row.get(cols["taxon"]))
