@@ -1,0 +1,86 @@
+name: Stage98 original TDWG3 88/37 mainland holdout source polygon adjacency audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage98/**"
+      - ".github/workflows/floral-stage98-original-TDWG-heldout-polygon-contact.yml"
+      - "docs/FLORAL_STAGE98_MAINLAND_SHARED_HOLDOUT_GEOGRAPHY_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-geo-only-holdout-boundary-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original geographical data source geometry readers
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3" "pyproj==3.7.2"
+      - name: Source-free verify spatial touching vs distant original region geometries
+        run: python -m unittest discover -s research/floral_macro_stage98 -p "test_*.py" -v
+      - name: Recover SHA-locked original Stage94 125 strictly mainland + 88/37 fold boundaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage98_original_stage94_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage98_original_stage94_geo.zip" | sha256sum -c
+      - name: Download immutable author-original TDWG Level 3 geometric source and verify Git blob
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage98_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage98_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Compute exact polygon touching/overlap and approximate geographical boundary distances with no cue outcomes
+        run: |
+          python -u research/floral_macro_stage98/original_TDWG3_shared_holdout_polygon_contact_audit.py \
+            --stage94-geo-source-zip stage98_original_stage94_geo.zip \
+            --original-TDWG-geojson stage98_original_TDWG3.geojson \
+            --outdir stage98_derived
+      - name: Verify 3256 source-original cross-fold region comparisons and no fake certified buffer
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path("stage98_derived")
+          d=json.loads((root/"stage98_original_frozen_holdout_geography_adjacency_receipt.json").read_text())
+          x=d["source_region_counts"]
+          assert x["n_train_regions"]==88
+          assert x["n_holdout_regions"]==37
+          assert x["total_train_holdout_region_pairs_evaluated"]==3256
+          assert d["original_TDWG_level3_geojson_git_blob_sha1"]=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          assert d["original_stage94_geo_artifact_sha256"]=="3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833"
+          assert d["original_holdout_exploration_partition_UNCHANGED"]
+          assert d["no_wind_signal_or_Bombus_data_opened"]
+          assert not d["verified_physical_distance_buffer_success"]
+          assert x.get("intersecting_identical_block_count",0)==0
+          rows=list(csv.DictReader((root/"stage98_original_holdout_source_nearest_boundary_audit.csv").open()))
+          assert len(rows)==37
+          print("STAGE98_TRUE_GEOGRAPHY_BLIND_HOLDOUT_CONTACT",{
+             "cross_fold_pairs":x["total_train_holdout_region_pairs_evaluated"],
+             "holdout_regions_in_direct_contact":x["holdout_regions_touching_or_intersecting_any_exploration_polygon"],
+             "touching_pairs":x.get("touching_pairs",0),
+             "overlap_pairs":x.get("overlap_pairs",0),
+             "approx_under100km":x["holdout_regions_geodesic_approx_boundary_distance_below100km"]})
+          PY
+      - name: Preserve only source geometry-derived leakage receipt and 37 heldout regional nearest sources
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage98-original-TDWG3-mainland-88-37-source-spatial-holdout-boundary-audit
+          path: stage98_derived/
+          retention-days: 90
+          if-no-files-found: warn
