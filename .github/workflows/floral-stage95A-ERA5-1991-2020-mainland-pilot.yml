@@ -1,0 +1,83 @@
+name: Stage95 source-original ERA5 1991-2020 strong gust site-pilot mainland flora
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage95/**"
+      - ".github/workflows/floral-stage95A-ERA5-1991-2020-mainland-pilot.yml"
+      - "docs/FLORAL_STAGE95_ERA5_1991_2020_SOURCE_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  actually-fetch-ERA5-model-30yr-daily-gust-five-mainland-sites:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original geographic source validators
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Source-free true 30-year temporal and strict threshold controls
+        run: python -m unittest discover -s research/floral_macro_stage95 -p "test_*.py" -v
+      - name: Restore source-proven original 125-mainland 88-exploration 37-holdout geographic split
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage95_original_stage94_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage95_original_stage94_geo.zip" | sha256sum -c
+      - name: Retrieve exact original TDWG 367 botanical-region polygons
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage95_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage95_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Get actually original ERA5-model daily max GUST and 2m T for full 1991-2020 from historical archive
+        run: |
+          python -u research/floral_macro_stage95/original_ERA5_1991_2020_gust_five_mainland_pilot.py \
+            --original-Stage94-geography-ZIP stage95_original_stage94_geo.zip \
+            --original-TDWG3-geojson stage95_original_TDWG3.geojson \
+            --outdir stage95_original_ERA5_1991_2020_derived
+      - name: Validate original source SHA receipt and never claim regional wind effect
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("stage95_original_ERA5_1991_2020_derived/stage95A_original_model_ERA5_gust_climatology_5_mainland_sources.json")
+          d=json.loads(p.read_text())
+          assert d["number_pilot_source_sites"]==5
+          assert d["model"]=="era5"
+          assert d["source_daily_not_CDS_original_hourly_10fg_independent_validation_pending"]
+          assert d["temperature_climatology_30yr_monthly_mean_strict_above_5_C"]
+          assert d["wind_10m_gust_daily_max_strict_above_15_m_s"]
+          assert d["no_area_aggregation_or_mainland_wind_signal_coefficients_estimated"]
+          assert len(d["original_query_decade_sha256"])==3
+          assert len({r["spatial_block_id"] for r in d["sites"]})==5
+          assert all(r["outcome_blind_exploration_only"] for r in d["sites"])
+          assert all(r["source_ERA5_observed_30yr_days"]==10958 for r in d["sites"])
+          assert all(r["source_eligible_days"]>0 for r in d["sites"])
+          assert all(0<=r["source_primary_fraction_days_daily_gust_strict_above_15_ms"]<=1 for r in d["sites"])
+          print("STAGE95_TRUE_ORIGINAL_ERA5_30YR_SITE_PILOT",
+                [(r["TDWG_L3"],r["source_eligible_days"],
+                  r["source_primary_fraction_days_daily_gust_strict_above_15_ms"]) for r in d["sites"]])
+          PY
+      - name: Archive only derived source-replay climate fraction + SHA manifests, no raw climate redistribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage95A-real-ERA5-model-1991-2020-daily-max-gust-5-mainland
+          path: stage95_original_ERA5_1991_2020_derived/
+          retention-days: 90
+          if-no-files-found: warn
