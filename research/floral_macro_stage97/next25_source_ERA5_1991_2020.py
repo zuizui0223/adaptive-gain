@@ -16,9 +16,13 @@ from collections import Counter
 BASE=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(BASE/"floral_macro_stage95"))
 from original_ERA5_1991_2020_regional_25point_source_probe import (
-    source_mainland_regions, SITES_PER_REQUEST,INTER_GROUP_PACE_SEC,
-    SOURCE_429_PAUSE_SEC
+    source_mainland_regions, SITES_PER_REQUEST
 )
+# Stage96 branch did not inherit later Stage95C quota-pacing amendments.
+# Freeze the source-provider's previously observed quota recovery locally;
+# do NOT depend on whichever stacked Stage95 file version happens to exist.
+INTER_GROUP_PACE_SEC=70
+SOURCE_429_PAUSE_SEC=70
 from original_ERA5_1991_2020_gust_five_mainland_pilot import (
     api_url,query_original,parse_decade,climatology,YEARS,sha256
 )
