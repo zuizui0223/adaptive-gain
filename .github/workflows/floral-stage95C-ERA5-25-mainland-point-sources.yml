@@ -1,0 +1,81 @@
+name: Stage95C 25 source-original mainland 30-year ERA5 gust geographic preflight
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage95/original_ERA5_1991_2020_regional_25point_source_probe.py"
+      - "research/floral_macro_stage95/test_original_ERA5_1991_2020_regional_25point_source_probe.py"
+      - ".github/workflows/floral-stage95C-ERA5-25-mainland-point-sources.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-25-mainland-gust-source-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned original TDWG GIS parser dependencies
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Test original 125-region source split and zero outcome leakage
+        run: python -m unittest discover -s research/floral_macro_stage95 -p "test_original_ERA5_1991_2020_regional_25point_source_probe.py" -v
+      - name: Verify original mainland-only 125 region 88/37 split artifact SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --silent --show-error --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage95C_original_source_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage95C_original_source_geo.zip" | sha256sum -c
+      - name: Retrieve exact original source TDWG Level 3 geography
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage95C_original_TDWG.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage95C_original_TDWG.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Actually acquire 30yr daily gust/T2m at 25 strictly mainland original source region points
+        run: |
+          python -u research/floral_macro_stage95/original_ERA5_1991_2020_regional_25point_source_probe.py \
+            --original-stage94-geography-zip stage95C_original_source_geo.zip \
+            --original-TDWG3-geojson stage95C_original_TDWG.geojson \
+            --limit-region-count 25 \
+            --outdir stage95C_derived
+      - name: Validate 25 original-source climatologies and no regional-area wind claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("stage95C_derived/stage95C_true_source_first25_mainland_site_gust_30yr.json").read_text())
+          assert d["original_mainland_regions_preoutcome"]==125
+          assert d["source_requested_region_count"]==25
+          assert d["source_completed_region_count"]==25
+          assert d["source_regions_not_yet_downloaded"]==100
+          assert len(d["source_queries_with_SHA256"])==15
+          assert d["no_source_regional_area_weighting"]
+          assert d["no_CDS_ERA5_hourly_10fg_independent_crosscheck"]
+          assert d["no_wind_to_signal_or_pollinator_ecological_regression"]
+          assert d["no_holdout_cue_outcomes_seen"]
+          assert len({s["TDWG_L3"] for s in d["sites"]})==25
+          assert all(s["source_ERA5_observed_30yr_days"]==10958 for s in d["sites"])
+          print("STAGE95C_REAL_25_MAINLAND_SOURCE_ONLY",{
+            "fractions":[d["regional_gust_source_site_fraction_min"],
+                          d["regional_gust_source_site_fraction_max"]],
+            "n":d["source_completed_region_count"]})
+          PY
+      - name: Archive only source-derived point metric and original response SHA receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage95C-original-30year-ERA5-model-25-mainland-site-climatology
+          path: stage95C_derived/
+          retention-days: 90
+          if-no-files-found: warn
