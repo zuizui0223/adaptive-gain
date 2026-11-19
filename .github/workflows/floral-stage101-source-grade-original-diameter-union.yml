@@ -1,0 +1,110 @@
+name: Stage101 original AusTraits + WFO exact species flower-size source-grade union in mainland 72/37
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage101/**"
+      - "docs/FLORAL_STAGE101_WFO_AUSTRAITS_MAINLAND_DIAMETER_SOURCE_20261119.md"
+      - ".github/workflows/floral-stage101-source-grade-original-diameter-union.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  authentic-floral-size-source-overlap-and-mainland-holdout-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate source grade union and taxonomic/missingness guards
+        run: python -m unittest discover -s research/floral_macro_stage101 -p "test_*.py" -v
+      - name: Restore source-original WFO 2026 eFloras 237 full-flower diameter prose candidates, 58 corolla-only, with immutable species ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14541288164/zip" \
+            -o stage101_WFO_original_stage100_species_ledger.zip
+          echo "06c370061a4c069038aaf11ecd59a423fb00cb051db6ec67632e316ce9d2ebd4  stage101_WFO_original_stage100_species_ledger.zip" | sha256sum -c
+      - name: Restore authentic original 2026 NHM botanical trait source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage101_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage101_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore accepted/native Kew WCVP source original globally
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 900 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage101_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage101_WCVP.zip" | sha256sum -c
+      - name: Restore authentic AusTraits v7.0.0 author numeric flower_diameter original rows
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://zenodo.org/records/15718081/files/austraits-7.0.0.zip?download=1" \
+            -o stage101_AusTraits7_original.zip
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f  stage101_AusTraits7_original.zip" | sha256sum -c
+      - name: Restore source-only Stage98B strict 72 mainland contact-free train and 37 original holdout
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage101_stage98B_mainland_source.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage101_stage98B_mainland_source.zip" | sha256sum -c
+      - name: Join exactly shared original species for measured AusTraits and WFO prose, preserving separate data grades
+        run: |
+          python -u research/floral_macro_stage101/verify_original_WFO_AusTraits_diameter_union_mainland.py \
+            --original-WFO-stage100-artifact stage101_WFO_original_stage100_species_ledger.zip \
+            --original-WFO-stage100-SHA256 06c370061a4c069038aaf11ecd59a423fb00cb051db6ec67632e316ce9d2ebd4 \
+            --original-AusTraits7 stage101_AusTraits7_original.zip \
+            --original-NHM stage101_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage101_WCVP.zip \
+            --source-mainland-Stage98B-ZIP stage101_stage98B_mainland_source.zip \
+            --outdir stage101_source_derived
+      - name: Assert strict source-grade and mainland holdout integrity with no wind-cue coefficients
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path("stage101_source_derived")
+          d=json.loads((p/"stage101_original_mainland_3cue_size_source_union_receipt.json").read_text())
+          cohorts=d["source_grade_exact_species_and_holdout_overlap"]
+          regions=list(csv.DictReader((p/"stage101_original_mainland_source_grade_flower_size_109_regions.csv").open()))
+          assert len(regions)==109
+          assert sum(r["predeclared_original_geographic_source_fold"]=="exploration" for r in regions)==72
+          assert sum(r["predeclared_original_geographic_source_fold"]=="holdout" for r in regions)==37
+          assert cohorts["AusTraits_measured_grade"]["source_distinct_global_species"]==104
+          assert cohorts["WFO_textual_candidate_unreviewed"]["source_distinct_global_species"]==237
+          overlap=cohorts["AusTraits_and_WFO_exact_species_overlap"]["source_distinct_global_species"]
+          union=cohorts["source_union_ANY_size_record_not_all_direct_measured"]["source_distinct_global_species"]
+          assert union==104+237-overlap
+          assert not d["no_wind_flower_size_ecological_coefficients_estimated"] is False
+          assert d["size_prose_candidate_is_NOT_confirmed_measurement"]
+          assert d["corolla_width_candidate_never_promoted_to_flower_display"]
+          assert d["original_mainland_geo_and_species_names_unchanged"]
+          print("STAGE101_TRUE_ORIGINAL_SOURCE_DIAMETER_SPECIES_OVERLAP",{
+            "AusTraits":104,"WFO_prose":237,"overlap":overlap,"combined":union,
+            "holdout_source_union":cohorts["source_union_ANY_size_record_not_all_direct_measured"]["source_original_holdout_species"],
+            "holdout_new_only_from_train":cohorts["source_union_ANY_size_record_not_all_direct_measured"]["distinct_holdout_species_NOT_seen_in_train"],
+            "n_holdout_regions_with_10_plus_source_any_grade":
+              d["original_mainland_72exploration_37holdout_coverage"]["holdout"]["regions_with_at_least_10_original_ANY_grade_size"]})
+          PY
+      - name: Archive only provenance checked regional coverage and source grade receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage101-original-WFO-AusTraits-size-mainland-72-37-graded-source-union
+          path: stage101_source_derived/
+          retention-days: 90
+          if-no-files-found: warn
