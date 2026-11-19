@@ -58,12 +58,22 @@ jobs:
           sha256sum stage93_WFO/*zip | tee stage93_WFO/original_sha256_manifest.txt
           unzip -tq stage93_WFO/Flora_Of_China_original.zip
           unzip -tq stage93_WFO/FNA_original.zip
-      - name: Read ORIGINAL WFO DwC-A taxon and description rows, not structured ADEPT trait fields
+      - name: Retrieve exact WFO Plant List 2026-06 independently versioned Taxon ID to scientific name backbone
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1" \
+            -o stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip
+          echo "0e4486945cd9f7af548ca87eb9a870ed  stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip" | md5sum -c
+          unzip -tq stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip
+          sha256sum stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip | tee stage93_WFO/WFO_2026-06_backbone_SHA256.txt
+      - name: Read ORIGINAL WFO DwC-A taxon and description rows with versioned accepted-species ID crosswalk
         run: |
           python -u research/floral_macro_stage93/original_wfo_eFloras_scent_full_prose.py \
             --original-NHM stage93_NHM/combined/original_NHM_text_traits_compact.csv \
             --original-WCVP stage93_WCVP.zip \
             --original-GIFT stage93_GIFT32.zip \
+            --original-WFO-202606-backbone-ZIP stage93_WFO/WFO_2026-06_original_DwC_backbone_R.zip \
             --original-Flora-of-China-ZIP stage93_WFO/Flora_Of_China_original.zip \
             --original-Flora-of-North-America-ZIP stage93_WFO/FNA_original.zip \
             --outdir stage93_derived
@@ -98,5 +108,6 @@ jobs:
           path: |
             stage93_derived/
             stage93_WFO/original_sha256_manifest.txt
+            stage93_WFO/WFO_2026-06_backbone_SHA256.txt
           retention-days: 90
           if-no-files-found: warn
