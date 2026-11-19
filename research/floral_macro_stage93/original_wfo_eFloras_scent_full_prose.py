@@ -145,6 +145,10 @@ def source_raw_flora(path,approved):
         meta=parse_meta(archive)
         core=next(x for x in meta if x["type"]=="core")
         taxcol=core["fields"]
+        print("STAGE93_REAL_ORIGINAL_WFO_DWCA_META_SCHEMA",json.dumps([
+            {"type":m["type"],"row_type":m["row_type"],"file":m["file"],
+             "id":m["id"],"coreid":m["coreid"],"field_names":sorted(m["fields"])}
+            for m in meta],sort_keys=True),flush=True)
         if "scientificname" not in taxcol or core["id"] is None:
             raise ValueError("WFO_ORIGINAL_CORE_TAXON_NAME_OR_ID_NOT_DISCOVERABLE")
         taxa={}
