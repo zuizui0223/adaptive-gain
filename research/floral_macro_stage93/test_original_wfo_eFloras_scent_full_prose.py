@@ -29,6 +29,28 @@ class Stage93SourceProseTests(unittest.TestCase):
     def test_nonflower_odor_not_a_floral_positive(self):
         self.assertEqual(scent_class("Leaves fragrant. Flowers white."),"unmentioned_or_uncertain")
         self.assertEqual(scent_class("Aromatic bark; showy flowers."),"unmentioned_or_uncertain")
+    def test_cross_organ_fragrance_not_flower_fragrance(self):
+        for text in (
+            "Leaves fragrant, flowers white and small.",
+            "Flowers white, leaves fragrant and shiny.",
+            "Flowers blue, stems strongly scented.",
+            "Fragrant bark, flowers white.",
+            "Flowers white, fruits fragrant."
+        ):
+            self.assertEqual(scent_class(text),"unmentioned_or_uncertain",text)
+    def test_cross_organ_scentless_not_flower_scentless(self):
+        for text in (
+            "Leaves scentless, flowers white.",
+            "Flowers white, leaves scentless.",
+            "Odorless stems, flowers yellow.",
+            "Flowers red, bark odorless."
+        ):
+            self.assertEqual(scent_class(text),"unmentioned_or_uncertain",text)
+    def test_true_flower_fragrance_survives_nearby_nonfloral_other_clause(self):
+        self.assertEqual(scent_class("Flowers fragrant, leaves green."),"positive_candidate")
+        self.assertEqual(scent_class("Flowers fragrant; leaves scentless."),"positive_candidate")
+        self.assertEqual(scent_class("Leaves green; flowers not fragrant."),"explicit_negative_candidate")
+
     def test_no_description_not_scentless(self):
         self.assertEqual(scent_class("Flowers purple."),"unmentioned_or_uncertain")
         self.assertEqual(scent_class(""),"empty_description")
