@@ -1,0 +1,65 @@
+name: Stage89C source-verified GIFT3.2 versus AusTraits7 pollination-mode species concordance
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage89/crosscheck_GIFT_AusTraits_original_pollination_modes.py"
+      - "research/floral_macro_stage89/test_crosscheck_GIFT_AusTraits_original_pollination_modes.py"
+      - ".github/workflows/floral-stage89C-GIFT32-AusTraits7-source-mode-concordance.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independently-qualify-original-plant-species-modes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install bounded source original trait extraction dependencies
+        run: python -m pip install "numpy==2.3.5"
+      - name: Source-free direct and discordant mode labels tests
+        run: python -m unittest discover -s research/floral_macro_stage89 -p "test_crosscheck_GIFT_AusTraits_original_pollination_modes.py" -v
+      - name: Retrieve original independent public GIFT3.2 H5c taxon-qualified mode source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --silent --show-error --location --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage89C_true_original_GIFT32_modes.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage89C_true_original_GIFT32_modes.zip" | sha256sum -c
+      - name: Actually download and verify original 21100078-byte AusTraits7 source; join exact plant species
+        run: |
+          python -u research/floral_macro_stage89/crosscheck_GIFT_AusTraits_original_pollination_modes.py \
+            --original-GIFT-H5c-artifact-zip stage89C_true_original_GIFT32_modes.zip \
+            --outdir stage89C_derived_original_GIFT_AusTraits_mode_agreement
+      - name: Verify original source denominators and do not claim independent evolutionary origins
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage89C_derived_original_GIFT_AusTraits_mode_agreement/stage89C_original_GIFT_vs_AusTraits_pollination_species_concordance.json")
+          r=json.loads(p.read_text())
+          assert r["source_distinct_GIFT_exact_species"]==5770
+          assert r["source_distinct_AusTraits_exact_species"]==4619
+          assert r["source_exact_name_overlap"]>20
+          assert r["original_source_AusTraits_v7"]["original_SHA256"]=="2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f"
+          assert r["source_GIFT_vs_AusTraits_may_share_original_literature"]
+          assert r["source_agreement_not_independent_pollination_or_selection_replication"]
+          assert r["source_absent_from_either_database_UNKNOWN_not_false_mode"]
+          assert r["source_no_at_flower_wind_VOC_learning_or_landing"]
+          print("STAGE89C_ORIGINAL_SPECIES_MODE_CROSS_SOURCE_AGREEMENT",r["source_two_category_original_labels_cross_table"])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage89C-original-GIFT32-AusTraits7-species-pollen-mode-concordance
+          path: stage89C_derived_original_GIFT_AusTraits_mode_agreement/
+          retention-days: 90
+          if-no-files-found: warn
