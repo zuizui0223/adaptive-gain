@@ -63,8 +63,9 @@ jobs:
           from pathlib import Path
           p=Path("stage89_original_GIFT_NHM_WCVP_mode_derived")
           x=json.loads((p/"stage89_original_GIFT32_NHM_WCVP_global_plant_mode_spatial_support.json").read_text())
-          assert x["source_original_GIFT32"]["original_species_modes_declared"]["source_mode_animal"]==4538
+          assert x["source_original_GIFT32"]["original_species_modes_declared"]["source_mode_animal"]==4537
           assert x["source_original_GIFT32"]["original_species_modes_declared"]["source_mode_wind"]==1233
+          assert x["source_original_GIFT32"]["original_species_modes_declared"]["bad_name"]==1
           z=x["source_global_GIFT_pollination_mode_native_join"]
           assert z["source_original_WCVP_native_plant_species"]==55775
           assert z["source_original_367_native_region_modes"]==367
