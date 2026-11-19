@@ -59,7 +59,7 @@ def original_gift_species(source_zip):
         code=str(row.get("pollen_vector_mode") or "").strip()
         mode=SOURCE_MODE.get(code)
         if not name:
-            bad_name+=1;continue
+            bad_name+=1;counts["bad_name"]+=1;continue
         if mode is None:unknown.append((name,code));continue
         if name in out:raise ValueError("STAGE89_SOURCE_GIFT_QUALIFIED_DUPLICATE_SPECIES")
         out[name]=mode
