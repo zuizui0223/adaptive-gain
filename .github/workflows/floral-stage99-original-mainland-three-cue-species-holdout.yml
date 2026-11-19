@@ -1,0 +1,122 @@
+name: Stage99 original 72 mainland train 37 heldout exact species identity leakage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage99/**"
+      - "docs/FLORAL_STAGE99_MAINLAND_SPECIES_HOLDOUT_SOURCE_20261119.md"
+      - ".github/workflows/floral-stage99-original-mainland-three-cue-species-holdout.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  authentic-source-trait-species-recurrence-across-mainland-holdout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify strict source-blind species and genus identity guards
+        run: python -m unittest discover -s research/floral_macro_stage99 -p "test_*.py" -v
+      - name: Restore genuine source-only 72train / 37holdout / 16excluded Stage98B source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage99_original_stage98B_contact_free_mainland.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage99_original_stage98B_contact_free_mainland.zip" | sha256sum -c
+      - name: Recover exact original 59,369 NHM descriptive trait records and SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage99_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage99_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Recover original Kew WCVP 2026 accepted/native TDWG3 species×region truth
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 900 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" -o stage99_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage99_WCVP.zip" | sha256sum -c
+      - name: Restore independently authenticated GIFT v3.2 species animal vs wind mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage99_GIFT32.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage99_GIFT32.zip" | sha256sum -c
+      - name: Restore authentic full-original source AusTraits7 690 flower-diameter rows with original 104 native species
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://zenodo.org/records/15718081/files/austraits-7.0.0.zip?download=1" \
+            -o stage99_original_AusTraits7.zip
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f  stage99_original_AusTraits7.zip" | sha256sum -c
+      - name: Restore previously ORIGINAL WFO full flora human-scent prose source with strict 27,899 species identities
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14534460860/zip" \
+            -o stage99_original_WFO_scent_names.zip
+          echo "eb32786c6464a6edecd7ff0d12e61762cdb107f3082124066aadcc03292dd88e  stage99_original_WFO_scent_names.zip" | sha256sum -c
+      - name: Independently count exact source trait species and genus identity repeated across exploration/holdout
+        run: |
+          python -u research/floral_macro_stage99/original_three_cue_species_holdout_source_leakage.py \
+            --stage98B-contact-free-source-zip stage99_original_stage98B_contact_free_mainland.zip \
+            --original-NHM stage99_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage99_WCVP.zip \
+            --original-GIFT stage99_GIFT32.zip \
+            --original-AusTraits7 stage99_original_AusTraits7.zip \
+            --original-WFO-scent-species-zip stage99_original_WFO_scent_names.zip \
+            --outdir stage99_derived
+      - name: Verify original species universes, fixed 72/37, and no false evolutionary replication
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage99_derived")
+          r=json.loads((p/"stage99_original_mainland_three_cue_shared_species_source_receipt.json").read_text())
+          d=r["source_trait_categories_source_only"]
+          assert r["source_original_contact_free_train_regions"]==72
+          assert r["source_original_holdout_regions"]==37
+          assert r["source_original_excluded_train_regions"]==16
+          assert r["original_native_plant_universe"]==55775
+          assert d["reported_marking_lexical_positive_not_true_guide"]["source_total_globally_recognized_trait_species"]==906
+          assert d["source_measured_flower_diameter"]["source_total_globally_recognized_trait_species"]==104
+          assert d["WFO_floral_scent_lexical_positive"]["source_total_globally_recognized_trait_species"]==420
+          assert d["WFO_floral_scent_explicit_negative"]["source_total_globally_recognized_trait_species"]==105
+          assert d["GIFT_qualified_animal_pollination"]["source_total_globally_recognized_trait_species"]==2560
+          assert d["GIFT_qualified_wind_pollination"]["source_total_globally_recognized_trait_species"]==612
+          assert all(v["distinct_exact_species_shared_train_and_holdout"]+
+             v["distinct_exact_species_new_only_in_holdout"]==
+             v["distinct_source_species_in_fixed_37holdout"] for v in d.values())
+          assert r["heldout_region_identity_does_NOT_imply_heldout_species_identity"]
+          assert r["no_actual_wind_cue_association_fitted"]
+          assert not r["no_phylogenetic_independent_lineages_inferred"] is False
+          rows=list(csv.DictReader((p/"stage99_original_37holdout_region_trait_identity_novelty_counts.csv").open()))
+          assert len(rows)==37
+          print("STAGE99_TRUE_ORIGINAL_SPECIES_IDENTITY_REUSE",
+                {k:{"train":v["distinct_source_species_in_contact_free_72train"],
+                    "holdout":v["distinct_source_species_in_fixed_37holdout"],
+                    "shared":v["distinct_exact_species_shared_train_and_holdout"],
+                    "new":v["distinct_exact_species_new_only_in_holdout"]} for k,v in d.items()})
+          PY
+      - name: Upload ONLY source-derived aggregate identities and original regional coverage counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage99-original-mainland-72train-37holdout-three-cue-species-source-novelty
+          path: stage99_derived/
+          retention-days: 90
+          if-no-files-found: warn
