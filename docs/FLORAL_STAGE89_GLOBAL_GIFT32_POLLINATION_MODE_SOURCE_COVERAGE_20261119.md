@@ -64,3 +64,22 @@ Wind-mediated source taxa have NO explicit blue, pink, red, orange or grey NHM s
 6. Before any stronger causal evolutionary claim, require independent source region/abundance, mode-specific local surveys, verified source phylogeny and independent transitions, GBIF target-group effort and measured plant/insect behavior in the same wind/plume/flower stage.
 
 Repro code: research/floral_macro_stage89/gift32_independent_pollen_mode_global_native_coverage.py and compare_gift_animal_wind_hue_geographic_regimes.py; tests and GitHub source workflows in .github/workflows. All original-source-derived receipts are archived, not original NHM/WCVP bulk files, raw GBIF 3.96M records or GIFT raw source responses. Stage89 remains draft stacked on Stage88. Main unchanged.
+
+
+## Stage89C: genuinely source-authenticated independent database label-concordance audit
+
+We re-downloaded original AusTraits v7.0.0 official 21,100,078-byte author ZIP, SHA256 2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f (1,798,215 author trait rows, 13,440 original pollination_syndrome source rows, 4,619 valid strict insect-only/wind-only species). These original species labels were compared to the separately original-source-verified GIFT v3.2 5,770 valid species labels, using ONLY exact names without automatic synonym inference, after excluding ambiguous or mixed reports.
+
+Source-verified GitHub Actions [#44432262460](https://github.com/zuizui0223/adaptive-gain/actions/runs/44432262460) **SUCCESS**, derived-only artifact **14487207856**, ZIP SHA256 c721a31b2b0eb01a8132febc1e544f10fe0f70f46480c9e1fce01132ba1bce0b.
+
+**Only 225 species in 144 genera** have qualified direct pollination categories in both external databases:
+- GIFT biotic & AusTraits insect: **171 species**
+- GIFT wind & AusTraits wind: **52 species**
+- GIFT biotic & AusTraits wind: **1 species**
+- GIFT wind & AusTraits insect: **1 species**
+
+Thus the selected overlapping labelled species agree **223/225 = 99.11%**, with descriptive Cohen kappa **0.9753** and a genus-reclustered bootstrap agreement interval **[0.97685, 1.000]**. The two actual mismatched species are *Coprosma perpusilla* (GIFT wind; AusTraits source White_2020 insect) and *Glochidion philippicum* (GIFT biotic; AusTraits source Metcalfe_2009 wind). This is a **source-database label agreement** on 225 nonrandom taxa, NOT a demonstration that GIFT and AusTraits were independently measured in different field studies, not a phylogenetically independent test, nor an external validation of all 3,172 GIFT/WCVP native species. Both databases can cite overlapping original literature and share inherited taxonomic conservatism.
+
+The scientifically supported statement: the 225 shared source-coded species rarely contradict on these two broad pollination categories, but neither confirms the species-mode population field identity nor resolves the wind/odor/visual-learning mechanism.
+
+Source-validated implementation: research/floral_macro_stage89/crosscheck_GIFT_AusTraits_original_pollination_modes.py and its tests; workflow .github/workflows/floral-stage89C-GIFT32-AusTraits7-source-mode-concordance.yml. Stage89A/B/C all have their own independent actual-source Actions runs and their results are documented here. Main unchanged.
