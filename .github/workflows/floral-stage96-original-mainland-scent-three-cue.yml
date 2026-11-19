@@ -1,0 +1,76 @@
+name: Stage96 genuine WFO floral scent source support × strict mainland three floral cues
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage96/**"
+      - ".github/workflows/floral-stage96-original-mainland-scent-three-cue.yml"
+      - "docs/FLORAL_STAGE96_TRUE_MAINLAND_SCENT_CUE_SOURCE_20261119.md"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source_sha_qualified_mainland_scent_support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-only tests of 367 region, 88/37 holdout, true scent negatives and unknowns
+        run: python -m unittest discover -s research/floral_macro_stage96 -p "test_*.py" -v
+      - name: Restore genuine author-source-derived WFO 420 fragrance positive and 105 explicit negative candidates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14533307677/zip" \
+            -o stage96_original_WFO_source.zip
+          echo "3f838cc1ed6841b136f122b9c8df695b842f46745cdff0edf10820e00905ec38  stage96_original_WFO_source.zip" | sha256sum -c
+      - name: Restore genuine original NHM/AusTraits7/WCVP/GIFT strictly mainland three-cue availability
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14530500166/zip" \
+            -o stage96_original_mainland_three_cue_source.zip
+          echo "326815aa9686c0063afb326bf67b9480969d47187759b37f32b9c36e488e0780  stage96_original_mainland_three_cue_source.zip" | sha256sum -c
+      - name: Compute source-only 125 mainland 88 exploration 37 holdout fragrance positive/explicit negative support
+        run: |
+          python -u research/floral_macro_stage96/mainland_three_cue_source_scent_support.py \
+            --stage93-source-zip stage96_original_WFO_source.zip \
+            --stage94B-source-zip stage96_original_mainland_three_cue_source.zip \
+            --outdir stage96_derived
+      - name: Verify source-supported counts and reject claims of actual VOC or wind effects
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("stage96_derived/stage96_true_mainland_3cue_source_coverage_receipt.json").read_text())
+          c=d["source_cohorts"]
+          assert c["mainland"]["regions"]==125
+          assert c["exploration"]["regions"]==88
+          assert c["holdout"]["regions"]==37
+          assert c["mainland"]["regions_with_both_flora_scent_positive_and_explicit_negative"]==89
+          assert c["holdout"]["regions_with_both_flora_scent_positive_and_explicit_negative"]==28
+          assert c["mainland"]["regions_three_distinct_cue_source_counts_ge10_each"]==23
+          assert c["holdout"]["regions_three_distinct_cue_source_counts_ge10_each"]==4
+          assert d["wind_cue_regression_NOT_fitted"]
+          assert d["unknown_fragrance_not_a_negative_phenotype"]
+          print("STAGE96_TRUE_MAINLAND_SOURCE_FRAGRANCE_3CUE",{
+            "both_explicit":c["mainland"]["regions_with_both_flora_scent_positive_and_explicit_negative"],
+            "confirmatory_both":c["holdout"]["regions_with_both_flora_scent_positive_and_explicit_negative"],
+            "three_cues_10_each":c["mainland"]["regions_three_distinct_cue_source_counts_ge10_each"]})
+          PY
+      - name: Upload derived source-only regional tables and original provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage96-original-mainland-flora-WFO-fragrance-three-cue-support
+          path: stage96_derived/
+          retention-days: 90
+          if-no-files-found: warn
