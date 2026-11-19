@@ -91,7 +91,15 @@ jobs:
           r=list(csv.DictReader((p/"stage100_wfo_original_size_phrase_367_regions_INCLUDES_ISLANDS.csv").open()))
           assert d["source_original_NHM_WCVP_native_species"]==55775
           assert d["source_original_TDWG3_regions_INCLUDING_islands"]==367
-          assert d["unique_source_native_species_with_original_botanical_prose"]>1000
+          assert d["unique_source_native_species_with_original_botanical_prose"]==27899
+          assert d["n_original_source_unreviewed_flower_diameter_phrase_species"]==237
+          assert d["n_original_source_only_corolla_width_not_whole_flower_species"]==58
+          ledger=list(csv.DictReader((p/"stage100_WFO_original_accepted_species_whole_flower_diameter_SOURCE_CANDIDATE.csv").open()))
+          assert len(ledger)==295 and d["source_species_ledger_exact_rows"]==295
+          assert len({row["accepted_species_exact_WCVP"] for row in ledger})==295
+          assert all(row["floral_size_description_manual_validation"]=="PENDING" for row in ledger)
+          assert sum(row["source_202606_WFO_prose_state"]=="candidate_flower_diameter_from_prose" for row in ledger)==237
+          assert sum(row["source_202606_WFO_prose_state"]=="candidate_corolla_width_only_NOT_whole_flower" for row in ledger)==58
           assert len(r)==367
           assert d["flower_diameter_prose_candidates_are_NOT_manually_phenotype_validated"]
           assert d["no_range_imputation_or_petals_or_inflorescences"]
