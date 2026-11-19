@@ -45,7 +45,7 @@ class VOCOriginalSource(unittest.TestCase):
             with self.assertRaises(ValueError):get(p,"f"*64,"fake.csv")
     def test_compound_presence_not_direct_emission(self):
         f,v=fixture();rows=overlap(f,v)
-        self.assertIn("NOT_emission_flux","".join(rows[0].keys()))
+        self.assertIn("original_VOC_positive_presence_compound_columns_not_emission_flux",rows[0])
         self.assertTrue(rows[0]["original_VOC_compound_detected_not_human_fragrance_perception"])
 
 if __name__=="__main__":unittest.main()
