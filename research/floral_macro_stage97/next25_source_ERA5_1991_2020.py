@@ -10,7 +10,7 @@ NOT source CDS raw hourly ERA5 10fg and NOT area-weighted regional wind.
 NO floral signal/cognition/landing/fitness or ecological regression fit.
 """
 from __future__ import annotations
-import argparse,datetime,hashlib,io,json,time,zipfile,sys
+import argparse,datetime,hashlib,io,json,time,zipfile,sys,ssl,urllib.error
 from pathlib import Path
 from collections import Counter
 BASE=Path(__file__).resolve().parents[1]
@@ -31,6 +31,25 @@ FIRST25_SHA="7c98421306466b589b1f80ec97d4ca32ba58e73ba7807f0c2330a7f082fe6b67"
 FIRST25_MEMBER="stage95C_true_source_first25_mainland_site_gust_30yr.json"
 START=25
 COUNT=25
+TLS_TRANSIENT_RETRY_DELAYS_SEC=(20,60)
+
+def original_source_with_bounded_transient_retries(url):
+    """Retry *connection* transport failures, never changed scientific data.
+
+    HTTP source/provider errors are handled separately, not swallowed.
+    """
+    for attempt in range(len(TLS_TRANSIENT_RETRY_DELAYS_SEC)+1):
+        try:
+            return query_original(url)
+        except (urllib.error.URLError,TimeoutError,ConnectionError,ssl.SSLError) as exc:
+            if attempt==len(TLS_TRANSIENT_RETRY_DELAYS_SEC):
+                raise RuntimeError("STAGE97_ORIGINAL_ERA5_TLS_CONNECTIVITY_RETRIES_EXHAUSTED") from exc
+            pause=TLS_TRANSIENT_RETRY_DELAYS_SEC[attempt]
+            print("STAGE97_SOURCE_CONNECTION_TRANSIENT_RETRY",
+                  {"attempt":attempt+1,"pause_seconds":pause,
+                   "error_type":type(exc).__name__,
+                   "reason":str(exc)[:160]},flush=True)
+            time.sleep(pause)
 
 def verified_prior25(path,allsites):
     """Require frozen original Stage95C signed first-25 sites, not guessed ranks."""
@@ -69,6 +88,7 @@ def run(geography_zip,tdwg_geo,first25_archive,outdir):
     prior=verified_prior25(first25_archive,sites)
     selection=next25(sites,prior)
     original_queries=[];regional=[];quota_retries=[]
+    outdir.mkdir(parents=True,exist_ok=True)
     for start in range(0,COUNT,SITES_PER_REQUEST):
         if start:
             print("STAGE97_PAUSE_BETWEEN_PROVIDER_SOURCE_GROUPS",INTER_GROUP_PACE_SEC,flush=True)
@@ -78,7 +98,7 @@ def run(geography_zip,tdwg_geo,first25_archive,outdir):
         for y1,y2 in YEARS:
             url=api_url(group,f"{y1}-01-01",f"{y2}-12-31")
             try:
-                frames,source_sha,n_bytes=query_original(url)
+                frames,source_sha,n_bytes=original_source_with_bounded_transient_retries(url)
             except ValueError as exc:
                 if "STAGE95_OPENMETEO_ERA5_API_HTTP_429_" not in str(exc):
                     raise
@@ -87,7 +107,7 @@ def run(geography_zip,tdwg_geo,first25_archive,outdir):
                                       "original_decade":f"{y1}-{y2}",
                                       "wait_seconds":SOURCE_429_PAUSE_SEC})
                 time.sleep(SOURCE_429_PAUSE_SEC)
-                frames,source_sha,n_bytes=query_original(url)
+                frames,source_sha,n_bytes=original_source_with_bounded_transient_retries(url)
             if not isinstance(frames,list) or len(frames)!=len(group):
                 raise ValueError("STAGE97_ORIGINAL_FIVE_SOURCE_RESPONSE_COUNT_MISMATCH")
             original_queries.append({
@@ -109,8 +129,23 @@ def run(geography_zip,tdwg_geo,first25_archive,outdir):
             if response["source_ERA5_observed_30yr_days"]!=10958:
                 raise ValueError("STAGE97_GUST_SOURCE_30YR_DAILY_INCOMPLETE")
             regional.append({**row,**response})
+        # On a later batch failure, the workflow's if-always artifact will
+        # still preserve this complete source-derived batch and its SHA ledger.
+        # Never mistake a partial artifact for a complete 25-region result.
+        batch_idx=start//SITES_PER_REQUEST
+        (outdir/f"stage97_partial_source_batch_{batch_idx:02d}_NOT_25_COMPLETE.json").write_text(
+            json.dumps({"schema":"stage97_provisional_SOURCE_BATCH_NOT_FULL_25",
+                        "source_batch":batch_idx,
+                        "source_original_TDWG_codes":[r["TDWG_L3"] for r in group],
+                        "original_ERA5_source_query_receipts":
+                           [x for x in original_queries
+                            if x["original_fixed_source_batch"]==batch_idx],
+                        "source_30yr_derived_sites":[r for r in regional
+                            if r["TDWG_L3"] in {x["TDWG_L3"] for x in group}],
+                        "not_a_completed_25_region_analysis":True},
+                       indent=2,sort_keys=True)+"\n",encoding="utf-8")
         print("STAGE97_SOURCE_ERA5_BATCH_COMPLETE",json.dumps({
-            "batch_number":start//SITES_PER_REQUEST,
+            "batch_number":batch_idx,
             "source_region_codes":[r["TDWG_L3"] for r in group],
             "completed_regions":len(regional)},sort_keys=True),flush=True)
     if len(regional)!=COUNT:
