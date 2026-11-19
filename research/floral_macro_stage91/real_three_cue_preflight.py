@@ -41,8 +41,9 @@ def source_rows(path, accepted):
     with Path(path).open(encoding="utf-8-sig",newline="") as h:
         rd=csv.DictReader(h)
         keys=set(rd.fieldnames or [])
-        if not set(COLS+("taxon","petal max. width [cm]"))<=keys:
-            raise ValueError("Stage91 source fields missing")
+        if "taxon" not in keys or not (set(COLS)&keys):
+            raise ValueError("Stage91 source flower-colour text or taxon fields missing")
+        print("STAGE91_ACTUAL_NHM_COMPACT_FIELDS",json.dumps(sorted(keys)),flush=True)
         scent_headers=[k for k in keys if any(s in k.casefold() for s in ("scent","odour","odor","fragrance"))]
         diameter_headers=[k for k in keys if "flower" in k.casefold() and "diameter" in k.casefold()]
         for row in rd:
