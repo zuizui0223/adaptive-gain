@@ -1,0 +1,95 @@
+name: Stage97 original ERA5 1991-2020 second25 mainland regions source extension
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage97/**"
+      - ".github/workflows/floral-stage97-second25-ERA5-mainland-source.yml"
+      - "docs/FLORAL_STAGE97_SECOND25_1991_2020_ERA5_SOURCE_20261119.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-source-ERA5-second25-original-mainland:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install source verified original polygon reader
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Run source-free original first25 non-overlap and mainland only contract tests
+        run: |
+          python -m unittest discover -s research/floral_macro_stage97 -p "test_*.py" -v
+      - name: Restore exact Stage94 original mainland-only 125-region 88-37 spatial source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage97_original_stage94_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage97_original_stage94_geo.zip" | sha256sum -c
+      - name: Restore exactly verified original Stage95C first25 1991-2020 source as frozen no-overlap gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14535045199/zip" \
+            -o stage97_original_stage95C_first25.zip
+          echo "7c98421306466b589b1f80ec97d4ca32ba58e73ba7807f0c2330a7f082fe6b67  stage97_original_stage95C_first25.zip" | sha256sum -c
+      - name: Restore exact original TDWG Level3 region geometry from immutable blob
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage97_original_TDWG.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage97_original_TDWG.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Fetch genuine ERA5-model 1991–2020 daily gust/T2m at next original 25 mainland sites
+        run: |
+          python -u research/floral_macro_stage97/next25_source_ERA5_1991_2020.py \
+            --original-stage94-mainland-geo-ZIP stage97_original_stage94_geo.zip \
+            --original-TDWG3-geojson stage97_original_TDWG.geojson \
+            --original-first25-ERA5-ZIP stage97_original_stage95C_first25.zip \
+            --outdir stage97_derived
+      - name: Verify original 25 new regions and no invented cue-wind coefficients
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("stage97_derived/stage97_real_1991_2020_next25_original_mainland_ERA5_model_gust.json").read_text())
+          assert r["source_original_stage95C_first25_ZIP_SHA256"]=="7c98421306466b589b1f80ec97d4ca32ba58e73ba7807f0c2330a7f082fe6b67"
+          assert r["source_sorted_TDWG3_zero_based_region_position_range"]==[25,49]
+          assert r["source_returned_distinct_region_count"]==25
+          assert r["source_zero_overlap_prior25"]
+          assert len(r["source_prior25_exact_region_codes"])==25
+          assert len(set(r["source_prior25_exact_region_codes"])&set(r["source_new25_original_region_codes"]))==0
+          assert r["original_daily_ERA5_model_complete_1991_2020_30yr_days_per_region"]==10958
+          assert len(r["original_raw_source_JSON_SHA256_queries"])==15
+          assert all(x["source_ERA5_observed_30yr_days"]==10958 for x in r["regions"])
+          assert not r["region_area_weighting_performed"]
+          assert not r["independent_original_CDS_hourly_10fg_comparison_performed"]
+          assert not r["biological_ecological_wind_signal_coefficient_estimated"]
+          assert not r["holdout_flora_signal_outcomes_opened"]
+          print("STAGE97_NEW_25_ACTUAL_ERA5_MODEL_MAINLAND",{
+            "original_region_count":r["source_returned_distinct_region_count"],
+            "folds":r["source_new25_partition"],
+            "fraction_range":[r["source_point_fraction_min"],r["source_point_fraction_max"]]})
+          PY
+      - name: Upload source-only 30yr region point climatology receipts and SHA queries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage97-next25-authentic-ERA5-model-1991-2020-mainland-point-exposure
+          path: stage97_derived/
+          retention-days: 90
+          if-no-files-found: warn
