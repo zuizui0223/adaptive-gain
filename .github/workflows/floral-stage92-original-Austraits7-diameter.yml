@@ -1,0 +1,92 @@
+name: Stage92 original AusTraits v7 flower diameter source audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage92/**"
+      - "docs/FLORAL_STAGE92_AUSTRAITS7_DIAMETER_REAL_SOURCE_20261119.md"
+      - ".github/workflows/floral-stage92-original-Austraits7-diameter.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-authentic-original-austraits-diameter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify source-free input and scientific inference tests
+        run: python -m unittest discover -s research/floral_macro_stage92 -p "test_*.py" -v
+      - name: Restore original 59,369 NHM source-text derived compact file
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV --dir stage92_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage92_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore true original GIFT3.2 versioned qualified pollen modes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/island/actions/artifacts/10332810251/zip" \
+            -o stage92_GIFT32.zip
+          echo "074a52323ba835201043a3a5980cc2b2d0ff79878e83bc9be19511ae83a1c0e8  stage92_GIFT32.zip" | sha256sum -c
+      - name: Restore official Kew WCVP native global taxonomy
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 900 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" -o stage92_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage92_WCVP.zip" | sha256sum -c
+      - name: Retrieve and authenticate ORIGINAL AusTraits v7.0.0 ZIP from Zenodo
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 900 \
+            "https://zenodo.org/records/15718081/files/austraits-7.0.0.zip?download=1" \
+            -o stage92_original_AusTraits7.zip
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4d547c68f95e2f3f" >/dev/null
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4d547c68f95e2f3f  stage92_original_AusTraits7.zip" | sha256sum -c
+      - name: Count exact open flower diameter source labels, native species, regions, and effective lineages
+        run: |
+          python -u research/floral_macro_stage92/austraits7_flower_diameter_source_audit.py \
+            --original-NHM stage92_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage92_WCVP.zip \
+            --original-GIFT stage92_GIFT32.zip \
+            --original-AusTraits7 stage92_original_AusTraits7.zip \
+            --outdir stage92_derived
+      - name: Protect canonical 55k/367 native source support and NO wind effects
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage92_derived")
+          d=json.loads((p/"stage92_real_AusTraits7_flower_diameter_source_support.json").read_text())
+          rows=list(csv.DictReader((p/"stage92_AusTraits7_flower_diameter_367_regions_INCLUDES_ISLANDS.csv").open()))
+          assert d["native_accepted_species"]==55775
+          assert d["region_source_count_INCLUDES_ISLANDS"]==367
+          assert d["source"]["authentic_zipped_source_sha256"]=="2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f"
+          assert d["exact_WCVP_native_valid_flower_diameter_species"]>0
+          assert not d["mainland_only_spatial_region_frame_verified"]
+          assert not d["signal_size_exposure_regression_executed"]
+          assert len(rows)==367
+          assert all(x["mainland_scope"]=="NOT_GEOMETRY_VERIFIED_INCLUDES_ISLANDS" for x in rows)
+          assert all(x["wind_exposure_join_admissible"]=="NO" for x in rows)
+          print("STAGE92_TRUE_ORIGINAL_FLORAL_DIAMETER",{
+             "source_long_rows":d["source"]["counts"]["source_long_format_rows"],
+             "author_diameter_rows":d["source"]["counts"]["author_flower_diameter_rows"],
+             "verified_species":d["exact_WCVP_native_valid_flower_diameter_species"],
+             "valid_units_by_source":d["source"]["raw_source_units"]})
+          PY
+      - name: Archive only derived scientific source-availability counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage92-original-Austraits7-55775-native-floral-diameter-source-audit
+          path: stage92_derived/
+          retention-days: 90
+          if-no-files-found: warn
