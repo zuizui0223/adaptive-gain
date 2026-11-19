@@ -29,7 +29,7 @@ class ModeSpatialGuards(unittest.TestCase):
         frame=pd.DataFrame({"latitude":lats,"longitude":lons})
         X=pd.DataFrame({"const":np.ones(len(frame)),"wind":rng.normal(size=len(frame))})
         Y=np.column_stack([.5+.1*X.wind,.2+.02*X.wind,.3+.08*X.wind])
-        r,b=geographically_blocked_beta(frame,X,Y,60,20,45,99,20261119)
+        r,b=geographically_blocked_beta(frame,X,Y,20,45,99,20261119)
         self.assertEqual(r.shape[1:],(2,3))
         self.assertGreaterEqual(b,10)
         self.assertAlmostEqual(np.mean(r[:,1,0]-r[:,1,1]),.08,places=5)
