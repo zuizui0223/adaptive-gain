@@ -1,0 +1,77 @@
+name: Stage109 public ERA5-model original 1991-2020 gridded WDC true land-area gust, no CDS key
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage109/**"
+      - ".github/workflows/floral-stage109-no-CDS-public-ERA5-30y-WDC-grid.yml"
+      - "docs/FLORAL_STAGE109_NO_CDS_PUBLIC_ERA5_WDC_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  public-model-ERA5-original-30y-0p25-WDC-2-cell:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify NO-CDS original source semantics and two-cell geodesic weighted 30-year daily calculation
+        run: python -m unittest discover -s research/floral_macro_stage109 -p "test_*.py" -v
+      - name: Restore source-verified original mainland WDC 0.25-degree fractional cell land areas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14602954663/zip" \
+            -o stage109_original_Stage106_WDC_025_mainland_geodesic_weights.zip
+          echo "09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8  stage109_original_Stage106_WDC_025_mainland_geodesic_weights.zip" | sha256sum -c
+      - name: Fetch actual ERA5 MODEL daily max gust and 2m T Jan1991-Dec2020 (2 real gridded WDC source cells, 3 decades)
+        run: |
+          python -u research/floral_macro_stage109/original_geogrid_public_ERA5_1991_2020_WDC_area_gust.py \
+            --original-Stage106-land-grid-ZIP stage109_original_Stage106_WDC_025_mainland_geodesic_weights.zip \
+            --outdir stage109_derived
+      - name: Scientific source-gate 10958 days/2 exact ERA5 grid cells/land-area fractions and no false CDS claim
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("stage109_derived/stage109_WDC_two_true_mainland_025deg_cells_30yr_public_ERA5_model_area_gust.json")
+          r=json.loads(p.read_text())
+          assert r["original_stage106_true_mainland_025_geo_SHA256"]=="09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8"
+          assert len(r["original_source_decade_JSON_SHA256_query_receipts"])==3
+          assert len({x["original_unmodified_JSON_SHA256"] for x in r["original_source_decade_JSON_SHA256_query_receipts"]})==3
+          assert len(r["source_daily_site_weather_and_frozen_area_weights"])==2
+          assert all(x["source_1991_2020_climatology"]["source_ERA5_observed_30yr_days"]==10958
+                     for x in r["source_daily_site_weather_and_frozen_area_weights"])
+          assert r["original_API_model"]=="era5" and r["original_API_cell_selection"]=="nearest"
+          assert r["source_only_model_ERA5_daily_derived_not_raw_hourly_original_CDS_10fg"]
+          assert r["no_NHM_WFO_flower_Bombus_or_holdout_data_read"]
+          assert r["not_125_full_mainland_area_exposure"]
+          a=r["source_geographic_area_weighted_ERA5_model_climate"]
+          assert a["source_gridcell_count"]==2
+          assert 180<a["source_original_land_area_total_km2"]<190
+          assert 0<=a["source_1991_2020_original_ERA5_model_daily_gust15_frequency_area_weighted"]<=1
+          assert a["source_NO_original_CDS_hourly_10fg_byte_verification"]
+          print("STAGE109_TRUE_PUBLIC_ERA5_MODEL_1991_2020_WDC_MULTI_GRID_LANDAREA",{
+             "original_land_cells":2,
+             "30_years_daily_days":10958,
+             "land_area_weighted_15ms_gust_frequency":
+                   a["source_1991_2020_original_ERA5_model_daily_gust15_frequency_area_weighted"],
+             "cell_min":a["source_original_land_cell_gust15_min"],
+             "cell_max":a["source_original_land_cell_gust15_max"]})
+          PY
+      - name: Preserve genuine source SHA receipts and derived 30-year WDC land area frequency, not full daily raw climate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage109-real-public-ERA5-1991-2020-WDC-two-025deg-landarea-grid-stronggust
+          path: stage109_derived/
+          retention-days: 90
+          if-no-files-found: warn
