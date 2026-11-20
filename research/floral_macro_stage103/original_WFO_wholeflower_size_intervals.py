@@ -114,7 +114,8 @@ def aggregate_species(evidence):
       "n_original_source_exact_entries":len(points),
       "n_original_source_bounded_intervals":len(intervals),
       "n_original_source_upper_only":len(uppers),
-      "original_source_values_envelope_not_CI":True}
+      "original_source_values_envelope_not_CI":True,
+      "source_envelope_over_5fold_NEEDS_REVIEW":(hi>5*lo if lo is not None else False)}
 
 def scan_source(path,label,accepted,crosswalk):
     if sha256(path)!=FROZEN_SRC_BY_LABEL[label]:
