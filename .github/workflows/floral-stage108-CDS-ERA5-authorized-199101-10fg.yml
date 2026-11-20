@@ -1,0 +1,104 @@
+name: Stage108 official authorized Copernicus CDS ERA5 1991-01 WDC daily 10fg and 2mT source
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage108/**"
+      - "docs/FLORAL_STAGE108_OFFICIAL_CDS_AUTHENTIC_WDC_199101_20261120.md"
+      - ".github/workflows/floral-stage108-CDS-ERA5-authorized-199101-10fg.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  genuine-authorized-CDS-small-original-1991-January-WDC:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      CDSAPI_KEY: ${{ secrets.CDSAPI_KEY || secrets.CDS_API_KEY || secrets.CDS_PERSONAL_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official CDS Python client and actual NetCDF source readers
+        run: |
+          python -m pip install "cdsapi>=0.7.7,<1" "numpy==2.3.5" "scipy==1.16.3" "xarray>=2025.1,<2027" "netCDF4>=1.7.2,<2"
+      - name: Validate source synthetic real-like 31-day netCDF and safe credential gate without network
+        run: python -m unittest discover -s research/floral_macro_stage108 -p "test_*.py" -v
+      - name: Restore independently verified Stage106 original 0.25-degree WDC two-land-cell area weights and official CDS request specification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14602954663/zip" \
+            -o stage108_original_stage106_WDC_0p25_land_grid.zip
+          echo "09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8  stage108_original_stage106_WDC_0p25_land_grid.zip" | sha256sum -c
+      - name: Check existing CDS Personal Access Token without printing or saving its value
+        id: auth_gate
+        shell: bash
+        run: |
+          set -eu
+          if [ -n "$CDSAPI_KEY" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "STAGE108_AUTH_GATE: existing repository CDS token found; will request only WDC original 1991-01"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "STAGE108_AUTH_GATE: no existing CDS Personal Access Token; official request NOT submitted"
+          fi
+      - name: Verify source contract and issue bounded official CDS requests ONLY when owner has already configured a personal token and accepted terms
+        run: |
+          python -u research/floral_macro_stage108/original_CDS_ERA5_199101_wdc_authorized_pilot.py \
+            --original-Stage106-grid-area-ZIP stage108_original_stage106_WDC_0p25_land_grid.zip \
+            --outdir stage108_derived \
+            --retrieve-if-authorized
+      - name: Assert exact authentic source response or explicit blocked gate; never imply 30-year climatology
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage108_derived/stage108_official_CDS_199101_auth_gate_and_source_receipt.json")
+          if not p.is_file():
+              print("STAGE108_NOT_YET_VERIFIED_OFFICIAL_CDS_SOURCE_NO_RECEIPT")
+              raise SystemExit(1)
+          d=json.loads(p.read_text())
+          assert d["source_true_mainland_landcell_count"]==2
+          assert d["official_source_CDS_dataset"]=="derived-era5-single-levels-daily-statistics"
+          assert d["source_1991_Jan_month_only_NOT_1991_2020_full_baseline"]
+          assert d["never_report_1991_Jan_as_climatological_flowering_month_exposure"]
+          assert d["no_flower_community_or_pollinator_data_opened"]
+          status=d["status"]
+          if status=="SUCCESS_OFFICIAL_CDS_TWO_VARIABLE_ORIGINAL_199101":
+              assert d["actual_official_CDS_download_successful"]
+              assert d["original_CDS_dataset_licence_acceptance_checked_by_account"]
+              assert set(d["original_CDS_responses"])=={"gust","temperature"}
+              s=d["199101_original_CDS_area_weighted_diagnostic_ONLY"]
+              assert s["source_exact_31_Jan_days_per_cell"]
+              assert s["source_NOT_1991_2020_flowering_month_gust_climatology"]
+              print("STAGE108_VERIFIED_OFFICIAL_CDS_199101_WDC",{
+                  "WDC_landcell_count":2,
+                  "Jan1991_10fg_max_gust_above15_fraction_landarea":
+                      s["source_original_region_CDS_area_weighted_Jan_only_gust15_fraction"]})
+          elif status=="BLOCKED_NO_EXISTING_CDS_PERSONAL_ACCESS_TOKEN":
+              assert not d["actual_official_CDS_download_successful"]
+              assert not d["original_CDS_dataset_licence_acceptance_checked_by_account"]
+              print("STAGE108_CDS_USER_SETUP_REQUIRED_NO_REQUEST_SENT")
+          elif status=="BLOCKED_AUTHENTIC_CDS_SOURCE_DOWNLOAD_OR_SCHEMA":
+              print("STAGE108_SOURCE_NOT_VALIDATED",
+                    d.get("safe_failure_classification","unspecified"))
+              raise SystemExit(1)
+          else:
+              raise AssertionError("Unrecognized CDS status: "+status)
+          PY
+      - name: Archive small derived-only authorization receipt and verified source NetCDF schema/diagnostics; no token or raw files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage108-official-CDS-ERA5-199101-WDC-authenticated-source-gate
+          path: stage108_derived/stage108_official_CDS_199101_auth_gate_and_source_receipt.json
+          retention-days: 90
+          if-no-files-found: warn
