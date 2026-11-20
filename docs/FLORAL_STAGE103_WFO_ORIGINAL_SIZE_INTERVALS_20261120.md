@@ -40,4 +40,18 @@ The source prose extraction remains automatically annotated and not independentl
 - research/floral_macro_stage103/test_original_WFO_wholeflower_size_intervals.py
 - .github/workflows/floral-stage103-original-WFO-size-intervals.yml
 
-**Real interval counts pending source-authenticated execution.** Failure to retrieve official files or verify original byte hashes stops numerical claims; no synthetic fallback.
+## Verified authentic original source result — 2026-11-20
+
+[Stage103 Actions #44662510103](https://github.com/zuizui0223/adaptive-gain/actions/runs/44662510103) passed all **15 source-free tests**, original Stage100 species ledger SHA, original Stage98B mainland-only geographic cohort SHA, NHM/WCVP source SHA, both original eFloras source ZIP SHA and June-2026 WFO original backbone author MD5. Derived-only artifact **14595854235**, exact artifact SHA256 **95fb60fa049ed4e79673e1f1dc12aaddb97f5fadd1dc27f905d31dd25b8cfe90**.
+
+Original 237 whole-flower prose candidates yielded:
+- 124 species with an explicitly source-bounded size range;
+- 57 species having upper bounds only (NO assumed lower measurement);
+- 34 species with single-number lexical phrases;
+- 212 distinct species with at least one of these original evidence types, **25** with no eligible strict source expression. Categories can overlap.
+- Original source state partition: 122 bounded/range-mixed, 2 bounded+upper, 31 singleton-only, 57 upper-only, 25 unrecovered.
+
+The unchanged 37 mainland holdout regions contain **16** with at least ten source-eligible bounded/upper/singleton species, but only **3** regions with ten source-bounded intervals. In the original contact-free 72 train regions, corresponding counts are **27** and **15**. Among original 37 holdout regions **130** accepted source-eligible size taxa exist, **80** absent from the 72 training region native-source union. These figures reflect source opportunity and repeated species in regional floras; none proves biological accuracy or independently evolved flower sizes.
+
+**Source anomalies requiring manual treatment:** The source-derived interval ledger flags two accepted Acaena species where different original reports cause a greater than fivefold source envelope, potentially reflecting different organ/source units or report contexts. These are NOT confidently estimated species means. Original source range/upper values should be part of a source-aware interval-censoring likelihood only AFTER botanical truth auditing. No wind×visual-signal effect has been estimated.
+
