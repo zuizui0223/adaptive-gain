@@ -34,10 +34,20 @@ jobs:
             "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14602954663/zip" \
             -o stage110_original_Stage106_mainland_025_true_geodesic_grid.zip
           echo "09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8  stage110_original_Stage106_mainland_025_true_geodesic_grid.zip" | sha256sum -c
+      - name: Reuse original SHA verified DEL first 15 complete source 30-year climatology cells from failed singleton CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14631809099/zip" \
+            -o stage110_original_previous_run_15_real_DEL_full30y_partial.zip
+          echo "971320cc978ec35e2eb1b2f2492c541d948aaa337d92294e186ea16cf9c78b5a  stage110_original_previous_run_15_real_DEL_full30y_partial.zip" | sha256sum -c
       - name: Actually fetch publicly accessible 1991-2020 30year ERA5 model 10m daily max gust & 2m temp in all 34 real mainland grid cells
         run: |
           python -u research/floral_macro_stage110/original_public_ERA5_model_34cells_DEL_CAB_landarea.py \
             --source-original-Stage106-mainland-geogrid-ZIP stage110_original_Stage106_mainland_025_true_geodesic_grid.zip \
+            --original-verified-partial-15-DEL-source-ZIP stage110_original_previous_run_15_real_DEL_full30y_partial.zip \
             --outdir stage110_derived
       - name: Verify 34 full 10958-day per-cell original model climate source and two geography-only region wind indicators
         run: |
@@ -48,6 +58,8 @@ jobs:
           d=json.loads(p.read_text())
           assert d["original_source_Stage106_geographic_ZIP_SHA256"]=="09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8"
           assert d["source_original_site_counts"]=={"DEL":16,"CAB":18}
+          assert d["source_prior_original_15_DEL_cells_derived_SHA_verified"]
+          assert d["source_prior_original_15_DEL_cells_SHA256"]=="971320cc978ec35e2eb1b2f2492c541d948aaa337d92294e186ea16cf9c78b5a"
           assert d["source_1991_2020_full_calendar_days_per_source_cell"]==10958
           assert len(d["original_source_public_daily_JSON_SHA256_ledger"])==24
           assert len({x["original_unmodified_public_source_JSON_SHA256"] for x in d["original_source_public_daily_JSON_SHA256_ledger"]})==24
