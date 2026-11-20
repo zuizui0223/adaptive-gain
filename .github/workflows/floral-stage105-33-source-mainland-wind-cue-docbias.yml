@@ -1,0 +1,123 @@
+name: Stage105 source-only exploratory mainland ERA5 point wind x 3 flower-cue reporting-bias audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage105/**"
+      - "docs/FLORAL_STAGE105_50POINT_MAINLAND_CUE_REPORTING_BIAS_20261120.md"
+      - ".github/workflows/floral-stage105-33-source-mainland-wind-cue-docbias.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-50-wind-points-and-33-unopened-holdout-safe-flora:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-only Spearman/partial-rank computation dependencies
+        run: python -m pip install "numpy==2.3.5" "scipy==1.16.3"
+      - name: Verify source-only no-heldout no-invented-zero no-IID-significance tests
+        run: python -m unittest discover -s research/floral_macro_stage105 -p "test_*.py" -v
+      - name: Restore first exact 25 source mainland ERA5-model daily 1991-2020 point climatologies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14535045199/zip" \
+            -o stage105_first25_original_ERA5_daily_model.zip
+          echo "7c98421306466b589b1f80ec97d4ca32ba58e73ba7807f0c2330a7f082fe6b67  stage105_first25_original_ERA5_daily_model.zip" | sha256sum -c
+      - name: Restore next independent 25 source mainland ERA5-model daily 1991-2020 point climatologies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14539061901/zip" \
+            -o stage105_second25_original_ERA5_daily_model.zip
+          echo "5e5ee1c325cc85abfb3cfb98a85d9b3faecacd116db9d917eaebdd3a0c453d79  stage105_second25_original_ERA5_daily_model.zip" | sha256sum -c
+      - name: Restore original source-only 72 contact-free mainland exploratory regions, do not use 37 heldout signal values
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage105_original_stage98B_train72.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage105_original_stage98B_train72.zip" | sha256sum -c
+      - name: Restore original source WFO fragrance reports plus genuine NHM botanical positive pattern all regions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14533667535/zip" \
+            -o stage105_original_stage96_three_cues.zip
+          echo "99aaf623ac3a7f948c5d0cdad9a8ce8668c2131ee07af6fb5d02d81c573c3149  stage105_original_stage96_three_cues.zip" | sha256sum -c
+      - name: Restore true NHM flower-colour documentation completeness source ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526435551/zip" \
+            -o stage105_original_stage91_marking_reporting.zip
+          echo "f1197a050d110d1e3626ab01f3c5d49626ac32fd0588d41ce3a162b44d921cdf  stage105_original_stage91_marking_reporting.zip" | sha256sum -c
+      - name: Restore original AusTraits 104 true measured-source flower diameters regional medians
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526917824/zip" \
+            -o stage105_original_stage92_measured_size.zip
+          echo "01d76457aa8423b7964b5fccdfea597f5c158a805c138fd8597e7efd1733a05f  stage105_original_stage92_measured_size.zip" | sha256sum -c
+      - name: Screen ONLY source-frozen 33 exploration 1991-2020 point-gust regions for 3 independent cue source-documentation metrics
+        run: |
+          python -u research/floral_macro_stage105/source_50point_wind_vs_flora_report_bias.py \
+            --stage95C-first25-source-ZIP stage105_first25_original_ERA5_daily_model.zip \
+            --stage97-next25-source-ZIP stage105_second25_original_ERA5_daily_model.zip \
+            --stage98B-mainland-72-37-ZIP stage105_original_stage98B_train72.zip \
+            --stage96-mainland-3cues-ZIP stage105_original_stage96_three_cues.zip \
+            --stage91-source-marking-ZIP stage105_original_stage91_marking_reporting.zip \
+            --stage92-source-diameter-ZIP stage105_original_stage92_measured_size.zip \
+            --outdir stage105_derived
+      - name: Assert this is source documentation sensitivity NOT confirmatory wind-selection inference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,csv
+          p=Path("stage105_derived")
+          d=json.loads((p/"stage105_wind_to_three_source_cues_33_regions_EXPLORATORY_not_adjusted_causal.json").read_text())
+          r=list(csv.DictReader((p/"stage105_source_33_exploration_regions_ONLY_NO_HOLDOUT.csv").open()))
+          assert d["source_all_original_ERA5_model_point_regions"]==50
+          assert d["source_train_contact_free_wind_regions"]==33
+          assert d["source_geoblocks_in_current_33_region_model"]==15
+          assert len(r)==33 and all(x["NO_heldout_floral_outcomes_USED"]=="YES" for x in r)
+          assert d["original_37_mainland_holdout_source_traits_NOT_fit_or_reported"]
+          assert d["nonrandom_first50_original_alphabetical_TDWG_region_subset"]
+          assert d["one_source_point_per_region_NOT_land_area_weighted"]
+          assert d["original_ERA5_CDS_hourly_10fg_NOT_verified"]
+          assert d["WFO_original_prose_fragrance_unknowns_NOT_biological_negative"]
+          assert d["no_IID_p_values_reported"]
+          assert all(v["NO_p_value_or_evolutionary_hypothesis_test"] for v in d["outcomes"].values())
+          print("STAGE105_EXPLORATORY_SOURCE_DOCUMENTATION_DIAGNOSTIC_ONLY",{
+             k:{"n":v["n_source_regions"],"raw_rho":v["unadjusted_region_Spearman_rho"],
+                "rank_partially_adjusted_rho":v["partial_rank_correlation_after_documentation_latitude_temperature"]}
+             for k,v in d["outcomes"].items()})
+          PY
+      - name: Archive only genuine 33 exploration region source association sensitivities, NOT a causal main wind coefficient
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage105-first50-mainland-33-safe-exploration-source-wind-three-cue-ascertainment
+          path: stage105_derived/
+          retention-days: 90
+          if-no-files-found: warn
