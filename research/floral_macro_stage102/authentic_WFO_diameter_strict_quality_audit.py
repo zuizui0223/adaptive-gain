@@ -154,9 +154,23 @@ def scan_original_flora_for_qa(archive,label,approved,crosswalk):
                 if not txt:continue
                 old,_=width_candidates(txt)
                 stricter,flags,fragments=strict_source_candidate_evidence(txt)
+                old_fragments=[]
+                if old:
+                    for pattern in (P_AFTER,P_BEFORE):
+                        for m in pattern.finditer(txt):
+                            # The original parser itself makes the final
+                            # admission decision; this snippet is a review
+                            # locator only, never an admitted measurement.
+                            phrase=re.sub(r"\\s+"," ",m.group(0))[:62]
+                            old_fragments.append({
+                               "value_mm":None,
+                               "state":"original_lexical_match_NEEDS_MANUAL_REVIEW",
+                               "risk_flags":[],
+                               "fragment_sha256":hashlib.sha256(phrase.encode()).hexdigest(),
+                               "very_short_fragment_for_internal_QA":phrase})
                 if old or stricter:
                     hits[sp].append({"original_old":old,"stricter":stricter,
-                         "risk":flags,"examples":fragments,
+                         "risk":flags,"examples":fragments+old_fragments,
                          "text_sha256":hashlib.sha256(txt.encode()).hexdigest()})
                     source_counts["source_taxon_description_rows_with_old_or_strict_hits"]+=1
     if source_counts["original_author_description_rows"]<100:
@@ -232,9 +246,11 @@ def run(stage100_zip,stage98B_zip,nhm,wcvp,china,fna,wfo_backbone,outdir):
            (kind=="corolla" and r["original_stage100_organ_grade"]=="candidate_corolla_width_only_NOT_whole_flower")]
         pool=sorted(pool,key=lambda r:hashlib.sha256((INTERNAL_SAMPLE_SALT+"|"+kind+"|"+r["source_accepted_species"]).encode()).hexdigest())
         for r in pool[:(6 if kind!="corolla" else 3)]:
-            sample=[e for e in r["_examples"] if len(e["very_short_fragment_for_internal_QA"])>0]
+            sample=[e for e in r["_examples"] if e["very_short_fragment_for_internal_QA"]]
             if not sample:continue
-            e=sample[0]
+            preferred=("strict_clause_candidate" if kind=="strict" else
+                       "original_lexical_match_NEEDS_MANUAL_REVIEW")
+            e=next((x for x in sample if x["state"]==preferred),sample[0])
             preselected.append({"stratum":kind,
                "accepted_species":r["source_accepted_species"],
                "source_fragment_sha256":e["fragment_sha256"],
