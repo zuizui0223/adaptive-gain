@@ -1,0 +1,112 @@
+name: Stage104 genuine WFO original-size-interval and AusTraits measured-grade source union
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage104/**"
+      - ".github/workflows/floral-stage104-original-size-interval-Austraits-mainland.yml"
+      - "docs/FLORAL_STAGE104_INTERVAL_AUSTRAITS_MAINLAND_SOURCE_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-original-graded-size-interval-mainland-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify source-only bounding, source grade and strict geographic tests
+        run: python -m unittest discover -s research/floral_macro_stage104 -p "test_*.py" -v
+      - name: Restore exactly original Stage103 WFO 124 range 57 upper-only 34 singleton species
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14595854235/zip" \
+            -o stage104_original_WFO_intervals_source.zip
+          echo "95fb60fa049ed4e79673e1f1dc12aaddb97f5fadd1dc27f905d31dd25b8cfe90  stage104_original_WFO_intervals_source.zip" | sha256sum -c
+      - name: Restore independently SHA verified mainland 72 train and original 37 holdout split
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage104_original_mainland_source_geo.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage104_original_mainland_source_geo.zip" | sha256sum -c
+      - name: Restore original NHM 59k botanical source accepted plants
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 \
+            --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage104_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage104_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Restore original global Kew WCVP accepted native plants 367 TDWG regions
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 900 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" \
+            -o stage104_original_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage104_original_WCVP.zip" | sha256sum -c
+      - name: Retrieve actual source original 7.0.0 AusTraits author-labelled flower diameter
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 1200 \
+            "https://zenodo.org/records/15718081/files/austraits-7.0.0.zip?download=1" \
+            -o stage104_original_AusTraits7.zip
+          echo "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f  stage104_original_AusTraits7.zip" | sha256sum -c
+      - name: Source-only original intervals against measured-source AusTraits with species identity
+        run: |
+          python -u research/floral_macro_stage104/graded_Austraits_and_WFO_interval_mainland_source.py \
+            --original-Stage103-WFO-interval-source-ZIP stage104_original_WFO_intervals_source.zip \
+            --original-AusTraits7 stage104_original_AusTraits7.zip \
+            --original-NHM stage104_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage104_original_WCVP.zip \
+            --original-Stage98B-mainland-source-ZIP stage104_original_mainland_source_geo.zip \
+            --outdir stage104_derived
+      - name: Verify exactly original true 104 A source + 212 WFO source usable and 72 vs 37
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          p=Path("stage104_derived")
+          d=json.loads((p/"stage104_genuine_WFO_interval_AusTraits_size_support_receipt.json").read_text())
+          x=d["source_graded_species"]
+          r=list(csv.DictReader((p/"stage104_original_strict_mainland_109_region_graded_size_support.csv").open()))
+          assert len(r)==109
+          assert sum(v["original_source_fixed_fold"]=="exploration" for v in r)==72
+          assert sum(v["original_source_fixed_fold"]=="holdout" for v in r)==37
+          assert d["frozen_original_source_WFO_unreviewed_237"]==237
+          assert d["frozen_original_source_AusTraits_labelled_flower_diameter_104"]==104
+          assert x["B_original_WFO_all_source_bound_evidence_NOT_manual"]["global_distinct_accepted_source_species"]==212
+          assert x["B2_WFO_two_sided_bounded_intervals"]["global_distinct_accepted_source_species"]==124
+          assert x["B3_WFO_upper_only_no_lower_bound"]["global_distinct_accepted_source_species"]==57
+          assert x["B4_WFO_original_single_number_lexical"]["global_distinct_accepted_source_species"]==34
+          n=x["A_and_B_exact_species_overlap"]["global_distinct_accepted_source_species"]
+          assert x["A_or_B_total_source_available_NOT_all_measured"]["global_distinct_accepted_source_species"]==104+212-n
+          assert d["source_bound_size_is_not_population_uncertainty_CI"]
+          assert d["original_WFO_source_prose_NOT_manual_validated"]
+          assert not d["no_wind_to_flower_size_effect_estimated"] is False
+          print("STAGE104_TRUE_SOURCE_INTERVAL_AUSTRAITS_GRADED",
+            {"n_A_original_measured":104,"n_B_unreviewed_WFO_bound":212,
+             "exact_species_overlap":n,
+             "A_or_B_exact_species_total":104+212-n,
+             "mainland_72_37_source_region_support":d["source_graded_mainland_region_support"]})
+          PY
+      - name: Upload only original source derived trait availability and geographic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage104-true-original-WFO-size-interval-Austraits-mainland-source-grade
+          path: stage104_derived/
+          retention-days: 90
+          if-no-files-found: warn
