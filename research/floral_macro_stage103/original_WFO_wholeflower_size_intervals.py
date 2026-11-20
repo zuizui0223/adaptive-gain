@@ -131,7 +131,10 @@ def scan_source(path,label,accepted,crosswalk):
             else:
                 i=field(row,core["fields"],"taxonid") or row[core["id"]]
                 sp=crosswalk.get(stable_wfo_name_id(i))
-            if sp in accepted:taxa[row[core["id"]]]=sp
+            if sp in accepted:
+                status=field(row,core["fields"],"taxonomicstatus").casefold().strip()
+                if status and status not in {"accepted","valid"}:continue
+                taxa[row[core["id"]]]=sp
         descriptions=[d for d in meta if d["type"]=="extension" and
                  ("description" in d["fields"] or "description" in d["row_type"].casefold())]
         if not descriptions:raise ValueError("STAGE103_ORIGINAL_SOURCE_DESCRIPTION_MEMBER_ABSENT")
@@ -181,8 +184,8 @@ def run(stage100_zip,stage98B_zip,nhm,wcvp,china,fna,backbone,outdir):
         provenance[label]=qc
     aggregated={sp:aggregate_species(all_evidence[sp]) for sp in sorted(source_train)}
     statuses=Counter(x["status"] for x in aggregated.values())
-    ranged={sp for sp,rec in aggregated.items() if rec["n_original_source_bounded_intervals"]>0} if False else {
-        sp for sp,rec in aggregated.items() if rec.get("n_original_source_bounded_intervals",0)>0}
+    ranged={sp for sp,rec in aggregated.items()
+        if rec.get("n_original_source_bounded_intervals",0)>0}
     exact={sp for sp,rec in aggregated.items() if rec.get("n_original_source_exact_entries",0)>0}
     only_upper={sp for sp,rec in aggregated.items() if rec["status"]=="upper_limit_only_source_NO_lower_bound"}
     measurable={sp for sp,v in aggregated.items() if v["status"]!="no_eligible_size_evidence"}
