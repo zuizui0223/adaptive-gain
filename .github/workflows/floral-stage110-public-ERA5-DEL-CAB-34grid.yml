@@ -1,0 +1,96 @@
+name: Stage110 NO-CDS real 1991-2020 public ERA5-model 34 gridded Delaware Cabinda mainland strong gust
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage110/**"
+      - ".github/workflows/floral-stage110-public-ERA5-DEL-CAB-34grid.yml"
+      - "docs/FLORAL_STAGE110_NO_CDS_34_ERA5_GRID_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  actual-original-source-ERA5-model-34-landcells-2-regions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install verified original Stage95 ERA5 model reader and spatial libraries
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Test exact 16 Delaware / 18 Cabinda native 0.25 area source and 30year threshold correctness
+        run: python -m unittest discover -s research/floral_macro_stage110 -p "test_*.py" -v
+      - name: Restore exact author original TDWG mainland land-intersected 0.25 degree ERA5 source-grid weights
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14602954663/zip" \
+            -o stage110_original_Stage106_mainland_025_true_geodesic_grid.zip
+          echo "09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8  stage110_original_Stage106_mainland_025_true_geodesic_grid.zip" | sha256sum -c
+      - name: Reuse original SHA verified DEL first 15 complete source 30-year climatology cells from failed singleton CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14631809099/zip" \
+            -o stage110_original_previous_run_15_real_DEL_full30y_partial.zip
+          echo "971320cc978ec35e2eb1b2f2492c541d948aaa337d92294e186ea16cf9c78b5a  stage110_original_previous_run_15_real_DEL_full30y_partial.zip" | sha256sum -c
+      - name: Actually fetch publicly accessible 1991-2020 30year ERA5 model 10m daily max gust & 2m temp in all 34 real mainland grid cells
+        run: |
+          python -u research/floral_macro_stage110/original_public_ERA5_model_34cells_DEL_CAB_landarea.py \
+            --source-original-Stage106-mainland-geogrid-ZIP stage110_original_Stage106_mainland_025_true_geodesic_grid.zip \
+            --original-verified-partial-15-DEL-source-ZIP stage110_original_previous_run_15_real_DEL_full30y_partial.zip \
+            --outdir stage110_derived
+      - name: Verify 34 full 10958-day per-cell original model climate source and two geography-only region wind indicators
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage110_derived/stage110_REAL_DEL_CAB_34grid_landarea_1991_2020_ERA5model_daily_gust.json")
+          d=json.loads(p.read_text())
+          assert d["original_source_Stage106_geographic_ZIP_SHA256"]=="09c65542c221daecd1867baf250b694e9229f7c85fc09d401849765aa234b6b8"
+          assert d["source_original_site_counts"]=={"DEL":16,"CAB":18}
+          assert d["source_prior_original_15_DEL_cells_derived_SHA_verified"]
+          assert d["source_prior_original_15_DEL_cells_SHA256"]=="971320cc978ec35e2eb1b2f2492c541d948aaa337d92294e186ea16cf9c78b5a"
+          assert d["source_1991_2020_full_calendar_days_per_source_cell"]==10958
+          assert len(d["original_source_public_daily_JSON_SHA256_ledger"])==24
+          assert len({x["original_unmodified_public_source_JSON_SHA256"] for x in d["original_source_public_daily_JSON_SHA256_ledger"]})==24
+          assert d["source_NO_original_ECMWF_CDS_hourly_10fg_file_has_been_used"]
+          assert d["source_original_two_regions"]==["DEL","CAB"]
+          assert d["source_not_125_region_global_climate_analysis"]
+          assert d["no_adaptive_wind_flower_ecological_coefficient_estimated"]
+          assert d["source_137_plus_flora_taxa_or_37_holdout_source_outcomes_NOT_read"]
+          for code in ("DEL","CAB"):
+              regions=d["source_original_34_cell_30year_ERA5model_derived_climates"][code]
+              assert len(regions)==d["source_original_site_counts"][code]
+              assert all(r["original_30y_cell_ERA5_model_daily"]["source_ERA5_observed_30yr_days"]==10958 for r in regions)
+              z=d["source_real_geodesic_weighted_region_results"][code]
+              assert z["source_original_025_model_land_cells"]==len(regions)
+              assert 0<=z["source_1991_2020_ERA5model_daily_gust_gt15_area_weighted_fraction"]<=1
+              assert z["source_30year_T_GT5C_eligible_land_area_fraction"]>=.95
+              assert z["source_external_ERA5_model_daily_not_original_CDS_hourly_10fg"]
+          print("STAGE110_TRUE_1991_2020_SOURCE_MAINLAND_AREA_WIND",{
+              c:{"cells":r["source_original_025_model_land_cells"],
+                 "area_km2":r["original_source_model_land_intersected_km2"],
+                 "fraction_daily_gust_gt15":
+                    r["source_1991_2020_ERA5model_daily_gust_gt15_area_weighted_fraction"],
+                 "cell_range":[r["source_between_original_025_landcells_gust_gt15_fraction_min"],
+                               r["source_between_original_025_landcells_gust_gt15_fraction_max"]]}
+              for c,r in d["source_real_geodesic_weighted_region_results"].items()})
+          PY
+      - name: Preserve real derived 34-grid area weather evidence and source JSON SHA ledger; partial source groups clearly marked if failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage110-public-ERA5-model-1991-2020-DEL-CAB-34-original-mainland-025deg-grid
+          path: stage110_derived/
+          retention-days: 90
+          if-no-files-found: warn
