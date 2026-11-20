@@ -29,3 +29,14 @@ No plant-native floristic WCVP or WFO lexical trait descriptions are read by the
 - .github/workflows/floral-stage110-public-ERA5-DEL-CAB-34grid.yml
 
 Until genuine source API SHA and geographic integration CI completes, no numerical DEL/CAB 30yr source strong gust fractions are claimed.
+
+
+## Actual source 2026-11-20 first 34-cell run: 15/16 DEL complete, provider singleton response shape fixed
+
+First genuine CI [#44743993401](https://github.com/zuizui0223/adaptive-gain/actions/runs/44743993401) passed all 10 tests and source Stage106 original WDC/DEL/CAB geodesic grid archive SHA. It completed original 1991–2020 full 10,958-day ERA5-model daily climate for **15 Delaware land-intersecting 0.25-degree source cells** (three groups of 5 × three decades), with original response JSON SHA hashes. The run then failed on the *last one DEL cell* before reaching any Cabinda cells, because Open-Meteo returns a **single JSON object** when one coordinate is requested, while it returns a **list** for multi-coordinate requests. Original code incorrectly required a list for both; this is a programming **source serialization bug**, not an inferred weather or landscape result.
+
+The first verified 15-source partial artifact **14631809099** exact ZIP SHA256 **971320cc978ec35e2eb1b2f2492c541d948aaa337d92294e186ea16cf9c78b5a** contains three independently completed groups with original full 30-year source cell climatologies, source grid coordinates, geodesic land areas, and all 9 original unmodified API JSON response SHA256. They have NEVER been claimed a complete DEL region (only 15 of 16 land cells) and NO DEL regional gust mean was calculated or biologically interpreted.
+
+**Repair in this branch:** the source climate request reader now accepts (a) ONE JSON source dict with the original daily field only when the request has exactly one source site, or (b) a list of exactly n original source site records when multi-site. Other shapes still fail closed. The workflow authenticates the source artifact 14631809099 with pinned ZIP SHA256, verifies exactly its original three groups × 5 cells with exact Stage106 source geometry, original model grid centres and immutable raw request SHA metadata, then REUSES those 15 real complete 30-year climatologies; it will request only missing one DEL cell and all original 18 CAB cells. New source unit tests test that singleton data cannot masquerade as multiple source sites and fake earlier ZIPs are rejected. Original WFO/NHM/Bombus and fixed 37 holdout outcomes remain unopened.
+
+**The full DEL/CAB regional 34-cell result is not yet established until the repaired source workflow completes successfully.**
