@@ -3,6 +3,7 @@ import tempfile,zipfile,unittest
 from pathlib import Path
 from original_public_ERA5_model_34cells_DEL_CAB_landarea import (
     frozen_original_mainland_cell_sets,true_geodesic_region_area_average,
+    normalize_source_era5_response,original_verified_partial_DEL15,
     SOURCE_REGIONS,EXPECTED_COUNTS,REQUEST_GROUP_MAX)
 from original_geogrid_public_ERA5_1991_2020_WDC_area_gust import accepted_grid_coordinates
 
@@ -21,6 +22,20 @@ def synthetic_area_region(code,n=None,missing_index=None):
     return cells
 
 class Stage110SourceBoundaries(unittest.TestCase):
+    def test_actual_public_ERA5_single_site_dict_vs_multisite_list(self):
+        exemplar={"latitude":38.5,"longitude":-75.75,"daily":{"time":["1991-01-01"]}}
+        self.assertEqual(normalize_source_era5_response(exemplar,1),[exemplar])
+        self.assertEqual(normalize_source_era5_response([exemplar,exemplar],2),[exemplar,exemplar])
+        with self.assertRaisesRegex(ValueError,"SOURCE_RESPONSE_SHAPE"):
+            normalize_source_era5_response(exemplar,3)
+        with self.assertRaisesRegex(ValueError,"SOURCE_RESPONSE_SHAPE"):
+            normalize_source_era5_response({"reason":"Provider error"},1)
+    def test_previous_original_15_source_zip_must_match_immutable_sha(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"fake_partial.zip"
+            with zipfile.ZipFile(p,"w") as z:z.writestr("fake","untrusted source")
+            with self.assertRaisesRegex(ValueError,"SOURCE_ARCHIVE_SHA_MISMATCH"):
+                original_verified_partial_DEL15(p,{"DEL":[]})
     def test_true_original_source_regional_geographies(self):
         self.assertEqual(SOURCE_REGIONS,("DEL","CAB"))
         self.assertEqual(EXPECTED_COUNTS,{"DEL":16,"CAB":18})
