@@ -1,0 +1,94 @@
+name: Stage112 genuine public ERA5-model 1991-2020 33 real GAM mainland land grid sources
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage112/**"
+      - ".github/workflows/floral-stage112-noCDS-GAM33-landcell-wind.yml"
+      - "docs/FLORAL_STAGE112_GAM33_NEW_GEO_BLOCK_ERA5_MODEL_WIND_20261121.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  genuine-GAM33-geodesic-land-025-ERA5-model-30years:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies reused from source-verified Stage95/110
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3"
+      - name: Verify original 33-grid area weighting 30year source-only testing and one-site API shape
+        run: python -m unittest discover -s research/floral_macro_stage112 -p "test_*.py" -v
+      - name: Restore original SHA-verified GAM KRY BGM real 0.25-degree mainland geodesic area weights chosen independent of outcomes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14640899337/zip" \
+            -o stage112_original_stage111_207source_landgrid_geo.zip
+          echo "c8368faae9b4d2f2e3fe8cc6b307626ab20aa69a99b35d1069ec8c033c9ecf8b  stage112_original_stage111_207source_landgrid_geo.zip" | sha256sum -c
+      - name: Restore original source-verified 30 of 33 GAM 30-year land-grid climate from first provider-quota-limited run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14644461950/zip" \
+            -o stage112_original_verified_30of33_full30year_sources.zip
+          echo "a53db9024a6c3cc35265648cf197281c073f61ff834e68fe9245ce2e7cc61c4a  stage112_original_verified_30of33_full30year_sources.zip" | sha256sum -c
+      - name: Actually fetch original source 1991-2020 full 10958-day public ERA5 model 10m gust and mean 2m temperature at all 33 GAM land-intersecting 0.25-degree sites
+        run: |
+          python -u research/floral_macro_stage112/real_GAM33_public_ERA5_1991_2020_geodesic_land_area.py \
+            --original-Stage111-geographic-grid-ZIP stage112_original_stage111_207source_landgrid_geo.zip \
+            --source-original-Stage112-prior30-verified-ZIP stage112_original_verified_30of33_full30year_sources.zip \
+            --outdir stage112_derived
+      - name: Independently verify original complete GAM33 model site climate and physically weighted strong-wind source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("stage112_derived/stage112_REAL_GAM33grid_1991_2020_ERA5_model_025_land_area_daily_gust.json")
+          d=json.loads(p.read_text())
+          assert d["source_original_Stage111_geo_artifact_SHA256"]=="c8368faae9b4d2f2e3fe8cc6b307626ab20aa69a99b35d1069ec8c033c9ecf8b"
+          assert d["source_original_TDWG3_region"]=="GAM"
+          assert d["source_original_ERA5_grid_size_degrees"]==.25
+          assert d["source_genuine_original_1991_2020_30_year_full_dates"]==10958
+          assert len(d["source_actual_33_land_cells_with_30year_weather"])==33
+          assert d["source_PRIOR30_verified_completed_climate_cells_reused"]==30
+          assert d["source_PRIOR30_original_partial_artifact_SHA256"]=="a53db9024a6c3cc35265648cf197281c073f61ff834e68fe9245ce2e7cc61c4a"
+          assert len(d["original_source_API_raw_decade_JSON_SHA256_ledger"])==21
+          assert len({x["source_original_JSON_SHA256"] for x in d["original_source_API_raw_decade_JSON_SHA256_ledger"]})==21
+          assert all(x["original_1991_2020_cell_model_ERA5_climatology"]["source_ERA5_observed_30yr_days"]==10958 for x in d["source_actual_33_land_cells_with_30year_weather"])
+          assert len({(x["lat"],x["lon"]) for x in d["source_actual_33_land_cells_with_30year_weather"]})==33
+          assert d["source_provider_model_daily_archive_not_original_ECMWF_CDS_10fg"]
+          assert d["source_37_original_holdout_NHM_WFO_AusTraits_Bombus_NOT_read"]
+          assert d["source_not_all72_original_mainland_ERA5_fully_obtained"]
+          r=d["source_original_GAM_geodesic_landarea_ERA5_model_30yr_gust"]
+          assert r["source_original_region_ERA5_model_land_cells"]==33
+          assert 9500<r["source_original_mainland_area_km2"]<9700
+          assert r["source_1991_2020_Tclim_GT5C_warm_month_land_fraction"]>=.95
+          assert 0<=r["source_1991_2020_daily_10m_gust_gt15_source_geodesic_area_weighted"]<=1
+          assert r["source_public_ERA5model_daily_NOT_original_CDS_hourly_10fg"]
+          print("STAGE112_TRUE_PUBLIC_ERA5_MODEL_GAM33_GUST_LAND_AREA",{
+             "area_km2":r["source_actual_source_025_land_grid_areas_sum_km2"],
+             "true_ERA5_grid_cells":33,"all_daily_days_each":10958,
+             "gust_gt15_area_fraction":r["source_1991_2020_daily_10m_gust_gt15_source_geodesic_area_weighted"],
+             "gust_gt10_area_fraction":r["source_1991_2020_daily_10m_gust_gt10_source_geodesic_area_weighted"],
+             "gust_gt20_area_fraction":r["source_1991_2020_daily_10m_gust_gt20_source_geodesic_area_weighted"],
+             "within_region_gridcell_source_range":[r["source_original_025_cell_GUST_gt15_min"],r["source_original_025_cell_GUST_gt15_max"]]})
+          PY
+      - name: Preserve actual full GAM33 derived 30y source grid and raw JSON SHA receipts; partial batches correctly not full region on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage112-genuine-public-ERA5-model-GAM33-025-original-mainland-1991-2020-gust
+          path: stage112_derived/
+          retention-days: 90
+          if-no-files-found: warn
