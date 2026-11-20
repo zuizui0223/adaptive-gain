@@ -195,7 +195,11 @@ def true_source_association_sensitivity(rows):
     controls=list(DOC_FIELDS)
     covariates=controls+list(CLIM_FIELDS)
     results={}
-    for exposure,xkey in SOURCE_EXPOSURES.items():
+    for exposure,source_json_field in SOURCE_EXPOSURES.items():
+        # join_source_frame stores region-exposure columns under the
+        # independently named output exposure label; the original raw
+        # source climate JSON field is only used during source joining.
+        xkey=exposure
         inside={}
         for name,(_,minsize) in TARGETS.items():
             eligible=[r for r in rows if r[xkey] is not None and r[name] is not None
