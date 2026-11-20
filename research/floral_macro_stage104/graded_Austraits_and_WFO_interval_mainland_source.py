@@ -145,7 +145,7 @@ def describe_floral_size_sources(native,measured,worded,train,holdout):
             "regions_with_10plus_A_or_B_total":sum(r["n_A_or_B_total_source_available_NOT_all_measured"]>=10 for r in rows),
             "regions_with_10plus_B2_two_sided_intervals":sum(r["n_B2_WFO_two_sided_bounded_intervals"]>=10 for r in rows),
             "regions_with_10plus_AB_after_removing_wide_source_span":sum(
-                len(native[r["TDWG_L3"]]&(grade["A_or_B_total_source_available_NOT_all_measured"]-too_wide))>=10 for r in rows)}
+                len(native[r["TDWG_L3"]]&(grade["A_or_B_total_source_available_NOT_all_measured"]-(too_wide-direct)))>=10 for r in rows)}
     paired=[]
     for sp in sorted(direct&eligible):
         a=float(measured[sp]);v=worded[sp]
