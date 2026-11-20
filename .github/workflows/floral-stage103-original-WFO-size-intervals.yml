@@ -1,0 +1,147 @@
+name: Stage103 actual WFO original whole-flower diameter interval and upper-limit source rescue
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage103/**"
+      - ".github/workflows/floral-stage103-original-WFO-size-intervals.yml"
+      - "docs/FLORAL_STAGE103_WFO_ORIGINAL_SIZE_INTERVALS_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-WFO-flower-size-intervals:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify botanical range 8 double hyphen 9 cannot become exact 9
+        run: python -m unittest discover -s research/floral_macro_stage103 -p "test_*.py" -v
+      - name: Restore original 237 whole-flower and 58 corolla-only WFO source species
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14541288164/zip" \
+            -o stage103_original_stage100_source_ledger.zip
+          echo "06c370061a4c069038aaf11ecd59a423fb00cb051db6ec67632e316ce9d2ebd4  stage103_original_stage100_source_ledger.zip" | sha256sum -c
+      - name: Restore SHA locked original contact-free mainland 72 exploration and 37 unchanged holdout
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage103_original_geo_72_37.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage103_original_geo_72_37.zip" | sha256sum -c
+      - name: Restore exact original NHM + WCVP 55,775 species 367 native TDWG3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV \
+            --dir stage103_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage103_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" -o stage103_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage103_WCVP.zip" | sha256sum -c
+      - name: Retrieve author-original full Flora China and FNA botanical descriptions, pinned SHA
+        run: |
+          mkdir -p stage103_WFO
+          curl --fail --location --silent --show-error --retry 5 --retry-all-errors --retry-delay 5 \
+            --connect-timeout 45 --max-time 1600 \
+            "https://files.worldfloraonline.org/files/eFloras/Flora_Of_China/Flora_Of_China.zip" \
+            -o stage103_WFO/China.zip
+          curl --fail --location --silent --show-error --retry 5 --retry-all-errors --retry-delay 5 \
+            --connect-timeout 45 --max-time 1600 \
+            "https://files.worldfloraonline.org/files/eFloras/FNA/FNA.zip" \
+            -o stage103_WFO/FNA.zip
+          echo "4c0b89280efdcfd0ef8dc753cca5d63566ddf8c34542b0bb4a78cdce799b63a9  stage103_WFO/China.zip" | sha256sum -c
+          echo "0757eb55f2e844383d34650ea3aa577d15c2210f3893561b6694559dd9aa02e1  stage103_WFO/FNA.zip" | sha256sum -c
+      - name: Retrieve WFO Plant List 2026-06 official source name-ID crosswalk, bounded resumable original MD5
+        run: |
+          set -euo pipefail
+          out="stage103_WFO/WFO_202606_backbone.zip"
+          url="https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1"
+          complete=0
+          for attempt in 1 2 3 4; do
+            echo "STAGE103_WFO_ORIGINAL_BACKBONE_TRANSPORT_ATTEMPT=$attempt"
+            if [ -s "$out" ]; then
+              curl --fail --location --silent --show-error --continue-at - \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            else
+              curl --fail --location --silent --show-error \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            fi
+            if [ -s "$out" ] && echo "0e4486945cd9f7af548ca87eb9a870ed  $out" | md5sum -c; then
+              complete=1
+              break
+            fi
+            if [ "$attempt" = "2" ]; then
+              url="https://zenodo.org/api/records/20782718/files/_DwC_backbone_R.zip/content"
+              rm -f "$out"
+            fi
+            sleep 6
+          done
+          if [ "$complete" != "1" ]; then
+            echo "STAGE103_AUTHOR_SOURCE_BACKBONE_UNAVAILABLE_NO_DATA_INVENTED" >&2
+            exit 1
+          fi
+          unzip -tq "$out"
+      - name: Extract range-valued whole flower dimensions and true upper-only reports separately
+        run: |
+          python -u research/floral_macro_stage103/original_WFO_wholeflower_size_intervals.py \
+            --stage100-original-zip stage103_original_stage100_source_ledger.zip \
+            --stage98B-mainland-source-zip stage103_original_geo_72_37.zip \
+            --original-NHM stage103_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage103_WCVP.zip \
+            --original-China stage103_WFO/China.zip \
+            --original-FNA stage103_WFO/FNA.zip \
+            --original-WFO-202606-backbone stage103_WFO/WFO_202606_backbone.zip \
+            --outdir stage103_derived
+      - name: Verify actual 237 original species, no false endpoint-as-point, geographic scope and original evidence
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path("stage103_derived")
+          rec=json.loads((root/"stage103_WFO_original_flower_size_interval_not_point_receipt.json").read_text())
+          rows=list(csv.DictReader((root/"stage103_original_WFO_237_flower_source_interval_envelopes_NOT_measured.csv").open()))
+          reg=list(csv.DictReader((root/"stage103_original_mainland_72_37_WFO_interval_size_source_counts.csv").open()))
+          assert rec["source_stage100_unreviewed_whole_flower_237_original_species"]==237
+          assert rec["exact_source_taxonomic_species"]==237 and len(rows)==237
+          assert len({r["accepted_species"] for r in rows})==237
+          assert len(reg)==109
+          assert sum(x["original_fixed_geographic_split"]=="exploration" for x in reg)==72
+          assert sum(x["original_fixed_geographic_split"]=="holdout" for x in reg)==37
+          assert rec["source_distinct_species_with_any_valid_bounded_or_upper_or_singleton"]>0
+          assert rec["source_distinct_species_with_bounded_range"]>0
+          assert rec["source_author_upper_endpoint_NEVER_promoted_to_exact_value"]
+          assert rec["size_intervals_are_morphological_source_envelopes_NOT_measurement_uncertainty"]
+          assert rec["human_extraction_precision_still_unverified"]
+          assert rec["no_ERA5_area_weighted_wind_or_flower_selection_coefficient"]
+          print("STAGE103_WFO_AUTHOR_ORIGINAL_SOURCE_INTERVAL_RESULT",{
+            "size_source_interval_species":rec["source_distinct_species_with_bounded_range"],
+            "strict_point_species":rec["source_distinct_species_with_exact_singleton_phrase"],
+            "upper_only_species":rec["source_distinct_species_with_upper_limit_only"],
+            "holdout_37_source_interval_10plus_regions":
+               rec["source_frozen_mainland_regions"]["holdout"]["regions_with_10plus_bounded_interval_source_species"]})
+          PY
+      - name: Upload noncopyright source-size interval bounds and provenance, NO original prose or false wind effects
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage103-genuine-WFO-original-flower-size-interval-source-rescue
+          path: stage103_derived/
+          retention-days: 90
+          if-no-files-found: warn
