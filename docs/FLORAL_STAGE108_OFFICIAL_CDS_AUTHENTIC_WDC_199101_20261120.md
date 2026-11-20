@@ -38,3 +38,16 @@ The source trait observation/ascertainment controls from Stage105 (33 representa
 - .github/workflows/floral-stage108-CDS-ERA5-authorized-199101-10fg.yml
 
 **No successful original CDS climate result should be reported until the authentic GitHub Actions receipt explicitly says SUCCESS_OFFICIAL_CDS_TWO_VARIABLE_ORIGINAL_199101 with two original source ZIP hashes and verified 31-day NetCDF schemas.**
+
+
+## Verified first original-source authentication gate — 2026-11-20
+
+GitHub Actions [#44728278046](https://github.com/zuizui0223/adaptive-gain/actions/runs/44728278046) completed with **12 source-free tests passing**, including 31-day 1991 January NetCDF ZIP schema/unit validation against SYNTHETIC fixture arrays, original WDC two land-intersecting 0.25-degree source cells, strict >15m/s gust comparison, original 2mT Kelvin units and no climate-data guessing. The actual Stage106 original area-weighting source ZIP checksum was verified.
+
+**Actual source retrieval state:** BLOCKED_NO_EXISTING_CDS_PERSONAL_ACCESS_TOKEN. The source code found no existing authorized Copernicus CDS repository token under CDSAPI_KEY, CDS_API_KEY, or CDS_PERSONAL_ACCESS_TOKEN. No official Copernicus CDS climate API request was sent. No actual original January 1991 CDS data, NetCDF units, daily climate values, or 1991–2020 regional climate exposure was obtained.
+
+The source gate receipt is preserved in artifact **14625311199**, original ZIP SHA256 **23a9412e778da9554218edf86717eafe750953b2782815f0a6fe839fa481260d**. A green CI status verifies that the fail-closed credential gate worked; it does **not** mean the original meteorological source was retrieved.
+
+**Explicit remaining user-only access step:** the account owner must accept the Copernicus ERA5 daily-statistics dataset licence on the CDS website, and save their own CDS Personal Access Token into the repository zuizui0223/adaptive-gain as GitHub Actions repository secret **CDSAPI_KEY** (Settings → Secrets and variables → Actions). Never send the token in chat, commit it to a repository or print it in logs. The existing Stage108 workflow can then be rerun from the Actions tab on this branch. Only a new receipt stating SUCCESS_OFFICIAL_CDS_TWO_VARIABLE_ORIGINAL_199101 with actual NetCDF-source ZIP SHA256 and full original January 1991 daily-grid evidence would close the source gate.
+
+No 125-region 1991–2020 area-weighted primary wind exposure exists yet.
