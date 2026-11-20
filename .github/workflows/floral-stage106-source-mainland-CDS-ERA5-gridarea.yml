@@ -1,0 +1,93 @@
+name: Stage106 original TDWG3 NaturalEarth 0.25deg ERA5 CDS daily gust land-area source preflight
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage106/**"
+      - ".github/workflows/floral-stage106-source-mainland-CDS-ERA5-gridarea.yml"
+      - "docs/FLORAL_STAGE106_OFFICIAL_CDS_GRIDAREA_WIND_SOURCE_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  actual-original-land-grid-area-source-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original WGS84 geography geodesic and stable array dependencies
+        run: python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3" "fiona==1.10.1" "pyproj==3.7.2"
+      - name: Test official 10fg daily maximum vs T2m daily mean and actual cell area weighting
+        run: python -m unittest discover -s research/floral_macro_stage106 -p "test_*.py" -v
+      - name: Restore source original 367 TDWG3 geography classification 125 genuine mainland
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage106_original_stage94_mainland_geo.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage106_original_stage94_mainland_geo.zip" | sha256sum -c
+      - name: Retrieve genuine immutable TDWG WGSRPD Level3 geometry
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 600 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage106_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage106_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Retrieve independent Natural Earth 10m physical mainland and island source (NOT sea cell centres)
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 900 \
+            "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip" \
+            -o stage106_original_NaturalEarth10m_land.zip
+          echo "e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc  stage106_original_NaturalEarth10m_land.zip" | sha256sum -c
+          unzip -tq stage106_original_NaturalEarth10m_land.zip
+      - name: Compute ACTUAL fractional land area per ERA5 0.25 degree grid cell for three source-smallest mainland regions
+        run: |
+          python -u research/floral_macro_stage106/original_CDS_ERA5_025deg_mainland_area_weights.py \
+            --original-Stage94-geography-ZIP stage106_original_stage94_mainland_geo.zip \
+            --original-TDWG-geojson stage106_original_TDWG3.geojson \
+            --original-NaturalEarth-land-ZIP stage106_original_NaturalEarth10m_land.zip \
+            --outdir stage106_derived
+      - name: Validate original source geodesic integration and no false full ERA5 1991-2020 claim
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage106_derived")
+          r=json.loads((p/"stage106_original_CDS_ERA5_daily_10fg_1991_2020_area_weighting_PRECHECK.json").read_text())
+          rows=list(csv.DictReader((p/"stage106_original_three_mainland_regions_ERA5_025deg_cell_landarea_weights.csv").open()))
+          assert r["CDS_official_dataset"]=="derived-era5-single-levels-daily-statistics"
+          assert len(r["source_three_geometry_only_preflight_regions"])==3
+          assert len(r["source_month_1991_01_CDS_request_specs_NOT_submitted"])==6
+          assert not r["CDS_original_API_source_request_submitted"]
+          assert r["no_CDS_original_weather_cells_or_climate_wind_outputs_retrieved"]
+          assert r["source_global_125_region_climatology_NOT_obtained"]
+          assert all(.985<=q["area_ratio"]<=1.015 for q in r["source_three_geometry_only_preflight_regions"])
+          assert all(q["source_nonzero_land_grid_cells"]>0 for q in r["source_three_geometry_only_preflight_regions"])
+          assert all(q["source_regional_wind_fraction_HAS_NOT_BEEN_CALCULATED"]=="YES" for q in r["source_three_geometry_only_preflight_regions"])
+          assert all(float(v["source_intersected_original_mainland_land_km2"])>0 for v in rows)
+          print("STAGE106_REAL_SOURCE_GEO_CDS_GRID_READY_NO_WIND_FIT",{
+             "real_land_grid_cells":len(rows),
+             "geographic_preflight_regions":[q["TDWG_L3"] for q in r["source_three_geometry_only_preflight_regions"]],
+             "official_unsubmitted_CDS_request_count":6})
+          PY
+      - name: Archive derived-only real land-cell weights and official CDS API request manifests (NOT climate data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage106-original-TDWG-NaturalEarth-mainland-ERA5-025deg-source-gridweights
+          path: stage106_derived/
+          retention-days: 90
+          if-no-files-found: warn
