@@ -25,6 +25,14 @@ The result is **syntax retention sensitivity**, not independently estimated prec
 
 A deterministic, prelabelled-by-grammar 15-species review queue is selected by original species name SHA and fixed salt, stratified over six strict, six original-only/flagged, and three corolla-only candidates where available. Original source full treatment text is NOT redistributed. The GitHub Actions source-read step prints at most 15 minimal snippets of up to 62 characters to aid a later manual source review, with review flags remaining explicitly NOT_YET_DONE. Hashes and source identity, but not raw prose, are archived. An independent, botanical-domain human review is required to estimate positive predictive value of the original 237-source parser; the current algorithm's own replay is not a gold standard.
 
+## Genuine first source audit found an unhandled interval encoding — corrected
+
+In original source-verified Actions #44660691765, the preselected short original flora phrases included botanical intervals written with two ASCII hyphens (example: "8--9 cm in diam.") and phrases that designate an upper limit ("to 2 cm in diam."). Stage100's original detector, and the first Stage102 stricter grammar, could silently take the upper endpoint as a singleton measurement. This contaminates the interpretation of some source size candidates even where the botanical organ is correctly identified.
+
+**Fix before accepting empirical result:** the stricter parser now detects double hyphen, regular hyphen, en dash, em dash, tilde, "to", and explicit upper-limit expressions as bounded measurements, NOT single point diameter. A size interval may later be retained as [minimum, maximum] original evidence in a different interval-censored model; its maximum must not be treated as a species median. The new tests reproduce the observed double-hyphen issue and require proper rejection without losing genuine one-number diameter evidence.
+
+The initial strict candidate count from the pre-fix Actions run is NOT a validated final figure. The original Stage100 237-source candidate ledger is retained for provenance rather than silently rewritten. Re-run original authentic WFO and freeze corrected support counts without reading any wind-cue regression.
+
 ## Scientific decision gate
 
 The two legitimate outputs are (1) the proportion of original WFO whole-flower textual *candidates* surviving this new strict parser and (2) mainland 72/37 source coverage and heldout-only species count under that filter. Do not describe either as a corrected biological rate or evidence that strong wind changes long-distance floral signal allocation.
