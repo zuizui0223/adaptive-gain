@@ -1,0 +1,109 @@
+name: Stage111 original mainland 72 source 0p25 ERA5 grid capacity and 3 new geographic block masks
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage111/**"
+      - ".github/workflows/floral-stage111-mainland72-ERA5-grid-demand.yml"
+      - "docs/FLORAL_STAGE111_MAINLAND72_GEOGRAPHIC_WIND_BUDGET_20261121.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-72-source-mainland-grid-inventory-no-weather-query:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original Stage94/106 geodesic source geometry dependencies
+        run: |
+          python -m pip install "numpy==2.3.5" "shapely==2.1.2" "rasterio==1.4.3" "fiona==1.10.1" "pyproj==3.7.2"
+      - name: Test independent 72 source region eligibility, frozen 17 blocks and source-only budget
+        run: python -m unittest discover -s research/floral_macro_stage111 -p "test_*.py" -v
+      - name: Restore SHA-pinned original 367 region / 125 mainland Stage94 authentic geometry registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14529576121/zip" \
+            -o stage111_original_Stage94_367_mainland_registry.zip
+          echo "3475b544d0530e5dfa71b6324f80055d98971d1a3c364309596a381ea025d833  stage111_original_Stage94_367_mainland_registry.zip" | sha256sum -c
+      - name: Restore strict original Stage98B 72 contact-free mainland exploration / original 37 holdout geography
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage111_original_Stage98B_fixed_72_37_mainland.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage111_original_Stage98B_fixed_72_37_mainland.zip" | sha256sum -c
+      - name: Retrieve original source WGSRPD TDWG Level3 full geographic boundaries and immutable Git blob
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 900 \
+            "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson" \
+            -o stage111_original_TDWG3.geojson
+          python - <<'PY'
+          import hashlib
+          raw=open("stage111_original_TDWG3.geojson","rb").read()
+          assert hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
+          PY
+      - name: Retrieve original Natural Earth 10m physical mainland and true island polygons with immutable ZIP SHA
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 30 --max-time 1200 \
+            "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip" \
+            -o stage111_original_NE10m_land.zip
+          echo "e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc  stage111_original_NE10m_land.zip" | sha256sum -c
+      - name: Audit genuine 72 mainland source polygon areas 0p25 model grid demand and exact area weights for 3 NEW geography-only blocks
+        run: |
+          python -u research/floral_macro_stage111/original_mainland72_era5_geogrid_budget.py \
+            --original-Stage94-geography-ZIP stage111_original_Stage94_367_mainland_registry.zip \
+            --original-Stage98B-geographic-training-ZIP stage111_original_Stage98B_fixed_72_37_mainland.zip \
+            --original-TDWG-geojson stage111_original_TDWG3.geojson \
+            --original-NaturalEarth-land-ZIP stage111_original_NE10m_land.zip \
+            --outdir stage111_derived
+      - name: Enforce distinct source 17 geographic blocks, 3 new original landcell maps, no invented ERA5 climate
+        run: |
+          python - <<'PY'
+          import json,csv,math
+          from pathlib import Path
+          p=Path("stage111_derived")
+          z=json.loads((p/"stage111_original72_source_025_ERA5_grid_budget_receipt_NO_floral_model.json").read_text())
+          a=list(csv.DictReader((p/"stage111_original72_mainland_geographic_025grid_budget_NO_outcomes.csv").open()))
+          b=list(csv.DictReader((p/"stage111_original_3_new_geoblocks_true_ERA5_025_land_area_cells_NO_climate.csv").open()))
+          assert len(a)==72 and len({v["TDWG_L3"] for v in a})==72
+          assert z["source_original_72_exploration_regions"]==72
+          assert z["source_original_37_holdout_unchanged_and_unopened"]==37
+          assert z["source_geography_blocks_in_72"]==17
+          assert z["source_original_model_area_regions_cover_geographic_blocks"]==2
+          assert z["source_eligible_smallest_geography_only_3_new_region_codes"]==["GAM","KRY","BGM"]
+          assert z["source_no_weather_requests_submitted"]
+          assert z["source_no_WFO_NHM_AusTraits_Bombus_outcomes_read"]
+          assert z["source_full72_original_0p25_geodesic_area_grid_weights_NOT_YET_COMPUTED"]
+          n=z["source_lower_bound_separate_region_025_gridcells_using_800km2_max_cell"]
+          assert n>=30000
+          assert len(b)==sum(q["source_true_intersected_025_ERA5_gridcells"] for q in z["source_3_new_exact_mainland_geodesic_cell_regions"])
+          assert len({(x["ERA5_source_025_grid_latitude"],x["ERA5_source_025_grid_longitude"]) for x in b})==len(b)
+          assert all(q["no_1991_2020_climate_retrieved_for_new_region"] for q in z["source_3_new_exact_mainland_geodesic_cell_regions"])
+          assert all(.985<=q["source_actual_025_grid_land_intersection_area_km2"]/q["source_actual_polygon_mainland_land_area_km2"]<=1.015 for q in z["source_3_new_exact_mainland_geodesic_cell_regions"])
+          print("STAGE111_REAL_ORIGINAL72_GEO_SOURCE_GUST_SCALEUP_BUDGET_NO_CLIMATE",{
+              "exploration_regions":72,"blocks":17,"true_new_land_cells":len(b),
+              "source_minimum_025_land_cells_for_independent_region_retrieval":n,
+              "new_geography_codes":z["source_eligible_smallest_geography_only_3_new_region_codes"]})
+          PY
+      - name: Archive actual source 72 region per-region grid budget and EXACT three new source land-cell areas without floristic outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage111-original72-landmain-ERA5-025-grid-budget-plus3-geoblocks-source
+          path: stage111_derived/
+          retention-days: 90
+          if-no-files-found: warn
