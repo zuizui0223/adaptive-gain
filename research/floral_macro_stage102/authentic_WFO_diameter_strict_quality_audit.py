@@ -161,7 +161,7 @@ def scan_original_flora_for_qa(archive,label,approved,crosswalk):
                             # The original parser itself makes the final
                             # admission decision; this snippet is a review
                             # locator only, never an admitted measurement.
-                            phrase=re.sub(r"\\s+"," ",m.group(0))[:62]
+                            phrase=re.sub(r"\s+"," ",m.group(0))[:62]
                             old_fragments.append({
                                "value_mm":None,
                                "state":"original_lexical_match_NEEDS_MANUAL_REVIEW",
