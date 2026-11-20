@@ -1,0 +1,119 @@
+name: Stage107 original WorldClim mean wind 72 mainland exploration flora documentation sensitivity
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage107/**"
+      - ".github/workflows/floral-stage107-original-WorldClim72-cue-reporting.yml"
+      - "docs/FLORAL_STAGE107_WORLDCLIM72_MAINLAND_REPORTING_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  real-original-72-mainland-WorldClim-meanwind-and-3-source-cues:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pure source-rank statistical dependencies
+        run: python -m pip install "numpy==2.3.5" "scipy==1.16.3"
+      - name: Test no holdout or source unit conflation and rank sensitivity
+        run: python -m unittest discover -s research/floral_macro_stage107 -p "test_*.py" -v
+      - name: Restore real author-sourced WorldClim2.1 1970-2000 region original Stage87C
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14421822992/zip" \
+            -o stage107_original_WorldClim2_1_regional.zip
+          echo "f2650b0b4a76220c9add1feb4dcc6f93f14ef7c3399976364bcc4160741508de  stage107_original_WorldClim2_1_regional.zip" | sha256sum -c
+      - name: Restore original strict mainland 72 contact-free source geography, never use fixed 37 holdout traits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage107_original_mainland_72_geo.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage107_original_mainland_72_geo.zip" | sha256sum -c
+      - name: Restore WFO botanical scent positivity versus explicit negative and NHM source word-markings
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14533667535/zip" \
+            -o stage107_original_stage96_source_cues.zip
+          echo "99aaf623ac3a7f948c5d0cdad9a8ce8668c2131ee07af6fb5d02d81c573c3149  stage107_original_stage96_source_cues.zip" | sha256sum -c
+      - name: Restore NHM flower-colour source-collection completeness and author original measured AusTraits size
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526435551/zip" \
+            -o stage107_original_stage91_NHM_source.zip
+          echo "f1197a050d110d1e3626ab01f3c5d49626ac32fd0588d41ce3a162b44d921cdf  stage107_original_stage91_NHM_source.zip" | sha256sum -c
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14526917824/zip" \
+            -o stage107_original_stage92_AusTraits_size.zip
+          echo "01d76457aa8423b7964b5fccdfea597f5c158a805c138fd8597e7efd1733a05f  stage107_original_stage92_AusTraits_size.zip" | sha256sum -c
+      - name: Restore independent original source signed 33 safe train 1991-2020 ERA5 point climate proxy for strict same-region physical comparison
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14603498026/zip" \
+            -o stage107_original_stage105_ERA5_33_source_only.zip
+          echo "0d7cc6609c9ee3b85e24aafbbfd5dec307119506c4a4d5f79a579c21ed6c1534  stage107_original_stage105_ERA5_33_source_only.zip" | sha256sum -c
+      - name: Compute genuine all 72 mainland source mean-wind visual chemical and measured-size documentation sensitivity
+        run: |
+          python -u research/floral_macro_stage107/source_WorldClim72_mainland_cue_report_sensitivity.py \
+            --worldclim-original-TDWG3-ZIP stage107_original_WorldClim2_1_regional.zip \
+            --stage96-original-three-cues-ZIP stage107_original_stage96_source_cues.zip \
+            --stage91-original-marking-source-ZIP stage107_original_stage91_NHM_source.zip \
+            --stage92-original-size-source-ZIP stage107_original_stage92_AusTraits_size.zip \
+            --stage98B-original-mainland-ZIP stage107_original_mainland_72_geo.zip \
+            --stage105-original-33-point-ERA5-ZIP stage107_original_stage105_ERA5_33_source_only.zip \
+            --outdir stage107_derived
+      - name: Verify full 72 source records, no hidden holdout and no WorldClim/ERA5 gust substitution
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage107_derived")
+          rec=json.loads((p/"stage107_original_72_mainland_WorldClim_wind_flora_reporting_sensitivity.json").read_text())
+          r=list(csv.DictReader((p/"stage107_true_72_exploration_WorldClim_meanwind_3_flora_source_proxies.csv").open()))
+          assert len(r)==72
+          assert len({x["TDWG_L3"] for x in r})==72
+          assert rec["source_geographically_contact_free_exploration_region_count"]==72
+          assert rec["original_FIXED_holdout_37_plant_signal_outcomes_not_used"]
+          assert rec["WorldClim2_1_1970_2000_mean_NOT_original_ERA5_10fg_gust"]
+          assert rec["no_IID_pvalues_reported"]
+          assert rec["same_source_33_ERA5_point_gust_vs_WorldClim_mean_wind"]["n_source_identical_TDWG_region_codes"]==33
+          assert all(x["no_holdout_climate_or_floral_effect_fitted"]=="YES" for x in r)
+          assert all(v["no_IID_pvalue_or_causal_inference"] for v in rec["source_outcomes"].values())
+          print("STAGE107_REAL_SOURCE72_WORLDCLIM_MEAN_WIND_3CUE_REPORTING_DIAGNOSTIC",{
+           k:{"n":v["n_source_regions"],
+              "raw":v["unadjusted_WorldClim_mean_wind_Spearman_rho"],
+              "documentation_rank_adjusted":v["partial_rank_corr_after_source_reporting_two_fields"],
+              "documentation_latitude_temperature_precip":v["partial_rank_corr_after_reporting_latitude_temperature_precip"]}
+           for k,v in rec["source_outcomes"].items()})
+          PY
+      - name: Archive only genuine source 72 region mean-wind reporting-bias exploration data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage107-genuine-WorldClim72-mainland-source-3cue-documentation-sensitivity
+          path: stage107_derived/
+          retention-days: 90
+          if-no-files-found: warn
