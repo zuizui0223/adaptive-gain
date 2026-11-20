@@ -3,7 +3,8 @@ import tempfile,zipfile,unittest
 from pathlib import Path
 from real_GAM33_public_ERA5_1991_2020_geodesic_land_area import (
    original_source_GAM_cells,true_source_region_GAM_area_mean,
-   SOURCE_CODE,FROZEN_SOURCE_CELLCOUNT,SOURCE_STAGE111_ORIGINAL_SHA,GROUP_SIZE)
+   SOURCE_CODE,FROZEN_SOURCE_CELLCOUNT,SOURCE_STAGE111_ORIGINAL_SHA,GROUP_SIZE,
+   source_verified_prior30_GAM_full_decades,SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA)
 from original_public_ERA5_model_34cells_DEL_CAB_landarea import normalize_source_era5_response
 from original_geogrid_public_ERA5_1991_2020_WDC_area_gust import accepted_grid_coordinates
 
@@ -53,6 +54,13 @@ class GAMOriginalLandGrid(unittest.TestCase):
         sites,source=fake_source()
         with self.assertRaisesRegex(ValueError,"NOT_ALL_33"):
             true_source_region_GAM_area_mean(sites[:-1],source)
+    def test_original_first30_completed_source_replay_must_be_SHA_pinned(self):
+        self.assertEqual(len(SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA),64)
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"untrusted.zip"
+            with zipfile.ZipFile(p,"w") as z:z.writestr("fake","not the original 30")
+            with self.assertRaisesRegex(ValueError,"PRIOR30_SOURCE_ARTIFACT_SHA_DRIFT"):
+                source_verified_prior30_GAM_full_decades(p,[])
     def test_fake_original_Stage111_geo_zip_never_accepted(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/"fake.zip"

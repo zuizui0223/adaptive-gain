@@ -34,10 +34,20 @@ jobs:
             "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14640899337/zip" \
             -o stage112_original_stage111_207source_landgrid_geo.zip
           echo "c8368faae9b4d2f2e3fe8cc6b307626ab20aa69a99b35d1069ec8c033c9ecf8b  stage112_original_stage111_207source_landgrid_geo.zip" | sha256sum -c
+      - name: Restore original source-verified 30 of 33 GAM 30-year land-grid climate from first provider-quota-limited run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14644461950/zip" \
+            -o stage112_original_verified_30of33_full30year_sources.zip
+          echo "a53db9024a6c3cc35265648cf197281c073f61ff834e68fe9245ce2e7cc61c4a  stage112_original_verified_30of33_full30year_sources.zip" | sha256sum -c
       - name: Actually fetch original source 1991-2020 full 10958-day public ERA5 model 10m gust and mean 2m temperature at all 33 GAM land-intersecting 0.25-degree sites
         run: |
           python -u research/floral_macro_stage112/real_GAM33_public_ERA5_1991_2020_geodesic_land_area.py \
             --original-Stage111-geographic-grid-ZIP stage112_original_stage111_207source_landgrid_geo.zip \
+            --source-original-Stage112-prior30-verified-ZIP stage112_original_verified_30of33_full30year_sources.zip \
             --outdir stage112_derived
       - name: Independently verify original complete GAM33 model site climate and physically weighted strong-wind source
         run: |
@@ -51,6 +61,8 @@ jobs:
           assert d["source_original_ERA5_grid_size_degrees"]==.25
           assert d["source_genuine_original_1991_2020_30_year_full_dates"]==10958
           assert len(d["source_actual_33_land_cells_with_30year_weather"])==33
+          assert d["source_PRIOR30_verified_completed_climate_cells_reused"]==30
+          assert d["source_PRIOR30_original_partial_artifact_SHA256"]=="a53db9024a6c3cc35265648cf197281c073f61ff834e68fe9245ce2e7cc61c4a"
           assert len(d["original_source_API_raw_decade_JSON_SHA256_ledger"])==21
           assert len({x["source_original_JSON_SHA256"] for x in d["original_source_API_raw_decade_JSON_SHA256_ledger"]})==21
           assert all(x["original_1991_2020_cell_model_ERA5_climatology"]["source_ERA5_observed_30yr_days"]==10958 for x in d["source_actual_33_land_cells_with_30year_weather"])

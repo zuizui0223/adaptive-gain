@@ -14,7 +14,7 @@ model-provider-derived daily ERA5 reanalysis source, NOT original ECMWF CDS
 hourly 10fg byte comparison and not observed wind at flowers.
 """
 from __future__ import annotations
-import argparse,csv,hashlib,io,json,math,sys,time,zipfile
+import argparse,csv,hashlib,io,json,math,re,sys,time,zipfile
 from pathlib import Path
 import numpy as np
 
@@ -37,6 +37,56 @@ GROUP_SIZE=5
 GROUP_SPACING_SECONDS=68
 DECADE_SPACING_SECONDS=12
 SOURCE_CORRECTED_MODEL="open-meteo_historical_ERA5_model_daily_derived_NOT_ECMWF_CDS_hourly_10fg"
+SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA="a53db9024a6c3cc35265648cf197281c073f61ff834e68fe9245ce2e7cc61c4a"
+
+def source_verified_prior30_GAM_full_decades(original_prior_source_zip,sites):
+    """Restore SIX true completed 5-cell groups, original source SHA + no weather gaps."""
+    if sha256(original_prior_source_zip)!=SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA:
+        raise ValueError("STAGE112_PRIOR30_SOURCE_ARTIFACT_SHA_DRIFT")
+    groups={}
+    with zipfile.ZipFile(original_prior_source_zip) as z:
+        if len(z.namelist())!=6:
+            raise ValueError("STAGE112_PRIOR30_NOT_EXACT_SIX_SOURCE_GROUPS")
+        for i in range(6):
+            filename=f"stage112_PARTIAL_source_GAM_group_{i:02d}_NOT_FULL_REGION.json"
+            if filename not in z.namelist():
+                raise ValueError("STAGE112_PRIOR30_MISSING_SOURCE_GROUP")
+            q=json.loads(z.read(filename))
+            if (q["source_status"]!="PARTIAL_GROUP_NOT_COMPLETE_GAM33" or
+                q["original_frozen_source_stage111_SHA256"]!=SOURCE_STAGE111_ORIGINAL_SHA or
+                q["source_group_number"]!=i or
+                q["no_complete_region_or_floral_claim_from_partial"] is not True):
+                raise ValueError("STAGE112_PRIOR30_GROUP_SOURCE_PROVENANCE_DRIFT")
+            original_group=sites[i*GROUP_SIZE:(i+1)*GROUP_SIZE]
+            cells=q["source_group_cells"]
+            requests=q["source_raw_decade_SHA256_receipts"]
+            if len(original_group)!=5 or len(cells)!=5 or len(requests)!=3:
+                raise ValueError("STAGE112_PRIOR30_SOURCE_GROUP_SIZE_OR_DECADE_COUNT_CHANGED")
+            for requested,actual in zip(original_group,cells):
+                if (requested["TDWG_L3"]!=actual["TDWG_L3"] or
+                    (requested["lat"],requested["lon"])!=(actual["lat"],actual["lon"]) or
+                    requested["source_original_TDWG_polygon_SHA256"]!=actual["source_original_TDWG_polygon_SHA256"] or
+                    abs(requested["source_mainland_cell_land_area_km2"]-
+                        actual["source_mainland_cell_land_area_km2"])>1e-8 or
+                    actual["original_1991_2020_cell_model_ERA5_climatology"]["source_ERA5_observed_30yr_days"]!=10958):
+                    raise ValueError("STAGE112_PRIOR30_SOURCE_GEO_OR_30YR_CLIMATE_DRIFT")
+                coords=actual["source_returned_model_latlon"]
+                accepted_grid_coordinates(requested,
+                    {"latitude":coords[0],"longitude":coords[1]})
+            for qrequest,(y1,y2) in zip(requests,YEARS):
+                if (qrequest["TDWG_L3"]!=SOURCE_CODE or
+                    qrequest["original_source_group"]!=i or
+                    qrequest["source_years"]!=f"{y1}-{y2}" or
+                    qrequest["original_public_historical_ERA5_model_daily_URL"]!=api_url(
+                        original_group,f"{y1}-01-01",f"{y2}-12-31") or
+                    not re.fullmatch(r"[a-f0-9]{64}",qrequest["source_original_JSON_SHA256"]) or
+                    qrequest["original_public_source_bytes"]<10000 or
+                    qrequest["source_model"]!="ERA5"):
+                    raise ValueError("STAGE112_PRIOR30_ORIGINAL_ERA5_MODEL_SHA_REQUEST_DRIFT")
+            groups[i]={"cells":cells,"requests":requests}
+    if sum(len(g["cells"]) for g in groups.values())!=30:
+        raise ValueError("STAGE112_PRIOR30_NOT_ALL30_REAL_SOURCE_CELLS")
+    return groups
 
 def original_source_GAM_cells(stage111):
     if sha256(stage111)!=SOURCE_STAGE111_ORIGINAL_SHA:
@@ -129,16 +179,27 @@ def true_source_region_GAM_area_mean(reports,regional_source):
         "source_public_ERA5model_daily_NOT_original_CDS_hourly_10fg":True,
         "no_flower_pollinator_sensory_signal_effect_estimated":True}
 
-def run(original_stage111_zip,outdir):
+def run(original_stage111_zip,outdir,prior_verified30=None):
     sites,region_area=original_source_GAM_cells(original_stage111_zip)
+    cached=source_verified_prior30_GAM_full_decades(prior_verified30,sites) if prior_verified30 is not None else {}
     outdir.mkdir(parents=True,exist_ok=True)
     finish=[]
     receipt=[]
+    reused_source_cells=0
     for start in range(0,len(sites),GROUP_SIZE):
+        group=sites[start:start+GROUP_SIZE]
+        batch=start//GROUP_SIZE
+        if batch in cached:
+            finish.extend(cached[batch]["cells"])
+            receipt.extend(cached[batch]["requests"])
+            reused_source_cells+=len(cached[batch]["cells"])
+            print("STAGE112_REUSED_SOURCE_VERIFIED_ORIGINAL_30YR_GAM_GROUP",
+                  {"group":batch,"cached_cells":len(cached[batch]["cells"]),
+                   "original_source_artifact_SHA256":SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA},flush=True)
+            continue
         if start:
             print("STAGE112_PUBLIC_SOURCE_ERA5_PROVIDER_GROUP_SPACING",GROUP_SPACING_SECONDS,flush=True)
             time.sleep(GROUP_SPACING_SECONDS)
-        group=sites[start:start+GROUP_SIZE]
         collect={i:[] for i in range(len(group))}
         coords={}
         for decade,(y1,y2) in enumerate(YEARS):
@@ -195,6 +256,8 @@ def run(original_stage111_zip,outdir):
       "source_original_Stage111_geo_artifact_SHA256":SOURCE_STAGE111_ORIGINAL_SHA,
       "source_original_TDWG3_region":SOURCE_CODE,
       "source_original_ERA5_grid_size_degrees":0.25,
+      "source_PRIOR30_verified_completed_climate_cells_reused":reused_source_cells,
+      "source_PRIOR30_original_partial_artifact_SHA256":SOURCE_PRIOR30_COMPLETED_ARTIFACT_SHA if cached else None,
       "source_genuine_original_1991_2020_30_year_full_dates":10958,
       "original_source_API_raw_decade_JSON_SHA256_ledger":receipt,
       "source_actual_33_land_cells_with_30year_weather":finish,
@@ -216,5 +279,7 @@ if __name__=="__main__":
     p=argparse.ArgumentParser()
     p.add_argument("--original-Stage111-geographic-grid-ZIP",type=Path,required=True)
     p.add_argument("--outdir",type=Path,required=True)
+    p.add_argument("--source-original-Stage112-prior30-verified-ZIP",type=Path)
     a=p.parse_args()
-    run(a.original_Stage111_geographic_grid_ZIP,a.outdir)
+    run(a.original_Stage111_geographic_grid_ZIP,a.outdir,
+        a.source_original_Stage112_prior30_verified_ZIP)
