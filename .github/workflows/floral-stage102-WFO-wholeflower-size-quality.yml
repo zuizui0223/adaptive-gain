@@ -64,13 +64,40 @@ jobs:
             -o stage102_original_WFO/FNA.zip
           echo "4c0b89280efdcfd0ef8dc753cca5d63566ddf8c34542b0bb4a78cdce799b63a9  stage102_original_WFO/Flora_Of_China.zip" | sha256sum -c
           echo "0757eb55f2e844383d34650ea3aa577d15c2210f3893561b6694559dd9aa02e1  stage102_original_WFO/FNA.zip" | sha256sum -c
-      - name: Retrieve 2026-06 WFO author name-to-ID backbone with original declared MD5
+      - name: Retrieve 2026-06 WFO original backbone with bounded resume and source MD5
         run: |
-          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
-            --connect-timeout 45 --max-time 1800 \
-            "https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1" \
-            -o stage102_original_WFO/WFO_202606_backbone.zip
-          echo "0e4486945cd9f7af548ca87eb9a870ed  stage102_original_WFO/WFO_202606_backbone.zip" | md5sum -c
+          set -euo pipefail
+          out="stage102_original_WFO/WFO_202606_backbone.zip"
+          url="https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1"
+          complete=0
+          for attempt in 1 2 3 4; do
+            echo "STAGE102_WFO_AUTHOR_SOURCE_TRANSPORT_ATTEMPT=$attempt"
+            if [ -s "$out" ]; then
+              curl --fail --location --silent --show-error --continue-at - \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            else
+              curl --fail --location --silent --show-error \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            fi
+            if [ -s "$out" ] && echo "0e4486945cd9f7af548ca87eb9a870ed  $out" | md5sum -c; then
+              complete=1
+              break
+            fi
+            if [ "$attempt" = "2" ]; then
+              echo "STAGE102_SWITCH_TO_EQUIVALENT_OFFICIAL_ZENODO_RECORD_CONTENT_URL"
+              url="https://zenodo.org/api/records/20782718/files/_DwC_backbone_R.zip/content"
+              rm -f "$out"
+            fi
+            sleep 6
+          done
+          if [ "$complete" != "1" ]; then
+            echo "STAGE102_WFO_TRANSPORT_EXHAUSTED_NO_UNVERIFIED_DATA" >&2
+            exit 1
+          fi
+          unzip -tq "$out"
+          sha256sum "$out"
       - name: Independently replay and audit original 237 whole-flower diameter botanical phrases with strong morphology grammar
         run: |
           python -u research/floral_macro_stage102/authentic_WFO_diameter_strict_quality_audit.py \
