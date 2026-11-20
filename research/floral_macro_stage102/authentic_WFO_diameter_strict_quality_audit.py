@@ -58,7 +58,13 @@ INTERVENING_OTHER_STRUCTURE=re.compile(
     r"panicles?|racemes?|spikes?|spikelets?|bracts?|"
     r"peduncles?|stems?|branches?|ovaries|fruits?|seeds?|"
     r"pollen|anthers?|stamens?|receptacles?)\b",re.I)
-RANGE_PREFIX=re.compile(r"\d+(?:\.\d+)?\s*(?:to|[-–—~])\s*$",re.I)
+# eFloras commonly uses literal "--" to encode a botanical size range
+# ("8--9 cm", not a measured singleton 9 cm). Prefix may also be an upper
+# bound ("flowers to 2 cm"); neither is an exact point observation.
+RANGE_PREFIX=re.compile(
+    r"(?:\d+(?:\.\d+)?\s*(?:to|[-–—~]{1,3})\s*|"
+    r"(?:up\s+to|to|at\s+most|not\s+more\s+than|"
+    r"less\s+than|under|maximum|max\.?)\s*)$",re.I)
 NEGATIVE_MEASUREMENT=re.compile(r"\b(?:not|without|no|rarely)\b",re.I)
 
 def strict_source_candidate_evidence(original):
@@ -73,8 +79,9 @@ def strict_source_candidate_evidence(original):
             local=txt[max(0,m.start()-36):min(len(txt),m.end()+30)]
             blocked=[]
             if INTERVENING_OTHER_STRUCTURE.search(before):blocked.append("ambiguous_other_organ_in_clause")
-            if RANGE_PREFIX.search(txt[max(m.start(),m.start("number")-18):m.start("number")]):
-                blocked.append("unresolved_numeric_range")
+            previous=txt[max(m.start(),m.start("number")-35):m.start("number")]
+            if RANGE_PREFIX.search(previous):
+                blocked.append("unresolved_numeric_range_or_upper_limit")
             if NEGATIVE_MEASUREMENT.search(before):blocked.append("negation_or_contrast_context")
             # Single num unit and anchored grammatical subject are mandatory.
             v=float(m.group("number"))*(10 if m.group("unit").lower()=="cm" else 1)
@@ -209,7 +216,7 @@ def audit_species(evidence,ledger):
             "original_author_description_SHA256_count":len(hashes),
             "strict_match_count":len(strong),
             "risk_flora_intervening_other_organ_count":risks["risk_ambiguous_other_organ_in_clause"],
-            "risk_numeric_range_count":risks["risk_unresolved_numeric_range"],
+            "risk_numeric_range_count":risks["risk_unresolved_numeric_range_or_upper_limit"],
             "risk_negation_count":risks["risk_negation_or_contrast_context"],
             "strict_source_text_human_validated":"NO",
             "raw_original_description_redistributed":"NO",
@@ -282,6 +289,9 @@ def run(stage100_zip,stage98B_zip,nhm,wcvp,china,fna,wfo_backbone,outdir):
        "strict_source_grammar_holdout_UNSEEN_in_72_training":len(strict_flower&(holdsp-trainsp)),
        "original_holdout_regions_with_at_least_10_candidates":sum(len(regions[k]&source_flower)>=10 for k in test),
        "strict_holdout_regions_with_at_least_10_candidates":sum(len(regions[k]&strict_flower)>=10 for k in test),
+       "stage100_candidate_species_with_detected_range_or_upper_limit":sum(
+          int(r["risk_numeric_range_count"])>0
+          for r in actual if r["original_stage100_organ_grade"]=="candidate_flower_diameter_from_prose"),
        "strict_train_regions_with_at_least_10_candidates":sum(len(regions[k]&strict_flower)>=10 for k in train),
        "original_source_description_species_audited":len(original),
     }
