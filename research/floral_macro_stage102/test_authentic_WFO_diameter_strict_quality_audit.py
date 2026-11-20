@@ -29,6 +29,28 @@ class SourceSpecificity(unittest.TestCase):
     def test_range_rejected(self):
         v,r,_=strict_source_candidate_evidence("Flowers 3–5 mm across.")
         self.assertEqual(v,[])
+    def test_WFO_double_hyphen_range_not_single_upper_endpoint(self):
+        v,q,_=strict_source_candidate_evidence(
+            "Flowers violet, funnelform, 8--9 cm in diam.")
+        self.assertEqual(v,[])
+        self.assertGreater(q["risk_unresolved_numeric_range_or_upper_limit"],0)
+    def test_WFO_hyphen_dash_and_to_range_not_single_endpoint(self):
+        for vtxt in ("Flowers 8-9 cm across.","Flowers 8–9 cm in diam.",
+                     "Flowers 8—9 cm across.","Flowers 8 to 9 cm wide.",
+                     "Flowers 8~9 cm across."):
+            v,q,_=strict_source_candidate_evidence(vtxt)
+            self.assertEqual(v,[],vtxt)
+            self.assertGreater(q["risk_unresolved_numeric_range_or_upper_limit"],0)
+    def test_to_2cm_is_maximum_not_a_point_measurement(self):
+        v,q,_=strict_source_candidate_evidence("Flowers to 2 cm in diam.")
+        self.assertEqual(v,[])
+        self.assertGreater(q["risk_unresolved_numeric_range_or_upper_limit"],0)
+    def test_not_more_than_1cm_not_exact(self):
+        v,q,_=strict_source_candidate_evidence("Flowers not more than 1 cm in diam.")
+        self.assertEqual(v,[])
+    def test_genuine_point_single_value_preserved(self):
+        v,q,_=strict_source_candidate_evidence("Flowers dark violet, 6 cm in diam.")
+        self.assertEqual(v,[60.0])
     def test_other_organ_sentence_does_not_promote(self):
         v,r,_=strict_source_candidate_evidence("Leaves 20 mm wide. Flowers white.")
         self.assertEqual(v,[])
