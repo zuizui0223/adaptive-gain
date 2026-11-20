@@ -44,3 +44,25 @@ All sources use their immutable artifact SHA from genuinely successful original 
 Actual exploratory slopes and source sensitivity counts must come from the original Actions logs, not from an invented globally complete or confirmed model. Regardless of signs, the scientifically valid next work is to compute the same 1991–2020 daily gust fraction over TRUE mainland regions using CDS daily statistics 1-hourly-derived 10fg at 0.25° gridded resolution, land-mask and area weights, which is independent of the external Open-Meteo one-point proxy and the botanical archive.
 
 Code: research/floral_macro_stage105/source_50point_wind_vs_flora_report_bias.py, tests; workflow floral-stage105-33-source-mainland-wind-cue-docbias.yml.
+
+
+## Actual original-source screening RESULT — 2026-11-20
+
+Original [Actions #44679591129](https://github.com/zuizui0223/adaptive-gain/actions/runs/44679591129) **SUCCESS**. Seven source-free tests passed and all SIX independently source-gated original derived GitHub Actions ZIP SHA256 digests passed. Derived artifact ID **14603498026**, ZIP SHA256 **0d7cc6609c9ee3b85e24aafbbfd5dec307119506c4a4d5f79a579c21ed6c1534**.
+
+Exactly **33** of 50 original ERA5-model one-point climate source regions lie in the frozen contact-free 72-region exploration scope (15 coarse geo-blocks). Neither the 37 original holdout cue outcomes nor 16 region source-contact exclusions entered the correlations. This is an alphabetic original TDWG-source first50 subsample, NOT 33 spatially or phylogenetically independent ecological experiments.
+
+| Original regional source metric | n source regions | Raw Spearman rho with 30y 15m/s gust exceedance | Partial rank correlation after four source/geography controls |
+|---|---:|---:|---:|
+| NHM floral pattern word-positive / original native species | 33 | **+0.679** | **+0.082** |
+| NHM floral pattern word-positive / source flower-colour-documented species | 33 | +0.637 | +0.146 |
+| WFO floral fragrance-positive source mentions / full source descriptions | 33 | **+0.677** | **+0.344** |
+| WFO fragrance-positive / explicit positive plus explicit negative source mentions | 29 | **-0.512** | **-0.116** |
+| AusTraits original source labelled flower_diameter median (>=3 source species per region) | 30 | -0.199 | -0.325 |
+| AusTraits size median with >=10 source species | **9** (4 blocks) | -0.184 | **NOT ESTIMABLE** |
+
+The four partial rank control fields are NHM original flower-colour documentation fraction, WFO full-flora description coverage, latitude and source ERA5 1991-2020 temperature. Source NHM flower-colour *documentation coverage itself* correlated with the point-gust fraction at rho **+0.776**, and source WFO original full-flora descriptions at rho **+0.774**. The apparent original wind-to-floral-pattern text gradient is **highly sensitive to reporting/ascertainment bias**, not a demonstrated adaptive phenotype gradient. The WFO scent association changes SIGN when selecting explicit positive-vs-negative documents instead of positive mentions among all descriptions; the two source variables are not comparable measures of true fragrance prevalence.
+
+The Stage105 estimates are descriptive geographical-source correlations, NO conventional IID p-values, no valid common ecological outcome denominator across the three senses, no independent phylogenetic trait evolution, no externally certified 100-km holdout distance, and no original CDS 0.25-degree area-aggregated 10fg wind. A source species repeatedly occurring in regional native lists is not repeated observed selection. Do not promote this screening to a confirmatory strong-wind-driven bee choice or sensory cue order theory.
+
+Next formal source task: use Copernicus CDS derived ERA5 daily-statistics on single levels, daily max of 10m wind gust since previous post processing from hourly original source (1-hourly), plus daily mean 2m temperature for original mainland region grid cells. Aggregate across mainland land-weighted cell areas for the frozen 1991–2020 baseline, never silently replace original ERA5 post-processing gust with one-point Open-Meteo or mean wind. Official CDS dataset name: derived-era5-single-levels-daily-statistics. Region source documentation/canopy/taxonomy controls remain necessary after that data task.
