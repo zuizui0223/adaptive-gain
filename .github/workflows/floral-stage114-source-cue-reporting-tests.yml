@@ -1,0 +1,33 @@
+name: Stage114 source-only 72 mainland ERA5-point floral cue diagnostic validity tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage114/**"
+      - ".github/workflows/floral-stage114-source-cue-reporting-tests.yml"
+      - "docs/FLORAL_STAGE114_ERA5_72_SOURCE_CUE_REPORTING_20261121.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-conditional-original-geographical-floral-cue-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact source-ranked scipy and numpy dependencies
+        run: python -m pip install "numpy==2.3.5" "scipy==1.16.3"
+      - name: Verify original data-grain source rank controls, 72 exploration and never fake significance
+        run: python -m unittest discover -s research/floral_macro_stage114 -p "test_*.py" -v
+      - name: Explicitly do not fit 72-point cue association before genuine Stage113 ZIP SHA is known
+        run: |
+          python - <<'PY'
+          print("STAGE114_SOURCE_METHODS_ONLY_SCIENTIFIC_TESTS_PASS_NO_OUTCOME_72_FIT_YET")
+          print("Pending exact Stage113 original 72 noncontact exploration ERA5 point source artifact SHA.")
+          PY
