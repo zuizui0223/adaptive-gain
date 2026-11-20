@@ -1,0 +1,145 @@
+name: Stage102 independent original WFO botanical size extraction specificity audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage102/**"
+      - ".github/workflows/floral-stage102-WFO-wholeflower-size-quality.yml"
+      - "docs/FLORAL_STAGE102_ORIGINAL_WFO_SIZE_QUALITY_20261120.md"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-WFO-independent-size-grammar-and-sample:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run independent stronger organ and lexical grammar tests
+        run: python -m unittest discover -s research/floral_macro_stage102 -p "test_*.py" -v
+      - name: Restore original SHA-locked Stage100 WFO accepted species source ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14541288164/zip" \
+            -o stage102_original_stage100_WFO_species_ledger.zip
+          echo "06c370061a4c069038aaf11ecd59a423fb00cb051db6ec67632e316ce9d2ebd4  stage102_original_stage100_WFO_species_ledger.zip" | sha256sum -c
+      - name: Restore original contact-free 72train 37holdout region assignments without floral outcomes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14537927849/zip" \
+            -o stage102_original_stage98B_mainland_geo.zip
+          echo "8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7  stage102_original_stage98B_mainland_geo.zip" | sha256sum -c
+      - name: Retrieve exact source-native NHM and Kew WCVP species-region universe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain \
+            --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV --dir stage102_original_NHM
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  stage102_original_NHM/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            "https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip" -o stage102_original_WCVP.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  stage102_original_WCVP.zip" | sha256sum -c
+      - name: Restore source-original WFO full Flora China and North America textual archives by pinned source SHA
+        run: |
+          mkdir -p stage102_original_WFO
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/Flora_Of_China/Flora_Of_China.zip" \
+            -o stage102_original_WFO/Flora_Of_China.zip
+          curl --fail --location --silent --show-error --retry 3 --retry-delay 5 \
+            --connect-timeout 45 --max-time 1800 \
+            "https://files.worldfloraonline.org/files/eFloras/FNA/FNA.zip" \
+            -o stage102_original_WFO/FNA.zip
+          echo "4c0b89280efdcfd0ef8dc753cca5d63566ddf8c34542b0bb4a78cdce799b63a9  stage102_original_WFO/Flora_Of_China.zip" | sha256sum -c
+          echo "0757eb55f2e844383d34650ea3aa577d15c2210f3893561b6694559dd9aa02e1  stage102_original_WFO/FNA.zip" | sha256sum -c
+      - name: Retrieve 2026-06 WFO original backbone with bounded resume and source MD5
+        run: |
+          set -euo pipefail
+          out="stage102_original_WFO/WFO_202606_backbone.zip"
+          url="https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1"
+          complete=0
+          for attempt in 1 2 3 4; do
+            echo "STAGE102_WFO_AUTHOR_SOURCE_TRANSPORT_ATTEMPT=$attempt"
+            if [ -s "$out" ]; then
+              curl --fail --location --silent --show-error --continue-at - \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            else
+              curl --fail --location --silent --show-error \
+                --retry 2 --retry-all-errors --retry-delay 4 \
+                --connect-timeout 45 --max-time 1500 "$url" -o "$out" || true
+            fi
+            if [ -s "$out" ] && echo "0e4486945cd9f7af548ca87eb9a870ed  $out" | md5sum -c; then
+              complete=1
+              break
+            fi
+            if [ "$attempt" = "2" ]; then
+              echo "STAGE102_SWITCH_TO_EQUIVALENT_OFFICIAL_ZENODO_RECORD_CONTENT_URL"
+              url="https://zenodo.org/api/records/20782718/files/_DwC_backbone_R.zip/content"
+              rm -f "$out"
+            fi
+            sleep 6
+          done
+          if [ "$complete" != "1" ]; then
+            echo "STAGE102_WFO_TRANSPORT_EXHAUSTED_NO_UNVERIFIED_DATA" >&2
+            exit 1
+          fi
+          unzip -tq "$out"
+          sha256sum "$out"
+      - name: Independently replay and audit original 237 whole-flower diameter botanical phrases with strong morphology grammar
+        run: |
+          python -u research/floral_macro_stage102/authentic_WFO_diameter_strict_quality_audit.py \
+            --stage100-original-derived-zip stage102_original_stage100_WFO_species_ledger.zip \
+            --stage98B-original-geography-zip stage102_original_stage98B_mainland_geo.zip \
+            --original-NHM stage102_original_NHM/combined/original_NHM_text_traits_compact.csv \
+            --original-WCVP stage102_original_WCVP.zip \
+            --original-China stage102_original_WFO/Flora_Of_China.zip \
+            --original-FNA stage102_original_WFO/FNA.zip \
+            --original-WFO-202606-backbone stage102_original_WFO/WFO_202606_backbone.zip \
+            --outdir stage102_derived
+      - name: Verify independent machine sensitivity, human review still required, and unchanged source holdout
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          p=Path("stage102_derived")
+          d=json.loads((p/"stage102_original_WFO_lexical_sensitivity_not_precision_report.json").read_text())
+          q=d["source_grammar_retention"]
+          rows=list(csv.DictReader((p/"stage102_original_WFO_295_species_strict_extraction_flags_NO_QUOTED_PROSE.csv").open()))
+          assert len(rows)==295
+          assert len({r["source_accepted_species"] for r in rows})==295
+          assert q["original_237_stage100_flower_candidates"]==237
+          assert q["original_source_description_species_audited"]==295
+          assert 0 <= q["strict_grammar_retained_original_flower_candidates"] <= 237
+          assert 0 <= q["strict_source_grammar_holdout_distinct_species"] <= q["stage100_237_holdout_distinct_source_candidates"]
+          assert d["human_precision_estimate_UNAVAILABLE"]
+          assert d["manually_verified_true_whole_flower_diameter_count_UNAVAILABLE"]
+          assert d["strict_source_organ_is_NOT_a_measurement_confirmation"]
+          assert d["no_confirmatory_wind_cue_regression"]
+          assert all(r["strict_source_text_human_validated"]=="NO" for r in rows)
+          print("STAGE102_REAL_ORIGINAL_SOURCE_SENSITIVITY_NOT_MEASURED_PRECISION",{
+             "source_initial_candidates":237,
+             "stricter_candidates":q["strict_grammar_retained_original_flower_candidates"],
+             "strict_holdout_37_species":q["strict_source_grammar_holdout_distinct_species"],
+             "strict_holdout_ge10_regions":q["strict_holdout_regions_with_at_least_10_candidates"]})
+          PY
+      - name: Publish only derived source hashes, lexical flags, source selection queue without original full prose
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage102-original-WFO-295-size-lexical-independent-parser-QA-source-only
+          path: stage102_derived/
+          if-no-files-found: warn
+          retention-days: 90
