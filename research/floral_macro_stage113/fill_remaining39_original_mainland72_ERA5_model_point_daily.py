@@ -114,13 +114,95 @@ def returned_source_model_point(requested,frame):
         raise ValueError("STAGE113_TDWG_REP_POINT_ERA5_MODEL_CELL_TOO_FAR")
     return [lat,lon]
 
-def execute(original_stage94,original_tdwg,original_stage98B,stage95C,stage97,out):
+# Original failed Actions run 44837660708 persisted 6 fully completed
+# five-region batches before public-provider quota exhaustion.
+SHA_RESUME_30="18a6e34b0d81061670de8533eeb7d302a68245e0415b1d9b541f8593b3c70b6f"
+
+def read_resume_batches(resume_zip,missing,train):
+    """Restore only byte-pinned derived receipts, not independently re-read raw JSON."""
+    if sha256(resume_zip)!=SHA_RESUME_30:
+        raise ValueError("STAGE113_RESUME_ORIGINAL_ARTIFACT_SHA_DRIFT")
+    expected={f"stage113_PARTIAL_NEW_TRAIN_POINT_BATCH_{i:02d}_NOT_72_COMPLETE.json" for i in range(6)}
+    restored={}
+    all_hashes=set()
+    with zipfile.ZipFile(resume_zip) as z:
+        names=z.namelist()
+        if len(names)!=6 or set(names)!=expected:
+            raise ValueError("STAGE113_RESUME_EXPECTED_EXACT_SIX_BATCHES")
+        for batch in range(6):
+            name=f"stage113_PARTIAL_NEW_TRAIN_POINT_BATCH_{batch:02d}_NOT_72_COMPLETE.json"
+            receipt=json.loads(z.read(name))
+            group=missing[batch*BATCH_SITES:(batch+1)*BATCH_SITES]
+            codes=[site["TDWG_L3"] for site in group]
+            rows=receipt["source_verified_new_batch_30year_point_climates"]
+            ledger=receipt["source_current_batch_raw_JSON_SHA256"]
+            if (receipt["status"]!="PARTIAL_SOURCE_BATCH_NOT_ALL72"
+                or receipt["no_global_completed72_claim_from_partial"] is not True
+                or receipt["fixed_source_original_72_train_region_codes"]!=sorted(train)
+                or [row["TDWG_L3"] for row in rows]!=codes or len(rows)!=5
+                or len(ledger)!=3):
+                raise ValueError("STAGE113_RESUME_BATCH_IDENTITY_DRIFT")
+            for site,row in zip(group,rows):
+                if (any(row.get(k)!=v for k,v in site.items())
+                    or row["source_ERA5_observed_30yr_days"]!=10958
+                    or row["source_ERA5_years"]!="1991-2020"
+                    or row["source_daily_NOT_direct_CDS_hourly_10fg"] is not True
+                    or row["source_ERA5_provider_location_is_original_TDWG_rep_point_NOT_exact_area_mean"] is not True):
+                    raise ValueError("STAGE113_RESUME_GEOMETRY_OR_CALENDAR_DRIFT")
+                lat,lon=row["source_actual_model_returned_grid_latlon"]
+                returned_source_model_point(site,{"latitude":lat,"longitude":lon})
+                means=row["source_monthly_30yr_mean_T2m_C"]
+                months=row["source_eligible_climatological_months_T2m_strict_above_5C"]
+                if (set(means)!={str(m) for m in range(1,13)}
+                    or not all(math.isfinite(t) for t in means.values())
+                    or months!=[m for m in range(1,13) if means[str(m)]>5]):
+                    raise ValueError("STAGE113_RESUME_WARM_MONTHS_DRIFT")
+                import calendar
+                expected_days=sum(calendar.monthrange(y,m)[1] for y in range(1991,2021) for m in months)
+                values=[row[k] for k in ("source_fraction_gust_greater_than_20_ms",
+                    "source_primary_fraction_days_daily_gust_strict_above_15_ms",
+                    "source_fraction_gust_greater_than_10_ms")]
+                if row["source_eligible_days"]!=expected_days or (
+                    (expected_days==0 and any(v is not None for v in values)) or
+                    (expected_days>0 and (any(v is None or not math.isfinite(v) or not 0<=v<=1 for v in values)
+                    or values!=sorted(values)))):
+                    raise ValueError("STAGE113_RESUME_CLIMATE_SUMMARY_DRIFT")
+            for rec,(y1,y2) in zip(ledger,YEARS):
+                digest=rec["source_raw_provider_JSON_SHA256"]
+                if (rec["source_new_exploration_batch"]!=batch
+                    or rec["source_original_region_codes"]!=codes
+                    or rec["source_original_decade_years"]!=f"{y1}-{y2}"
+                    or rec["source_public_ERA5model_daily_archive_URL"]!=api_url(group,f"{y1}-01-01",f"{y2}-12-31")
+                    or rec["source_is_ERA5_model_daily_NOT_CDS_hourly"] is not True
+                    or rec["source_raw_original_response_bytes"]<=0
+                    or len(digest)!=64 or any(c not in "0123456789abcdef" for c in digest)
+                    or digest in all_hashes):
+                    raise ValueError("STAGE113_RESUME_SOURCE_REQUEST_LEDGER_DRIFT")
+                all_hashes.add(digest)
+            restored[batch]=(receipt,rows,ledger)
+    return restored
+
+def execute(original_stage94,original_tdwg,original_stage98B,stage95C,stage97,out,resume_zip=None):
     prior,missing,train=exact_geo_and_source_first50(
         original_stage94,original_tdwg,original_stage98B,stage95C,stage97)
     out.mkdir(parents=True,exist_ok=True)
     results=dict(prior);queries=[];n=0
+    restored=read_resume_batches(resume_zip,missing,train) if resume_zip is not None else {}
+    new_requests=0
     for start in range(0,len(missing),BATCH_SITES):
-        if start:time.sleep(SOURCE_BATCH_SPACING_SECONDS)
+        batch=start//BATCH_SITES
+        if batch in restored:
+            receipt,completed,ledger=restored[batch]
+            for item in completed:
+                results[item["TDWG_L3"]]=item
+            queries.extend(ledger)
+            n+=len(completed)
+            (out/f"stage113_PARTIAL_NEW_TRAIN_POINT_BATCH_{batch:02d}_NOT_72_COMPLETE.json").write_text(
+                json.dumps(receipt,sort_keys=True,indent=2)+"\n")
+            print("STAGE113_RESUME_AUTHENTICATED_BATCH",batch,n,flush=True)
+            continue
+        if new_requests:time.sleep(SOURCE_BATCH_SPACING_SECONDS)
+        new_requests+=1
         group=missing[start:start+BATCH_SITES]
         series={r["TDWG_L3"]:[] for r in group}
         coordinates={}
@@ -192,6 +274,9 @@ def execute(original_stage94,original_tdwg,original_stage98B,stage95C,stage97,ou
         "source_original_new39_selected_only_from_frozen_geographic_train72":True,
         "source_1991_2020_complete_days_per_site":10958,
         "source_original_API_request_sha256_ledger_for_new39":queries,
+        "source_resume_original_30point_derived_artifact_SHA256":SHA_RESUME_30 if restored else None,
+        "source_resume_reused_new_point_count":5*len(restored),
+        "source_new_public_request_batch_count":new_requests,
         "source_72_area_weighted_gust_NOT_obtained":True,
         "source_real_Public_OpenMeteo_ERA5model_daily_not_CDS_hourly_10fg":True,
         "source_NHM_WFO_AusTraits_Bombus_outcomes_NOT_read":True,
@@ -219,7 +304,8 @@ if __name__=="__main__":
                 "original-stage97-next25-ZIP"):
         p.add_argument("--"+arg,required=True,type=Path)
     p.add_argument("--outdir",required=True,type=Path)
+    p.add_argument("--resume-original-30-zip",type=Path)
     a=p.parse_args()
     execute(a.original_stage94_geo_ZIP,a.original_TDWG3_geojson,
       a.original_stage98B_train72_ZIP,a.original_stage95C_first25_ZIP,
-      a.original_stage97_next25_ZIP,a.outdir)
+      a.original_stage97_next25_ZIP,a.outdir,a.resume_original_30_zip)

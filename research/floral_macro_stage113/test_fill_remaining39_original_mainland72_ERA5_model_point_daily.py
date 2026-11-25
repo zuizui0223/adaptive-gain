@@ -64,4 +64,22 @@ class SourceOnlyFills(unittest.TestCase):
             self.assertIn(x,url)
         self.assertNotIn("CDSAPI_KEY",url)
 
+    def test_resume_wrong_bytes_fail_before_use(self):
+        from fill_remaining39_original_mainland72_ERA5_model_point_daily import read_resume_batches
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"not_original.zip"
+            p.write_bytes(b"unverified")
+            with self.assertRaisesRegex(ValueError,"RESUME_ORIGINAL_ARTIFACT_SHA_DRIFT"):
+                read_resume_batches(p,[],{})
+
+    def test_resume_wrong_members_fail_even_with_mocked_hash(self):
+        from unittest.mock import patch
+        import fill_remaining39_original_mainland72_ERA5_model_point_daily as stage
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"fake.zip"
+            with zipfile.ZipFile(p,"w") as z:z.writestr("wrong.json","{}")
+            with patch.object(stage,"sha256",return_value=stage.SHA_RESUME_30):
+                with self.assertRaisesRegex(ValueError,"RESUME_EXPECTED_EXACT_SIX_BATCHES"):
+                    stage.read_resume_batches(p,[],{})
+
 if __name__=="__main__":unittest.main()

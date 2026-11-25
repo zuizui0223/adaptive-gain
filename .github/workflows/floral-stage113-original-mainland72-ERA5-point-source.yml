@@ -72,7 +72,16 @@ jobs:
           data=open("stage113_original_TDWG3.geojson","rb").read()
           assert hashlib.sha1(("blob "+str(len(data))+"\0").encode()+data).hexdigest()=="91104e5159e31f88154833a51d3b0d1c9271083f"
           PY
-      - name: Acquire actual missing 39 of 72 source-original train-point ERA5 MODEL 30-year daily max wind gust and 2m T
+      - name: Restore immutable Stage113 six complete batches (30 new points)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14679863429/zip" \
+            -o stage113_original_partial30.zip
+          echo "18a6e34b0d81061670de8533eeb7d302a68245e0415b1d9b541f8593b3c70b6f  stage113_original_partial30.zip" | sha256sum -c
+      - name: Acquire remaining nine original train-point ERA5 MODEL 30-year daily max gust and 2m T
         run: |
           python -u research/floral_macro_stage113/fill_remaining39_original_mainland72_ERA5_model_point_daily.py \
             --original-stage94-geo-ZIP stage113_original_stage94_mainland_source.zip \
@@ -80,6 +89,7 @@ jobs:
             --original-stage98B-train72-ZIP stage113_original_stage98B_contactfree72.zip \
             --original-stage95C-first25-ZIP stage113_original_stage95C_first25.zip \
             --original-stage97-next25-ZIP stage113_original_stage97_next25.zip \
+            --resume-original-30-zip stage113_original_partial30.zip \
             --outdir stage113_derived
       - name: Assert actual full 72 original source point climates (NOT area wind, not floral effect, holdout unopened)
         run: |
@@ -91,6 +101,8 @@ jobs:
           assert d["source_original_stage98B_72_37_SHA256"]=="8026b800672cad2afd97e2fe416349cc3aca8f650e78ae8c001dd31de104c8b7"
           assert d["source_first50_existing_33_train_points_reused"]==33
           assert d["source_new_39_original_train_points_ERA5_model_30years"]==39
+          assert d["source_resume_reused_new_point_count"]==30
+          assert d["source_new_public_request_batch_count"]==2
           assert d["source_final_72_original_mainland_exploration_gust15_POINT_regions"]==72
           assert d["source_original17_geographic_blocks"]==17
           assert d["source_1991_2020_complete_days_per_site"]==10958
