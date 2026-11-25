@@ -1,0 +1,49 @@
+name: Stage118 original reward information source admission
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage118/**"
+      - ".github/workflows/floral-stage118-reward-source.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reward-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "pandas==2.2.3" "openpyxl==3.1.5"
+      - run: python -m unittest discover -s research/floral_macro_stage118 -p "test_*.py" -v
+      - name: Recover original source trait and network ZIPs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 14313209081 14316616619 14296278415; do
+            curl --fail --location --silent --show-error --retry 2 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - name: Obtain original author appendices twice from Europe PMC
+        run: |
+          for i in 1 2; do
+            curl --fail --location --silent --show-error --retry 2 --retry-all-errors --connect-timeout 25 --max-time 180 \
+              "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12640470/supplementaryFiles" \
+              -o "reward-original-$i.zip"
+            unzip -tq "reward-original-$i.zip"
+          done
+      - name: Inspect source-name and unit schema and exact existing-source overlap
+        run: python -u research/floral_macro_stage118/reward_source_admission.py --first reward-original-1.zip --second reward-original-2.zip --archives archives --out derived/stage118_reward_source_admission.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage118-reward-source-schema-and-cosupport
+          path: derived/
+          if-no-files-found: warn
+          retention-days: 90
