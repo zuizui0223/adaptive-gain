@@ -43,10 +43,30 @@ def model_set(d,y,w=W,b=B,eff=E,extra=()):
             out[key]=result
     return out
 
+def within_block_product(d,y):
+    """Separate centered-within-block product from cross-level products.
+    A global rank product with block FE is NOT a purely within-block interaction.
+    """
+    d=d.dropna(subset=[y,W,B,*C,E]).copy()
+    def zr(x):
+        v=rankdata(x);s=v.std();return (v-v.mean())/s if s>0 else np.zeros(len(v))
+    d['x']=zr(d[W]);d['z']=zr(d[B]);d['y']=zr(d[y])
+    d['wx']=d.x-d.groupby(G).x.transform('mean')
+    d['wz']=d.z-d.groupby(G).z.transform('mean')
+    d['bx']=d.x-d.wx;d['bz']=d.z-d.wz
+    X0=np.column_stack([np.ones(len(d)),d.wx,d.wz]+[zr(d[k]) for k in C+[E]]+[pd.get_dummies(d[G],drop_first=True).to_numpy(float)])
+    outputs={}
+    for kind,names,terms in [('within_only',['within_wind_x_within_Bombus'],[d.wx*d.wz]),('within_cross',['within_wind_x_within_Bombus','within_wind_x_between_Bombus','between_wind_x_within_Bombus'],[d.wx*d.wz,d.wx*d.bz,d.bx*d.wz])]:
+        X=np.column_stack([X0]+terms);rank=np.linalg.matrix_rank(X);df=len(d)-rank
+        if rank!=X.shape[1] or df<5:outputs[kind]=None;continue
+        coef=np.linalg.lstsq(X,d.y,rcond=None)[0][-len(terms):]
+        outputs[kind]={'n':len(d),'residual_df':int(df),'coefficients':dict(zip(names,map(float,coef)))}
+    return outputs
+
 def run(root):
     d=frame(root);results={}
     for cut in [1,5,10]:
-        q=d[d[E]>=cut].copy();results[str(cut)]={'regions':len(q),'blocks':q[G].nunique(),'primary':model_set(q,Y),'native_denominator':model_set(q,Y2)}
+        q=d[d[E]>=cut].copy();results[str(cut)]={'regions':len(q),'blocks':q[G].nunique(),'primary':model_set(q,Y),'native_denominator':model_set(q,Y2),'within_centered_product':within_block_product(q,Y)}
     q=d[d[E]>=5]
     results['sensitivity']={k:model_set(q,Y,w=w,b=b,eff=e) for k,w,b,e in [('gust10','gust10_secondary',B,E),('gust20','gust20_secondary',B,E),('record_effort',W,B,R),('strict_species',W,'GBIF_Bombus_strict_binomial_recorded_species',E),('uncertainty10km',W,'GBIF_Bombus_2grid_coord_uncertainty_le10km_sensitivity_species',E)]}
     return {'n_exploration':72,'n_with_positive_Bombus_records':43,'n_missing_not_absent':29,'NO_holdout_floral_outcomes':True,'NO_taxonomic_adjustment_in_this_regional_screen':True,'NO_causal_or_true_Bombus_suitability_claim':True,'results':results}
