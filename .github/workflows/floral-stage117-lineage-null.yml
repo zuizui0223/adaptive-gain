@@ -1,0 +1,46 @@
+name: Stage117 original hierarchy decomposition and lineage conditional source null
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage117/**"
+      - ".github/workflows/floral-stage117-lineage-null.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-hierarchy-and-null:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "scipy==1.16.3"
+      - run: python -m unittest discover -s research/floral_macro_stage117 -p "test_*.py" -v
+      - name: Restore verified Stage116 taxonomy matrix and original NHM source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/15069564689/zip" -o stage116.zip
+          echo "d9ceb43214cfe661e8cc23541362c8a4cf2b1181e36aa4db5313330b72a01cdd  stage116.zip" | sha256sum -c
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV --dir nhm
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  nhm/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Run exact common-outcome-scale source decomposition before further source retrieval
+        run: python -u research/floral_macro_stage117/lineage_source_null.py --stage116 stage116.zip --decompose-only --out derived/stage117_common_scale.json
+      - name: Restore immutable original Kew source
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip -o wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  wcvp.zip" | sha256sum -c
+      - name: Randomize original source report labels conditional on genus, range and report length
+        run: python -u research/floral_macro_stage117/lineage_source_null.py --stage116 stage116.zip --nhm nhm/combined/original_NHM_text_traits_compact.csv --wcvp wcvp.zip --out derived/stage117_lineage_conditional_null.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage117-original-source-hierarchy-and-label-null
+          path: derived/
+          if-no-files-found: warn
+          retention-days: 90
