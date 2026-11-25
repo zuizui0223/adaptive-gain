@@ -1,0 +1,78 @@
+name: Stage116 original marking wind recorded Bombus taxonomy diagnostics
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage116/**"
+      - ".github/workflows/floral-stage116-marking-wind-bombus.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  regional-original-source-reproduction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "scipy==1.16.3"
+      - name: Restore original Stage114 and GBIF Bombus ZIPs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 15069908329 14419407872; do
+            curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - run: python -u research/floral_macro_stage116/regional_marking_bombus.py --archives archives --out derived/stage116_regional.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage116-regional-source-bombus-marking-not-causal
+          path: derived/
+          if-no-files-found: error
+          retention-days: 90
+  original-taxonomy-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "scipy==1.16.3"
+      - name: Restore original Stage114 and GBIF Bombus ZIPs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 15069908329 14419407872; do
+            curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - name: Test source-free lineage expectation and strict disjoint support
+        run: python -m unittest discover -s research/floral_macro_stage116 -p "test_*.py" -v
+      - name: Recover exact original NHM compact source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 44051561567 --repo zuizui0223/adaptive-gain --name stage68-NHM-original-botanical-TEXT-59k-traits-no-photo-no-UV --dir nhm
+          echo "b81ab96a2883e2b2e7f254a9e7ab62a34afaa0dfe62f0062d1677ba852dc686a  nhm/combined/original_NHM_text_traits_compact.csv" | sha256sum -c
+      - name: Obtain exact original Kew WCVP native range and family source
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip -o wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  wcvp.zip" | sha256sum -c
+      - name: Reproduce 72 exact botanical denominators then test lineage expected reporting and residuals
+        run: python -u research/floral_macro_stage116/taxonomy_marking.py --archives archives --nhm nhm/combined/original_NHM_text_traits_compact.csv --wcvp wcvp.zip --outdir derived
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage116-72-exploration-taxonomy-source-diagnostics
+          path: derived/
+          if-no-files-found: error
+          retention-days: 90
