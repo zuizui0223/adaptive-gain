@@ -25,9 +25,59 @@ jobs:
         run: python -m pip install "numpy==2.3.5" "scipy==1.16.3"
       - name: Verify original data-grain source rank controls, 72 exploration and never fake significance
         run: python -m unittest discover -s research/floral_macro_stage114 -p "test_*.py" -v
-      - name: Explicitly do not fit 72-point cue association before genuine Stage113 ZIP SHA is known
+      - name: Restore immutable Stage113 source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/15069868618/zip" \
+            -o stage113_original.zip
+          echo "53bcdedcba6659a84dbeea59094c05f24debe85093f2fc37f9efb66f9501b749  stage113_original.zip" | sha256sum -c
+      - name: Restore immutable Stage107 source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14605080199/zip" \
+            -o stage107_original.zip
+          echo "8bdd375003ed7a7e9de03d13543b76a7c8542f092c0c28344925e51f0b418c1a  stage107_original.zip" | sha256sum -c
+      - name: Restore immutable Stage105 source artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/14603498026/zip" \
+            -o stage105_original.zip
+          echo "0d7cc6609c9ee3b85e24aafbbfd5dec307119506c4a4d5f79a579c21ed6c1534  stage105_original.zip" | sha256sum -c
+      - name: Run frozen Stage114 original 72-region descriptive source screen
+        run: |
+          python -u research/floral_macro_stage114/source72_real_ERA5point_flora3cue_reporting_analysis.py \
+            --original-Stage113-ERA5model-72source-ZIP stage113_original.zip \
+            --source-Stage113-ZIP-SHA256 53bcdedcba6659a84dbeea59094c05f24debe85093f2fc37f9efb66f9501b749 \
+            --original-Stage107-72-flora-source-ZIP stage107_original.zip \
+            --original-Stage105-33-point-bias-source-ZIP stage105_original.zip \
+            --outdir stage114_derived
+      - name: Verify exact 72-source 33-overlap cohort and publish descriptive values
         run: |
           python - <<'PY'
-          print("STAGE114_SOURCE_METHODS_ONLY_SCIENTIFIC_TESTS_PASS_NO_OUTCOME_72_FIT_YET")
-          print("Pending exact Stage113 original 72 noncontact exploration ERA5 point source artifact SHA.")
+          import json
+          from pathlib import Path
+          p=Path("stage114_derived/stage114_original72_source_ERA5point_cue_reporting_bias_diagnostics_NO_CAUSAL.json")
+          d=json.loads(p.read_text())
+          assert d["original_full_72_exploration_climate_source_regions"]==72
+          assert d["original_exact_old33_source_climate_and_floral_report_values_reproduced"]==33
+          assert d["original_geo_blocks"]==17
+          assert d["source_37_original_holdout_floral_outcomes_NOT_read"] is True
+          assert d["NO_IID_pvalues_NO_fitness_OR_pollinator_sensory_order_inference"] is True
+          for exposure, targets in d["outcomes_and_source_reporting_diagnostics"].items():
+              print("STAGE114_REAL_SOURCE", exposure, json.dumps(targets,sort_keys=True))
           PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage114-real72-source-cue-reporting-descriptive-NO-CAUSAL
+          path: stage114_derived/
+          if-no-files-found: error
+          retention-days: 90
