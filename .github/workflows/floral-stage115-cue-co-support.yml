@@ -1,0 +1,38 @@
+name: Stage115 original species-level floral cue co-support audit
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage115/**"
+      - ".github/workflows/floral-stage115-cue-co-support.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Restore immutable original derived source artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 14313209081 14534460860 14595854235; do
+            curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - name: Exact source-name join and explicit-state co-support audit
+        run: python -u research/floral_macro_stage115/source_cue_co_support.py --archives archives --out derived/stage115_source_cue_co_support.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage115-source-cue-co-support-not-causal
+          path: derived/
+          if-no-files-found: error
+          retention-days: 90
