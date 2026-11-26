@@ -1,0 +1,45 @@
+name: Stage120 paired floral reward and provenance transfer
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage120/**"
+      - ".github/workflows/floral-stage120-paired-reward.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  paired-source-transfer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "scipy==1.16.3" "scikit-learn==1.7.2" "openpyxl==3.1.5"
+      - run: python -m unittest discover -s research/floral_macro_stage120 -p "test_*.py" -v
+      - name: Recover original immutable existing source ZIPs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 14313209081 14316616619 14296278415; do
+            curl --fail --location --silent --show-error --retry 2 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - name: Restore original author appendices, pinned members
+        run: |
+          curl --fail --location --silent --show-error --retry 2 --retry-all-errors --connect-timeout 25 --max-time 180 \
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12640470/supplementaryFiles" -o reward-original.zip
+          unzip -tq reward-original.zip
+      - name: Compare matched plant lineages and source-disjoint nectar transfer
+        run: python -u research/floral_macro_stage120/paired_reward_transfer.py --source reward-original.zip --archives archives --out derived/stage120_paired_reward.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage120-original-paired-reward-source-transfer
+          path: derived/
+          if-no-files-found: error
+          retention-days: 90
