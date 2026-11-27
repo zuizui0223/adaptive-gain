@@ -1,0 +1,48 @@
+name: Stage121 original regional reward information transfer
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "research/floral_macro_stage121/**"
+      - ".github/workflows/floral-stage121-regional-reward.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-assemblage-transfer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.2.3" "scipy==1.16.3" "scikit-learn==1.7.2" "openpyxl==3.1.5"
+      - run: python -m unittest discover -s research/floral_macro_stage121 -p "test_*.py" -v
+      - name: Restore pinned Stage120 reward comparison and existing climate receiver and trait archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p archives
+          for id in 14313209081 14316616619 14296278415 15089720778 15069908329 14419407872; do
+            curl --fail --location --silent --show-error --retry 2 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/zuizui0223/adaptive-gain/actions/artifacts/$id/zip" \
+              -o "archives/github-actions-artifact-$id.zip"
+          done
+      - name: Restore original author reward and pinned native range sources
+        run: |
+          curl --fail --location --silent --show-error --retry 2 --retry-all-errors --connect-timeout 25 --max-time 180 \
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12640470/supplementaryFiles" -o reward-original.zip
+          unzip -tq reward-original.zip
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 30 --max-time 1200 \
+            https://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip -o wcvp.zip
+          echo "d32ea2b3a85e489b14e83bcc9eae7274532e1d113753f7be290d4b2dfde573fa  wcvp.zip" | sha256sum -c
+      - name: Fit non-local lineage prediction and audit regional macro support
+        run: python -u research/floral_macro_stage121/regional_reward_transfer.py --source reward-original.zip --archives archives --wcvp wcvp.zip --outdir derived
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage121-original-regional-reward-information-transfer
+          path: derived/
+          if-no-files-found: error
+          retention-days: 90
